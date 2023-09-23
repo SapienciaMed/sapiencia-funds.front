@@ -1,14 +1,12 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import {
-  ITableAction,
-  ITableElement,
-} from "../../../common/interfaces/table.interfaces";
+import {ITableAction,ITableElement,} from "../../../common/interfaces/table.interfaces";
 import {IMasterActivityFilter, IMasterActivity} from "../../../common/interfaces/funds.interfaces";
+import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
-
-
+import { ApiResponse } from "../../../common/utils/api-response";
+import useActivityService from "../../../common/hooks/activity-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
 
 
@@ -17,11 +15,11 @@ export default function useSearchMasterHook() {
   const { setMessage } = useContext(AppContext);
 
   //custom hooks
-  //const { getCharges } = usePayrollService();
+  const { getActivity } = useActivityService();
 
   //states
   const [showTable, setshowTable] = useState(false);
-  const [charges, setCharges] = useState<IDropdownProps[]>([]);
+  const [activitylist, setActivity] = useState([]);
 
   //ref
   const tableComponentRef = useRef(null);
@@ -58,7 +56,31 @@ const onSubmit = handleSubmit(async (data: IMasterActivityFilter) => {
   }
 });
 
-  //variables
+const getMasterActivity = () => {
+  getActivity()
+    .then((response: ApiResponse<IMasterActivity[]>) => {
+      if (response && response?.operation?.code === EResponseCodes.OK) {
+        setActivity(
+          response.data.map((item) => {
+            const list = {
+              name: item.name,
+              value: item.id,
+            };
+
+            return list;
+          })
+        );
+      }
+    })
+    .catch((err) => {});
+};
+
+useEffect(() => {
+  getMasterActivity();
+}, []);
+
+
+
 const tableColumns: ITableElement<IMasterActivity>[] = [
   {
       fieldName: "employment.worker.numberDocument",
@@ -109,7 +131,11 @@ const tableColumns: ITableElement<IMasterActivity>[] = [
     clearFields,
     formValues,
     showTable,
-    charges,
+    getMasterActivity,
+    activitylist,
+    tableComponentRef,
+    tableColumns,
+    tableActions,
     
   }
 

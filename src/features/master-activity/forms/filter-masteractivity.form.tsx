@@ -18,7 +18,8 @@ import {
 } from "react-hook-form";
 
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
-import { IMasterActivityFilter } from "../../../common/interfaces/funds.interfaces";
+import { IMasterActivityFilter, IMasterActivity } from "../../../common/interfaces/funds.interfaces";
+import useSearchMasterHook from "../hooks/search-master-activity.hook";
 
 interface IPropsFilterMasterActivity {
     control: Control<IMasterActivityFilter, any>;
@@ -26,9 +27,8 @@ interface IPropsFilterMasterActivity {
     redirectCreate: () => void;
     clearFields: () => void;
     onSubmit: () => Promise<void>;
-    chargesState: IDropdownProps[];
-    
 }
+
 
 export const FilterMasterActivityForm = ({
   control,
@@ -36,11 +36,12 @@ export const FilterMasterActivityForm = ({
   redirectCreate,
   onSubmit,
   clearFields,
-  chargesState,
 }: IPropsFilterMasterActivity): React.JSX.Element => {
   const { errors, isValid } = formState;
 
-  //const { codCharge, numberActApproval } = formValues;
+  const {activitylist } = useSearchMasterHook();
+
+  //const { activity } = formValues;
 
   return (
     <div className="container-sections-forms">
@@ -56,36 +57,38 @@ export const FilterMasterActivityForm = ({
       </div>
 
       <div>
-        <FormComponent
-          id="searchIncrementSalary"
-          className="form-signIn"
-          action={""}
-        >
+      <FormComponent className="form-signIn" action={onSubmit}>
+        <div className="container-sections-forms">
           <div className="grid-form-3-container gap-25">
             <SelectComponent
-              idInput={"codCharge"}
+              idInput={"activity"}
               control={control}
               errors={errors}
-              data={chargesState}
-              label={
-                <>
-                  Actividad <span>*</span>
-                </>
-              }
+              data={activitylist}
+              label={<>Actividad.</>}
               className="select-basic medium"
               classNameLabel="text-black big bold"
+              filter={true}
               placeholder="Seleccione."
             />
+
           </div>
-          
+
           <div className="button-save-container-display m-top-20">
+            <ButtonComponent
+              value={"Limpiar campos"}
+              className="button-clean bold"
+              type="button"
+              action={clearFields}
+            />
             <ButtonComponent
               value={"Buscar"}
               className="button-save disabled-black big"
-              //disabled={!codCharge && !numberActApproval}
+              //disabled={!codEmployment && !codFormsPeriod && !typeDeduction}
             />
           </div>
-        </FormComponent>
+        </div>
+      </FormComponent>
       </div>
     </div>
   );

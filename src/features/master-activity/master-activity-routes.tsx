@@ -8,7 +8,7 @@ function MasterActivityRoutes() {
     );
  
     const CreateUpdateMasterActivityPage = lazy(
-        () => import("./pages/create-update-master-page")
+        () => import("./pages/create-master-page")
     );
 
     return (
