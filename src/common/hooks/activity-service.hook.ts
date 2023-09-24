@@ -8,7 +8,7 @@ import {
   import useCrudService from "./crud-service.hook";
 
 export function useActivityService(){
-  const baseURL: string = process.env.urlApiPayroll;
+  const baseURL: string = process.env.urlApiFunds;
   const authUrl: string = "/api/v1/activities";
  
   const { get, post, put } = useCrudService( baseURL);
@@ -28,6 +28,7 @@ export function useActivityService(){
 
   return {
     getActivity,
+    
   };
   
 }

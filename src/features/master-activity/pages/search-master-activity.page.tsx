@@ -16,7 +16,7 @@ const SearchMasterPage = (): React.JSX.Element => {
       clearFields,
       formValues,
       showTable,
-      //typeProgramList
+      activity,
       tableComponentRef,
       tableColumns,
       tableActions,
@@ -34,21 +34,27 @@ const SearchMasterPage = (): React.JSX.Element => {
           <FilterMasterActivityForm
           control={control}
           formState={formState}
-          //typeProgramList = {typeProgramList}
+          activityList = {activity}
           redirectCreate={redirectCreate}
           clearFields={clearFields}
           onSubmit={onSubmit}
-          //formValues={formValues}
+          formValues={formValues}
           />
           
           {showTable && (
           <div className="container-sections-forms">
-
-          
-        </div>
-        )}  
-        </div>
+            <TableComponent
+              setPaginateData={null}
+              ref={tableComponentRef}
+              url={`${process.env.urlApiFunds}/api/v1/activities/get-paginated`}
+              columns={tableColumns}
+              actions={tableActions}
+              isShowModal={false}
+            />
+          </div>
+        )}
       </div>
+    </div>
     );
   };  
             

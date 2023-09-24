@@ -8,6 +8,10 @@ import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { ApiResponse } from "../../../common/utils/api-response";
 import useActivityService from "../../../common/hooks/activity-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
+import {
+    DataItem,
+    ResponsiveTable,
+  } from "../../../common/components/Form/table-detail.component";
 
 
 export default function useSearchMasterHook() {
@@ -19,7 +23,7 @@ export default function useSearchMasterHook() {
 
   //states
   const [showTable, setshowTable] = useState(false);
-  const [activitylist, setActivity] = useState([]);
+  const [activity, setActivity] = useState<IDropdownProps[]>([]);
 
   //ref
   const tableComponentRef = useRef(null);
@@ -48,7 +52,7 @@ const clearFields = () => {
     setshowTable(false);
 };
 
-const onSubmit = handleSubmit(async (data: IMasterActivityFilter) => {
+const onSubmit = handleSubmit(async (data: IMasterActivity) => {
   setshowTable(true);
 
   if (tableComponentRef.current) {
@@ -56,68 +60,94 @@ const onSubmit = handleSubmit(async (data: IMasterActivityFilter) => {
   }
 });
 
-const getMasterActivity = () => {
-  getActivity()
-    .then((response: ApiResponse<IMasterActivity[]>) => {
-      if (response && response?.operation?.code === EResponseCodes.OK) {
-        setActivity(
-          response.data.map((item) => {
-            const list = {
-              name: item.name,
-              value: item.id,
-            };
 
-            return list;
-          })
-        );
-      }
-    })
-    .catch((err) => {});
+  // carga combos
+  useEffect(() => {
+    loadDropdown();
+  }, []);
+
+  //functions
+  const loadDropdown = async () => {
+    //charges
+    const { data, operation } = await getActivity();
+    if (operation.code === EResponseCodes.OK) {
+      const chargesList = data.map((item) => {
+        return {
+          name: item.name,
+          value: item.id,
+        };
+      });
+
+      setActivity(chargesList);
+    } else {
+      setActivity([]);
+    }
+  };
+
+
+  const showEditMasterActivity = (row: IMasterActivity) => {
+    if (row) {
+      const infoPersonal: DataItem[] = [
+        {
+          title: <span className="text-left">Actividad</span>,
+          value: row.name,
+        },
+        {
+          title: <span className="text-left">Valor</span>,
+          value: row.totalValue,
+        },
+        {
+          title: <span className="text-left">Programa</span>,
+          value: row.codProgramCode[0].name,
+        },
+        {
+          title: (
+            <span className="text-left">Descripción</span>
+          ),
+          value: row.description,
+        },
+      ];
+    };
 };
-
-useEffect(() => {
-  getMasterActivity();
-}, []);
-
-
+    
 
 const tableColumns: ITableElement<IMasterActivity>[] = [
   {
       fieldName: "employment.worker.numberDocument",
       header: "Actividad",
       renderCell: (row) => {
-        return <>{""}</>;
+        return <>{row.name}</>;
       },
     },
     {
       fieldName: "row.employment.worker",
       header: "Valor",
       renderCell: (row) => {
-        return <>{}</>;
+        return <>{row.totalValue}</>;
       },
     },
     {
       fieldName: "salaryIncrement.charge.name",
       header: "Programa",
       renderCell: (row) => {
-        return <>{""}</>;
+        return <>{row.codProgramCode[0].name}</>;
       },
     },
     {
       fieldName: "salaryIncrement.numberActApproval",
       header: "Descripción",
       renderCell: (row) => {
-        return <>{""}</>;
+        return <>{row.description}</>;
       },
     },
   ];
 
   const tableActions: ITableAction<IMasterActivity>[] = [
     {
-      icon: "Edit",
-      onClick: (row) => {
-        navigate(`../edit/${""}`);
-      },
+        icon: "Edit",
+        onClick: (row) => {
+          showEditMasterActivity(row);
+        },
     },
   ];
 
@@ -131,8 +161,7 @@ const tableColumns: ITableElement<IMasterActivity>[] = [
     clearFields,
     formValues,
     showTable,
-    getMasterActivity,
-    activitylist,
+    activity,
     tableComponentRef,
     tableColumns,
     tableActions,

@@ -27,6 +27,8 @@ interface IPropsFilterMasterActivity {
     redirectCreate: () => void;
     clearFields: () => void;
     onSubmit: () => Promise<void>;
+    activityList: IDropdownProps[];
+    formValues: IMasterActivityFilter
 }
 
 
@@ -36,12 +38,13 @@ export const FilterMasterActivityForm = ({
   redirectCreate,
   onSubmit,
   clearFields,
+  activityList,
+  formValues,
 }: IPropsFilterMasterActivity): React.JSX.Element => {
   const { errors, isValid } = formState;
 
-  const {activitylist } = useSearchMasterHook();
 
-  //const { activity } = formValues;
+  const { name } = formValues;
 
   return (
     <div className="container-sections-forms">
@@ -64,8 +67,12 @@ export const FilterMasterActivityForm = ({
               idInput={"activity"}
               control={control}
               errors={errors}
-              data={activitylist}
-              label={<>Actividad.</>}
+              data={activityList}
+              label={
+                <>
+                  Actividad <span>*</span>
+                </>
+              }
               className="select-basic medium"
               classNameLabel="text-black big bold"
               filter={true}
@@ -76,15 +83,8 @@ export const FilterMasterActivityForm = ({
 
           <div className="button-save-container-display m-top-20">
             <ButtonComponent
-              value={"Limpiar campos"}
-              className="button-clean bold"
-              type="button"
-              action={clearFields}
-            />
-            <ButtonComponent
               value={"Buscar"}
               className="button-save disabled-black big"
-              //disabled={!codEmployment && !codFormsPeriod && !typeDeduction}
             />
           </div>
         </div>
