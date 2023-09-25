@@ -27,10 +27,7 @@ interface IPropsCreateMasterActivity {
   formState: FormState<FieldValues>;
   redirectCancel: () => void;
   onSubmit: () => Promise<void>;
-  chargesState: IDropdownProps[];
-  percentageValue: boolean;
-  idChargeValue: number;
-  action?: string;
+
 }
 
 export const CreateMasterActivityForm = ({
@@ -39,16 +36,13 @@ export const CreateMasterActivityForm = ({
   formState,
   redirectCancel,
   onSubmit,
-  chargesState,
-  percentageValue,
-  idChargeValue,
-  action,
+
 }: IPropsCreateMasterActivity): React.JSX.Element => {
   const { errors, isValid } = formState;
 
   return (
     <FormComponent
-      id="createMasterActivity"
+      id="createMaste"
       className="form-signIn"
       action={onSubmit}
     >
@@ -136,7 +130,7 @@ export const CreateMasterActivityForm = ({
           action={redirectCancel}
         />
         <ButtonComponent
-          value={action === "edit" ? "Editar" : "Guardar"}
+          value={"Guardar"}
           className="button-save disabled-black big"
           type="submit"
           disabled={!isValid}

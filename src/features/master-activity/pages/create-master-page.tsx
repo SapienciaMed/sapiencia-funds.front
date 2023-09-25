@@ -6,20 +6,27 @@ import useCreateActivityHook from "../hooks/create-master-activity.hook";
 
 import TableComponent from "../../../common/components/table.component";
 
-const CreateMasterPage = (): React.JSX.Element => {
+interface IPropsCreateUpdateIncrementSalary {
+  action: string;
+}
+
+
+const CreateMasterPage = ({
+  action,
+}: IPropsCreateUpdateIncrementSalary): React.JSX.Element => {
   const {
     control,
     formState,
     onSubmit,
+    register,
     redirectCreate,
-    clearFields,
-    formValues,
+    redirectCancel,
+    //formValues,
     showTable,
     activity,
     tableComponentRef,
-    tableColumns,
-    tableActions,
-  } = useCreateActivityHook();
+
+  } = useCreateActivityHook(action);
 
   return (
     <div className="main-page">
@@ -30,16 +37,14 @@ const CreateMasterPage = (): React.JSX.Element => {
           </label>
         </div>
 
-        {/* <CreateMasterActivityForm
-        //control={control}
+        <CreateMasterActivityForm
+        register={register}
+        control={control}
         formState={formState}
-        //activityList = {activity}
-        //redirectCreate={redirectCreate}
-        //clearFields={clearFields}
         onSubmit={onSubmit}
-        formValues={formValues}
+        redirectCancel={redirectCancel}
         />
-       */}
+      
 
     </div>
   </div>

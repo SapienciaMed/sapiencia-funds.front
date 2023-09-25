@@ -13,6 +13,36 @@ export function useActivityService(){
  
   const { get, post, put } = useCrudService( baseURL);
 
+  async function createMasterActivity(
+    data: IMasterActivity
+  ): Promise<ApiResponse<IMasterActivity>> {
+    try {
+      const endpoint: string = `/`;
+      return await post(`${authUrl}${endpoint}`, data);
+    } catch (error) {
+      return new ApiResponse(
+        {} as IMasterActivity,
+        EResponseCodes.FAIL,
+        "Error no controlado"
+      );
+    }
+  }
+
+  async function updateMasterActivity(
+    data: IMasterActivity
+  ): Promise<ApiResponse<IMasterActivity>> {
+    try {
+      const endpoint: string = `/`;
+      return await put(`${authUrl}${endpoint}`, data);
+    } catch (error) {
+      return new ApiResponse(
+        {} as IMasterActivity,
+        EResponseCodes.FAIL,
+        "Error no controlado"
+      );
+    }
+  }
+
   async function getActivity(): Promise<ApiResponse<IMasterActivity[]>> {
     try {
       
@@ -41,8 +71,9 @@ export function useActivityService(){
 
   return {
     getActivity,
-    getActivityById
-    
+    getActivityById,
+    createMasterActivity,
+    updateMasterActivity
   };
   
 }

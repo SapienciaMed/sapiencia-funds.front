@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+
+import { createmasterActivity } from "../../../common/schemas/master-schema";
+
 import {ITableAction,ITableElement,} from "../../../common/interfaces/table.interfaces";
 import {IMasterActivityFilter, IMasterActivity} from "../../../common/interfaces/funds.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
@@ -13,13 +17,21 @@ import {
     ResponsiveTable,
   } from "../../../common/components/Form/table-detail.component";
 
+import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 
-export default function useCreateActivityHook() {
+export default function useCreateActivityHook(action: string) {
   // Context
   const { setMessage } = useContext(AppContext);
 
   //custom hooks
   const { getActivity } = useActivityService();
+
+  const {
+    createMasterActivity,
+    updateMasterActivity,
+    getActivityById
+  } = useActivityService();
+
 
   //states
   const [showTable, setshowTable] = useState(false);
@@ -30,126 +42,157 @@ export default function useCreateActivityHook() {
 
   //react-router-dom
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  const { register, handleSubmit, control, formState, reset, watch } =
-  useForm<IMasterActivityFilter>({
-    //resolver,
-    mode: "all",
-    defaultValues: { 
-      id: null,
-    },
-  });
+  //useForm
+  const resolver = useYupValidationResolver(createmasterActivity);
 
-  const formValues = watch();
+  const { register, handleSubmit, control, formState, watch, setValue } =
+    useForm<IMasterActivity>({
+      resolver,
+      mode: "all",
+      defaultValues: async () => loadDefaultValues(),
+    });
+
 
 const redirectCreate = () => {
  navigate("../crear");
 };
 
-const clearFields = () => {
-    reset();
-    tableComponentRef.current?.emptyData();
-    setshowTable(false);
-};
 
 const onSubmit = handleSubmit(async (data: IMasterActivity) => {
-  setshowTable(true);
-
-  if (tableComponentRef.current) {
-    tableComponentRef.current.loadData(data);
-  }
+  setMessage({
+    title: action === "edit" ? "Editar" : "Guardar",
+    description: `¿Estás segur@ de ${
+      action === "edit" ? "editar" : "guardar"
+    } el incremento de salario?`,
+    show: true,
+    //OkTitle: "Aceptar",
+    onOk: () => {
+      handleCreateIncrementSalary(data);
+      setMessage((prev) => {
+        return { ...prev, show: false };
+      });
+    },
+    cancelTitle: "Cancelar",
+    background: true,
+  });
 });
 
-
-  // carga combos
-  useEffect(() => {
-    loadDropdown();
-  }, []);
-
-  //functions
-  const loadDropdown = async () => {
-    //charges
-    const { data, operation } = await getActivity();
-    if (operation.code === EResponseCodes.OK) {
-      const chargesList = data.map((item) => {
-        return {
-          name: item.name,
-          value: item.id,
-        };
+const handleModalSuccess = () => {
+  setMessage({
+    title: action === "edit" ? "Editado" : "Guardado",
+    description: `¡Se ha ${
+      action === "edit" ? "editado" : "guardado"
+    } el incremento de salario exitosamente!`,
+    show: true,
+    //OkTitle: "cerrar",
+    onOk: () => {
+      navigate("../consultar");
+      setMessage((prev) => {
+        return { ...prev, show: false };
       });
-
-      setActivity(chargesList);
-    } else {
-      setActivity([]);
-    }
-  };
-
-
-  const showEditMasterActivity = (row: IMasterActivity) => {
-    if (row) {
-      const infoPersonal: DataItem[] = [
-        {
-          title: <span className="text-left">Actividad</span>,
-          value: row.name,
-        },
-        {
-          title: <span className="text-left">Valor</span>,
-          value: row.totalValue,
-        },
-        {
-          title: <span className="text-left">Programa</span>,
-          value: row.codProgramCode[0].name,
-        },
-        {
-          title: (
-            <span className="text-left">Descripción</span>
-          ),
-          value: row.description,
-        },
-      ];
-    };
+    },
+    onClose: () => {
+      navigate("../consultar");
+      setMessage({});
+    },
+    background: true,
+  });
 };
-    
 
-const tableColumns: ITableElement<IMasterActivity>[] = [
-  {
-      fieldName: "employment.worker.numberDocument",
-      header: "Actividad",
-      renderCell: (row) => {
-        return <>{row.name}</>;
-      },
+const handleModalError = (msg = `¡Ha ocurrido un error!`) => {
+  setMessage({
+    title: "Error",
+    description: msg,
+    show: true,
+    //OkTitle: "cerrar",
+    onOk: () => {
+      navigate("../consultar");
+      setMessage((prev) => {
+        return { ...prev, show: false };
+      });
     },
-    {
-      fieldName: "row.employment.worker",
-      header: "Valor",
-      renderCell: (row) => {
-        return <>{row.totalValue}</>;
-      },
+    onClose: () => {
+      navigate("../consultar");
+      setMessage({});
     },
-    {
-      fieldName: "salaryIncrement.charge.name",
-      header: "Programa",
-      renderCell: (row) => {
-        return <>{row.codProgramCode[0].name}</>;
-      },
-    },
-    {
-      fieldName: "salaryIncrement.numberActApproval",
-      header: "Descripción",
-      renderCell: (row) => {
-        return <>{row.description}</>;
-      },
-    },
-  ];
+    background: true,
+  });
+};
 
-  const tableActions: ITableAction<IMasterActivity>[] = [
-    {
-        icon: "Edit",
-        onClick: (row) => {
-          showEditMasterActivity(row);
-        },
+
+
+const handleCreateIncrementSalary = async (
+  dataIncrement: IMasterActivity
+) => {
+  const response =
+    action === "edit"
+      ? await updateMasterActivity(dataIncrement)
+      : await createMasterActivity(dataIncrement);
+
+  if (response.operation.code === EResponseCodes.OK) {
+    handleModalSuccess();
+  } else {
+    handleModalError(
+      `¡Ha ocurrido un error al ${
+        action === "edit" ? "editar" : "crear"
+      } el incremento de salario!`
+    );
+  }
+};
+
+
+
+
+
+
+const loadDefaultValues = async (): Promise<IMasterActivity> => {
+  if (action === "edit" && id) {
+    const { data, operation } = await getActivityById(Number(id));
+
+    if (operation.code === EResponseCodes.OK) {
+      //console.log(data.effectiveDate)
+      return {
+        
+
+      } as IMasterActivity;
+    } else {
+      handleModalError("¡Ha ocurrido un error al cargar los datos!");
+    }
+  } else {
+    return {
+      id: null,
+      name: null,
+      totalValue: null,
+      codProgramCode: null,
+      description: null
+
+    } as IMasterActivity;
+  }
+};
+
+const redirectCancel = () => {
+  setMessage({
+    title: "Cancelar",
+    description: `¿Estás segur@ que deseas 
+    cancelar el incremento?`,
+    show: true,
+    //OkTitle: "Aceptar",
+    onOk: () => {
+      navigate("../consultar");
+      setMessage((prev) => {
+        return { ...prev, show: false };
+      });
     },
-  ];
+    cancelTitle: "Cancelar",
+    background: true,
+  });
+};
+
+
+
+
 
 
   return {
@@ -158,15 +201,11 @@ const tableColumns: ITableElement<IMasterActivity>[] = [
     formState,
     onSubmit,
     redirectCreate,
-    clearFields,
-    formValues,
+    redirectCancel,
     showTable,
     activity,
     tableComponentRef,
-    tableColumns,
-    tableActions,
     
   }
-
 
 }
