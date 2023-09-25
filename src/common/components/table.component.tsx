@@ -36,7 +36,6 @@ interface IProps<T> {
   searchItems?: object;
   isShowModal: boolean;
   titleMessageModalNoResult?: string;
-  setPaginateData: ({}) => {};
 }
 
 interface IRef {
@@ -52,7 +51,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     titleMessageModalNoResult,
     isShowModal,
     emptyMessage = "No hay resultados.",
-    setPaginateData,
   } = props;
 
   // States
@@ -66,12 +64,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   // const { width } = useWidth();
   const { setMessage } = useContext(AppContext);
 
-  // ============================================
-  // REMOVE THIS BECAUSE IS ONLY PARTIAL SOLUTION
-  useEffect(() => {
-    setPaginateData({ page, perPage });
-  }, [page, perPage]);
-  // ============================================
 
   // Declaraciones
   const { post } = useCrudService(url);

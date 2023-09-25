@@ -69,3 +69,96 @@ div[id="single-spa-application:@sapiencia/funds"] {
     gap: 25px;
   }
 }
+
+
+.container-form {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
+  border-radius: 15px;
+  opacity: 1;
+  margin: 2em;
+}
+
+
+// 
+.container-sections-forms {
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  opacity: 1;
+  padding: 2em;
+  margin: 1.5em 0em;
+}
+.container-table-result-responsive {
+  border: 1px none #e0e0e0;
+  border-radius: 15px;
+  opacity: 1;
+  padding: 0;
+  margin: 0;
+}
+
+.container-button-bot {
+  display: flex;
+  justify-content: end;
+  flex-direction: row;
+  align-items: center;
+  height: 9vh;
+}
+
+.button-save-container-display {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
+  &.m-top-20 {
+    margin-top: 20px;
+  }
+}
+
+.button-save-container-display {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+.title-area {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .responsive-table {
+    flex-direction: row;
+    border: none #ddd;
+    border-width: 0 0 0 0;
+    padding: 16px;
+    border-radius: 0;
+    box-shadow: none;
+    gap: 0;
+    margin: 0;
+  }
+
+  .title-table {
+    background-color: #f2f2f2;
+    align-items: center;
+    height: 3em;
+    display: flex;
+    justify-content: center;
+  }
+  .table-row {
+    flex-direction: column;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+  }
+
+  .table-column {
+    padding: 8px;
+    font-weight: normal;
+  }
+}
+
+

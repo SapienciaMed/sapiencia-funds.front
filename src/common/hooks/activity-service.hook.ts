@@ -15,8 +15,21 @@ export function useActivityService(){
 
   async function getActivity(): Promise<ApiResponse<IMasterActivity[]>> {
     try {
-      const endpoint: string = `/`;
-      return await get(`${authUrl}${endpoint}`);
+      
+      return await get(`${authUrl}`);
+    } catch (error) {
+      return new ApiResponse(
+        {} as IMasterActivity[],
+        EResponseCodes.FAIL,
+        "Error no controlado"
+      );
+    }
+  }
+
+  async function getActivityById(id: number): Promise<ApiResponse<IMasterActivity[]>> {
+    try {
+      const endpoint: string = `/${id}`;
+      return await get(`${authUrl}${endpoint}/`);
     } catch (error) {
       return new ApiResponse(
         {} as IMasterActivity[],
@@ -28,6 +41,7 @@ export function useActivityService(){
 
   return {
     getActivity,
+    getActivityById
     
   };
   

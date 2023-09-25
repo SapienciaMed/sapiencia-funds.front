@@ -19,7 +19,7 @@ export default function useSearchMasterHook() {
   const { setMessage } = useContext(AppContext);
 
   //custom hooks
-  const { getActivity } = useActivityService();
+  const { getActivity, getActivityById } = useActivityService();
 
   //states
   const [showTable, setshowTable] = useState(false);
@@ -31,34 +31,6 @@ export default function useSearchMasterHook() {
   //react-router-dom
   const navigate = useNavigate();
 
-  const { register, handleSubmit, control, formState, reset, watch } =
-  useForm<IMasterActivityFilter>({
-    //resolver,
-    mode: "all",
-    defaultValues: { 
-      id: null,
-    },
-  });
-
-  const formValues = watch();
-
-const redirectCreate = () => {
- navigate("../crear");
-};
-
-const clearFields = () => {
-    reset();
-    tableComponentRef.current?.emptyData();
-    setshowTable(false);
-};
-
-const onSubmit = handleSubmit(async (data: IMasterActivity) => {
-  setshowTable(true);
-
-  if (tableComponentRef.current) {
-    tableComponentRef.current.loadData(data);
-  }
-});
 
 
   // carga combos
@@ -69,87 +41,137 @@ const onSubmit = handleSubmit(async (data: IMasterActivity) => {
   //functions
   const loadDropdown = async () => {
     //charges
-    const { data, operation } = await getActivity();
+    const { data, operation } = await getActivity();  
     if (operation.code === EResponseCodes.OK) {
-      const chargesList = data.map((item) => {
+      const activityList = data.map((item) => {
         return {
           name: item.name,
           value: item.id,
         };
       });
 
-      setActivity(chargesList);
+      setActivity(activityList);
+
     } else {
       setActivity([]);
     }
   };
 
 
-  const showEditMasterActivity = (row: IMasterActivity) => {
-    if (row) {
-      const infoPersonal: DataItem[] = [
+  const showDetailLicence = async (id: number) => {
+    const { operation, data } = await getActivityById(id);
+
+    if (operation.code === EResponseCodes.OK) {
+      const dataResolution: DataItem[] = [
         {
-          title: <span className="text-left">Actividad</span>,
-          value: row.name,
+          title: "Actividad",
+          value: `${data[0].name}`,
         },
+      ];
+
+      const dataInformation: DataItem[] = [
         {
           title: <span className="text-left">Valor</span>,
-          value: row.totalValue,
+          value: `${data[0].totalValue}`,
         },
         {
           title: <span className="text-left">Programa</span>,
-          value: row.codProgramCode[0].name,
+          value: `${data[0].codProgramCode}`,
         },
+
         {
-          title: (
-            <span className="text-left">Descripción</span>
-          ),
-          value: row.description,
+          title: <span className="text-left">Descripción</span>,
+          value: data[0].description
         },
       ];
-    };
-};
-    
 
-const tableColumns: ITableElement<IMasterActivity>[] = [
-  {
+      return setMessage({
+        title: "Editar maestro actividad",
+        show: true,
+        //OkTitle: "Aceptar",
+        description: (
+          <div className="container-modal_description">
+            <ResponsiveTable data={dataResolution} />
+            <div>
+              <h3 className="">Información</h3>
+              <ResponsiveTable data={dataInformation} />
+            </div>
+           
+          </div>
+        ),
+        size: "large",
+        background: true,
+      });
+    }
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState,
+    control,
+    watch,
+  } = useForm<IMasterActivityFilter>();
+  
+
+  
+  const tableColumns: ITableElement<IMasterActivity>[] = [
+   
+    {
       fieldName: "employment.worker.numberDocument",
       header: "Actividad",
       renderCell: (row) => {
-        return <>{row.name}</>;
+        return (<>{row.name}</>);
       },
     },
     {
-      fieldName: "row.employment.worker",
+      fieldName: "row.employment.worker.firstName",
       header: "Valor",
       renderCell: (row) => {
-        return <>{row.totalValue}</>;
+        return (<>{row.totalValue}</>);
       },
     },
     {
-      fieldName: "salaryIncrement.charge.name",
+      fieldName: "licenceType.id",
       header: "Programa",
       renderCell: (row) => {
-        return <>{row.codProgramCode[0].name}</>;
+        return <>{""}</>;
       },
     },
     {
-      fieldName: "salaryIncrement.numberActApproval",
+      fieldName: "licenceState",
       header: "Descripción",
       renderCell: (row) => {
         return <>{row.description}</>;
       },
     },
   ];
-
   const tableActions: ITableAction<IMasterActivity>[] = [
     {
-        icon: "Edit",
-        onClick: (row) => {
-          showEditMasterActivity(row);
-        },
+      icon: "Edit",
+      onClick: (row) => {
+        showDetailLicence(row.id);
+      },
     },
   ];
+
+
+  const redirectCreate = () => {
+    navigate("../crear");
+   };
+
+
+  const formValues = watch();
+
+
+  const onSubmit = handleSubmit(async (data: IMasterActivity) => {
+    setshowTable(true);
+  
+    if (tableComponentRef.current) {
+      tableComponentRef.current.loadData(data);
+      console.log("*********************", data)
+    }
+  });
 
 
   return {
@@ -158,7 +180,6 @@ const tableColumns: ITableElement<IMasterActivity>[] = [
     formState,
     onSubmit,
     redirectCreate,
-    clearFields,
     formValues,
     showTable,
     activity,

@@ -13,7 +13,6 @@ import {
   Control,
   FieldValues,
   FormState,
-  UseFormRegister,
   Controller,
 } from "react-hook-form";
 
@@ -25,7 +24,6 @@ interface IPropsFilterMasterActivity {
     control: Control<IMasterActivityFilter, any>;
     formState: FormState<FieldValues>;
     redirectCreate: () => void;
-    clearFields: () => void;
     onSubmit: () => Promise<void>;
     activityList: IDropdownProps[];
     formValues: IMasterActivityFilter
@@ -37,7 +35,6 @@ export const FilterMasterActivityForm = ({
   formState,
   redirectCreate,
   onSubmit,
-  clearFields,
   activityList,
   formValues,
 }: IPropsFilterMasterActivity): React.JSX.Element => {
@@ -61,10 +58,9 @@ export const FilterMasterActivityForm = ({
 
       <div>
       <FormComponent className="form-signIn" action={onSubmit}>
-        <div className="container-sections-forms">
           <div className="grid-form-3-container gap-25">
             <SelectComponent
-              idInput={"activity"}
+              idInput={"name"}
               control={control}
               errors={errors}
               data={activityList}
@@ -78,16 +74,16 @@ export const FilterMasterActivityForm = ({
               filter={true}
               placeholder="Seleccione."
             />
-
           </div>
 
-          <div className="button-save-container-display m-top-20">
+          <div className="button-save-container-display">
             <ButtonComponent
               value={"Buscar"}
               className="button-save disabled-black big"
+              //disabled={!name}
             />
           </div>
-        </div>
+       
       </FormComponent>
       </div>
     </div>

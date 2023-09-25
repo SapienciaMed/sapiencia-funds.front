@@ -48,7 +48,7 @@ export const CreateMasterActivityForm = ({
 
   return (
     <FormComponent
-      id="createUpdateIncrementSalary"
+      id="createMasterActivity"
       className="form-signIn"
       action={onSubmit}
     >

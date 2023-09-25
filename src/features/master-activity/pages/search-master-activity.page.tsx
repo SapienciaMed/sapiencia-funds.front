@@ -13,7 +13,6 @@ const SearchMasterPage = (): React.JSX.Element => {
       formState,
       onSubmit,
       redirectCreate,
-      clearFields,
       formValues,
       showTable,
       activity,
@@ -27,7 +26,7 @@ const SearchMasterPage = (): React.JSX.Element => {
         <div className="card-table">
           <div className="title-area">
             <label className="text-black extra-large bold">
-            Gestión territorial
+            Consultar y modificar maestro actividad 
             </label>
           </div>
   
@@ -36,15 +35,14 @@ const SearchMasterPage = (): React.JSX.Element => {
           formState={formState}
           activityList = {activity}
           redirectCreate={redirectCreate}
-          clearFields={clearFields}
           onSubmit={onSubmit}
           formValues={formValues}
           />
           
+          
           {showTable && (
           <div className="container-sections-forms">
             <TableComponent
-              setPaginateData={null}
               ref={tableComponentRef}
               url={`${process.env.urlApiFunds}/api/v1/activities/get-paginated`}
               columns={tableColumns}
