@@ -7,7 +7,7 @@ function MasterActivityRoutes() {
         () => import("./pages/search-master-activity.page")
     );
  
-    const CreateUpdateMasterActivityPage = lazy(
+    const CreateMasterActivityPage = lazy(
         () => import("./pages/create-master-page")
     );
 
@@ -26,16 +26,7 @@ function MasterActivityRoutes() {
                 path={"/crear"}
                 element={
                     <PrivateRoute
-                        element={<CreateUpdateMasterActivityPage />}
-                        allowedAction={"NMN_TRABAJADOR_CONTRATAR"}
-                    />
-                }
-            />
-            <Route
-                path={"/edit/:id"}
-                element={
-                    <PrivateRoute
-                        element={< CreateUpdateMasterActivityPage />}
+                        element={<CreateMasterActivityPage />}
                         allowedAction={"NMN_TRABAJADOR_CONTRATAR"}
                     />
                 }

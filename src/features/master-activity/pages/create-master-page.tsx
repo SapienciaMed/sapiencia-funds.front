@@ -1,43 +1,51 @@
 import React from "react";
-import {
-  ButtonComponent,
-  FormComponent,
-  InputComponent,
-  SelectComponent,
-} from "../../../common/components/Form";
-import { Controller } from "react-hook-form";
-import useCreateMasterActivity from "../hooks/create-master-activity.hook";
-import { AiOutlinePlusCircle } from "react-icons/ai";
-import {
-  addBusinessDays,
-  addCalendarDays,
-} from "../../../common/utils/helpers";
 
+import {CreateMasterActivityForm}  from "../forms/create-master-activity.form";
 
-const CreateMasterActivityPage = (): React.JSX.Element => {
-    const {
+import useCreateActivityHook from "../hooks/create-master-activity.hook";
 
-    } = useCreateMasterActivity();
-  
-      return (
-        <div className="main-page">
-          <div className="card-table">
-            <div className="title-area">
-              <label className="text-black extra-large bold">Gestión territorial</label>
-              
-              <div
-                className="title-button text-main biggest pointer"
-                
-              >
-                maestro actividad <AiOutlinePlusCircle />
-              </div>
-          </div>
-            
+import TableComponent from "../../../common/components/table.component";
 
-        
-          </div>
+const CreateMasterPage = (): React.JSX.Element => {
+  const {
+    control,
+    formState,
+    onSubmit,
+    redirectCreate,
+    clearFields,
+    formValues,
+    showTable,
+    activity,
+    tableComponentRef,
+    tableColumns,
+    tableActions,
+  } = useCreateActivityHook();
+
+  return (
+    <div className="main-page">
+      <div className="card-table">
+        <div className="title-area">
+          <label className="text-black extra-large bold">
+          Gestión territorial
+          </label>
         </div>
-      );
-    };
-    
-    export default React.memo(CreateMasterActivityPage);
+
+        {/* <CreateMasterActivityForm
+        //control={control}
+        formState={formState}
+        //activityList = {activity}
+        //redirectCreate={redirectCreate}
+        //clearFields={clearFields}
+        onSubmit={onSubmit}
+        formValues={formValues}
+        />
+       */}
+
+    </div>
+  </div>
+  );
+};  
+          
+
+export default React.memo(CreateMasterPage);
+
