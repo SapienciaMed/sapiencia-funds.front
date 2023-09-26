@@ -176,7 +176,7 @@ const redirectCancel = () => {
   setMessage({
     title: "Cancelar",
     description: `¿Estás segur@ que deseas 
-    cancelar el incremento?`,
+    cancelar la Actividad?`,
     show: true,
     //OkTitle: "Aceptar",
     onOk: () => {

@@ -8,18 +8,6 @@ import TableComponent from "../../../common/components/table.component";
 
 
 const SearchMasterPage = (): React.JSX.Element => {
-    const {
-      control,
-      formState,
-      onSubmit,
-      redirectCreate,
-      formValues,
-      showTable,
-      activity,
-      tableComponentRef,
-      tableColumns,
-      tableActions,
-    } = useSearchMasterHook();
   
     return (
       <div className="main-page">
@@ -31,26 +19,11 @@ const SearchMasterPage = (): React.JSX.Element => {
           </div>
   
           <FilterMasterActivityForm
-          control={control}
-          formState={formState}
-          activityList = {activity}
-          redirectCreate={redirectCreate}
-          onSubmit={onSubmit}
-          formValues={formValues}
+          
           />
           
           
-          {showTable && (
-          <div className="container-sections-forms">
-            <TableComponent
-              ref={tableComponentRef}
-              url={`${process.env.urlApiFunds}/api/v1/activities/get-paginated`}
-              columns={tableColumns}
-              actions={tableActions}
-              isShowModal={false}
-            />
-          </div>
-        )}
+
       </div>
     </div>
     );

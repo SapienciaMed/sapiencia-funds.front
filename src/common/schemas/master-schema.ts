@@ -19,3 +19,11 @@ export const createmasterActivity = yup.object({
       .max(500, "Solo se permiten 500 caracteres"),
     }),
   });
+
+  export const searchActivity = yup.object({
+    activity: yup.object({
+      name: yup
+        .string()
+        .required("El campo es obligatorio")
+    }),
+  });

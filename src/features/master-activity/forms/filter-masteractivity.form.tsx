@@ -9,6 +9,8 @@ import {
   ButtonComponent,
 } from "../../../common/components/Form";
 
+import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
+
 import {
   Control,
   FieldValues,
@@ -19,29 +21,27 @@ import {
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { IMasterActivityFilter, IMasterActivity } from "../../../common/interfaces/funds.interfaces";
 import useSearchMasterHook from "../hooks/search-master-activity.hook";
-
-interface IPropsFilterMasterActivity {
-    control: Control<IMasterActivityFilter, any>;
-    formState: FormState<FieldValues>;
-    redirectCreate: () => void;
-    onSubmit: () => Promise<void>;
-    activityList: IDropdownProps[];
-    formValues: IMasterActivityFilter
-}
+import TableComponent from "../../../common/components/table.component";
+import { EDirection } from "../../../common/constants/input.enum";
 
 
-export const FilterMasterActivityForm = ({
-  control,
-  formState,
-  redirectCreate,
-  onSubmit,
-  activityList,
-  formValues,
-}: IPropsFilterMasterActivity): React.JSX.Element => {
-  const { errors, isValid } = formState;
+export const FilterMasterActivityForm = () =>{
 
-
-  const { name } = formValues;
+  const {    
+    register,
+    reset,
+    control,
+    errors,
+    onSubmit,
+    redirectCreate,
+    formValues,
+    showTable,
+    activity,
+    tableComponentRef,
+    tableColumns,
+    tableActions,
+  
+  } = useSearchMasterHook()
 
   return (
     <div className="container-sections-forms">
@@ -57,34 +57,59 @@ export const FilterMasterActivityForm = ({
       </div>
 
       <div>
-      <FormComponent className="form-signIn" action={onSubmit}>
+      <FormComponent className="form-signIn" id="useQueryForm" action={onSubmit}>
           <div className="grid-form-3-container gap-25">
-            <SelectComponent
-              idInput={"name"}
-              control={control}
+            <SelectComponentOld
+              direction={EDirection.column}
               errors={errors}
-              data={activityList}
-              label={
-                <>
-                  Actividad <span>*</span>
-                </>
-              }
+              idInput={"name"}
+              data={activity}
+              register={register}
+              label={"Actividad"}
               className="select-basic medium"
               classNameLabel="text-black big bold"
-              filter={true}
               placeholder="Seleccione."
-            />
-          </div>
-
-          <div className="button-save-container-display">
-            <ButtonComponent
-              value={"Buscar"}
-              className="button-save disabled-black big"
-              //disabled={!name}
             />
           </div>
        
       </FormComponent>
+      <div className="container-button-core-consultar">
+              <div className="button-save-container-display">
+              <ButtonComponent
+                  form="useQueryForm"
+                  value="Limpiar campos"
+                  type="button"
+                  className="button-clean-fields "
+                  action={() => {
+                    reset();
+                    tableComponentRef.current.emptyData();
+                  }}
+                
+                />
+                <ButtonComponent
+                  form="useQueryForm"
+                  value="Buscar"
+                  type="submit"
+                  className="button-search"
+                /> 
+              </div>
+        </div>
+      
+
+
+      <div className="container-sections-forms">
+            <TableComponent
+              ref={tableComponentRef}
+              url={`${process.env.urlApiFunds}/api/v1/activities/get-paginated`}
+              columns={tableColumns}
+              actions={tableActions}
+              isShowModal={true}
+              titleMessageModalNoResult="Usuario no existe"
+              descriptionModalNoResult="El usuario no existe en el sistema. 
+              Haga clic en el botón Crear usuario"
+            />
+          </div>
+      
       </div>
     </div>
   );

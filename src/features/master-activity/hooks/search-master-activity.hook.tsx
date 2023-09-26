@@ -7,6 +7,8 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { ApiResponse } from "../../../common/utils/api-response";
 import useActivityService from "../../../common/hooks/activity-service.hook";
+import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
+import {searchActivity} from "../../../common/schemas/master-schema"
 import { AppContext } from "../../../common/contexts/app.context";
 import {
     DataItem,
@@ -23,7 +25,7 @@ export default function useSearchMasterHook() {
 
   //states
   const [showTable, setshowTable] = useState(false);
-  const [activity, setActivity] = useState<IDropdownProps[]>([]);
+  const [activity, setActivity] = useState([]);
 
   //ref
   const tableComponentRef = useRef(null);
@@ -43,14 +45,13 @@ export default function useSearchMasterHook() {
     //charges
     const { data, operation } = await getActivity();  
     if (operation.code === EResponseCodes.OK) {
-      const activityList = data.map((item) => {
+      setActivity (data.map((item) => {
         return {
           name: item.name,
           value: item.id,
         };
-      });
+      }));
 
-      setActivity(activityList);
 
     } else {
       setActivity([]);
@@ -105,13 +106,16 @@ export default function useSearchMasterHook() {
     }
   };
 
+  const resolver = useYupValidationResolver(searchActivity)
   const {
     register,
     handleSubmit,
-    formState,
+    formState:{errors},
     control,
     watch,
-  } = useForm<IMasterActivityFilter>();
+    reset,
+
+  } = useForm<IMasterActivityFilter>({resolver});
   
 
   
@@ -166,18 +170,19 @@ export default function useSearchMasterHook() {
 
   const onSubmit = handleSubmit(async (data: IMasterActivity) => {
     setshowTable(true);
-  
+    
     if (tableComponentRef.current) {
-      tableComponentRef.current.loadData(data);
-      console.log("*********************", data)
+      
+      tableComponentRef.current.loadData(data.id);
+    
     }
   });
 
-
   return {
     register,
+    reset,
     control,
-    formState,
+    errors,
     onSubmit,
     redirectCreate,
     formValues,
