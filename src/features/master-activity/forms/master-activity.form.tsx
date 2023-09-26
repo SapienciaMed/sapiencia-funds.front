@@ -20,7 +20,7 @@ interface IProps {
 
 function MasterActivityForm({ initData }: IProps): React.JSX.Element {
   // Servicios
-  const { createMasterActivity, editMasterActivity } = useMasterActivityApi();
+  const { createMasterActivity, editMasterActivity, getProgramTypes} = useMasterActivityApi();
   const navigate = useNavigate();
   const { setMessage } = useContext(AppContext);
   const form = useForm<IMasterActivity>({
@@ -30,6 +30,31 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
 
   // States
   const [sending, setSending] = useState<boolean>(false);
+  const [typeProgram, setTypeProgram] = useState([]);
+
+  //Effect que inicializa el Tipo de Porgrama
+    
+  // carga Tipo de Porgrama
+    useEffect(() => {
+      ProgramType();
+    }, []);
+  
+    //functions
+    const ProgramType = async () => {
+      //charges
+      const { data, operation } = await getProgramTypes();
+      if (operation.code === EResponseCodes.OK) {
+        const programList = data.map((item) => {
+          return {
+            name: item.name,
+            value: item.id,
+          };
+        });
+        setTypeProgram(programList);
+      } else {
+        setTypeProgram([]);
+      }
+    };
 
   // Effect que inicialicia los datos iniciales
   useEffect(() => {
@@ -39,7 +64,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
       form.setValue("name", initData.name);
       form.setValue("description", initData.description);
       form.setValue("totalValue", initData.totalValue);
-      form.setValue("codProgramCode", initData.codProgramCode);
+      form.setValue("typesProgram", initData.typesProgram);
     }
   }, [initData]);
 
@@ -137,15 +162,10 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
               />
 
               <SelectComponent
-                idInput={"codProgramCode"}
+                idInput={"typesProgram"}
                 control={form.control}
                 errors={form.formState.errors}
-                data={[
-                  {
-                    name: "test",
-                    value: "1",
-                  },
-                ]}
+                data={typeProgram}
                 label="Programa"
                 className="select-basic medium"
                 classNameLabel="text-black big bold"

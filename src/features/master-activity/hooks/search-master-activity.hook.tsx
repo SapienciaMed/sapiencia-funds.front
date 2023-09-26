@@ -13,10 +13,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import useActivityService from "../../../common/hooks/activity-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
-import {
-  DataItem,
-  ResponsiveTable,
-} from "../../../common/components/Form/table-detail.component";
+
 
 export default function useSearchMasterHook() {
   // Context
@@ -58,79 +55,33 @@ export default function useSearchMasterHook() {
     }
   };
 
-  const showDetailLicence = async (id: number) => {
-    const { operation, data } = await getActivityById(id);
-
-    if (operation.code === EResponseCodes.OK) {
-      const dataResolution: DataItem[] = [
-        {
-          title: "Actividad",
-          value: `${data[0].name}`,
-        },
-      ];
-
-      const dataInformation: DataItem[] = [
-        {
-          title: <span className="text-left">Valor</span>,
-          value: `${data[0].totalValue}`,
-        },
-        {
-          title: <span className="text-left">Programa</span>,
-          value: `${data[0].codProgramCode}`,
-        },
-
-        {
-          title: <span className="text-left">Descripción</span>,
-          value: data[0].description,
-        },
-      ];
-
-      return setMessage({
-        title: "Editar maestro actividad",
-        show: true,
-        //OkTitle: "Aceptar",
-        description: (
-          <div className="container-modal_description">
-            <ResponsiveTable data={dataResolution} />
-            <div>
-              <h3 className="">Información</h3>
-              <ResponsiveTable data={dataInformation} />
-            </div>
-          </div>
-        ),
-        size: "large",
-        background: true,
-      });
-    }
-  };
-
   const { register, handleSubmit, formState, control, watch } =
     useForm<IMasterActivityFilter>();
 
   const tableColumns: ITableElement<IMasterActivity>[] = [
     {
-      fieldName: "employment.worker.numberDocument",
+      fieldName: "row.activity.name",
       header: "Actividad",
       renderCell: (row) => {
         return <>{row.name}</>;
       },
     },
     {
-      fieldName: "row.employment.worker.firstName",
+      fieldName: "row.activity.value",
       header: "Valor",
       renderCell: (row) => {
         return <>{row.totalValue}</>;
       },
     },
     {
-      fieldName: "licenceType.id",
+      fieldName: "row.activity.programa",
       header: "Programa",
       renderCell: (row) => {
-        return <>{row.codProgramCode}</>;
+        return <>{row.typesProgram.name}</>;
       },
     },
     {
-      fieldName: "licenceState",
+      fieldName: "row.activity.descripcion",
       header: "Descripción",
       renderCell: (row) => {
         return <>{row.description}</>;

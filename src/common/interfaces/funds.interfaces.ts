@@ -4,7 +4,7 @@ export interface IMasterActivity{
   id?: number;
   name: string;
   totalValue: number;
-  codProgramCode: IProgramTypes;
+  typesProgram: IProgramTypes;
   description?: string;
 }
 
