@@ -7,6 +7,7 @@ import "primereact/resources/primereact.min.css";
 import ModalMessageComponent from "./common/components/modal-message.component";
 import ApplicationProvider from "./application-provider";
 import VotingResultsRoutes from "./features/voting-results/voting-results-routes";
+import MasterActivityRoutes from "./features/master-activity/master-activity-routes"
 import useAppCominicator from "./common/hooks/app-communicator.hook";
 
 function App() {
@@ -33,6 +34,10 @@ function App() {
               <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
+              />
+              <Route
+                path={"/fondos/maestro/*"}
+                element={<MasterActivityRoutes />}
               />
             </Routes>
           </Suspense>
