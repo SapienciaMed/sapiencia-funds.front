@@ -135,7 +135,7 @@ export default function useSearchMasterHook() {
       fieldName: "licenceType.id",
       header: "Programa",
       renderCell: (row) => {
-        return <>{""}</>;
+        return <>{row.codProgramCode}</>;
       },
     },
     {

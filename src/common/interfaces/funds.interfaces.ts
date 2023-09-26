@@ -4,11 +4,17 @@ export interface IMasterActivity{
   id?: number;
   name: string;
   totalValue: number;
-  codProgramCode: number;
+  codProgramCode: IProgramTypes;
   description?: string;
 }
 
 export interface IMasterActivityFilter {
     id?: number;
     name: string;
-  }
+}
+
+
+export interface IProgramTypes {
+    id?: number;
+    name?: string;
+}
