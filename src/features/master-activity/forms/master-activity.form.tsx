@@ -41,7 +41,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
   
     //functions
     const ProgramType = async () => {
-      //charges
+      //Tipo de Porgrama
       const { data, operation } = await getProgramTypes();
       if (operation.code === EResponseCodes.OK) {
         const programList = data.map((item) => {
@@ -58,7 +58,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
 
   // Effect que inicialicia los datos iniciales
   useEffect(() => {
-    console.log(initData);
+    console.log("******************************iniData",initData);
 
     if (initData) {
       form.setValue("name", initData.name);
@@ -159,10 +159,11 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 label="Valor Total"
                 classNameLabel="text-black big text-required"
                 errors={form.formState.errors}
+                disabled={true}
               />
 
               <SelectComponent
-                idInput={"typesProgram"}
+                idInput={"codProgramCode"}
                 control={form.control}
                 errors={form.formState.errors}
                 data={typeProgram}
