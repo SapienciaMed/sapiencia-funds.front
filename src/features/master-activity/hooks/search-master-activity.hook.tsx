@@ -1,18 +1,22 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import {ITableAction,ITableElement,} from "../../../common/interfaces/table.interfaces";
-import {IMasterActivityFilter, IMasterActivity} from "../../../common/interfaces/funds.interfaces";
+import {
+  ITableAction,
+  ITableElement,
+} from "../../../common/interfaces/table.interfaces";
+import {
+  IMasterActivityFilter,
+  IMasterActivity,
+} from "../../../common/interfaces/funds.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
-import { ApiResponse } from "../../../common/utils/api-response";
 import useActivityService from "../../../common/hooks/activity-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
 import {
-    DataItem,
-    ResponsiveTable,
-  } from "../../../common/components/Form/table-detail.component";
-
+  DataItem,
+  ResponsiveTable,
+} from "../../../common/components/Form/table-detail.component";
 
 export default function useSearchMasterHook() {
   // Context
@@ -31,8 +35,6 @@ export default function useSearchMasterHook() {
   //react-router-dom
   const navigate = useNavigate();
 
-
-
   // carga combos
   useEffect(() => {
     loadDropdown();
@@ -41,7 +43,7 @@ export default function useSearchMasterHook() {
   //functions
   const loadDropdown = async () => {
     //charges
-    const { data, operation } = await getActivity();  
+    const { data, operation } = await getActivity();
     if (operation.code === EResponseCodes.OK) {
       const activityList = data.map((item) => {
         return {
@@ -51,12 +53,10 @@ export default function useSearchMasterHook() {
       });
 
       setActivity(activityList);
-
     } else {
       setActivity([]);
     }
   };
-
 
   const showDetailLicence = async (id: number) => {
     const { operation, data } = await getActivityById(id);
@@ -81,7 +81,7 @@ export default function useSearchMasterHook() {
 
         {
           title: <span className="text-left">Descripción</span>,
-          value: data[0].description
+          value: data[0].description,
         },
       ];
 
@@ -96,7 +96,6 @@ export default function useSearchMasterHook() {
               <h3 className="">Información</h3>
               <ResponsiveTable data={dataInformation} />
             </div>
-           
           </div>
         ),
         size: "large",
@@ -105,30 +104,22 @@ export default function useSearchMasterHook() {
     }
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState,
-    control,
-    watch,
-  } = useForm<IMasterActivityFilter>();
-  
+  const { register, handleSubmit, formState, control, watch } =
+    useForm<IMasterActivityFilter>();
 
-  
   const tableColumns: ITableElement<IMasterActivity>[] = [
-   
     {
       fieldName: "employment.worker.numberDocument",
       header: "Actividad",
       renderCell: (row) => {
-        return (<>{row.name}</>);
+        return <>{row.name}</>;
       },
     },
     {
       fieldName: "row.employment.worker.firstName",
       header: "Valor",
       renderCell: (row) => {
-        return (<>{row.totalValue}</>);
+        return <>{row.totalValue}</>;
       },
     },
     {
@@ -149,30 +140,23 @@ export default function useSearchMasterHook() {
   const tableActions: ITableAction<IMasterActivity>[] = [
     {
       icon: "Edit",
-      onClick: (row) => {
-        showDetailLicence(row.id);
-      },
+      onClick: (row) => navigate("/fondos/maestro/editar/" + row.id),
     },
   ];
 
-
   const redirectCreate = () => {
     navigate("../crear");
-   };
-
+  };
 
   const formValues = watch();
 
-
   const onSubmit = handleSubmit(async (data: IMasterActivity) => {
     setshowTable(true);
-  
+
     if (tableComponentRef.current) {
       tableComponentRef.current.loadData(data);
-      console.log("*********************", data)
     }
   });
-
 
   return {
     register,
@@ -186,8 +170,5 @@ export default function useSearchMasterHook() {
     tableComponentRef,
     tableColumns,
     tableActions,
-    
-  }
-
-
+  };
 }

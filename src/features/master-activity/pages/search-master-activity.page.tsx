@@ -6,41 +6,39 @@ import useSearchMasterHook from "../hooks/search-master-activity.hook";
 
 import TableComponent from "../../../common/components/table.component";
 
-
 const SearchMasterPage = (): React.JSX.Element => {
-    const {
-      control,
-      formState,
-      onSubmit,
-      redirectCreate,
-      formValues,
-      showTable,
-      activity,
-      tableComponentRef,
-      tableColumns,
-      tableActions,
-    } = useSearchMasterHook();
-  
-    return (
-      <div className="main-page">
-        <div className="card-table">
-          <div className="title-area">
-            <label className="text-black extra-large bold">
-            Consultar y modificar maestro actividad 
-            </label>
-          </div>
-  
-          <FilterMasterActivityForm
+  const {
+    control,
+    formState,
+    onSubmit,
+    redirectCreate,
+    formValues,
+    showTable,
+    activity,
+    tableComponentRef,
+    tableColumns,
+    tableActions,
+  } = useSearchMasterHook();
+
+  return (
+    <div className="main-page">
+      <div className="card-table">
+        <div className="title-area">
+          <label className="text-black extra-large bold">
+            Consultar y modificar maestro actividad
+          </label>
+        </div>
+
+        <FilterMasterActivityForm
           control={control}
           formState={formState}
-          activityList = {activity}
+          activityList={activity}
           redirectCreate={redirectCreate}
           onSubmit={onSubmit}
           formValues={formValues}
-          />
-          
-          
-          {showTable && (
+        />
+
+        {showTable && (
           <div className="container-sections-forms">
             <TableComponent
               ref={tableComponentRef}
@@ -53,12 +51,7 @@ const SearchMasterPage = (): React.JSX.Element => {
         )}
       </div>
     </div>
-    );
-  };  
-            
+  );
+};
 
 export default React.memo(SearchMasterPage);
-
-
-
-

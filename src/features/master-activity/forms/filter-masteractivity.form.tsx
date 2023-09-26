@@ -1,34 +1,21 @@
 import React from "react";
-
 import { AiOutlinePlusCircle } from "react-icons/ai";
-
 import {
   FormComponent,
-  SelectComponent,
-  InputComponent,
   ButtonComponent,
+  InputComponent,
 } from "../../../common/components/Form";
-
-import {
-  Control,
-  FieldValues,
-  FormState,
-  Controller,
-} from "react-hook-form";
-
+import { Control, FieldValues, FormState } from "react-hook-form";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
-import { IMasterActivityFilter, IMasterActivity } from "../../../common/interfaces/funds.interfaces";
-import useSearchMasterHook from "../hooks/search-master-activity.hook";
-
+import { IMasterActivityFilter } from "../../../common/interfaces/funds.interfaces";
 interface IPropsFilterMasterActivity {
-    control: Control<IMasterActivityFilter, any>;
-    formState: FormState<FieldValues>;
-    redirectCreate: () => void;
-    onSubmit: () => Promise<void>;
-    activityList: IDropdownProps[];
-    formValues: IMasterActivityFilter
+  control: Control<IMasterActivityFilter, any>;
+  formState: FormState<FieldValues>;
+  redirectCreate: () => void;
+  onSubmit: () => Promise<void>;
+  activityList: IDropdownProps[];
+  formValues: IMasterActivityFilter;
 }
-
 
 export const FilterMasterActivityForm = ({
   control,
@@ -39,10 +26,6 @@ export const FilterMasterActivityForm = ({
   formValues,
 }: IPropsFilterMasterActivity): React.JSX.Element => {
   const { errors, isValid } = formState;
-
-
-  const { name } = formValues;
-
   return (
     <div className="container-sections-forms">
       <div className="title-area">
@@ -57,9 +40,19 @@ export const FilterMasterActivityForm = ({
       </div>
 
       <div>
-      <FormComponent className="form-signIn" action={onSubmit}>
+        <FormComponent className="form-signIn" action={onSubmit}>
           <div className="grid-form-3-container gap-25">
-            <SelectComponent
+            <InputComponent
+              register={control.register}
+              idInput="name"
+              className="input-basic medium"
+              typeInput="text"
+              label="Actividad"
+              classNameLabel="text-black big text-required"
+              errors={errors}
+            />
+
+            {/* <SelectComponent
               idInput={"name"}
               control={control}
               errors={errors}
@@ -73,7 +66,7 @@ export const FilterMasterActivityForm = ({
               classNameLabel="text-black big bold"
               filter={true}
               placeholder="Seleccione."
-            />
+            /> */}
           </div>
 
           <div className="button-save-container-display">
@@ -83,8 +76,7 @@ export const FilterMasterActivityForm = ({
               //disabled={!name}
             />
           </div>
-       
-      </FormComponent>
+        </FormComponent>
       </div>
     </div>
   );
