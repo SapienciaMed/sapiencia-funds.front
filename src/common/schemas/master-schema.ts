@@ -11,7 +11,7 @@ export const createmasterActivity = yup.object({
         .required("El campo es obligatorio")
         .max(10, "Solo se permiten 20 caracteres"),
       totalValue: yup.string().required("El campo es obligatorio"),
-      typesProgram: yup.string().required("El campo es obligatorio"),
+      codProgramCode: yup.string().required("El campo es obligatorio"),
       description: yup
       .string()
       .optional()

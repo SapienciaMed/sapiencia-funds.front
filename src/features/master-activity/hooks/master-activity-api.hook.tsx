@@ -11,7 +11,6 @@ export default function useMasterActivityApi() {
   async function getMasterActivityById(
     id: number
   ): Promise<ApiResponse<IMasterActivity[]>> {
-    console.log("*********ById", get(`${serviceUrl}/${id}`))
     return await get(`${serviceUrl}/${id}`);
   }
 
