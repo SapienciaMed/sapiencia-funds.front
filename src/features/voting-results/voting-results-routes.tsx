@@ -12,7 +12,17 @@ function VotingResultsRoutes() {
         element={
           <PrivateRoute
             element={<VotingResultsPage />}
-            allowedAction={"INDICADOR_ACCION_SEGURIDAD"}
+            allowedAction={"VOTACION_CONSULTAR"}
+          />
+        }
+      />
+
+      <Route
+        path={"/crear"}
+        element={
+          <PrivateRoute
+            element={<VotingResultsPage />}
+            allowedAction={"VOTACION_CONSULTAR"}
           />
         }
       />
