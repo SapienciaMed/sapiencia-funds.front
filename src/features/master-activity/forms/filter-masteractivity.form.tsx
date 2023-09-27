@@ -26,6 +26,7 @@ export const FilterMasterActivityForm = ({
   formValues,
 }: IPropsFilterMasterActivity): React.JSX.Element => {
   const { errors, isValid } = formState;
+ 
   return (
     <div className="container-sections-forms">
       <div className="title-area">
@@ -51,22 +52,6 @@ export const FilterMasterActivityForm = ({
               classNameLabel="text-black big text-required"
               errors={errors}
             />
-
-            {/* <SelectComponent
-              idInput={"name"}
-              control={control}
-              errors={errors}
-              data={activityList}
-              label={
-                <>
-                  Actividad <span>*</span>
-                </>
-              }
-              className="select-basic medium"
-              classNameLabel="text-black big bold"
-              filter={true}
-              placeholder="Seleccione."
-            /> */}
           </div>
 
           <div className="button-save-container-display">
