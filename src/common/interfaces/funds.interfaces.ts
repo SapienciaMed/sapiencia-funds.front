@@ -3,10 +3,10 @@ import { DateTime } from "luxon";
 export interface IMasterActivity{
   id?: number;
   name: string;
-  codProgramCode?: number;
+  codProgramCode?: number,
   totalValue: number;
-  typesProgram: IProgramTypes;
   description?: string;
+  typesProgram: IProgramTypes;
 }
 
 export interface IMasterActivityFilter {

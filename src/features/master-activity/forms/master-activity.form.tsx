@@ -58,13 +58,13 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
 
   // Effect que inicialicia los datos iniciales
   useEffect(() => {
-    console.log("******************************iniData",initData.codProgramCode);
 
     if (initData) {
       form.setValue("name", initData.name);
       form.setValue("description", initData.description);
       form.setValue("totalValue", initData.totalValue);
       form.setValue("typesProgram", initData.typesProgram);
+      form.setValue("codProgramCode", initData.codProgramCode);
     }
   }, [initData]);
 
@@ -72,8 +72,9 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
   function onSubmitForm(data: IMasterActivity) {
     setMessage({
       show: true,
-      title: "Guardar actividad maestra",
-      description: "¿Esta seguro de crear esta actividad maestra?",
+      title: "Guardar cambios",
+      description: `¿Estás segur@ de 
+      guardar los cambios?`,
       okTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
@@ -125,6 +126,25 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
     });
   }
 
+// Metodo que ejecuta el redirectCancel del formulario
+  const redirectCancel = () => {
+    setMessage({
+      title: "Cancelar",
+      description: `¿Estás segur@ que deseas 
+      cancelar los cambios?`,
+      show: true,
+      okTitle: "Aceptar",
+      onOk: () => {
+        navigate("../consultar");
+        setMessage((prev) => {
+          return { ...prev, show: false };
+        });
+      },
+      cancelTitle: "Cancelar",
+      background: true,
+    });
+  };
+
   return (
     <>
       <FormComponent
@@ -140,11 +160,11 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
           </div>
 
           <div>
-            <div className="grid-form-2-container gap-25">
+            <div className="grid-form-4-container gap-25">
               <InputComponent
                 register={form.register}
                 idInput="name"
-                className="input-basic medium"
+                className="input-basic medium input-disabled"
                 typeInput="text"
                 label="Actividad"
                 classNameLabel="text-black big text-required"
@@ -169,7 +189,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 errors={form.formState.errors}
                 data={typeProgram}
                 label="Programa"
-                className="select-basic medium"
+                className="select-basic medium select-disabled-list"
                 classNameLabel="text-black big bold"
                 filter={true}
                 placeholder="Seleccione."
@@ -179,7 +199,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
               <InputComponent
                 register={form.register}
                 idInput="description"
-                className="input-basic medium"
+                className="input-basic medium input-disabled"
                 typeInput="text"
                 label="Descripcion"
                 classNameLabel="text-black big text-required"
@@ -195,7 +215,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
           value={"Cancelar"}
           className="button-clean bold"
           type="button"
-          action={() => {}}
+          action={redirectCancel}
         />
         <ButtonComponent
           //   form="createMaster"

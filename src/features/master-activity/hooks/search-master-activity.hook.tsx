@@ -87,7 +87,9 @@ export default function useSearchMasterHook() {
         return <>{row.description}</>;
       },
     },
+    
   ];
+  
   const tableActions: ITableAction<IMasterActivity>[] = [
     {
       icon: "Edit",
