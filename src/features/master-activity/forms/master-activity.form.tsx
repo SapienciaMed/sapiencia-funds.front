@@ -58,7 +58,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
 
   // Effect que inicialicia los datos iniciales
   useEffect(() => {
-    console.log("******************************iniData",initData);
+    console.log("******************************iniData",initData.codProgramCode);
 
     if (initData) {
       form.setValue("name", initData.name);
@@ -149,6 +149,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 label="Actividad"
                 classNameLabel="text-black big text-required"
                 errors={form.formState.errors}
+                disabled={initData ? true : false} 
               />
 
               <InputComponent
@@ -159,7 +160,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 label="Valor Total"
                 classNameLabel="text-black big text-required"
                 errors={form.formState.errors}
-                disabled={true}
+                
               />
 
               <SelectComponent
@@ -172,6 +173,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 classNameLabel="text-black big bold"
                 filter={true}
                 placeholder="Seleccione."
+                disabled={initData ? true : false} 
               />
 
               <InputComponent
@@ -182,6 +184,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 label="Descripcion"
                 classNameLabel="text-black big text-required"
                 errors={form.formState.errors}
+                disabled={initData ? true : false} 
               />
             </div>
           </div>
