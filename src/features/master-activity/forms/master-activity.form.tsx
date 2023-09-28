@@ -75,7 +75,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
       title: "Guardar cambios",
       description: `¿Estás segur@ de 
       guardar los cambios?`,
-      okTitle: "Aceptar",
+      OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
         setSending(true);
@@ -88,7 +88,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 background: true,
                 title: "Actividad Mestro",
                 description: res.operation.message,
-                okTitle: "Aceptar",
+                OkTitle: "Aceptar",
                 onOk() {
                   if (res.operation.code == EResponseCodes.OK) {
                     navigate("/fondos/maestro/consultar");
@@ -108,7 +108,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 background: true,
                 title: "Actividad Mestro",
                 description: res.operation.message,
-                okTitle: "Aceptar",
+                OkTitle: "Aceptar",
                 onOk() {
                   if (res.operation.code == EResponseCodes.OK) {
                     navigate("/fondos/maestro/consultar");
@@ -133,7 +133,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
       description: `¿Estás segur@ que deseas 
       cancelar los cambios?`,
       show: true,
-      okTitle: "Aceptar",
+      OkTitle: "Aceptar",
       onOk: () => {
         navigate("../consultar");
         setMessage((prev) => {

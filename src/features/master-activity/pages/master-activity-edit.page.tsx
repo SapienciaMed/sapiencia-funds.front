@@ -25,7 +25,7 @@ const MasterActivityEditPage = (): React.JSX.Element => {
           title: "Actividad Mestro",
           background: true,
           description: res.operation.message,
-          okTitle: "Aceptar",
+          OkTitle: "Aceptar",
           onOk() {
             navigate("fondos/maestro/consultar");
             setMessage({});
