@@ -13,88 +13,34 @@ const VotingResultsPage = () => {
 
   return (
     <Fragment>
-      <div className="full-height container-form-grid">
-        <div className="container-form">
-          <p className="text-black huge ml-24px">Crear usuario del sistema</p>
+      <div className=" container-form-grid">
+        <div className="container-form padding-form">
+          <p className="text-black huge mg-0">Resultados votación</p>
           <div>
             <FormComponent
-              id="createUserForm"
+              id="createVotingForm"
               className="form-signIn"
               action={onSubmitSignIn}
             >
-              <div className="grid-form-4-container gap-25 container-sections-forms">
-                <span className="text-black large bold grid-span-4-columns">
-                  Datos personales
-                </span>
-                <div className="">
-                  <div className="display-justify-space-between">
-                    <SelectComponentOld
-                      idInput="typeDocument"
-                      label="Tipo"
-                      register={register}
-                      className="select-basic medium "
-                      placeholder="Tipo"
-                      data={[]}
-                      value={null}
-                      classNameLabel="text-black big text-required bold"
-                      direction={EDirection.column}
-                      errors={errors}
-                    />
-                    <InputComponent
-                      idInput="numberDocument"
-                      className="input-basic medium form-group"
-                      typeInput="number"
-                      label="No. documento"
-                      register={register}
-                      classNameLabel="text-black big text-required bold "
-                      direction={EDirection.column}
-                      errors={errors}
-                      placeholder={""}
-                    />
-                  </div>
-                </div>
-
-                <InputComponent
-                  idInput="names"
-                  className="input-basic medium form-group"
-                  typeInput="text"
-                  label="Nombres"
-                  register={register}
-                  classNameLabel="text-black big text-required bold "
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
-                />
-
-                <InputComponent
-                  idInput="lastNames"
-                  className="input-basic medium form-group"
-                  typeInput="text"
-                  label="Apellidos"
-                  register={register}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
-                />
-
+              <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
                 <SelectComponentOld
-                  idInput="gender"
+                  idInput="commune"
                   register={register}
                   className="select-basic medium"
                   placeholder="Seleccionar"
-                  label="G&eacute;nero"
+                  label="Comuna y/o corregimiento "
                   data={[]}
                   value={null}
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
                 />
+
                 <InputComponent
-                  idInput="email"
+                  idInput="numberProject"
                   className="input-basic medium form-group"
-                  typeInput="email"
-                  label="Correo electr&oacute;nico"
+                  typeInput="number"
+                  label="Número proyecto"
                   register={register}
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
@@ -103,83 +49,36 @@ const VotingResultsPage = () => {
                 />
 
                 <InputComponent
-                  idInput="numberContact1"
-                  className="input-basic medium form-group"
-                  typeInput="phone"
-                  label="Celular"
-                  register={register}
-                  classNameLabel="text-black big bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
-                />
-              </div>
-
-              <div className="grid-form-4-container gap-25 container-sections-forms">
-                <span className="text-black large bold grid-span-4-columns ">
-                  Información de localización
-                </span>
-                <InputComponent
-                  idInput="address"
+                  idInput="Validity"
                   className="input-basic medium form-group"
                   typeInput="text"
-                  label="Direcci&oacute;n"
+                  label="Vigencia"
                   register={register}
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
                   placeholder={""}
                 />
-                {/* <SelectComponentUser
-                  idInput="deparmentCode"
-                  register={register}
-                  className="select-basic medium "
-                  placeholder="Seleccione"
-                  label="Departamento"
-                  data={[{}]}
-                  setValue={setDeparment}
-                  value={null}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                />
-                <SelectComponentUser
-                  idInput="townCode"
-                  register={register}
-                  className="select-basic medium "
-                  placeholder="Seleccione"
-                  label="Municipio"
-                  data={[{}]}
-                  setValue={setTown}
-                  value={null}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                /> */}
 
                 <InputComponent
-                  idInput="neighborhood"
-                  register={register}
-                  className="input-basic medium "
-                  placeholder={""}
-                  label="Barrio"
+                  idInput="projectIdea"
+                  className="input-basic medium form-group"
                   typeInput="text"
+                  label="Idea de proyecto"
+                  register={register}
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
+                  placeholder={""}
                 />
               </div>
             </FormComponent>
           </div>
         </div>
 
-        <div>
-          <hr />
-        </div>
-
         <div className="button-save-container-display-users">
           <ButtonComponent
-            form="createUserForm"
+            form="createVotingForm"
             value="Cancelar"
             type="button"
             className="button-cancel-text large hover-three disabled-black"
@@ -187,7 +86,7 @@ const VotingResultsPage = () => {
             disabled={sending}
           />
           <ButtonComponent
-            form="createUserForm"
+            form="createVotingForm"
             value="Guardar"
             type="submit"
             className="button-save large disabled-black"
