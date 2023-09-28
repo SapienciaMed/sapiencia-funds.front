@@ -13,12 +13,23 @@ import { IMasterActivity } from "../../../common/interfaces/funds.interfaces";
 import { createmasterActivity } from "../../../common/schemas/master-schema";
 import useMasterActivityApi from "../hooks/master-activity-api.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
+import { Control, FieldValues, FormState } from "react-hook-form";
 
-interface IProps {
+interface IPropsCreateUodateActivity {
   initData?: IMasterActivity;
+  onSubmit: () => Promise<void>;
+  formState: FormState<FieldValues>;
+  typeProgram: any[];
 }
 
-function MasterActivityForm({ initData }: IProps): React.JSX.Element {
+export const MasterActivityForm = ({
+  onSubmit,
+  formState,
+  typeProgram,
+  initData
+}: IPropsCreateUodateActivity): React.JSX.Element => {
+  const { errors, isValid } = formState;
+
   // Servicios
   const { createMasterActivity, editMasterActivity, getProgramTypes} = useMasterActivityApi();
   const navigate = useNavigate();
@@ -31,31 +42,6 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
 
   // States
   const [sending, setSending] = useState<boolean>(false);
-  const [typeProgram, setTypeProgram] = useState([]);
-
-  //Effect que inicializa el Tipo de Porgrama
-    
-  // carga Tipo de Porgrama
-    useEffect(() => {
-      ProgramType();
-    }, []);
-  
-    //functions
-    const ProgramType = async () => {
-      //Tipo de Porgrama
-      const { data, operation } = await getProgramTypes();
-      if (operation.code === EResponseCodes.OK) {
-        const programList = data.map((item) => {
-          return {
-            name: item.name,
-            value: item.id,
-          };
-        });
-        setTypeProgram(programList);
-      } else {
-        setTypeProgram([]);
-      }
-    };
 
   // Effect que inicialicia los datos iniciales
   useEffect(() => {
@@ -151,7 +137,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
       <FormComponent
         id="createMaster"
         className="form-signIn"
-        action={() => {}}
+        action={onSubmit}
       >
         <div className="container-sections-forms">
           <div className="title-area">
@@ -185,7 +171,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
               />
 
               <SelectComponent
-                idInput={"codProgramCode"}
+                idInput={"typesProgram"}
                 control={form.control}
                 errors={form.formState.errors}
                 data={typeProgram}
@@ -231,5 +217,3 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
     </>
   );
 }
-
-export default React.memo(MasterActivityForm);

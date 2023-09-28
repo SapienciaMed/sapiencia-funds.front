@@ -1,12 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
-import MasterActivityForm from "../forms/master-activity.form";
+import { MasterActivityForm } from "../forms/master-activity.form";
 import { useNavigate, useParams } from "react-router-dom";
 import useMasterActivityApi from "../hooks/master-activity-api.hook";
 import { IMasterActivity } from "../../../common/interfaces/funds.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { AppContext } from "../../../common/contexts/app.context";
+import useCreateMasterHook from "../hooks/activity-create-update.hook";
 
 const MasterActivityEditPage = (): React.JSX.Element => {
+  const {
+    control,
+    formState,
+    onSubmit,
+    formValues,
+    showTable,
+    typeProgram,
+    tableComponentRef,
+  } = useCreateMasterHook();
+
   // Servicios
   const { id } = useParams();
   const { setMessage } = useContext(AppContext);
@@ -45,7 +56,12 @@ const MasterActivityEditPage = (): React.JSX.Element => {
             Gestión territorial
           </label>
         </div>
-        {masterActivity && <MasterActivityForm initData={masterActivity} />}
+        {masterActivity && 
+        <MasterActivityForm
+        onSubmit={onSubmit}
+        formState={formState}
+        typeProgram={typeProgram}
+        initData={masterActivity} />}
       </div>
     </div>
   );

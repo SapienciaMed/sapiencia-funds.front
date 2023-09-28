@@ -1,7 +1,18 @@
 import React from "react";
-import MasterActivityForm from "../forms/master-activity.form";
+import { MasterActivityForm } from "../forms/master-activity.form";
+import useCreateMasterHook from "../hooks/activity-create-update.hook";
 
 const MasterActivityCreatePage = (): React.JSX.Element => {
+  const {
+    control,
+    formState,
+    onSubmit,
+    formValues,
+    showTable,
+    typeProgram,
+    tableComponentRef,
+  } = useCreateMasterHook();
+  
   return (
     <div className="main-page">
       <div className="card-table">
@@ -11,7 +22,11 @@ const MasterActivityCreatePage = (): React.JSX.Element => {
           </label>
         </div>
 
-        <MasterActivityForm />
+        <MasterActivityForm 
+         onSubmit={onSubmit}
+         formState={formState}
+         typeProgram={typeProgram}
+        />
       </div>
     </div>
   );

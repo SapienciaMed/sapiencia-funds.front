@@ -9,17 +9,14 @@ export const filtermasterActivity = yup.object({
 export const createmasterActivity = yup.object({
       name: yup
         .string()
-        .required("El campo es obligatorio")
-        .typeError("El campo debe ser obligatorio")
+        .required("Completar información")
         .max(10, "Solo se permiten 20 caracteres"),
       totalValue: yup
       .number()
-      .typeError("El campo debe ser obligatorio")
-      .required("El campo es obligatorio"),
-      codProgramCode: yup
+      .required("Completar información"),
+      typesProgram: yup
       .number()
-      .typeError("El campo debe ser obligatorio")
-      .required("El campo es obligatorio"),
+      .required("Completar información"),
       description: yup
       .string()
       .optional()
