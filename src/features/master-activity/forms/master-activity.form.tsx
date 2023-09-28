@@ -23,6 +23,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
   const { createMasterActivity, editMasterActivity, getProgramTypes} = useMasterActivityApi();
   const navigate = useNavigate();
   const { setMessage } = useContext(AppContext);
+  
   const form = useForm<IMasterActivity>({
     mode: "all",
     resolver: useYupValidationResolver(createmasterActivity),
@@ -206,6 +207,7 @@ function MasterActivityForm({ initData }: IProps): React.JSX.Element {
                 errors={form.formState.errors}
                 disabled={initData ? true : false} 
               />
+              
             </div>
           </div>
         </div>
