@@ -13,6 +13,8 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import useActivityService from "../../../common/hooks/activity-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
+import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
+import { filtermasterActivity } from "../../../common/schemas/master-schema";
 
 
 export default function useSearchMasterHook() {
@@ -55,8 +57,10 @@ export default function useSearchMasterHook() {
     }
   };
 
+  const resolver = useYupValidationResolver(filtermasterActivity);
+
   const { register, handleSubmit, formState, control, watch } =
-    useForm<IMasterActivityFilter>();
+    useForm<IMasterActivityFilter>({resolver});
 
   const tableColumns: ITableElement<IMasterActivity>[] = [
     {

@@ -1,7 +1,9 @@
 import * as yup from "yup";
 
 export const filtermasterActivity = yup.object({
-    name: yup.number().required("Seleccionar actividad es obligatorio"),
+    name: yup
+    .string()
+    .required("Seleccionar actividad es obligatorio"),
   });
 
 export const createmasterActivity = yup.object({
