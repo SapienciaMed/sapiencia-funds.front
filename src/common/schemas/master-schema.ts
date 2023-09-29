@@ -14,7 +14,7 @@ export const createmasterActivity = yup.object({
       totalValue: yup
       .number()
       .required("Completar información"),
-      typesProgram: yup
+      codProgramCode: yup
       .number()
       .required("Completar información"),
       description: yup

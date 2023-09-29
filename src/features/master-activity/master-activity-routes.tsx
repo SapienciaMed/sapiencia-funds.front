@@ -11,9 +11,6 @@ function MasterActivityRoutes() {
     () => import("./pages/master-activity-create.page")
   );
 
-  const MasterActivityEditPage = lazy(
-    () => import("./pages/master-activity-edit.page")
-  );
 
   return (
     <Routes>
@@ -30,7 +27,7 @@ function MasterActivityRoutes() {
         path={"/crear"}
         element={
           <PrivateRoute
-            element={<MasterActivityCreatePage />}
+            element={<MasterActivityCreatePage action={"new"}/>}
             allowedAction={"MAESTRO_ACTIVIDAD_CREAR"}
           />
         }
@@ -39,7 +36,7 @@ function MasterActivityRoutes() {
         path={"/editar/:id"}
         element={
           <PrivateRoute
-            element={<MasterActivityEditPage />}
+            element={<MasterActivityCreatePage action={"edit"}/>}
             allowedAction={"MAESTRO_ACTIVIDAD_EDITAR"}
           />
         }

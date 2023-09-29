@@ -6,7 +6,7 @@ export interface IMasterActivity{
   codProgramCode?: number,
   totalValue: number;
   description?: string;
-  typesProgram: IProgramTypes;
+  typesProgram?: IProgramTypes;
 }
 
 export interface IMasterActivityFilter {

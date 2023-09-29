@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
   ITableAction,
@@ -17,9 +17,15 @@ import useYupValidationResolver from "../../../common/hooks/form-validator.hook"
 import { createmasterActivity } from "../../../common/schemas/master-schema";
 import useMasterActivityApi from "./master-activity-api.hook";
 
-export default function useCreateMasterHook() {
+
+export default function useCreateMasterHook(action: string) {
+
     // Context
     const { setMessage } = useContext(AppContext);
+
+  //react router dom
+  const navigate = useNavigate();
+  const { id } = useParams();
   
     //states
     const [showTable, setshowTable] = useState(false);
@@ -29,7 +35,26 @@ export default function useCreateMasterHook() {
     const tableComponentRef = useRef(null);
 
     // Servicios
-    const { createMasterActivity, editMasterActivity, getProgramTypes} = useMasterActivityApi();
+    const { 
+      createMasterActivity, 
+      editMasterActivity, 
+      getProgramTypes, 
+      getMasterActivityById
+    } = useMasterActivityApi();
+
+    //use form
+    const resolver = useYupValidationResolver(createmasterActivity);
+
+    const { 
+      handleSubmit,
+      register, 
+      control, 
+      formState, 
+      watch,  
+    } = useForm<IMasterActivity>({ 
+      defaultValues: async () => loadDefaultValues(),
+      resolver });
+
 
       // carga Tipo de Porgrama
       useEffect(() => {
@@ -53,32 +78,176 @@ export default function useCreateMasterHook() {
         }
       };
 
-    const resolver = useYupValidationResolver(createmasterActivity);
 
-    const { register, handleSubmit, formState, control, watch } =
-      useForm<IMasterActivityFilter>({resolver});
+
+      const loadDefaultValues = async (): Promise<IMasterActivity> => {
+        if (action === "new") {
+          return {
+            id: null,
+            name: "",
+            codProgramCode: null,
+            totalValue: null,
+            description: "",
+
+          };
+        }
+    
+        if (action === "edit") {
+          const { data, operation } = await getMasterActivityById(Number(id));
+    
+          if (operation.code === EResponseCodes.OK) {
+            if (data.length > 0) {
+              return {
+                id: data[0].id,
+                name: data[0].name,
+                codProgramCode: data[0].codProgramCode,
+                totalValue: data[0].totalValue,
+                description: data[0].description,
+                typesProgram: data[0].typesProgram
+
+
+              };
+            } else {
+              handleModalError("No se han cargado los datos");
+    
+              return {
+                id: null,
+                name: "",
+                codProgramCode: null,
+                totalValue: null,
+                description: "",
+                typesProgram: null
+              };
+            }
+          } else {
+            handleModalError("No se han cargado los datos");
+    
+            return {
+              id: null,
+              name: "",
+              codProgramCode: null,
+              totalValue: null,
+              description: "",
+              typesProgram: null
+            };
+          }
+        }
+      };
+    
+      const redirectCancel = () => {
+        setMessage({
+          title: "Cancelar",
+          description: `¿Estás segur@ que deseas 
+          cancelar la actividad?`,
+          show: true,
+          okTitle: "Aceptar",
+          onOk: () => {
+            navigate("../consultar");
+            setMessage((prev) => {
+              return { ...prev, show: false };
+            });
+          },
+          cancelTitle: "Cancelar",
+          background: true,
+        });
+      };
+    
+      const handleModalError = (
+        msg = `¡Ha ocurrido un error!`,
+        navigateBoolean = true
+      ) => {
+        setMessage({
+          title: "Error",
+          description: msg,
+          show: true,
+          okTitle: "cerrar",
+          onOk: () => {
+            if (navigateBoolean) {
+              navigate("../consultar");
+            }
+            setMessage((prev) => {
+              return { ...prev, show: false };
+            });
+          },
+          onClose: () => {
+            if (navigateBoolean) {
+              navigate("../consultar");
+            }
+            setMessage({});
+          },
+          background: true,
+        });
+      };
+    
+      const handleModalSuccess = () => {
+        setMessage({
+          title: ` ${action === "edit" ? "Editado" : "Guardado"}`,
+          description: `¡Cambios ${
+            action === "edit" ? "editada" : "guardados"
+          } exitosamente!`,
+          show: true,
+          okTitle: "Aceptar",
+          onOk: () => {
+            navigate("../consultar");
+            setMessage((prev) => {
+              return { ...prev, show: false };
+            });
+          },
+          onClose: () => {
+            navigate("../consultar");
+            setMessage({});
+          },
+          background: true,
+        });
+      };
+    
+      const onSubmit = handleSubmit(async (data: IMasterActivity) => {
+        setMessage({
+          title: "Guardar cambios",
+          description: `¿Estás segur@ de ${
+            action === "edit" ? "editar" : "guardar"
+          }
+          los cambios?`,
+          show: true,
+          okTitle: "Aceptar",
+          onOk: () => {
+            handleCreateOrUpdateActivity(data);
+            setMessage((prev) => {
+              return { ...prev, show: false };
+            });
+          },
+          cancelTitle: "Cancelar",
+          background: true,
+        });
+      });
+    
+      const handleCreateOrUpdateActivity = async (data: IMasterActivity) => {
+        const { data: dataResponse, operation } =
+          action === "edit"
+            ? await editMasterActivity(data.id, data)
+            : await createMasterActivity(data);
+    
+        if (operation.code === EResponseCodes.OK) {
+          handleModalSuccess();
+        } else {
+          handleModalError(operation.message, false);
+        }
+      };
 
       const formValues = watch();
-
-    const onSubmit = handleSubmit(async (data: IMasterActivity) => {
-        setshowTable(true);
     
-        if (tableComponentRef.current) {
-          tableComponentRef.current.loadData(data);
-        }
-      });
+
 
     return {
-        register,
-        control,
-        formState,
-        onSubmit,
-        formValues,
-        showTable,
-        typeProgram,
-        tableComponentRef,
-
+      control, 
+      formState, 
+      register,
+      redirectCancel,
+      onSubmit,
+      typeProgram,
+      tableComponentRef,
+      formValues,
       };
 
 
-}
+};

@@ -2,16 +2,21 @@ import React from "react";
 import { MasterActivityForm } from "../forms/master-activity.form";
 import useCreateMasterHook from "../hooks/activity-create-update.hook";
 
-const MasterActivityCreatePage = (): React.JSX.Element => {
+interface IPropsCreateUpdateActivity {
+  action: string;
+}
+
+const MasterActivityCreatePage = ({
+  action,
+}: IPropsCreateUpdateActivity): React.JSX.Element => {
   const {
     control,
     formState,
-    onSubmit,
-    formValues,
-    showTable,
     typeProgram,
     tableComponentRef,
-  } = useCreateMasterHook();
+    redirectCancel,
+    onSubmit
+  } = useCreateMasterHook(action);
   
   return (
     <div className="main-page">
@@ -23,9 +28,12 @@ const MasterActivityCreatePage = (): React.JSX.Element => {
         </div>
 
         <MasterActivityForm 
-         onSubmit={onSubmit}
+         control={control}
          formState={formState}
+         action={action}
          typeProgram={typeProgram}
+         redirectCancel={redirectCancel}
+         onSubmit ={onSubmit}
         />
       </div>
     </div>
