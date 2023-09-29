@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "../../common/utils/auth-private-guard";
 
 function VotingResultsRoutes() {
-  const VotingResultsPage = lazy(() => import("./pages/voting-results.page"));
+  const VotingResultsPage = lazy(() => import("./pages/voting-create.page"));
 
   return (
     <Routes>

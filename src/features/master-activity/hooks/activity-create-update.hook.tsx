@@ -140,7 +140,7 @@ export default function useCreateMasterHook(action: string) {
           description: `¿Estás segur@ que deseas 
           cancelar la actividad?`,
           show: true,
-          okTitle: "Aceptar",
+          OkTitle: "Aceptar",
           onOk: () => {
             navigate("../consultar");
             setMessage((prev) => {
@@ -160,7 +160,7 @@ export default function useCreateMasterHook(action: string) {
           title: "Error",
           description: msg,
           show: true,
-          okTitle: "cerrar",
+          OkTitle: "cerrar",
           onOk: () => {
             if (navigateBoolean) {
               navigate("../consultar");
@@ -186,7 +186,7 @@ export default function useCreateMasterHook(action: string) {
             action === "edit" ? "editada" : "guardados"
           } exitosamente!`,
           show: true,
-          okTitle: "Aceptar",
+          OkTitle: "Aceptar",
           onOk: () => {
             navigate("../consultar");
             setMessage((prev) => {
@@ -209,7 +209,7 @@ export default function useCreateMasterHook(action: string) {
           }
           los cambios?`,
           show: true,
-          okTitle: "Aceptar",
+          OkTitle: "Aceptar",
           onOk: () => {
             handleCreateOrUpdateActivity(data);
             setMessage((prev) => {
