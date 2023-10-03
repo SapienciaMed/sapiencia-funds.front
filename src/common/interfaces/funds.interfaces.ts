@@ -14,8 +14,24 @@ export interface IMasterActivityFilter {
     name: string;
 }
 
-
 export interface IProgramTypes {
     id?: number;
     name?: string;
+}
+
+export interface IUploadInformation{
+  id?: number;
+  commune?: number;
+  validity?: number;
+  information?: number;
+}
+
+export interface IWorker {
+  id?: number;
+  typeDocument: string;
+  numberDocument: string;
+  firstName: string;
+  secondName?: string;
+  surname: string;
+  secondSurname?: string;
 }
