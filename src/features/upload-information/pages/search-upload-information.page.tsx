@@ -16,8 +16,11 @@ const SearchUploadInformationPage = (): React.JSX.Element => {
     formValues,
     showTable,
     tableComponentRef,
-    //tableColumns,
-    //tableActions,
+    commune,
+    validity,
+    information,
+    tableColumns,
+    tableActions,
   } = useSearchUploadHook();
 
 
@@ -37,7 +40,22 @@ const SearchUploadInformationPage = (): React.JSX.Element => {
           redirectCreate={redirectCreate}
           onSubmit={onSubmit}
           formValues={formValues}
+          commune={commune}
+          validity={validity}
+          information={information}
         />
+
+        {showTable && (
+          <div className="container-sections-forms">
+            <TableComponent
+              ref={tableComponentRef}
+              url={`${process.env.urlApiFunds}/api/v1/uploadInformation/get-paginated`}
+              columns={tableColumns}
+              actions={tableActions}
+              isShowModal={false}
+            />
+          </div>
+        )}
 
       </div>
     </div>

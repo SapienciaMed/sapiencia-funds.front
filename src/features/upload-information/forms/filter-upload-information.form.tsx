@@ -17,6 +17,9 @@ interface IPropsFilterUploadInformation {
   redirectCreate: () => void;
   onSubmit: () => Promise<void>;
   formValues: IUploadInformation;
+  commune: IDropdownProps[];
+  validity: IDropdownProps[];
+  information: IDropdownProps[];
 }
 
 export const FilterUploadInformationForm = ({
@@ -26,6 +29,9 @@ export const FilterUploadInformationForm = ({
   redirectCreate,
   onSubmit,
   formValues,
+  commune,
+  validity,
+  information
 }: IPropsFilterUploadInformation): React.JSX.Element => {
   const { errors, isValid } = formState;
  
@@ -47,10 +53,10 @@ export const FilterUploadInformationForm = ({
           <div className="grid-form-4-container gap-25">
            
                 <SelectComponent
-                  idInput={"codProgramCode"}
+                  idInput={"commune"}
                   control={control}
                   errors={errors}
-                  data={[]}
+                  data={commune}
                   label={
                     <>
                     Comuna y/o corregimiento <span>*</span>
@@ -64,10 +70,10 @@ export const FilterUploadInformationForm = ({
                 />
 
                 <SelectComponent
-                  idInput={"codProgramCode"}
+                  idInput={"validity"}
                   control={control}
                   errors={errors}
-                  //data={typeProgram}
+                  data={validity}
                   label={
                     <>
                     Vigencia <span>*</span>
@@ -81,10 +87,10 @@ export const FilterUploadInformationForm = ({
                 />
 
                 <SelectComponent
-                  idInput={"codProgramCode"}
+                  idInput={"information"}
                   control={control}
                   errors={errors}
-                  //data={typeProgram}
+                  data={information}
                   label={
                     <>
                     información <span>*</span>

@@ -2,12 +2,12 @@ import * as yup from "yup";
 
 export const filterUploadInformationSchema = yup.object({
     commune: yup
-    .number()
+    .string()
     .required("Completar información"),
     validity: yup
-    .number()
+    .string()
     .required("Completar información"),
     information: yup
-    .number()
+    .string()
     .required("Completar información"),
   });

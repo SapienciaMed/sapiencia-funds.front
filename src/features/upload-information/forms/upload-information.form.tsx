@@ -7,6 +7,10 @@ import {
 import { Control, FieldValues, FormState, UseFormRegister } from "react-hook-form";
 import { IUploadInformation } from "../../../common/interfaces/funds.interfaces";
 
+//borrar
+import useSearchUploadHook from "../hooks/search-upload-information.hook";
+
+
 interface IPropsCreateUploadInformation {
   register: UseFormRegister<any>;
   control: Control<IUploadInformation, any>;
@@ -23,6 +27,8 @@ export const CreateUploadInformationForm = ({
   formValues,
 }: IPropsCreateUploadInformation): React.JSX.Element => {
   const { errors, isValid } = formState;
+
+  const {commune, validity, information} = useSearchUploadHook()
  
   return (
     <div className="container-sections-forms">
@@ -31,10 +37,10 @@ export const CreateUploadInformationForm = ({
           <div className="grid-form-4-container gap-25">
            
                 <SelectComponent
-                  idInput={"codProgramCode"}
+                  idInput={"commune"}
                   control={control}
                   errors={errors}
-                  data={[]}
+                  data={commune}
                   label={
                     <>
                     Comuna y/o corregimiento <span>*</span>
@@ -48,10 +54,10 @@ export const CreateUploadInformationForm = ({
                 />
 
                 <SelectComponent
-                  idInput={"codProgramCode"}
+                  idInput={"validity"}
                   control={control}
                   errors={errors}
-                  //data={typeProgram}
+                  data={validity}
                   label={
                     <>
                     Vigencia <span>*</span>
@@ -65,10 +71,10 @@ export const CreateUploadInformationForm = ({
                 />
 
                 <SelectComponent
-                  idInput={"codProgramCode"}
+                  idInput={"information"}
                   control={control}
                   errors={errors}
-                  //data={typeProgram}
+                  data={information}
                   label={
                     <>
                     información <span>*</span>

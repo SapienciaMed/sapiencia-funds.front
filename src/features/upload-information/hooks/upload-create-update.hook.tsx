@@ -26,38 +26,38 @@ export default function useCreateUploadHook() {
     //react-router-dom
     const navigate = useNavigate();
     //Servicios
-    const {getWorkers} = useFundsService();
+    //const {getWorkers} = useFundsService();
 
 
     
-    const getWorkersActive = () => {
-      getWorkers()
-        .then((response: ApiResponse<IWorker[]>) => {
-          if (response && response?.operation?.code === EResponseCodes.OK) {
-            setWorkerInfo(response.data);
-            setActiveWorkerList(
-              response.data.map((item) => {
-                const list = {
-                  name: `${
-                    item.numberDocument +
-                    " - " +
-                    item.firstName +
-                    " " +
-                    item.surname
-                  }`,
-                  value: item.id,
-                };
-                return list;
-              })
-            );
-          }
-        })
-        .catch((err) => {});
-    };
+    // const getWorkersActive = () => {
+    //   getWorkers()
+    //     .then((response: ApiResponse<IWorker[]>) => {
+    //       if (response && response?.operation?.code === EResponseCodes.OK) {
+    //         setWorkerInfo(response.data);
+    //         setActiveWorkerList(
+    //           response.data.map((item) => {
+    //             const list = {
+    //               name: `${
+    //                 item.numberDocument +
+    //                 " - " +
+    //                 item.firstName +
+    //                 " " +
+    //                 item.surname
+    //               }`,
+    //               value: item.id,
+    //             };
+    //             return list;
+    //           })
+    //         );
+    //       }
+    //     })
+    //     .catch((err) => {});
+    // };
 
-    useEffect(() => {
-      getWorkersActive();
-    }, []);
+    // useEffect(() => {
+    //   getWorkersActive();
+    // }, []);
     
 
     const resolver = useYupValidationResolver(filterUploadInformationSchema);

@@ -21,9 +21,11 @@ export interface IProgramTypes {
 
 export interface IUploadInformation{
   id?: number;
-  commune?: number;
-  validity?: number;
-  information?: number;
+  commune: string;
+  validity: string;
+  information: string;
+  fileName?: string;
+  dateUpload: DateTime;
 }
 
 export interface IWorker {

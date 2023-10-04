@@ -29,7 +29,7 @@ export const FileUploadInformationForm = ({
     return (
         <div className="container-sections-forms">
           <div className="title-area">
-            <label className="text-black extra-large bold">File</label>
+            <label className="text-black extra-large bold">doc</label>
           </div>
     
           <div>
