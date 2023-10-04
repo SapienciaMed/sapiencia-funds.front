@@ -13,7 +13,8 @@ export const createmasterActivity = yup.object({
         .max(10, "Solo se permiten 20 caracteres"),
       totalValue: yup
       .number()
-      .required("Completar información"),
+      .required("Completar información")
+      .typeError("Completar información"),
       codProgramCode: yup
       .number()
       .required("Completar información"),
