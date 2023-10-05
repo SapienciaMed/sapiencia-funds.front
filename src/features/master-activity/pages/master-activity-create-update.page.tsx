@@ -15,7 +15,8 @@ const MasterActivityCreatePage = ({
     typeProgram,
     tableComponentRef,
     redirectCancel,
-    onSubmit
+    onSubmit,
+    renderTitleMasterActivity
   } = useCreateMasterHook(action);
   
   return (
@@ -23,7 +24,7 @@ const MasterActivityCreatePage = ({
       <div className="card-table">
         <div className="title-area">
           <label className="text-black extra-large bold">
-            Gestión territorial
+           {renderTitleMasterActivity()}
           </label>
         </div>
 

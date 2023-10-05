@@ -152,6 +152,13 @@ export const MasterActivityForm = ({
       <div className="button-save-container-display m-top-20">
         <ButtonComponent
           form="createItemForm"
+          value={"Cancelar"}
+          className="button-clean bold"
+          type="button"
+          action={redirectCancel}
+        />
+        <ButtonComponent
+          form="createItemForm"
           value={`${action === "edit" ? "Editar" : "Guardar"}`}
           className="button-save large hover-three disabled-black"
         />

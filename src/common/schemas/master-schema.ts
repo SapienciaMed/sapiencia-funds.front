@@ -10,7 +10,7 @@ export const createmasterActivity = yup.object({
       name: yup
         .string()
         .required("Completar información")
-        .max(10, "Solo se permiten 20 caracteres"),
+        .max(20, "Solo se permiten 20 caracteres"),
       totalValue: yup
       .number()
       .required("Completar información")
