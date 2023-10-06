@@ -6,20 +6,21 @@ export const filtermasterActivity = yup.object({
     .required("Seleccionar actividad es obligatorio"),
   });
 
-export const createmasterActivity = yup.object({
-      name: yup
-        .string()
-        .required("Completar información")
-        .max(20, "Solo se permiten 20 caracteres"),
-      totalValue: yup
+  export const createmasterActivity = yup.object({
+    name: yup
+      .string()
+      .required("Completar información")
+      .max(20, "Solo se permiten 20 caracteres"),
+    totalValue: yup
       .number()
       .required("Completar información")
-      .typeError("Completar información")
-      .max(13, "Solo se permiten 13 caracteres"),
-      codProgramCode: yup
-      .number()
-      .required("Completar información"),
-      description: yup
+      .integer()
+      .max(13, "Solo se permiten 13 caracteres")
+      .typeError("Completar información"),
+    codProgramCode: yup
+    .number()
+    .required("Completar información"),
+    description: yup
       .string()
       .optional()
       .nullable()
