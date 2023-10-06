@@ -25,7 +25,7 @@ const SearchMasterPage = (): React.JSX.Element => {
       <div className="card-table">
         <div className="title-area">
           <label className="text-black extra-large bold">
-          Gestión territorial
+          Consultar maestro actividad
           </label>
         </div>
 

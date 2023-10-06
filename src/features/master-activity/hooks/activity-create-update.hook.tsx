@@ -138,22 +138,9 @@ export default function useCreateMasterHook(action: string) {
     }
   };
 
-  const redirectCancel = () => {
-    setMessage({
-      title: "Cancelar",
-      description: `¿Estás segur@ que deseas 
-          cancelar la actividad?`,
-      show: true,
-      OkTitle: "Aceptar",
-      onOk: () => {
-        navigate("../consultar");
-        setMessage((prev) => {
-          return { ...prev, show: false };
-        });
-      },
-      cancelTitle: "Cancelar",
-      background: true,
-    });
+  const redirectCancel = () =>
+  {
+    navigate("../consultar");
   };
 
   const handleModalError = (

@@ -46,7 +46,7 @@ export const MasterActivityForm = ({
       >
           <div className="container-sections-forms">
             <div className="title-area">
-              <label className="text-black extra-large bold">
+              <label className="text-black large bold grid-span-4-columns">
               Maestro Actividad
             </label>
           </div>
@@ -159,7 +159,7 @@ export const MasterActivityForm = ({
         />
         <ButtonComponent
           form="createItemForm"
-          value={`${action === "edit" ? "Editar" : "Guardar"}`}
+          value={`Guardar`}
           className="button-save large hover-three disabled-black"
         />
       </div>

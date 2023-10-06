@@ -30,13 +30,12 @@ export const FilterMasterActivityForm = ({
   return (
     <div className="container-sections-forms">
       <div className="title-area">
-        <label className="text-black extra-large bold">Maestro actividad</label>
+        <label className="text-black large bold grid-span-4-columns">Maestro actividad</label>
 
         <div
-          className="title-button text-main biggest pointer"
+          className="title-button text-three large"
           onClick={redirectCreate}
-        >
-          Crear maestro actividad <AiOutlinePlusCircle />
+        >Crear maestro actividad <AiOutlinePlusCircle />
         </div>
       </div>
 
