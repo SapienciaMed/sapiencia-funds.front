@@ -30,6 +30,7 @@ export default function useCreateMasterHook(action: string) {
   //states
   const [showTable, setshowTable] = useState(false);
   const [typeProgram, setTypeProgram] = useState([]);
+  const [existingActivity, setExistingActivity] = useState([]);
 
   //ref
   const tableComponentRef = useRef(null);
@@ -39,7 +40,8 @@ export default function useCreateMasterHook(action: string) {
     createMasterActivity,
     editMasterActivity,
     getProgramTypes,
-    getMasterActivityById
+    getMasterActivityById,
+    getMasterActivity,
   } = useMasterActivityApi();
 
   //use form
@@ -64,7 +66,6 @@ export default function useCreateMasterHook(action: string) {
 
   //Effect que inicializa el Tipo de Porgrama
   const ProgramType = async () => {
-    //Tipo de Porgrama
     const { data, operation } = await getProgramTypes();
     if (operation.code === EResponseCodes.OK) {
       const programList = data.map((item) => {
@@ -78,6 +79,29 @@ export default function useCreateMasterHook(action: string) {
       setTypeProgram([]);
     }
   };
+
+
+  //cargar validador actividad unica
+  useEffect(() => {
+    loadExistingNames();
+  }, []);
+
+  //Listado de Activiades
+  const loadExistingNames = async () => {
+    const { data, operation } = await getMasterActivity();
+    if (operation.code === EResponseCodes.OK) {
+      const activityList = data.map((item) => {
+        return {
+          name: item.name,
+        };
+      });
+      setExistingActivity(activityList);
+      console.log("************************maestroactiv", activityList)
+    } else {
+      setExistingActivity([]);
+    }
+  };
+
 
   //functions
   const renderTitleMasterActivity = () => {
@@ -138,8 +162,7 @@ export default function useCreateMasterHook(action: string) {
     }
   };
 
-  const redirectCancel = () =>
-  {
+  const redirectCancel = () => {
     navigate("../consultar");
   };
 
@@ -211,21 +234,27 @@ export default function useCreateMasterHook(action: string) {
   });
 
   const handleCreateOrUpdateActivity = async (data: IMasterActivity) => {
-    const { data: dataResponse, operation } =
-      action === "edit"
-        ? await editMasterActivity(data.id, data)
-        : await createMasterActivity(data);
 
-    if (operation.code === EResponseCodes.OK) {
-      handleModalSuccess();
-    } else {
-      handleModalError(operation.message, false);
+    const nameExists = existingActivity.some((item) => item.name === data.name);
+    if (nameExists) {
+      //TODO:Falta pintar pop up
+      handleModalError("Maestro de Actividad esta duplicado");
+    }
+    else {
+      const { data: dataResponse, operation } =
+        action === "edit"
+          ? await editMasterActivity(data.id, data)
+          : await createMasterActivity(data);
+
+      if (operation.code === EResponseCodes.OK) {
+        handleModalSuccess();
+      } else {
+        handleModalError(operation.message, false);
+      }
     }
   };
 
   const formValues = watch();
-
-
 
   return {
     control,

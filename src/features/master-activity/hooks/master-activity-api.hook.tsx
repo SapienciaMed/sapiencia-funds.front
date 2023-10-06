@@ -7,6 +7,11 @@ export default function useMasterActivityApi() {
   const serviceUrl: string = "/api/v1/activities";
 
   const { get, post, put } = useCrudService(baseURL);
+  
+  async function getMasterActivity(
+  ): Promise<ApiResponse<IMasterActivity[]>> {
+    return await get(`${serviceUrl}/`);
+  }
 
   async function getMasterActivityById(
     id: number
@@ -37,6 +42,7 @@ export default function useMasterActivityApi() {
     createMasterActivity,
     getMasterActivityById,
     editMasterActivity,
-    getProgramTypes
+    getProgramTypes,
+    getMasterActivity
   };
 }
