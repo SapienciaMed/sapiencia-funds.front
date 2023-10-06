@@ -10,6 +10,7 @@ import ApplicationProvider from "./application-provider";
 import VotingResultsRoutes from "./features/voting-results/voting-results-routes";
 import MasterActivityRoutes from "./features/master-activity/master-activity-routes"
 import useAppCominicator from "./common/hooks/app-communicator.hook";
+import MasterRoutes from "./features/master/master-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -39,6 +40,10 @@ function App() {
               <Route
                 path={"/fondos/maestro/*"}
                 element={<MasterActivityRoutes />}
+              />
+              <Route
+                path={"/fondos/maestros/*"}
+                element={<MasterRoutes />}
               />
             </Routes>
           </Suspense>
