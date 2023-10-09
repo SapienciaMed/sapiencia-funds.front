@@ -44,8 +44,7 @@ export default function useMasterCrud() {
       })
   }, []);
 
-  const onsubmitCreate = handleSubmit((data: IMaster) => {
-    console.log('llego', data)
+  const onsubmitCreate = handleSubmit((data: IMaster) => {    
     setMessage({
       show: true,
       title: "Guardar información",
