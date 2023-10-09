@@ -1,5 +1,10 @@
 import * as yup from "yup";
 
+function validateTotalValue(value) {
+  const isNumeric = /^\d+$/.test(value);
+  return isNumeric && value.length <= 10;
+}
+
 export const filtermasterActivity = yup.object({
     name: yup
     .string()
@@ -12,7 +17,8 @@ export const createmasterActivity = yup.object({
         .required("Completar información")
         .max(20, "Solo se permiten 20 caracteres"),
       totalValue: yup
-        .number()
+        .string()
+        .test("is-valid-total-value", "debe tener 10 dígitos numéricos", validateTotalValue)
         .required("Completar información")
         .typeError("Completar información"),
       codProgramCode: yup

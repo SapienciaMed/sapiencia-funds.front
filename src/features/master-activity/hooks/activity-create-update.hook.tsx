@@ -21,7 +21,7 @@ import useMasterActivityApi from "./master-activity-api.hook";
 export default function useCreateMasterHook(action: string) {
 
   // Context
-  const { setMessage } = useContext(AppContext);
+  const { message, setMessage } = useContext(AppContext);
 
   //react router dom
   const navigate = useNavigate();
@@ -55,6 +55,7 @@ export default function useCreateMasterHook(action: string) {
     watch,
   } = useForm<IMasterActivity>({
     defaultValues: async () => loadDefaultValues(),
+    mode: "all",
     resolver
   });
 
@@ -96,7 +97,6 @@ export default function useCreateMasterHook(action: string) {
         };
       });
       setExistingActivity(activityList);
-      console.log("************************maestroactiv", activityList)
     } else {
       setExistingActivity([]);
     }
@@ -195,9 +195,8 @@ export default function useCreateMasterHook(action: string) {
 
   const handleModalSuccess = () => {
     setMessage({
-      title: ` ${action === "edit" ? "Editado" : "Cambios guardados"}`,
-      description: `¡Cambios ${action === "edit" ? "editada" : "guardados"
-        } exitosamente!`,
+      title: "Cambios guardados",
+      description: `¡Cambios guardados exitosamente!`,
       show: true,
       OkTitle: "Aceptar",
       onOk: () => {
@@ -215,42 +214,64 @@ export default function useCreateMasterHook(action: string) {
   };
 
   const onSubmit = handleSubmit(async (data: IMasterActivity) => {
-    setMessage({
-      title: "Guardar cambios",
-      description: `¿Estás segur@ de ${action === "edit" ? "editar" : "guardar"
-        }
-          los cambios?`,
-      show: true,
-      OkTitle: "Aceptar",
-      onOk: () => {
-        handleCreateOrUpdateActivity(data);
-        setMessage((prev) => {
-          return { ...prev, show: false };
-        });
-      },
-      cancelTitle: "Cancelar",
-      background: true,
-    });
+    const nameExists = existingActivity.some((item) => item.name === data.name);
+    action === "edit" ?
+      setMessage({
+        title: "Guardar cambios",
+        description: `¿Estás segur@ de guardar los cambios?`,
+        show: true,
+        OkTitle: "Aceptar",
+        onOk: () => {
+          handleCreateOrUpdateActivity(data);
+          setMessage((prev) => {
+            return { ...prev, show: false };
+          });
+        },
+        cancelTitle: "Cancelar",
+        background: true,
+      }): 
+      nameExists === true ?
+      setMessage({
+        title: "Validación de datos",
+        description: `¡El dato ya existe!`,
+        show: true,
+        OkTitle: "Aceptar",
+        onOk: () => {
+          navigate("../consultar");
+          setMessage((prev) => {
+            return { ...prev, show: false };
+          });
+        },
+        background: true,
+      }):
+      setMessage({
+        title: "Guardar cambios",
+        description: `¿Estás segur@ de guardar los cambios?`,
+        show: true,
+        OkTitle: "Aceptar",
+        onOk: () => {
+          handleCreateOrUpdateActivity(data);
+          setMessage((prev) => {
+            return { ...prev, show: false };
+          });
+        },
+        cancelTitle: "Cancelar",
+        background: true,
+      })
   });
+
 
   const handleCreateOrUpdateActivity = async (data: IMasterActivity) => {
 
-    const nameExists = existingActivity.some((item) => item.name === data.name);
-    if (nameExists) {
-      //TODO:Falta pintar pop up
-      handleModalError("Maestro de Actividad esta duplicado");
-    }
-    else {
-      const { data: dataResponse, operation } =
-        action === "edit"
-          ? await editMasterActivity(data.id, data)
-          : await createMasterActivity(data);
+    const { data: dataResponse, operation } =
+      action === "edit"
+        ? await editMasterActivity(data.id, data)
+        : await createMasterActivity(data);
 
-      if (operation.code === EResponseCodes.OK) {
-        handleModalSuccess();
-      } else {
-        handleModalError(operation.message, false);
-      }
+    if (operation.code === EResponseCodes.OK) {
+      handleModalSuccess();
+    } else {
+      handleModalError(operation.message, false);
     }
   };
 
