@@ -2,15 +2,16 @@ import { useForm } from "react-hook-form";
 import { IMaster } from "../../../common/interfaces/master.interface";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { filterMaster } from "../../../common/schemas/masters-schema";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import useMasterApi from "./master-api.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import { AppContext } from "../../../common/contexts/app.context";
 
 
 export default function useMasterConsult() {
-
+    const { validateActionAccess } = useContext(AppContext);
     const { TypeMasterList } = useMasterApi();
     const resolver = useYupValidationResolver(filterMaster);
     const navigate = useNavigate();
@@ -58,7 +59,7 @@ export default function useMasterConsult() {
         },       
         {
             fieldName: "description",
-            header:  "Descripción"           
+            header:  "Descripción" ,                      
         }
     ];
 
@@ -72,6 +73,7 @@ export default function useMasterConsult() {
             onClick: (row) => {                
                 navigate(`./edit/${row.id}`);
             },
+            //hide: !validateActionAccess('MAESTROS_CREAR')
             
         },
     ];
