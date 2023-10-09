@@ -97,7 +97,7 @@ export const MasterActivityForm = ({
                           </>
                         }
                         value={`${field.value}`}
-                        //onChange={field.onChange}
+                        onChange={field.onChange}
                         onBlur={field.onBlur}
                         className="input-basic medium"
                         classNameLabel="text-black big bold"
