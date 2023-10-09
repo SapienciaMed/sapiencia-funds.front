@@ -234,11 +234,12 @@ export default function useCreateMasterHook(action: string) {
       }): 
       nameExists === true ?
       setMessage({
-        title: "Datos duplicados",
+        title: "Validación de datos",
         description: `¡El dato ya existe!`,
         show: true,
         OkTitle: "Aceptar",
         onOk: () => {
+          navigate("../consultar");
           setMessage((prev) => {
             return { ...prev, show: false };
           });
