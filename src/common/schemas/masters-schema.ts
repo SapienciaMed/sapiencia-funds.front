@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const filtermasterActivity = yup.object({
+export const filterMaster = yup.object({
     codtlmo: yup
     .string()
     .required("Cargar información"),

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from '../../../common/components/Form';
 import { InputText } from 'primereact/inputtext';
 import { TextAreaComponent } from '../../../common/components/Form/input-text-area.component';
-import useMaster from '../hooks/master-crud.hook';
+import useMasterCrud from '../hooks/master-crud.hook';
 import { useForm } from 'react-hook-form';
 import { IMaster } from '../../../common/interfaces/master.interface';
 import { Controller } from "react-hook-form";
@@ -13,7 +13,7 @@ interface IPropsMasterCrud {
 
 const MasterCrudPage = ({ action }) => {
 
-    const { typeMasterList, control, errors, register, setValue, onsubmitCreate,CancelFunction } = useMaster();
+    const { typeMasterList, control, errors, register, onsubmitCreate,CancelFunction } = useMasterCrud();
 
     return (
         <Fragment>
@@ -34,14 +34,13 @@ const MasterCrudPage = ({ action }) => {
                                     data={typeMasterList}
                                     label={
                                         <>
-                                            Programa <span>*</span>
+                                            Tipo maestro <span>*</span>
                                         </>
                                     }
                                     className="select-basic medium select-disabled-list"
                                     classNameLabel="text-black biggest bold"
                                     filter={true}
-                                    placeholder="Seleccione."
-                                    //disabled={action === "edit" ? true : false}
+                                    placeholder="Seleccione."                                    
                                 />
 
                                 <InputComponent
@@ -91,15 +90,13 @@ const MasterCrudPage = ({ action }) => {
                         value="Cancelar"
                         type="button"
                         className="button-cancel-text large hover-three disabled-black"
-                        action={() => CancelFunction()}
-                    //disabled={sending}
+                        action={() => CancelFunction()}                    
                     />
                     <ButtonComponent
                         form="createMasterForm"
                         value="Guardar"
                         type="submit"
-                        className="button-save large disabled-black"
-                    //disabled={sending}
+                        className="button-save large disabled-black"                    
                     />
                 </div>
             </div>

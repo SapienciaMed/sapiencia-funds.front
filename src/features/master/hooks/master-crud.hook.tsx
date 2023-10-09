@@ -1,6 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { IGenericList } from "../../../common/interfaces/global.interface";
-import { ApiResponse } from "../../../common/utils/api-response";
 import useMasterApi from "./master-api.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useForm } from "react-hook-form";
@@ -11,7 +9,7 @@ import { createMasters } from "../../../common/schemas/masters-schema";
 import { useNavigate } from "react-router-dom";
 
 
-export default function useMaster() {
+export default function useMasterCrud() {
 
   const { setMessage, authorization } = useContext(AppContext);
   const { TypeMasterList, createMaster } = useMasterApi();
@@ -22,9 +20,7 @@ export default function useMaster() {
   const {
     handleSubmit,
     register,
-    control: control,
-    formState,
-    watch,
+    control: control,   
     setValue,
     reset,
     formState: { errors },
@@ -85,7 +81,7 @@ export default function useMaster() {
         onOk() {
           reset();
           setMessage({});
-          navigate("/fondos/maestros");
+          navigate("/fondos/maestros/consultar");
         },
         onClose() {
           reset();
@@ -112,14 +108,13 @@ export default function useMaster() {
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
-        navigate("/fondos/maestros");
+        navigate("/fondos/maestros/consultar");
         setMessage((prev) => ({ ...prev, show: false }));
       },
       background: true,
     });
   };
-
-  console.log(typeMasterList)
+  
   return {
     typeMasterList,
     control,

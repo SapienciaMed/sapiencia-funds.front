@@ -1,31 +1,36 @@
 import React, { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "../../common/utils/auth-private-guard";
+import MasterPage from "./pages/master.page";
 
 function MasterRoutes() {
  
   const MasterCrudPage = lazy(
     () => import("./pages/master-crud.page")
   );
+  const MasterPage = lazy(
+    () => import("./pages/master.page")
+  );
 
 
   return (
     <Routes>
-      {/* <Route
+      <Route
         path={"/consultar"}
         element={
           <PrivateRoute
-            element={<SearchMasterActivityPage />}
-            allowedAction={"MAESTRO_ACTIVIDAD_CONSULTAR"}
+            element={<MasterPage/>}
+            allowedAction={"MAESTROS_CONSULTAR"}
           />
         }
-      /> */}
+      /> 
+      
       <Route
         path={"/crear"}
         element={
           <PrivateRoute
             element={<MasterCrudPage action={"new"}/>}
-            allowedAction={"MAESTRO_ACTIVIDAD_CREAR"}
+            allowedAction={"MAESTROS_CREAR"}
           />
         }
       />
