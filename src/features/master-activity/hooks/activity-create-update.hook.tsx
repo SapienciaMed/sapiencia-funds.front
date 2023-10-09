@@ -55,6 +55,7 @@ export default function useCreateMasterHook(action: string) {
     watch,
   } = useForm<IMasterActivity>({
     defaultValues: async () => loadDefaultValues(),
+    mode: "all",
     resolver
   });
 
@@ -194,7 +195,7 @@ export default function useCreateMasterHook(action: string) {
 
   const handleModalSuccess = () => {
     setMessage({
-      title: ` ${action === "edit" ? "Editado" : "Cambios guardados"}`,
+      title: "Cambios guardados",
       description: `¡Cambios guardados exitosamente!`,
       show: true,
       OkTitle: "Aceptar",
