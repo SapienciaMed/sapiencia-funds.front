@@ -13,7 +13,7 @@ interface IPropsMasterCrud {
 
 const MasterCrudPage = ({ action }) => {
 
-    const { typeMasterList, control, errors, register, setValue, onsubmitCreate } = useMaster();
+    const { typeMasterList, control, errors, register, setValue, onsubmitCreate,CancelFunction } = useMaster();
 
     return (
         <Fragment>
@@ -38,7 +38,7 @@ const MasterCrudPage = ({ action }) => {
                                         </>
                                     }
                                     className="select-basic medium select-disabled-list"
-                                    classNameLabel="text-black big bold"
+                                    classNameLabel="text-black biggest bold"
                                     filter={true}
                                     placeholder="Seleccione."
                                     //disabled={action === "edit" ? true : false}
@@ -50,7 +50,7 @@ const MasterCrudPage = ({ action }) => {
                                     typeInput="text"
                                     label="Nuevo maestro"
                                     register={register}
-                                    classNameLabel="text-black big text-required bold"
+                                    classNameLabel="text-black biggest text-required bold"
                                     //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
@@ -69,7 +69,7 @@ const MasterCrudPage = ({ action }) => {
                                                 value={`${field.value}`}
                                                 label="Descripción"
                                                 className="text-area-basic"
-                                                classNameLabel="text-black biggest bold text-required"
+                                                classNameLabel="text-black biggest bold"
                                                 rows={4}
                                                 placeholder="Escribe aquí"
                                                 register={register}
@@ -91,7 +91,7 @@ const MasterCrudPage = ({ action }) => {
                         value="Cancelar"
                         type="button"
                         className="button-cancel-text large hover-three disabled-black"
-                    //action={() => CancelFunction()}
+                        action={() => CancelFunction()}
                     //disabled={sending}
                     />
                     <ButtonComponent
