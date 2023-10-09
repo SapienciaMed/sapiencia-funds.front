@@ -195,8 +195,7 @@ export default function useCreateMasterHook(action: string) {
   const handleModalSuccess = () => {
     setMessage({
       title: ` ${action === "edit" ? "Editado" : "Cambios guardados"}`,
-      description: `¡Cambios ${action === "edit" ? "editada" : "guardados"
-        } exitosamente!`,
+      description: `¡Cambios guardados exitosamente!`,
       show: true,
       OkTitle: "Aceptar",
       onOk: () => {
@@ -218,9 +217,7 @@ export default function useCreateMasterHook(action: string) {
     action === "edit" ?
       setMessage({
         title: "Guardar cambios",
-        description: `¿Estás segur@ de ${action === "edit" ? "editar" : "guardar"
-          }
-          los cambios?`,
+        description: `¿Estás segur@ de guardar los cambios?`,
         show: true,
         OkTitle: "Aceptar",
         onOk: () => {
@@ -248,9 +245,7 @@ export default function useCreateMasterHook(action: string) {
       }):
       setMessage({
         title: "Guardar cambios",
-        description: `¿Estás segur@ de ${action === "edit" ? "editar" : "guardar"
-          }
-          los cambios?`,
+        description: `¿Estás segur@ de guardar los cambios?`,
         show: true,
         OkTitle: "Aceptar",
         onOk: () => {
