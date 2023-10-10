@@ -7,6 +7,11 @@ export interface IMasterActivity{
   totalValue: number;
   description?: string;
   typesProgram?: IProgramTypes;
+  userModified?: string;
+  dateModified?: DateTime;
+  userCreate?: string;
+  dateCreate?: DateTime;
+
 }
 
 export interface IMasterActivityFilter {
