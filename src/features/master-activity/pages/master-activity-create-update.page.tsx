@@ -20,8 +20,8 @@ const MasterActivityCreatePage = ({
   } = useCreateMasterHook(action);
   
   return (
-    <div className="main-page">
-      <div className="card-table">
+    <>
+    <div className="container-sections-forms m-24px">
         <div className="title-area">
           <label className="text-black extra-large bold">
            {renderTitleMasterActivity()}
@@ -36,8 +36,8 @@ const MasterActivityCreatePage = ({
          redirectCancel={redirectCancel}
          onSubmit ={onSubmit}
         />
-      </div>
     </div>
+    </>
   );
 };
 

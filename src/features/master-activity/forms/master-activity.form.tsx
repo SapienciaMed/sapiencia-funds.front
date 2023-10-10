@@ -116,7 +116,7 @@ export const MasterActivityForm = ({
                     Programa <span>*</span>
                     </>
                   }
-                  className={`select-basic medium ${action === "edit" ? "input-disabled" : "input-enabled"}`}
+                  className={"select-basic medium select-disabled-list"}
                   classNameLabel="text-black big bold"
                   filter={true}
                   placeholder="Seleccione."
