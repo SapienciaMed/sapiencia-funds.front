@@ -227,3 +227,17 @@ div[id="single-spa-application:@sapiencia/funds"] {
     }
   }
 }
+
+/* Estilo para el campo habilitado */
+.input-enabled {
+  background-color: #ffffff; /* Color de fondo blanco por defecto */
+  /* Agrega otros estilos según tus preferencias */
+}
+
+/* Estilo para el campo deshabilitado */
+.input-disabled {
+  background-color: #E2E2E2;
+  //cursor: not-allowed; 
+}
+
+
