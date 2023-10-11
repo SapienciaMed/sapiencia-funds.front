@@ -72,7 +72,7 @@ export const MasterActivityForm = ({
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
-                        className={`input-regular input-basic medium select-disabled-list input-regular`}
+                        className={`input-basic medium ${action === "edit" ? "input-disabled" : "input-regular"}`}
                         classNameLabel="text-black big medium label-regular"
                         disabled={action === "edit" ? true : false} 
                       />
