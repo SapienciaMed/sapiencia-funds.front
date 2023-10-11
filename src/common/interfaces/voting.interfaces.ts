@@ -17,3 +17,16 @@ export interface IItemCreate {
     percentage456: string;
     codRtVotingResult: string;
 }
+
+
+export interface IVotingSearcheResult {
+    id?: number;
+    aimStraight: number;
+    productCatalogueDnp: number;
+    codPmaProgram: string;
+    codMtaTeacherActivity: string;
+    costTotal: string;
+    percentage123: string;
+    percentage456: string;
+    codRtVotingResult: string;
+}
