@@ -115,7 +115,7 @@ export function SelectComponent({
         {messageError() && <span className="icon-error"></span>}
       </div>
       {messageError() && (
-        <p className="error-message bold not-margin-padding">
+        <p className="error-message medium not-margin-padding">
           {messageError()}
         </p>
       )}

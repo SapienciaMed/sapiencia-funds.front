@@ -52,7 +52,7 @@ export const MasterActivityForm = ({
           </div>
 
           <div>
-            <div className="grid-form-4-container gap-25">
+            <div className="grid-form-4-container mb-24px">
                 <Controller
                   control={control}
                   name={"name"}
@@ -72,8 +72,8 @@ export const MasterActivityForm = ({
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
-                        className={`input-basic medium ${action === "edit" ? "input-disabled" : "input-enabled"}`}
-                        classNameLabel="text-black big bold"
+                        className={`input-regular input-basic medium select-disabled-list input-regular`}
+                        classNameLabel="text-black big medium label-regular"
                         disabled={action === "edit" ? true : false} 
                       />
                     );
@@ -99,8 +99,8 @@ export const MasterActivityForm = ({
                         value={`${field.value}`}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
-                        className="input-basic medium"
-                        classNameLabel="text-black big bold"
+                        className="input-basic medium input-regular"
+                        classNameLabel="text-black big medium label-regular"
                       />
                     );
                   }}
@@ -116,8 +116,8 @@ export const MasterActivityForm = ({
                     Programa <span>*</span>
                     </>
                   }
-                  className={"select-basic medium select-disabled-list"}
-                  classNameLabel="text-black big bold"
+                  className={"select-basic medium select-disabled-list select-basic input-regular" }
+                  classNameLabel="text-black big medium label-regular"
                   filter={true}
                   placeholder="Seleccione."
                   disabled={action === "edit" ? true : false} 
@@ -138,8 +138,8 @@ export const MasterActivityForm = ({
                         value={field.value}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
-                        className={`input-basic medium ${action === "edit" ? "input-disabled" : "input-enabled"}`}
-                        classNameLabel="text-black big bold"
+                        className={`input-basic medium ${action === "edit" ? "input-disabled" : "input-regular"}`}
+                        classNameLabel="text-black big medium label-regular"
                         disabled={action === "edit" ? true : false} 
                       />
                     );

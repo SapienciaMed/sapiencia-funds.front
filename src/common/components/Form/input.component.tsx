@@ -145,13 +145,13 @@ export function InputComponent({
         {messageError() && (
           <MdOutlineError
             className="icon-error"
-            fontSize={"22px"}
+            fontSize={"14px"}
             color="#ff0000"
           />
         )}
       </div>
       {messageError() && (
-        <p className="error-message bold not-margin-padding">
+        <p className="error-message  not-margin-padding">
           {messageError()}
         </p>
       )}
