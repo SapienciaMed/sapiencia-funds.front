@@ -46,7 +46,7 @@ export const MasterActivityForm = ({
       >
           <div className="container-sections-forms">
             <div className="title-area">
-              <label className="text-black large bold grid-span-4-columns">
+              <label className="text-black large medium grid-span-4-columns">
               Maestro Actividad
             </label>
           </div>
@@ -116,7 +116,7 @@ export const MasterActivityForm = ({
                     Programa <span>*</span>
                     </>
                   }
-                  className={"select-basic medium select-disabled-list select-basic input-regular" }
+                  className={"select-basic medium select-disabled-list input-basic input-regular" }
                   classNameLabel="text-black big medium label-regular"
                   filter={true}
                   placeholder="Seleccione."

@@ -23,7 +23,7 @@ const MasterActivityCreatePage = ({
     <>
     <div className="container-sections-forms m-24px">
         <div className="title-area">
-          <label className="text-black extra-large bold">
+          <label className="text-black extra-large medium">
            {renderTitleMasterActivity()}
           </label>
         </div>

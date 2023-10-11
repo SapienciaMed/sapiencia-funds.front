@@ -145,7 +145,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                 : item[properties[0]];
             return (
               <div key={item} className="item-value-container">
-                <p className="text-black bold">{column.header}</p>
+                <p className="text-black medium">{column.header}</p>
                 <p> {column.renderCell ? column.renderCell(item) : field} </p>
               </div>
             );
@@ -275,7 +275,7 @@ function getIconElement(icon: string, element: "name" | "src") {
 }
 
 const leftContent = (
-  <p className="header-information text-black bold biggest">
+  <p className="header-information text-black medium biggest">
     Resultados de búsqueda
   </p>
 );
@@ -285,10 +285,10 @@ const paginatorHeader: PaginatorTemplateOptions = {
   CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
     return (
       <>
-        <p className="header-information text-black bold big">
+        <p className="header-information text-black medium big">
           Total de resultados
         </p>
-        <p className="header-information text-three bold big">
+        <p className="header-information text-three medium big">
           {options.totalRecords}
         </p>
       </>
@@ -304,7 +304,7 @@ const paginatorHeader: PaginatorTemplateOptions = {
 
     return (
       <React.Fragment>
-        <p className="header-information text-black bold big">
+        <p className="header-information text-black medium big">
           Registros por página{" "}
         </p>
         <Dropdown

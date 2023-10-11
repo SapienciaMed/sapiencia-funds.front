@@ -24,7 +24,7 @@ const SearchMasterPage = (): React.JSX.Element => {
     <div className="main-page">
       <div className="card-table">
         <div className="title-area">
-          <label className="text-black extra-large bold">
+          <label className="text-black extra-large medium">
           Consultar maestro actividad
           </label>
         </div>

@@ -149,14 +149,14 @@ import React, {
                   : item[properties[0]];
               return (
                 <div key={item} className="item-value-container">
-                  <p className="text-black bold text-center">{column.header}</p>
+                  <p className="text-black medium text-center">{column.header}</p>
                   <p> {column.renderCell ? column.renderCell(item) : field} </p>
                 </div>
               );
             })}
           </div>
           <div className="card-footer">
-            <section className="position-absolute top text-black bold text-center"> Acciones </section>
+            <section className="position-absolute top text-black medium text-center"> Acciones </section>
             <section className="section-action">
               {actions?.map((action) => (
                 <div key={action.icon} onClick={() => action.onClick(item)}>
@@ -193,7 +193,7 @@ import React, {
           totalRecords={resultData?.meta?.total || 0}
           onPageChange={onPageChange}
           leftContent={
-            <p className="header-information text-black bold biggest">
+            <p className="header-information text-black medium biggest">
               { secondaryTitle ?? 'Resultados de búsqueda'}
             </p>
           }
@@ -285,10 +285,10 @@ import React, {
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
       return (
         <>
-          <p className="header-information text-black bold big">
+          <p className="header-information text-black medium big">
             Total de resultados
           </p>
-          <p className="header-information text-three bold big">
+          <p className="header-information text-three medium big">
             {options.totalRecords}
           </p>
         </>
@@ -304,7 +304,7 @@ import React, {
   
       return (
         <React.Fragment>
-          <p className="header-information text-black bold big">
+          <p className="header-information text-black medium big">
             Registros por página{" "}
           </p>
           <Dropdown
