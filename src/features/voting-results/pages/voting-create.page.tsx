@@ -4,11 +4,12 @@ import { ButtonComponent, FormComponent, InputComponent } from "../../../common/
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { EDirection } from "../../../common/constants/input.enum";
 import { SelectComponentUser } from "../../../common/components/Form/select.component.user";
-import TableComponent from "../../../common/components/table.component";
+import TableComponentNew from "../../../common/components/tableNew.component";
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
+
 
 
 const VotingResultsPage = () => {
@@ -150,7 +151,7 @@ const VotingResultsPage = () => {
               />
             </div>
 
-            <TableComponent
+            {/* <TableComponent
               ref={tableComponentRef}
               url={`${process.env.urlApiAuth}/api/v1/voting/search`}
               columns={tableColumns}
@@ -158,7 +159,25 @@ const VotingResultsPage = () => {
               titleMessageModalNoResult="Registro no existente"
               descriptionModalNoResult="EL registro no existe en el sistema."
               isShowModal={true}
-            />
+            /> */}
+
+              <div className="container-form-grid mt-24px">
+                <div className="container-form padding-form">
+                  <TableComponentNew
+                    ref={tableComponentRef}
+                    data={{
+                      data: [], // Aquí pasas tu array de datos
+                      pagingInfo: {
+                        total: [].length,
+                      },
+                    }}
+                    columns={tableColumns}
+                    actions={tableActions}
+                    isShowModal={true}
+                  />
+                </div>
+              </div>
+
           </div>
 
           <div>
