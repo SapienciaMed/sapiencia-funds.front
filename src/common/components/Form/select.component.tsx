@@ -21,6 +21,7 @@ interface ISelectProps<T> {
   fieldArray?: boolean;
   filter?: boolean;
   emptyMessage?: string;
+  customClass?: string;
 }
 
 function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
@@ -49,6 +50,7 @@ export function SelectComponent({
   fieldArray,
   filter,
   emptyMessage = "Sin resultados.",
+  customClass,
   
 }: ISelectProps<any>): React.JSX.Element {
   if (data) {
@@ -86,7 +88,7 @@ export function SelectComponent({
         idInput={idInput}
         classNameLabel={classNameLabel}
       />
-      <div>
+      <div className={`select-element ${customClass}`}>
         <Controller
           name={idInput}
           control={control}
@@ -113,7 +115,7 @@ export function SelectComponent({
         {messageError() && <span className="icon-error"></span>}
       </div>
       {messageError() && (
-        <p className="error-message bold not-margin-padding">
+        <p className="error-message medium not-margin-padding">
           {messageError()}
         </p>
       )}

@@ -1,9 +1,15 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { useVotingResults } from "../hooks/voting-create.hooks";
 import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { EDirection } from "../../../common/constants/input.enum";
 import { SelectComponentUser } from "../../../common/components/Form/select.component.user";
+import TableComponentNew from "../../../common/components/tableNew.component";
+import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../../common/contexts/app.context";
+
 
 
 const VotingResultsPage = () => {
@@ -16,7 +22,60 @@ const VotingResultsPage = () => {
     sending,
     deparmetList,
     addItem,
+    tableComponentRef,
   } = useVotingResults();
+
+  const navigate = useNavigate();
+  const { validateActionAccess } = useContext(AppContext);
+
+    const tableColumns: ITableElement<IVotingSearcheResult>[] = [
+      {
+        fieldName: "numberDocument",
+        header: "Objetivo directo",
+      },
+      {
+        fieldName: "Producto catalogo dnp",
+        header: "Nombres y apellidos",
+      },
+      {
+        fieldName: "email",
+        header: "ódigo catalogo dnp",
+      },
+      {
+        fieldName: "profile",
+        header: "Programa",
+      },
+      {
+        fieldName: "profile",
+        header: "Actividad",
+      },
+      {
+        fieldName: "profile",
+        header: "",
+      },
+  ];
+  
+    const tableActions: ITableAction<IVotingSearcheResult>[] = [
+      {
+        icon: "Detail",
+        onClick: (row) => {
+          navigate(`/core/usuarios/editar/${row.id}`);
+        },
+        hide: !validateActionAccess("USUARIOS_DETALLE"),
+      },
+      {
+        icon: "Edit",
+        onClick: (row) => {
+          navigate(`/core/usuarios/editar/${row.id}`);
+        },
+        hide: !validateActionAccess("USUARIOS_EDITAR"),
+      },
+      {
+        icon: "Delete",
+        onClick: (row) => {},
+        hide: !validateActionAccess("USUARIOS_ELIMINAR"),
+      }
+    ];
 
   return (
     <Fragment>
@@ -91,6 +150,34 @@ const VotingResultsPage = () => {
                 }}
               />
             </div>
+
+            {/* <TableComponent
+              ref={tableComponentRef}
+              url={`${process.env.urlApiAuth}/api/v1/voting/search`}
+              columns={tableColumns}
+              actions={tableActions}
+              titleMessageModalNoResult="Registro no existente"
+              descriptionModalNoResult="EL registro no existe en el sistema."
+              isShowModal={true}
+            /> */}
+
+              <div className="container-form-grid mt-24px">
+                <div className="container-form padding-form">
+                  <TableComponentNew
+                    ref={tableComponentRef}
+                    data={{
+                      data: [], // Aquí pasas tu array de datos
+                      pagingInfo: {
+                        total: [].length,
+                      },
+                    }}
+                    columns={tableColumns}
+                    actions={tableActions}
+                    isShowModal={true}
+                  />
+                </div>
+              </div>
+
           </div>
 
           <div>

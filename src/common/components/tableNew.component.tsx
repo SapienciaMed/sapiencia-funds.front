@@ -9,6 +9,7 @@ import { ITableAction, ITableElement } from "../interfaces/table.interfaces";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { DataView } from "primereact/dataview";
+import {IUnifiedPagingData} from "../../common/utils/api-response"
 import {
   Paginator,
   PaginatorCurrentPageReportOptions,
@@ -27,39 +28,41 @@ import * as Icons from "react-icons/fa";
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
 import { AppContext } from "../contexts/app.context";
-import { ImProfile } from "react-icons/im";
 
 interface IProps<T> {
-  url: string;
+  url?: string;
   emptyMessage?: string;
   title?: string;
+  secondaryTitle?: string;
   columns: ITableElement<T>[];
   actions?: ITableAction<T>[];
   searchItems?: object;
   isShowModal: boolean;
-  titleMessageModalNoResult?: string;
-  descriptionModalNoResult?: string;
+  titleMessageModalNoResult?: string;  
+  data?: IUnifiedPagingData | null;
+  
 }
+
 
 interface IRef {
   loadData: (newSearchCriteria?: object) => void;
 }
 
-const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
+const TableComponentNew = forwardRef<IRef, IProps<any>>((props, ref,) => {
   const {
     title,
+    secondaryTitle,
     columns,
     actions,
     url,
     titleMessageModalNoResult,
-    descriptionModalNoResult,
     isShowModal,
     emptyMessage = "No hay resultados.",
   } = props;
 
   // States
   const [charged, setCharged] = useState<boolean>(false);
-  const [resultData, setResultData] = useState<IPagingData<any>>();
+  const [resultData, setResultData] = useState<IUnifiedPagingData | null>(props.data || null);
   const [loading, setLoading] = useState<boolean>(false);
   const [perPage, setPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
@@ -67,6 +70,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const [searchCriteria, setSearchCriteria] = useState<object>();
   const { width } = useWidth();
   const { setMessage } = useContext(AppContext);
+
 
   // Declaraciones
   const { post } = useCrudService(url);
@@ -80,6 +84,11 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     currentPage?: number
   ): Promise<void> {
     setLoading(true);
+    if (props.data) {
+      setResultData(props.data);
+      setLoading(false);
+      return;
+    }
     if (newSearchCriteria) {
       setSearchCriteria(newSearchCriteria);
     }
@@ -89,14 +98,18 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       page: currentPage || 1,
       perPage: perPage,
     });
+
     if (res.operation.code === EResponseCodes.OK) {
-      setResultData(res.data);
+      setResultData({
+        data: res.data.array,  // Ajusta según el formato de tu respuesta
+        pagingInfo: res.data.meta  // Ajusta según el formato de tu respuesta
+    });
 
       if (res.data.array.length <= 0 && isShowModal) {
         setMessage({
           title: `${titleMessageModalNoResult || ""}`,
           show: true,
-          description: `${descriptionModalNoResult}` || "",
+          description: "No hay resultado para la búsqueda",
           OkTitle: "Aceptar",
           background: true,
         });
@@ -129,14 +142,17 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   }, [perPage, first, page]);
 
   useEffect(() => {
-    setCharged(true);
-
+    if (props.data) {
+        setResultData(props.data);
+    } else {
+        setCharged(true);
+    }
     return () => {
-      setCharged(false);
+        setCharged(false);
     };
-  }, []);
+}, [props.data]);
 
-  const mobilTemplate = (item: any) => {
+  const mobilTemplate = (item) => {
     return (
       <div className="card-grid-item">
         <div className="card-header">
@@ -148,19 +164,22 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                 : item[properties[0]];
             return (
               <div key={item} className="item-value-container">
-                <p className="text-black medium">{column.header}</p>
+                <p className="text-black bold text-center">{column.header}</p>
                 <p> {column.renderCell ? column.renderCell(item) : field} </p>
               </div>
             );
           })}
         </div>
-        {console.log(actions)}
         <div className="card-footer">
-          {actions.map((action) => (
-            <div key={action.icon} onClick={() => action.onClick(item)}>
-              {getIconElement(action.icon, "src")}
-            </div>
-          ))}
+          <section className="position-absolute top text-black bold text-center"> Acciones </section>
+          <section className="section-action">
+            {actions?.map((action) => (
+              <div key={action.icon} onClick={() => action.onClick(item)}>
+                {getIconElement(action.icon, "src")}
+              </div>
+            ))}
+
+          </section>
         </div>
       </div>
     );
@@ -173,83 +192,95 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 
   async function EmptyData(): Promise<void> {
     setLoading(true);
-    setResultData({ array: [], meta: { total: 0 } });
+    setResultData({
+        data: [],  // Cambia 'array' por 'data'
+        pagingInfo: {
+            total: 0,
+            // También puedes inicializar los otros campos de IDataPaging con valores predeterminados si es necesario
+            perPage: 0,
+            currentPage: 0,
+            lastPage: 0,
+            firstPage: 0,
+            firstPageUrl: "",
+            lastPageUrl: "",
+            nextPageUrl: "",
+            previousPageUrl: ""
+        }
+    });
     setLoading(false);
-  }
+}
 
-  if (resultData && resultData.array && resultData.array.length > 0) {
-    return (
-      <div className="card-user">
-        <div className="spc-common-table">
-          {title && <div className="spc-table-title">{title}</div>}
 
-          {/* Verificar si resultData.array tiene elementos */}
-          <>
-            <Paginator
-              className="between spc-table-paginator"
-              template={paginatorHeader}
-              first={first}
-              rows={perPage}
-              totalRecords={resultData?.meta?.total || 0}
-              onPageChange={onPageChange}
-              leftContent={leftContent}
+  return (
+    <div className="spc-common-table">
+      {title && <div className="spc-table-title">{title}</div>}
+
+      <Paginator
+    className="between spc-table-paginator"
+    template={paginatorHeader}
+    first={first}
+    rows={perPage}
+    totalRecords={resultData?.pagingInfo?.total || 0}  // Cambia 'meta' por 'pagingInfo'
+    onPageChange={onPageChange}
+    leftContent={
+        <p className="header-information text-black bold biggest">
+            {secondaryTitle ?? 'Resultados de búsqueda'}
+        </p>
+    }
+/>
+
+
+{width > 830 ? (
+    <DataTable
+        className="spc-table full-height"
+        value={resultData?.data || []}  // Actualizado de resultData?.array a resultData?.data
+        loading={loading}
+        scrollable={true}
+        emptyMessage={emptyMessage}
+    >
+        {columns.map((col) => (
+            <Column
+                key={col.fieldName}
+                field={col.fieldName}
+                header={col.header}
+                body={col.renderCell}
             />
+        ))}
 
-            {width > 830 ? (
-              <DataTable
-                className="spc-table full-height"
-                value={resultData?.array || []}
-                loading={loading}
-                scrollable={true}
-                emptyMessage={emptyMessage}
-              >
-                {columns.map((col) => (
-                  <Column
-                    key={col.fieldName}
-                    field={col.fieldName}
-                    header={col.header}
-                    body={col.renderCell}
-                  />
-                ))}
-
-                {actions && (
-                  <Column
-                    className="spc-table-actions"
-                    header={
-                      <div>
+        {actions && (
+            <Column
+                className="spc-table-actions"
+                header={
+                    <div>
                         <div className="spc-header-title">Acciones</div>
-                      </div>
-                    }
-                    body={(row) => (
-                      <ActionComponent row={row} actions={actions} />
-                    )}
-                  />
-                )}
-              </DataTable>
-            ) : (
-              <DataView
-                value={resultData?.array || []}
-                itemTemplate={mobilTemplate}
-                rows={5}
-                emptyMessage={emptyMessage}
-              />
-            )}
-
-            <Paginator
-              className="spc-table-paginator"
-              template={paginatorFooter}
-              first={first}
-              rows={perPage}
-              totalRecords={resultData?.meta?.total || 0}
-              onPageChange={onPageChange}
+                    </div>
+                }
+                body={(row) => <ActionComponent row={row} actions={actions} />}
             />
-          </>
-        </div>
-      </div>
-    );
-  }
+        )}
+    </DataTable>
+) : (
+    <DataView
+        value={resultData?.data || []}  // Actualizado de resultData?.array a resultData?.data
+        itemTemplate={mobilTemplate}
+        rows={5}
+        emptyMessage={emptyMessage}
+    />
+)}
+<Paginator
+    className="spc-table-paginator"
+    template={paginatorFooter}
+    first={first}
+    rows={perPage}
+    totalRecords={resultData?.pagingInfo?.total || 0}  // Actualizado de resultData?.meta?.total a resultData?.pagingInfo?.total
+    onPageChange={onPageChange}
+/>
+</div>
+);
+
 });
 
+// Metodo que retorna el icono o nombre de la accion
 function getIconElement(icon: string, element: "name" | "src") {
   switch (icon) {
     case "Detail":
@@ -276,33 +307,20 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <Icons.FaLink className="button grid-button button-link" />
       );
-    case "Profile":
-      return element == "name" ? (
-        "Vincular"
-      ) : (
-        <ImProfile className="button grid-button button-link" />
-      );
     default:
       return "";
   }
 }
-
-let leftContent = (
-  <p className="header-information text-black bold biggest">
-    Resultados de búsqueda
-  </p>
-);
-// Metodo que retorna el icono o nombre de la accion
 
 const paginatorHeader: PaginatorTemplateOptions = {
   layout: "CurrentPageReport RowsPerPageDropdown",
   CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
     return (
       <>
-        <p className="header-information text-black medium big">
+        <p className="header-information text-black bold big">
           Total de resultados
         </p>
-        <p className="header-information text-three medium big">
+        <p className="header-information text-three bold big">
           {options.totalRecords}
         </p>
       </>
@@ -318,7 +336,7 @@ const paginatorHeader: PaginatorTemplateOptions = {
 
     return (
       <React.Fragment>
-        <p className="header-information text-black medium big">
+        <p className="header-information text-black bold big">
           Registros por página{" "}
         </p>
         <Dropdown
@@ -332,7 +350,7 @@ const paginatorHeader: PaginatorTemplateOptions = {
   },
 };
 
-const paginatorFooter: PaginatorTemplateOptions = {
+export const paginatorFooter: PaginatorTemplateOptions = {
   layout: "PrevPageLink PageLinks NextPageLink",
   PrevPageLink: (options: PaginatorPrevPageLinkOptions) => {
     return (
@@ -393,23 +411,13 @@ const ActionComponent = (props: {
 }): React.JSX.Element => {
   return (
     <div className="spc-table-action-button">
-      {props.actions.map((action, index) => (
-        <div
-          style={{ display: action.hide ? "none" : "block" }}
-          key={index}
-          onClick={() => action.onClick(props.row)}
-        >
-          {action.customIcon ? (
-            <div className="button grid-button button-link">
-              {action.customIcon()}
-            </div>
-          ) : (
-            getIconElement(action.icon, "src")
-          )}
+      {props.actions.map((action) => (
+        <div key={action.icon} onClick={() => action.onClick(props.row)}>
+          {getIconElement(action.icon, "src")}
         </div>
       ))}
     </div>
   );
 };
 
-export default React.memo(TableComponent);
+export default React.memo(TableComponentNew);

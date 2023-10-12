@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../common/contexts/app.context";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -20,7 +20,8 @@ export const useVotingResults = () => {
     const navigate = useNavigate();
     const resolver = useYupValidationResolver(createVotings);
     const { getListByParent } = useGenericListService();
-    const [deparmetList, setDeparmentList] = useState([])
+    const [deparmetList, setDeparmentList] = useState([]);
+    const tableComponentRef = useRef(null);
 
 
     const { createVoting } = useVotingService();
@@ -64,7 +65,7 @@ export const useVotingResults = () => {
               description: <ItemResultsPage />,
               size: "large",
             });
-    
+          onSubmitSearch();
         } else {
             setMessage({
               show: true,
@@ -95,6 +96,16 @@ export const useVotingResults = () => {
           background: true,
         });
     });
+  
+    const onSubmitSearch = async () => {
+      loadTableData({});
+    };
+
+    function loadTableData(searchCriteria?: object): void {
+      if (tableComponentRef.current) {
+        tableComponentRef.current.loadData(searchCriteria);
+      }
+    }
 
 
     const confirmVotingCreation = async (data: IVotingCreate) => { 
@@ -162,15 +173,17 @@ export const useVotingResults = () => {
 
 
     return {
-        CancelFunction,
-        onSubmitCreateVoting,
-        confirmVotingCreation,
-        register,
-        errors,
-        sending,
-        deparmetList,
-        addItem
-    }
+      CancelFunction,
+      onSubmitCreateVoting,
+      confirmVotingCreation,
+      register,
+      errors,
+      sending,
+      deparmetList,
+      addItem,
+      tableComponentRef,
+      onSubmitSearch,
+    };
 };
 
 

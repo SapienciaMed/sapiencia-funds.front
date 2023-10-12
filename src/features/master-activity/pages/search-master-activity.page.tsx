@@ -4,7 +4,7 @@ import { FilterMasterActivityForm } from "../forms/filter-masteractivity.form";
 
 import useSearchMasterHook from "../hooks/search-master-activity.hook";
 
-import TableComponent from "../../../common/components/table.component";
+import TableComponentNew from "../../../common/components/tableNew.component";
 
 const SearchMasterPage = (): React.JSX.Element => {
   const {
@@ -24,7 +24,7 @@ const SearchMasterPage = (): React.JSX.Element => {
     <div className="main-page">
       <div className="card-table">
         <div className="title-area">
-          <label className="text-black extra-large bold">
+          <label className="text-black extra-large medium">
           Consultar maestro actividad
           </label>
         </div>
@@ -40,7 +40,7 @@ const SearchMasterPage = (): React.JSX.Element => {
 
         {showTable && (
           <div className="container-sections-forms">
-            <TableComponent
+            <TableComponentNew
               ref={tableComponentRef}
               url={`${process.env.urlApiFunds}/api/v1/activities/get-paginated`}
               columns={tableColumns}

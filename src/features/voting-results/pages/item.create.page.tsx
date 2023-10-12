@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import { FormComponent, InputComponent } from "../../../common/components/Form";
+import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { useItemResults } from "../hooks/item.create.hooks";
 import { EDirection } from "../../../common/constants/input.enum";
@@ -8,12 +8,14 @@ import { EDirection } from "../../../common/constants/input.enum";
 const ItemResultsPage = () => {
 
     const {
-        CancelFunction,
-        onSubmitCreateItem,
-        register,
-        errors,
-        sending,
-        deparmetList,
+      CancelFunction,
+      onSubmitCreateItem,
+      register,
+      errors,
+      sending,
+      typeProgram,
+      setProgramSelected,
+      activity,
     } = useItemResults();
 
     return (
@@ -24,21 +26,8 @@ const ItemResultsPage = () => {
           action={onSubmitCreateItem}
         >
           <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
-            {/* <SelectComponentOld
-            idInput="communeNeighborhood"
-            register={register}
-            className="select-basic medium"
-            placeholder="Seleccionar"
-            label="Comuna y/o corregimiento "
-            data={deparmetList ? deparmetList : []}
-            value={null}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-          /> */}
-
             <InputComponent
-              idInput="numberProject"
+              idInput="directObject"
               className="input-basic medium form-group"
               typeInput="text"
               label="Objetivo directo"
@@ -50,7 +39,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="numberProject"
+              idInput="productCatalog"
               className="input-basic medium form-group"
               typeInput="number"
               label="Producto catalogo dnp"
@@ -62,7 +51,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="validity"
+              idInput="productCode"
               className="input-basic medium form-group"
               typeInput="text"
               label="Código producto dnp"
@@ -73,27 +62,27 @@ const ItemResultsPage = () => {
               placeholder={""}
             />
 
-
             <SelectComponentOld
-              idInput="communeNeighborhood"
+              idInput="program"
               register={register}
               className="select-basic medium"
               placeholder="Seleccionar"
               label="Programa "
-              data={[]}
+              data={typeProgram ? typeProgram : []}
               value={null}
               classNameLabel="text-black big text-required bold"
               direction={EDirection.column}
               errors={errors}
+              setValue={setProgramSelected}
             />
 
             <SelectComponentOld
-              idInput="communeNeighborhood"
+              idInput="activity"
               register={register}
               className="select-basic medium"
               placeholder="Seleccionar"
               label="Actividad"
-              data={[]}
+              data={activity ? activity : []}
               value={null}
               classNameLabel="text-black big text-required bold"
               direction={EDirection.column}
@@ -101,7 +90,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="activityValue"
               className="input-basic medium form-group"
               typeInput="number"
               label="Valor actividad"
@@ -114,7 +103,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="amount"
               className="input-basic medium form-group"
               typeInput="number"
               label="Cantidad"
@@ -126,7 +115,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="totalCost"
               className="input-basic medium form-group"
               typeInput="number"
               label="Costo total"
@@ -139,7 +128,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="porcentaje123"
               className="input-basic medium form-group"
               typeInput="number"
               label="Porcentaje 123"
@@ -151,7 +140,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="porcentaje456"
               className="input-basic medium form-group"
               typeInput="number"
               label="Porcentaje 456"
@@ -160,6 +149,23 @@ const ItemResultsPage = () => {
               direction={EDirection.column}
               errors={errors}
               placeholder={""}
+            />
+          </div>
+          <div className="button-save-container-display-users margin-right0">
+            <ButtonComponent
+              form="createItemForm"
+              value="Cancelar"
+              type="button"
+              className="button-cancel-text large hover-three disabled-black"
+              action={() => CancelFunction()}
+              disabled={sending}
+            />
+            <ButtonComponent
+              form="createItemForm"
+              value="Guardar"
+              type="submit"
+              className="button-save large disabled-black"
+              disabled={sending}
             />
           </div>
         </FormComponent>

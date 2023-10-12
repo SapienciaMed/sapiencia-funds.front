@@ -10,6 +10,7 @@ import { useVotingService } from "../../../common/hooks/voting-service.hook";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
+import useVotingItemApi from "./voting-items-api.hooks";
 
 
 
@@ -21,6 +22,9 @@ export const useItemResults = () => {
     const resolver = useYupValidationResolver(createItems);
     const { getListByParent } = useGenericListService();
     const [deparmetList, setDeparmentList] = useState([])
+    const [typeProgram, setTypeProgram] = useState([]);
+    const [programSelected, setProgramSelected] = useState();
+    const [activity, setActivity] = useState([]);
 
 
     const { createVoting } = useVotingService();
@@ -28,10 +32,19 @@ export const useItemResults = () => {
     const {
         handleSubmit,
         register,
-        control,
         formState: { errors },
         reset,
     } = useForm<IVotingCreate>({ resolver });
+
+
+    const { 
+        //     getMasterVotingById,
+        //     createVotingResults,
+        //     editVotignResults,
+        getActivityProgram,
+        getProgramTypes
+    } = useVotingItemApi();
+
     
     const CancelFunction = () => {
         setMessage({
@@ -62,7 +75,6 @@ export const useItemResults = () => {
             background: true,
         });
     });
-
 
     const confirmVotingCreation = async (data: IVotingCreate) => {
         
@@ -109,21 +121,68 @@ export const useItemResults = () => {
     };
 
     useEffect(() => {
-        getListByParent({ grouper: "DEPARTAMENTOS", parentItemCode: "COL" })
-            .then((response: ApiResponse<IGenericList[]>) => {
-                if (response && response?.operation?.code === EResponseCodes.OK) {
-                    setDeparmentList(
-                        response.data.map((item) => {
-                            const list = {
-                                name: item.itemDescription,
-                                value: item.itemCode,
-                            };
-                            return list;
-                        })
-                    );
-                }
+        const aux = async ()=> {
+            
+            //listado de departamentos
+            getListByParent({ grouper: "DEPARTAMENTOS", parentItemCode: "COL" })
+                .then((response: ApiResponse<IGenericList[]>) => {
+                    if (response && response?.operation?.code === EResponseCodes.OK) {
+                        setDeparmentList(
+                            response.data.map((item) => {
+                                const list = {
+                                    name: item.itemDescription,
+                                    value: item.itemCode,
+                                };
+                                return list;
+                            })
+                        );
+                    }
             })
+            
+            //listado de programas
+            const { data, operation } = await getProgramTypes();
+            if (operation.code === EResponseCodes.OK) {
+            const programList = data.map((item) => {
+                return {
+                name: item.name,
+                value: item.id,
+                };
+            });
+                setTypeProgram(programList);
+            } else {
+                setTypeProgram([]);
+            }
+            
+        }
+
+        aux()
+        
     }, []);
+
+
+    //se cargan el listado de las actividades asociadas al programa
+    useEffect(() => {
+
+        const aux = async () => {
+            if (programSelected) {
+                //listado de actividades
+                const { data, operation } = await getActivityProgram(programSelected);
+                if (operation.code === EResponseCodes.OK) {
+                const programList = data.map((item) => {
+                    return {
+                    name: item.name,
+                    value: item.id,
+                    };
+                });
+                    setActivity(programList);
+                } else {
+                    setActivity([]);
+                }   
+           }
+        }
+
+        aux();
+    },[programSelected])
 
 
     return {
@@ -133,7 +192,11 @@ export const useItemResults = () => {
         register,
         errors,
         sending,
-        deparmetList
+        deparmetList,
+        typeProgram,
+        programSelected,
+        setProgramSelected,
+        activity, setActivity
     }
 };
 
