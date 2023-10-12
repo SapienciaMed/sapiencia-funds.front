@@ -1,9 +1,9 @@
 import React from "react";
-import { CreateUploadInformationForm } from "../forms/upload-information.form";
+import { CreateUploadInformationForm } from "../forms/information-upload.form";
 import {UserNotifyUploadInformationForm} from "../forms/users-notice-upload-information.form"
-import {FileUploadInformationForm} from "../forms/file-upload-information.form"
 import useCreateUploadHook from "../hooks/upload-create-update.hook";
 import { ButtonComponent } from "../../../common/components/Form";
+import { UploadComponent } from "../../../common/components/Form";
 
 interface IPropsCreateUpdateActivity {
   action: string;
@@ -43,21 +43,16 @@ const MasterActivityCreatePage = ({
           formValues={formValues}
         />
 
-        <div className="">
+        <div>
           <br />
           <h3>Si tienes más de un documento, se deben unir en un solo archivo para ser cargados.</h3>
         </div>
-
-        <FileUploadInformationForm
-          register={register}
-          control={control}
-          formState={formState}
-          onSubmit={onSubmit}
-          formValues={formValues}
+        
+        <UploadComponent
         />
 
         <div className="title-area">
-          <label className="text-black extra-large bold">
+          <label className="text-black extra-large medium">
             Usuarios a notificar
           </label>
         </div>

@@ -138,7 +138,7 @@ export default function useSearchUploadHook() {
       
       const tableActions: ITableAction<IUploadInformation>[] = [
         {
-          icon: "Detail",
+          icon: "download",
           onClick: (row) => {
             showDownloadInformation(row);
           },

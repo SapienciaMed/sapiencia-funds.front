@@ -21,6 +21,7 @@ import React, {
   useState,
 } from "react";
 import * as Icons from "react-icons/fa";
+import * as IconsBS from 'react-icons/bs';
 import { EResponseCodes } from "../constants/api.enum";
 import { AppContext } from "../contexts/app.context";
 import useCrudService from "../hooks/crud-service.hook";
@@ -269,6 +270,15 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <Icons.FaRegFilePdf className="button grid-button button-pdf color-icon-pdf" />
       );
+      case "download":
+        return element == "name" ? (
+          "descargar"
+        ) : (
+          <IconsBS.BsDownload 
+          className="button grid-button button-download" 
+          style={{ color: '#533893' }}
+          />
+        );
     default:
       return "";
   }
