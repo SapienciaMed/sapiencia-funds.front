@@ -6,7 +6,7 @@ interface IOperation {
 }
 
 interface IDataPaging {
-  total: number;
+  total?: number;
   perPage?: number;
   currentPage?: number;
   lastPage?: number;
@@ -30,4 +30,10 @@ export class ApiResponse<T> {
     this.data = data;
     this.operation = { code, message };
   }
+}
+
+
+export interface IUnifiedPagingData {
+  data: any[];  // Asume que los datos son un array, ajusta según sea necesario
+  pagingInfo: IDataPaging;
 }
