@@ -4,27 +4,30 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { createItems } from "../../../common/schemas/voting-schema";
-import { IVotingCreate } from "../../../common/interfaces/voting.interfaces";
+import { IItemCreate, IItemCreateRegTable, IVotingCreate } from "../../../common/interfaces/voting.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useVotingService } from "../../../common/hooks/voting-service.hook";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import useVotingItemApi from "./voting-items-api.hooks";
+import { useVotingResults } from "./voting-create.hooks";
 
 
 
-export const useItemResults = () => {
+export const useItemResults = (action, dataVoting) => {
 
     const [sending, setSending] = useState(false);
-    const { setMessage, authorization } = useContext(AppContext);
-    // const navigate = useNavigate();
+    const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
+
     const resolver = useYupValidationResolver(createItems);
     const { getListByParent } = useGenericListService();
     const [deparmetList, setDeparmentList] = useState([])
     const [typeProgram, setTypeProgram] = useState([]);
     const [programSelected, setProgramSelected] = useState();
     const [activity, setActivity] = useState([]);
+
+
 
 
     const { createVoting } = useVotingService();
@@ -38,9 +41,6 @@ export const useItemResults = () => {
 
 
     const { 
-        //     getMasterVotingById,
-        //     createVotingResults,
-        //     editVotignResults,
         getActivityProgram,
         getProgramTypes
     } = useVotingItemApi();
@@ -62,62 +62,81 @@ export const useItemResults = () => {
 
 
     /*Functions*/
-    const onSubmitCreateItem = handleSubmit((data: IVotingCreate) => {
-        setMessage({
-            show: true,
-            title: "Crear usuario",
-            description: "¿Estás segur@ de crear un nuevo usuario en el sistema?",
-            OkTitle: "Crear",
-            cancelTitle: "Cancelar",
-            onOk() {
-                confirmVotingCreation(data);
-            },
-            background: true,
-        });
+  const onSubmitCreateItem = handleSubmit((data: IItemCreateRegTable) => {
+      if (data) {
+                dataGrid.push({
+                  porcentaje456: data.porcentaje456,
+                  porcentaje123: data.porcentaje123,
+                  totalCost: data.totalCost,
+                  amount: data.amount,
+                  activityValue: data.activityValue,
+                  directObject: data.directObject,
+                  productCatalog: data.productCatalog,
+                  productCode: data.productCode,
+                  program: data.program,
+                  activity: data.activity,
+                });
+                setMessage({
+                  OkTitle: "Aceptar",
+                  description:
+                    "Se ha agregado el item exitosamente",
+                  title: "Agregar Item",
+                  show: true,
+                  type: EResponseCodes.OK,
+                  background: true,
+                  onOk() {
+                    reset();
+                    setMessage({});
+                  },
+                  onClose() {
+                    reset();
+                    setMessage({});
+                  },
+                });
+      }
     });
 
-    const confirmVotingCreation = async (data: IVotingCreate) => {
-        
-        setSending(true);
+    const confirmVotingCreation = async (data: IItemCreateRegTable) => {
+      setSending(true);
 
-        const user = {
-            communeNeighborhood: data.communeNeighborhood,
-            numberProject: data.numberProject,
-            validity: data.validity,
-            ideaProject: data.ideaProject,
-        };
+      const user = {
+        // communeNeighborhood: data.communeNeighborhood,
+        // numberProject: data.numberProject,
+        // validity: data.validity,
+        // ideaProject: data.ideaProject,
+      };
 
-        const res = await createVoting(user);
+      const res = await createVoting(user);
 
-        if (res && res?.operation?.code === EResponseCodes.OK) {
-            setMessage({
-                OkTitle: "Aceptar",
-                description: "Se ha creado la votación en el sistema exitosamente",
-                title: "Crear Votación",
-                show: true,
-                type: EResponseCodes.OK,
-                background: true,
-                onOk() {
-                    reset();
-                    setMessage({});
-                },
-                onClose() {
-                    reset();
-                    setMessage({});
-                },
-            });
-            setSending(false);
-        } else {
-            setMessage({
-                type: EResponseCodes.FAIL,
-                title: "Crear Votación",
-                description: "Ocurrió un error en el sistema",
-                show: true,
-                OkTitle: "Aceptar",
-                background: true,
-            });
-            setSending(false);
-        }
+      if (res && res?.operation?.code === EResponseCodes.OK) {
+        setMessage({
+          OkTitle: "Aceptar",
+          description: "Se ha creado la votación en el sistema exitosamente",
+          title: "Crear Votación",
+          show: true,
+          type: EResponseCodes.OK,
+          background: true,
+          onOk() {
+            reset();
+            setMessage({});
+          },
+          onClose() {
+            reset();
+            setMessage({});
+          },
+        });
+        setSending(false);
+      } else {
+        setMessage({
+          type: EResponseCodes.FAIL,
+          title: "Crear Votación",
+          description: "Ocurrió un error en el sistema",
+          show: true,
+          OkTitle: "Aceptar",
+          background: true,
+        });
+        setSending(false);
+      }
     };
 
     useEffect(() => {
@@ -186,18 +205,21 @@ export const useItemResults = () => {
 
 
     return {
-        CancelFunction,
-        onSubmitCreateItem,
-        confirmVotingCreation,
-        register,
-        errors,
-        sending,
-        deparmetList,
-        typeProgram,
-        programSelected,
-        setProgramSelected,
-        activity, setActivity
-    }
+      CancelFunction,
+      onSubmitCreateItem,
+      confirmVotingCreation,
+      register,
+      errors,
+      sending,
+      deparmetList,
+      typeProgram,
+      programSelected,
+      setProgramSelected,
+      activity,
+      setActivity,
+      setDataGrid,
+      dataGrid,
+    };
 };
 
 

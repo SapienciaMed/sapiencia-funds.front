@@ -9,6 +9,7 @@ import { ITableAction, ITableElement } from "../../../common/interfaces/table.in
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
+import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 
 
 
@@ -23,36 +24,58 @@ const VotingResultsPage = () => {
     deparmetList,
     addItem,
     tableComponentRef,
+    dataGrid,
+    setDataGrid,
   } = useVotingResults();
 
   const navigate = useNavigate();
   const { validateActionAccess } = useContext(AppContext);
 
-    const tableColumns: ITableElement<IVotingSearcheResult>[] = [
-      {
-        fieldName: "numberDocument",
-        header: "Objetivo directo",
-      },
-      {
-        fieldName: "Producto catalogo dnp",
-        header: "Nombres y apellidos",
-      },
-      {
-        fieldName: "email",
-        header: "ódigo catalogo dnp",
-      },
-      {
-        fieldName: "profile",
-        header: "Programa",
-      },
-      {
-        fieldName: "profile",
-        header: "Actividad",
-      },
-      {
-        fieldName: "profile",
-        header: "",
-      },
+  const tableColumns: ITableElement<IVotingSearcheResult>[] = [
+    {
+      fieldName: "directObject",
+      header: "Objetivo directo",
+    },
+    {
+      fieldName: "productCatalog",
+      header: "Producto catalogo dnp",
+    },
+    {
+      fieldName: "productCode",
+      header: "Código catalogo dnp",
+    },
+    {
+      fieldName: "program",
+      header: "Programa",
+    },
+    {
+      fieldName: "activity",
+      header: "Actividad",
+    },
+    {
+      fieldName: "activityValue",
+      header: "Valor Actividad",
+    },
+    {
+      fieldName: "amount",
+      header: "Cantidad",
+    },
+    {
+      fieldName: "totalCost",
+      header: "Costo Total",
+    },
+    {
+      fieldName: "porcentaje123",
+      header: "Porcentaje 123",
+    },
+    {
+      fieldName: "porcentaje456",
+      header: "Porcentaje 456",
+    },
+    // {
+    //   fieldName: "profile",
+    //   header: "",
+    // },
   ];
   
     const tableActions: ITableAction<IVotingSearcheResult>[] = [
@@ -151,33 +174,37 @@ const VotingResultsPage = () => {
               />
             </div>
 
-            {/* <TableComponent
-              ref={tableComponentRef}
-              url={`${process.env.urlApiAuth}/api/v1/voting/search`}
-              columns={tableColumns}
-              actions={tableActions}
-              titleMessageModalNoResult="Registro no existente"
-              descriptionModalNoResult="EL registro no existe en el sistema."
-              isShowModal={true}
-            /> */}
-
+            <div style={dataGrid.length > 0 ? { display: 'block' } : { display: 'none' }}>
               <div className="container-form-grid mt-24px">
                 <div className="container-form padding-form">
                   <TableComponentNew
                     ref={tableComponentRef}
                     data={{
-                      data: [], // Aquí pasas tu array de datos
+                      data: dataGrid, // Aquí pasas tu array de datos
                       pagingInfo: {
-                        total: [].length,
+                        total: dataGrid.length,
                       },
                     }}
                     columns={tableColumns}
                     actions={tableActions}
+                    titleMessageModalNoResult="Registro no existente"
+                    // descriptionModalNoResult="EL registro no existe en el sistema."
                     isShowModal={true}
                   />
                 </div>
               </div>
-
+              <TextAreaComponent
+                id={"observations"}
+                idInput={"observations"}
+                label="Observaciones"
+                classNameLabel="text-black biggest bold text-required"
+                className={`text-area-basic `}
+                placeholder="Escribe aquí"
+                register={register}
+                errors={errors}
+                characters={500}
+              ></TextAreaComponent>
+            </div>
           </div>
 
           <div>
