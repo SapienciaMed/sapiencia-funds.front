@@ -26,6 +26,7 @@ const VotingResultsPage = () => {
     tableComponentRef,
     dataGrid,
     setDataGrid,
+    setValCommuneNeighborhood,
   } = useVotingResults();
 
   const navigate = useNavigate();
@@ -123,6 +124,7 @@ const VotingResultsPage = () => {
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
+                  setValue={setValCommuneNeighborhood}
                 />
 
                 <InputComponent
@@ -174,7 +176,11 @@ const VotingResultsPage = () => {
               />
             </div>
 
-            <div style={dataGrid.length > 0 ? { display: 'block' } : { display: 'none' }}>
+            <div
+              style={
+                dataGrid.length > 0 ? { display: "block" } : { display: "none" }
+              }
+            >
               <div className="container-form-grid mt-24px">
                 <div className="container-form padding-form">
                   <TableComponentNew

@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { createVotings } from "../../../common/schemas/voting-schema";
-import { IVotingCreate } from "../../../common/interfaces/voting.interfaces";
+import {
+  IVotingCreate,
+  IItemSave,
+} from "../../../common/interfaces/voting.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useVotingService } from "../../../common/hooks/voting-service.hook";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
@@ -12,6 +15,8 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import ItemResultsPage from "../pages/item.create.page";
 import { useItemResults } from "./item.create.hooks";
+import useVotingItemApi from "./voting-items-api.hooks";
+import { number } from "yup";
 
 
 export const useVotingResults = () => {
@@ -24,9 +29,10 @@ export const useVotingResults = () => {
     const { getListByParent } = useGenericListService();
     const [deparmetList, setDeparmentList] = useState([]);
     const tableComponentRef = useRef(null);
+    const [itemSave, setItemSave] = useState(Array<IItemSave>);
+    const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
 
-  
-
+    const { createVotingResults } = useVotingItemApi();
 
     const { createVoting } = useVotingService();
 
@@ -114,17 +120,33 @@ export const useVotingResults = () => {
 
 
     const confirmVotingCreation = async (data: IVotingCreate) => { 
-        
-        setSending(true);
 
-        const user = {
-        communeNeighborhood: data.communeNeighborhood,
-        numberProject: data.numberProject,
-        validity: data.validity,
-        ideaProject: data.ideaProject,
+
+         setSending(true);
+      
+          dataGrid.map((e) => {
+            itemSave.push({
+              aimStraight: e.directObject,
+              productCatalogueDnp: e.productCatalog,
+              codProductgueDnp: e.productCode,
+              codPmaProgram: 1,
+              codMtaTeacherActivity: 1,
+              amount: e.amount,
+              costTotal: e.totalCost,
+              percentage123: e.porcentaje123,
+              percentage456: e.porcentaje456,
+            });
+          })
+
+        const votingData = {
+          communeNeighborhood: valCommuneNeighborhood,
+          numberProject: data.numberProject,
+          validity: data.validity,
+          ideaProject: data.ideaProject,
+          items: itemSave,
         };
 
-        const res = await createVoting(user);
+        const res = await createVotingResults(votingData);
 
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
@@ -191,6 +213,8 @@ export const useVotingResults = () => {
       onSubmitSearch,
       setDataGrid,
       dataGrid,
+      valCommuneNeighborhood,
+      setValCommuneNeighborhood,
     };
 };
 
