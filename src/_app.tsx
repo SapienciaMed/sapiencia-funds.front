@@ -11,6 +11,7 @@ import VotingResultsRoutes from "./features/voting-results/voting-results-routes
 import MasterActivityRoutes from "./features/master-activity/master-activity-routes"
 import useAppCominicator from "./common/hooks/app-communicator.hook";
 import MasterRoutes from "./features/master/master-routes";
+import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -44,6 +45,10 @@ function App() {
               <Route
                 path={"/fondos/maestros/*"}
                 element={<MasterRoutes />}
+              />
+              <Route
+                path={"/fondos/presupuesto-convocatoria/*"}
+                element={<BudgetConvocationRoutes />}
               />
             </Routes>
           </Suspense>
