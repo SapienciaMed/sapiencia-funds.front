@@ -11,17 +11,21 @@ import { useGenericListService } from "../../../common/hooks/generic-list-servic
 import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import ItemResultsPage from "../pages/item.create.page";
+import { useItemResults } from "./item.create.hooks";
 
 
 export const useVotingResults = () => {
 
     const [sending, setSending] = useState(false);
-    const { setMessage, authorization } = useContext(AppContext);
+    const { setMessage, authorization, setDataGrid, dataGrid } =
+      useContext(AppContext);
     const navigate = useNavigate();
     const resolver = useYupValidationResolver(createVotings);
     const { getListByParent } = useGenericListService();
     const [deparmetList, setDeparmentList] = useState([]);
     const tableComponentRef = useRef(null);
+
+  
 
 
     const { createVoting } = useVotingService();
@@ -56,14 +60,15 @@ export const useVotingResults = () => {
             setMessage({
               show: true,
               title: "Agregar item",
-              OkTitle: "Aceptar",
-              cancelTitle: "Cancelar",
+              // OkTitle: "Aceptar",
+              // cancelTitle: "Cancelar",
               onOk() {
                 setMessage({});
               },
               background: true,
-              description: <ItemResultsPage />,
+              description: <ItemResultsPage dataVoting={data} action={"new"} />,
               size: "large",
+              style: "mdl-agregarItem-voting",
             });
           onSubmitSearch();
         } else {
@@ -168,7 +173,8 @@ export const useVotingResults = () => {
                 })
             );
             }
-      })
+        })
+        
     }, []);
 
 
@@ -183,6 +189,8 @@ export const useVotingResults = () => {
       addItem,
       tableComponentRef,
       onSubmitSearch,
+      setDataGrid,
+      dataGrid,
     };
 };
 
