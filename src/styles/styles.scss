@@ -153,6 +153,12 @@ div[id="single-spa-application:@sapiencia/funds"] {
   display: grid;
   grid-template-rows: 1fr 3em;
 }
+
+.container-form-grid-actas {
+  display: grid;
+  //grid-template-rows: 1fr 3em;
+}
+
 .title-area {
   display: flex;
   justify-content: space-between;
@@ -591,4 +597,12 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
 .select-disabled-list {
   background-color: #ccc;
+}
+
+.form-signIn {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-evenly; */
+  gap: .5em;
+  height: 100%;
 }

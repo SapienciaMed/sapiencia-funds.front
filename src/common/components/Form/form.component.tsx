@@ -1,7 +1,7 @@
 import React from "react";
 
 interface IFormProps {
-  action: any;
+  action?: any;
   children: React.JSX.Element | React.JSX.Element[];
   className?: string;
   id?: string;
