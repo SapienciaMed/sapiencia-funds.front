@@ -4,6 +4,7 @@ import {
   IMasterActivity,
   IProgramTypes,
 } from "../../../common/interfaces/funds.interfaces";
+import { IVotinItemCreate } from "../../../common/interfaces/voting.interfaces";
 
 export default function useVotingItemApi() {
   const baseURL: string = process.env.urlApiFunds || "";
@@ -19,8 +20,8 @@ export default function useVotingItemApi() {
   }
 
   async function createVotingResults(
-    data: IMasterActivity
-  ): Promise<ApiResponse<IMasterActivity>> {
+    data: IVotinItemCreate
+  ): Promise<ApiResponse<IVotinItemCreate>> {
     return await post(`${serviceUrl}/create/`, data);
   }
 

@@ -59,3 +59,23 @@ export interface IItemCreateRegTable {
     activityValue: number,
 
 }
+
+export interface IVotinItemCreate {
+    communeNeighborhood: number;
+    numberProject: number;
+    validity: string;
+    ideaProject: string;
+    items: Array<IItemSave>
+}
+
+export interface IItemSave { 
+    aimStraight : string,
+    productCatalogueDnp: number,
+    codProductgueDnp: number,
+    codPmaProgram: number,
+    codMtaTeacherActivity: number,
+    amount: number,
+    costTotal: number,
+    percentage123: number,
+    percentage456: number,  
+}
