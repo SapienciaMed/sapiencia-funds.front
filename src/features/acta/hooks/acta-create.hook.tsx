@@ -11,10 +11,10 @@ import { ITableAction, ITableElement } from "../../../common/interfaces/table.in
 
 
 export default function useActaCreate() {
-    const resolver = useYupValidationResolver(createActas);
-    const { setMessage, authorization } = useContext(AppContext);
+    const resolver = useYupValidationResolver(createActas);    
 
-
+    const { setMessage, authorization, setDataGridItems, dataGridItems } =
+    useContext(AppContext);
 
     const tableComponentRef = useRef(null);
 
@@ -40,7 +40,7 @@ export default function useActaCreate() {
         setMessage({
             show: true,
             title: "Agregar ítem",
-            description: <ItemsCreatePage />,
+            description: <ItemsCreatePage  acta={data} action={"new"}/>,
             background: true,
             size: "large",
             style: "mdl-agregarItem-voting"
@@ -56,35 +56,9 @@ export default function useActaCreate() {
 
 
 
-    const tableColumns: ITableElement<IActaItems>[] = [
-        {
-            fieldName: "program",
-            header: "Tipo maestro",
-        },
-        {
-            fieldName: "found",
-            header: "Fondo"
-        },
-        {
-            fieldName: "line",
-            header: "Linea",
-        }
-    ];
+    
 
-    const tableActions: ITableAction<IActaItems>[] = [
-        {
-            icon: "Detail",
-            onClick: (row) => { },
-        },
-        {
-            icon: "Edit",
-            onClick: (row) => {
-                //navigate(`./edit/${row.id}`);
-            },
-            //hide: !validateActionAccess('MAESTROS_CREAR')
-
-        },
-    ];
+   
 
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
@@ -124,7 +98,8 @@ export default function useActaCreate() {
         onsubmitItem,
         onsubmitAddItem,
 
-        showTable, tableActions, tableColumns, tableComponentRef, datos
+        showTable, tableComponentRef, datos,
+        setDataGridItems, dataGridItems
 
         /* CancelFunction  */
     }

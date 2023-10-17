@@ -1,66 +1,72 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { IActaItems } from "../../../common/interfaces/actaItems.interface";
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import { createActas } from "../../../common/schemas/acta-shema";
 import { useForm } from "react-hook-form";
+import { AppContext } from "../../../common/contexts/app.context";
+import { EResponseCodes } from "../../../common/constants/api.enum";
+import useVotingItemApi from "../../voting-results/hooks/voting-items-api.hooks";
+import useActaApi from "./acta-api.hook";
 
 
-export default function useActaItems() {
-    const resolver = useYupValidationResolver(createActas);
-    //const { setMessage, authorization } = useContext(AppContext);
+export default function useActaItems(action, acta) {
+    const resolver = useYupValidationResolver(createActas);   
 
     const tableComponentRef = useRef(null);
 
     const [showTable, setShowTable] = useState(false);
     const [datos, setDatos] = useState<IActaItems[]>([]);
+    const [typeProgram, setTypeProgram] = useState([]);
+
+    const { getProgramTypes} = useActaApi();
+   
+
+    const { setMessage, authorization, setDataGridItems, dataGridItems } = useContext(AppContext);
 
     const {
         handleSubmit,
         register,
-        control: control,   
+        control: control,
         setValue,
         reset,
         formState: { errors },
-      } = useForm<IActaItems>({ resolver });
+    } = useForm<IActaItems>({ resolver });
 
 
-      const onsubmitAddItem = handleSubmit((data: IActaItems) => {    
+    const onsubmitAddItem = handleSubmit((data: IActaItems) => {
         console.log(data)
-        setDatos([data])
-        loadTableData([data])
-      });
 
-
-      const tableColumns: ITableElement<IActaItems>[] = [
-        {
-            fieldName: "program",
-            header: "Tipo maestro",
-        },
-        {
-            fieldName: "found",
-            header: "Fondo"
-        },       
-        {
-            fieldName: "line",
-            header:  "Linea" ,                      
+        if (data) {
+            dataGridItems.push({
+                found: data.found,
+                line: data.line,
+                program: data.program
+            });
+            setMessage({
+                OkTitle: "Aceptar",
+                description:
+                    "Se ha agregado el item exitosamente",
+                title: "Agregar Item",
+                show: true,
+                type: EResponseCodes.OK,
+                background: true,
+                onOk() {
+                    reset();
+                    setMessage({});
+                },
+                onClose() {
+                    reset();
+                    setMessage({});
+                },
+            });
         }
-    ];
 
-    const tableActions: ITableAction<IActaItems>[] = [
-        {
-            icon: "Detail",
-            onClick: (row) => {},
-        },
-        {
-            icon: "Edit",
-            onClick: (row) => {                
-                //navigate(`./edit/${row.id}`);
-            },
-            //hide: !validateActionAccess('MAESTROS_CREAR')
-            
-        },
-    ];
+
+
+    });
+
+
 
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
@@ -70,18 +76,46 @@ export default function useActaItems() {
 
     useEffect(() => {
         loadTableData()
-    },[])
+    }, [])
 
-    useEffect(() => {            
+    useEffect(() => {
         reset();
-        if(showTable)  {
+        if (showTable) {
             tableComponentRef.current.emptyData();
             setShowTable(true);
         }
-    }, []); 
+    }, []);
 
 
-    return {        
+
+
+
+    //useEffects
+    useEffect(() => {
+        getProgramTypes()
+          .then((response) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {
+                setTypeProgram(
+                response.data.map((item) => {
+                  const list = {
+                    name: item.name,
+                    value: item.id,
+                  };
+                  return list;
+                })
+              );
+            }
+          })
+      }, []);
+
+
+
+
+
+
+
+
+    return {
         control,
         errors,
         register,
@@ -89,10 +123,9 @@ export default function useActaItems() {
         onsubmitAddItem,
         setShowTable,
         showTable,
-        tableActions,
-        tableColumns,
         tableComponentRef,
-        datos
+        datos,
+        typeProgram
         /* CancelFunction  */
-      } 
+    }
 }

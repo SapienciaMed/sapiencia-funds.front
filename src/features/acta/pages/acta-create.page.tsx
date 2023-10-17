@@ -3,6 +3,8 @@ import { ButtonComponent, FormComponent, InputComponent } from "../../../common/
 import useActaCreate from "../hooks/acta-create.hook";
 import useActaItems from "../hooks/items.hook";
 import TableGridComponent from "../../../common/components/tableGrid.component";
+import { IActaItems } from "../../../common/interfaces/actaItems.interface";
+import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 
 
 const ActaCreatePage = () => {
@@ -13,9 +15,33 @@ const ActaCreatePage = () => {
         }
     ]
 
-    const { errors, register,onsubmitItem,showTable,tableActions,tableColumns, tableComponentRef, datos } = useActaCreate();
+   
+
+    const { errors, register,onsubmitItem,showTable,tableComponentRef, datos, setDataGridItems, dataGridItems  } = useActaCreate();
 
     console.log("asi llegan los datos",datos)
+
+    const tableColumns: ITableElement<IActaItems>[] = [
+        {
+            fieldName: "program",
+            header: "Programa",
+        },
+        {
+            fieldName: "found",
+            header: "Fondo"
+        },
+        {
+            fieldName: "line",
+            header: "Linea",
+        }
+    ];
+
+    const tableActions: ITableAction<IActaItems>[] = [
+        {
+            icon: "Delete",
+            onClick: (row) => { },
+        }       
+    ];
   
 
     return (
@@ -148,7 +174,7 @@ const ActaCreatePage = () => {
                 </div>
 
 
-
+{/* 
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
                         <TableGridComponent
@@ -165,7 +191,31 @@ const ActaCreatePage = () => {
 
                         />
                     </div>
+                </div> */}
+
+                <div
+              style={
+                dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
+              }
+            >
+              <div className="container-form-grid mt-24px">
+                <div className="container-form padding-form">
+                  <TableGridComponent
+                    ref={tableComponentRef}
+                    data={{
+                      data: dataGridItems, // Aquí pasas tu array de datos
+                      pagingInfo: {
+                        total: dataGridItems.length,
+                      },
+                    }}
+                    columns={tableColumns}
+                    actions={tableActions}                   
+                    // descriptionModalNoResult="EL registro no existe en el sistema."
+                    isShowModal={true}
+                  />
                 </div>
+              </div>
+              </div>
 
 
                 
