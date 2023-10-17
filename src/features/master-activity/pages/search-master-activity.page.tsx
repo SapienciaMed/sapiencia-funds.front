@@ -1,10 +1,7 @@
 import React from "react";
-
 import { FilterMasterActivityForm } from "../forms/filter-masteractivity.form";
-
 import useSearchMasterHook from "../hooks/search-master-activity.hook";
-
-import TableComponentNew from "../../../common/components/tableNew.component";
+import TableComponent from "../../../common/components/table.component";
 
 const SearchMasterPage = (): React.JSX.Element => {
   const {
@@ -40,7 +37,7 @@ const SearchMasterPage = (): React.JSX.Element => {
 
         {showTable && (
           <div className="container-sections-forms">
-            <TableComponentNew
+            <TableComponent
               ref={tableComponentRef}
               url={`${process.env.urlApiFunds}/api/v1/activities/get-paginated`}
               columns={tableColumns}

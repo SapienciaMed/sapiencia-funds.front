@@ -1,20 +1,23 @@
 import React, { Fragment, useContext } from "react";
 import { useVotingResults } from "../hooks/voting-create.hooks";
-import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
+import {
+  ButtonComponent,
+  FormComponent,
+  InputComponent,
+} from "../../../common/components/Form";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { EDirection } from "../../../common/constants/input.enum";
-import { SelectComponentUser } from "../../../common/components/Form/select.component.user";
-import TableComponentNew from "../../../common/components/tableNew.component";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import BasicTableComponent from "../../../common/components/basic-table.component";
+import {
+  ITableAction,
+  ITableElement,
+} from "../../../common/interfaces/table.interfaces";
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
 import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 
-
-
 const VotingResultsPage = () => {
-
   const {
     CancelFunction,
     onSubmitCreateVoting,
@@ -25,12 +28,13 @@ const VotingResultsPage = () => {
     addItem,
     tableComponentRef,
     dataGrid,
-    setDataGrid,
     setValCommuneNeighborhood,
   } = useVotingResults();
 
   const navigate = useNavigate();
   const { validateActionAccess } = useContext(AppContext);
+
+
 
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
     {
@@ -78,28 +82,28 @@ const VotingResultsPage = () => {
     //   header: "",
     // },
   ];
-  
-    const tableActions: ITableAction<IVotingSearcheResult>[] = [
-      {
-        icon: "Detail",
-        onClick: (row) => {
-          navigate(`/core/usuarios/editar/${row.id}`);
-        },
-        hide: !validateActionAccess("USUARIOS_DETALLE"),
+
+  const tableActions: ITableAction<IVotingSearcheResult>[] = [
+    {
+      icon: "Detail",
+      onClick: (row) => {
+        navigate(`/core/usuarios/editar/${row.id}`);
       },
-      {
-        icon: "Edit",
-        onClick: (row) => {
-          navigate(`/core/usuarios/editar/${row.id}`);
-        },
-        hide: !validateActionAccess("USUARIOS_EDITAR"),
+      hide: !validateActionAccess("USUARIOS_DETALLE"),
+    },
+    {
+      icon: "Edit",
+      onClick: (row) => {
+        navigate(`/core/usuarios/editar/${row.id}`);
       },
-      {
-        icon: "Delete",
-        onClick: (row) => {},
-        hide: !validateActionAccess("USUARIOS_ELIMINAR"),
-      }
-    ];
+      hide: !validateActionAccess("USUARIOS_EDITAR"),
+    },
+    {
+      icon: "Delete",
+      onClick: (row) => {},
+      hide: !validateActionAccess("USUARIOS_ELIMINAR"),
+    },
+  ];
 
   return (
     <Fragment>
@@ -183,18 +187,12 @@ const VotingResultsPage = () => {
             >
               <div className="container-form-grid mt-24px">
                 <div className="container-form padding-form">
-                  <TableComponentNew
+                  <BasicTableComponent
                     ref={tableComponentRef}
-                    data={{
-                      data: dataGrid, // Aquí pasas tu array de datos
-                      pagingInfo: {
-                        total: dataGrid.length,
-                      },
-                    }}
+                    data={dataGrid}
                     columns={tableColumns}
                     actions={tableActions}
                     titleMessageModalNoResult="Registro no existente"
-                    // descriptionModalNoResult="EL registro no existe en el sistema."
                     isShowModal={true}
                   />
                 </div>
