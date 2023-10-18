@@ -89,6 +89,7 @@ const VotingResultsPage = () => {
     {
       icon: "Edit",
       onClick: (row) => {
+        console.log("row ", row);
         // navigate(`/core/usuarios/editar/${row.id}`);
         setMessage({
           show: true,
@@ -99,7 +100,7 @@ const VotingResultsPage = () => {
             setMessage({});
           },
           background: true,
-          description: <ItemResultsPage dataVoting={row} action={"new"} />,
+          description: <ItemResultsPage dataVoting={row} action={"edit"} />,
           size: "large",
           style: "mdl-agregarItem-voting",
         });
