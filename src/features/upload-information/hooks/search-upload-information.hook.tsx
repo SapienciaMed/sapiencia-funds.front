@@ -130,7 +130,7 @@ export default function useSearchUploadHook() {
           fieldName: "row.upload.date",
           header: "Fecha y hora de carga",
           renderCell: (row) => {
-            return <>{row.information}</>;
+            return <>{row.dateUpload}</>;
           },
         },
         

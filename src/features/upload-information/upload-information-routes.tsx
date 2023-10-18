@@ -7,8 +7,8 @@ function UploadInformationRoutes() {
     () => import("./pages/search-upload-information.page")
   );
 
-  const UploadInformationCreateUpdatePage = lazy(
-    () => import("./pages/upload-information-create-update.page")
+  const UploadCreatepage = lazy(
+    () => import("./pages/upload-create.page")
   );
 
 
@@ -27,17 +27,8 @@ function UploadInformationRoutes() {
         path={"/crear"}
         element={
           <PrivateRoute
-            element={<UploadInformationCreateUpdatePage action={"new"}/>}
+            element={<UploadCreatepage/>}
             allowedAction={"MAESTRO_ACTIVIDAD_CREAR"}
-          />
-        }
-      />
-      <Route
-        path={"/editar/:id"}
-        element={
-          <PrivateRoute
-            element={<UploadInformationCreateUpdatePage action={"edit"}/>}
-            allowedAction={"MAESTRO_ACTIVIDAD_EDITAR"}
           />
         }
       />

@@ -8,27 +8,22 @@ import {
 import {IUploadInformation, IWorker} from "../../../common/interfaces/funds.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { ApiResponse } from "../../../common/utils/api-response";
-import useFundsService from "../../../common/hooks/upload-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import {filterUploadInformationSchema} from "../../../common/schemas/upload-information";
-//import { filtermasterActivity } from "../../../common/schemas/master-schema";
+import useUploadApi from "./upload-information-api.hook";
+
 
 export default function useCreateUploadHook() {
-    // Context
     const { setMessage } = useContext(AppContext);
-    //states
     const [showTable, setshowTable] = useState(false);
     const [activeWorkerList, setActiveWorkerList] = useState([]);
+    const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
     const [workerInfo, setWorkerInfo] = useState([]);
-    //ref
     const tableComponentRef = useRef(null);
-    //react-router-dom
     const navigate = useNavigate();
-    //Servicios
-    //const {getWorkers} = useFundsService();
-
-
+    const { createUploadInformation, } = useUploadApi();
+    
     
     // const getWorkersActive = () => {
     //   getWorkers()
@@ -61,36 +56,136 @@ export default function useCreateUploadHook() {
     
 
     const resolver = useYupValidationResolver(filterUploadInformationSchema);
-    const { register, handleSubmit, formState, control, watch } =
+   
+    const { register, handleSubmit, formState, control, watch, reset } =
       useForm<IUploadInformation>({ resolver });
-
-
-    const redirectCreate = () => {
-        navigate("../crear");
-      };
-      
-    const formValues = watch();
-
-    const onSubmit = handleSubmit(async (data: IUploadInformation) => {
-        setshowTable(true);
     
-        if (tableComponentRef.current) {
-          tableComponentRef.current.loadData(data);
-        }
+    
+      const formValues = watch();
+
+      const handleModalError = (
+        msg = `¡Ha ocurrido un error!`,
+        navigateBoolean = true
+      ) => {
+        setMessage({
+          title: "Error",
+          description: msg,
+          show: true,
+          OkTitle: "cerrar",
+          onOk: () => {
+            if (navigateBoolean) {
+              navigate("../consultar");
+            }
+            setMessage((prev) => {
+              return { ...prev, show: false };
+            });
+          },
+          onClose: () => {
+            if (navigateBoolean) {
+              navigate("../consultar");
+            }
+            setMessage({});
+          },
+          background: true,
+        });
+      };
+
+      const handleModalSuccess = () => {
+        setMessage({
+          title: "Carga de archivo y notificación",
+          description: `El archivo fue cargado con éxito y se ha notificado a los usuarios su carga`,
+          show: true,
+          OkTitle: "Aceptar",
+          onOk: () => {
+            navigate("../consultar");
+            setMessage((prev) => {
+              return { ...prev, show: false };
+            });
+          },
+          onClose: () => {
+            navigate("../consultar");
+            setMessage({});
+          },
+          background: true,
+        });
+      };
+
+      const onSubmit = handleSubmit(async (data: IUploadInformation) => {
+        setMessage({
+          title: "Cargar archivo y notificar",
+          description: `¿Estás segur@ de cargar el archivo y notificarlo?`,
+          show: true,
+          OkTitle: "Aceptar",
+          onOk: () => {
+
+            data.fileName = "archivocargado.xml";
+            handleCreateInformation(data);
+            setMessage((prev) => {
+              return { ...prev, show: false };
+            });
+          },
+          cancelTitle: "Cancelar",
+          background: true,
+        });
       });
+
+      const handleCreateInformation = async (data: IUploadInformation) => {
+        const { data: dataResponse, operation } =
+           
+          await createUploadInformation(data);
+    
+        if (operation.code === EResponseCodes.OK) {
+          handleModalSuccess();
+        } else {
+          handleModalError(operation.message, false);
+        }
+      };
+
+      const redirectCancel = () => {
+        setMessage({
+          title: "Cancelar",
+          description: `¿Estás segur@ que deseas 
+          cancelar la cargar el archivo?`,
+          show: true,
+          OkTitle: "Aceptar",
+          onOk: () => {
+            navigate("../consultar");
+            setMessage((prev) => {
+              return { ...prev, show: false };
+            });
+          },
+          cancelTitle: "Cancelar",
+          background: true,
+        });
+      };
+
+    useEffect(() => {            
+        reset();
+        if(showTable)  {
+            tableComponentRef.current.emptyData();
+            //setShowTable(false);
+        }
+    }, []); 
+
+    const clearFields = () => {
+      reset();
+      tableComponentRef.current?.emptyData();
+      //setshowTable(false);
+    };
+
 
 return {
     register,
     control,
     formState,
     onSubmit,
-    redirectCreate,
     formValues,
     showTable,
     tableComponentRef,
     //tableColumns,
     //tableActions,
-    activeWorkerList
+    activeWorkerList,
+    redirectCancel,
+    setFilesUploadData
   };
 }
-

@@ -7,4 +7,4 @@ export * from "./input-showpassword.component";
 export * from "./select.component";
 export * from "./transfer-box.component";
 export * from "./fieldset.component";
-export * from "./upload.component";
+export * from "./Upload.component";
