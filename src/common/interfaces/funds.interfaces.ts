@@ -23,4 +23,10 @@ export interface IMasterActivityFilter {
 export interface IProgramTypes {
     id?: number;
     name?: string;
+    typeMasterList?: ITypeMaster
+}
+
+export interface ITypeMaster {
+    id?: number;
+    name?: string;    
 }

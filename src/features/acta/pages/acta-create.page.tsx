@@ -15,11 +15,11 @@ const ActaCreatePage = () => {
         }
     ]
 
-   
 
-    const { errors, register,onsubmitItem,showTable,tableComponentRef, datos, setDataGridItems, dataGridItems  } = useActaCreate();
 
-    console.log("asi llegan los datos",datos)
+    const { errors, register, onsubmitItem, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems } = useActaCreate();
+
+    console.log("asi llegan los datos", datos)
 
     const tableColumns: ITableElement<IActaItems>[] = [
         {
@@ -40,9 +40,9 @@ const ActaCreatePage = () => {
         {
             icon: "Delete",
             onClick: (row) => { },
-        }       
+        }
     ];
-  
+
 
     return (
         <Fragment>
@@ -121,104 +121,154 @@ const ActaCreatePage = () => {
                     </div>
                     <div className="container-form padding-form">
                         <div>
-                        <div className="title-area">
-                            <label className="text-black extra-large grid-span-4-columns mb-18px">Tasas</label>
-                        </div>
-                        <div className='grid-form-3-container mb-24px'>
-                            <InputComponent
-                                idInput={"costsExpenses"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Costo y gastos de operación logística"
-                                //register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                            />
-                            <InputComponent
-                                idInput={"OperatorCommission"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Comisión operador financiero"
-                                register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                            />
-                            <InputComponent
-                                idInput={"financialOperation"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Operación finaciera MB"
-                                register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                            />
-                        </div>
-                            
+                            <div className="title-area">
+                                <label className="text-black extra-large grid-span-4-columns mb-18px">Tasas</label>
+                            </div>
+                            <div className='grid-form-3-container mb-24px'>
+                                <InputComponent
+                                    idInput={"costsExpenses"}
+                                    className="input-basic medium"
+                                    typeInput="text"
+                                    label="Costo y gastos de operación logística"
+                                    //register={register}
+                                    classNameLabel="text-black biggest text-required"
+                                    //direction={EDirection.column}
+                                    errors={errors}
+                                    placeholder={""}
+                                />
+                                <InputComponent
+                                    idInput={"OperatorCommission"}
+                                    className="input-basic medium"
+                                    typeInput="text"
+                                    label="Comisión operador financiero"
+                                    register={register}
+                                    classNameLabel="text-black biggest text-required"
+                                    //direction={EDirection.column}
+                                    errors={errors}
+                                    placeholder={""}
+                                />
+                                <InputComponent
+                                    idInput={"financialOperation"}
+                                    className="input-basic medium"
+                                    typeInput="text"
+                                    label="Operación finaciera MB"
+                                    register={register}
+                                    classNameLabel="text-black biggest text-required"
+                                    //direction={EDirection.column}
+                                    errors={errors}
+                                    placeholder={""}
+                                />
+                            </div>
+
                         </div>
                     </div>
                 </div>
-            </FormComponent>
-            <div className="button-save-container-display-maestros margin-right0 mr-24px">                    
+
+                <div className="button-save-container-display-maestros margin-right0 mr-24px">
                     <ButtonComponent
                         form="createActaForm"
                         value="Agregar item"
                         type="submit"
-                        className="button-save large disabled-black"                    
+                        className="button-save large disabled-black"
                     />
                 </div>
 
-
-{/* 
-                <div className="container-form-grid mt-24px">
-                    <div className="container-form padding-form">
-                        <TableGridComponent
-                            ref={tableComponentRef}
-                            data={{
-                                data: datos, 
-                                pagingInfo: {
-                                    total: datos.length,                                    
-                                }
-                            }}
-                            columns={tableColumns}
-                            actions={tableActions}
-                            isShowModal={true}
-
-                        />
-                    </div>
-                </div> */}
-
                 <div
-              style={
-                dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-              }
-            >
-              <div className="container-form-grid mt-24px">
-                <div className="container-form padding-form">
-                  <TableGridComponent
-                    ref={tableComponentRef}
-                    data={{
-                      data: dataGridItems, // Aquí pasas tu array de datos
-                      pagingInfo: {
-                        total: dataGridItems.length,
-                      },
-                    }}
-                    columns={tableColumns}
-                    actions={tableActions}                   
-                    // descriptionModalNoResult="EL registro no existe en el sistema."
-                    isShowModal={true}
-                  />
+                    style={
+                        dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
+                    }
+                >
+                    <div className="container-form-grid mt-24px">
+                        <div className="container-form padding-form">
+                            <TableGridComponent
+                                ref={tableComponentRef}
+                                data={{
+                                    data: dataGridItems, // Aquí pasas tu array de datos
+                                    pagingInfo: {
+                                        total: dataGridItems.length,
+                                    },
+                                }}
+                                columns={tableColumns}
+                                actions={tableActions}
+                                // descriptionModalNoResult="EL registro no existe en el sistema."
+                                isShowModal={true}
+                            />
+                            <h1>prueba</h1>
+                        </div>
+                    </div>
+
+                    <div className="container-form padding-form">
+                        <div>
+                            <div className='grid-form-3-container mb-24px'>
+                                <InputComponent
+                                    idInput={"costsExpenses"}
+                                    className="input-basic medium"
+                                    typeInput="text"
+                                    label="Verificador 1"
+                                    //register={register}
+                                    classNameLabel="text-black biggest text-required"
+                                    //direction={EDirection.column}
+                                    errors={errors}
+                                    placeholder={""}
+                                    disabled
+                                />
+                                <InputComponent
+                                    idInput={"OperatorCommission"}
+                                    className="input-basic medium"
+                                    typeInput="text"
+                                    label="Verificador 2"
+                                    register={register}
+                                    classNameLabel="text-black biggest text-required"
+                                    //direction={EDirection.column}
+                                    errors={errors}
+                                    placeholder={""}
+                                    disabled
+                                />
+                                <InputComponent
+                                    idInput={"financialOperation"}
+                                    className="input-basic medium"
+                                    typeInput="text"
+                                    label="Techo"
+                                    register={register}
+                                    classNameLabel="text-black biggest text-required"
+                                    //direction={EDirection.column}
+                                    errors={errors}
+                                    placeholder={""}
+                                    disabled
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+
+
                 </div>
-              </div>
-              </div>
 
 
-                
+
+
+
+            </FormComponent>
+
+            <hr />
+
+            <div className="button-save-container-display-maestros margin-right0 mr-24px">
+                <ButtonComponent
+                    form="createMasterForm"
+                    value="Cancelar"
+                    type="button"
+                    className="button-cancel-text large hover-three disabled-black"
+                //action={() => CancelFunction()}                    
+                />
+                <ButtonComponent
+                    form="createMasterForm"
+                    value="Guardar"
+                    type="submit"
+                    className="button-save large disabled-black"
+                />
+            </div>
+
+
 
         </Fragment>
 

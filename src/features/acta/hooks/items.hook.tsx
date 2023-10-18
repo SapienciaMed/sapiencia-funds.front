@@ -11,18 +11,25 @@ import useActaApi from "./acta-api.hook";
 
 
 export default function useActaItems(action, acta) {
-    const resolver = useYupValidationResolver(createActas);   
+    const resolver = useYupValidationResolver(createActas);
 
     const tableComponentRef = useRef(null);
 
     const [showTable, setShowTable] = useState(false);
     const [datos, setDatos] = useState<IActaItems[]>([]);
     const [typeProgram, setTypeProgram] = useState([]);
+    const [masterList, setMasterList] = useState([]);
+    const [programList, setProgramList] = useState([]);
+    const [foundList, setFoundList] = useState([]);
+    const [lineList, setLineList] = useState([]);
+    const [announcementList, setAnnouncementList] = useState([]);
+    const [conceptList, setConceptList] = useState([]);
 
-    const { getProgramTypes} = useActaApi();
-   
 
-    const { setMessage, authorization, setDataGridItems, dataGridItems } = useContext(AppContext);
+    const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
+
+
+    const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
     const {
         handleSubmit,
@@ -93,23 +100,93 @@ export default function useActaItems(action, acta) {
     //useEffects
     useEffect(() => {
         getProgramTypes()
-          .then((response) => {
-            if (response && response?.operation?.code === EResponseCodes.OK) {
-                setTypeProgram(
-                response.data.map((item) => {
-                  const list = {
-                    name: item.name,
-                    value: item.id,
-                  };
-                  return list;
-                })
-              );
-            }
-          })
-      }, []);
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setTypeProgram(
+                        response.data.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+
+        getAnnouncement()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setAnnouncementList(
+                        response.data.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+
+        getMaster()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+
+                    // const programData = response.data.filter(item => item.typeMasterList.name === 'Programa');
+                    const foundData = response.data.filter(item => item.typeMasterList.name === 'Fondo');
+                    const lineData = response.data.filter(item => item.typeMasterList.name === 'Línea');
+                    const conceptData = response.data.filter(item => item.typeMasterList.name === 'Concepto');
+
+                    /*  setProgramList(
+                         programData.map((item) => {
+                             const list = {
+                                 name: item.name,
+                                 value: item.id,                               
+                             };
+                             return list;
+                         })
+                     ); */
+
+                    setFoundList(
+                        foundData.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+
+                    setLineList(
+                        lineData.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+
+                    setConceptList(
+                        conceptData.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+
+                }
+            })
+    }, []);
 
 
-
+    console.log('fondos', foundList)
+    console.log('programas', programList)
+    console.log('linea', lineList)
+    console.log('concepto', conceptList)
 
 
 
@@ -125,7 +202,12 @@ export default function useActaItems(action, acta) {
         showTable,
         tableComponentRef,
         datos,
-        typeProgram
+        foundList,
+        typeProgram,
+        programList,
+        lineList,
+        conceptList,
+        announcementList
         /* CancelFunction  */
     }
 }

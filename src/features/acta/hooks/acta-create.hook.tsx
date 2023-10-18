@@ -42,14 +42,15 @@ export default function useActaCreate() {
             title: "Agregar ítem",
             description: <ItemsCreatePage  acta={data} action={"new"}/>,
             background: true,
-            size: "large",
-            style: "mdl-agregarItem-voting"
+           // size: "items",           
+            size: "large",           
+            items: true            
         });
     });
 
     const onsubmitAddItem = handleSubmit((data: IActaItems[]) => {
-        console.log("array", data);  // Verifica en la consola que data es un array
-        setDatos(data);  // Asigna data directamente a setDatos
+        console.log("array", data);  
+        setDatos(data);  
     });
 
 
