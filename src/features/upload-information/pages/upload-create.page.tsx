@@ -19,7 +19,8 @@ const UploadCreatePage = (): React.JSX.Element => {
     //setShowTable,
     onSubmit,
     redirectCancel,
-    setFilesUploadData
+    setFilesUploadData,
+    uploadFiles
   } = useCreateUploadHook();
   const { errors, isValid } = formState;
 

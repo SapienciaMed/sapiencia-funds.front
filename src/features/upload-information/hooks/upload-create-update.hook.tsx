@@ -12,6 +12,7 @@ import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import {filterUploadInformationSchema} from "../../../common/schemas/upload-information";
 import useUploadApi from "./upload-information-api.hook";
+import axios from "axios";
 
 
 export default function useCreateUploadHook() {
@@ -19,6 +20,9 @@ export default function useCreateUploadHook() {
     const [showTable, setshowTable] = useState(false);
     const [activeWorkerList, setActiveWorkerList] = useState([]);
     const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
+    const [showDialog, setShowDialog] = useState<boolean>(false);
+    const [selectedRow, setSelectedRow] = useState<IUploadInformation>(null);
+    const uploadFilesRef = useRef(null);
     const [workerInfo, setWorkerInfo] = useState([]);
     const tableComponentRef = useRef(null);
     const navigate = useNavigate();
@@ -165,7 +169,55 @@ export default function useCreateUploadHook() {
             tableComponentRef.current.emptyData();
             //setShowTable(false);
         }
-    }, []); 
+    }, []);
+    
+    //cargar archivos por multipart/form-data
+    const uploadFiles = () => {
+      const form = new FormData();
+      const files = filesUploadData;
+      files.forEach(file => {
+          form.append('files', file);
+      });
+      const options = {
+          method: 'POST',
+          url: `${process.env.urlApiStrategicDirection}/api/v1/project/upload/${selectedRow?.id}`,
+          headers: { 'content-type': 'multipart/form-data' },
+          data: form,
+      };
+      axios.request(options).then(response => {
+          const data: ApiResponse<boolean> = response.data;
+          if (data.operation.code === EResponseCodes.OK) {
+              setFilesUploadData([]);
+              setShowDialog(false);
+              setMessage({
+                  background: true,
+                  show: true,
+                  title: "Adjuntos del proyecto",
+                  description: "¡Archivos guardados exitosamente!",
+                  OkTitle: "Cerrar",
+              });
+          } else {
+              setFilesUploadData([]);
+              setShowDialog(false);
+              setMessage({
+                  background: true,
+                  show: true,
+                  title: "Adjuntos del proyecto",
+                  description: data.operation.message,
+                  OkTitle: "Cerrar"
+              });
+          }
+      }).catch(err => {
+          setShowDialog(false);
+          setMessage({
+              background: true,
+              show: true,
+              title: "Adjuntos del proyecto",
+              description: String(err),
+              OkTitle: "Cerrar"
+          })
+      });
+  }
 
     const clearFields = () => {
       reset();
@@ -186,6 +238,7 @@ return {
     //tableActions,
     activeWorkerList,
     redirectCancel,
-    setFilesUploadData
+    setFilesUploadData,
+    uploadFiles,
   };
 }
