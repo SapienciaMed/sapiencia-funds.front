@@ -16,6 +16,7 @@ import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfac
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
 import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
+import ItemResultsPage from "../pages/item.create.page";
 
 const VotingResultsPage = () => {
   const {
@@ -32,7 +33,8 @@ const VotingResultsPage = () => {
   } = useVotingResults();
 
   const navigate = useNavigate();
-  const { validateActionAccess } = useContext(AppContext);
+  const { validateActionAccess, setMessage } = useContext(AppContext);
+
 
 
 
@@ -85,22 +87,47 @@ const VotingResultsPage = () => {
 
   const tableActions: ITableAction<IVotingSearcheResult>[] = [
     {
-      icon: "Detail",
-      onClick: (row) => {
-        navigate(`/core/usuarios/editar/${row.id}`);
-      },
-      hide: !validateActionAccess("USUARIOS_DETALLE"),
-    },
-    {
       icon: "Edit",
       onClick: (row) => {
-        navigate(`/core/usuarios/editar/${row.id}`);
+        // navigate(`/core/usuarios/editar/${row.id}`);
+        setMessage({
+          show: true,
+          title: "Agregar item",
+          // OkTitle: "Aceptar",
+          // cancelTitle: "Cancelar",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: <ItemResultsPage dataVoting={row} action={"new"} />,
+          size: "large",
+          style: "mdl-agregarItem-voting",
+        });
       },
       hide: !validateActionAccess("USUARIOS_EDITAR"),
     },
     {
       icon: "Delete",
-      onClick: (row) => {},
+      onClick: (row) => {
+        console.log("row ", row);
+          setMessage({
+            show: true,
+            title: "Eliminar registro",
+            description: "Estás segur@ de eliminar este registro?",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            onOk() {
+              if (dataGrid.find((obj) => obj.ident == row.ident)) {
+                const position = dataGrid.findIndex(
+                  (obj) => obj.ident === row.ident
+                );
+                dataGrid.splice(position, 1);
+                setMessage({})
+              }
+            },
+            background: true,
+          });
+      },
       hide: !validateActionAccess("USUARIOS_ELIMINAR"),
     },
   ];

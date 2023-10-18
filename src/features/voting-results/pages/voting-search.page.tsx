@@ -29,25 +29,26 @@ const VotingResultsSearchPage = () => {
     const navigate = useNavigate();
   const { validateActionAccess } = useContext(AppContext);
 
+
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
     {
-      fieldName: "directObject",
+      fieldName: "aimStraight",
       header: "Objetivo directo",
     },
     {
-      fieldName: "productCatalog",
+      fieldName: "productCatalogueDnp",
       header: "Producto catalogo dnp",
     },
     {
-      fieldName: "productCode",
+      fieldName: "codProductgueDnp",
       header: "Código catalogo dnp",
     },
     {
-      fieldName: "program",
+      fieldName: "codPmaProgram",
       header: "Programa",
     },
     {
-      fieldName: "activity",
+      fieldName: "codMtaTeacherActivity",
       header: "Actividad",
     },
     {
@@ -59,39 +60,26 @@ const VotingResultsSearchPage = () => {
       header: "Cantidad",
     },
     {
-      fieldName: "totalCost",
+      fieldName: "costTotal",
       header: "Costo Total",
     },
     {
-      fieldName: "porcentaje123",
+      fieldName: "percentage123",
       header: "Porcentaje 123",
     },
     {
-      fieldName: "porcentaje456",
+      fieldName: "percentage456",
       header: "Porcentaje 456",
     },
-
   ];
 
     const tableActions: ITableAction<IVotingSearcheResult>[] = [
-      {
-        icon: "Detail",
-        onClick: (row) => {
-          navigate(`/core/usuarios/editar/${row.id}`);
-        },
-        hide: !validateActionAccess("USUARIOS_DETALLE"),
-      },
       {
         icon: "Edit",
         onClick: (row) => {
           navigate(`/core/usuarios/editar/${row.id}`);
         },
         hide: !validateActionAccess("USUARIOS_EDITAR"),
-      },
-      {
-        icon: "Delete",
-        onClick: (row) => {},
-        hide: !validateActionAccess("USUARIOS_ELIMINAR"),
       },
     ];
 
@@ -101,112 +89,109 @@ const VotingResultsSearchPage = () => {
         <div className="container-form padding-form">
           <p className="text-black huge mg-0">Resultados votación</p>
 
-            <div className="card-user">
-              <div className="card-table-user">
-                <div className="title-area">
-                  <label className="text-black large medium grid-span-4-columns">
-                    
-                  </label>
+          <div className="card-user">
+            <div className="card-table-user">
+              <div className="title-area">
+                <label className="text-black large medium grid-span-4-columns"></label>
 
-                  <div
-                    className="title-button text-three large"
-                    onClick={() => {
-                      navigate("/fondos/resultados-votacion/crear");
-                    }}
-                  >
-                    Crear resultado de votación <AiOutlinePlusCircle />
-                  </div>
-                </div>
-
-                <FormComponent
-                  id="createVotingForm"
-                  className="form-signIn"
-                  action={onSubmitSearchVoting}
-                >
-                  <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
-                    <SelectComponentOld
-                      idInput="communeNeighborhood"
-                      register={register}
-                      className="select-basic medium"
-                      placeholder="Seleccionar"
-                      label="Comuna y/o corregimiento "
-                      data={deparmetList ? deparmetList : []}
-                      value={null}
-                      classNameLabel="text-black big text-required bold"
-                      direction={EDirection.column}
-                      errors={errors}
-                      setValue={setValCommuneNeighborhood}
-                    />
-
-                    <InputComponent
-                      idInput="numberProject"
-                      className="input-basic medium form-group"
-                      typeInput="number"
-                      label="Número proyecto"
-                      register={register}
-                      classNameLabel="text-black big text-required bold"
-                      direction={EDirection.column}
-                      errors={errors}
-                      placeholder={""}
-                    />
-
-                    <InputComponent
-                      idInput="validity"
-                      className="input-basic medium form-group"
-                      typeInput="text"
-                      label="Vigencia"
-                      register={register}
-                      classNameLabel="text-black big text-required bold"
-                      direction={EDirection.column}
-                      errors={errors}
-                      placeholder={""}
-                    />
-
-                    <InputComponent
-                      idInput="ideaProject"
-                      className="input-basic medium form-group"
-                      typeInput="text"
-                      label="Idea de proyecto"
-                      register={register}
-                      classNameLabel="text-black big text-required bold"
-                      direction={EDirection.column}
-                      errors={errors}
-                      placeholder={""}
-                    />
-                  </div>
-                </FormComponent>
-              </div>
-              <div className="button-save-container-display-users margin-right0">
-                <ButtonComponent
-                  form="useQueryForm"
-                  value="Limpiar campos"
-                  type="button"
-                  className="button-clean-fields "
-                  action={() => {
-                    reset();
-                    tableComponentRef.current.emptyData();
+                <div
+                  className="title-button text-three large"
+                  onClick={() => {
+                    navigate("/fondos/resultados-votacion/crear");
                   }}
-                />
-                <ButtonComponent
-                  form="createVotingForm"
-                  value="Buscar"
-                  type="submit"
-                  className="button-save large disabled-black"
-                  disabled={sending}
-                />
+                >
+                  Crear resultado de votación <AiOutlinePlusCircle />
+                </div>
               </div>
-              <TableComponent
-                ref={tableComponentRef}
-                url={`${process.env.urlApiAuth}/api/v1/user/search`}
-                columns={tableColumns}
-                actions={tableActions}
-                titleMessageModalNoResult="La votación no existe"
-                descriptionModalNoResult="La votación no existe en el sistema. 
-              Haga clic en el botón crear votación"
-                isShowModal={true}
+
+              <FormComponent
+                id="createVotingForm"
+                className="form-signIn"
+                action={onSubmitSearchVoting}
+              >
+                <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+                  <SelectComponentOld
+                    idInput="communeNeighborhood"
+                    register={register}
+                    className="select-basic medium"
+                    placeholder="Seleccionar"
+                    label="Comuna y/o corregimiento "
+                    data={deparmetList ? deparmetList : []}
+                    value={null}
+                    classNameLabel="text-black big text-required bold"
+                    direction={EDirection.column}
+                    errors={errors}
+                    setValue={setValCommuneNeighborhood}
+                  />
+
+                  <InputComponent
+                    idInput="numberProject"
+                    className="input-basic medium form-group"
+                    typeInput="number"
+                    label="Número proyecto"
+                    register={register}
+                    classNameLabel="text-black big text-required bold"
+                    direction={EDirection.column}
+                    errors={errors}
+                    placeholder={""}
+                  />
+
+                  <InputComponent
+                    idInput="validity"
+                    className="input-basic medium form-group"
+                    typeInput="text"
+                    label="Vigencia"
+                    register={register}
+                    classNameLabel="text-black big text-required bold"
+                    direction={EDirection.column}
+                    errors={errors}
+                    placeholder={""}
+                  />
+
+                  <InputComponent
+                    idInput="ideaProject"
+                    className="input-basic medium form-group"
+                    typeInput="text"
+                    label="Idea de proyecto"
+                    register={register}
+                    classNameLabel="text-black big text-required bold"
+                    direction={EDirection.column}
+                    errors={errors}
+                    placeholder={""}
+                  />
+                </div>
+              </FormComponent>
+            </div>
+            <div className="button-save-container-display-users margin-right0">
+              <ButtonComponent
+                form="useQueryForm"
+                value="Limpiar campos"
+                type="button"
+                className="button-clean-fields "
+                action={() => {
+                  reset();
+                  tableComponentRef.current.emptyData();
+                }}
+              />
+              <ButtonComponent
+                form="createVotingForm"
+                value="Buscar"
+                type="submit"
+                className="button-save large disabled-black"
+                disabled={sending}
               />
             </div>
-          
+            <TableComponent
+              ref={tableComponentRef}
+              url={`${process.env.urlApiFunds}/api/v1/voting/get-paginated`}
+              columns={tableColumns}
+              actions={tableActions}
+              titleMessageModalNoResult="La votación no existe"
+              descriptionModalNoResult="La votación no existe en el sistema. 
+              Haga clic en el botón crear votación"
+              isShowModal={true}
+            />
+          </div>
         </div>
       </div>
     </Fragment>
