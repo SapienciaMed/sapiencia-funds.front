@@ -8,13 +8,13 @@ import "primereact/resources/primereact.min.css";
 import ModalMessageComponent from "./common/components/modal-message.component";
 import ApplicationProvider from "./application-provider";
 import VotingResultsRoutes from "./features/voting-results/voting-results-routes";
-import MasterActivityRoutes from "./features/master-activity/master-activity-routes"
+import MasterActivityRoutes from "./features/master-activity/master-activity-routes";
 import useAppCominicator from "./common/hooks/app-communicator.hook";
 import MasterRoutes from "./features/master/master-routes";
+import Socialization from "./features/socialization";
 
 function App() {
   const { publish } = useAppCominicator();
-  const HomePage = lazy(() => import("./common/components/home.page"));
 
   // Effect que comunica la aplicacion actual
   useEffect(() => {
@@ -32,7 +32,10 @@ function App() {
         <Router>
           <Suspense fallback={<p>Loading...</p>}>
             <Routes>
-              <Route path={"/fondos/"} element={<HomePage />} />;
+              <Route
+                path={"/fondos/socializacion/*"}
+                element={<Socialization />}
+              />
               <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
@@ -41,10 +44,7 @@ function App() {
                 path={"/fondos/maestro/*"}
                 element={<MasterActivityRoutes />}
               />
-              <Route
-                path={"/fondos/maestros/*"}
-                element={<MasterRoutes />}
-              />
+              <Route path={"/fondos/maestros/*"} element={<MasterRoutes />} />
             </Routes>
           </Suspense>
         </Router>
