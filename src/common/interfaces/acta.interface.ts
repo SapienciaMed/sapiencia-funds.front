@@ -5,11 +5,11 @@ export interface IActa {
     numberProject: number;
     periodVigency: number;
     announcementInitial: number;
-    salaryMin: number;
-    costsExpenses: number;
+    salaryMin: number | string;
+    costsExpenses: number ;
     OperatorCommission: number;
     financialOperation: number;
-    creationDate: string;
+    creationDate?: string;
     idStatus: number;
     items?: IActaItems[];
 }

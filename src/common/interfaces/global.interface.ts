@@ -26,6 +26,9 @@ export interface IGenericList {
   itemDescription: string;
   additionalFields?: object
 }
+export interface ISalaryMin {  
+  value: string;  
+}
 
 export interface IAdditionalField {
   grouper: string;

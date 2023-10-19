@@ -5,6 +5,7 @@ import useActaItems from "../hooks/items.hook";
 import TableGridComponent from "../../../common/components/tableGrid.component";
 import { IActaItems } from "../../../common/interfaces/actaItems.interface";
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import BasicTableComponent from "../../../common/components/basic-table.component";
 
 
 const ActaCreatePage = () => {
@@ -17,7 +18,7 @@ const ActaCreatePage = () => {
 
 
 
-    const { errors, register, onsubmitItem, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems } = useActaCreate();
+    const { errors, register, onsubmitItem, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary } = useActaCreate();
 
     console.log("asi llegan los datos", datos)
 
@@ -33,7 +34,60 @@ const ActaCreatePage = () => {
         {
             fieldName: "line",
             header: "Linea",
-        }
+        },
+        {
+            fieldName: "line",
+            header: "Convocatoria",
+        },
+        {
+            fieldName: "line",
+            header: "Concepto",
+        },
+        {
+            fieldName: "line",
+            header: "Costo promedio",
+        },
+        {
+            fieldName: "line",
+            header: "Cantidad",
+        },
+        {
+            fieldName: "line",
+            header: "Valor",
+        },
+        {
+            fieldName: "line",
+            header: "Cantidad",
+        },
+        {
+            fieldName: "line",
+            header: "Valor",
+        },
+        {
+            fieldName: "line",
+            header: "Subtotal vigencia",
+        },
+        {
+            fieldName: "line",
+            header: "Costos y gastos de operación",
+        },
+        {
+            fieldName: "line",
+            header: "Neto",
+        },
+        {
+            fieldName: "line",
+            header: "Recurso para el crédito",
+        },
+        {
+            fieldName: "line",
+            header: "Comisión operador financiero",
+        },
+        {
+            fieldName: "",
+            header: "Acción",
+        },
+
     ];
 
     const tableActions: ITableAction<IActaItems>[] = [
@@ -67,7 +121,8 @@ const ActaCreatePage = () => {
                                     //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
-                                    disabled
+                                    
+                                    value="Pendiente aprobación"
                                 />
                                 <InputComponent
                                     idInput={"numberProject"}
@@ -114,6 +169,7 @@ const ActaCreatePage = () => {
                                     //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
+                                    disabled                                    
                                 />
                             </div>
 
@@ -130,7 +186,7 @@ const ActaCreatePage = () => {
                                     className="input-basic medium"
                                     typeInput="text"
                                     label="Costo y gastos de operación logística"
-                                    //register={register}
+                                    register={register}
                                     classNameLabel="text-black biggest text-required"
                                     //direction={EDirection.column}
                                     errors={errors}
@@ -180,20 +236,17 @@ const ActaCreatePage = () => {
                 >
                     <div className="container-form-grid mt-24px">
                         <div className="container-form padding-form">
-                            <TableGridComponent
+                            <BasicTableComponent
                                 ref={tableComponentRef}
-                                data={{
-                                    data: dataGridItems, // Aquí pasas tu array de datos
-                                    pagingInfo: {
-                                        total: dataGridItems.length,
-                                    },
-                                }}
+                                data={dataGridItems}
                                 columns={tableColumns}
                                 actions={tableActions}
-                                // descriptionModalNoResult="EL registro no existe en el sistema."
+                                titleMessageModalNoResult="Registro no existente"
                                 isShowModal={true}
                             />
+
                             <h1>prueba</h1>
+
                         </div>
                     </div>
 

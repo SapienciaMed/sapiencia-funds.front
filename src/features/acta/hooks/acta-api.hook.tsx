@@ -1,4 +1,5 @@
 import useCrudService from "../../../common/hooks/crud-service.hook";
+import { IStatus } from "../../../common/interfaces/estado.interface";
 import { IProgramTypes } from "../../../common/interfaces/funds.interfaces";
 import { ApiResponse } from "../../../common/utils/api-response";
 
@@ -8,6 +9,7 @@ export default function useActaApi() {
     const serviceUrl: string = "/api/v1/master";   
     const serviceUrlActivity: string = "/api/v1/activities";
     const serviceUrlSapiencia: string = "/api/v1/sapiencia";   
+    const serviceUrlStausList: string = "/api/v1/estatusList";   
 
     const { get, post, put } = useCrudService(baseURL);
 
@@ -24,14 +26,15 @@ export default function useActaApi() {
         return await get(`${serviceUrlSapiencia}/call-periods/get-all`);
       }
 
-      /* async function TypeMasterList(
-    ): Promise<ApiResponse<IMaster[]>> {
-      return await get(`${serviceTypeMaster}/`);
-    } */
+      async function getStatusList(
+    ): Promise<ApiResponse<IStatus[]>> {
+      return await get(`${serviceUrlStausList}`);
+    } 
 
     return {
         getProgramTypes,
         getMaster,
-        getAnnouncement
+        getAnnouncement,
+        getStatusList
     };
 }

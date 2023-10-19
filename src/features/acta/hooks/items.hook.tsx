@@ -8,9 +8,11 @@ import { AppContext } from "../../../common/contexts/app.context";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import useVotingItemApi from "../../voting-results/hooks/voting-items-api.hooks";
 import useActaApi from "./acta-api.hook";
+import { IActa } from "../../../common/interfaces/acta.interface";
 
 
-export default function useActaItems(action, acta) {
+export default function useActaItems(action, acta:IActa) {
+
     const resolver = useYupValidationResolver(createActas);
 
     const tableComponentRef = useRef(null);
@@ -24,26 +26,62 @@ export default function useActaItems(action, acta) {
     const [lineList, setLineList] = useState([]);
     const [announcementList, setAnnouncementList] = useState([]);
     const [conceptList, setConceptList] = useState([]);
+    const [costBillsOperation, setCostBillsOperationt] = useState("0");
+    const [net, setNet] = useState("0");
 
 
     const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
 
 
     const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
-
+    
     const {
         handleSubmit,
         register,
         control: control,
         setValue,
         reset,
+        watch,
         formState: { errors },
     } = useForm<IActaItems>({ resolver });
 
+   /*  const handleInputChange = (event) => {
+        console.log('acta',acta.costsExpenses)
+        const inputValue = event.target.value;       
+        if (inputValue && acta.costsExpenses) {
+
+            const multiplicacion = parseFloat(inputValue) * acta.costsExpenses / 100;
+            const resta = parseFloat(inputValue) - acta.costsExpenses
+
+            setNet(resta.toString())
+            setCostBillsOperationt(multiplicacion.toString());
+        }else {
+            setCostBillsOperationt("0");
+            setNet("0")
+        }
+    }; */
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;        
+       console.log(name)
+        if (name === "subtotalVigency" && value && acta.costsExpenses) {
+            const multiplicacion = parseFloat(value) * acta.costsExpenses / 100;
+            const resta = parseFloat(value) - acta.costsExpenses;
+    
+            setNet(resta.toString());
+            setCostBillsOperationt(multiplicacion.toString());
+        } else if (name === "subtotalVigency") {
+            setCostBillsOperationt("0");
+            setNet("0");
+        }
+    
+        
+    };
+    
+
 
     const onsubmitAddItem = handleSubmit((data: IActaItems) => {
-        console.log(data)
-
+       // console.log(data)
         if (data) {
             dataGridItems.push({
                 found: data.found,
@@ -68,9 +106,6 @@ export default function useActaItems(action, acta) {
                 },
             });
         }
-
-
-
     });
 
 
@@ -81,6 +116,7 @@ export default function useActaItems(action, acta) {
         }
     }
 
+    //useEffects
     useEffect(() => {
         loadTableData()
     }, [])
@@ -93,11 +129,6 @@ export default function useActaItems(action, acta) {
         }
     }, []);
 
-
-
-
-
-    //useEffects
     useEffect(() => {
         getProgramTypes()
             .then((response) => {
@@ -179,17 +210,8 @@ export default function useActaItems(action, acta) {
                     );
 
                 }
-            })
+            })            
     }, []);
-
-
-    console.log('fondos', foundList)
-    console.log('programas', programList)
-    console.log('linea', lineList)
-    console.log('concepto', conceptList)
-
-
-
 
 
     return {
@@ -207,7 +229,12 @@ export default function useActaItems(action, acta) {
         programList,
         lineList,
         conceptList,
-        announcementList
+        announcementList,
+        setCostBillsOperationt,
+        costBillsOperation, 
+        setNet,
+        net,
+        handleInputChange
         /* CancelFunction  */
     }
 }
