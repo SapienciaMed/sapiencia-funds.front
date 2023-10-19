@@ -12,7 +12,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "RubikMedium", sans-serif;
+  font-family: "RubikRegular", sans-serif;
   // font-size: 16px;
 }
 
@@ -176,6 +176,10 @@ div[id="single-spa-application:@sapiencia/funds"] {
   padding: 20px;
 }
 
+.dl-agregarItem-voting{
+  height: 90vh !important;
+}
+
 .margin-right0 {
   margin-right: 0px;
 }
@@ -190,6 +194,17 @@ div[id="single-spa-application:@sapiencia/funds"] {
   margin-top: 0px;
   font-size: 14px;
 }
+
+
+.mdf{
+
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 
 .button-save-container-display-maestros {
   display: flex;
@@ -240,4 +255,43 @@ div[id="single-spa-application:@sapiencia/funds"] {
   //cursor: not-allowed; 
 }
 
+.input-basic {
+  font-weight: regular;
+  font-family: "Rubik" !important;
+  font-size: 14px;
+}
 
+.input-regular {
+  font-weight: regular;
+  font-family: "Rubik" !important;
+  font-size: 14px;
+}
+
+span.select-basic {
+
+  font-weight: regular !important;
+  font-family: "Rubik" !important;
+  font-size: 7px  !important;
+
+}
+
+.select-basic .p-dropdown-label {
+  font-weight: regular !important;
+  font-family: "Rubik" !important;
+  font-size: 14px  !important;
+}
+
+.p-datatable-tbody{
+  font-weight: regular !important;
+  font-family: "Rubik" !important;
+  font-size: 14px  !important;
+}
+
+.modal-content .text-black-2 {
+  font-weight: medium !important;
+  font-family: "Rubik" !important;
+}
+
+.modal-container .modal-header p {
+  font-size: 29px !important;
+}

@@ -55,7 +55,7 @@ export default function useMasterConsult() {
         },
         {
             fieldName: "name",
-            header: "Nombre"
+            header: "Maestro"
         },       
         {
             fieldName: "description",

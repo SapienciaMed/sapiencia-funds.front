@@ -31,3 +31,9 @@ export class ApiResponse<T> {
     this.operation = { code, message };
   }
 }
+
+
+export interface IUnifiedPagingData {
+  data: any[];  // Asume que los datos son un array, ajusta según sea necesario
+  pagingInfo: IDataPaging;
+}

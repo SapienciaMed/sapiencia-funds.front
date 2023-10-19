@@ -30,7 +30,7 @@ export const FilterMasterActivityForm = ({
   return (
     <div className="container-sections-forms">
       <div className="title-area">
-        <label className="text-black large bold grid-span-4-columns">Maestro actividad</label>
+        <label className="text-black large medium grid-span-4-columns">Maestro actividad</label>
 
         <div
           className="title-button text-three large"

@@ -2,8 +2,8 @@ import React, { Fragment, useContext } from "react";
 import { ButtonComponent, FormComponent, SelectComponent } from "../../../common/components/Form";
 import useMasterConsult from "../hooks/master-consult.hook";
 import { BiPlusCircle } from 'react-icons/bi';
-import TableComponentNew from "../../../common/components/tableNew.component";
 import { AppContext } from "../../../common/contexts/app.context";
+import TableComponent from "../../../common/components/table.component";
 
 
 
@@ -81,7 +81,7 @@ const MasterPage = () => {
                 showTable &&
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
-                        <TableComponentNew
+                        <TableComponent
                             ref={tableComponentRef}
                             url={`${process.env.urlApiFunds}/api/v1/master/get-paginated`}
                             columns={tableColumns}

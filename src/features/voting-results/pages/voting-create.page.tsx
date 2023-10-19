@@ -1,13 +1,24 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { useVotingResults } from "../hooks/voting-create.hooks";
-import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
+import {
+  ButtonComponent,
+  FormComponent,
+  InputComponent,
+} from "../../../common/components/Form";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { EDirection } from "../../../common/constants/input.enum";
-import { SelectComponentUser } from "../../../common/components/Form/select.component.user";
-
+import BasicTableComponent from "../../../common/components/basic-table.component";
+import {
+  ITableAction,
+  ITableElement,
+} from "../../../common/interfaces/table.interfaces";
+import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../../common/contexts/app.context";
+import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
+import ItemResultsPage from "../pages/item.create.page";
 
 const VotingResultsPage = () => {
-
   const {
     CancelFunction,
     onSubmitCreateVoting,
@@ -16,7 +27,111 @@ const VotingResultsPage = () => {
     sending,
     deparmetList,
     addItem,
+    tableComponentRef,
+    dataGrid,
+    setValCommuneNeighborhood,
   } = useVotingResults();
+
+  const navigate = useNavigate();
+  const { validateActionAccess, setMessage } = useContext(AppContext);
+
+
+
+
+  const tableColumns: ITableElement<IVotingSearcheResult>[] = [
+    {
+      fieldName: "directObject",
+      header: "Objetivo directo",
+    },
+    {
+      fieldName: "productCatalog",
+      header: "Producto catalogo dnp",
+    },
+    {
+      fieldName: "productCode",
+      header: "Código catalogo dnp",
+    },
+    {
+      fieldName: "program",
+      header: "Programa",
+    },
+    {
+      fieldName: "activity",
+      header: "Actividad",
+    },
+    {
+      fieldName: "activityValue",
+      header: "Valor Actividad",
+    },
+    {
+      fieldName: "amount",
+      header: "Cantidad",
+    },
+    {
+      fieldName: "totalCost",
+      header: "Costo Total",
+    },
+    {
+      fieldName: "porcentaje123",
+      header: "Porcentaje 123",
+    },
+    {
+      fieldName: "porcentaje456",
+      header: "Porcentaje 456",
+    },
+    // {
+    //   fieldName: "profile",
+    //   header: "",
+    // },
+  ];
+
+  const tableActions: ITableAction<IVotingSearcheResult>[] = [
+    {
+      icon: "Edit",
+      onClick: (row) => {
+        console.log("row ", row);
+        // navigate(`/core/usuarios/editar/${row.id}`);
+        setMessage({
+          show: true,
+          title: "Agregar item",
+          // OkTitle: "Aceptar",
+          // cancelTitle: "Cancelar",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: <ItemResultsPage dataVoting={row} action={"edit"} />,
+          size: "large",
+          style: "mdl-agregarItem-voting",
+        });
+      },
+      hide: !validateActionAccess("USUARIOS_EDITAR"),
+    },
+    {
+      icon: "Delete",
+      onClick: (row) => {
+        console.log("row ", row);
+          setMessage({
+            show: true,
+            title: "Eliminar registro",
+            description: "Estás segur@ de eliminar este registro?",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            onOk() {
+              if (dataGrid.find((obj) => obj.ident == row.ident)) {
+                const position = dataGrid.findIndex(
+                  (obj) => obj.ident === row.ident
+                );
+                dataGrid.splice(position, 1);
+                setMessage({})
+              }
+            },
+            background: true,
+          });
+      },
+      hide: !validateActionAccess("USUARIOS_ELIMINAR"),
+    },
+  ];
 
   return (
     <Fragment>
@@ -41,6 +156,7 @@ const VotingResultsPage = () => {
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
+                  setValue={setValCommuneNeighborhood}
                 />
 
                 <InputComponent
@@ -90,6 +206,36 @@ const VotingResultsPage = () => {
                   addItem();
                 }}
               />
+            </div>
+
+            <div
+              style={
+                dataGrid.length > 0 ? { display: "block" } : { display: "none" }
+              }
+            >
+              <div className="container-form-grid mt-24px">
+                <div className="container-form padding-form">
+                  <BasicTableComponent
+                    ref={tableComponentRef}
+                    data={dataGrid}
+                    columns={tableColumns}
+                    actions={tableActions}
+                    titleMessageModalNoResult="Registro no existente"
+                    isShowModal={true}
+                  />
+                </div>
+              </div>
+              <TextAreaComponent
+                id={"observations"}
+                idInput={"observations"}
+                label="Observaciones"
+                classNameLabel="text-black biggest bold text-required"
+                className={`text-area-basic `}
+                placeholder="Escribe aquí"
+                register={register}
+                errors={errors}
+                characters={500}
+              ></TextAreaComponent>
             </div>
           </div>
 

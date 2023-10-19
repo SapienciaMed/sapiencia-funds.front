@@ -1,44 +1,36 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import { FormComponent, InputComponent } from "../../../common/components/Form";
+import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { useItemResults } from "../hooks/item.create.hooks";
 import { EDirection } from "../../../common/constants/input.enum";
 
 
-const ItemResultsPage = () => {
 
-    const {
-        CancelFunction,
-        onSubmitCreateItem,
-        register,
-        errors,
-        sending,
-        deparmetList,
-    } = useItemResults();
+const ItemResultsPage = ({ dataVoting, action }) => {
+  const {
+    CancelFunction,
+    onSubmitCreateItem,
+    register,
+    errors,
+    sending,
+    typeProgram,
+    setProgramSelected,
+    activity,
+    setDataGrid,
+    dataGrid,
+  } = useItemResults(action, dataVoting);
 
-    return (
-      <Fragment>
+  return (
+    <Fragment>
+      {action == "new" ? (
         <FormComponent
           id="createItemForm"
           className="form-signIn"
           action={onSubmitCreateItem}
         >
           <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
-            {/* <SelectComponentOld
-            idInput="communeNeighborhood"
-            register={register}
-            className="select-basic medium"
-            placeholder="Seleccionar"
-            label="Comuna y/o corregimiento "
-            data={deparmetList ? deparmetList : []}
-            value={null}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-          /> */}
-
             <InputComponent
-              idInput="numberProject"
+              idInput="directObject"
               className="input-basic medium form-group"
               typeInput="text"
               label="Objetivo directo"
@@ -50,7 +42,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="numberProject"
+              idInput="productCatalog"
               className="input-basic medium form-group"
               typeInput="number"
               label="Producto catalogo dnp"
@@ -62,7 +54,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="validity"
+              idInput="productCode"
               className="input-basic medium form-group"
               typeInput="text"
               label="Código producto dnp"
@@ -73,27 +65,27 @@ const ItemResultsPage = () => {
               placeholder={""}
             />
 
-
             <SelectComponentOld
-              idInput="communeNeighborhood"
+              idInput="program"
               register={register}
               className="select-basic medium"
               placeholder="Seleccionar"
               label="Programa "
-              data={[]}
+              data={typeProgram ? typeProgram : []}
               value={null}
               classNameLabel="text-black big text-required bold"
               direction={EDirection.column}
               errors={errors}
+              setValue={setProgramSelected}
             />
 
             <SelectComponentOld
-              idInput="communeNeighborhood"
+              idInput="activity"
               register={register}
               className="select-basic medium"
               placeholder="Seleccionar"
               label="Actividad"
-              data={[]}
+              data={activity ? activity : []}
               value={null}
               classNameLabel="text-black big text-required bold"
               direction={EDirection.column}
@@ -101,7 +93,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="activityValue"
               className="input-basic medium form-group"
               typeInput="number"
               label="Valor actividad"
@@ -110,11 +102,10 @@ const ItemResultsPage = () => {
               direction={EDirection.column}
               errors={errors}
               placeholder={""}
-              disabled={true}
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="amount"
               className="input-basic medium form-group"
               typeInput="number"
               label="Cantidad"
@@ -126,7 +117,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="totalCost"
               className="input-basic medium form-group"
               typeInput="number"
               label="Costo total"
@@ -135,11 +126,10 @@ const ItemResultsPage = () => {
               direction={EDirection.column}
               errors={errors}
               placeholder={""}
-              disabled={true}
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="porcentaje123"
               className="input-basic medium form-group"
               typeInput="number"
               label="Porcentaje 123"
@@ -151,7 +141,7 @@ const ItemResultsPage = () => {
             />
 
             <InputComponent
-              idInput="ideaProject"
+              idInput="porcentaje456"
               className="input-basic medium form-group"
               typeInput="number"
               label="Porcentaje 456"
@@ -162,9 +152,183 @@ const ItemResultsPage = () => {
               placeholder={""}
             />
           </div>
+
+          <div className="button-save-container-display-users margin-right0">
+            <ButtonComponent
+              value="Cancelar"
+              type="button"
+              className="button-cancel-text large hover-three disabled-black"
+              action={() => CancelFunction()}
+              disabled={sending}
+            />
+            <ButtonComponent
+              form="createItemForm"
+              value="Guardar"
+              type="submit"
+              className="button-save large disabled-black"
+              disabled={sending}
+            />
+          </div>
         </FormComponent>
-      </Fragment>
-    );
+      ) : (
+        <FormComponent
+          id="createItemForm"
+          className="form-signIn"
+          action={onSubmitCreateItem}
+        >
+          <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+            <InputComponent
+              idInput="directObject"
+              className="input-basic medium form-group"
+              typeInput="text"
+              label="Objetivo directo"
+              register={register}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              placeholder={""}
+              value={dataVoting.directObject}
+            />
+
+            <InputComponent
+              idInput="productCatalog"
+              className="input-basic medium form-group"
+              typeInput="number"
+              label="Producto catalogo dnp"
+              register={register}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              placeholder={""}
+              value={dataVoting.productCatalog}
+            />
+
+            <InputComponent
+              idInput="productCode"
+              className="input-basic medium form-group"
+              typeInput="text"
+              label="Código producto dnp"
+              register={register}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              placeholder={""}
+              value={dataVoting.productCode}
+            />
+
+            <SelectComponentOld
+              idInput="program"
+              register={register}
+              className="select-basic medium"
+              placeholder="Seleccionar"
+              label="Programa "
+              data={typeProgram ? typeProgram : []}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              setValue={setProgramSelected}
+              value={dataVoting.program}
+            />
+
+            <SelectComponentOld
+              idInput="activity"
+              register={register}
+              className="select-basic medium"
+              placeholder="Seleccionar"
+              label="Actividad"
+              data={activity ? activity : []}
+              value={dataVoting.activity}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+            />
+
+            <InputComponent
+              idInput="activityValue"
+              className="input-basic medium form-group"
+              typeInput="number"
+              label="Valor actividad"
+              register={register}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              placeholder={""}
+              value={dataVoting.activityValue}
+            />
+
+            <InputComponent
+              idInput="amount"
+              className="input-basic medium form-group"
+              typeInput="number"
+              label="Cantidad"
+              register={register}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              placeholder={""}
+              value={dataVoting.amount}
+            />
+
+            <InputComponent
+              idInput="totalCost"
+              className="input-basic medium form-group"
+              typeInput="number"
+              label="Costo total"
+              register={register}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              placeholder={""}
+              value={dataVoting.totalCost}
+            />
+
+            <InputComponent
+              idInput="porcentaje123"
+              className="input-basic medium form-group"
+              typeInput="number"
+              label="Porcentaje 123"
+              register={register}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              placeholder={""}
+              value={dataVoting.porcentaje123}
+            />
+
+            <InputComponent
+              idInput="porcentaje456"
+              className="input-basic medium form-group"
+              typeInput="number"
+              label="Porcentaje 456"
+              register={register}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              placeholder={""}
+              value={dataVoting.porcentaje456}
+            />
+          </div>
+
+          <div className="button-save-container-display-users margin-right0">
+            <ButtonComponent
+              value="Cancelar"
+              type="button"
+              className="button-cancel-text large hover-three disabled-black"
+              action={() => CancelFunction()}
+              disabled={sending}
+            />
+            <ButtonComponent
+              form="createItemForm"
+              value="Guardar"
+              type="submit"
+              className="button-save large disabled-black"
+              disabled={sending}
+            />
+          </div>
+        </FormComponent>
+      )}
+    </Fragment>
+  );
 };
 
 export default React.memo(ItemResultsPage);

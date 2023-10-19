@@ -1,9 +1,6 @@
 import React from "react";
-
 import { FilterMasterActivityForm } from "../forms/filter-masteractivity.form";
-
 import useSearchMasterHook from "../hooks/search-master-activity.hook";
-
 import TableComponent from "../../../common/components/table.component";
 
 const SearchMasterPage = (): React.JSX.Element => {
@@ -24,7 +21,7 @@ const SearchMasterPage = (): React.JSX.Element => {
     <div className="main-page">
       <div className="card-table">
         <div className="title-area">
-          <label className="text-black extra-large bold">
+          <label className="text-black extra-large medium">
           Consultar maestro actividad
           </label>
         </div>
