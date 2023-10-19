@@ -9,14 +9,12 @@ import {
   IItemSave,
 } from "../../../common/interfaces/voting.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
-import { useVotingService } from "../../../common/hooks/voting-service.hook";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import ItemResultsPage from "../pages/item.create.page";
-import { useItemResults } from "./item.create.hooks";
 import useVotingItemApi from "./voting-items-api.hooks";
-import { number } from "yup";
+
 
 
 export const useVotingResults = () => {
@@ -34,7 +32,7 @@ export const useVotingResults = () => {
 
     const { createVotingResults } = useVotingItemApi();
 
-    const { createVoting } = useVotingService();
+
 
     const {
         handleSubmit,
@@ -52,7 +50,7 @@ export const useVotingResults = () => {
           OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
           onOk() {
-            navigate("/core/usuarios/consultar");
+            navigate("/fondos/resultados-votacion/consultar");
             setMessage((prev) => ({ ...prev, show: false }));
           },
           background: true,

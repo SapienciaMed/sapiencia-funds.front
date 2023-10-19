@@ -31,6 +31,7 @@ export interface IVotingSearcheResult {
     percentage123: string;
     percentage456: string;
     codRtVotingResult: string;
+    ident: number
 }
 
 export interface IVotingResultGrid{
@@ -43,7 +44,8 @@ export interface IVotingResultGrid{
     productCatalog: number
     productCode: number
     program: string
-    activity: string
+    activity: string,
+    ident: number
 }
 
 export interface IItemCreateRegTable {

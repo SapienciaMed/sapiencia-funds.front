@@ -75,6 +75,7 @@ export const useItemResults = (action, dataVoting) => {
                   productCode: data.productCode,
                   program: data.program,
                   activity: data.activity,
+                  ident: Math.random(),
                 });
                 setMessage({
                   OkTitle: "Aceptar",

@@ -4,6 +4,9 @@ import PrivateRoute from "../../common/utils/auth-private-guard";
 
 function VotingResultsRoutes() {
   const VotingResultsPage = lazy(() => import("./pages/voting-create.page"));
+  const VotingResultsSearchPage = lazy(
+    () => import("./pages/voting-search.page")
+  );
 
   return (
     <Routes>
@@ -11,7 +14,7 @@ function VotingResultsRoutes() {
         path={"/consultar"}
         element={
           <PrivateRoute
-            element={<VotingResultsPage />}
+            element={<VotingResultsSearchPage />}
             allowedAction={"VOTACION_CONSULTAR"}
           />
         }
