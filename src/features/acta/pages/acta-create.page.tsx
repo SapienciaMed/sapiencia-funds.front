@@ -20,7 +20,7 @@ const ActaCreatePage = () => {
 
     const { errors, register, onsubmitItem, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary } = useActaCreate();
 
-   // console.log("asi llegan los datos", datos)
+   
 
     const tableColumns: ITableElement<IActaItems>[] = [
         {
@@ -82,11 +82,7 @@ const ActaCreatePage = () => {
         {
             fieldName: "financialOperatorCommission",
             header: "Comisión operador financiero",
-        },
-        {
-            fieldName: "",
-            header: "Acción",
-        }, 
+        }        
 
     ];
 
@@ -115,7 +111,7 @@ const ActaCreatePage = () => {
         }
     ];
 
-    //console.log('datos',dataGridItems)
+    console.log('datos',dataGridItems)
     
 
     return (

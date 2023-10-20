@@ -17,7 +17,6 @@ export default function useActaCreate() {
     const resolver = useYupValidationResolver(createActas);
 
     const { setMessage, authorization, setDataGridItems, dataGridItems } = useContext(AppContext);
-
     const tableComponentRef = useRef(null);
 
     const [showTable, setShowTable] = useState(false);

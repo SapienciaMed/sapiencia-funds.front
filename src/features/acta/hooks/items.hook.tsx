@@ -33,8 +33,7 @@ export default function useActaItems(action, acta) {
     const [resourcesCredit, setResourcesCredit] = useState("0");
 
 
-    const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
-    console.log("action",action)
+    const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();  
 
     const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
@@ -104,20 +103,22 @@ export default function useActaItems(action, acta) {
             setFinancialOperatorCommission(String(resultadoOperacion1));
             setResourcesCredit(String(resultadoOperacion2));
         }
-    };
-   
+    };  
 
-    const onsubmitAddItem = handleSubmit((data: IActaItems) => {        
+    const onsubmitAddItem = handleSubmit((data: IActaItems) => { 
+        console.log('object',data)       
         if (data) {
-            dataGridItems.push({
+            const updatedItem = {
                 ident: uuidv4(),
                 found: selectedLabelFound,
                 line: selectedLabelLine,
                 program: selectedLabelProgram,
                 announcement: selectedLabelAnnouncement,
                 concept: selectedLabelConcept,
+                costOperation: data.costOperation,
                 subtotalVigency: data.subtotalVigency,
                 costBillsOperation: parseInt(costBillsOperation),
+                financialOperatorCommission: parseInt(financialOperatorCommission),
                 net: parseInt(neto),
                 resourcesCredit: parseInt(resourcesCredit),
                 averageCost: {
@@ -126,9 +127,24 @@ export default function useActaItems(action, acta) {
                     quantityPeriod2: data.quantityPeriod2,
                     valuePeriod2: data.valuePeriod2,
                 }                                
-            });
+            };
+    
+            if (action === "edit" && acta) {     
+                // Continuación de tu lógica de edición
+                const editingIndex = dataGridItems.findIndex(item => item.ident === acta.ident);              
+                if (editingIndex !== -1) {       
+                    setDataGridItems(prevDataGridItems => {
+                        const updatedDataGridItems = [...prevDataGridItems];
+                        updatedDataGridItems[editingIndex] = updatedItem;
+                        return updatedDataGridItems;
+                    });
+                }
+            } else {                
+                console.log('mandar a guardar',updatedItem)
+                setDataGridItems(prevDataGridItems => [...prevDataGridItems, updatedItem]);
+            }
 
-            console.log('ids',dataGridItems)
+           
             
             setMessage({
                 OkTitle: "Aceptar",
@@ -147,7 +163,7 @@ export default function useActaItems(action, acta) {
                     setMessage({});
                 },
             });
-        }
+        }       
     });
 
 
@@ -260,15 +276,31 @@ export default function useActaItems(action, acta) {
 
     //editar items al crear actas
 
-    if (action === "edit") {
-        console.log('estas en el editar',acta)
+  if (action === "edit") {        
+    console.log(acta)
         useEffect(() => {
             if (!acta) return; 
+            setValue("found", acta.found);
+            setValue("line", acta.line);
+            setValue("program", String(1));
+            setValue("announcement", acta.announcement);
+            setValue("concept", acta.concept);
+            setValue("costOperation", acta.costOperation);
             setValue("subtotalVigency", acta.subtotalVigency);
+            setValue("costBillsOperation", parseInt(costBillsOperation));
+            setValue("net", parseInt(neto));
+            setValue("resourcesCredit", acta.resourcesCredit);
+            setValue("quantityPeriod1", acta.averageCost.quantityPeriod1);
+            setValue("valuePeriod1", acta.averageCost.valuePeriod1);
+            setValue("quantityPeriod2", acta.averageCost.quantityPeriod2);
+            setValue("valuePeriod2", acta.averageCost.valuePeriod2);
         }, [acta]);
-    }
-
-
+    } 
+/* 
+financialOperatorCommission: parseInt(financialOperatorCommission),
+                net: parseInt(neto),
+                resourcesCredit: parseInt(resourcesCredit),
+*/
 
     return {
         control,
