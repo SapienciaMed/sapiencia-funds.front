@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import {
-  ITableAction,
-  ITableElement,
-} from "../../../common/interfaces/table.interfaces";
+import {ITableAction,ITableElement,} from "../../../common/interfaces/table.interfaces";
+import { IUser } from "../../../common/interfaces/auth.interfaces"
 import {IUploadInformation, IWorker} from "../../../common/interfaces/funds.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { ApiResponse } from "../../../common/utils/api-response";
@@ -12,7 +10,9 @@ import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import {filterUploadInformationSchema} from "../../../common/schemas/upload-information";
 import useUploadApi from "./upload-information-api.hook";
+import { useAuthService } from "../../../common/hooks/auth-service.hook";
 import axios from "axios";
+
 
 
 export default function useCreateUploadHook() {
@@ -20,43 +20,47 @@ export default function useCreateUploadHook() {
     const [showTable, setshowTable] = useState(false);
     const [activeWorkerList, setActiveWorkerList] = useState([]);
     const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
+    const [uploadedFileName, setUploadedFileName] = useState("");
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [selectedRow, setSelectedRow] = useState<IUploadInformation>(null);
     const uploadFilesRef = useRef(null);
-    const [workerInfo, setWorkerInfo] = useState([]);
+    const [activeUserList, setActiveUserList] = useState([]);
+    const [userInfo, setUserInfo] = useState([]);
     const tableComponentRef = useRef(null);
     const navigate = useNavigate();
+    const { getUser } = useAuthService();
     const { createUploadInformation, } = useUploadApi();
     
     
-    // const getWorkersActive = () => {
-    //   getWorkers()
-    //     .then((response: ApiResponse<IWorker[]>) => {
-    //       if (response && response?.operation?.code === EResponseCodes.OK) {
-    //         setWorkerInfo(response.data);
-    //         setActiveWorkerList(
-    //           response.data.map((item) => {
-    //             const list = {
-    //               name: `${
-    //                 item.numberDocument +
-    //                 " - " +
-    //                 item.firstName +
-    //                 " " +
-    //                 item.surname
-    //               }`,
-    //               value: item.id,
-    //             };
-    //             return list;
-    //           })
-    //         );
-    //       }
-    //     })
-    //     .catch((err) => {});
-    // };
+    //Cargar usuarios del sistema
+    const getWorkersActive = () => {
+      getUser()
+        .then((response: ApiResponse<IUser[]>) => {
+          if (response && response?.operation?.code === EResponseCodes.OK) {
+            setUserInfo(response.data);
+            setActiveUserList(
+              response.data.map((item) => {
+                const list = {
+                  name: `${
+                    item.numberDocument +
+                    " - " +
+                    item.names +
+                    " " +
+                    item.lastNames
+                  }`,
+                  value: item.id,
+                };
+                return list;
+              })
+            );
+          }
+        })
+        .catch((err) => {});
+    };
 
-    // useEffect(() => {
-    //   getWorkersActive();
-    // }, []);
+    useEffect(() => {
+      getWorkersActive();
+    }, []);
     
 
     const resolver = useYupValidationResolver(filterUploadInformationSchema);
@@ -114,34 +118,20 @@ export default function useCreateUploadHook() {
         });
       };
 
-      const onSubmit = handleSubmit(async (data: IUploadInformation) => {
-        setMessage({
-          title: "Cargar archivo y notificar",
-          description: `¿Estás segur@ de cargar el archivo y notificarlo?`,
-          show: true,
-          OkTitle: "Aceptar",
-          onOk: () => {
-
-            data.fileName = "archivocargado.xml";
-            handleCreateInformation(data);
-            setMessage((prev) => {
-              return { ...prev, show: false };
-            });
-          },
-          cancelTitle: "Cancelar",
-          background: true,
-        });
-      });
 
       const handleCreateInformation = async (data: IUploadInformation) => {
-        const { data: dataResponse, operation } =
-           
-          await createUploadInformation(data);
-    
-        if (operation.code === EResponseCodes.OK) {
-          handleModalSuccess();
-        } else {
-          handleModalError(operation.message, false);
+        try {
+          data.fileName = uploadedFileName;
+          const { data: dataResponse, operation } = await createUploadInformation(data);
+          if (operation.code === EResponseCodes.OK) {
+            const id = dataResponse.id;
+            await uploadFiles(id); // Espera a que la carga de archivos se complete
+            handleModalSuccess();
+          } else {
+            handleModalError(operation.message, false);
+          }
+        } catch (error) {
+          handleModalError(error, false);
         }
       };
 
@@ -172,52 +162,63 @@ export default function useCreateUploadHook() {
     }, []);
     
     //cargar archivos por multipart/form-data
-    const uploadFiles = () => {
-      const form = new FormData();
-      const files = filesUploadData;
-      files.forEach(file => {
+    const uploadFiles = (recordId) => {
+      return new Promise<void>((resolve, reject) => {
+        const form = new FormData();
+        const files = filesUploadData;
+        files.forEach(file => {
           form.append('files', file);
-      });
-      const options = {
+        });
+        const authToken = localStorage.getItem("token");
+        const options = {
           method: 'POST',
-          url: `${process.env.urlApiStrategicDirection}/api/v1/project/upload/${selectedRow?.id}`,
-          headers: { 'content-type': 'multipart/form-data' },
+          url: `${process.env.urlApiFunds}/api/v1/uploadInformation/upload/${recordId}`,
+          headers: {
+            'content-type': 'multipart/form-data',
+            'Authorization': `Bearer ${authToken}`
+          },
           data: form,
-      };
-      axios.request(options).then(response => {
+        };
+        axios.request(options).then(response => {
           const data: ApiResponse<boolean> = response.data;
           if (data.operation.code === EResponseCodes.OK) {
-              setFilesUploadData([]);
-              setShowDialog(false);
-              setMessage({
-                  background: true,
-                  show: true,
-                  title: "Adjuntos del proyecto",
-                  description: "¡Archivos guardados exitosamente!",
-                  OkTitle: "Cerrar",
-              });
+            setFilesUploadData([]);
+            setShowDialog(false);
+            resolve(); // Resuelve la promesa
           } else {
-              setFilesUploadData([]);
-              setShowDialog(false);
-              setMessage({
-                  background: true,
-                  show: true,
-                  title: "Adjuntos del proyecto",
-                  description: data.operation.message,
-                  OkTitle: "Cerrar"
-              });
+            setFilesUploadData([]);
+            setShowDialog(false);
+            reject(data.operation.message); // Rechaza la promesa con el mensaje de error
           }
-      }).catch(err => {
+        }).catch(err => {
           setShowDialog(false);
-          setMessage({
-              background: true,
-              show: true,
-              title: "Adjuntos del proyecto",
-              description: String(err),
-              OkTitle: "Cerrar"
-          })
+          reject(String(err)); // Rechaza la promesa con el error
+        });
       });
-  }
+    }
+
+  const onSubmit = handleSubmit(async (data: IUploadInformation) => {
+    setMessage({
+      title: "Cargar archivo y notificar",
+      description: `¿Estás segur@ de cargar el archivo y notificarlo?`,
+      show: true,
+      OkTitle: "Aceptar",
+      onOk: () => {
+         
+         if(uploadedFileName === ""){
+          const error = "Debe ingresar un documento Valido";
+          handleModalError(error, false);
+        }else{
+          handleCreateInformation(data);
+        }
+        setMessage((prev) => {
+          return { ...prev, show: false };
+        });
+      },
+      cancelTitle: "Cancelar",
+      background: true,
+    });
+  });
 
     const clearFields = () => {
       reset();
@@ -234,11 +235,15 @@ return {
     formValues,
     showTable,
     tableComponentRef,
+    setUserInfo,
     //tableColumns,
     //tableActions,
     activeWorkerList,
     redirectCancel,
     setFilesUploadData,
+    filesUploadData,
     uploadFiles,
+    activeUserList,
+    setUploadedFileName,
   };
 }

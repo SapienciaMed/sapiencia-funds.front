@@ -12,10 +12,13 @@ import useUploadService from "../../../common/hooks/upload-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import {filterUploadInformationSchema} from "../../../common/schemas/upload-information";
+import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import {
   DataItem,
   ResponsiveTable,
 } from "../../../common/components/Form/table-detail.component";
+import { ApiResponse } from "../../../common/utils/api-response";
+import { IGenericList } from "../../../common/interfaces/global.interface";
 import { filtermasterActivity } from "../../../common/schemas/master-schema";
 
 export default function useSearchUploadHook() {
@@ -28,12 +31,13 @@ export default function useSearchUploadHook() {
     const [commune, setcommune] = useState<IDropdownProps[]>([]);
     const [validity, setvalidity] = useState<IDropdownProps[]>([]);
     const [information, setinformation] = useState<IDropdownProps[]>([]);
+    const { getListByGrouper } = useGenericListService();
     //ref
     const tableComponentRef = useRef(null);
     //react-router-dom
     const navigate = useNavigate();
 
-
+  //borrar loadDropdown vigencias
   // carga combos
   useEffect(() => {
     loadDropdown();
@@ -44,34 +48,39 @@ export default function useSearchUploadHook() {
     //charges
     const { data, operation } = await getUpload();
     if (operation.code === EResponseCodes.OK) {
-      const communeList = data.map((item) => {
-        return {
-          name: item.commune,
-          value: item.commune,
-        };
-      });
       const validityList = data.map((item) => {
         return {
           name: item.validity,
           value: item.validity,
         };
       });
-      const informationList = data.map((item) => {
-        return {
-          name: item.information,
-          value: item.information,
-        };
-      });
-      setcommune(communeList);
       setvalidity(validityList);
-      setinformation(informationList);
     } else {
-      setcommune([]);
       setvalidity([]);
     }
   };
 
+
+  useEffect(() => {
+    getListByGrouper("COMUNA_CORREGIMIENTO").then(response => {
+        if (response.operation.code === EResponseCodes.OK) {
+            const data: IDropdownProps[] = response.data.map(data => {
+                return { name: data.itemDescription, value: data.itemDescription }
+            })
+            setcommune(data);
+        }
+    })
+    getListByGrouper("INFORMACION_COMUNA").then(response => {
+      if (response.operation.code === EResponseCodes.OK) {
+          const data: IDropdownProps[] = response.data.map(data => {
+              return { name: data.itemDescription, value:data.itemDescription }
+          })
+          setinformation(data);
+      }
+  })
+}, []);
   
+
     const resolver = useYupValidationResolver(filterUploadInformationSchema);
 
     const { register, handleSubmit, formState, control, watch } =

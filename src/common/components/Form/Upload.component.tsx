@@ -12,6 +12,7 @@ import { imagesicon } from "../icons/images";
 interface IProps {
     id: string;
     setFilesData: Dispatch<SetStateAction<File[]>>;
+    onFileChange: (fileName: string) => void; 
     filesAccept?: string;
     maxSize?: number;
     multiple?: boolean;
@@ -30,6 +31,7 @@ interface IProps {
     maxSize,
     multiple = false,
     dropboxMessage = "",
+    onFileChange,
     buttonsTitle = { choose: "Adjuntar", upload: "Cargar", cancel: "Eliminar" }
   }: IProps) => {
     const [totalSize, setTotalSize] = useState(0);
@@ -47,6 +49,9 @@ interface IProps {
         });
         setTotalSize(_totalSize);
         setFilesData(filesArr);
+        if (e.files.length > 0) {
+          onFileChange(e.files[0].name);
+        }
     };
 
     const onTemplateUpload = (e) => {
@@ -61,7 +66,8 @@ interface IProps {
     };
 
     const onTemplateRemove = (file, callback) => {
-        setFilesData(prev => {
+      onFileChange("");  
+      setFilesData(prev => {
             return prev.filter(item => item !== file);
           });
         setTotalSize(totalSize - file.size);
@@ -69,13 +75,15 @@ interface IProps {
     };
 
     const onTemplateClear = () => {
+        onFileChange("");
         setTotalSize(0);
     };
 
     const clearFile = () => {
-        setFilesData([]);
-        setTotalSize(0);
-      }
+      onFileChange("");  
+      setFilesData([]);
+      setTotalSize(0);
+    }
 
     const headerTemplate = (options) => {
         const { className, chooseButton, uploadButton, cancelButton } = options;

@@ -20,13 +20,18 @@ const UploadCreatePage = (): React.JSX.Element => {
     onSubmit,
     redirectCancel,
     setFilesUploadData,
-    uploadFiles
+    uploadFiles,
+    activeUserList,
+    setUploadedFileName
   } = useCreateUploadHook();
   const { errors, isValid } = formState;
 
-  const [uploadedFileName, setUploadedFileName] = useState("");
-
   const { commune, validity, information } = useSearchUploadHook()
+
+  const handleFileNameChange = (fileName) => {
+    setUploadedFileName(fileName);
+  };
+
 
   return (
     <Fragment>
@@ -109,14 +114,15 @@ const UploadCreatePage = (): React.JSX.Element => {
           </div>
 
           {/* Cargar documento PDF */}
-          <div className="container-sections-forms">
+          <div className="container-sections-forms" >
             <UploadComponent
               id="fileList"
               setFilesData={setFilesUploadData}
               filesAccept="application/pdf"
               maxSize={1048576}
               dropboxMessage="Arrastra y suelta el archivo aquí"
-              multiple
+              multiple={false}
+              onFileChange={handleFileNameChange} 
             />
           </div>
 
@@ -137,8 +143,8 @@ const UploadCreatePage = (): React.JSX.Element => {
                 <SelectComponent
                   idInput={"codEmployment"}
                   control={control}
-                  //errors={errors}
-                  //data={activeWorkerList}
+                  errors={errors}
+                  data={activeUserList}
                   label={<>Notificar a</>}
                   className="select-basic medium"
                   classNameLabel="text-black big bold"
