@@ -11,6 +11,19 @@ export interface IActaItems {
     net?: number;
     financialOperatorCommission?: number;
     resourcesCredit?: number; 
-    program?: number;
+    program?: string;
+    
+    quantityPeriod1?: string;
+    valuePeriod1? : string;
+    quantityPeriod2?: string;
+    valuePeriod2?: string;
+
+    averageCost?: {
+        quantityPeriod1?: string;
+        valuePeriod1? : string;
+        quantityPeriod2?: string;
+        valuePeriod2?: string;
+    };
     //idActa: number;
 }
+

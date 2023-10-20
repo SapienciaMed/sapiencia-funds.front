@@ -11,7 +11,7 @@ import useActaApi from "./acta-api.hook";
 import { IActa } from "../../../common/interfaces/acta.interface";
 
 
-export default function useActaItems(action, acta:IActa) {
+export default function useActaItems(action, acta: IActa) {
 
     const resolver = useYupValidationResolver(createActas);
 
@@ -27,14 +27,16 @@ export default function useActaItems(action, acta:IActa) {
     const [announcementList, setAnnouncementList] = useState([]);
     const [conceptList, setConceptList] = useState([]);
     const [costBillsOperation, setCostBillsOperationt] = useState("0");
-    const [net, setNet] = useState("0");
+    const [neto, setNet] = useState("0");
+    const [financialOperatorCommission, setFinancialOperatorCommission] = useState("0");
+    const [resourcesCredit, setResourcesCredit] = useState("0");
 
 
     const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
 
 
     const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
-    
+
     const {
         handleSubmit,
         register,
@@ -45,49 +47,85 @@ export default function useActaItems(action, acta:IActa) {
         formState: { errors },
     } = useForm<IActaItems>({ resolver });
 
-   /*  const handleInputChange = (event) => {
-        console.log('acta',acta.costsExpenses)
-        const inputValue = event.target.value;       
-        if (inputValue && acta.costsExpenses) {
+    const handleSelectChange = (event) => {
+        const { value } = event.target;
+        console.log('u');  // Este es el nuevo valor seleccionado
+    };
 
-            const multiplicacion = parseFloat(inputValue) * acta.costsExpenses / 100;
-            const resta = parseFloat(inputValue) - acta.costsExpenses
 
-            setNet(resta.toString())
-            setCostBillsOperationt(multiplicacion.toString());
-        }else {
-            setCostBillsOperationt("0");
-            setNet("0")
-        }
-    }; */
+    const selectedFound = watch('found');
+    const selectedLine = watch('line');
+    const selectedProgram = watch('program');
+    const selectedAnnouncement = watch('announcement');
+    const selectedConcept = watch('concept');
 
+    const getSelectedLabel = (value, list) => {
+        const selectedOption = list.find(option => option.value === value);
+        return selectedOption ? selectedOption.name : null;
+    };    
+
+    const selectedLabelFound = getSelectedLabel(selectedFound, foundList);
+    const selectedLabelLine = getSelectedLabel(selectedLine, lineList);  
+    const selectedLabelProgram = getSelectedLabel(selectedProgram, programList);  
+    const selectedLabelAnnouncement = getSelectedLabel(selectedAnnouncement, announcementList);  
+    const selectedLabelConcept = getSelectedLabel(selectedConcept, conceptList);  
+    
+    
     const handleInputChange = (event) => {
-        const { name, value } = event.target;        
-       console.log(name)
+        const { name, value } = event.target;
+    
         if (name === "subtotalVigency" && value && acta.costsExpenses) {
-            const multiplicacion = parseFloat(value) * acta.costsExpenses / 100;
-            const resta = parseFloat(value) - acta.costsExpenses;
+            const multiplicacion = parseInt(value) * acta.costsExpenses / 100;
+            const resta = parseInt(value) - multiplicacion;         
     
             setNet(resta.toString());
             setCostBillsOperationt(multiplicacion.toString());
+            
         } else if (name === "subtotalVigency") {
             setCostBillsOperationt("0");
             setNet("0");
         }
-    
         
+        // Se verifica si net es 0 antes de verificar selectedLabel y otros valores
+        if (parseInt(neto) == 0) {
+            setFinancialOperatorCommission("0");
+            setResourcesCredit("0");
+            return;  // Retorna temprano para evitar ejecutar el resto del código si net es 0
+        }
+        
+       
+        
+        if (selectedLabelFound === 'MEJORES BACHILLERES' && (acta.financialOperation || acta.OperatorCommission)) {
+            const porcentajeOperacion = selectedLabelFound === 'MEJORES BACHILLERES' ? acta.financialOperation : acta.OperatorCommission;
+            const divisor = 1 + porcentajeOperacion;
+            const resultadoOperacion1 = parseInt(neto) - (parseInt(neto) / divisor);
+            const resultadoOperacion2 = parseInt(neto) / divisor;
+            setFinancialOperatorCommission(String(resultadoOperacion1));
+            setResourcesCredit(String(resultadoOperacion2));
+        }
     };
-    
+   
 
-
-    const onsubmitAddItem = handleSubmit((data: IActaItems) => {
-       // console.log(data)
+    const onsubmitAddItem = handleSubmit((data: IActaItems) => {        
         if (data) {
             dataGridItems.push({
-                found: data.found,
-                line: data.line,
-                program: data.program
+                found: selectedLabelFound,
+                line: selectedLabelLine,
+                program: selectedLabelProgram,
+                announcement: selectedLabelAnnouncement,
+                concept: selectedLabelConcept,
+                subtotalVigency: data.subtotalVigency,
+                costBillsOperation: parseInt(costBillsOperation),
+                net: parseInt(neto),
+                resourcesCredit: parseInt(resourcesCredit),
+                averageCost: {
+                    quantityPeriod1: data.quantityPeriod1,
+                    valuePeriod1: data.valuePeriod1,
+                    quantityPeriod2: data.quantityPeriod2,
+                    valuePeriod2: data.valuePeriod2,
+                }                                
             });
+            
             setMessage({
                 OkTitle: "Aceptar",
                 description:
@@ -133,7 +171,7 @@ export default function useActaItems(action, acta:IActa) {
         getProgramTypes()
             .then((response) => {
                 if (response && response?.operation?.code === EResponseCodes.OK) {
-                    setTypeProgram(
+                    setProgramList(
                         response.data.map((item) => {
                             const list = {
                                 name: item.name,
@@ -184,6 +222,7 @@ export default function useActaItems(action, acta:IActa) {
                             const list = {
                                 name: item.name,
                                 value: item.id,
+                                description: item.description
                             };
                             return list;
                         })
@@ -210,8 +249,9 @@ export default function useActaItems(action, acta:IActa) {
                     );
 
                 }
-            })            
+            })
     }, []);
+
 
 
     return {
@@ -231,10 +271,13 @@ export default function useActaItems(action, acta:IActa) {
         conceptList,
         announcementList,
         setCostBillsOperationt,
-        costBillsOperation, 
+        costBillsOperation,
         setNet,
-        net,
-        handleInputChange
+        neto,
+        financialOperatorCommission,
+        resourcesCredit,
+        handleInputChange,
+        handleSelectChange
         /* CancelFunction  */
     }
 }

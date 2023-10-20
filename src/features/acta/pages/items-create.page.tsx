@@ -7,7 +7,7 @@ import useActaCreate from "../hooks/acta-create.hook";
 
 const ItemsCreatePage = ({ action, acta }) => {
 
-    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,costBillsOperation,handleInputChange,net } = useActaItems(action, acta);
+    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,costBillsOperation,handleInputChange,neto,financialOperatorCommission, resourcesCredit,programList } = useActaItems(action, acta);
 
 
     return (
@@ -21,7 +21,7 @@ const ItemsCreatePage = ({ action, acta }) => {
                                     idInput={"program"}
                                     control={control}
                                     errors={errors}
-                                    data={typeProgram}
+                                    data={programList}
                                     label={
                                         <>
                                             Programa <span>*</span>
@@ -45,7 +45,7 @@ const ItemsCreatePage = ({ action, acta }) => {
                                     className="select-basic medium select-disabled-list"
                                     classNameLabel="text-black biggest"
                                     filter={true}
-                                    placeholder="Seleccionar."
+                                    placeholder="Seleccionar."                                
                                 />
                                 <SelectComponent
                                     idInput={"line"}
@@ -119,10 +119,10 @@ const ItemsCreatePage = ({ action, acta }) => {
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
                                     <InputComponent
-                                        idInput={"averageCost"}
+                                        idInput={"quantityPeriod1"}
                                         className="input-basic medium"
                                         typeInput="text"
-                                        label="Costo promedio"
+                                        label="Cantidad"
                                         register={register}
                                         classNameLabel="text-black biggest text-required"
                                         //direction={EDirection.column}
@@ -130,7 +130,7 @@ const ItemsCreatePage = ({ action, acta }) => {
                                         placeholder={""}
                                     />
                                     <InputComponent
-                                        idInput={"averageCost"}
+                                        idInput={"valuePeriod1"}
                                         className="input-basic medium"
                                         typeInput="text"
                                         label="Costo promedio"
@@ -153,10 +153,10 @@ const ItemsCreatePage = ({ action, acta }) => {
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
                                     <InputComponent
-                                        idInput={"averageCost"}
+                                        idInput={"quantityPeriod2"}
                                         className="input-basic medium"
                                         typeInput="text"
-                                        label="Costo promedio"
+                                        label="Cantidad"
                                         register={register}
                                         classNameLabel="text-black biggest text-required"
                                         //direction={EDirection.column}
@@ -164,7 +164,7 @@ const ItemsCreatePage = ({ action, acta }) => {
                                         placeholder={""}
                                     />
                                     <InputComponent
-                                        idInput={"averageCost"}
+                                        idInput={"valuePeriod2"}
                                         className="input-basic medium"
                                         typeInput="text"
                                         label="Costo promedio"
@@ -218,7 +218,7 @@ const ItemsCreatePage = ({ action, acta }) => {
                                     errors={errors}
                                     placeholder={""}
                                     disabled
-                                    value={net}  
+                                    value={neto}  
                                 />
                             </div>
                             <div className='grid-form-3-container '>
@@ -233,6 +233,7 @@ const ItemsCreatePage = ({ action, acta }) => {
                                     errors={errors}
                                     placeholder={""}
                                     disabled
+                                    value={financialOperatorCommission}
                                 />                                
                                 <InputComponent
                                     idInput={"resourcesCredit"}
@@ -245,6 +246,7 @@ const ItemsCreatePage = ({ action, acta }) => {
                                     errors={errors}
                                     placeholder={""}
                                     disabled
+                                    value={resourcesCredit}
                                 />
                             </div>
                         </div>

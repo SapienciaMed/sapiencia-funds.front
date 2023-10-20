@@ -3,18 +3,16 @@ import { ButtonComponent, FormComponent, InputComponent } from "../../../common/
 import useActaCreate from "../hooks/acta-create.hook";
 import useActaItems from "../hooks/items.hook";
 import TableGridComponent from "../../../common/components/tableGrid.component";
-import { IActaItems } from "../../../common/interfaces/actaItems.interface";
+import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 
+import { TreeTable } from 'primereact/treetable';
+import { Column } from 'primereact/column';
+        
 
-const ActaCreatePage = () => {
 
-    const datoss = [
-        {
-            program: 1,
-        }
-    ]
+const ActaCreatePage = () => { 
 
 
 
@@ -36,57 +34,57 @@ const ActaCreatePage = () => {
             header: "Linea",
         },
         {
-            fieldName: "line",
+            fieldName: "announcement",
             header: "Convocatoria",
         },
         {
-            fieldName: "line",
+            fieldName: "concept",
             header: "Concepto",
         },
         {
-            fieldName: "line",
+            fieldName: "costOperation",
             header: "Costo promedio",
         },
         {
-            fieldName: "line",
+            fieldName: "averageCost.quantityPeriod1",
             header: "Cantidad",
         },
         {
-            fieldName: "line",
+            fieldName: "averageCost.valuePeriod1",
             header: "Valor",
         },
         {
-            fieldName: "line",
+            fieldName: "averageCost.quantityPeriod2",
             header: "Cantidad",
         },
         {
-            fieldName: "line",
+            fieldName: "averageCost.valuePeriod2",
             header: "Valor",
         },
         {
-            fieldName: "line",
+            fieldName: "subtotalVigency",
             header: "Subtotal vigencia",
         },
         {
-            fieldName: "line",
+            fieldName: "costBillsOperation",
             header: "Costos y gastos de operación",
         },
         {
-            fieldName: "line",
+            fieldName: "net",
             header: "Neto",
         },
         {
-            fieldName: "line",
+            fieldName: "resourcesCredit",
             header: "Recurso para el crédito",
         },
         {
-            fieldName: "line",
+            fieldName: "financialOperatorCommission",
             header: "Comisión operador financiero",
         },
         {
             fieldName: "",
             header: "Acción",
-        },
+        }, 
 
     ];
 
@@ -97,6 +95,8 @@ const ActaCreatePage = () => {
         }
     ];
 
+    console.log('datos',dataGridItems)
+    
 
     return (
         <Fragment>
@@ -230,9 +230,9 @@ const ActaCreatePage = () => {
                 </div>
 
                 <div
-                    style={
+                    /* style={
                         dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-                    }
+                    } */
                 >
                     <div className="container-form-grid mt-24px">
                         <div className="container-form padding-form">
@@ -244,8 +244,15 @@ const ActaCreatePage = () => {
                                 titleMessageModalNoResult="Registro no existente"
                                 isShowModal={true}
                             />
+                            
+                               
+                            
 
-                            <h1>prueba</h1>
+                            <h1>Totales</h1>
+
+                           
+                          
+         
 
                         </div>
                     </div>

@@ -40,6 +40,60 @@ export default function useActaCreate() {
     } = useForm<IActa>({ resolver });
 
     
+    
+    const calculateTotals = (items) => {
+        let totalQuantityPeriod1 = 0;
+        let totalValuePeriod1 = 0;
+        let totalQuantityPeriod2 = 0;
+        let totalValuePeriod2 = 0;
+        let totalCostBillsOperation = 0;
+        let totalNet= 0;
+        let totalFinancialOperatorCommission= 0;
+        let totalResourcesCredit= 0;
+        
+        items.forEach(item => {
+
+            const quantityPeriod1 = parseInt(item.averageCost?.quantityPeriod1 || '0', 10);
+            const valuePeriod1 = parseInt(item.averageCost?.valuePeriod1 || '0', 10);
+            const quantityPeriod2 = parseInt(item.averageCost?.quantityPeriod1 || '0', 10);
+            const valuePeriod2 = parseInt(item.averageCost?.valuePeriod1 || '0', 10);
+            const costBillsOperation = parseInt(item.costBillsOperation || '0', 10);
+            const net = parseInt(item.net || '0', 10);
+            const financialOperatorCommission = parseInt(item.financialOperatorCommission || '0', 10);
+            const resourcesCredit = parseInt(item.resourcesCredit || '0', 10);
+            
+
+            totalQuantityPeriod1 += isNaN(quantityPeriod1) ? 0 : quantityPeriod1;
+            totalValuePeriod1 += isNaN(valuePeriod1) ? 0 : valuePeriod1;
+
+            totalQuantityPeriod2 += isNaN(quantityPeriod2) ? 0 : quantityPeriod2;
+            totalValuePeriod2 += isNaN(valuePeriod2) ? 0 : valuePeriod2;
+
+            totalCostBillsOperation += isNaN(costBillsOperation) ? 0 : costBillsOperation;
+            
+            totalNet += isNaN(net) ? 0 : net;
+
+            totalFinancialOperatorCommission += isNaN(financialOperatorCommission) ? 0 : financialOperatorCommission;
+            
+            totalResourcesCredit += isNaN(resourcesCredit) ? 0 : resourcesCredit;
+        });
+    
+        return {
+            totalQuantityPeriod1,
+            totalValuePeriod1,
+            totalQuantityPeriod2,
+            totalValuePeriod2, 
+            totalCostBillsOperation,
+            totalNet,
+            totalFinancialOperatorCommission,
+            totalResourcesCredit            
+        };
+    };  
+    
+    
+    const totals = calculateTotals(dataGridItems);
+    console.log('Totals:', totals);   
+    
 
 
     const onsubmitItem = handleSubmit((data: IActa) => {

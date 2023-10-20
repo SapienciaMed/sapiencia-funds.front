@@ -23,7 +23,8 @@ export interface IMasterActivityFilter {
 export interface IProgramTypes {
     id?: number;
     name?: string;
-    typeMasterList?: ITypeMaster
+    typeMasterList?: ITypeMaster;
+    description?: string
 }
 
 export interface ITypeMaster {
