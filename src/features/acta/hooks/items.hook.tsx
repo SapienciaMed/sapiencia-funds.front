@@ -9,9 +9,10 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import useVotingItemApi from "../../voting-results/hooks/voting-items-api.hooks";
 import useActaApi from "./acta-api.hook";
 import { IActa } from "../../../common/interfaces/acta.interface";
+import { v4 as uuidv4 } from 'uuid';
 
 
-export default function useActaItems(action, acta: IActa) {
+export default function useActaItems(action, acta) {
 
     const resolver = useYupValidationResolver(createActas);
 
@@ -33,7 +34,7 @@ export default function useActaItems(action, acta: IActa) {
 
 
     const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
-
+    console.log("action",action)
 
     const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
@@ -49,10 +50,10 @@ export default function useActaItems(action, acta: IActa) {
 
     const handleSelectChange = (event) => {
         const { value } = event.target;
-        console.log('u');  // Este es el nuevo valor seleccionado
+        //console.log('u');  
     };
 
-
+    //capturar el value de los select
     const selectedFound = watch('found');
     const selectedLine = watch('line');
     const selectedProgram = watch('program');
@@ -109,6 +110,7 @@ export default function useActaItems(action, acta: IActa) {
     const onsubmitAddItem = handleSubmit((data: IActaItems) => {        
         if (data) {
             dataGridItems.push({
+                ident: uuidv4(),
                 found: selectedLabelFound,
                 line: selectedLabelLine,
                 program: selectedLabelProgram,
@@ -125,6 +127,8 @@ export default function useActaItems(action, acta: IActa) {
                     valuePeriod2: data.valuePeriod2,
                 }                                
             });
+
+            console.log('ids',dataGridItems)
             
             setMessage({
                 OkTitle: "Aceptar",
@@ -251,6 +255,18 @@ export default function useActaItems(action, acta: IActa) {
                 }
             })
     }, []);
+
+
+
+    //editar items al crear actas
+
+    if (action === "edit") {
+        console.log('estas en el editar',acta)
+        useEffect(() => {
+            if (!acta) return; 
+            setValue("subtotalVigency", acta.subtotalVigency);
+        }, [acta]);
+    }
 
 
 

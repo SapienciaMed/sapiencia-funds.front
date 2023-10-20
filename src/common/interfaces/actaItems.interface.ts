@@ -25,5 +25,6 @@ export interface IActaItems {
         valuePeriod2?: string;
     };
     //idActa: number;
+    ident?: string;
 }
 

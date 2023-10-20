@@ -92,7 +92,7 @@ export default function useActaCreate() {
     
     
     const totals = calculateTotals(dataGridItems);
-    console.log('Totals:', totals);   
+    //console.log('Totals:', totals);   
     
 
 

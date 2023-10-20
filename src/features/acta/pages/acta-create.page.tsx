@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
 import useActaCreate from "../hooks/acta-create.hook";
 import useActaItems from "../hooks/items.hook";
@@ -9,16 +9,18 @@ import BasicTableComponent from "../../../common/components/basic-table.componen
 
 import { TreeTable } from 'primereact/treetable';
 import { Column } from 'primereact/column';
+import ItemsCreatePage from "./items-create.page";
+import { AppContext } from "../../../common/contexts/app.context";
         
 
 
 const ActaCreatePage = () => { 
 
-
+    const {  setMessage } = useContext(AppContext);
 
     const { errors, register, onsubmitItem, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary } = useActaCreate();
 
-    console.log("asi llegan los datos", datos)
+   // console.log("asi llegan los datos", datos)
 
     const tableColumns: ITableElement<IActaItems>[] = [
         {
@@ -90,12 +92,30 @@ const ActaCreatePage = () => {
 
     const tableActions: ITableAction<IActaItems>[] = [
         {
+            icon: "Edit",
+            onClick: (row) => { 
+                //console.log(row.ident)
+
+                setMessage({
+                    show: true,
+                    title: "Editar ítem",
+                    description: <ItemsCreatePage acta={row} action={"edit"} />,
+                    background: true,
+                    size: "items",
+                    items: true,
+                    onOk() {
+                        setMessage({});
+                    },
+                });
+            },
+        },
+        {
             icon: "Delete",
             onClick: (row) => { },
         }
     ];
 
-    console.log('datos',dataGridItems)
+    //console.log('datos',dataGridItems)
     
 
     return (
