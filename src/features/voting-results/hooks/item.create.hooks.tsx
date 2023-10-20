@@ -16,7 +16,7 @@ import { useVotingResults } from "./voting-create.hooks";
 
 
 export const useItemResults = (action, dataVoting) => {
-console.log("action ", action);
+
     const [sending, setSending] = useState(false);
     const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
 
@@ -33,7 +33,48 @@ console.log("action ", action);
 
 
 
-    const { createVoting } = useVotingService();
+  const { createVoting } = useVotingService();
+  
+  
+    useEffect(() => {
+      const aux = async () => {
+        //listado de departamentos
+        getListByParent({
+          grouper: "DEPARTAMENTOS",
+          parentItemCode: "COL",
+        }).then((response: ApiResponse<IGenericList[]>) => {
+          if (response && response?.operation?.code === EResponseCodes.OK) {
+            setDeparmentList(
+              response.data.map((item) => {
+                const list = {
+                  name: item.itemDescription,
+                  value: item.itemCode,
+                };
+                return list;
+              })
+            );
+          }
+        });
+
+        //listado de programas
+        const { data, operation } = await getProgramTypes();
+        if (operation.code === EResponseCodes.OK) {
+          const programList = data.map((item) => {
+            return {
+              name: item.name,
+              value: item.id,
+            };
+          });
+          setTypeProgram(programList);
+        } else {
+          setTypeProgram([]);
+        }
+
+        setIdItemEdit(action == "edit" ? dataVoting.ident : 0);
+      };
+
+      aux();
+    }, []);
 
     const {
       handleSubmit,
@@ -56,7 +97,6 @@ console.log("action ", action);
       },
     });
 
-console.log("dataVoting ", dataVoting);
     const { 
         getActivityProgram,
         getProgramTypes
@@ -80,7 +120,7 @@ console.log("dataVoting ", dataVoting);
 
     /*Functions*/
   const onSubmitCreateItem = handleSubmit((data: IItemCreateRegTable) => {
-    debugger
+    
       if (action == 'new') {
         if (data) {
           dataGrid.push({
@@ -117,7 +157,7 @@ console.log("dataVoting ", dataVoting);
         }
     }
     if (action == "edit") {
-      debugger;
+      
       if (dataGrid.find((obj) => obj.ident == idItemEdit)) {
         (dataGrid.find((obj) => obj.ident == idItemEdit).porcentaje456 =
           data.porcentaje456),
@@ -206,46 +246,6 @@ console.log("dataVoting ", dataVoting);
       }
     };
 
-    useEffect(() => {
-        const aux = async ()=> {
-            
-            //listado de departamentos
-            getListByParent({ grouper: "DEPARTAMENTOS", parentItemCode: "COL" })
-                .then((response: ApiResponse<IGenericList[]>) => {
-                    if (response && response?.operation?.code === EResponseCodes.OK) {
-                        setDeparmentList(
-                            response.data.map((item) => {
-                                const list = {
-                                    name: item.itemDescription,
-                                    value: item.itemCode,
-                                };
-                                return list;
-                            })
-                        );
-                    }
-            })
-            
-            //listado de programas
-            const { data, operation } = await getProgramTypes();
-            if (operation.code === EResponseCodes.OK) {
-            const programList = data.map((item) => {
-                return {
-                name: item.name,
-                value: item.id,
-                };
-            });
-                setTypeProgram(programList);
-            } else {
-                setTypeProgram([]);
-          }
-          
-          setIdItemEdit(action == 'edit' ? dataVoting.ident : 0);
-            
-        }
-
-        aux()
-        
-    }, []);
 
 
     //se cargan el listado de las actividades asociadas al programa
