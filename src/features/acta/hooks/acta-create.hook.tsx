@@ -21,6 +21,7 @@ export default function useActaCreate() {
 
     const [showTable, setShowTable] = useState(false);
     const [datos, setDatos] = useState<IActaItems[]>([]);
+    const [datosActa, setDatosActa] = useState<IActa>();
     const [status, setStatus] = useState([]);
     const [salary, setSalary] = useState([]);
   
@@ -98,6 +99,7 @@ export default function useActaCreate() {
     const onsubmitItem = handleSubmit((data: IActa) => {
         //console.log('datos',data)
         data.idStatus = 1;
+        setDatosActa(data)
         setMessage({
             show: true,
             title: "Agregar ítem",
@@ -161,7 +163,9 @@ export default function useActaCreate() {
         datos,
         setDataGridItems, 
         dataGridItems,
-        salary
+        salary,
+        datosActa
+        
 
         /* CancelFunction  */
     }

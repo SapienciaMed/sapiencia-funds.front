@@ -3,11 +3,13 @@ import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from 
 import useActaItems from "../hooks/items.hook";
 import TableGridComponent from "../../../common/components/tableGrid.component";
 import useActaCreate from "../hooks/acta-create.hook";
+import { IActa } from '../../../common/interfaces/acta.interface';
+import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 
 
-const ItemsCreatePage = ({ action, acta }) => {
+const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, actaItems?: IActaItems }) => {
 
-    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,costBillsOperation,handleInputChange,neto,financialOperatorCommission, resourcesCredit,programList } = useActaItems(action, acta);
+    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,costBillsOperation,handleInputChange,neto,financialOperatorCommission, resourcesCredit,programList } = useActaItems(action, acta,actaItems);
 
 
     return (

@@ -18,7 +18,7 @@ const ActaCreatePage = () => {
 
     const {  setMessage } = useContext(AppContext);
 
-    const { errors, register, onsubmitItem, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary } = useActaCreate();
+    const { errors, register, onsubmitItem, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary,datosActa } = useActaCreate();
 
    
 
@@ -95,7 +95,7 @@ const ActaCreatePage = () => {
                 setMessage({
                     show: true,
                     title: "Editar ítem",
-                    description: <ItemsCreatePage acta={row} action={"edit"} />,
+                    description: <ItemsCreatePage acta={datosActa} actaItems={row} action={"edit"} />,
                     background: true,
                     size: "items",
                     items: true,
@@ -109,9 +109,7 @@ const ActaCreatePage = () => {
             icon: "Delete",
             onClick: (row) => { },
         }
-    ];
-
-    console.log('datos',dataGridItems)
+    ];    
     
 
     return (

@@ -12,12 +12,21 @@ import { IActa } from "../../../common/interfaces/acta.interface";
 import { v4 as uuidv4 } from 'uuid';
 
 
-export default function useActaItems(action, acta) {
+export default function useActaItems(action, acta: IActa, actaItems: IActaItems) {
 
-    const resolver = useYupValidationResolver(createActas);
+    //contex
+    const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
+    //peticiones api
+    const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
+
+    //refs
     const tableComponentRef = useRef(null);
 
+    //Validaciones
+    const resolver = useYupValidationResolver(createActas);
+
+    //states
     const [showTable, setShowTable] = useState(false);
     const [datos, setDatos] = useState<IActaItems[]>([]);
     const [typeProgram, setTypeProgram] = useState([]);
@@ -31,12 +40,9 @@ export default function useActaItems(action, acta) {
     const [neto, setNet] = useState("0");
     const [financialOperatorCommission, setFinancialOperatorCommission] = useState("0");
     const [resourcesCredit, setResourcesCredit] = useState("0");
+    const [dataActa, setDataActa] = useState<IActa>(acta);
 
-
-    const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();  
-
-    const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
-
+    //form
     const {
         handleSubmit,
         register,
@@ -49,7 +55,6 @@ export default function useActaItems(action, acta) {
 
     const handleSelectChange = (event) => {
         const { value } = event.target;
-        //console.log('u');  
     };
 
     //capturar el value de los select
@@ -62,51 +67,59 @@ export default function useActaItems(action, acta) {
     const getSelectedLabel = (value, list) => {
         const selectedOption = list.find(option => option.value === value);
         return selectedOption ? selectedOption.name : null;
-    };    
+    };
 
     const selectedLabelFound = getSelectedLabel(selectedFound, foundList);
-    const selectedLabelLine = getSelectedLabel(selectedLine, lineList);  
-    const selectedLabelProgram = getSelectedLabel(selectedProgram, programList);  
-    const selectedLabelAnnouncement = getSelectedLabel(selectedAnnouncement, announcementList);  
-    const selectedLabelConcept = getSelectedLabel(selectedConcept, conceptList);  
-    
-    
+    const selectedLabelLine = getSelectedLabel(selectedLine, lineList);
+    const selectedLabelProgram = getSelectedLabel(selectedProgram, programList);
+    const selectedLabelAnnouncement = getSelectedLabel(selectedAnnouncement, announcementList);
+    const selectedLabelConcept = getSelectedLabel(selectedConcept, conceptList);
+
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-    
+
         if (name === "subtotalVigency" && value && acta.costsExpenses) {
-            const multiplicacion = parseInt(value) * acta.costsExpenses / 100;
-            const resta = parseInt(value) - multiplicacion;         
-    
-            setNet(resta.toString());
-            setCostBillsOperationt(multiplicacion.toString());
-            
+            const results = calculateValues(value, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
+            setNet(results.net);
+            setCostBillsOperationt(results.costBillsOperation);
+            setFinancialOperatorCommission(results.financialOperatorCommission);
+            setResourcesCredit(results.resourcesCredit);
         } else if (name === "subtotalVigency") {
             setCostBillsOperationt("0");
             setNet("0");
-        }
-        
-        // Se verifica si net es 0 antes de verificar selectedLabel y otros valores
-        if (parseInt(neto) == 0) {
             setFinancialOperatorCommission("0");
             setResourcesCredit("0");
-            return;  // Retorna temprano para evitar ejecutar el resto del código si net es 0
         }
-        
-       
-        
-        if (selectedLabelFound === 'MEJORES BACHILLERES' && (acta.financialOperation || acta.OperatorCommission)) {
-            const porcentajeOperacion = selectedLabelFound === 'MEJORES BACHILLERES' ? acta.financialOperation : acta.OperatorCommission;
-            const divisor = 1 + porcentajeOperacion;
-            const resultadoOperacion1 = parseInt(neto) - (parseInt(neto) / divisor);
-            const resultadoOperacion2 = parseInt(neto) / divisor;
-            setFinancialOperatorCommission(String(resultadoOperacion1));
-            setResourcesCredit(String(resultadoOperacion2));
-        }
-    };  
+    };
 
-    const onsubmitAddItem = handleSubmit((data: IActaItems) => { 
-        console.log('object',data)       
+    const calculateValues = (subtotalVigency, costsExpenses, selectedLabel, financialOperation, OperatorCommission) => {
+        const multiplicacion = parseInt(subtotalVigency) * costsExpenses / 100;
+        const resta = parseInt(subtotalVigency) - multiplicacion;
+        let financialOperatorCommission = "0";
+        let resourcesCredit = "0";
+
+        if (resta !== 0) {
+            if (selectedLabel === 'MEJORES BACHILLERES' && (financialOperation || OperatorCommission)) {
+                const porcentajeOperacion = selectedLabel === 'MEJORES BACHILLERES' ? financialOperation : OperatorCommission;
+                const divisor = 1 + porcentajeOperacion;
+                const resultadoOperacion1 = resta - (resta / divisor);
+                const resultadoOperacion2 = resta / divisor;
+                financialOperatorCommission = String(resultadoOperacion1);
+                resourcesCredit = String(resultadoOperacion2);
+            }
+        }
+        console.log(resta, financialOperatorCommission, resourcesCredit);
+        return {
+            net: resta.toString(),
+            costBillsOperation: multiplicacion.toString(),
+            financialOperatorCommission,
+            resourcesCredit
+        };
+    };
+
+
+    const onsubmitAddItem = handleSubmit((data: IActaItems) => {
         if (data) {
             const updatedItem = {
                 ident: uuidv4(),
@@ -126,26 +139,32 @@ export default function useActaItems(action, acta) {
                     valuePeriod1: data.valuePeriod1,
                     quantityPeriod2: data.quantityPeriod2,
                     valuePeriod2: data.valuePeriod2,
-                }                                
+                },
+                idFound: selectedFound,
+                idLine: selectedLine,
+                idProgram: selectedProgram,
+                idAnnouncement: selectedAnnouncement,
+                idConcept: selectedConcept
             };
-    
-            if (action === "edit" && acta) {     
+
+            if (actaItems) {
+                console.log(acta)
                 // Continuación de tu lógica de edición
-                const editingIndex = dataGridItems.findIndex(item => item.ident === acta.ident);              
-                if (editingIndex !== -1) {       
+                const editingIndex = dataGridItems.findIndex(item => item.ident === actaItems.ident);
+                if (editingIndex !== -1) {
                     setDataGridItems(prevDataGridItems => {
                         const updatedDataGridItems = [...prevDataGridItems];
                         updatedDataGridItems[editingIndex] = updatedItem;
                         return updatedDataGridItems;
                     });
                 }
-            } else {                
-                console.log('mandar a guardar',updatedItem)
+            } else {
+                //console.log('mandar a guardar',updatedItem)
                 setDataGridItems(prevDataGridItems => [...prevDataGridItems, updatedItem]);
             }
 
-           
-            
+
+
             setMessage({
                 OkTitle: "Aceptar",
                 description:
@@ -163,7 +182,7 @@ export default function useActaItems(action, acta) {
                     setMessage({});
                 },
             });
-        }       
+        }
     });
 
 
@@ -222,21 +241,10 @@ export default function useActaItems(action, acta) {
             .then((response) => {
                 if (response && response?.operation?.code === EResponseCodes.OK) {
 
-                    // const programData = response.data.filter(item => item.typeMasterList.name === 'Programa');
                     const foundData = response.data.filter(item => item.typeMasterList.name === 'Fondo');
                     const lineData = response.data.filter(item => item.typeMasterList.name === 'Línea');
                     const conceptData = response.data.filter(item => item.typeMasterList.name === 'Concepto');
-
-                    /*  setProgramList(
-                         programData.map((item) => {
-                             const list = {
-                                 name: item.name,
-                                 value: item.id,                               
-                             };
-                             return list;
-                         })
-                     ); */
-
+                   
                     setFoundList(
                         foundData.map((item) => {
                             const list = {
@@ -269,38 +277,43 @@ export default function useActaItems(action, acta) {
                     );
 
                 }
+
             })
+
+            setDataActa(acta)
     }, []);
 
 
 
     //editar items al crear actas
 
-  if (action === "edit") {        
-    console.log(acta)
-        useEffect(() => {
-            if (!acta) return; 
-            setValue("found", acta.found);
-            setValue("line", acta.line);
-            setValue("program", String(1));
-            setValue("announcement", acta.announcement);
-            setValue("concept", acta.concept);
-            setValue("costOperation", acta.costOperation);
-            setValue("subtotalVigency", acta.subtotalVigency);
+    useEffect(() => {
+        if (!actaItems) return;
+        if (action === "edit") {
+            console.log(actaItems.subtotalVigency, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
+            const results = calculateValues(actaItems.subtotalVigency, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
+            setNet(results.net);
+            setCostBillsOperationt(results.costBillsOperation);
+            setFinancialOperatorCommission(results.financialOperatorCommission);
+            setResourcesCredit(results.resourcesCredit);
+            
+            setValue("found", actaItems.idFound);
+            setValue("line", actaItems.idLine);
+            setValue("program", actaItems.idProgram);
+            setValue("announcement", actaItems.idAnnouncement);
+            setValue("concept", actaItems.idConcept);
+            setValue("costOperation", actaItems.costOperation);
+            setValue("subtotalVigency", actaItems.subtotalVigency);
             setValue("costBillsOperation", parseInt(costBillsOperation));
             setValue("net", parseInt(neto));
-            setValue("resourcesCredit", acta.resourcesCredit);
-            setValue("quantityPeriod1", acta.averageCost.quantityPeriod1);
-            setValue("valuePeriod1", acta.averageCost.valuePeriod1);
-            setValue("quantityPeriod2", acta.averageCost.quantityPeriod2);
-            setValue("valuePeriod2", acta.averageCost.valuePeriod2);
-        }, [acta]);
-    } 
-/* 
-financialOperatorCommission: parseInt(financialOperatorCommission),
-                net: parseInt(neto),
-                resourcesCredit: parseInt(resourcesCredit),
-*/
+            setValue("resourcesCredit", parseInt(resourcesCredit));
+            setValue("quantityPeriod1", actaItems.averageCost.quantityPeriod1);
+            setValue("valuePeriod1", actaItems.averageCost.valuePeriod1);
+            setValue("quantityPeriod2", actaItems.averageCost.quantityPeriod2);
+            setValue("valuePeriod2", actaItems.averageCost.valuePeriod2);
+            setValue("financialOperatorCommission", parseInt(financialOperatorCommission));           
+        }
+    }, [actaItems,acta]);
 
     return {
         control,

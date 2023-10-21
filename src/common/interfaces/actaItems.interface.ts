@@ -26,5 +26,10 @@ export interface IActaItems {
     };
     //idActa: number;
     ident?: string;
+    idFound?:string;
+    idLine?: string;
+    idProgram?: string;
+    idAnnouncement?: string;
+    idConcept?: string;
 }
 
