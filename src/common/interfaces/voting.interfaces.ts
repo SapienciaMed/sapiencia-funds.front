@@ -45,7 +45,9 @@ export interface IVotingResultGrid{
     productCode: number
     program: string
     activity: string,
-    ident: number
+    ident: number,
+    idActivity: number,
+    idProgram: number
 }
 
 export interface IItemCreateRegTable {
@@ -59,7 +61,19 @@ export interface IItemCreateRegTable {
     totalCost: number,
     amount: number,
     activityValue: number,
+}
 
+export interface IItemCreateForm {
+    directObject: string,
+    productCatalog: number
+    productCode: number
+    program: string
+    activity: string
+    porcentaje456: number,
+    porcentaje123: number,
+    totalCost: number,
+    amount: number,
+    activityValue: number,
 }
 
 export interface IVotinItemCreate {
