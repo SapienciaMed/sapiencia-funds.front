@@ -9,3 +9,9 @@ export interface ISocialization {
   portfolioCollections: number;
   description?: string;
 }
+
+export interface ISocializationSearch {
+  noProyect: number;
+  communeCode: string;
+  validity: number;
+}

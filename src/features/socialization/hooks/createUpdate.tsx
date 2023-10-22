@@ -58,22 +58,36 @@ export default function useSocializationCrud() {
   const getUpdateData = async () => {
     if (id) {
       const res = await getSocializationById(id);
-      setUpdateData(res.data);
+      if (res?.data[0]) setUpdateData(res?.data[0]);
       setLoading(false);
-
-      return { ...res.data };
+      return { ...res?.data[0] };
     }
     setLoading(false);
   };
 
   const onsubmitCreate = handleSubmit((data: ISocialization) => {
+    let buildData = { ...data };
     const newDate = new Date(data.socializationDate).toLocaleDateString(
       "en-GB"
     );
-    const buildData = {
-      ...data,
-      socializationDate: newDate,
-    };
+
+    if (id) {
+      buildData = {
+        ...data,
+        socializationDate: newDate,
+      };
+    } else {
+      const getCode: any = deparmetList.find(
+        (dep) => dep.name === data.communeCode
+      );
+
+      buildData = {
+        ...data,
+        communeCode: getCode.value,
+        socializationDate: newDate,
+      };
+    }
+
     setMessage({
       show: true,
       title: "Guardar información",
@@ -86,6 +100,8 @@ export default function useSocializationCrud() {
       background: true,
     });
   });
+
+  const actionCreacte = async () => {};
 
   const confirmSocializationCreate = async (data: ISocialization) => {
     const { data: dataResponse, operation } = updateData?.id

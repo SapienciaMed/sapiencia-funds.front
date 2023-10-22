@@ -104,7 +104,7 @@ export const Socialization = () => {
           <TableComponent
             title="Resultados disponibles socializados"
             ref={tableComponentRef}
-            url={`${process.env.urlApiFunds}/api/v1/activities/get-paginated`}
+            url={`${process.env.urlApiFunds}/api/v1/socialization/get-paginated`}
             columns={tableColumns}
             actions={tableActions}
             isShowModal={false}

@@ -42,7 +42,7 @@ export const searchSocialization = yup.object({
     .number()
     .typeError(MESSAGE_REQUIRED)
     .required(MESSAGE_REQUIRED),
-  commune: yup
+  communeCode: yup
     .string()
     .required(MESSAGE_REQUIRED)
     .typeError(MESSAGE_REQUIRED)

@@ -14,7 +14,10 @@ import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import useActivityService from "../../../common/hooks/activity-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
-import { ISocialization } from "../../../common/interfaces/socialization.interface";
+import {
+  ISocialization,
+  ISocializationSearch,
+} from "../../../common/interfaces/socialization.interface";
 import { searchSocialization } from "../../../common/schemas/socialization-schema";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { ApiResponse } from "../../../common/utils/api-response";
@@ -36,7 +39,7 @@ export default function useSearchSocialization() {
   const resolver = useYupValidationResolver(searchSocialization);
 
   const { register, handleSubmit, formState, control, watch, reset } =
-    useForm<ISocialization>({ resolver });
+    useForm<ISocializationSearch>({ resolver });
   const { getListByParent } = useGenericListService();
 
   const [deparmetList, setDeparmentList] = useState([]);
@@ -100,7 +103,7 @@ export default function useSearchSocialization() {
   const tableActions: ITableAction<ISocialization>[] = [
     {
       icon: "Edit",
-      onClick: (row) => navigate("/fondos/socialization/form/" + row.id),
+      onClick: (row) => navigate("/fondos/socializacion/form/" + row.id),
     },
   ];
 
@@ -110,10 +113,18 @@ export default function useSearchSocialization() {
 
   //servicio de busqueda
   const onSubmit = handleSubmit(async (data: ISocialization) => {
+    const getCode: any = deparmetList.find(
+      (dep) => dep.name === data.communeCode
+    );
+
+    const buildData = {
+      ...data,
+      communeCode: getCode.value,
+    };
     setshowTable(true);
 
     if (tableComponentRef.current) {
-      tableComponentRef.current.loadData(data);
+      tableComponentRef.current.loadData(buildData);
     }
   });
 
