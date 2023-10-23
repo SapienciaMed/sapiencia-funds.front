@@ -1,0 +1,180 @@
+.container-form-fields {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-size {
+  height: 40px;
+  min-height: 40px;
+}
+
+.text-29 {
+  font-size: 29px;
+}
+
+.text-24 {
+  font-size: 24px;
+}
+
+.text-17 {
+  font-size: 17px;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-start {
+  justify-content: start;
+}
+
+.justify-end {
+  justify-content: end;
+}
+
+.ml-24 {
+  margin-left: 24px;
+}
+
+.mr-24 {
+  margin-right: 24px;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+.padding-button {
+  padding: 12px 16px 12px 16px;
+}
+
+.w-140px {
+  width: 140px;
+}
+
+.firtsGrid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.secondGrid {
+  width: 76%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.containerInput {
+  width: 100%;
+  padding: 0px 10px 46px 0;
+}
+
+.container-btns {
+  display: flex;
+  justify-content: end;
+}
+
+.containerInputProyect {
+  width: 141px;
+  padding: 5px;
+}
+
+.containerCommune {
+  width: 263px;
+  padding: 5px;
+}
+
+.containerDate {
+  width: 232px;
+  padding: 5px;
+}
+
+.containerGruopValue {
+  width: 160px;
+  padding: 0 5px 0 0px;
+}
+
+.containerIndexAction {
+  display: flex;
+  justify-content: end;
+}
+
+.containerIndexForm {
+  display: flex;
+  justify-content: start;
+}
+
+.btnCreate {
+  color: #533893;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.plusBtn {
+  font-size: 16px;
+  border: 1px solid;
+  border-radius: 30px;
+  width: 20px;
+  text-align: center;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+@media (min-width: 200px) and (max-width: 640px) {
+  .core-container {
+    display: block;
+  }
+
+  .container-form {
+    margin: 1em;
+  }
+
+  .firtsGrid {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .secondGrid {
+    width: 100%;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .container-btns {
+    flex-direction: column-reverse;
+  }
+
+  .containerInputProyect {
+    width: 100%;
+    padding-bottom: 43px;
+  }
+
+  .containerCommune {
+    width: 100%;
+    padding-bottom: 43px;
+  }
+
+  .containerDate {
+    width: 100%;
+    padding-bottom: 43px;
+  }
+
+  .containerGruopValue {
+    width: 100%;
+    padding-bottom: 43px;
+  }
+
+  .containerIndexForm {
+    display: block;
+  }
+}
