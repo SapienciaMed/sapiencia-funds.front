@@ -38,8 +38,16 @@ export function useUploadService() {
   }
 
   async function GetInformationFiles(idFile: string): Promise<ApiResponse<IFiles[]>> {
+    try {
     const endpoint: string = `/files/get-by-project/${idFile}`;
-    return get(`${authUrl}${endpoint}`);
+    return await get(`${authUrl}${endpoint}`);
+  } catch (error) {
+    return new ApiResponse(
+      {} as IFiles[],
+      EResponseCodes.FAIL,
+      "Error no controlado"
+    );
+  }
 }
 
   return {

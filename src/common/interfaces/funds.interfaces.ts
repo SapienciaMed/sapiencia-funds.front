@@ -25,7 +25,7 @@ export interface IUploadInformation{
   validity: string;
   information: string;
   fileName?: string;
-  dateUpload: DateTime;
+  dateUpload: string;
 }
 
 export interface IWorker {

@@ -204,10 +204,15 @@ export default function useCreateUploadHook() {
       show: true,
       OkTitle: "Aceptar",
       onOk: () => {
-         
          if(uploadedFileName === ""){
-          const error = "Debe ingresar un documento Valido";
-          handleModalError(error, false);
+          console.log("Pintar mensaje de cargar archivo valido")
+          setMessage({
+            title: "Cargar archivo y notificar",
+            description: "El archivo no fue cargado. ",
+            show: true,
+            background: true,
+            OkTitle: "Aceptar"
+          });
         }else{
           handleCreateInformation(data);
         }
