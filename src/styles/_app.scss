@@ -132,6 +132,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
 @media (min-width: 768px) {
   .responsive-table {
+    // Propiedades originales
     flex-direction: row;
     border: none #ddd;
     border-width: 0 0 0 0;
@@ -140,25 +141,37 @@ div[id="single-spa-application:@sapiencia/funds"] {
     box-shadow: none;
     gap: 0;
     margin: 0;
+
+    // Propiedades nuevas
+    display: inline-block;
   }
 
   .title-table {
+    // Propiedades originales
     background-color: #f2f2f2;
     align-items: center;
     height: 3em;
     display: flex;
     justify-content: center;
+
+    // Propiedades nuevas
+    display: inline-block;
   }
 
   .table-row {
+    // Propiedades originales
     flex-direction: column;
     width: 100%;
     display: flex;
     justify-content: space-between;
     text-align: center;
+
+    // Propiedades nuevas
+    display: inline-block;
   }
 
   .table-column {
+    // Propiedades originales
     padding: 8px;
     font-weight: normal;
   }

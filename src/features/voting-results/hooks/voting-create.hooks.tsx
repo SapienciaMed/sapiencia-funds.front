@@ -59,7 +59,7 @@ export const useVotingResults = () => {
 
 
     const addItem = handleSubmit((data: IVotingCreate) => { 
-        console.log("data en agregar item ", data)
+
         if (data.communeNeighborhood && data.numberProject && data.ideaProject && data.validity) {
             setMessage({
               show: true,

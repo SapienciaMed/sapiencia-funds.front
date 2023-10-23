@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { EDirection } from "../../constants/input.enum";
 import { LabelComponent } from "./label.component";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { Dropdown } from 'primereact/dropdown';
+import { Dropdown } from "primereact/dropdown";
 
 interface IDropdownProps {
-  name: string,
-  value: string
+  name: string;
+  value: string;
 }
 
 interface ISelectProps<T> {
@@ -16,16 +16,17 @@ interface ISelectProps<T> {
   placeholder?: string;
   data?: Array<IDropdownProps>;
   value?: string;
-  label?: string;
+  label?: string | React.JSX.Element;
   classNameLabel?: string;
   direction?: EDirection;
   children?: React.JSX.Element | React.JSX.Element[];
   errors?: FieldErrors<any>;
   setValue?: React.Dispatch<any>;
+  disabled?: boolean;
   stateProps?: {
-    state: any,
-    setState: React.Dispatch<any>
-  }
+    state: any;
+    setState: React.Dispatch<any>;
+  };
 }
 
 function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
@@ -47,18 +48,28 @@ function SelectElement({
   value,
   register,
   setValue,
-  stateProps
+  stateProps,
+  disabled,
 }): React.JSX.Element {
   const [selectedCity, setSelectedCity] = useState(value);
   const registerProp = register ? register : () => {};
   return (
-    <Dropdown {...registerProp(idInput)} value={stateProps ? stateProps.state : selectedCity} onChange={(e) =>{ if (setValue) {
-      setValue(e.value);
-      setSelectedCity(e.value)
-    }
-    stateProps ? stateProps.setState(e.value) : setSelectedCity(e.value);
-  }} options={data} optionLabel="name" 
-      placeholder={placeholder} className={className} />
+    <Dropdown
+      {...registerProp(idInput)}
+      value={stateProps ? stateProps.state : selectedCity}
+      onChange={(e) => {
+        if (setValue) {
+          setValue(e.value);
+          setSelectedCity(e.value);
+        }
+        stateProps ? stateProps.setState(e.value) : setSelectedCity(e.value);
+      }}
+      options={data}
+      optionLabel="name"
+      placeholder={placeholder}
+      className={className}
+      disabled={disabled}
+    />
   );
 }
 
@@ -75,7 +86,8 @@ export function SelectComponentOld({
   children,
   errors = {},
   stateProps,
-  setValue
+  disabled,
+  setValue,
 }: ISelectProps<any>): React.JSX.Element {
   return (
     <div
@@ -91,7 +103,17 @@ export function SelectComponentOld({
         classNameLabel={classNameLabel}
       />
       <div>
-        <SelectElement idInput={idInput} className={className} setValue={setValue} placeholder={placeholder} data={data} value={value} register={register} stateProps={stateProps}/>
+        <SelectElement
+          idInput={idInput}
+          className={className}
+          setValue={setValue}
+          placeholder={placeholder}
+          data={data}
+          value={value}
+          register={register}
+          stateProps={stateProps}
+          disabled={disabled}
+        />
         {errors[idInput]?.message && <span className="icon-error"></span>}
       </div>
       {errors[idInput]?.message && (

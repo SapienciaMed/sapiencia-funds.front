@@ -22,6 +22,7 @@ interface IDateProps<T> {
   maxDate?: Date;
   minDate?: Date;
   fieldArray?: boolean;
+  value?: string;
 }
 
 function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
@@ -51,7 +52,8 @@ export function DatePickerComponent({
   dateFormat,
   disabled,
   disabledDates,
-  disabledDays
+  value,
+  disabledDays,
 }: IDateProps<any>): React.JSX.Element {
   const messageError = () => {
     const keysError = idInput.split(".");
@@ -81,10 +83,11 @@ export function DatePickerComponent({
         idInput={idInput}
         classNameLabel={classNameLabel}
       />
-      <div>
+      <div className="flex-container-input">
         <Controller
           name={idInput}
           control={control}
+          defaultValue={value}
           render={({ field }) => (
             <Calendar
               id={field.name}

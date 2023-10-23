@@ -12,7 +12,7 @@ interface IInputProps<T> {
   className?: string;
   placeholder?: string;
   value?: string;
-  defaultValue?: string;
+  defaultValue?: string | number;
   label?: string | React.JSX.Element;
   classNameLabel?: string;
   direction?: EDirection;
