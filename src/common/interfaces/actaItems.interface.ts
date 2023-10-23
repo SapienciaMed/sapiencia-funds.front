@@ -4,8 +4,7 @@ export interface IActaItems {
     line?: string;
     announcement?: string;
     concept?: string;
-    costOperation?: string;
-    periods?: string;
+    costOperation?: string;   
     subtotalVigency?: number;
     costBillsOperation?: number;
     net?: number;
@@ -18,7 +17,7 @@ export interface IActaItems {
     quantityPeriod2?: string;
     valuePeriod2?: string;
 
-    averageCost?: {
+    periods?: {
         quantityPeriod1?: string;
         valuePeriod1? : string;
         quantityPeriod2?: string;

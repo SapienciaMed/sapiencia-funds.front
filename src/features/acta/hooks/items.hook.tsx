@@ -120,6 +120,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
 
 
     const onsubmitAddItem = handleSubmit((data: IActaItems) => {
+        console.log(data)
         if (data) {
             const updatedItem = {
                 ident: uuidv4(),
@@ -134,7 +135,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 financialOperatorCommission: parseInt(financialOperatorCommission),
                 net: parseInt(neto),
                 resourcesCredit: parseInt(resourcesCredit),
-                averageCost: {
+                periods: {
                     quantityPeriod1: data.quantityPeriod1,
                     valuePeriod1: data.valuePeriod1,
                     quantityPeriod2: data.quantityPeriod2,
@@ -307,10 +308,10 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
             setValue("costBillsOperation", parseInt(costBillsOperation));
             setValue("net", parseInt(neto));
             setValue("resourcesCredit", parseInt(resourcesCredit));
-            setValue("quantityPeriod1", actaItems.averageCost.quantityPeriod1);
-            setValue("valuePeriod1", actaItems.averageCost.valuePeriod1);
-            setValue("quantityPeriod2", actaItems.averageCost.quantityPeriod2);
-            setValue("valuePeriod2", actaItems.averageCost.valuePeriod2);
+            setValue("quantityPeriod1", actaItems.periods.quantityPeriod1);
+            setValue("valuePeriod1", actaItems.periods.valuePeriod1);
+            setValue("quantityPeriod2", actaItems.periods.quantityPeriod2);
+            setValue("valuePeriod2", actaItems.periods.valuePeriod2);
             setValue("financialOperatorCommission", parseInt(financialOperatorCommission));           
         }
     }, [actaItems,acta]);

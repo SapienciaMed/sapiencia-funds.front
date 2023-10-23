@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
+import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useActaCreate from "../hooks/acta-create.hook";
 import useActaItems from "../hooks/items.hook";
 import TableGridComponent from "../../../common/components/tableGrid.component";
@@ -7,8 +7,6 @@ import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 
-import { TreeTable } from 'primereact/treetable';
-import { Column } from 'primereact/column';
 import ItemsCreatePage from "./items-create.page";
 import { AppContext } from "../../../common/contexts/app.context";
         
@@ -18,7 +16,7 @@ const ActaCreatePage = () => {
 
     const {  setMessage } = useContext(AppContext);
 
-    const { errors, register, onsubmitItem, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary,datosActa } = useActaCreate();
+    const { errors, register, onsubmitCreate, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary,datosActa,control,projectList,projectMeta,vigency1,addItem } = useActaCreate();
 
    
 
@@ -48,19 +46,19 @@ const ActaCreatePage = () => {
             header: "Costo promedio",
         },
         {
-            fieldName: "averageCost.quantityPeriod1",
+            fieldName: "periods.quantityPeriod1",
             header: "Cantidad",
         },
         {
-            fieldName: "averageCost.valuePeriod1",
+            fieldName: "periods.valuePeriod1",
             header: "Valor",
         },
         {
-            fieldName: "averageCost.quantityPeriod2",
+            fieldName: "periods.quantityPeriod2",
             header: "Cantidad",
         },
         {
-            fieldName: "averageCost.valuePeriod2",
+            fieldName: "periods.valuePeriod2",
             header: "Valor",
         },
         {
@@ -117,7 +115,7 @@ const ActaCreatePage = () => {
             <div className="title-area">
                 <p className="text-black huge ml-24px mt-20px mg-0">Acta</p>
             </div>
-            <FormComponent id="createActaForm" className="form" action={onsubmitItem}>
+            <FormComponent id="createActaForm" className="form" action={onsubmitCreate}>
                 <div className="container-form-grid-actas">
                     <div className="container-form padding-form">
                         <div>
@@ -138,16 +136,21 @@ const ActaCreatePage = () => {
                                     
                                     value="Pendiente aprobación"
                                 />
-                                <InputComponent
+                                {/*  */}
+                                <SelectComponent
                                     idInput={"numberProject"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Número proyecto"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
+                                    control={control}
                                     errors={errors}
-                                    placeholder={""}
+                                    data={projectList}
+                                    label={
+                                        <>
+                                            Número proyecto <span>*</span>
+                                        </>
+                                    }
+                                    className="select-basic medium select-disabled-list"
+                                    classNameLabel="text-black biggest"
+                                    filter={true}
+                                    placeholder="Seleccionar."
                                 />
                                 <InputComponent
                                     idInput={"periodVigency"}
@@ -233,15 +236,19 @@ const ActaCreatePage = () => {
                         </div>
                     </div>
                 </div>
+                    </FormComponent>
 
                 <div className="button-save-container-display-maestros margin-right0 mr-24px">
-                    <ButtonComponent
-                        form="createActaForm"
+                    <ButtonComponent                        
                         value="Agregar item"
-                        type="submit"
+                        action={() => {
+                            addItem();
+                          }}
                         className="button-save large disabled-black"
                     />
                 </div>
+
+               
 
                 <div
                     /* style={
@@ -275,7 +282,7 @@ const ActaCreatePage = () => {
                         <div>
                             <div className='grid-form-3-container mb-24px'>
                                 <InputComponent
-                                    idInput={"costsExpenses"}
+                                    idInput={"vigency1"}
                                     className="input-basic medium"
                                     typeInput="text"
                                     label="Verificador 1"
@@ -285,6 +292,7 @@ const ActaCreatePage = () => {
                                     errors={errors}
                                     placeholder={""}
                                     disabled
+                                    value={String(vigency1)}
                                 />
                                 <InputComponent
                                     idInput={"OperatorCommission"}
@@ -299,16 +307,17 @@ const ActaCreatePage = () => {
                                     disabled
                                 />
                                 <InputComponent
-                                    idInput={"financialOperation"}
+                                    idInput={"techo"}
                                     className="input-basic medium"
                                     typeInput="text"
-                                    label="Techo"
+                                    label="techo"
                                     register={register}
                                     classNameLabel="text-black biggest text-required"
                                     //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
                                     disabled
+                                    value={projectMeta}
                                 />
                             </div>
 
@@ -322,25 +331,25 @@ const ActaCreatePage = () => {
 
 
 
-            </FormComponent>
 
             <hr />
-
+            <br />
             <div className="button-save-container-display-maestros margin-right0 mr-24px">
                 <ButtonComponent
-                    form="createMasterForm"
+                    form="createActaForm"
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                //action={() => CancelFunction()}                    
+                    //action={() => CancelFunction()}                    
                 />
                 <ButtonComponent
-                    form="createMasterForm"
+                    form="createActaForm"
                     value="Guardar"
                     type="submit"
                     className="button-save large disabled-black"
                 />
             </div>
+            <br />
 
 
 
