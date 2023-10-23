@@ -15,6 +15,7 @@ import {
 } from "primereact/paginator";
 import { classNames } from "primereact/utils";
 import * as Icons from "react-icons/fa";
+import * as IconsBS from 'react-icons/bs';
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
 
@@ -172,6 +173,16 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <Icons.FaLink className="button grid-button button-link" />
       );
+      case "download":
+        return element == "name" ? (
+          "descargar"
+        ) : (
+          <IconsBS.BsDownload 
+          className="button grid-button button-download" 
+          style={{ color: '#533893' }}
+          />
+        );
+
     default:
       return "";
   }

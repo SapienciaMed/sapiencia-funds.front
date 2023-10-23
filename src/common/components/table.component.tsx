@@ -24,6 +24,7 @@ import useCrudService from "../hooks/crud-service.hook";
 import { EResponseCodes } from "../constants/api.enum";
 import { classNames } from "primereact/utils";
 import * as Icons from "react-icons/fa";
+import * as IconsBS from 'react-icons/bs';
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
 import { AppContext } from "../contexts/app.context";
@@ -282,6 +283,15 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <ImProfile className="button grid-button button-link" />
       );
+      case "download":
+        return element == "name" ? (
+          "descargar"
+        ) : (
+          <IconsBS.BsDownload 
+          className="button grid-button button-download" 
+          style={{ color: '#533893' }}
+          />
+        );
     default:
       return "";
   }
