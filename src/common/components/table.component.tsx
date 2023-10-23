@@ -24,6 +24,7 @@ import useCrudService from "../hooks/crud-service.hook";
 import { EResponseCodes } from "../constants/api.enum";
 import { classNames } from "primereact/utils";
 import * as Icons from "react-icons/fa";
+import * as IconsBS from 'react-icons/bs';
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
 import { AppContext } from "../contexts/app.context";
