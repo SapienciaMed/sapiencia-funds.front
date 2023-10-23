@@ -1,4 +1,3 @@
-import { ITypeMaster } from './funds.interfaces';
 import { DateTime } from "luxon";
 
 export interface IMasterActivity{
