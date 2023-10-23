@@ -1,0 +1,3 @@
+INSERT INTO `aurora-autenticacion-dev`.MAC_MENU_ACCESOS
+(MAC_CODAPP_APLICACION, MAC_NOMBRE, MAC_URL, MAC_CODMAC_SUPERIOR, MAC_ORDEN, MAC_INDICADOR_ACCION)
+VALUES(2, 'Socializacion', '/fondos/socializacion', 66, 20, '');
