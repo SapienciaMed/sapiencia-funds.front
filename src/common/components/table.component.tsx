@@ -282,6 +282,15 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <ImProfile className="button grid-button button-link" />
       );
+      case "download":
+        return element == "name" ? (
+          "descargar"
+        ) : (
+          <IconsBS.BsDownload 
+          className="button grid-button button-download" 
+          style={{ color: '#533893' }}
+          />
+        );
     default:
       return "";
   }

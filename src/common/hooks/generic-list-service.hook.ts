@@ -10,17 +10,9 @@ export function useGenericListService() {
 
   async function getListByGrouper(
     grouper: string
-  ): Promise<ApiResponse<IGenericList>> {
-    try {
-      const endpoint: string = `/get-by-grouper/${grouper}`;
-      return await get(`${listUrl}${endpoint}`);
-    } catch (error) {
-      return new ApiResponse(
-        {} as IGenericList,
-        EResponseCodes.FAIL,
-        "Error no controlado"
-      );
-    }
+  ): Promise<ApiResponse<IGenericList[]>> {
+    const endpoint: string = `/get-by-grouper/${grouper}`;
+    return await get(`${listUrl}${endpoint}`);
   }
 
   async function getListByGroupers(
