@@ -21,7 +21,7 @@ interface ISelectProps<T> {
   fieldArray?: boolean;
   filter?: boolean;
   emptyMessage?: string;
-  customClass?: string;
+  customClass?: string;  
 }
 
 function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
@@ -108,6 +108,7 @@ export function SelectComponent({
               filter={filter}
               emptyMessage={emptyMessage}
               emptyFilterMessage={emptyMessage}
+             
             />
           )}
         />

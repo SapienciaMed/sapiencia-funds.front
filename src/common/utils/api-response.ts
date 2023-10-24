@@ -6,7 +6,7 @@ interface IOperation {
 }
 
 interface IDataPaging {
-  total: number;
+  total?: number;
   perPage?: number;
   currentPage?: number;
   lastPage?: number;

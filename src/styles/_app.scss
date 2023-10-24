@@ -308,3 +308,59 @@ span.select-basic {
 .modal-container .modal-header p {
   font-size: 29px !important;
 }
+
+.modal-content-items {
+  text-align: center; 
+  flex-direction: column;
+  align-items: center;
+  height: 70%;
+  //margin-top: 1em;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+
+.flex-container {
+  display: flex;
+  flex-direction: row; 
+  flex-wrap: wrap;
+  margin-right: 8px; 
+}
+
+.container-form-grid-actas {
+  flex: 1; /* Ocupa todo el espacio disponible, dividido equitativamente */
+}
+
+/* Punto de interrupción para pantallas pequeñas */
+@media (max-width: 768px) {
+  .flex-container {
+      flex-direction: column; /* Alineación vertical en pantallas pequeñas */
+  }
+
+  .container-form-grid-actas {
+      width: 100%; /* Ocupa el 100% del ancho en pantallas pequeñas */
+  }
+}
+
+.label-container {
+  display: flex;
+  align-items: center; /* Alinea los elementos verticalmente en el centro */
+}
+
+
+.exmaple-1{
+display: flex;
+padding: var(--spacing-spacing-0, 0px);
+justify-content: center;
+align-items: flex-end;
+gap: var(--spacing-spacing-0, 0px);
+align-self: stretch;
+
+border-radius: var(--spacing-spacing-0, 0px);
+border: 1px solid var(--border-table, #F2F2F2);
+}
+
+
+
+
+

@@ -13,6 +13,7 @@ export interface IMessage {
   cancelTitle?: string;
   OkButtonStyle?: string;
   cancelButtonStyle?: string;
+  items?: boolean;
   onOk?: () => void;
   onCancel?: () => void;
   onClose?: () => void;
@@ -24,6 +25,9 @@ export interface IGenericList {
   itemCode: string;
   itemDescription: string;
   additionalFields?: object
+}
+export interface ISalaryMin {  
+  value: string;  
 }
 
 export interface IAdditionalField {

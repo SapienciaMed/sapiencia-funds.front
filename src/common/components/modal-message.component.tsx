@@ -37,7 +37,7 @@ function ModalMessageComponent(): React.JSX.Element {
           </button>
           <p>{message?.title}</p>
         </div>
-        <div className="modal-content">
+        <div className={` ${message.items ? "modal-content-items" : "modal-content"}`}>
           {typeof message.description != "string" ? (
             message?.description
           ) : (

@@ -12,6 +12,7 @@ import MasterActivityRoutes from "./features/master-activity/master-activity-rou
 import UploadInformationRoutes from "./features/upload-information/upload-information-routes";
 import useAppCominicator from "./common/hooks/app-communicator.hook";
 import MasterRoutes from "./features/master/master-routes";
+import ActaRoutes from "./features/acta/acta-routes";
 import Socialization from "./features/socialization";
 
 function App() {
@@ -45,10 +46,13 @@ function App() {
                 path={"/fondos/maestro/*"}
                 element={<MasterActivityRoutes />}
               />
-              <Route path={"/fondos/maestros/*"} element={<MasterRoutes />} />
               <Route
-                path={"/fondos/cargar-informacion/*"}
-                element={<UploadInformationRoutes />}
+                path={"/fondos/maestros/*"}
+                element={<MasterRoutes />}
+              />
+              <Route
+                path={"/fondos/acta/*"}
+                element={<ActaRoutes />}
               />
             </Routes>
           </Suspense>

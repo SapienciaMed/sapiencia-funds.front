@@ -22,6 +22,13 @@ export interface IMasterActivityFilter {
 export interface IProgramTypes {
     id?: number;
     name?: string;
+    typeMasterList?: ITypeMaster;
+    description?: string
+}
+
+export interface ITypeMaster {
+    id?: number;
+    name?: string;    
 }
 
 export interface IUploadInformation{
