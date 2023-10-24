@@ -5,6 +5,7 @@ import { UploadComponent } from "../../../common/components/Form";
 import { FormComponent, SelectComponent, } from "../../../common/components/Form";
 //borrar
 import useSearchUploadHook from "../hooks/search-upload-information.hook";
+import useListData from "../hooks/list.hook";
 
 
 const UploadCreatePage = (): React.JSX.Element => {
@@ -32,6 +33,7 @@ const UploadCreatePage = (): React.JSX.Element => {
     setUploadedFileName(fileName);
   };
 
+  const {vigencias} = useListData();
 
   return (
     <Fragment>
@@ -73,7 +75,7 @@ const UploadCreatePage = (): React.JSX.Element => {
                   idInput={"validity"}
                   control={control}
                   errors={errors}
-                  data={validity}
+                  data={vigencias}
                   label={
                     <>
                       Vigencia <span>*</span>
