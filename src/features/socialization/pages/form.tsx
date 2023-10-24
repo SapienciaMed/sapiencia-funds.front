@@ -77,7 +77,7 @@ const Form = () => {
                 <DatePickerComponent
                   value={
                     updateData?.socializationDate
-                      ? updateData?.socializationDate
+                      ? new Date(updateData?.socializationDate).toISOString()
                       : new Date().toISOString()
                   }
                   control={control}
