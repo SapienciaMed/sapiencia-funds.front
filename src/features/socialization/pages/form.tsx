@@ -92,6 +92,7 @@ const Form = () => {
                 <InputComponent
                   idInput={"validity"}
                   className="input-basic input-size"
+                  defaultValue="2023"
                   typeInput="text"
                   label="Vigencia"
                   disabled={updateData?.validity ? true : false}
