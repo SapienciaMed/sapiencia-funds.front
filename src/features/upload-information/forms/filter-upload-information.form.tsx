@@ -9,6 +9,7 @@ import {
 import { Control, FieldValues, FormState, UseFormRegister } from "react-hook-form";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { IUploadInformation } from "../../../common/interfaces/funds.interfaces";
+import useListData from "../hooks/list.hook";
 
 interface IPropsFilterUploadInformation {
   register: UseFormRegister<any>;
@@ -34,6 +35,8 @@ export const FilterUploadInformationForm = ({
   information
 }: IPropsFilterUploadInformation): React.JSX.Element => {
   const { errors, isValid } = formState;
+
+  const {vigencias} = useListData();
  
   return (
     <div className="container-sections-forms">
@@ -73,7 +76,7 @@ export const FilterUploadInformationForm = ({
                   idInput={"validity"}
                   control={control}
                   errors={errors}
-                  data={validity}
+                  data={vigencias}
                   label={
                     <>
                     Vigencia <span>*</span>

@@ -11,7 +11,7 @@ export const createSocialization = yup.object({
     .string()
     .required(MESSAGE_REQUIRED)
     .typeError(MESSAGE_REQUIRED)
-    .max(10, "Solo se permiten 10 caracteres"),
+    .max(50, "Solo se permiten 10 caracteres"),
   socializationDate: yup
     .string()
     .required(MESSAGE_REQUIRED)
@@ -21,7 +21,7 @@ export const createSocialization = yup.object({
     .string()
     .typeError(MESSAGE_REQUIRED)
     .required(MESSAGE_REQUIRED)
-    .max(5, "Solo se permiten 5 caracteres"),
+    .max(50, "Solo se permiten 5 caracteres"),
   financialPerformance: yup
     .number()
     .typeError(MESSAGE_REQUIRED)
@@ -46,6 +46,6 @@ export const searchSocialization = yup.object({
     .string()
     .required(MESSAGE_REQUIRED)
     .typeError(MESSAGE_REQUIRED)
-    .max(10, "Solo se permiten 10 caracteres"),
+    .max(50, "Solo se permiten 10 caracteres"),
   validity: yup.number().typeError(MESSAGE_REQUIRED).required(MESSAGE_REQUIRED),
 });

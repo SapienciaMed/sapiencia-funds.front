@@ -12,12 +12,12 @@ export const data: { value: string; name: string }[] = [
     name: "CCCP",
   },
   {
-    value: "JA-CP",
-    name: "JA-CP",
+    value: "JAL-CCCP",
+    name: "JAL Y CCCP",
   },
   {
     value: "OTRO",
-    name: "OTRO",
+    name: "Otro",
   },
 ];
 
