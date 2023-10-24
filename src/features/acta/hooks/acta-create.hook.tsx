@@ -13,11 +13,12 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import useAuthService from "../../../common/hooks/auth-service.hook";
 import { IUser } from "../../../common/interfaces/auth.interfaces";
+import { ICitation } from '../../../common/interfaces/citationInterface';
 
 export default function useActaCreate() {
     const resolver = useYupValidationResolver(createActas);
 
-    const { setMessage, authorization, setDataGridItems, dataGridItems } = useContext(AppContext);
+    const { setMessage, authorization, setDataGridItems, dataGridItems, setDataGridUsers, dataGridUsers } = useContext(AppContext);
     const tableComponentRef = useRef(null);
 
     const [showTable, setShowTable] = useState(false);
@@ -45,12 +46,12 @@ export default function useActaCreate() {
     const [userInfo, setUserInfo] = useState([]);
     const [activeUserList, setActiveUserList] = useState([]);
     const [times, setTimes] = useState([]);
-    
-    
-    const { getProjectsList, createActa, getHours   } = useActaApi();
+
+
+    const { getProjectsList, createActa, getHours } = useActaApi();
     const { getSalaryMin } = useGenericListService();
     const { getUser } = useAuthService();
-    
+
 
     const {
         handleSubmit,
@@ -215,46 +216,77 @@ export default function useActaCreate() {
                 }
             })
 
-            getWorkersActive();
-           
-            
-               
-            
-            getHours().then(result => setTimes(result));
-            
+        getWorkersActive();
+
+
+
+
+        getHours().then(result => setTimes(result));
+
     }, []);
-  
+
 
     const getWorkersActive = () => {
         getUser()
-          .then((response: ApiResponse<IUser[]>) => {
-            if (response && response?.operation?.code === EResponseCodes.OK) {
-              setUserInfo(response.data);
-              setActiveUserList(
-                response.data.map((item) => {
-                  const list = {
-                    name: `${
-                      item.numberDocument +
-                      " - " +
-                      item.names +
-                      " " +
-                      item.lastNames
-                    }`,
-                    value: item.id,
-                    email:item.email
-                  };
-                  return list;
-                })
-              );
-            }
-          })
-          .catch((err) => {});
-      };
-    
-     
+            .then((response: ApiResponse<IUser[]>) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setUserInfo(response.data);
+                    setActiveUserList(
+                        response.data.map((item) => {
+                            const list = {
+                                value: item.id,
+                                name: `${item.numberDocument +
+                                    " - " +
+                                    item.names +
+                                    " " +
+                                    item.lastNames
+                                    }`,
+                                email: item.email
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+            .catch((err) => { });
+    };
 
-    //console.log(userList)
-    const selectedProject = watch('numberProject');
+
+        const selectedProject = watch('numberProject');    
+        const selectedUser = watch('user');    
+        const selectedTime= watch('timeCitation');    
+        const selectedDate= watch('dateCitation');    
+
+        useEffect(() => {
+            // Verifica si todos los valores están definidos antes de ejecutar el push
+            if (selectedUser ) {
+                dataGridUsers.push({
+                    user: selectedUser,
+                    dateCitation: selectedDate,
+                    timeCitation: selectedTime
+                });
+                setMessage({
+                    OkTitle: "Aceptar",
+                    description: "Se ha agregado el item exitosamente",
+                    title: "Agregar Item",
+                    show: true,
+                    type: EResponseCodes.OK,
+                    background: true,
+                    onOk() {
+                        //reset();
+                        setMessage({});
+                    },
+                    onClose() {
+                        reset();
+                        setMessage({});
+                    },
+                });
+            }
+        }, [selectedUser]);
+             
+        
+
+
 
     useEffect(() => {
         const selectedProjectMeta = projectList[selectedProject]?.meta;
@@ -371,6 +403,7 @@ export default function useActaCreate() {
         }
     };
 
+    const handleInputChange = 0;
 
 
     return {
@@ -400,7 +433,9 @@ export default function useActaCreate() {
         totalResourcesCredit,
         subtotalVigency,
         activeUserList,
-        times
+        times,
+        handleInputChange,
+        dataGridUsers
         /* CancelFunction  */
     }
 }

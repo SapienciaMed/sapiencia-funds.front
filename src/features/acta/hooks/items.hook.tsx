@@ -148,8 +148,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 idConcept: selectedConcept
             };
 
-            if (actaItems) {
-                console.log(acta)
+            if (actaItems) {                
                 // Continuación de tu lógica de edición
                 const editingIndex = dataGridItems.findIndex(item => item.ident === actaItems.ident);
                 if (editingIndex !== -1) {

@@ -11,6 +11,7 @@ import ItemsCreatePage from "./items-create.page";
 import { AppContext } from "../../../common/contexts/app.context";
 import TotalTableComponent from "../../../common/components/total-table.component";
 import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
+import useCitacion from "../hooks/citacion.hook";
 
 
 
@@ -29,8 +30,9 @@ const ActaCreatePage = () => {
         totalResourcesCredit,
         subtotalVigency,
         activeUserList,
-        times
-    } = useActaCreate();
+        times,
+        dataGridUsers
+    } = useActaCreate(); 
 
 
 
@@ -123,6 +125,20 @@ const ActaCreatePage = () => {
         }
     ];
 
+    const tableColumnsUsers: ITableElement<IActaItems>[] = [
+        {
+            fieldName: "program",
+            header: "Aprobar",
+        },
+        {
+            fieldName: "found",
+            header: "Usuario"
+        },
+        {
+            fieldName: "line",
+            header: "Fecha de aprobación",
+        }
+    ];
 
     return (
         <Fragment>
@@ -261,8 +277,6 @@ const ActaCreatePage = () => {
                     className="button-save large disabled-black"
                 />
             </div>
-
-
 
             <div
             /* style={
@@ -464,25 +478,28 @@ const ActaCreatePage = () => {
                 </div>
 
 
-                <div className="container-form padding-form">
+                <div className="container-form padding-form" >
                     <div>
-                        <div className="title-area">
-                            <label className="text-black extra-large grid-span-4-columns mb-18px">Citar</label>
-                        </div>
-                        <div className='grid-form-3-container mb-24px'>
-                            <DatePickerComponent
-                                idInput="initialDate"
-                                control={control}
-                                label={"Fecha"}
-                                errors={errors}
-                                classNameLabel="text-black biggest medium"
-                                className="dataPicker-basic"
-                                placeholder="DD/MM/YYYY"
-                                dateFormat="dd/mm/yy"
-                            />
-                            
-                            <SelectComponent
-                                    idInput={"numberProject"}
+
+                        <div>
+                            <div className="title-area">
+                                <label className="text-black extra-large grid-span-4-columns mb-18px">Citar</label>
+                            </div>
+                            <div className='grid-form-3-container mb-24px'>
+                                <DatePickerComponent
+                                    idInput="dateCitation"
+                                    control={control}
+                                    label={"Fecha"}
+                                    errors={errors}
+                                    classNameLabel="text-black biggest medium"
+                                    className="dataPicker-basic"
+                                    placeholder="DD/MM/YYYY"
+                                    dateFormat="dd/mm/yy"
+                                    
+                                />
+
+                                <SelectComponent
+                                    idInput={"timeCitation"}
                                     control={control}
                                     errors={errors}
                                     data={times}
@@ -495,9 +512,10 @@ const ActaCreatePage = () => {
                                     classNameLabel="text-black biggest"
                                     filter={true}
                                     placeholder="Seleccionar."
+                                    
                                 />
-                            <SelectComponent
-                                    idInput={"numberProject"}
+                                <SelectComponent
+                                    idInput={"user"}
                                     control={control}
                                     errors={errors}
                                     data={activeUserList}
@@ -510,11 +528,32 @@ const ActaCreatePage = () => {
                                     classNameLabel="text-black biggest"
                                     filter={true}
                                     placeholder="Seleccionar."
+                                    
                                 />
+                            </div>
+
                         </div>
+
+
 
                     </div>
                 </div>
+
+                <div className="container-form-grid mt-24px">
+                    <div className="container-form padding-form">
+                        <BasicTableComponent
+                            ref={tableComponentRef}
+                            data={dataGridUsers}
+                            columns={tableColumnsUsers}
+                            actions={tableActions}
+                            titleMessageModalNoResult="Registro no existente"
+                            isShowModal={true}
+                            secondaryTitle={""}
+                        />
+                    </div>
+                </div>
+
+
 
 
             </div>
