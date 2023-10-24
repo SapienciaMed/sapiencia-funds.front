@@ -75,7 +75,11 @@ const Form = () => {
               </div>
               <div className="containerDate">
                 <DatePickerComponent
-                  value={updateData?.socializationDate}
+                  value={
+                    updateData?.socializationDate
+                      ? updateData?.socializationDate
+                      : new Date().toISOString()
+                  }
                   control={control}
                   classNameLabel="text-black text-required bold"
                   label={<>Fecha de socialización</>}
@@ -130,7 +134,7 @@ const Form = () => {
                 <InputComponent
                   idInput={"financialPerformance"}
                   className="input-basic input-size"
-                  typeInput="text"
+                  typeInput="number"
                   label="Rendimientos Financieros"
                   register={register}
                   classNameLabel="text-black biggest text-required bold "

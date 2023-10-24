@@ -5,19 +5,19 @@ import { ApiResponse } from "../../../common/utils/api-response";
 export const data: { value: string; name: string }[] = [
   {
     value: "JAL",
-    name: "JAL",
+    name: "Junta administradora local",
   },
   {
     value: "CCCP",
-    name: "CCCP",
+    name: "Consejo comunal y corregimental de planeación",
   },
   {
-    value: "JA-CP",
-    name: "JA-CP",
+    value: "JAl-CCCP",
+    name: "JAL Y CCCP",
   },
   {
     value: "OTRO",
-    name: "OTRO",
+    name: "Otro",
   },
 ];
 
