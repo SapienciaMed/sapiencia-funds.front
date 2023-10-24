@@ -6,15 +6,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ISocialization } from "../../../common/interfaces/socialization.interface";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
-import { ApiResponse } from "../../../common/utils/api-response";
-import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useSocializationApi } from "../service/api";
+import { data as dataGroup } from "../service/api";
 
 export default function useSocializationCrud() {
   const { setMessage, authorization } = useContext(AppContext);
   const { id } = useParams();
-  const { getListByParent } = useGenericListService();
+  const { getListByGrouper } = useGenericListService();
   const resolver = useYupValidationResolver(createSocialization);
   const { getSocializationById, editSocialization, createSocializationAction } =
     useSocializationApi();
@@ -38,21 +37,19 @@ export default function useSocializationCrud() {
   useEffect(() => {
     getUpdateData();
 
-    getListByParent({ grouper: "DEPARTAMENTOS", parentItemCode: "COL" }).then(
-      (response: ApiResponse<IGenericList[]>) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-          setDeparmentList(
-            response.data.map((item) => {
-              const list = {
-                name: item.itemDescription,
-                value: item.itemCode,
-              };
-              return list;
-            })
-          );
-        }
+    getListByGrouper("COMUNA_CORREGIMIENTO").then((response) => {
+      if (response.operation.code === EResponseCodes.OK) {
+        setDeparmentList(
+          response.data.map((item) => {
+            const list = {
+              name: item.itemDescription,
+              value: item.itemCode,
+            };
+            return list;
+          })
+        );
       }
-    );
+    });
   }, []);
 
   const getUpdateData = async () => {
@@ -81,10 +78,15 @@ export default function useSocializationCrud() {
         (dep) => dep.name === data.communeCode
       );
 
+      const getValueGroup: any = dataGroup.find(
+        (item) => item.name === data.valueGroup
+      );
+
       buildData = {
         ...data,
         communeCode: getCode.value,
         socializationDate: newDate,
+        valueGroup: getValueGroup.value,
       };
     }
 
@@ -100,8 +102,6 @@ export default function useSocializationCrud() {
       background: true,
     });
   });
-
-  const actionCreacte = async () => {};
 
   const confirmSocializationCreate = async (data: ISocialization) => {
     const { data: dataResponse, operation } = updateData?.id

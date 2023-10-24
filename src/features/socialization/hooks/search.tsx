@@ -40,26 +40,24 @@ export default function useSearchSocialization() {
 
   const { register, handleSubmit, formState, control, watch, reset } =
     useForm<ISocializationSearch>({ resolver });
-  const { getListByParent } = useGenericListService();
+  const { getListByGrouper } = useGenericListService();
 
   const [deparmetList, setDeparmentList] = useState([]);
 
   useEffect(() => {
-    getListByParent({ grouper: "DEPARTAMENTOS", parentItemCode: "COL" }).then(
-      (response: ApiResponse<IGenericList[]>) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-          setDeparmentList(
-            response.data.map((item) => {
-              const list = {
-                name: item.itemDescription,
-                value: item.itemCode,
-              };
-              return list;
-            })
-          );
-        }
+    getListByGrouper("COMUNA_CORREGIMIENTO").then((response) => {
+      if (response.operation.code === EResponseCodes.OK) {
+        setDeparmentList(
+          response.data.map((item) => {
+            const list = {
+              name: item.itemDescription,
+              value: item.itemCode,
+            };
+            return list;
+          })
+        );
       }
-    );
+    });
   }, []);
 
   const tableColumns: ITableElement<ISocialization>[] = [
