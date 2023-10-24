@@ -54,6 +54,10 @@ function App() {
                 path={"/fondos/acta/*"}
                 element={<ActaRoutes />}
               />
+              <Route
+                path={"/fondos/cargar-informacion/*"}
+                element={<UploadInformationRoutes/>}
+              />
             </Routes>
           </Suspense>
         </Router>
