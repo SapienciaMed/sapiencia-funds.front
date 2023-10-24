@@ -93,7 +93,7 @@ const VotingResultsPage = () => {
         // navigate(`/core/usuarios/editar/${row.id}`);
         setMessage({
           show: true,
-          title: "Agregar item",
+          title: "Editar item",
           // OkTitle: "Aceptar",
           // cancelTitle: "Cancelar",
           onOk() {

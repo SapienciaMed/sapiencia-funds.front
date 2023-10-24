@@ -12,91 +12,62 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import useVotingItemApi from "./voting-items-api.hooks";
 import { useVotingResults } from "./voting-create.hooks";
+// import { useVotingResultsSearch } from "./voting-search.hooks";
 
 
 
 export const useItemResults = (action, dataVoting) => {
 
-    const [sending, setSending] = useState(false);
-    const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
+  const [sending, setSending] = useState(false);
+  const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
 
-    const resolver = useYupValidationResolver(createItems);
-    const { getListByParent } = useGenericListService();
-    const [deparmetList, setDeparmentList] = useState([])
-    const [typeProgram, setTypeProgram] = useState([]);
-    const [programSelected, setProgramSelected] = useState();
-    const [activitySelected, setActivitySelected] = useState();
-    const [activity, setActivity] = useState([]);
-    const [idItemEdit, setIdItemEdit] = useState(0);
-  
-
-
-
-
+  const resolver = useYupValidationResolver(createItems);
+  const { getListByParent } = useGenericListService();
+  const [deparmetList, setDeparmentList] = useState([])
+  const [typeProgram, setTypeProgram] = useState([]);
+  const [programSelected, setProgramSelected] = useState(0);
+  const [activitySelected, setActivitySelected] = useState(0);
+  const [activity, setActivity] = useState([]);
+  const [idItemEdit, setIdItemEdit] = useState(0);
   const { createVoting } = useVotingService();
+  const { updateItemsVotingResults } = useVotingItemApi();
+  const [idVoting, setIdVoting] = useState('');
+  // const { onSubmitSearch } = useVotingResultsSearch();
   
   
-    useEffect(() => {
-      const aux = async () => {
-        //listado de departamentos
-        getListByParent({
-          grouper: "DEPARTAMENTOS",
-          parentItemCode: "COL",
-        }).then((response: ApiResponse<IGenericList[]>) => {
-          if (response && response?.operation?.code === EResponseCodes.OK) {
-            setDeparmentList(
-              response.data.map((item) => {
-                const list = {
-                  name: item.itemDescription,
-                  value: item.itemCode,
-                };
-                return list;
-              })
-            );
-          }
-        });
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+    setValue,
+    control,
+    watch
+  } = useForm<IItemCreateForm>({
+    resolver,
+    defaultValues: {
+      porcentaje456: action == "edit" ? dataVoting.porcentaje456 : null,
+      porcentaje123: action == "edit" ? dataVoting.porcentaje123 : null,
+      totalCost: action == "edit" ? dataVoting.totalCost : null,
+      amount: action == "edit" ? dataVoting.amount : null,
+      activityValue: action == "edit" ? dataVoting.activityValue : null,
+      productCode: action == "edit" ? dataVoting.productCode : null,
+      productCatalog: action == "edit" ? dataVoting.productCatalog : null,
+      directObject: action == "edit" ? dataVoting.directObject : null,
+    },
+  });
 
-        //listado de programas
-        const { data, operation } = await getProgramTypes();
-        if (operation.code === EResponseCodes.OK) {
-          const programList = data.map((item) => {
-            return {
-              name: item.name,
-              value: item.id,
-            };
-          });
-          setTypeProgram(programList);
-        } else {
-          setTypeProgram([]);
-        }
+  const selectedProgram = watch("program");
+  const selectedActivity = watch("activity");
 
-        setIdItemEdit(action == "edit" ? dataVoting.ident : 0);
-      };
+  
+  useEffect(() => {
+    setProgramSelected(Number(selectedProgram));
+    setActivitySelected(Number(selectedActivity));
+  }, [selectedProgram, selectedActivity])
 
-      aux();
-    }, []);
 
-    const {
-      handleSubmit,
-      register,
-      formState: { errors },
-      reset,
-    } = useForm<IItemCreateForm>({
-      resolver,
-      defaultValues: {
-        porcentaje456: action == "edit" ? dataVoting.porcentaje456 : null,
-        porcentaje123: action == "edit" ? dataVoting.porcentaje123 : null,
-        totalCost: action == "edit" ? dataVoting.totalCost : null,
-        amount: action == "edit" ? dataVoting.amount : null,
-        activityValue: action == "edit" ? dataVoting.activityValue : null,
-        activity: action == "edit" ? dataVoting.idActivity : null,
-        program: action == "edit" ? dataVoting.idProgram : null,
-        productCode: action == "edit" ? dataVoting.productCode : null,
-        productCatalog: action == "edit" ? dataVoting.productCatalog : null,
-        directObject: action == "edit" ? dataVoting.directObject : null,
-      },
-    });
-
+  
     const { 
         getActivityProgram,
         getProgramTypes
@@ -119,10 +90,11 @@ export const useItemResults = (action, dataVoting) => {
 
 
     /*Functions*/
-  const onSubmitCreateItem = handleSubmit((data: IItemCreateRegTable) => {
+  const onSubmitCreateItem = handleSubmit( async(data: IItemCreateRegTable)  => {
     
       if (action == 'new') {
         if (data) {
+          debugger
           dataGrid.push({
             porcentaje456: data.porcentaje456,
             porcentaje123: data.porcentaje123,
@@ -132,8 +104,8 @@ export const useItemResults = (action, dataVoting) => {
             directObject: data.directObject,
             productCatalog: data.productCatalog,
             productCode: data.productCode,
-            program: data.program,
-            activity: data.activity,
+            program: typeProgram.find(obj => obj.value == data.program).name ? typeProgram.find(obj => obj.value == data.program).name : '' ,
+            activity: activity.find( obj => obj.value == data.activity).name ? activity.find( obj => obj.value == data.activity).name : '',
             ident: Math.random(),
             idActivity: activitySelected,
             idProgram:  programSelected
@@ -161,28 +133,28 @@ export const useItemResults = (action, dataVoting) => {
       if (dataGrid.find((obj) => obj.ident == idItemEdit)) {
         (dataGrid.find((obj) => obj.ident == idItemEdit).porcentaje456 =
           data.porcentaje456),
-          (dataGrid.find(
-            (obj) => obj.ident == idItemEdit
-          ).porcentaje123 = data.porcentaje123),
+          (dataGrid.find((obj) => obj.ident == idItemEdit).porcentaje123 =
+            data.porcentaje123),
           (dataGrid.find((obj) => obj.ident == idItemEdit).totalCost =
             data.totalCost),
           (dataGrid.find((obj) => obj.ident == idItemEdit).amount =
             data.amount),
-          (dataGrid.find(
-            (obj) => obj.ident == idItemEdit
-          ).activityValue = data.activityValue),
-          (dataGrid.find(
-            (obj) => obj.ident == idItemEdit
-          ).directObject = data.directObject),
-          (dataGrid.find(
-            (obj) => obj.ident == idItemEdit
-          ).productCatalog = data.productCatalog),
+          (dataGrid.find((obj) => obj.ident == idItemEdit).activityValue =
+            data.activityValue),
+          (dataGrid.find((obj) => obj.ident == idItemEdit).directObject =
+            data.directObject),
+          (dataGrid.find((obj) => obj.ident == idItemEdit).productCatalog =
+            data.productCatalog),
           (dataGrid.find((obj) => obj.ident == idItemEdit).productCode =
             data.productCode),
           (dataGrid.find((obj) => obj.ident == idItemEdit).program =
-            data.program),
+            typeProgram.find((obj) => obj.value == data.program).name
+              ? typeProgram.find((obj) => obj.value == data.program).name
+              : ""),
           (dataGrid.find((obj) => obj.ident == idItemEdit).activity =
-            data.activity);
+            activity.find((obj) => obj.value == data.activity).name
+              ? activity.find((obj) => obj.value == data.activity).name
+              : "");
                   setMessage({
                     OkTitle: "Aceptar",
                     description: "Se ha editado el item exitosamente",
@@ -199,6 +171,51 @@ export const useItemResults = (action, dataVoting) => {
                       setMessage({});
                     },
                   });
+      }
+    }
+    if (action == "editVoting") {
+      const votingItesData = {
+        aimStraight: String(data.directObject),
+        productCatalogueDnp: Number(data.productCatalog),
+        codProductgueDnp: Number(data.productCode),
+        codPmaProgram: Number(programSelected),
+        codMtaTeacherActivity: Number(activitySelected),
+        amount: String(data.amount),
+        costTotal: String(data.totalCost),
+        percentage123: String(data.porcentaje123),
+        percentage456: String(data.porcentaje456),
+        codRtVotingResult: String(dataVoting.codRtVotingResult),
+      };
+      
+
+      const res = await updateItemsVotingResults(idItemEdit, votingItesData);
+
+      if (res && res?.operation?.code === EResponseCodes.OK) {
+        setMessage({
+          OkTitle: "Aceptar",
+          description: "Registro actualizado correctamente",
+          title: "Editar registro",
+          show: true,
+          type: EResponseCodes.OK,
+          background: true,
+          onOk() {
+            // onSubmitSearch();
+            setMessage({});
+          },
+          onClose() {
+            reset();
+            setMessage({});
+          },
+        });
+      } else {
+        setMessage({
+          type: EResponseCodes.FAIL,
+          title: "Editar registro",
+          description: "Ocurrió un error en el sistema",
+          show: true,
+          OkTitle: "Aceptar",
+          background: true,
+        });
       }
     }
     });
@@ -219,7 +236,7 @@ export const useItemResults = (action, dataVoting) => {
         setMessage({
           OkTitle: "Aceptar",
           description: "Se ha creado la votación en el sistema exitosamente",
-          title: "Crear Votación",
+          title: "Resultados de votación",
           show: true,
           type: EResponseCodes.OK,
           background: true,
@@ -247,6 +264,104 @@ export const useItemResults = (action, dataVoting) => {
     };
 
 
+  useEffect(() => {
+    const aux = async () => {
+      //listado de departamentos
+      getListByParent({
+        grouper: "DEPARTAMENTOS",
+        parentItemCode: "COL",
+      }).then((response: ApiResponse<IGenericList[]>) => {
+        if (response && response?.operation?.code === EResponseCodes.OK) {
+          setDeparmentList(
+            response.data.map((item) => {
+              const list = {
+                name: item.itemDescription,
+                value: item.itemCode,
+              };
+              return list;
+            })
+          );
+        }
+      });
+
+      //listado de programas
+      const { data, operation } = await getProgramTypes();
+      if (operation.code === EResponseCodes.OK) {
+        const programList = data.map((item) => {
+          return {
+            name: item.name,
+            value: item.id,
+          };
+        });
+        setTypeProgram(programList);
+      } else {
+        setTypeProgram([]);
+      }
+
+      setIdItemEdit(action == "edit" ? dataVoting.ident : 0);
+      
+      if (action == 'editVoting') {
+          setValue(
+            "porcentaje456", action == "edit" ? dataVoting.porcentaje456 : action == "editVoting" ? dataVoting.percentage456 : null
+          );
+          setValue(
+            "program", action == "edit" ? dataVoting.idProgram : action == "editVoting" ? Number(dataVoting.activiti.typesProgram.id) : null
+          );
+          setProgramSelected(Number(dataVoting.activiti.typesProgram.id));
+          setActivitySelected(Number(dataVoting.activiti.id));
+          setValue(
+            "activity", action == "edit" ? dataVoting.idActivity : action == "editVoting" ? Number(dataVoting.activiti.id) : null
+          );
+          setValue(
+            "porcentaje123", action == "edit" ? dataVoting.porcentaje123 : action == "editVoting" ? Number(dataVoting.percentage123) : null
+          );
+          setValue(
+            "totalCost", action == "edit" ? dataVoting.totalCost : action == "editVoting" ? Number(dataVoting.costTotal) : null
+          );
+          setValue(
+            "amount", action == "edit" ? dataVoting.amount : action == "editVoting" ? Number(dataVoting.amount) : null
+          );
+          setValue(
+            "activityValue", action == "edit" ? dataVoting.activityValue : action == "editVoting" ? Number(dataVoting.activiti.totalValue) : null
+          );
+          setValue(
+            "productCode", action == "edit" ? dataVoting.productCode : action == "editVoting" ? Number(dataVoting.codProductgueDnp) : null
+          );
+          setValue(
+            "productCatalog", action == "edit" ? dataVoting.productCatalog : action == "editVoting" ? Number(dataVoting.productCatalogueDnp) : null
+          );
+          setValue(
+            "directObject", action == "edit" ? dataVoting.directObject : action == "editVoting" ? Number(dataVoting.aimStraight) : null
+        );
+        setIdItemEdit(dataVoting.id);
+        setIdVoting(dataVoting.codRtVotingResult);
+      }
+      
+      if (action == 'new') {
+        setValue("porcentaje456", null);
+        setValue("program", '');
+        setValue("activity", '');
+        setValue("porcentaje123", null);
+        setValue("totalCost", null);
+        setValue("amount", null);
+        setValue("activityValue", null);
+        setValue("productCode", null);
+        setValue("productCatalog", null);
+        setValue("directObject", null);
+        reset();
+      }
+      if (action == 'edit') {
+         setValue(
+            "program", dataVoting.idProgram 
+          );
+          setProgramSelected(Number(dataVoting.idProgram));
+          setActivitySelected(Number(dataVoting.idActivity));
+          setValue("activity", dataVoting.idActivity);
+      }
+    };
+    aux();
+  }, []);
+
 
     //se cargan el listado de las actividades asociadas al programa
     useEffect(() => {
@@ -256,13 +371,13 @@ export const useItemResults = (action, dataVoting) => {
                 //listado de actividades
                 const { data, operation } = await getActivityProgram(programSelected);
                 if (operation.code === EResponseCodes.OK) {
-                const programList = data.map((item) => {
+                const activityList = data.map((item) => {
                     return {
                     name: item.name,
                     value: item.id,
                     };
                 });
-                    setActivity(programList);
+                    setActivity(activityList);
                 } else {
                     setActivity([]);
                 }   
@@ -292,6 +407,7 @@ export const useItemResults = (action, dataVoting) => {
       setIdItemEdit,
       activitySelected,
       setActivitySelected,
+      control,
     };
 };
 
