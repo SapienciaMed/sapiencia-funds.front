@@ -12,15 +12,15 @@ export interface IAuthorization {
 
 export interface IUser {
   id?: number;
-  names?: string;
-  lastNames?: string;
-  typeDocument?: string;
-  numberDocument?: string;
+  names: string;
+  lastNames: string;
+  typeDocument: string;
+  numberDocument: string;
+  email?:string;
   password?: string;
   userModify?: string;
   dateModify?: Date;
   userCreate?: string;
   dateCreate?: Date;
-  email?: string
 }
 

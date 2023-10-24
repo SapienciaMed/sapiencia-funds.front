@@ -10,6 +10,7 @@ import { IAuthorization } from "../interfaces/auth.interfaces";
 import { IMessage } from "../interfaces/global.interface";
 import {IVotingResultGrid} from "../interfaces/voting.interfaces"
 import { IActaItems } from "../interfaces/actaItems.interface";
+import { IEmail } from "../interfaces/funds.interfaces";
 
 interface IAppContext {
   authorization: IAuthorization;
@@ -25,6 +26,8 @@ interface IAppContext {
   setDataGrid: Dispatch<SetStateAction<Array<IVotingResultGrid>>>;
   dataGridItems: Array<IActaItems>;
   setDataGridItems: Dispatch<SetStateAction<Array<IActaItems>>>;
+  dataGridEmails: Array<IEmail>;
+  setDataGridEmails: Dispatch<SetStateAction<Array<IEmail>>>;
 }
 interface IProps {
   children: ReactElement | ReactElement[];
@@ -44,6 +47,9 @@ export const AppContext = createContext<IAppContext>({
   setDataGrid: () => {},
   dataGridItems: {} as Array<IActaItems>,
   setDataGridItems: () => {},
+  dataGridEmails: {} as Array<IEmail>,
+  setDataGridEmails: () => {},
+  
 });
 
 export function AppContextProvider({ children }: IProps) {
@@ -57,6 +63,7 @@ export function AppContextProvider({ children }: IProps) {
   const [disabledFields, setDisabledFields] = useState<boolean>(false);
   const [dataGrid, setDataGrid] = useState(Array<IVotingResultGrid>);
   const [dataGridItems, setDataGridItems] = useState(Array<IActaItems>);
+  const [dataGridEmails, setDataGridEmails] = useState(Array<IEmail>);
 
   // Metodo que verifica si el usuario posee permisos sobre un accion
   function validateActionAccess(indicator: string): boolean {
@@ -77,7 +84,9 @@ export function AppContextProvider({ children }: IProps) {
       setDataGrid,
       dataGrid,
       setDataGridItems,
-      dataGridItems
+      dataGridItems,
+      dataGridEmails,
+      setDataGridEmails
     };
   }, [
     message,

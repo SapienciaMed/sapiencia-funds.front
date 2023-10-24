@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, useFormState, useWatch } from "react-hook-form";
 import {ITableAction,ITableElement,} from "../../../common/interfaces/table.interfaces";
 import { IUser } from "../../../common/interfaces/auth.interfaces"
-import {IUploadInformation, IWorker} from "../../../common/interfaces/funds.interfaces";
+import {IEmail, IUploadInformation, IWorker} from "../../../common/interfaces/funds.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { AppContext } from "../../../common/contexts/app.context";
@@ -16,7 +16,7 @@ import axios from "axios";
 
 
 export default function useCreateUploadHook() {
-    const { setMessage } = useContext(AppContext);
+    const { setMessage, dataGridEmails, setDataGridEmails } = useContext(AppContext);
     const [showTable, setshowTable] = useState(false);
     const [activeWorkerList, setActiveWorkerList] = useState([]);
     const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
@@ -30,6 +30,8 @@ export default function useCreateUploadHook() {
     const navigate = useNavigate();
     const { getUser } = useAuthService();
     const { createUploadInformation, } = useUploadApi();
+    const [itemSave, setItemSave] = useState(Array<IEmail>);
+    const [selectedCodEmployment, setSelectedCodEmployment] = useState(""); // Estado para el valor seleccionado
     
     
     //Cargar usuarios del sistema
@@ -62,6 +64,10 @@ export default function useCreateUploadHook() {
       getWorkersActive();
     }, []);
     
+    const handleCodEmploymentChange = (value) => {
+      setSelectedCodEmployment(value); // Actualiza el valor seleccionado en el estado
+    };
+  
 
     const resolver = useYupValidationResolver(filterUploadInformationSchema);
    
@@ -98,6 +104,7 @@ export default function useCreateUploadHook() {
         });
       };
 
+
       const handleModalSuccess = () => {
         setMessage({
           title: "Carga de archivo y notificación",
@@ -117,6 +124,26 @@ export default function useCreateUploadHook() {
           background: true,
         });
       };
+
+      
+
+  //   // Cambio en el selector de usuario
+  //   const selectedProject = watch('codEmployment');
+
+  //   useEffect(() => {
+  //     const selectedProjectMeta = selectedCodEmployment[selectedProject]?.meta;
+  //     setSelectedCodEmployment(selectedProjectMeta);
+  //     //setValue("techo", projectMeta);
+  // }, [selectedProject, selectedCodEmployment]);
+
+  //     const EmailCreation = async (data: IEmail) => { 
+  //       dataGridEmails.map((e) => {
+  //         itemSave.push({
+  //           lastNames: e.lastNames,
+  //         });
+
+  //         });
+  //     }
 
 
       const handleCreateInformation = async (data: IUploadInformation) => {
@@ -241,14 +268,14 @@ return {
     showTable,
     tableComponentRef,
     setUserInfo,
-    //tableColumns,
-    //tableActions,
     activeWorkerList,
     redirectCancel,
     setFilesUploadData,
     filesUploadData,
     uploadFiles,
     activeUserList,
+    dataGridEmails,
     setUploadedFileName,
+    selectedCodEmployment
   };
 }
