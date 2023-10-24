@@ -348,6 +348,19 @@ span.select-basic {
 }
 
 
+.exmaple-1{
+display: flex;
+padding: var(--spacing-spacing-0, 0px);
+justify-content: center;
+align-items: flex-end;
+gap: var(--spacing-spacing-0, 0px);
+align-self: stretch;
+
+border-radius: var(--spacing-spacing-0, 0px);
+border: 1px solid var(--border-table, #F2F2F2);
+}
+
+
 
 
 

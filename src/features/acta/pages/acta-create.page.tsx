@@ -9,16 +9,25 @@ import BasicTableComponent from "../../../common/components/basic-table.componen
 
 import ItemsCreatePage from "./items-create.page";
 import { AppContext } from "../../../common/contexts/app.context";
-        
+import TotalTableComponent from "../../../common/components/total-table.component";
 
 
-const ActaCreatePage = () => { 
 
-    const {  setMessage } = useContext(AppContext);
+const ActaCreatePage = () => {
 
-    const { errors, register, onsubmitCreate, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary,datosActa,control,projectList,projectMeta,vigency1,addItem } = useActaCreate();
+    const { setMessage } = useContext(AppContext);
 
-   
+    const { errors, register, onsubmitCreate, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary, datosActa, control, projectList, projectMeta, vigency1, addItem,
+        totalQuantityPeriod1,
+        totalValuePeriod1,
+        totalQuantityPeriod2,
+        totalValuePeriod2,
+        totalCostBillsOperation,
+        totalNet,
+        totalFinancialOperatorCommission,
+        totalResourcesCredit } = useActaCreate();
+
+
 
     const tableColumns: ITableElement<IActaItems>[] = [
         {
@@ -80,14 +89,14 @@ const ActaCreatePage = () => {
         {
             fieldName: "financialOperatorCommission",
             header: "Comisión operador financiero",
-        }        
+        }
 
     ];
 
     const tableActions: ITableAction<IActaItems>[] = [
         {
             icon: "Edit",
-            onClick: (row) => { 
+            onClick: (row) => {
                 //console.log(row.ident)
 
                 setMessage({
@@ -107,8 +116,8 @@ const ActaCreatePage = () => {
             icon: "Delete",
             onClick: (row) => { },
         }
-    ];    
-    
+    ];
+
 
     return (
         <Fragment>
@@ -133,7 +142,7 @@ const ActaCreatePage = () => {
                                     //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
-                                    
+
                                     value="Pendiente aprobación"
                                 />
                                 {/*  */}
@@ -186,7 +195,7 @@ const ActaCreatePage = () => {
                                     //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
-                                    disabled                                    
+                                    disabled
                                 />
                             </div>
 
@@ -236,96 +245,218 @@ const ActaCreatePage = () => {
                         </div>
                     </div>
                 </div>
-                    </FormComponent>
+            </FormComponent>
 
-                <div className="button-save-container-display-maestros margin-right0 mr-24px">
-                    <ButtonComponent                        
-                        value="Agregar item"
-                        action={() => {
-                            addItem();
-                          }}
-                        className="button-save large disabled-black"
-                    />
-                </div>
+            <div className="button-save-container-display-maestros margin-right0 mr-24px">
+                <ButtonComponent
+                    value="Agregar item"
+                    action={() => {
+                        addItem();
+                    }}
+                    className="button-save large disabled-black"
+                />
+            </div>
 
-               
 
-                <div
-                    /* style={
-                        dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-                    } */
-                >
-                    <div className="container-form-grid mt-24px">
-                        <div className="container-form padding-form">
-                            <BasicTableComponent
-                                ref={tableComponentRef}
-                                data={dataGridItems}
-                                columns={tableColumns}
-                                actions={tableActions}
-                                titleMessageModalNoResult="Registro no existente"
-                                isShowModal={true}
-                            />
-                            
-                               
-                            
 
-                            <h1>Totales</h1>
-
-                           
-                          
-         
-
-                        </div>
-                    </div>
-
+            <div
+            /* style={
+                dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
+            } */
+            >
+                <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
-                        <div>
-                            <div className='grid-form-3-container mb-24px'>
-                                <InputComponent
-                                    idInput={"vigency1"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Verificador 1"
-                                    //register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
-                                    disabled
-                                    value={String(vigency1)}
-                                />
-                                <InputComponent
-                                    idInput={"OperatorCommission"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Verificador 2"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
-                                    disabled
-                                />
-                                <InputComponent
-                                    idInput={"techo"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="techo"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
-                                    disabled
-                                    value={projectMeta}
-                                />
-                            </div>
-
-                        </div>
+                        <BasicTableComponent
+                            ref={tableComponentRef}
+                            data={dataGridItems}
+                            columns={tableColumns}
+                            actions={tableActions}
+                            titleMessageModalNoResult="Registro no existente"
+                            isShowModal={true}
+                        />
                     </div>
-
-
                 </div>
+                <div className="container-form padding-form">
+                    <div>
+                    <div className="title-area">
+                                <label className="text-black extra-large grid-span-4-columns mb-18px">Totales</label>
+                            </div>
+                        <div className='grid-form-4-container mb-24px'>
+                            <InputComponent
+                                idInput={"tQuantity1"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Cantidad periodo 1"
+                                //register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={String(totalQuantityPeriod1)}
+                            />
+                            <InputComponent
+                                idInput={"tValue1"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Valor periodo 1"
+                                register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={String(totalValuePeriod1)}
+                            />
+                            <InputComponent
+                                idInput={"tQuantity2"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Cantidad periodo 2"
+                                register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={String(totalQuantityPeriod2)}
+                            />
+                              <InputComponent
+                                idInput={"tValue2"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Valor periodo 2"
+                                register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={String(totalValuePeriod2)}
+                            />
+                        </div>
+                        <div className='grid-form-3-container mb-24px'>
+                            <InputComponent
+                                idInput={"tQuantity1"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Subtotal vigencia"
+                                //register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={String(totalQuantityPeriod1)}
+                            />
+                            <InputComponent
+                                idInput={"OperatorCommission"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Costo y gasto de operación"
+                                register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                            />
+                            <InputComponent
+                                idInput={"tQuantity1"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Neto"
+                                register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={projectMeta}
+                            />                             
+                             
+                        </div>
+                        <div className='grid-form-2-container mb-24px'>
+                            <InputComponent
+                                idInput={"tQuantity1"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Recursos para el crédito"
+                                //register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={String(totalQuantityPeriod1)}
+                            />                            
+                            <InputComponent
+                                idInput={"tQuantity1"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Total comisión operador financiero"
+                                register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={projectMeta}
+                            />                             
+                             
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className="container-form padding-form">
+                    <div>
+                        <div className='grid-form-3-container mb-24px'>
+                            <InputComponent
+                                idInput={"vigency1"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Verificador 1"
+                                //register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={String(vigency1)}
+                            />
+                            <InputComponent
+                                idInput={"OperatorCommission"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Verificador 2"
+                                register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                            />
+                            <InputComponent
+                                idInput={"techo"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="techo"
+                                register={register}
+                                classNameLabel="text-black biggest text-required"
+                                //direction={EDirection.column}
+                                errors={errors}
+                                placeholder={""}
+                                disabled
+                                value={projectMeta}
+                            />
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
 
 
 
@@ -340,7 +471,7 @@ const ActaCreatePage = () => {
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                    //action={() => CancelFunction()}                    
+                //action={() => CancelFunction()}                    
                 />
                 <ButtonComponent
                     form="createActaForm"

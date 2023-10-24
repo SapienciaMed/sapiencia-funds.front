@@ -68,10 +68,10 @@ export default function useActaCreate() {
 
         items.forEach(item => {
 
-            const quantityPeriod1 = parseInt(item.averageCost?.quantityPeriod1 || '0', 10);
-            const valuePeriod1 = parseInt(item.averageCost?.valuePeriod1 || '0', 10);
-            const quantityPeriod2 = parseInt(item.averageCost?.quantityPeriod1 || '0', 10);
-            const valuePeriod2 = parseInt(item.averageCost?.valuePeriod1 || '0', 10);
+            const quantityPeriod1 = parseInt(item.periods?.quantityPeriod1 || '0', 10);
+            const valuePeriod1 = parseInt(item.periods?.valuePeriod1 || '0', 10);
+            const quantityPeriod2 = parseInt(item.periods?.quantityPeriod1 || '0', 10);
+            const valuePeriod2 = parseInt(item.periods?.valuePeriod1 || '0', 10);
             const costBillsOperation = parseInt(item.costBillsOperation || '0', 10);
             const net = parseInt(item.net || '0', 10);
             const financialOperatorCommission = parseInt(item.financialOperatorCommission || '0', 10);
@@ -119,12 +119,12 @@ export default function useActaCreate() {
     };
 
 
-    /* const totals = calculateTotals(dataGridItems);
-    console.log('Totals:', totals.vigency1);    */
-
+    
     useEffect(() => {
+        const totals = calculateTotals(dataGridItems);
+        console.log('Totals:', totals);    
         // Calcula los totales cada vez que dataGridItems cambie
-        calculateTotals(dataGridItems);
+        calculateTotals(dataGridItems);        
     }, [dataGridItems]);
 
     const addItem = handleSubmit((data: IActa) => {
@@ -207,6 +207,7 @@ export default function useActaCreate() {
 
 
 
+console.log('total V',totalQuantityPeriod1)
 
     }, []);
 
@@ -217,10 +218,6 @@ export default function useActaCreate() {
         setProjectMeta(selectedProjectMeta);
         //setValue("techo", projectMeta);
     }, [selectedProject, projectList]);
-
-    console.log(projectMeta);
-
-
 
 
     useEffect(() => {
@@ -266,10 +263,8 @@ export default function useActaCreate() {
         });
     });
 
-    const confirmActaCreation = async (data: IActa) => { 
-            console.log('datos',dataGridItems)
-         dataGridItems.map((e) => {
-            console.log('object',e)
+    const confirmActaCreation = async (data: IActa) => {           
+         dataGridItems.map((e) => {          
             actaItems.push({
                 costOperation: e.costOperation,                
                 subtotalVigency: e.subtotalVigency,
@@ -333,6 +328,17 @@ export default function useActaCreate() {
        } 
    }; 
 
+   /* 
+     const [totalQuantityPeriod1, setTotalQuantityPeriod1] = useState(0);
+    const [, setTotalValuePeriod1] = useState(0);
+    const [, setTotalQuantityPeriod2] = useState(0);
+    const [, setTotalValuePeriod2] = useState(0);
+    const [, setTotalCostBillsOperation] = useState(0);
+    const [totalNet, setTotalNet] = useState(0);
+    const [, setTotalFinancialOperatorCommission] = useState(0);
+    const [, setTotalResourcesCredit] = useState(0);
+
+   */
 
     return {
         control,
@@ -350,9 +356,15 @@ export default function useActaCreate() {
         projectList,
         projectMeta,
         vigency1,
-        addItem
-
-
+        addItem,
+        totalQuantityPeriod1,
+        totalValuePeriod1,
+        totalQuantityPeriod2,
+        totalValuePeriod2,
+        totalCostBillsOperation,
+        totalNet,
+        totalFinancialOperatorCommission,
+        totalResourcesCredit
         /* CancelFunction  */
     }
 }
