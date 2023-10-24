@@ -20,8 +20,7 @@ import {
 } from "../../../common/interfaces/socialization.interface";
 import { searchSocialization } from "../../../common/schemas/socialization-schema";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
-import { ApiResponse } from "../../../common/utils/api-response";
-import { IGenericList } from "../../../common/interfaces/global.interface";
+import { data as dataGroup } from "../service/api";
 
 export default function useSearchSocialization() {
   // Context
@@ -65,14 +64,21 @@ export default function useSearchSocialization() {
       fieldName: "row.socialization.socializationDate",
       header: "Fecha",
       renderCell: (row) => {
-        return <>{row.socializationDate}</>;
+        const formatDate = new Date(
+          new Date(row.socializationDate)
+        ).toLocaleDateString("en-GB");
+        return <>{formatDate}</>;
       },
     },
     {
       fieldName: "row.socialization.valueGroup",
       header: "Grupo de valor",
       renderCell: (row) => {
-        return <>{row.valueGroup}</>;
+        const getValueGroup: any = dataGroup.find(
+          (item) =>
+            item.name === row.valueGroup || item.value === row.valueGroup
+        );
+        return <>{getValueGroup.name}</>;
       },
     },
     {

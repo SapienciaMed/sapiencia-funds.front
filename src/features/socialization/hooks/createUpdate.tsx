@@ -64,22 +64,20 @@ export default function useSocializationCrud() {
 
   const onsubmitCreate = handleSubmit((data: ISocialization) => {
     let buildData = { ...data };
-    const newDate = new Date(data.socializationDate).toLocaleDateString(
-      "en-GB"
+    const newDate = new Date(data.socializationDate).toISOString();
+    const getValueGroup: any = dataGroup.find(
+      (item) => item.name === data.valueGroup || item.value === data.valueGroup
     );
 
     if (id) {
       buildData = {
         ...data,
         socializationDate: newDate,
+        valueGroup: getValueGroup.value,
       };
     } else {
       const getCode: any = deparmetList.find(
         (dep) => dep.name === data.communeCode
-      );
-
-      const getValueGroup: any = dataGroup.find(
-        (item) => item.name === data.valueGroup
       );
 
       buildData = {
