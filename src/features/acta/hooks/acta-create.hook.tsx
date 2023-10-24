@@ -11,7 +11,8 @@ import { useGenericListService } from "../../../common/hooks/generic-list-servic
 import { IGenericList, ISalaryMin } from "../../../common/interfaces/global.interface";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { EResponseCodes } from "../../../common/constants/api.enum";
-
+import useAuthService from "../../../common/hooks/auth-service.hook";
+import { IUser } from "../../../common/interfaces/auth.interfaces";
 
 export default function useActaCreate() {
     const resolver = useYupValidationResolver(createActas);
@@ -27,6 +28,8 @@ export default function useActaCreate() {
     const [projectList, setProjectsList] = useState([]);
     const [projectMeta, setProjectMeta] = useState("");
     const [actaItems, setActaItems] = useState(Array<IActaItems>);
+    const [userList, setUserList] = useState(Array<IUser>);
+
 
 
     const [totalQuantityPeriod1, setTotalQuantityPeriod1] = useState(0);
@@ -38,11 +41,16 @@ export default function useActaCreate() {
     const [totalFinancialOperatorCommission, setTotalFinancialOperatorCommission] = useState(0);
     const [totalResourcesCredit, setTotalResourcesCredit] = useState(0);
     const [vigency1, setVigency1] = useState(0);
-
-
-    const { getProjectsList,createActa } = useActaApi();
+    const [subtotalVigency, setSubtotalVigency] = useState(0);
+    const [userInfo, setUserInfo] = useState([]);
+    const [activeUserList, setActiveUserList] = useState([]);
+    const [times, setTimes] = useState([]);
+    
+    
+    const { getProjectsList, createActa, getHours   } = useActaApi();
     const { getSalaryMin } = useGenericListService();
-
+    const { getUser } = useAuthService();
+    
 
     const {
         handleSubmit,
@@ -65,17 +73,19 @@ export default function useActaCreate() {
         let totalNet = 0;
         let totalFinancialOperatorCommission = 0;
         let totalResourcesCredit = 0;
+        let totalSubtotalVigency = 0;
 
         items.forEach(item => {
 
             const quantityPeriod1 = parseInt(item.periods?.quantityPeriod1 || '0', 10);
             const valuePeriod1 = parseInt(item.periods?.valuePeriod1 || '0', 10);
-            const quantityPeriod2 = parseInt(item.periods?.quantityPeriod1 || '0', 10);
-            const valuePeriod2 = parseInt(item.periods?.valuePeriod1 || '0', 10);
+            const quantityPeriod2 = parseInt(item.periods?.quantityPeriod2 || '0', 10);
+            const valuePeriod2 = parseInt(item.periods?.valuePeriod2 || '0', 10);
             const costBillsOperation = parseInt(item.costBillsOperation || '0', 10);
             const net = parseInt(item.net || '0', 10);
             const financialOperatorCommission = parseInt(item.financialOperatorCommission || '0', 10);
             const resourcesCredit = parseInt(item.resourcesCredit || '0', 10);
+            const subtotalVigency = parseInt(item.subtotalVigency || '0', 10);
 
 
             totalQuantityPeriod1 += isNaN(quantityPeriod1) ? 0 : quantityPeriod1;
@@ -91,6 +101,8 @@ export default function useActaCreate() {
             totalFinancialOperatorCommission += isNaN(financialOperatorCommission) ? 0 : financialOperatorCommission;
 
             totalResourcesCredit += isNaN(resourcesCredit) ? 0 : resourcesCredit;
+
+            totalSubtotalVigency += isNaN(subtotalVigency) ? 0 : subtotalVigency;
         });
 
         const vigency1 = totalValuePeriod1 + totalValuePeriod2 + totalCostBillsOperation + totalFinancialOperatorCommission;
@@ -103,8 +115,8 @@ export default function useActaCreate() {
         setTotalNet(totalNet);
         setTotalFinancialOperatorCommission(totalFinancialOperatorCommission);
         setTotalResourcesCredit(totalResourcesCredit);
+        setSubtotalVigency(totalSubtotalVigency)
         setVigency1(vigency1);
-
         return {
             totalQuantityPeriod1,
             totalValuePeriod1,
@@ -114,17 +126,15 @@ export default function useActaCreate() {
             totalNet,
             totalFinancialOperatorCommission,
             totalResourcesCredit,
+            totalSubtotalVigency,
             vigency1
         };
     };
 
 
-    
+
     useEffect(() => {
-        const totals = calculateTotals(dataGridItems);
-        console.log('Totals:', totals);    
-        // Calcula los totales cada vez que dataGridItems cambie
-        calculateTotals(dataGridItems);        
+        calculateTotals(dataGridItems);
     }, [dataGridItems]);
 
     const addItem = handleSubmit((data: IActa) => {
@@ -205,12 +215,45 @@ export default function useActaCreate() {
                 }
             })
 
-
-
-console.log('total V',totalQuantityPeriod1)
-
+            getWorkersActive();
+           
+            
+               
+            
+            getHours().then(result => setTimes(result));
+            
     }, []);
+  
 
+    const getWorkersActive = () => {
+        getUser()
+          .then((response: ApiResponse<IUser[]>) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {
+              setUserInfo(response.data);
+              setActiveUserList(
+                response.data.map((item) => {
+                  const list = {
+                    name: `${
+                      item.numberDocument +
+                      " - " +
+                      item.names +
+                      " " +
+                      item.lastNames
+                    }`,
+                    value: item.id,
+                    email:item.email
+                  };
+                  return list;
+                })
+              );
+            }
+          })
+          .catch((err) => {});
+      };
+    
+     
+
+    //console.log(userList)
     const selectedProject = watch('numberProject');
 
     useEffect(() => {
@@ -257,88 +300,78 @@ console.log('total V',totalQuantityPeriod1)
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
-               confirmActaCreation(data);
+                confirmActaCreation(data);
             },
             background: true,
         });
     });
 
-    const confirmActaCreation = async (data: IActa) => {           
-         dataGridItems.map((e) => {          
+    const confirmActaCreation = async (data: IActa) => {
+        dataGridItems.map((e) => {
             actaItems.push({
-                costOperation: e.costOperation,                
+                costOperation: e.costOperation,
                 subtotalVigency: e.subtotalVigency,
-                costBillsOperation: e.costBillsOperation,                
+                costBillsOperation: e.costBillsOperation,
                 financialOperatorCommission: e.financialOperatorCommission,
-                resourcesCredit: e.resourcesCredit,  
-                periods: e.periods,            
-                net: e.net,                       
-                idFound:e.idFound,
+                resourcesCredit: e.resourcesCredit,
+                periods: e.periods,
+                net: e.net,
+                idFound: e.idFound,
                 idLine: e.idLine,
                 idProgram: e.idProgram,
                 idAnnouncement: e.idAnnouncement,
-                idConcept: e.idConcept             
-            
-           });
-         })
+                idConcept: e.idConcept
 
-       const actaData = {
-         numberProject: data.numberProject,
-         periodVigency: data.periodVigency,
-         announcementInitial: data.announcementInitial,
-         salaryMin: data.salaryMin,
-         costsExpenses: data.costsExpenses,
-         OperatorCommission: data.OperatorCommission,
-         financialOperation: data.financialOperation,
-         idStatus: data.idStatus,        
-         items: actaItems,
-       };
+            });
+        })
 
-       const res = await createActa(actaData);
+        const actaData = {
+            numberProject: data.numberProject,
+            periodVigency: data.periodVigency,
+            announcementInitial: data.announcementInitial,
+            salaryMin: data.salaryMin,
+            costsExpenses: data.costsExpenses,
+            OperatorCommission: data.OperatorCommission,
+            financialOperation: data.financialOperation,
+            idStatus: data.idStatus,
+            items: actaItems,
+        };
 
-       if (res && res?.operation?.code === EResponseCodes.OK) {
-           setMessage({
-             OkTitle: "Guardar",
-             description: "¡Guardado exitosamente!",
-             title: "Guardar",
-             show: true,
-             type: EResponseCodes.OK,
-             background: true,
-             onOk() {
-               reset();
-               setMessage({});
-               //navigate("/core/usuarios/consultar");
-             },
-             onClose() {
-               reset();
-               setMessage({});
-             },
-           });
-          
-       } else {
-           setMessage({
-             type: EResponseCodes.FAIL,
-             title: "Crear Acta",
-             description: "Ocurrió un error en el sistema",
-             show: true,
-             OkTitle: "Aceptar",
-             background: true,
-           });
-           
-       } 
-   }; 
+        const res = await createActa(actaData);
 
-   /* 
-     const [totalQuantityPeriod1, setTotalQuantityPeriod1] = useState(0);
-    const [, setTotalValuePeriod1] = useState(0);
-    const [, setTotalQuantityPeriod2] = useState(0);
-    const [, setTotalValuePeriod2] = useState(0);
-    const [, setTotalCostBillsOperation] = useState(0);
-    const [totalNet, setTotalNet] = useState(0);
-    const [, setTotalFinancialOperatorCommission] = useState(0);
-    const [, setTotalResourcesCredit] = useState(0);
+        if (res && res?.operation?.code === EResponseCodes.OK) {
+            setMessage({
+                OkTitle: "Guardar",
+                description: "¡Guardado exitosamente!",
+                title: "Guardar",
+                show: true,
+                type: EResponseCodes.OK,
+                background: true,
+                onOk() {
+                    reset();
+                    setMessage({});
+                    //navigate("/core/usuarios/consultar");
+                },
+                onClose() {
+                    reset();
+                    setMessage({});
+                },
+            });
 
-   */
+        } else {
+            setMessage({
+                type: EResponseCodes.FAIL,
+                title: "Crear Acta",
+                description: "Ocurrió un error en el sistema",
+                show: true,
+                OkTitle: "Aceptar",
+                background: true,
+            });
+
+        }
+    };
+
+
 
     return {
         control,
@@ -364,7 +397,10 @@ console.log('total V',totalQuantityPeriod1)
         totalCostBillsOperation,
         totalNet,
         totalFinancialOperatorCommission,
-        totalResourcesCredit
+        totalResourcesCredit,
+        subtotalVigency,
+        activeUserList,
+        times
         /* CancelFunction  */
     }
 }
