@@ -1,11 +1,16 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
+import { useForm, useFormState, useWatch } from "react-hook-form";
 import useCreateUploadHook from "../hooks/upload-create-update.hook";
 import { ButtonComponent } from "../../../common/components/Form";
 import { UploadComponent } from "../../../common/components/Form";
 import { FormComponent, SelectComponent, } from "../../../common/components/Form";
 //borrar
 import useSearchUploadHook from "../hooks/search-upload-information.hook";
+import { AppContext } from "../../../common/contexts/app.context";
 import useListData from "../hooks/list.hook";
+import BasicTableComponent from "../../../common/components/basic-table.component";
+import {ITableAction,ITableElement,} from "../../../common/interfaces/table.interfaces";
+import { IUser } from "../../../common/interfaces/auth.interfaces";
 
 
 const UploadCreatePage = (): React.JSX.Element => {
@@ -23,17 +28,53 @@ const UploadCreatePage = (): React.JSX.Element => {
     setFilesUploadData,
     uploadFiles,
     activeUserList,
-    setUploadedFileName
+    dataGridEmails,
+    setUploadedFileName,
   } = useCreateUploadHook();
   const { errors, isValid } = formState;
 
   const { commune, validity, information } = useSearchUploadHook()
+
+  const { setMessage } = useContext(AppContext);
 
   const handleFileNameChange = (fileName) => {
     setUploadedFileName(fileName);
   };
 
   const {vigencias} = useListData();
+
+  const tableColumns: ITableElement<IUser>[] = [
+    {
+      fieldName: "Email",
+      header: "Correo electronico",
+    }
+  ];
+
+  const tableActions: ITableAction<IUser>[] = [
+    {
+      icon: "Delete",
+      onClick: (row) => {
+        console.log("row ", row);
+          setMessage({
+            show: true,
+            title: "Eliminar registro",
+            description: "Estás segur@ de eliminar este registro?",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            onOk() {
+              if (dataGridEmails.find((obj) => obj.email == row.names)) {
+                const position = dataGridEmails.findIndex(
+                  (obj) => obj.email === row.names
+                );
+                dataGridEmails.splice(position, 1);
+                setMessage({})
+              }
+            },
+            background: true,
+          });
+      },
+    },
+  ];
 
   return (
     <Fragment>
@@ -156,7 +197,25 @@ const UploadCreatePage = (): React.JSX.Element => {
               </div>
             </FormComponent>
           </div>
-
+          
+          <div
+              // style={
+              //   dataGridEmails.length > 0 ? { display: "block" } : { display: "none" }
+              // }
+            >
+              <div className="container-form-grid mt-24px">
+                <div className="container-form padding-form">
+                  <BasicTableComponent
+                    ref={tableComponentRef}
+                    data={dataGridEmails}
+                    columns={tableColumns}
+                    actions={tableActions}
+                    titleMessageModalNoResult="Registro no existente"
+                    isShowModal={true}
+                  />
+                </div>
+              </div>
+              </div>
           <div className="button-save-container-display m-top-20">
             <ButtonComponent
               form="uploadCreate"
@@ -175,6 +234,7 @@ const UploadCreatePage = (): React.JSX.Element => {
 
         </div>
       </div>
+
     </Fragment>
     
   );

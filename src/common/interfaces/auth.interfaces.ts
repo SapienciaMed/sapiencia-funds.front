@@ -16,6 +16,7 @@ export interface IUser {
   lastNames: string;
   typeDocument: string;
   numberDocument: string;
+  email?:string;
   password?: string;
   userModify: string;
   dateModify?: Date;

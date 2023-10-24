@@ -49,3 +49,9 @@ export interface IWorker {
   surname: string;
   secondSurname?: string;
 }
+
+export interface IEmail{
+  id?: number;
+  email?: string;
+  lastNames?: string
+}
