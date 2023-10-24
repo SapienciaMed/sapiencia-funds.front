@@ -21,6 +21,7 @@ import React, {
   useState,
 } from "react";
 import * as Icons from "react-icons/fa";
+import * as IconsBS from 'react-icons/bs';
 import { EResponseCodes } from "../constants/api.enum";
 import { AppContext } from "../contexts/app.context";
 import useCrudService from "../hooks/crud-service.hook";
@@ -36,7 +37,6 @@ interface IProps<T> {
   searchItems?: object;
   isShowModal: boolean;
   titleMessageModalNoResult?: string;
-  setPaginateData: ({}) => {};
 }
 
 interface IRef {
@@ -52,7 +52,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     titleMessageModalNoResult,
     isShowModal,
     emptyMessage = "No hay resultados.",
-    setPaginateData,
   } = props;
 
   // States
@@ -66,12 +65,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   // const { width } = useWidth();
   const { setMessage } = useContext(AppContext);
 
-  // ============================================
-  // REMOVE THIS BECAUSE IS ONLY PARTIAL SOLUTION
-  useEffect(() => {
-    setPaginateData({ page, perPage });
-  }, [page, perPage]);
-  // ============================================
 
   // Declaraciones
   const { post } = useCrudService(url);
@@ -102,7 +95,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           title: `${titleMessageModalNoResult || ""}`,
           show: true,
           description: "No hay resultado para la búsqueda",
-          okTitle: "Aceptar",
+          OkTitle: "Aceptar",
           background: true,
         });
       }
@@ -111,7 +104,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         title: `Error en la consulta de datos`,
         show: true,
         description: res.operation.message,
-        okTitle: "Aceptar",
+        OkTitle: "Aceptar",
         background: true,
         onOk: () => {
           setMessage({});
@@ -277,6 +270,15 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <Icons.FaRegFilePdf className="button grid-button button-pdf color-icon-pdf" />
       );
+      case "download":
+        return element == "name" ? (
+          "descargar"
+        ) : (
+          <IconsBS.BsDownload 
+          className="button grid-button button-download" 
+          style={{ color: '#533893' }}
+          />
+        );
     default:
       return "";
   }

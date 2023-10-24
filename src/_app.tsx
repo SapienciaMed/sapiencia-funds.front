@@ -2,11 +2,14 @@ import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AppContextProvider } from "./common/contexts/app.context";
 import "./styles/_app.scss";
+// import "./styles/styles.scss";
 import "./styles/_theme-prime.css";
 import "primereact/resources/primereact.min.css";
 import ModalMessageComponent from "./common/components/modal-message.component";
 import ApplicationProvider from "./application-provider";
 import VotingResultsRoutes from "./features/voting-results/voting-results-routes";
+import MasterActivityRoutes from "./features/master-activity/master-activity-routes"
+import UploadInformationRoutes from "./features/upload-information/upload-information-routes"
 import useAppCominicator from "./common/hooks/app-communicator.hook";
 
 function App() {
@@ -33,6 +36,14 @@ function App() {
               <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
+              />
+              <Route
+                path={"/fondos/maestro/*"}
+                element={<MasterActivityRoutes />}
+              />
+              <Route
+                path={"/fondos/cargar-informacion/*"}
+                element={<UploadInformationRoutes/>}
               />
             </Routes>
           </Suspense>

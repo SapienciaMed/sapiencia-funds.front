@@ -15,6 +15,10 @@ interface IAppContext {
   message: IMessage;
   setMessage: Dispatch<SetStateAction<IMessage>>;
   validateActionAccess: (indicator: string) => boolean;
+  step: number;
+  setStep: Dispatch<SetStateAction<number>>;
+  disabledFields: boolean;
+  setDisabledFields: Dispatch<SetStateAction<boolean>>;
 }
 interface IProps {
   children: ReactElement | ReactElement[];
@@ -26,6 +30,10 @@ export const AppContext = createContext<IAppContext>({
   message: {} as IMessage,
   setMessage: () => {},
   validateActionAccess: () => true,
+  step: {} as number,
+  setStep: () => {},
+  disabledFields: {} as boolean,
+  setDisabledFields: () => {},
 });
 
 export function AppContextProvider({ children }: IProps) {
@@ -34,6 +42,9 @@ export function AppContextProvider({ children }: IProps) {
   const [authorization, setAuthorization] = useState<IAuthorization>(
     {} as IAuthorization
   );
+
+  const [step, setStep] = useState<number>(0);
+  const [disabledFields, setDisabledFields] = useState<boolean>(false);
 
   // Metodo que verifica si el usuario posee permisos sobre un accion
   function validateActionAccess(indicator: string): boolean {
@@ -47,8 +58,21 @@ export function AppContextProvider({ children }: IProps) {
       message,
       setMessage,
       validateActionAccess,
+      step,
+      setStep,
+      disabledFields,
+      setDisabledFields,
     };
-  }, [message, authorization]);
+  }, [
+    message,
+    setMessage,
+    authorization,
+    setAuthorization,
+    step,
+    setStep,
+    disabledFields,
+    setDisabledFields,
+  ]);
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 }

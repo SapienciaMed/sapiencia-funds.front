@@ -20,6 +20,7 @@ interface IInputProps<T> {
   errors?: any;
   disabled?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   id?: string;
   fieldArray?: boolean;
   optionsRegister?: {};
@@ -47,6 +48,7 @@ function InputElement({
   value,
   disabled,
   onChange,
+  onBlur,
   defaultValue,
   id,
   optionsRegister,
@@ -85,6 +87,7 @@ export function InputComponent({
   errors,
   disabled,
   onChange,
+  onBlur,
   defaultValue,
   id,
   fieldArray,
@@ -132,6 +135,7 @@ export function InputComponent({
           value={value}
           disabled={disabled}
           onChange={onChange}
+          onBlur={onBlur}
           defaultValue={defaultValue}
           id={id}
           optionsRegister={optionsRegister}
