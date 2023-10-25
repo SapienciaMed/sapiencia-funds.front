@@ -258,6 +258,75 @@ div[id="single-spa-application:@sapiencia/funds"] {
     }
   }
 }
+.button-save-container-display-actas {
+  display: flex;
+  justify-content: end;
+  flex-direction: row;
+  
+  margin-bottom: 20px;  
+
+  @media (max-width: 768px) {
+    flex-direction: column; 
+    margin-left: 4px;
+
+    .button-cancel-text {
+      order: 2; 
+      width: 100%; 
+      margin-left: 9px;
+      margin-top: 24px;
+      //margin-bottom: 60px;
+      margin-top: 5px;
+    }
+
+    .button-save {
+      order: 1; 
+      width: 100%;       
+      background-color: #533893;
+      display: flex;
+      padding: 12px 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      margin-top: 24px;      
+    }
+  }
+}
+.button-save-container-display-actas-users {
+  display: flex;
+  justify-content: end;
+  flex-direction: row;
+  
+  margin-bottom: 20px;  
+
+  @media (max-width: 768px) {
+    flex-direction: column; 
+    margin-left: 0px;
+    margin-right: 10px;
+
+    .button-cancel-text {
+      order: 2; 
+      width: 100%; 
+      margin-left: 9px;
+      margin-top: 24px;
+      
+      margin-top: 5px;
+    }
+
+    .button-save {
+      order: 1; 
+      width: 100%;       
+      background-color: #533893;
+      display: flex;
+      padding: 12px 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      margin-top: 24px;      
+    }
+  }
+}
 
 /* Estilo para el campo habilitado */
 .input-enabled {

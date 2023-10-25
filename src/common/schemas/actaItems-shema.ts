@@ -1,13 +1,7 @@
 import * as yup from "yup";
 
-/* export const filterMaster = yup.object({
-    codtlmo: yup
-    .string()
-    .required("Cargar información"),
-  }); */
-
 export const createActaItems = yup.object({
-  program: yup
+   program: yup
     .number()
     .required("Completar información"),
     found: yup
@@ -45,7 +39,7 @@ export const createActaItems = yup.object({
     subtotalVigency: yup
     .number()
     .required()
-    .typeError("Completar información"),
+    .typeError("Completar información"), 
 
 });
 

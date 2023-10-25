@@ -39,7 +39,8 @@ const ActaCreatePage = () => {
         addUser,
         checked,
         setChecked,
-        send
+        send,
+        CancelFunction
     } = useActaCreate();
 
 
@@ -326,7 +327,7 @@ const ActaCreatePage = () => {
                 </div>
             </FormComponent>
 
-            <div className="button-save-container-display-maestros margin-right0 mr-24px">
+            <div className="button-save-container-display-actas margin-right0 mr-24px">
                 <ButtonComponent
                     value="Agregar item"
                     action={() => {
@@ -337,9 +338,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-           /*  style={
+          style={
                 dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-            }  */
+            }  
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
@@ -590,7 +591,7 @@ const ActaCreatePage = () => {
                                 />
                                
                             </div>
-                            <div className="button-save-container-display m-top-20">
+                            <div className="button-save-container-display-actas-users margin-right0">
                                 <ButtonComponent
                                     value="Agregar"
                                     action={() => {
@@ -633,13 +634,13 @@ const ActaCreatePage = () => {
 
             <hr />
             <br />
-            <div className="button-save-container-display-maestros margin-right0 mr-24px">
+            <div className="button-save-container-display-actas margin-right0 mr-24px">
                 <ButtonComponent
                     form="createActaForm"
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                    //action={() => CancelFunction()}                    
+                    action={() => CancelFunction()}                    
                     />
                 <ButtonComponent
                     form="createActaForm"

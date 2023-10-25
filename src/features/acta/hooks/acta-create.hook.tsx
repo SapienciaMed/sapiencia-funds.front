@@ -15,9 +15,12 @@ import useAuthService from "../../../common/hooks/auth-service.hook";
 import { IUser } from "../../../common/interfaces/auth.interfaces";
 import { ICitation } from '../../../common/interfaces/citationInterface';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from "react-router-dom";
 
 export default function useActaCreate() {
     const resolver = useYupValidationResolver(createActas);
+
+    const navigate = useNavigate();
 
     const { setMessage, authorization, setDataGridItems, dataGridItems, setDataGridUsers, dataGridUsers } = useContext(AppContext);
     const tableComponentRef = useRef(null);
@@ -419,6 +422,22 @@ export default function useActaCreate() {
     
     }, [projectMeta,vigency1,subtotalVigency]);
      
+    const CancelFunction = () => {
+        setMessage({
+          show: true,
+          title: "Cancelar",
+          description: "¿Estás segur@ de cancelar esta acción en el sistema?",
+          OkTitle: "Aceptar",
+          cancelTitle: "Cancelar",
+          onOk() {
+            navigate("/fondos/acta/consultar");
+            setMessage((prev) => ({ ...prev, show: false }));
+            setDataGridItems([])
+            setDataGridUsers([])
+          },
+          background: true,
+        });
+      };
 
     return {
         control,
@@ -453,7 +472,7 @@ export default function useActaCreate() {
         addUser,
         checked,
         setChecked,
-        send
-        /* CancelFunction  */
+        send,
+        CancelFunction  
     }
 }
