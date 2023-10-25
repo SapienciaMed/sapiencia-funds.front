@@ -61,14 +61,14 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                 : item[properties[0]];
             return (
               <div key={item} className="item-value-container">
-                <p className="text-black bold text-center">{column.header}</p>
+                <p className="text-black text-center">{column.header}</p>
                 <p> {column.renderCell ? column.renderCell(item) : field} </p>
               </div>
             );
           })}
         </div>
         <div className="card-footer">
-          <section className="position-absolute top text-black bold text-center">
+          <section className="position-absolute top text-black text-center">
             {" "}
             Acciones{" "}
           </section>
@@ -102,7 +102,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       />
 
       {width > 830 ? (
-        <div style={{ maxWidth: width - 500 }}>
+        
           <DataTable
             className="spc-table full-height"
             value={props.data}
@@ -133,7 +133,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               />
             )}
           </DataTable>
-        </div>
+        
       ) : (
         <DataView
           value={props.data}

@@ -116,7 +116,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     <div className="container-form-grid-actas flex-half">
                         <div className="container-form padding-form">
                             <div className="label-container">
-                                <label className="text-black large medium grid-span-2-columns mb-24px">Periodo 1</label>
+                                <label className="text-black large medium grid-span-2-columns mb-24px">Período 1</label>
                             </div>
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
@@ -150,7 +150,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     <div className="container-form-grid-actas flex-half">
                         <div className="container-form padding-form">
                             <div className="label-container">
-                                <label className="text-black large medium grid-span-2-columns mb-24px">Periodo 2</label>
+                                <label className="text-black large medium grid-span-2-columns mb-24px">Período 2</label>
                             </div>
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
