@@ -193,10 +193,10 @@ const paginatorHeader: PaginatorTemplateOptions = {
   CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
     return (
       <>
-        <p className="header-information text-black bold big">
+        <p className="header-information text-black big">
           Total de resultados
         </p>
-        <p className="header-information text-three bold big">
+        <p className="header-information text-three big">
           {options.totalRecords}
         </p>
       </>
@@ -212,7 +212,7 @@ const paginatorHeader: PaginatorTemplateOptions = {
 
     return (
       <React.Fragment>
-        <p className="header-information text-black bold big">
+        <p className="header-information text-black big">
           Registros por página{" "}
         </p>
         <Dropdown
@@ -268,14 +268,17 @@ export const paginatorFooter: PaginatorTemplateOptions = {
       );
     }
 
+    
+
     return (
       <button
-        type="button"
-        className={options.className}
-        onClick={options.onClick}
-      >
-        {options.page + 1}
-      </button>
+      type="button"
+      className={classNames(options.className, "border-round")}
+      onClick={options.onClick}
+      //disabled={options.disabled}
+    >
+      <span className="p-3 table-next"></span>
+    </button>
     );
   },
 };

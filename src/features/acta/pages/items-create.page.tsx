@@ -9,7 +9,7 @@ import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 
 const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, actaItems?: IActaItems }) => {
 
-    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,costBillsOperation,handleInputChange,neto,financialOperatorCommission, resourcesCredit,programList } = useActaItems(action, acta,actaItems);
+    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,costBillsOperation,handleInputChange,neto,financialOperatorCommission, resourcesCredit,programList,CancelFunction } = useActaItems(action, acta,actaItems);
 
 
     return (
@@ -268,7 +268,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                //action={() => CancelFunction()}                    
+                    action={() => CancelFunction()}                    
                 />
                 <ButtonComponent
                     form="createItemsForm"
