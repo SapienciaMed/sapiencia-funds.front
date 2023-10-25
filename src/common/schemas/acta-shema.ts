@@ -6,6 +6,8 @@ import * as yup from "yup";
     .required("Cargar información"),
   }); */
 
+
+
 export const createActas = yup.object({    
    numberProject: yup
         .number()
@@ -29,23 +31,7 @@ export const createActas = yup.object({
         financialOperation: yup
         .number()
         .required()
-        .typeError("Completar información"),       
-
-       
-    
-    /* techo: yup.number()        
-        .test(
-            'is-greater',
-            'Vigency1 y/o Vigency2 no deben ser mayores que Techo',
-            function (value) {
-                const { vigency1, vigency2 } = this.parent;
-                return vigency1 <= value && vigency2 <= value;
-            }
-        ), */
-
-       
-    
-   
+        .typeError("Completar información"), 
         
 });
 

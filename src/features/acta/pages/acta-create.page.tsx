@@ -1,5 +1,5 @@
-import React, { Fragment, useContext } from "react";
-import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
+import React, { Fragment, useContext, useState } from "react";
+import { ButtonComponent, CheckComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useActaCreate from "../hooks/acta-create.hook";
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
@@ -8,15 +8,22 @@ import BasicTableComponent from "../../../common/components/basic-table.componen
 import ItemsCreatePage from "./items-create.page";
 import { AppContext } from "../../../common/contexts/app.context";
 import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
-
-
-
+import { Checkbox } from "primereact/checkbox";
 
 const ActaCreatePage = () => {
 
     const { setMessage } = useContext(AppContext);
 
-    const { errors, register, onsubmitCreate, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary, datosActa, control, projectList, projectMeta, vigency1, addItem,
+    const { errors, register,
+        onsubmitCreate,
+        tableComponentRef,
+        dataGridItems,
+        datosActa,
+        control, 
+        projectList, 
+        projectMeta, 
+        vigency1, 
+        addItem,
         totalQuantityPeriod1,
         totalValuePeriod1,
         totalQuantityPeriod2,
@@ -29,7 +36,10 @@ const ActaCreatePage = () => {
         activeUserList,
         times,
         dataGridUsers,
-        addUser
+        addUser,
+        checked,
+        setChecked,
+        send
     } = useActaCreate();
 
 
@@ -165,11 +175,18 @@ const ActaCreatePage = () => {
             },
         }
     ];
-
+    
     const tableColumnsUsers: ITableElement<IActaItems>[] = [
         {
             fieldName: "program",
-            header: "Aprobar",
+            header: "Aprobar",          
+            renderCell: (row) => {
+                let checked = false;
+                return (
+                   /*  <SwitchComponent /> */
+                   <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
+                );
+            }
         },
         {
             fieldName: "user",
@@ -320,9 +337,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-            style={
+           /*  style={
                 dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-            } 
+            }  */
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
@@ -622,13 +639,14 @@ const ActaCreatePage = () => {
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                //action={() => CancelFunction()}                    
-                />
+                    //action={() => CancelFunction()}                    
+                    />
                 <ButtonComponent
                     form="createActaForm"
                     value="Guardar"
                     type="submit"
                     className="button-save large disabled-black"
+                    disabled={send}
                 />
             </div>
             <br />

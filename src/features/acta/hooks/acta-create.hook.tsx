@@ -32,6 +32,7 @@ export default function useActaCreate() {
     const [actaItems, setActaItems] = useState(Array<IActaItems>);
     const [userList, setUserList] = useState(Array<IUser>);
     const [citation, setCitation] = useState(Array<ICitation>);
+    const [send, setSend] = useState(false);
 
 
 
@@ -48,6 +49,7 @@ export default function useActaCreate() {
     const [userInfo, setUserInfo] = useState([]);
     const [activeUserList, setActiveUserList] = useState([]);
     const [times, setTimes] = useState([]);
+    const [checked, setChecked] = useState(false);
 
 
     const { getProjectsList, createActa, getHours } = useActaApi();
@@ -400,6 +402,24 @@ export default function useActaCreate() {
     const handleInputChange = 0;
 
 
+    
+    useEffect(() => {
+        if (Number(projectMeta) < vigency1 || Number(projectMeta)<subtotalVigency) {
+            setMessage({           
+                title: "Crear Acta",
+                description: "El acta no podrá ser guardada por superar el valor del techo",
+                show: true,
+                OkTitle: "Aceptar",
+                background: true,
+            });
+            setSend(true)
+        }else{
+            setSend(false)
+        }
+    
+    }, [projectMeta,vigency1,subtotalVigency]);
+     
+
     return {
         control,
         errors,
@@ -430,7 +450,10 @@ export default function useActaCreate() {
         times,
         handleInputChange,
         dataGridUsers,
-        addUser
+        addUser,
+        checked,
+        setChecked,
+        send
         /* CancelFunction  */
     }
 }
