@@ -36,7 +36,6 @@ const [deparmetList, setDeparmentList] = useState([]);
 
     /*Functions*/
     const onSubmitSearchVoting = handleSubmit((data: IVotingCreate) => {
-        console.log("search ", { data });
         loadTableData({
           communeNeighborhood: valCommuneNeighborhood,
           numberProject: data?.numberProject,
