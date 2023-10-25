@@ -28,8 +28,9 @@ const ActaCreatePage = () => {
         subtotalVigency,
         activeUserList,
         times,
-        dataGridUsers
-    } = useActaCreate(); 
+        dataGridUsers,
+        addUser
+    } = useActaCreate();
 
 
 
@@ -126,21 +127,21 @@ const ActaCreatePage = () => {
                     OkTitle: "Aceptar",
                     cancelTitle: "Cancelar",
                     onOk() {
-                      if (dataGridItems.find((obj) => obj.ident == row.ident)) {
-                        const position = dataGridItems.findIndex(
-                          (obj) => obj.ident === row.ident
-                        );
-                        dataGridItems.splice(position, 1);
-                        setMessage({})
-                      }
+                        if (dataGridItems.find((obj) => obj.ident == row.ident)) {
+                            const position = dataGridItems.findIndex(
+                                (obj) => obj.ident === row.ident
+                            );
+                            dataGridItems.splice(position, 1);
+                            setMessage({})
+                        }
                     },
                     background: true,
-                  });
-             },
+                });
+            },
         }
     ];
 
-    const tableActionsUser: ITableAction<IActaItems>[] = [      
+    const tableActionsUser: ITableAction<IActaItems>[] = [
         {
             icon: "Delete",
             onClick: (row) => {
@@ -151,17 +152,17 @@ const ActaCreatePage = () => {
                     OkTitle: "Aceptar",
                     cancelTitle: "Cancelar",
                     onOk() {
-                      if (dataGridUsers.find((obj) => obj.ident == row.ident)) {
-                        const position = dataGridUsers.findIndex(
-                          (obj) => obj.ident === row.ident
-                        );
-                        dataGridUsers.splice(position, 1);
-                        setMessage({})
-                      }
+                        if (dataGridUsers.find((obj) => obj.ident == row.ident)) {
+                            const position = dataGridUsers.findIndex(
+                                (obj) => obj.ident === row.ident
+                            );
+                            dataGridUsers.splice(position, 1);
+                            setMessage({})
+                        }
                     },
                     background: true,
-                  });
-             },
+                });
+            },
         }
     ];
 
@@ -177,7 +178,7 @@ const ActaCreatePage = () => {
         {
             fieldName: "line",
             header: "Fecha de aprobación",
-        }       
+        }
     ];
 
     return (
@@ -319,9 +320,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-            /* style={
+            style={
                 dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-            } */
+            } 
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
@@ -535,7 +536,7 @@ const ActaCreatePage = () => {
                                     className="dataPicker-basic"
                                     placeholder="DD/MM/YYYY"
                                     dateFormat="dd/mm/yy"
-                                    
+
                                 />
 
                                 <SelectComponent
@@ -552,7 +553,7 @@ const ActaCreatePage = () => {
                                     classNameLabel="text-black biggest"
                                     filter={true}
                                     placeholder="Seleccionar."
-                                    
+
                                 />
                                 <SelectComponent
                                     idInput={"user"}
@@ -568,7 +569,17 @@ const ActaCreatePage = () => {
                                     classNameLabel="text-black biggest"
                                     filter={true}
                                     placeholder="Seleccionar."
-                                    
+
+                                />
+                               
+                            </div>
+                            <div className="button-save-container-display m-top-20">
+                                <ButtonComponent
+                                    value="Agregar"
+                                    action={() => {
+                                        addUser();
+                                    }}
+                                    className="button-save large disabled-black"
                                 />
                             </div>
 
