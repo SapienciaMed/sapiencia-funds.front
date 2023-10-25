@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
 import TableComponent from "../../../common/components/table.component";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import ItemResultsPage from "../pages/item.create.page";
 
 
 const VotingResultsSearchPage = () => {
@@ -26,8 +27,9 @@ const VotingResultsSearchPage = () => {
     reset,
   } = useVotingResultsSearch();
 
-    const navigate = useNavigate();
-  const { validateActionAccess } = useContext(AppContext);
+  const navigate = useNavigate();
+  
+  const { validateActionAccess, setMessage } = useContext(AppContext);
 
 
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
@@ -77,7 +79,21 @@ const VotingResultsSearchPage = () => {
       {
         icon: "Edit",
         onClick: (row) => {
-          navigate(`/core/usuarios/editar/${row.id}`);
+          console.log("row edit", row);
+          // navigate(`/core/usuarios/editar/${row.id}`);
+          setMessage({
+            show: true,
+            title: "Editar item",
+            // OkTitle: "Aceptar",
+            // cancelTitle: "Cancelar",
+            onOk() {
+              setMessage({});
+            },
+            background: true,
+            description: <ItemResultsPage dataVoting={row} action={"editVoting"} />,
+            size: "large",
+            style: "mdl-agregarItem-voting",
+          });
         },
         hide: !validateActionAccess("USUARIOS_EDITAR"),
       },

@@ -4,11 +4,12 @@ import {
   IMasterActivity,
   IProgramTypes,
 } from "../../../common/interfaces/funds.interfaces";
-import { IVotinItemCreate } from "../../../common/interfaces/voting.interfaces";
+import { IItemsUpdate, IVotinItemCreate } from "../../../common/interfaces/voting.interfaces";
 
 export default function useVotingItemApi() {
   const baseURL: string = process.env.urlApiFunds || "";
   const serviceUrl: string = "/api/v1/voting";
+  const serviceItems: string = '/api/v1/items'
   const serviceUrlActivity: string = "/api/v1/activities";
 
   const { get, post, put } = useCrudService(baseURL);
@@ -23,6 +24,13 @@ export default function useVotingItemApi() {
     data: IVotinItemCreate
   ): Promise<ApiResponse<IVotinItemCreate>> {
     return await post(`${serviceUrl}/create/`, data);
+  }
+
+  async function updateItemsVotingResults(
+    id: number,
+    data: IItemsUpdate
+  ): Promise<ApiResponse<IVotinItemCreate>> {
+    return await put(`${serviceItems}/update/${id}`, data);
   }
 
   async function editVotignResults(
@@ -46,5 +54,6 @@ export default function useVotingItemApi() {
     editVotignResults,
     getActivityProgram,
     getProgramTypes,
+    updateItemsVotingResults,
   };
 }

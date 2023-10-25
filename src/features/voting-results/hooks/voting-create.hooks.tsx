@@ -95,8 +95,8 @@ export const useVotingResults = () => {
     const onSubmitCreateVoting = handleSubmit((data: IVotingCreate) => {    
         setMessage({
           show: true,
-          title: "Crear usuario",
-          description: "¿Estás segur@ de crear un nuevo usuario en el sistema?",
+          title: "Crear votación",
+          description: "¿Estás segur@ de crear una nueva votación en el sistema?",
           OkTitle: "Crear",
           cancelTitle: "Cancelar",
           onOk() {
@@ -158,7 +158,8 @@ export const useVotingResults = () => {
               onOk() {
                 reset();
                 setMessage({});
-                navigate("/core/usuarios/consultar");
+                navigate("/fondos/resultados-votacion/consultar");
+                setDataGrid([]);
               },
               onClose() {
                 reset();

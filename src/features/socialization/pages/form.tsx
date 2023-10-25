@@ -84,7 +84,7 @@ const Form = () => {
                   classNameLabel="text-black text-required bold"
                   label={<>Fecha de socialización</>}
                   idInput="socializationDate"
-                  dateFormat="d-m-y"
+                  dateFormat="dd-mm-yy"
                   errors={errors}
                 ></DatePickerComponent>
               </div>
