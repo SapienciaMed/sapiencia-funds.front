@@ -6,4 +6,5 @@ export interface IUserDataGrid {
     idActa?:         number;
     dateAprobation?: Date;
     email?:          string;
+    ident?: string;
 }

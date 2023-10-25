@@ -1,17 +1,14 @@
 import React, { Fragment, useContext } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useActaCreate from "../hooks/acta-create.hook";
-import useActaItems from "../hooks/items.hook";
-import TableGridComponent from "../../../common/components/tableGrid.component";
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 
 import ItemsCreatePage from "./items-create.page";
 import { AppContext } from "../../../common/contexts/app.context";
-import TotalTableComponent from "../../../common/components/total-table.component";
 import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
-import useCitacion from "../hooks/citacion.hook";
+
 
 
 
@@ -121,7 +118,50 @@ const ActaCreatePage = () => {
         },
         {
             icon: "Delete",
-            onClick: (row) => { },
+            onClick: (row) => {
+                setMessage({
+                    show: true,
+                    title: "Eliminar registro",
+                    description: "Estás segur@ de eliminar este registro?",
+                    OkTitle: "Aceptar",
+                    cancelTitle: "Cancelar",
+                    onOk() {
+                      if (dataGridItems.find((obj) => obj.ident == row.ident)) {
+                        const position = dataGridItems.findIndex(
+                          (obj) => obj.ident === row.ident
+                        );
+                        dataGridItems.splice(position, 1);
+                        setMessage({})
+                      }
+                    },
+                    background: true,
+                  });
+             },
+        }
+    ];
+
+    const tableActionsUser: ITableAction<IActaItems>[] = [      
+        {
+            icon: "Delete",
+            onClick: (row) => {
+                setMessage({
+                    show: true,
+                    title: "Eliminar registro",
+                    description: "Estás segur@ de eliminar este registro?",
+                    OkTitle: "Aceptar",
+                    cancelTitle: "Cancelar",
+                    onOk() {
+                      if (dataGridUsers.find((obj) => obj.ident == row.ident)) {
+                        const position = dataGridUsers.findIndex(
+                          (obj) => obj.ident === row.ident
+                        );
+                        dataGridUsers.splice(position, 1);
+                        setMessage({})
+                      }
+                    },
+                    background: true,
+                  });
+             },
         }
     ];
 
@@ -131,13 +171,13 @@ const ActaCreatePage = () => {
             header: "Aprobar",
         },
         {
-            fieldName: "found",
+            fieldName: "user",
             header: "Usuario"
         },
         {
             fieldName: "line",
             header: "Fecha de aprobación",
-        }
+        }       
     ];
 
     return (
@@ -447,7 +487,7 @@ const ActaCreatePage = () => {
                                 value={String(vigency1)}
                             />
                             <InputComponent
-                                idInput={"OperatorCommission"}
+                                idInput={"vigency2"}
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Verificador 2"
@@ -545,7 +585,7 @@ const ActaCreatePage = () => {
                             ref={tableComponentRef}
                             data={dataGridUsers}
                             columns={tableColumnsUsers}
-                            actions={tableActions}
+                            actions={tableActionsUser}
                             titleMessageModalNoResult="Registro no existente"
                             isShowModal={true}
                             secondaryTitle={""}

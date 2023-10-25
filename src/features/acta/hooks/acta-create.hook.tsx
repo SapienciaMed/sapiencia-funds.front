@@ -30,6 +30,7 @@ export default function useActaCreate() {
     const [projectMeta, setProjectMeta] = useState("");
     const [actaItems, setActaItems] = useState(Array<IActaItems>);
     const [userList, setUserList] = useState(Array<IUser>);
+    const [citation, setCitation] = useState(Array<ICitation>);
 
 
 
@@ -255,32 +256,29 @@ export default function useActaCreate() {
         const selectedProject = watch('numberProject');    
         const selectedUser = watch('user');    
         const selectedTime= watch('timeCitation');    
-        const selectedDate= watch('dateCitation');    
+        const selectedDate= watch('dateCitation');   
+        
+        const getSelectedLabel = (value, list) => {
+            const selectedOption = list.find(option => option.value === value);
+            return selectedOption ? { email: selectedOption.email, name: selectedOption.name } : null;
+        };
+    
+        const selectedLabelUser = getSelectedLabel(selectedUser, activeUserList);
+       
 
         useEffect(() => {
             // Verifica si todos los valores están definidos antes de ejecutar el push
+            //console.log(selectedDate)
             if (selectedUser ) {
+                const date = new Date(selectedDate);
+                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
                 dataGridUsers.push({
-                    user: selectedUser,
-                    dateCitation: selectedDate,
-                    timeCitation: selectedTime
-                });
-                setMessage({
-                    OkTitle: "Aceptar",
-                    description: "Se ha agregado el item exitosamente",
-                    title: "Agregar Item",
-                    show: true,
-                    type: EResponseCodes.OK,
-                    background: true,
-                    onOk() {
-                        //reset();
-                        setMessage({});
-                    },
-                    onClose() {
-                        reset();
-                        setMessage({});
-                    },
-                });
+                    user: selectedLabelUser.name,
+                    dateCitation: formattedDate,
+                    timeCitation: selectedTime,
+                    status: 0,
+                    email: selectedLabelUser.email,
+                });               
             }
         }, [selectedUser]);
              
@@ -357,6 +355,18 @@ export default function useActaCreate() {
             });
         })
 
+        //dataGridUsers
+        dataGridUsers.map((e) => {
+            citation.push({              
+              user: e.user,
+              dateCitation: e.dateCitation,
+                timeCitation: e.timeCitation,
+                email: e.email,
+                status: e.status
+
+            });
+        })
+
         const actaData = {
             numberProject: data.numberProject,
             periodVigency: data.periodVigency,
@@ -367,9 +377,10 @@ export default function useActaCreate() {
             financialOperation: data.financialOperation,
             idStatus: data.idStatus,
             items: actaItems,
+            citation: citation
         };
-
-        const res = await createActa(actaData);
+        console.log(actaData)
+      const res = await createActa(actaData);
 
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
@@ -400,7 +411,7 @@ export default function useActaCreate() {
                 background: true,
             });
 
-        }
+        } 
     };
 
     const handleInputChange = 0;

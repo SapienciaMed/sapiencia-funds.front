@@ -7,10 +7,9 @@ import * as yup from "yup";
   }); */
 
 export const createActas = yup.object({    
-   /*  numberProject: yup
+   numberProject: yup
         .number()
-        .required()  
-        .typeError("Completar información"),       
+        .required("Completar información"),              
         periodVigency: yup
         .number()
         .required()
@@ -30,7 +29,14 @@ export const createActas = yup.object({
         financialOperation: yup
         .number()
         .required()
-        .typeError("Completar información"),        */
+        .typeError("Completar información"),       
+
+        vigency1: yup.number(),
+        
+    vigency2: yup.number(),
+       
+    
+   
         
 });
 
