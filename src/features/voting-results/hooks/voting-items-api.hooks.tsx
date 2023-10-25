@@ -3,6 +3,7 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import {
   IMasterActivity,
   IProgramTypes,
+  IProgramTypesActivity,
 } from "../../../common/interfaces/funds.interfaces";
 import { IItemsUpdate, IVotinItemCreate } from "../../../common/interfaces/voting.interfaces";
 
@@ -40,7 +41,7 @@ export default function useVotingItemApi() {
     return await put(`${serviceUrl}/edit/${id}`, data);
   }
 
-  async function getActivityProgram(id: number): Promise<ApiResponse<IProgramTypes[]>> {
+  async function getActivityProgram(id: number): Promise<ApiResponse<IProgramTypesActivity[]>> {
     return await get(`${serviceUrl}/getActivityProgram/${id}`);
   }
 

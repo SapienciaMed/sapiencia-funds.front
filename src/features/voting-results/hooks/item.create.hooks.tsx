@@ -32,6 +32,9 @@ export const useItemResults = (action, dataVoting) => {
   const { createVoting } = useVotingService();
   const { updateItemsVotingResults } = useVotingItemApi();
   const [idVoting, setIdVoting] = useState('');
+  const [disabledCantidad, setDisabledCantidad] = useState(true)
+  const [valueActivity, setValueActivity] = useState(0);
+
   // const { onSubmitSearch } = useVotingResultsSearch();
   
   
@@ -88,13 +91,22 @@ export const useItemResults = (action, dataVoting) => {
         });
     };
 
-
+  const changeAmountSum = (e) => {
+    if (e.target.value) {
+      if (Number(e.target.value)) {
+        const suma = (Number(e.target.value) * Number(valueActivity));
+        setValue("totalCost", suma);
+      }
+    } else {
+      
+    }
+  };
     /*Functions*/
   const onSubmitCreateItem = handleSubmit( async(data: IItemCreateRegTable)  => {
     
       if (action == 'new') {
         if (data) {
-          debugger
+          
           dataGrid.push({
             porcentaje456: data.porcentaje456,
             porcentaje123: data.porcentaje123,
@@ -131,138 +143,145 @@ export const useItemResults = (action, dataVoting) => {
     if (action == "edit") {
       
       if (dataGrid.find((obj) => obj.ident == idItemEdit)) {
-        (dataGrid.find((obj) => obj.ident == idItemEdit).porcentaje456 =
-          data.porcentaje456),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).porcentaje123 =
-            data.porcentaje123),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).totalCost =
-            data.totalCost),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).amount =
-            data.amount),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).activityValue =
-            data.activityValue),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).directObject =
-            data.directObject),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).productCatalog =
-            data.productCatalog),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).productCode =
-            data.productCode),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).program =
-            typeProgram.find((obj) => obj.value == data.program).name
-              ? typeProgram.find((obj) => obj.value == data.program).name
-              : ""),
-          (dataGrid.find((obj) => obj.ident == idItemEdit).activity =
-            activity.find((obj) => obj.value == data.activity).name
-              ? activity.find((obj) => obj.value == data.activity).name
-              : "");
-                  setMessage({
-                    OkTitle: "Aceptar",
-                    description: "Se ha editado el item exitosamente",
-                    title: "Editar Item",
-                    show: true,
-                    type: EResponseCodes.OK,
-                    background: true,
-                    onOk() {
-                      reset();
-                      setMessage({});
-                    },
-                    onClose() {
-                      reset();
-                      setMessage({});
-                    },
-                  });
+
+        setMessage({
+          OkTitle: "Aceptar",
+          cancelTitle: "Cancelar",
+          description: "Estás segur@ de editar este registro?",
+          title: "Editar registro",
+          show: true,
+          type: EResponseCodes.OK,
+          background: true,
+          async onOk() {
+            (dataGrid.find((obj) => obj.ident == idItemEdit).porcentaje456 =
+              data.porcentaje456),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).porcentaje123 =
+                data.porcentaje123),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).totalCost =
+                data.totalCost),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).amount =
+                data.amount),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).activityValue =
+                data.activityValue),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).directObject =
+                data.directObject),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).productCatalog =
+                data.productCatalog),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).productCode =
+                data.productCode),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).program =
+                typeProgram.find((obj) => obj.value == data.program).name
+                  ? typeProgram.find((obj) => obj.value == data.program).name
+                  : ""),
+              (dataGrid.find((obj) => obj.ident == idItemEdit).activity =
+                activity.find((obj) => obj.value == data.activity).name
+                  ? activity.find((obj) => obj.value == data.activity).name
+                  : "");
+            setMessage({
+              OkTitle: "Aceptar",
+              description: "Se ha editado el item exitosamente",
+              title: "Editar registro",
+              show: true,
+              type: EResponseCodes.OK,
+              background: true,
+              onOk() {
+                reset();
+                setMessage({});
+              },
+              onClose() {
+                reset();
+                setMessage({});
+              },
+            });
+          },
+          onClose() {
+            reset();
+            setMessage({});
+          },
+        });
       }
     }
     if (action == "editVoting") {
-      const votingItesData = {
-        aimStraight: String(data.directObject),
-        productCatalogueDnp: Number(data.productCatalog),
-        codProductgueDnp: Number(data.productCode),
-        codPmaProgram: Number(programSelected),
-        codMtaTeacherActivity: Number(activitySelected),
-        amount: String(data.amount),
-        costTotal: String(data.totalCost),
-        percentage123: String(data.porcentaje123),
-        percentage456: String(data.porcentaje456),
-        codRtVotingResult: String(dataVoting.codRtVotingResult),
-      };
-      
-
-      const res = await updateItemsVotingResults(idItemEdit, votingItesData);
-
-      if (res && res?.operation?.code === EResponseCodes.OK) {
-        setMessage({
+        await setMessage({
           OkTitle: "Aceptar",
-          description: "Registro actualizado correctamente",
+          cancelTitle: "Cancelar",
+          description: "Estás segur@ de editar este registro?",
           title: "Editar registro",
           show: true,
           type: EResponseCodes.OK,
           background: true,
-          onOk() {
-            // onSubmitSearch();
-            setMessage({});
+          async onOk() {
+            const votingItesData = {
+              aimStraight: String(data.directObject),
+              productCatalogueDnp: Number(data.productCatalog),
+              codProductgueDnp: Number(data.productCode),
+              codPmaProgram: Number(programSelected),
+              codMtaTeacherActivity: Number(activitySelected),
+              amount: String(data.amount),
+              costTotal: String(data.totalCost),
+              percentage123: String(data.porcentaje123),
+              percentage456: String(data.porcentaje456),
+              codRtVotingResult: String(dataVoting.codRtVotingResult),
+            };
+
+            const res = await updateItemsVotingResults(
+              idItemEdit,
+              votingItesData
+            );
+
+            if (res && res?.operation?.code === EResponseCodes.OK) {
+              setMessage({
+                OkTitle: "Aceptar",
+                description: "Registro actualizado correctamente",
+                title: "Editar registro",
+                show: true,
+                type: EResponseCodes.OK,
+                background: true,
+                onOk() {
+                  setMessage({});
+                },
+                onClose() {
+                  //reset();
+                  setMessage({});
+                },
+              });
+            } else {
+              setMessage({
+                type: EResponseCodes.FAIL,
+                title: "Editar registro",
+                description: "Ocurrió un error en el sistema",
+                show: true,
+                OkTitle: "Aceptar",
+                background: true,
+              });
+            }
           },
           onClose() {
             reset();
             setMessage({});
           },
         });
-      } else {
-        setMessage({
-          type: EResponseCodes.FAIL,
-          title: "Editar registro",
-          description: "Ocurrió un error en el sistema",
-          show: true,
-          OkTitle: "Aceptar",
-          background: true,
-        });
-      }
     }
     });
 
-    const confirmVotingCreation = async (data: IItemCreateRegTable) => {
-      setSending(true);
 
-      const user = {
-        // communeNeighborhood: data.communeNeighborhood,
-        // numberProject: data.numberProject,
-        // validity: data.validity,
-        // ideaProject: data.ideaProject,
-      };
-
-      const res = await createVoting(user);
-
-      if (res && res?.operation?.code === EResponseCodes.OK) {
-        setMessage({
-          OkTitle: "Aceptar",
-          description: "Se ha creado la votación en el sistema exitosamente",
-          title: "Resultados de votación",
-          show: true,
-          type: EResponseCodes.OK,
-          background: true,
-          onOk() {
-            reset();
-            setMessage({});
-          },
-          onClose() {
-            reset();
-            setMessage({});
-          },
-        });
-        setSending(false);
-      } else {
-        setMessage({
-          type: EResponseCodes.FAIL,
-          title: "Crear Votación",
-          description: "Ocurrió un error en el sistema",
-          show: true,
-          OkTitle: "Aceptar",
-          background: true,
-        });
-        setSending(false);
-      }
-    };
-
+  useEffect(() => {
+    if (activitySelected && activity.length> 1) {
+      setValue(
+        "activityValue",
+        activity.find((obj) => obj.value == activitySelected).total
+      );
+      setDisabledCantidad(false);
+      setValueActivity(
+        activity.find((obj) => obj.value == activitySelected).total
+      );
+        setValue(
+          "amount", null
+        );
+        setValue("totalCost", null);
+      
+    }
+  }, [activitySelected]);
 
   useEffect(() => {
     const aux = async () => {
@@ -373,11 +392,12 @@ export const useItemResults = (action, dataVoting) => {
                 if (operation.code === EResponseCodes.OK) {
                 const activityList = data.map((item) => {
                     return {
-                    name: item.name,
-                    value: item.id,
+                      name: item.name,
+                      value: item.id,
+                      total: item.totalValue,
                     };
                 });
-                    setActivity(activityList);
+                  setActivity(activityList);
                 } else {
                     setActivity([]);
                 }   
@@ -391,7 +411,6 @@ export const useItemResults = (action, dataVoting) => {
     return {
       CancelFunction,
       onSubmitCreateItem,
-      confirmVotingCreation,
       register,
       errors,
       sending,
@@ -408,6 +427,9 @@ export const useItemResults = (action, dataVoting) => {
       activitySelected,
       setActivitySelected,
       control,
+      disabledCantidad,
+      setDisabledCantidad,
+      changeAmountSum,
     };
 };
 

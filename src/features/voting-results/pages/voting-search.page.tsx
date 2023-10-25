@@ -79,20 +79,22 @@ const VotingResultsSearchPage = () => {
       {
         icon: "Edit",
         onClick: (row) => {
-          console.log("row edit", row);
-          // navigate(`/core/usuarios/editar/${row.id}`);
           setMessage({
             show: true,
             title: "Editar item",
-            // OkTitle: "Aceptar",
-            // cancelTitle: "Cancelar",
             onOk() {
               setMessage({});
             },
             background: true,
-            description: <ItemResultsPage dataVoting={row} action={"editVoting"} />,
+            description: (
+              <ItemResultsPage dataVoting={row} action={"editVoting"} />
+            ),
             size: "large",
             style: "mdl-agregarItem-voting",
+            onClose() {
+              //reset();
+              setMessage({});
+            },
           });
         },
         hide: !validateActionAccess("USUARIOS_EDITAR"),

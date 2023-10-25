@@ -64,8 +64,6 @@ export const useVotingResults = () => {
             setMessage({
               show: true,
               title: "Agregar item",
-              // OkTitle: "Aceptar",
-              // cancelTitle: "Cancelar",
               onOk() {
                 setMessage({});
               },
@@ -73,6 +71,10 @@ export const useVotingResults = () => {
               description: <ItemResultsPage dataVoting={data} action={"new"} />,
               size: "large",
               style: "mdl-agregarItem-voting",
+              onClose() {
+                //reset();
+                setMessage({});
+              },
             });
           onSubmitSearch();
         } else {
@@ -149,9 +151,8 @@ export const useVotingResults = () => {
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
               OkTitle: "Aceptar",
-              description:
-                "Se ha creado la votación en el sistema exitosamente",
-              title: "Crear Votación",
+              description: "Guardada exitosamente",
+              title: "Resultados de votación",
               show: true,
               type: EResponseCodes.OK,
               background: true,

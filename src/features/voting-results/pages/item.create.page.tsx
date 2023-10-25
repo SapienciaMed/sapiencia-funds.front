@@ -8,20 +8,16 @@ import { EDirection } from "../../../common/constants/input.enum";
 
 const ItemResultsPage = ({ dataVoting, action }) => {
   const {
+    disabledCantidad,
     CancelFunction,
     onSubmitCreateItem,
     register,
     errors,
     sending,
     typeProgram,
-    setProgramSelected,
-    setActivitySelected,
     activity,
-    setDataGrid,
-    dataGrid,
-    idItemEdit,
-    setIdItemEdit,
     control,
+    changeAmountSum,
   } = useItemResults(action, dataVoting);
 
   return (
@@ -103,6 +99,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
             direction={EDirection.column}
             errors={errors}
             placeholder={""}
+            disabled={true}
           />
 
           <InputComponent
@@ -115,6 +112,8 @@ const ItemResultsPage = ({ dataVoting, action }) => {
             direction={EDirection.column}
             errors={errors}
             placeholder={""}
+            disabled={disabledCantidad}
+            onChange={changeAmountSum}
           />
 
           <InputComponent
@@ -127,6 +126,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
             direction={EDirection.column}
             errors={errors}
             placeholder={""}
+            disabled={true}
           />
 
           <InputComponent
