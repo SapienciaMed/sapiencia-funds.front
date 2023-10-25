@@ -31,7 +31,7 @@ export const createActas = yup.object({
         .required()
         .typeError("Completar información"),       
 
-        vigency1: yup.number(),
+        //vigency1: yup.number(),
         
     vigency2: yup.number(),
        
