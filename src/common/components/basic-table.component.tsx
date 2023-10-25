@@ -95,7 +95,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         onPageChange={(i) => setPerPage(i.rows)}
         totalRecords={props.data.length} // Cambia 'meta' por 'pagingInfo'
         leftContent={
-          <p className="header-information text-black bold biggest">
+          <p className="header-information text-black biggest">
             {secondaryTitle ?? "Resultados de búsqueda"}
           </p>
         }

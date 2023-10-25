@@ -18,9 +18,9 @@ export interface IUser {
   numberDocument: string;
   email?:string;
   password?: string;
-  userModify: string;
+  userModify?: string;
   dateModify?: Date;
-  userCreate: string;
+  userCreate?: string;
   dateCreate?: Date;
 }
 

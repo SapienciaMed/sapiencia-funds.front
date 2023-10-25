@@ -10,6 +10,7 @@ import useVotingItemApi from "../../voting-results/hooks/voting-items-api.hooks"
 import useActaApi from "./acta-api.hook";
 import { IActa } from "../../../common/interfaces/acta.interface";
 import { v4 as uuidv4 } from 'uuid';
+import { createActaItems } from "../../../common/schemas/actaItems-shema";
 
 
 export default function useActaItems(action, acta: IActa, actaItems: IActaItems) {
@@ -24,7 +25,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     const tableComponentRef = useRef(null);
 
     //Validaciones
-    const resolver = useYupValidationResolver(createActas);
+    const resolver = useYupValidationResolver(createActaItems);
 
     //states
     const [showTable, setShowTable] = useState(false);
@@ -109,7 +110,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 resourcesCredit = String(resultadoOperacion2);
             }
         }
-        console.log(resta, financialOperatorCommission, resourcesCredit);
+       
         return {
             net: resta.toString(),
             costBillsOperation: multiplicacion.toString(),
@@ -148,8 +149,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 idConcept: selectedConcept
             };
 
-            if (actaItems) {
-                console.log(acta)
+            if (actaItems) {                
                 // Continuación de tu lógica de edición
                 const editingIndex = dataGridItems.findIndex(item => item.ident === actaItems.ident);
                 if (editingIndex !== -1) {
@@ -290,8 +290,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
 
     useEffect(() => {
         if (!actaItems) return;
-        if (action === "edit") {
-            console.log(actaItems.subtotalVigency, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
+        if (action === "edit") {           
             const results = calculateValues(actaItems.subtotalVigency, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
             setNet(results.net);
             setCostBillsOperationt(results.costBillsOperation);
