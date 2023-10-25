@@ -14,6 +14,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import useAuthService from "../../../common/hooks/auth-service.hook";
 import { IUser } from "../../../common/interfaces/auth.interfaces";
 import { ICitation } from '../../../common/interfaces/citationInterface';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function useActaCreate() {
     const resolver = useYupValidationResolver(createActas);
@@ -119,6 +120,9 @@ export default function useActaCreate() {
         setTotalResourcesCredit(totalResourcesCredit);
         setSubtotalVigency(totalSubtotalVigency)
         setVigency1(vigency1);
+
+
+        
         return {
             totalQuantityPeriod1,
             totalValuePeriod1,
@@ -132,7 +136,7 @@ export default function useActaCreate() {
             vigency1
         };
     };
-
+     
 
 
     useEffect(() => {
@@ -155,43 +159,6 @@ export default function useActaCreate() {
             },
         });
     });
-
-
-    /* 
-      const addItem = handleSubmit((data: IVotingCreate) => { 
-        console.log("data en agregar item ", data)
-        if (data.communeNeighborhood && data.numberProject && data.ideaProject && data.validity) {
-            setMessage({
-              show: true,
-              title: "Agregar item",
-              // OkTitle: "Aceptar",
-              // cancelTitle: "Cancelar",
-              onOk() {
-                setMessage({});
-              },
-              background: true,
-              description: <ItemResultsPage dataVoting={data} action={"new"} />,
-              size: "large",
-              style: "mdl-agregarItem-voting",
-            });
-          onSubmitSearch();
-        } else {
-            setMessage({
-              show: true,
-              title: "Error",
-              description: "Debe llenar todos los campos",
-              OkTitle: "Aceptar",
-              cancelTitle: "Cancelar",
-              onOk() {
-                setMessage({});
-              },
-              background: true,
-            });
-            }
-
-    })
-    */
-
 
 
     function loadTableData(searchCriteria?: object): void {
@@ -252,9 +219,10 @@ export default function useActaCreate() {
             .catch((err) => { });
     };
 
-
-        const selectedProject = watch('numberProject');    
-        const selectedUser = watch('user');    
+    
+    
+    const selectedProject = watch('numberProject');    
+    const selectedUser = watch('user');    
         const selectedTime= watch('timeCitation');    
         const selectedDate= watch('dateCitation');   
         
@@ -265,8 +233,23 @@ export default function useActaCreate() {
     
         const selectedLabelUser = getSelectedLabel(selectedUser, activeUserList);
        
-
-        useEffect(() => {
+        const addUser = handleSubmit((data: IActa) => {
+            if (selectedUser ) {
+                const date = new Date(selectedDate);
+                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                dataGridUsers.push({
+                    ident: uuidv4(),
+                    user: selectedLabelUser.name,
+                    dateCitation: formattedDate,
+                    timeCitation: selectedTime,
+                    status: 0,
+                    email: selectedLabelUser.email,
+                });               
+            }
+           
+        });
+        
+       /*  useEffect(() => {
             // Verifica si todos los valores están definidos antes de ejecutar el push
             //console.log(selectedDate)
             if (selectedUser ) {
@@ -281,7 +264,7 @@ export default function useActaCreate() {
                 });               
             }
         }, [selectedUser]);
-             
+              */
         
 
 
@@ -446,7 +429,8 @@ export default function useActaCreate() {
         activeUserList,
         times,
         handleInputChange,
-        dataGridUsers
+        dataGridUsers,
+        addUser
         /* CancelFunction  */
     }
 }

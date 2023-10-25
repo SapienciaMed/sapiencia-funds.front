@@ -31,9 +31,18 @@ export const createActas = yup.object({
         .required()
         .typeError("Completar información"),       
 
-        //vigency1: yup.number(),
-        
-    vigency2: yup.number(),
+       
+    
+    /* techo: yup.number()        
+        .test(
+            'is-greater',
+            'Vigency1 y/o Vigency2 no deben ser mayores que Techo',
+            function (value) {
+                const { vigency1, vigency2 } = this.parent;
+                return vigency1 <= value && vigency2 <= value;
+            }
+        ), */
+
        
     
    
