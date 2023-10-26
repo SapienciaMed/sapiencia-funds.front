@@ -360,6 +360,8 @@ export default function useActaCreate() {
                     reset();
                     setMessage({});
                     navigate("/fondos/acta/consultar");
+                    setDataGridItems([])
+                    setDataGridUsers([])
                 },
                 onClose() {
                     reset();
