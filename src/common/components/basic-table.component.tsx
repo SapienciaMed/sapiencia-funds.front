@@ -102,7 +102,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       />
 
       {width > 830 ? (
-        
+        <div style={{ maxWidth: width - 390 }}>
           <DataTable
             className="spc-table full-height"
             value={props.data}
@@ -133,7 +133,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               />
             )}
           </DataTable>
-        
+        </div>
       ) : (
         <DataView
           value={props.data}
