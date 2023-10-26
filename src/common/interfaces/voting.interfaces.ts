@@ -95,3 +95,16 @@ export interface IItemSave {
     percentage123: number,
     percentage456: number,  
 }
+
+export interface IItemsUpdate {  
+  aimStraight: string,
+  productCatalogueDnp: number,
+  codProductgueDnp: number,
+  codPmaProgram: number,
+  codMtaTeacherActivity: number,
+  amount: String,
+  costTotal: String,
+  percentage123: String,
+  percentage456: String,
+  codRtVotingResult?: String
+}

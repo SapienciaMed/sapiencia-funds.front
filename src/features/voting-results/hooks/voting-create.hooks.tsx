@@ -64,8 +64,6 @@ export const useVotingResults = () => {
             setMessage({
               show: true,
               title: "Agregar item",
-              // OkTitle: "Aceptar",
-              // cancelTitle: "Cancelar",
               onOk() {
                 setMessage({});
               },
@@ -73,6 +71,10 @@ export const useVotingResults = () => {
               description: <ItemResultsPage dataVoting={data} action={"new"} />,
               size: "large",
               style: "mdl-agregarItem-voting",
+              onClose() {
+                //reset();
+                setMessage({});
+              },
             });
           onSubmitSearch();
         } else {
@@ -95,8 +97,8 @@ export const useVotingResults = () => {
     const onSubmitCreateVoting = handleSubmit((data: IVotingCreate) => {    
         setMessage({
           show: true,
-          title: "Crear usuario",
-          description: "¿Estás segur@ de crear un nuevo usuario en el sistema?",
+          title: "Crear votación",
+          description: "¿Estás segur@ de crear una nueva votación en el sistema?",
           OkTitle: "Crear",
           cancelTitle: "Cancelar",
           onOk() {
@@ -149,16 +151,16 @@ export const useVotingResults = () => {
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
               OkTitle: "Aceptar",
-              description:
-                "Se ha creado la votación en el sistema exitosamente",
-              title: "Crear Votación",
+              description: "Guardada exitosamente",
+              title: "Resultados de votación",
               show: true,
               type: EResponseCodes.OK,
               background: true,
               onOk() {
                 reset();
                 setMessage({});
-                navigate("/core/usuarios/consultar");
+                navigate("/fondos/resultados-votacion/consultar");
+                setDataGrid([]);
               },
               onClose() {
                 reset();

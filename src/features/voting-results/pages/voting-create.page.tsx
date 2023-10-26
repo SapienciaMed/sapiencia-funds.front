@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
 import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 import ItemResultsPage from "../pages/item.create.page";
+import { EResponseCodes } from "../../../common/constants/api.enum";
 
 const VotingResultsPage = () => {
   const {
@@ -93,7 +94,7 @@ const VotingResultsPage = () => {
         // navigate(`/core/usuarios/editar/${row.id}`);
         setMessage({
           show: true,
-          title: "Agregar item",
+          title: "Editar item",
           // OkTitle: "Aceptar",
           // cancelTitle: "Cancelar",
           onOk() {
@@ -117,13 +118,27 @@ const VotingResultsPage = () => {
             description: "Estás segur@ de eliminar este registro?",
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
-            onOk() {
+            async onOk() {
               if (dataGrid.find((obj) => obj.ident == row.ident)) {
                 const position = dataGrid.findIndex(
                   (obj) => obj.ident === row.ident
                 );
                 dataGrid.splice(position, 1);
-                setMessage({})
+                
+                setMessage({
+                  OkTitle: "Aceptar",
+                  description: "Eliminado exitosamente",
+                  title: "Eliminar item",
+                  show: true,
+                  type: EResponseCodes.OK,
+                  background: true,
+                  onOk() {
+                    setMessage({});
+                  },
+                  onClose() {
+                    setMessage({});
+                  },
+                });
               }
             },
             background: true,

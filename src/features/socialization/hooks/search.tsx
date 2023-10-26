@@ -25,12 +25,9 @@ import { data as dataGroup } from "../service/api";
 export default function useSearchSocialization() {
   // Context
   const { setMessage } = useContext(AppContext);
-
-  //states
   const [showTable, setshowTable] = useState(false);
-
-  //ref
   const tableComponentRef = useRef(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   //react-router-dom
   const navigate = useNavigate();
@@ -57,7 +54,8 @@ export default function useSearchSocialization() {
         );
       }
     });
-  }, []);
+    setLoading(false);
+  }, [loading]);
 
   const tableColumns: ITableElement<ISocialization>[] = [
     {
@@ -144,6 +142,9 @@ export default function useSearchSocialization() {
     tableActions,
     deparmetList,
     newElement,
+    setshowTable,
     reset,
+    loading,
+    setLoading,
   };
 }

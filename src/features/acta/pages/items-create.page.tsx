@@ -9,7 +9,7 @@ import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 
 const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, actaItems?: IActaItems }) => {
 
-    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,costBillsOperation,handleInputChange,neto,financialOperatorCommission, resourcesCredit,programList } = useActaItems(action, acta,actaItems);
+    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,costBillsOperation,handleInputChange,neto,financialOperatorCommission, resourcesCredit,programList,CancelFunction } = useActaItems(action, acta,actaItems);
 
 
     return (
@@ -116,7 +116,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     <div className="container-form-grid-actas flex-half">
                         <div className="container-form padding-form">
                             <div className="label-container">
-                                <label className="text-black large medium grid-span-2-columns mb-24px">Periodo 1 2024-1</label>
+                                <label className="text-black large medium grid-span-2-columns mb-24px">Período 1</label>
                             </div>
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
@@ -150,7 +150,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     <div className="container-form-grid-actas flex-half">
                         <div className="container-form padding-form">
                             <div className="label-container">
-                                <label className="text-black large medium grid-span-2-columns mb-24px">Periodo 2 2024-2</label>
+                                <label className="text-black large medium grid-span-2-columns mb-24px">Período 2</label>
                             </div>
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
@@ -268,7 +268,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                //action={() => CancelFunction()}                    
+                    action={() => CancelFunction()}                    
                 />
                 <ButtonComponent
                     form="createItemsForm"

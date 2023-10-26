@@ -61,14 +61,14 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                 : item[properties[0]];
             return (
               <div key={item} className="item-value-container">
-                <p className="text-black bold text-center">{column.header}</p>
+                <p className="text-black text-center">{column.header}</p>
                 <p> {column.renderCell ? column.renderCell(item) : field} </p>
               </div>
             );
           })}
         </div>
         <div className="card-footer">
-          <section className="position-absolute top text-black bold text-center">
+          <section className="position-absolute top text-black text-center">
             {" "}
             Acciones{" "}
           </section>
@@ -95,14 +95,14 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         onPageChange={(i) => setPerPage(i.rows)}
         totalRecords={props.data.length} // Cambia 'meta' por 'pagingInfo'
         leftContent={
-          <p className="header-information text-black bold biggest">
+          <p className="header-information text-black biggest">
             {secondaryTitle ?? "Resultados de búsqueda"}
           </p>
         }
       />
 
       {width > 830 ? (
-        <div style={{ maxWidth: width - 500 }}>
+        
           <DataTable
             className="spc-table full-height"
             value={props.data}
@@ -133,7 +133,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               />
             )}
           </DataTable>
-        </div>
+        
       ) : (
         <DataView
           value={props.data}
@@ -193,10 +193,10 @@ const paginatorHeader: PaginatorTemplateOptions = {
   CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
     return (
       <>
-        <p className="header-information text-black bold big">
+        <p className="header-information text-black big">
           Total de resultados
         </p>
-        <p className="header-information text-three bold big">
+        <p className="header-information text-three big">
           {options.totalRecords}
         </p>
       </>
@@ -212,7 +212,7 @@ const paginatorHeader: PaginatorTemplateOptions = {
 
     return (
       <React.Fragment>
-        <p className="header-information text-black bold big">
+        <p className="header-information text-black big">
           Registros por página{" "}
         </p>
         <Dropdown
@@ -268,14 +268,17 @@ export const paginatorFooter: PaginatorTemplateOptions = {
       );
     }
 
+    
+
     return (
       <button
-        type="button"
-        className={options.className}
-        onClick={options.onClick}
-      >
-        {options.page + 1}
-      </button>
+      type="button"
+      className={classNames(options.className, "border-round")}
+      onClick={options.onClick}
+      //disabled={options.disabled}
+    >
+      <span className="p-3 table-next"></span>
+    </button>
     );
   },
 };

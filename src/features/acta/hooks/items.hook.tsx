@@ -10,6 +10,7 @@ import useVotingItemApi from "../../voting-results/hooks/voting-items-api.hooks"
 import useActaApi from "./acta-api.hook";
 import { IActa } from "../../../common/interfaces/acta.interface";
 import { v4 as uuidv4 } from 'uuid';
+import { createActaItems } from "../../../common/schemas/actaItems-shema";
 
 
 export default function useActaItems(action, acta: IActa, actaItems: IActaItems) {
@@ -24,7 +25,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     const tableComponentRef = useRef(null);
 
     //Validaciones
-    const resolver = useYupValidationResolver(createActas);
+    const resolver = useYupValidationResolver(createActaItems);
 
     //states
     const [showTable, setShowTable] = useState(false);
@@ -109,7 +110,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 resourcesCredit = String(resultadoOperacion2);
             }
         }
-        console.log(resta, financialOperatorCommission, resourcesCredit);
+       
         return {
             net: resta.toString(),
             costBillsOperation: multiplicacion.toString(),
@@ -119,8 +120,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     };
 
 
-    const onsubmitAddItem = handleSubmit((data: IActaItems) => {
-        console.log(data)
+    const onsubmitAddItem = handleSubmit((data: IActaItems) => {       
         if (data) {
             const updatedItem = {
                 ident: uuidv4(),
@@ -148,8 +148,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 idConcept: selectedConcept
             };
 
-            if (actaItems) {
-                console.log(acta)
+            if (actaItems) {                
                 // Continuación de tu lógica de edición
                 const editingIndex = dataGridItems.findIndex(item => item.ident === actaItems.ident);
                 if (editingIndex !== -1) {
@@ -158,31 +157,49 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                         updatedDataGridItems[editingIndex] = updatedItem;
                         return updatedDataGridItems;
                     });
+
+                    setMessage({
+                        OkTitle: "Aceptar",
+                        description:
+                            "Se ha editado el item exitosamente",
+                        title: "Editar Item",
+                        show: true,
+                        type: EResponseCodes.OK,
+                        background: true,
+                        onOk() {
+                            reset();
+                            setMessage({});
+                        },
+                        onClose() {
+                            reset();
+                            setMessage({});
+                        },
+                    });
                 }
             } else {
                 //console.log('mandar a guardar',updatedItem)
                 setDataGridItems(prevDataGridItems => [...prevDataGridItems, updatedItem]);
+                setMessage({
+                    OkTitle: "Aceptar",
+                    description:
+                        "Se ha agregado el item exitosamente",
+                    title: "Agregar Item",
+                    show: true,
+                    type: EResponseCodes.OK,
+                    background: true,
+                    onOk() {
+                        reset();
+                        setMessage({});
+                    },
+                    onClose() {
+                        reset();
+                        setMessage({});
+                    },
+                });
             }
 
 
 
-            setMessage({
-                OkTitle: "Aceptar",
-                description:
-                    "Se ha agregado el item exitosamente",
-                title: "Agregar Item",
-                show: true,
-                type: EResponseCodes.OK,
-                background: true,
-                onOk() {
-                    reset();
-                    setMessage({});
-                },
-                onClose() {
-                    reset();
-                    setMessage({});
-                },
-            });
         }
     });
 
@@ -289,10 +306,9 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     //editar items al crear actas
 
     useEffect(() => {
-        if (!actaItems) return;
-        if (action === "edit") {
-            console.log(actaItems.subtotalVigency, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
-            const results = calculateValues(actaItems.subtotalVigency, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
+        if (!actaItems || !acta) return;          
+        if (action === "edit") {  
+            const results = calculateValues(Number(actaItems.subtotalVigency), Number(acta.costsExpenses), selectedLabelFound, Number(acta.financialOperation), Number(acta.OperatorCommission));
             setNet(results.net);
             setCostBillsOperationt(results.costBillsOperation);
             setFinancialOperatorCommission(results.financialOperatorCommission);
@@ -313,8 +329,16 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
             setValue("quantityPeriod2", actaItems.periods.quantityPeriod2);
             setValue("valuePeriod2", actaItems.periods.valuePeriod2);
             setValue("financialOperatorCommission", parseInt(financialOperatorCommission));           
-        }
-    }, [actaItems,acta]);
+        }        
+    }, [actaItems,acta,selectedLabelFound]);
+
+
+    const CancelFunction = () => {
+       
+                setMessage((prev) => ({ ...prev, show: false }));
+          
+    };
+
 
     return {
         control,
@@ -339,7 +363,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
         financialOperatorCommission,
         resourcesCredit,
         handleInputChange,
-        handleSelectChange
-        /* CancelFunction  */
+        handleSelectChange,
+        CancelFunction  
     }
 }

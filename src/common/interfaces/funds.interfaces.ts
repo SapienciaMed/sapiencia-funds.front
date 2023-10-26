@@ -26,6 +26,14 @@ export interface IProgramTypes {
     description?: string
 }
 
+export interface IProgramTypesActivity {
+    id?: number;
+    name?: string;
+    typeMasterList?: ITypeMaster;
+  description?: string,
+  totalValue: number
+}
+
 export interface ITypeMaster {
     id?: number;
     name?: string;    

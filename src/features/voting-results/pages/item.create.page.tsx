@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
+import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { useItemResults } from "../hooks/item.create.hooks";
 import { EDirection } from "../../../common/constants/input.enum";
@@ -8,19 +8,16 @@ import { EDirection } from "../../../common/constants/input.enum";
 
 const ItemResultsPage = ({ dataVoting, action }) => {
   const {
+    disabledCantidad,
     CancelFunction,
     onSubmitCreateItem,
     register,
     errors,
     sending,
     typeProgram,
-    setProgramSelected,
-    setActivitySelected,
     activity,
-    setDataGrid,
-    dataGrid,
-    idItemEdit,
-    setIdItemEdit,
+    control,
+    changeAmountSum,
   } = useItemResults(action, dataVoting);
 
   return (
@@ -67,32 +64,29 @@ const ItemResultsPage = ({ dataVoting, action }) => {
             placeholder={""}
           />
 
-          <SelectComponentOld
+          <SelectComponent
             idInput="program"
-            register={register}
+            control={control}
             className="select-basic medium"
             placeholder="Seleccionar"
             label="Programa "
             data={typeProgram ? typeProgram : []}
-            value={null}
             classNameLabel="text-black big text-required bold"
             direction={EDirection.column}
             errors={errors}
-            setValue={setProgramSelected}
+            // setValue={setProgramSelected}
           />
 
-          <SelectComponentOld
+          <SelectComponent
             idInput="activity"
-            register={register}
+            control={control}
             className="select-basic medium"
             placeholder="Seleccionar"
             label="Actividad"
             data={activity ? activity : []}
-            value={null}
             classNameLabel="text-black big text-required bold"
             direction={EDirection.column}
             errors={errors}
-            setValue={setActivitySelected}
           />
 
           <InputComponent
@@ -105,6 +99,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
             direction={EDirection.column}
             errors={errors}
             placeholder={""}
+            disabled={true}
           />
 
           <InputComponent
@@ -117,6 +112,8 @@ const ItemResultsPage = ({ dataVoting, action }) => {
             direction={EDirection.column}
             errors={errors}
             placeholder={""}
+            disabled={disabledCantidad}
+            onChange={changeAmountSum}
           />
 
           <InputComponent
@@ -129,6 +126,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
             direction={EDirection.column}
             errors={errors}
             placeholder={""}
+            disabled={true}
           />
 
           <InputComponent

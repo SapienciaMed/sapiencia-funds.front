@@ -1,23 +1,29 @@
-import React, { Fragment, useContext } from "react";
-import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
+import React, { Fragment, useContext, useState } from "react";
+import { ButtonComponent, CheckComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useActaCreate from "../hooks/acta-create.hook";
-import useActaItems from "../hooks/items.hook";
-import TableGridComponent from "../../../common/components/tableGrid.component";
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 
 import ItemsCreatePage from "./items-create.page";
 import { AppContext } from "../../../common/contexts/app.context";
-import TotalTableComponent from "../../../common/components/total-table.component";
-
-
+import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
+import { Checkbox } from "primereact/checkbox";
 
 const ActaCreatePage = () => {
 
     const { setMessage } = useContext(AppContext);
 
-    const { errors, register, onsubmitCreate, showTable, tableComponentRef, datos, setDataGridItems, dataGridItems, salary, datosActa, control, projectList, projectMeta, vigency1, addItem,
+    const { errors, register,
+        onsubmitCreate,
+        tableComponentRef,
+        dataGridItems,
+        datosActa,
+        control, 
+        projectList, 
+        projectMeta, 
+        vigency1, 
+        addItem,
         totalQuantityPeriod1,
         totalValuePeriod1,
         totalQuantityPeriod2,
@@ -25,7 +31,17 @@ const ActaCreatePage = () => {
         totalCostBillsOperation,
         totalNet,
         totalFinancialOperatorCommission,
-        totalResourcesCredit } = useActaCreate();
+        totalResourcesCredit,
+        subtotalVigency,
+        activeUserList,
+        times,
+        dataGridUsers,
+        addUser,
+        checked,
+        setChecked,
+        send,
+        CancelFunction
+    } = useActaCreate();
 
 
 
@@ -114,10 +130,74 @@ const ActaCreatePage = () => {
         },
         {
             icon: "Delete",
-            onClick: (row) => { },
+            onClick: (row) => {
+                setMessage({
+                    show: true,
+                    title: "Eliminar registro",
+                    description: "Estás segur@ de eliminar este registro?",
+                    OkTitle: "Aceptar",
+                    cancelTitle: "Cancelar",
+                    onOk() {
+                        if (dataGridItems.find((obj) => obj.ident == row.ident)) {
+                            const position = dataGridItems.findIndex(
+                                (obj) => obj.ident === row.ident
+                            );
+                            dataGridItems.splice(position, 1);
+                            setMessage({})
+                        }
+                    },
+                    background: true,
+                });
+            },
         }
     ];
 
+    const tableActionsUser: ITableAction<IActaItems>[] = [
+        {
+            icon: "Delete",
+            onClick: (row) => {
+                setMessage({
+                    show: true,
+                    title: "Eliminar registro",
+                    description: "Estás segur@ de eliminar este registro?",
+                    OkTitle: "Aceptar",
+                    cancelTitle: "Cancelar",
+                    onOk() {
+                        if (dataGridUsers.find((obj) => obj.ident == row.ident)) {
+                            const position = dataGridUsers.findIndex(
+                                (obj) => obj.ident === row.ident
+                            );
+                            dataGridUsers.splice(position, 1);
+                            setMessage({})
+                        }
+                    },
+                    background: true,
+                });
+            },
+        }
+    ];
+    
+    const tableColumnsUsers: ITableElement<IActaItems>[] = [
+        {
+            fieldName: "program",
+            header: "Aprobar",          
+            renderCell: (row) => {
+                let checked = false;
+                return (
+                   /*  <SwitchComponent /> */
+                   <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
+                );
+            }
+        },
+        {
+            fieldName: "user",
+            header: "Usuario"
+        },
+        {
+            fieldName: "line",
+            header: "Fecha de aprobación",
+        }
+    ];
 
     return (
         <Fragment>
@@ -247,7 +327,7 @@ const ActaCreatePage = () => {
                 </div>
             </FormComponent>
 
-            <div className="button-save-container-display-maestros margin-right0 mr-24px">
+            <div className="button-save-container-display-actas margin-right0 mr-24px">
                 <ButtonComponent
                     value="Agregar item"
                     action={() => {
@@ -257,12 +337,10 @@ const ActaCreatePage = () => {
                 />
             </div>
 
-
-
             <div
-            /* style={
+          style={
                 dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-            } */
+            }  
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
@@ -273,14 +351,15 @@ const ActaCreatePage = () => {
                             actions={tableActions}
                             titleMessageModalNoResult="Registro no existente"
                             isShowModal={true}
+                            secondaryTitle={"Acta control financiero"}
                         />
                     </div>
                 </div>
                 <div className="container-form padding-form">
                     <div>
-                    <div className="title-area">
-                                <label className="text-black extra-large grid-span-4-columns mb-18px">Totales</label>
-                            </div>
+                        <div className="title-area">
+                            <label className="text-black extra-large grid-span-4-columns mb-18px">Totales</label>
+                        </div>
                         <div className='grid-form-4-container mb-24px'>
                             <InputComponent
                                 idInput={"tQuantity1"}
@@ -321,7 +400,7 @@ const ActaCreatePage = () => {
                                 disabled
                                 value={String(totalQuantityPeriod2)}
                             />
-                              <InputComponent
+                            <InputComponent
                                 idInput={"tValue2"}
                                 className="input-basic medium"
                                 typeInput="text"
@@ -347,10 +426,10 @@ const ActaCreatePage = () => {
                                 errors={errors}
                                 placeholder={""}
                                 disabled
-                                value={String(totalQuantityPeriod1)}
+                                value={String(subtotalVigency)}
                             />
                             <InputComponent
-                                idInput={"OperatorCommission"}
+                                idInput={"totalCostBillsOperation"}
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Costo y gasto de operación"
@@ -360,9 +439,10 @@ const ActaCreatePage = () => {
                                 errors={errors}
                                 placeholder={""}
                                 disabled
+                                value={String(totalCostBillsOperation)}
                             />
                             <InputComponent
-                                idInput={"tQuantity1"}
+                                idInput={"totalNet"}
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Neto"
@@ -372,13 +452,13 @@ const ActaCreatePage = () => {
                                 errors={errors}
                                 placeholder={""}
                                 disabled
-                                value={projectMeta}
-                            />                             
-                             
+                                value={String(totalNet)}
+                            />
+
                         </div>
                         <div className='grid-form-2-container mb-24px'>
                             <InputComponent
-                                idInput={"tQuantity1"}
+                                idInput={"totalResourcesCredit"}
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Recursos para el crédito"
@@ -388,10 +468,10 @@ const ActaCreatePage = () => {
                                 errors={errors}
                                 placeholder={""}
                                 disabled
-                                value={String(totalQuantityPeriod1)}
-                            />                            
+                                value={String(totalResourcesCredit)}
+                            />
                             <InputComponent
-                                idInput={"tQuantity1"}
+                                idInput={"totalFinancialOperatorCommission"}
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Total comisión operador financiero"
@@ -401,9 +481,9 @@ const ActaCreatePage = () => {
                                 errors={errors}
                                 placeholder={""}
                                 disabled
-                                value={projectMeta}
-                            />                             
-                             
+                                value={String(totalFinancialOperatorCommission)}
+                            />
+
                         </div>
 
                     </div>
@@ -426,7 +506,7 @@ const ActaCreatePage = () => {
                                 value={String(vigency1)}
                             />
                             <InputComponent
-                                idInput={"OperatorCommission"}
+                                idInput={"vigency2"}
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Verificador 2"
@@ -436,6 +516,7 @@ const ActaCreatePage = () => {
                                 errors={errors}
                                 placeholder={""}
                                 disabled
+                                value={String(subtotalVigency)}
                             />
                             <InputComponent
                                 idInput={"techo"}
@@ -456,6 +537,94 @@ const ActaCreatePage = () => {
                 </div>
 
 
+                <div className="container-form padding-form" >
+                    <div>
+
+                        <div>
+                            <div className="title-area">
+                                <label className="text-black extra-large grid-span-4-columns mb-18px">Citar</label>
+                            </div>
+                            <div className='grid-form-3-container mb-24px'>
+                                <DatePickerComponent
+                                    idInput="dateCitation"
+                                    control={control}
+                                    label={"Fecha"}
+                                    errors={errors}
+                                    classNameLabel="text-black biggest medium"
+                                    className="dataPicker-basic"
+                                    placeholder="DD/MM/YYYY"
+                                    dateFormat="dd/mm/yy"
+
+                                />
+
+                                <SelectComponent
+                                    idInput={"timeCitation"}
+                                    control={control}
+                                    errors={errors}
+                                    data={times}
+                                    label={
+                                        <>
+                                            Hora <span>*</span>
+                                        </>
+                                    }
+                                    className="select-basic medium select-disabled-list"
+                                    classNameLabel="text-black biggest"
+                                    filter={true}
+                                    placeholder="Seleccionar."
+
+                                />
+                                <SelectComponent
+                                    idInput={"user"}
+                                    control={control}
+                                    errors={errors}
+                                    data={activeUserList}
+                                    label={
+                                        <>
+                                            Usuario-Nombre completo <span>*</span>
+                                        </>
+                                    }
+                                    className="select-basic medium select-disabled-list"
+                                    classNameLabel="text-black biggest"
+                                    filter={true}
+                                    placeholder="Seleccionar."
+
+                                />
+                               
+                            </div>
+                            <div className="button-save-container-display-actas-users margin-right0">
+                                <ButtonComponent
+                                    value="Agregar"
+                                    action={() => {
+                                        addUser();
+                                    }}
+                                    className="button-save large disabled-black"
+                                />
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                <div className="container-form-grid mt-24px">
+                    <div className="container-form padding-form">
+                        <BasicTableComponent
+                            ref={tableComponentRef}
+                            data={dataGridUsers}
+                            columns={tableColumnsUsers}
+                            actions={tableActionsUser}
+                            titleMessageModalNoResult="Registro no existente"
+                            isShowModal={true}
+                            secondaryTitle={""}
+                        />
+                    </div>
+                </div>
+
+
+
+
             </div>
 
 
@@ -465,19 +634,20 @@ const ActaCreatePage = () => {
 
             <hr />
             <br />
-            <div className="button-save-container-display-maestros margin-right0 mr-24px">
+            <div className="button-save-container-display-actas margin-right0 mr-24px">
                 <ButtonComponent
                     form="createActaForm"
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                //action={() => CancelFunction()}                    
-                />
+                    action={() => CancelFunction()}                    
+                    />
                 <ButtonComponent
                     form="createActaForm"
                     value="Guardar"
                     type="submit"
                     className="button-save large disabled-black"
+                    disabled={send}
                 />
             </div>
             <br />

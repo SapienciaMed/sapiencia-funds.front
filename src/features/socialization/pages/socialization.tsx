@@ -18,9 +18,15 @@ export const Socialization = () => {
     onSubmit,
     formState,
     deparmetList,
+    formValues,
     newElement,
     reset,
+    setshowTable,
+    loading,
+    setLoading,
   } = useSearchSocialization();
+
+  if (loading) return <></>;
 
   return (
     <div className="container-form">
@@ -89,7 +95,11 @@ export const Socialization = () => {
           value="Limpiar"
           type="button"
           className="button-cancel-text hover-three disabled-black padding-button"
-          action={() => reset()}
+          action={() => {
+            setshowTable(false);
+            setLoading(true);
+            reset();
+          }}
         />
         <ButtonComponent
           form="socializationSearch"
