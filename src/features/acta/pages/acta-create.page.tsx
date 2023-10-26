@@ -1,5 +1,5 @@
-import React, { Fragment, useContext, useState } from "react";
-import { ButtonComponent, CheckComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
+import React, { Fragment, useContext } from "react";
+import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useActaCreate from "../hooks/acta-create.hook";
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
@@ -336,9 +336,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-            /*  style={
+           style={
                    dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-               }   */
+               }  
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
