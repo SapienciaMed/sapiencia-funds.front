@@ -197,36 +197,38 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             />
 
             {width > 830 ? (
-              <DataTable
-                className="spc-table full-height"
-                value={resultData?.array || []}
-                loading={loading}
-                scrollable={true}
-                emptyMessage={emptyMessage}
-              >
-                {columns.map((col) => (
-                  <Column
-                    key={col.fieldName}
-                    field={col.fieldName}
-                    header={col.header}
-                    body={col.renderCell}
-                  />
-                ))}
+              <div style={{ maxWidth: width - 400 }}>
+                <DataTable
+                  className="spc-table full-height"
+                  value={resultData?.array || []}
+                  loading={loading}
+                  scrollable={true}
+                  emptyMessage={emptyMessage}
+                >
+                  {columns.map((col) => (
+                    <Column
+                      key={col.fieldName}
+                      field={col.fieldName}
+                      header={col.header}
+                      body={col.renderCell}
+                    />
+                  ))}
 
-                {actions && (
-                  <Column
-                    className="spc-table-actions"
-                    header={
-                      <div>
-                        <div className="spc-header-title">Acciones</div>
-                      </div>
-                    }
-                    body={(row) => (
-                      <ActionComponent row={row} actions={actions} />
-                    )}
-                  />
-                )}
-              </DataTable>
+                  {actions && (
+                    <Column
+                      className="spc-table-actions"
+                      header={
+                        <div>
+                          <div className="spc-header-title">Acciones</div>
+                        </div>
+                      }
+                      body={(row) => (
+                        <ActionComponent row={row} actions={actions} />
+                      )}
+                    />
+                  )}
+                </DataTable>
+              </div>
             ) : (
               <DataView
                 value={resultData?.array || []}

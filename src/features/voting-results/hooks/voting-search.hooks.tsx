@@ -104,6 +104,7 @@ const [deparmetList, setDeparmentList] = useState([]);
     valCommuneNeighborhood,
     setValCommuneNeighborhood,
     reset,
+    control,
   };
 }
 

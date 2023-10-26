@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
+import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
@@ -12,6 +12,7 @@ import { AppContext } from "../../../common/contexts/app.context";
 import TableComponent from "../../../common/components/table.component";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import ItemResultsPage from "../pages/item.create.page";
+import { Controller } from "react-hook-form";
 
 
 const VotingResultsSearchPage = () => {
@@ -25,6 +26,7 @@ const VotingResultsSearchPage = () => {
     deparmetList,
     setValCommuneNeighborhood,
     reset,
+    control,
   } = useVotingResultsSearch();
 
   const navigate = useNavigate();
@@ -46,15 +48,15 @@ const VotingResultsSearchPage = () => {
       header: "Código catalogo dnp",
     },
     {
-      fieldName: "codPmaProgram",
+      fieldName: "activiti.typesProgram.name",
       header: "Programa",
     },
     {
-      fieldName: "codMtaTeacherActivity",
+      fieldName: "activiti.name",
       header: "Actividad",
     },
     {
-      fieldName: "activityValue",
+      fieldName: "activiti.totalValue",
       header: "Valor Actividad",
     },
     {
@@ -106,8 +108,6 @@ const VotingResultsSearchPage = () => {
       <div className=" container-form-grid">
         <div className="container-form padding-form">
           <p className="text-black huge mg-0">Resultados votación</p>
-
-          <div className="card-user">
             <div className="card-table-user">
               <div className="title-area">
                 <label className="text-black large medium grid-span-4-columns"></label>
@@ -128,21 +128,79 @@ const VotingResultsSearchPage = () => {
                 action={onSubmitSearchVoting}
               >
                 <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
-                  <SelectComponentOld
+                  <SelectComponent
                     idInput="communeNeighborhood"
-                    register={register}
+                    control={control}
                     className="select-basic medium"
                     placeholder="Seleccionar"
                     label="Comuna y/o corregimiento "
                     data={deparmetList ? deparmetList : []}
-                    value={null}
                     classNameLabel="text-black big text-required bold"
                     direction={EDirection.column}
                     errors={errors}
-                    setValue={setValCommuneNeighborhood}
                   />
 
-                  <InputComponent
+                  <Controller
+                    control={control}
+                    name={"numberProject"}
+                    render={({ field }) => {
+                      return (
+                        <InputComponent
+                          idInput={field.name}
+                          errors={errors}
+                          typeInput={"text"}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          value={field.value}
+                          className="input-basic medium"
+                          classNameLabel="text-black big bold"
+                          label={<>Número proyecto</>}
+                        />
+                      );
+                    }}
+                  />
+
+                  <Controller
+                    control={control}
+                    name={"validity"}
+                    render={({ field }) => {
+                      return (
+                        <InputComponent
+                          idInput={field.name}
+                          errors={errors}
+                          typeInput={"text"}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          value={field.value}
+                          className="input-basic medium"
+                          classNameLabel="text-black big bold"
+                          label={<>Vigencia</>}
+                        />
+                      );
+                    }}
+                  />
+
+                  <Controller
+                    control={control}
+                    name={"ideaProject"}
+                    render={({ field }) => {
+                      return (
+                        <InputComponent
+                          idInput={field.name}
+                          errors={errors}
+                          typeInput={"text"}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          value={field.value}
+                          className="input-basic medium"
+                          classNameLabel="text-black big bold"
+                          label={<>Idea de proyecto</>}
+                        />
+                      );
+                    }}
+                  />
+
+                  {/* <InputComponent
                     idInput="numberProject"
                     className="input-basic medium form-group"
                     typeInput="number"
@@ -176,7 +234,7 @@ const VotingResultsSearchPage = () => {
                     direction={EDirection.column}
                     errors={errors}
                     placeholder={""}
-                  />
+                  /> */}
                 </div>
               </FormComponent>
             </div>
@@ -209,7 +267,7 @@ const VotingResultsSearchPage = () => {
               Haga clic en el botón crear votación"
               isShowModal={true}
             />
-          </div>
+      
         </div>
       </div>
     </Fragment>
