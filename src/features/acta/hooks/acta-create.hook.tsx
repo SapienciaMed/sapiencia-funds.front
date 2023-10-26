@@ -8,7 +8,6 @@ import ItemsCreatePage from "../pages/items-create.page";
 import { IActaItems } from "../../../common/interfaces/actaItems.interface";
 import useActaApi from "./acta-api.hook";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
-import { IGenericList, ISalaryMin } from "../../../common/interfaces/global.interface";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import useAuthService from "../../../common/hooks/auth-service.hook";
@@ -31,7 +30,7 @@ export default function useActaCreate() {
     const [status, setStatus] = useState([]);
     const [salary, setSalary] = useState([]);
     const [projectList, setProjectsList] = useState([]);
-    const [projectMeta, setProjectMeta] = useState("");
+    const [projectMeta, setProjectMeta] = useState(0);
     const [actaItems, setActaItems] = useState(Array<IActaItems>);
     const [userList, setUserList] = useState(Array<IUser>);
     const [citation, setCitation] = useState(Array<ICitation>);
@@ -85,6 +84,7 @@ export default function useActaCreate() {
 
         items.forEach(item => {
 
+            
             const quantityPeriod1 = parseInt(item.periods?.quantityPeriod1 || '0', 10);
             const valuePeriod1 = parseInt(item.periods?.valuePeriod1 || '0', 10);
             const quantityPeriod2 = parseInt(item.periods?.quantityPeriod2 || '0', 10);
@@ -253,31 +253,13 @@ export default function useActaCreate() {
             }
            
         });
-        
-       /*  useEffect(() => {
-            // Verifica si todos los valores están definidos antes de ejecutar el push
-            //console.log(selectedDate)
-            if (selectedUser ) {
-                const date = new Date(selectedDate);
-                const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-                dataGridUsers.push({
-                    user: selectedLabelUser.name,
-                    dateCitation: formattedDate,
-                    timeCitation: selectedTime,
-                    status: 0,
-                    email: selectedLabelUser.email,
-                });               
-            }
-        }, [selectedUser]);
-              */
-        
-
-
 
     useEffect(() => {
         const selectedProjectMeta = projectList[selectedProject]?.meta;
-        setProjectMeta(selectedProjectMeta);
-        //setValue("techo", projectMeta);
+        if (selectedProjectMeta) {
+            const integerPart = parseInt(selectedProjectMeta, 10);         
+            setProjectMeta(integerPart);  
+        }
     }, [selectedProject, projectList]);
 
 
@@ -325,35 +307,29 @@ export default function useActaCreate() {
     });
 
     const confirmActaCreation = async (data: IActa) => {
-        dataGridItems.map((e) => {
-            actaItems.push({
-                costOperation: e.costOperation,
-                subtotalVigency: e.subtotalVigency,
-                costBillsOperation: e.costBillsOperation,
-                financialOperatorCommission: e.financialOperatorCommission,
-                resourcesCredit: e.resourcesCredit,
-                periods: e.periods,
-                net: e.net,
-                idFound: e.idFound,
-                idLine: e.idLine,
-                idProgram: e.idProgram,
-                idAnnouncement: e.idAnnouncement,
-                idConcept: e.idConcept
-
-            });
-        })
+        const actaItems = dataGridItems.map((e) => ({
+            costOperation: String(e.costOperation),
+            subtotalVigency: e.subtotalVigency,
+            costBillsOperation: e.costBillsOperation,
+            financialOperatorCommission: e.financialOperatorCommission,
+            resourcesCredit: e.resourcesCredit,
+            periods: e.periods,
+            net: e.net,
+            idFound: e.idFound,
+            idLine: e.idLine,
+            idProgram: e.idProgram,
+            idAnnouncement: e.idAnnouncement,
+            idConcept: e.idConcept
+        }));
 
         //dataGridUsers
-        dataGridUsers.map((e) => {
-            citation.push({              
-              user: e.user,
-              dateCitation: e.dateCitation,
-                timeCitation: e.timeCitation,
-                email: e.email,
-                status: e.status
-
-            });
-        })
+        const citation = dataGridUsers.map((e) => ({
+            user: e.user,
+            dateCitation: e.dateCitation,
+            timeCitation: e.timeCitation,
+            email: e.email,
+            status: e.status
+        }));
 
         const actaData = {
             numberProject: data.numberProject,
@@ -363,12 +339,14 @@ export default function useActaCreate() {
             costsExpenses: data.costsExpenses,
             OperatorCommission: data.OperatorCommission,
             financialOperation: data.financialOperation,
-            idStatus: data.idStatus,
+            idStatus: 1,
             items: actaItems,
             citation: citation
         };
-        console.log(actaData)
-      const res = await createActa(actaData);
+
+        console.log('asi va al back',actaData)
+       
+    const res = await createActa(actaData);
 
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
@@ -381,7 +359,7 @@ export default function useActaCreate() {
                 onOk() {
                     reset();
                     setMessage({});
-                    //navigate("/core/usuarios/consultar");
+                    navigate("/fondos/acta/consultar");
                 },
                 onClose() {
                     reset();
@@ -399,7 +377,7 @@ export default function useActaCreate() {
                 background: true,
             });
 
-        } 
+        }  
     };
 
     const handleInputChange = 0;
