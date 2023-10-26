@@ -31,8 +31,8 @@ export default function useCreateUploadHook() {
     const { getUser } = useAuthService();
     const { createUploadInformation, } = useUploadApi();
     const [itemSave, setItemSave] = useState(Array<IEmail>);
-    const [selectedCodEmployment, setSelectedCodEmployment] = useState(""); // Estado para el valor seleccionado
-    
+    const [selectedCodEmployment, setSelectedCodEmployment] = useState([]); // Estado para el valor seleccionado
+
     
     //Cargar usuarios del sistema
     const getWorkersActive = () => {
@@ -64,9 +64,7 @@ export default function useCreateUploadHook() {
       getWorkersActive();
     }, []);
     
-    const handleCodEmploymentChange = (value) => {
-      setSelectedCodEmployment(value); // Actualiza el valor seleccionado en el estado
-    };
+
   
 
     const resolver = useYupValidationResolver(filterUploadInformationSchema);
@@ -127,23 +125,35 @@ export default function useCreateUploadHook() {
 
       
 
-  //   // Cambio en el selector de usuario
-  //   const selectedProject = watch('codEmployment');
+// Cambio en el selector de usuario
+const selecteduser = watch('codEmployment');
 
-  //   useEffect(() => {
-  //     const selectedProjectMeta = selectedCodEmployment[selectedProject]?.meta;
-  //     setSelectedCodEmployment(selectedProjectMeta);
-  //     //setValue("techo", projectMeta);
-  // }, [selectedProject, selectedCodEmployment]);
+useEffect(() => {
+  if (selecteduser && activeUserList && activeUserList[selecteduser]) {
+    const selectedProjectMeta = activeUserList[selecteduser].name;
+    console.log("+++++++++++++++++++++", selectedProjectMeta);
+    setSelectedCodEmployment(selectedProjectMeta);
 
-  //     const EmailCreation = async (data: IEmail) => { 
-  //       dataGridEmails.map((e) => {
-  //         itemSave.push({
-  //           lastNames: e.lastNames,
-  //         });
+    dataGridEmails.map((e) => {
+      console.log(".......................");
+      itemSave.push({
+        lastNames: String(selectedCodEmployment) ,
+      });
 
-  //         });
-  //     }
+      });
+  }
+}, [selecteduser, activeUserList]);
+
+
+
+
+  const handleCodEmploymentChange = (value) => {
+    setSelectedCodEmployment(value); // Actualiza el valor seleccionado en el estado
+  };
+  
+      const EmailCreation = async (data: IEmail) => { 
+       
+      }
 
 
       const handleCreateInformation = async (data: IUploadInformation) => {

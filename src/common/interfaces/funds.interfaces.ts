@@ -38,6 +38,7 @@ export interface IUploadInformation{
   information: string;
   fileName?: string;
   dateUpload: string;
+  codEmployment?: string;
 }
 
 export interface IWorker {
