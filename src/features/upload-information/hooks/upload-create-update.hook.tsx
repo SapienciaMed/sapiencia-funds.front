@@ -157,6 +157,7 @@ export default function useCreateUploadHook() {
     
     try {
       data.fileName = uploadedFileName;
+      data.dateUpload = new Date().toISOString();
       
       const { data: dataResponse, operation } = await createUploadInformation(data);
       if (operation.code === EResponseCodes.OK) {

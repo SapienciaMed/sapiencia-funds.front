@@ -108,23 +108,25 @@ interface IProps {
     };
 
     const itemTemplate = (file, props) => {
-        return (
-            <div className="flex align-items-center flex-wrap">
-                <div className="flex align-items-center" style={{ width: '10%' }}>
-                    <img alt={file.name} role="presentation" src={file.objectURL} width={100} />
-                </div>
-                <div className="flex flex-column" style={{ width: '50%' }}>
-                    <span className="text-center">
-                        <Tag value={props.formatSize} style={{ backgroundColor: '#533893' }} className="px-3 py-2" />
-                    </span>
-                    <span className="text-center">{file.name}</span>
-                </div>
-                <div className="ml-auto">
-                <Button type="button" icon="trashIcon" className="p-button p-component p-button-danger p-button-rounded p-button-outlined p-button-icon-only" onClick={() => onTemplateRemove(file, props.onRemove)} >{trashIcon}</Button>
-                </div>
-            </div>
-        );
-    };
+      return (
+          <div className="flex align-items-center">
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+                  <div style={{ width: '10%' }}>
+                      <img alt="PDF" role="presentation" src="https://imagizer.imageshack.com/img924/3053/HHPGTn.png" width={100} />
+                  </div>
+                  <div style={{ flex: 1, paddingLeft: '10px' }}>
+                      <span className="text-center">
+                          <Tag value={props.formatSize} style={{ backgroundColor: '#533893' }} className="px-3 py-2" />
+                      </span>
+                      <span className="text-center">{file.name}</span>
+                  </div>
+                  <div>
+                      <Button type="button" icon="trashIcon" className="p-button p-component p-button-danger p-button-rounded p-button-outlined p-button-icon-only" onClick={() => onTemplateRemove(file, props.onRemove)} >{trashIcon}</Button>
+                  </div>
+              </div>
+          </div>
+      );
+  };
 
     const emptyTemplate = () => {
         const containerStyle = {
