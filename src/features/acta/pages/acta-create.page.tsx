@@ -1,5 +1,5 @@
-import React, { Fragment, useContext, useState } from "react";
-import { ButtonComponent, CheckComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
+import React, { Fragment, useContext } from "react";
+import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useActaCreate from "../hooks/acta-create.hook";
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
@@ -19,10 +19,10 @@ const ActaCreatePage = () => {
         tableComponentRef,
         dataGridItems,
         datosActa,
-        control, 
-        projectList, 
-        projectMeta, 
-        vigency1, 
+        control,
+        projectList,
+        projectMeta,
+        vigency1,
         addItem,
         totalQuantityPeriod1,
         totalValuePeriod1,
@@ -176,16 +176,16 @@ const ActaCreatePage = () => {
             },
         }
     ];
-    
+
     const tableColumnsUsers: ITableElement<IActaItems>[] = [
         {
             fieldName: "program",
-            header: "Aprobar",          
+            header: "Aprobar",
             renderCell: (row) => {
                 let checked = false;
                 return (
-                   /*  <SwitchComponent /> */
-                   <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
+                    /*  <SwitchComponent /> */
+                    <Checkbox onChange={e => setChecked(e.checked)} checked={checked}></Checkbox>
                 );
             }
         },
@@ -248,7 +248,6 @@ const ActaCreatePage = () => {
                                     label="Periodos por vigencia"
                                     register={register}
                                     classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
                                 />
@@ -261,7 +260,6 @@ const ActaCreatePage = () => {
                                     label="Convocatoria inicial"
                                     register={register}
                                     classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
                                 />
@@ -271,12 +269,12 @@ const ActaCreatePage = () => {
                                     typeInput="text"
                                     label="Salario mínimo"
                                     register={register}
-                                    classNameLabel="text-black biggest"
-                                    //direction={EDirection.column}
+                                    classNameLabel="text-black biggest"                                   
                                     errors={errors}
                                     placeholder={""}
                                     disabled
                                 />
+                                
                             </div>
 
                         </div>
@@ -338,9 +336,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-          style={
-                dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-            }  
+           style={
+                   dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
+               }  
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
@@ -518,7 +516,7 @@ const ActaCreatePage = () => {
                                 disabled
                                 value={String(subtotalVigency)}
                             />
-                            <InputComponent
+                           <InputComponent
                                 idInput={"techo"}
                                 className="input-basic medium"
                                 typeInput="text"
@@ -529,8 +527,8 @@ const ActaCreatePage = () => {
                                 errors={errors}
                                 placeholder={""}
                                 disabled
-                                value={projectMeta}
-                            />
+                                value={String(projectMeta)}
+                            />                           
                         </div>
 
                     </div>
@@ -551,7 +549,7 @@ const ActaCreatePage = () => {
                                     label={"Fecha"}
                                     errors={errors}
                                     classNameLabel="text-black biggest medium"
-                                    className="dataPicker-basic"
+                                    className="dataPicker-basic  medium "
                                     placeholder="DD/MM/YYYY"
                                     dateFormat="dd/mm/yy"
 
@@ -589,7 +587,7 @@ const ActaCreatePage = () => {
                                     placeholder="Seleccionar."
 
                                 />
-                               
+
                             </div>
                             <div className="button-save-container-display-actas-users margin-right0">
                                 <ButtonComponent
@@ -640,8 +638,8 @@ const ActaCreatePage = () => {
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                    action={() => CancelFunction()}                    
-                    />
+                    action={() => CancelFunction()}
+                />
                 <ButtonComponent
                     form="createActaForm"
                     value="Guardar"

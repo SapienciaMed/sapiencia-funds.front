@@ -182,7 +182,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
 }
 
 .alto-auto {
-  height: auto !important;
+  height: auto ;
 }
 
 .padding-form {
@@ -190,7 +190,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
 }
 
 .dl-agregarItem-voting{
-  height: 90vh !important;
+  height: 90vh ;
 }
 
 .margin-right0 {
@@ -372,9 +372,68 @@ span.select-basic {
   font-size: 14px  !important;
 }
 
+.mg-0{
+  margin: 0;
+  padding: 15px;
+}
+
+.content-tbl-totales{
+display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+}
+
+.alingcent-textopciones{
+  display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.txt-center{
+text-align: center;
+height: 60px !important;
+}
+
+.content-tbltotls{
+      display: flex;
+    flex-direction: row;
+}
+
+.content-tbltotlscolumn{
+      display: flex;
+    flex-direction: column;
+}
+
+.colorcontetnmin{
+    width: 201px;
+height: 60px !important;
+flex-shrink: 0;
+border-radius: var(--spacing-spacing-0, 0px);
+text-align: center;
+background: #F8F9FA;
+}
+
+
 .modal-content .text-black-2 {
   font-weight: medium !important;
   font-family: "Rubik" !important;
+}
+
+.content-tblt{
+  width: 201px;
+  height: 104px;
+  flex-shrink: 0;
+  background: #F8F9FA;
+color: #000;
+text-align: center;
+/* Font/Large/Medium */
+font-family: Rubik;
+font-size: 17px;
+font-style: normal;
+font-weight: 500;
+line-height: 120%; /* 20.4px */
 }
 
 .modal-container .modal-header p {

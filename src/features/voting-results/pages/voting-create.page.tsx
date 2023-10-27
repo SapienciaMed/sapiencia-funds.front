@@ -4,9 +4,8 @@ import {
   ButtonComponent,
   FormComponent,
   InputComponent,
+  SelectComponent,
 } from "../../../common/components/Form";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
-import { EDirection } from "../../../common/constants/input.enum";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 import {
   ITableAction,
@@ -18,6 +17,7 @@ import { AppContext } from "../../../common/contexts/app.context";
 import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 import ItemResultsPage from "../pages/item.create.page";
 import { EResponseCodes } from "../../../common/constants/api.enum";
+import { Controller } from "react-hook-form";
 
 const VotingResultsPage = () => {
   const {
@@ -31,6 +31,7 @@ const VotingResultsPage = () => {
     tableComponentRef,
     dataGrid,
     setValCommuneNeighborhood,
+    control
   } = useVotingResults();
 
   const navigate = useNavigate();
@@ -160,45 +161,93 @@ const VotingResultsPage = () => {
               action={onSubmitCreateVoting}
             >
               <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
-                <SelectComponentOld
+                <SelectComponent
                   idInput="communeNeighborhood"
-                  register={register}
-                  className="select-basic medium"
+                  control={control}
+                  className={
+                    "select-basic medium select-disabled-list input-basic input-regular"
+                  }
                   placeholder="Seleccionar"
                   label="Comuna y/o corregimiento "
                   data={deparmetList ? deparmetList : []}
-                  value={null}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
+                  // classNameLabel="text-black big "
+                  classNameLabel="text-black big text-required bold medium label-regular"
                   errors={errors}
-                  setValue={setValCommuneNeighborhood}
                 />
 
-                <InputComponent
-                  idInput="numberProject"
-                  className="input-basic medium form-group"
-                  typeInput="number"
-                  label="Número proyecto"
-                  register={register}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
+                <Controller
+                  control={control}
+                  name={"numberProject"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        typeInput={"text"}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic medium"
+                        classNameLabel="text-black big bold"
+                        label={<>Número proyecto</>}
+                      />
+                    );
+                  }}
                 />
 
-                <InputComponent
+                <Controller
+                  control={control}
+                  name={"validity"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        typeInput={"text"}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic medium"
+                        classNameLabel="text-black big bold"
+                        label={<>Vigencia</>}
+                      />
+                    );
+                  }}
+                />
+
+                <Controller
+                  control={control}
+                  name={"ideaProject"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        typeInput={"text"}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic medium"
+                        classNameLabel="text-black big bold"
+                        label={<>Idea de proyecto</>}
+                      />
+                    );
+                  }}
+                />
+
+                {/* <InputComponent
                   idInput="validity"
                   className="input-basic medium form-group"
                   typeInput="text"
-                  label="Vigencia"
+                  label=""
                   register={register}
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
                   placeholder={""}
-                />
+                /> */}
 
-                <InputComponent
+                {/* <InputComponent
                   idInput="ideaProject"
                   className="input-basic medium form-group"
                   typeInput="text"
@@ -208,7 +257,7 @@ const VotingResultsPage = () => {
                   direction={EDirection.column}
                   errors={errors}
                   placeholder={""}
-                />
+                /> */}
               </div>
             </FormComponent>
 
@@ -228,18 +277,57 @@ const VotingResultsPage = () => {
                 dataGrid.length > 0 ? { display: "block" } : { display: "none" }
               }
             >
-              <div className="container-form-grid mt-24px">
-                <div className="container-form padding-form">
-                  <BasicTableComponent
-                    ref={tableComponentRef}
-                    data={dataGrid}
-                    columns={tableColumns}
-                    actions={tableActions}
-                    titleMessageModalNoResult="Registro no existente"
-                    isShowModal={true}
-                  />
+              {/* <div className="container-form mg-0"> */}
+              <BasicTableComponent
+                ref={tableComponentRef}
+                data={dataGrid}
+                columns={tableColumns}
+                actions={tableActions}
+                titleMessageModalNoResult="Registro no existente"
+                isShowModal={true}
+              />
+              {/* </div> */}
+
+              <br />
+              <br />
+
+              <div>
+                <div className="content-tbl-totales">
+                  <span className="content-tblt">
+                    <p>Totales</p>
+                  </span>
+                  <div className="content-tbltotls">
+                    <div className="content-tbltotlscolumn">
+                      <div className="colorcontetnmin alingcent-textopciones">
+                        <span>Valor de la Actividad</span>
+                      </div>
+                      <span className="txt-center">
+                        <p>5656</p>
+                      </span>
+                    </div>
+                    <div className="content-tbltotlscolumn">
+                      <div className="colorcontetnmin alingcent-textopciones">
+                        <span>Cantidad</span>
+                      </div>
+                      <span className="txt-center">
+                        <p>5656</p>
+                      </span>
+                    </div>
+                    <div className="content-tbltotlscolumn">
+                      <div className="colorcontetnmin alingcent-textopciones">
+                        <span>Costo total</span>
+                      </div>
+                      <span className="txt-center">
+                        <p>5656</p>
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <br />
+              <br />
+
               <TextAreaComponent
                 id={"observations"}
                 idInput={"observations"}

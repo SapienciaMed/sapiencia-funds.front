@@ -40,7 +40,7 @@ export const useVotingResults = () => {
         control,
         formState: { errors },
         reset,
-    } = useForm<IVotingCreate>({ resolver });
+    } = useForm<IVotingCreate>({ resolver, mode: 'all' });
     
     const CancelFunction = () => {
         setMessage({
@@ -120,8 +120,8 @@ export const useVotingResults = () => {
 
 
     const confirmVotingCreation = async (data: IVotingCreate) => { 
-
-
+debugger
+      setItemSave([]);
          setSending(true);
       
           dataGrid.map((e) => {
@@ -139,7 +139,7 @@ export const useVotingResults = () => {
           })
 
         const votingData = {
-          communeNeighborhood: valCommuneNeighborhood,
+          communeNeighborhood: data.communeNeighborhood,
           numberProject: data.numberProject,
           validity: data.validity,
           ideaProject: data.ideaProject,
@@ -215,6 +215,7 @@ export const useVotingResults = () => {
       dataGrid,
       valCommuneNeighborhood,
       setValCommuneNeighborhood,
+      control
     };
 };
 

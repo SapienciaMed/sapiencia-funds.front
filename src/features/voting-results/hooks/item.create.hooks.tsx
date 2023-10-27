@@ -62,6 +62,8 @@ export const useItemResults = (action, dataVoting) => {
 
   const selectedProgram = watch("program");
   const selectedActivity = watch("activity");
+  const ingresAmount = watch("amount");
+
 
   
   useEffect(() => {
@@ -69,8 +71,23 @@ export const useItemResults = (action, dataVoting) => {
     setActivitySelected(Number(selectedActivity));
   }, [selectedProgram, selectedActivity])
 
-
+  useEffect(() => {
+    if (ingresAmount != null && ingresAmount != undefined) {
+      changeAmountSum(ingresAmount);
+    }
+  }, [ingresAmount]);
   
+// useEffect(() => {
+//   const subscription = watch((value: IItemCreateForm) => {
+//     console.log(value);
+//     // console.log(type);
+//     if (value.amount != null) {
+//       changeAmountSum({ target: { value: value.amount } });
+//     }
+//   });
+//   return () => subscription.unsubscribe();
+// }, [watch]);
+
     const { 
         getActivityProgram,
         getProgramTypes
@@ -92,9 +109,9 @@ export const useItemResults = (action, dataVoting) => {
     };
 
   const changeAmountSum = (e) => {
-    if (e.target.value) {
-      if (Number(e.target.value)) {
-        const suma = (Number(e.target.value) * Number(valueActivity));
+    if (e) {
+      if (Number(e)) {
+        const suma = (Number(e) * Number(valueActivity));
         setValue("totalCost", suma);
       }
     } else {
