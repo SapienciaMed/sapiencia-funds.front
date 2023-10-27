@@ -3,11 +3,14 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import {
   IMasterActivity,
   IProgramTypes,
+  IProgramTypesActivity,
 } from "../../../common/interfaces/funds.interfaces";
+import { IItemsUpdate, IVotinItemCreate } from "../../../common/interfaces/voting.interfaces";
 
 export default function useVotingItemApi() {
   const baseURL: string = process.env.urlApiFunds || "";
   const serviceUrl: string = "/api/v1/voting";
+  const serviceItems: string = '/api/v1/items'
   const serviceUrlActivity: string = "/api/v1/activities";
 
   const { get, post, put } = useCrudService(baseURL);
@@ -19,9 +22,16 @@ export default function useVotingItemApi() {
   }
 
   async function createVotingResults(
-    data: IMasterActivity
-  ): Promise<ApiResponse<IMasterActivity>> {
+    data: IVotinItemCreate
+  ): Promise<ApiResponse<IVotinItemCreate>> {
     return await post(`${serviceUrl}/create/`, data);
+  }
+
+  async function updateItemsVotingResults(
+    id: number,
+    data: IItemsUpdate
+  ): Promise<ApiResponse<IVotinItemCreate>> {
+    return await put(`${serviceItems}/update/${id}`, data);
   }
 
   async function editVotignResults(
@@ -31,7 +41,7 @@ export default function useVotingItemApi() {
     return await put(`${serviceUrl}/edit/${id}`, data);
   }
 
-  async function getActivityProgram(id: number): Promise<ApiResponse<IProgramTypes[]>> {
+  async function getActivityProgram(id: number): Promise<ApiResponse<IProgramTypesActivity[]>> {
     return await get(`${serviceUrl}/getActivityProgram/${id}`);
   }
 
@@ -45,5 +55,6 @@ export default function useVotingItemApi() {
     editVotignResults,
     getActivityProgram,
     getProgramTypes,
+    updateItemsVotingResults,
   };
 }

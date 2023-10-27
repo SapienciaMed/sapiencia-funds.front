@@ -1,36 +1,25 @@
-import React, {
-  useState,
-  forwardRef,
-  useImperativeHandle,
-  useEffect,
-  useContext,
-} from "react";
+import React, { useState, forwardRef } from "react";
 import { ITableAction, ITableElement } from "../interfaces/table.interfaces";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { DataView } from "primereact/dataview";
-import {IUnifiedPagingData} from "../../common/utils/api-response"
+import { IUnifiedPagingData } from "../utils/api-response";
 import {
   Paginator,
   PaginatorCurrentPageReportOptions,
   PaginatorNextPageLinkOptions,
-  PaginatorPageChangeEvent,
   PaginatorPageLinksOptions,
   PaginatorPrevPageLinkOptions,
   PaginatorRowsPerPageDropdownOptions,
   PaginatorTemplateOptions,
 } from "primereact/paginator";
-import { IPagingData } from "../utils/api-response";
-import useCrudService from "../hooks/crud-service.hook";
-import { EResponseCodes } from "../constants/api.enum";
 import { classNames } from "primereact/utils";
 import * as Icons from "react-icons/fa";
+import * as IconsBS from 'react-icons/bs';
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
-import { AppContext } from "../contexts/app.context";
 
 interface IProps<T> {
-  url?: string;
   emptyMessage?: string;
   title?: string;
   secondaryTitle?: string;
@@ -38,119 +27,27 @@ interface IProps<T> {
   actions?: ITableAction<T>[];
   searchItems?: object;
   isShowModal: boolean;
-  titleMessageModalNoResult?: string;  
-  data?: IUnifiedPagingData | null;
-  
+  titleMessageModalNoResult?: string;
+  data: Array<T>;
 }
-
 
 interface IRef {
   loadData: (newSearchCriteria?: object) => void;
 }
 
-const TableComponentNew = forwardRef<IRef, IProps<any>>((props, ref,) => {
+const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const {
     title,
     secondaryTitle,
     columns,
     actions,
-    url,
-    titleMessageModalNoResult,
-    isShowModal,
     emptyMessage = "No hay resultados.",
   } = props;
 
   // States
-  const [charged, setCharged] = useState<boolean>(false);
-  const [resultData, setResultData] = useState<IUnifiedPagingData | null>(props.data || null);
-  const [loading, setLoading] = useState<boolean>(false);
+
   const [perPage, setPerPage] = useState<number>(10);
-  const [page, setPage] = useState<number>(0);
-  const [first, setFirst] = useState<number>(0);
-  const [searchCriteria, setSearchCriteria] = useState<object>();
   const { width } = useWidth();
-  const { setMessage } = useContext(AppContext);
-
-
-  // Declaraciones
-  const { post } = useCrudService(url);
-  useImperativeHandle(ref, () => ({
-    loadData: loadData,
-  }));
-
-  // Metodo que hace la peticion para realizar la carga de datos
-  async function loadData(
-    newSearchCriteria?: object,
-    currentPage?: number
-  ): Promise<void> {
-    setLoading(true);
-    if (props.data) {
-      setResultData(props.data);
-      setLoading(false);
-      return;
-    }
-    if (newSearchCriteria) {
-      setSearchCriteria(newSearchCriteria);
-    }
-    const body = newSearchCriteria || searchCriteria || {};
-    const res = await post<IPagingData<any>>(url, {
-      ...body,
-      page: currentPage || 1,
-      perPage: perPage,
-    });
-
-    if (res.operation.code === EResponseCodes.OK) {
-      setResultData({
-        data: res.data.array,  // Ajusta según el formato de tu respuesta
-        pagingInfo: res.data.meta  // Ajusta según el formato de tu respuesta
-    });
-
-      if (res.data.array.length <= 0 && isShowModal) {
-        setMessage({
-          title: `${titleMessageModalNoResult || ""}`,
-          show: true,
-          description: "No hay resultado para la búsqueda",
-          OkTitle: "Aceptar",
-          background: true,
-        });
-      }
-    } else {
-      setMessage({
-        title: `Error en la consulta de datos`,
-        show: true,
-        description: res.operation.message,
-        OkTitle: "Aceptar",
-        background: true,
-        onOk: () => {
-          setMessage({});
-        },
-      });
-    }
-
-    setLoading(false);
-  }
-
-  // Metodo que alamacena el el estado del paginador
-  function onPageChange(event: PaginatorPageChangeEvent): void {
-    setPerPage(event.rows);
-    setFirst(event.first);
-    setPage(event.page);
-  }
-
-  useEffect(() => {
-    if (charged) loadData(undefined, page + 1);
-  }, [perPage, first, page]);
-
-  useEffect(() => {
-    if (props.data) {
-        setResultData(props.data);
-    } else {
-        setCharged(true);
-    }
-    return () => {
-        setCharged(false);
-    };
-}, [props.data]);
 
   const mobilTemplate = (item) => {
     return (
@@ -164,120 +61,89 @@ const TableComponentNew = forwardRef<IRef, IProps<any>>((props, ref,) => {
                 : item[properties[0]];
             return (
               <div key={item} className="item-value-container">
-                <p className="text-black bold text-center">{column.header}</p>
+                <p className="text-black text-center">{column.header}</p>
                 <p> {column.renderCell ? column.renderCell(item) : field} </p>
               </div>
             );
           })}
         </div>
         <div className="card-footer">
-          <section className="position-absolute top text-black bold text-center"> Acciones </section>
+          <section className="position-absolute top text-black text-center">
+            {" "}
+            Acciones{" "}
+          </section>
           <section className="section-action">
             {actions?.map((action) => (
               <div key={action.icon} onClick={() => action.onClick(item)}>
                 {getIconElement(action.icon, "src")}
               </div>
             ))}
-
           </section>
         </div>
       </div>
     );
   };
 
-  useImperativeHandle(ref, () => ({
-    loadData: loadData,
-    emptyData: EmptyData,
-  }));
-
-  async function EmptyData(): Promise<void> {
-    setLoading(true);
-    setResultData({
-        data: [],  // Cambia 'array' por 'data'
-        pagingInfo: {
-            total: 0,
-            // También puedes inicializar los otros campos de IDataPaging con valores predeterminados si es necesario
-            perPage: 0,
-            currentPage: 0,
-            lastPage: 0,
-            firstPage: 0,
-            firstPageUrl: "",
-            lastPageUrl: "",
-            nextPageUrl: "",
-            previousPageUrl: ""
-        }
-    });
-    setLoading(false);
-}
-
-
   return (
     <div className="spc-common-table">
       {title && <div className="spc-table-title">{title}</div>}
 
       <Paginator
-    className="between spc-table-paginator"
-    template={paginatorHeader}
-    first={first}
-    rows={perPage}
-    totalRecords={resultData?.pagingInfo?.total || 0}  // Cambia 'meta' por 'pagingInfo'
-    onPageChange={onPageChange}
-    leftContent={
-        <p className="header-information text-black bold biggest">
-            {secondaryTitle ?? 'Resultados de búsqueda'}
-        </p>
-    }
-/>
+        className="between spc-table-paginator"
+        template={paginatorHeader}
+        rows={perPage}
+        onPageChange={(i) => setPerPage(i.rows)}
+        totalRecords={props.data.length} // Cambia 'meta' por 'pagingInfo'
+        leftContent={
+          <p className="header-information text-black biggest">
+            {secondaryTitle ?? "Resultados de búsqueda"}
+          </p>
+        }
+      />
 
-
-{width > 830 ? (
-    <DataTable
-        className="spc-table full-height"
-        value={resultData?.data || []}  // Actualizado de resultData?.array a resultData?.data
-        loading={loading}
-        scrollable={true}
-        emptyMessage={emptyMessage}
-    >
-        {columns.map((col) => (
-            <Column
+      {width > 830 ? (
+        <div style={{ maxWidth: width - 390 }}>
+          <DataTable
+            className="spc-table full-height"
+            value={props.data}
+            scrollable={true}
+            paginator={true}
+            rows={perPage}
+            scrollHeight="400px"
+            emptyMessage={emptyMessage}
+          >
+            {columns.map((col) => (
+              <Column
                 key={col.fieldName}
                 field={col.fieldName}
                 header={col.header}
                 body={col.renderCell}
-            />
-        ))}
+              />
+            ))}
 
-        {actions && (
-            <Column
+            {actions && (
+              <Column
                 className="spc-table-actions"
                 header={
-                    <div>
-                        <div className="spc-header-title">Acciones</div>
-                    </div>
+                  <div>
+                    <div className="spc-header-title">Acciones</div>
+                  </div>
                 }
                 body={(row) => <ActionComponent row={row} actions={actions} />}
-            />
-        )}
-    </DataTable>
-) : (
-    <DataView
-        value={resultData?.data || []}  // Actualizado de resultData?.array a resultData?.data
-        itemTemplate={mobilTemplate}
-        rows={5}
-        emptyMessage={emptyMessage}
-    />
-)}
-<Paginator
-    className="spc-table-paginator"
-    template={paginatorFooter}
-    first={first}
-    rows={perPage}
-    totalRecords={resultData?.pagingInfo?.total || 0}  // Actualizado de resultData?.meta?.total a resultData?.pagingInfo?.total
-    onPageChange={onPageChange}
-/>
-</div>
-);
-
+              />
+            )}
+          </DataTable>
+        </div>
+      ) : (
+        <DataView
+          value={props.data}
+          itemTemplate={mobilTemplate}
+          rows={5}
+          emptyMessage={emptyMessage}
+        />
+      )}
+    </div>
+  );
 });
 
 // Metodo que retorna el icono o nombre de la accion
@@ -307,6 +173,16 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <Icons.FaLink className="button grid-button button-link" />
       );
+      case "download":
+        return element == "name" ? (
+          "descargar"
+        ) : (
+          <IconsBS.BsDownload 
+          className="button grid-button button-download" 
+          style={{ color: '#533893' }}
+          />
+        );
+
     default:
       return "";
   }
@@ -317,10 +193,10 @@ const paginatorHeader: PaginatorTemplateOptions = {
   CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
     return (
       <>
-        <p className="header-information text-black bold big">
+        <p className="header-information text-black big">
           Total de resultados
         </p>
-        <p className="header-information text-three bold big">
+        <p className="header-information text-three big">
           {options.totalRecords}
         </p>
       </>
@@ -336,7 +212,7 @@ const paginatorHeader: PaginatorTemplateOptions = {
 
     return (
       <React.Fragment>
-        <p className="header-information text-black bold big">
+        <p className="header-information text-black big">
           Registros por página{" "}
         </p>
         <Dropdown
@@ -392,14 +268,17 @@ export const paginatorFooter: PaginatorTemplateOptions = {
       );
     }
 
+    
+
     return (
       <button
-        type="button"
-        className={options.className}
-        onClick={options.onClick}
-      >
-        {options.page + 1}
-      </button>
+      type="button"
+      className={classNames(options.className, "border-round")}
+      onClick={options.onClick}
+      //disabled={options.disabled}
+    >
+      <span className="p-3 table-next"></span>
+    </button>
     );
   },
 };
@@ -420,4 +299,4 @@ const ActionComponent = (props: {
   );
 };
 
-export default React.memo(TableComponentNew);
+export default React.memo(BasicTableComponent);

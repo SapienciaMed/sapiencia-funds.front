@@ -2,8 +2,9 @@ import React, { Fragment, useContext } from "react";
 import { ButtonComponent, FormComponent, SelectComponent } from "../../../common/components/Form";
 import useMasterConsult from "../hooks/master-consult.hook";
 import { BiPlusCircle } from 'react-icons/bi';
-import TableComponentNew from "../../../common/components/tableNew.component";
 import { AppContext } from "../../../common/contexts/app.context";
+import TableComponent from "../../../common/components/table.component";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 
 
@@ -27,7 +28,7 @@ const MasterPage = () => {
 
                                 {validateActionAccess('MAESTROS_CREAR') && (
                                     <div className="title-button-users text-three biggest" onClick={() => { navigate('../crear') }}>
-                                        Crear maestro <BiPlusCircle />
+                                        Crear maestro <AiOutlinePlusCircle />
                                     </div>
                                     
                                 )}
@@ -46,7 +47,7 @@ const MasterPage = () => {
                                         </>
                                     }
                                     className="select-basic medium select-disabled-list"
-                                    classNameLabel="text-black biggest bold"
+                                    classNameLabel="text-black biggest"
                                     filter={true}
                                     placeholder="Seleccione."
                                 />
@@ -54,7 +55,7 @@ const MasterPage = () => {
                         </FormComponent>
                     </div>
                 </div>
-                <div className="button-save-container-display-maestros margin-right0 mr-24px mb-24px">
+                <div className="button-save-container-display-maestros margin-right0 mr-24px button-container">
                     <ButtonComponent
                         form="createMasterForm"
                         value="Limpiar"
@@ -81,7 +82,7 @@ const MasterPage = () => {
                 showTable &&
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
-                        <TableComponentNew
+                        <TableComponent
                             ref={tableComponentRef}
                             url={`${process.env.urlApiFunds}/api/v1/master/get-paginated`}
                             columns={tableColumns}

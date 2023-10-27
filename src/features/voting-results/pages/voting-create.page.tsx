@@ -1,19 +1,25 @@
 import React, { Fragment, useContext } from "react";
 import { useVotingResults } from "../hooks/voting-create.hooks";
-import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
-import { EDirection } from "../../../common/constants/input.enum";
-import { SelectComponentUser } from "../../../common/components/Form/select.component.user";
-import TableComponentNew from "../../../common/components/tableNew.component";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import {
+  ButtonComponent,
+  FormComponent,
+  InputComponent,
+  SelectComponent,
+} from "../../../common/components/Form";
+import BasicTableComponent from "../../../common/components/basic-table.component";
+import {
+  ITableAction,
+  ITableElement,
+} from "../../../common/interfaces/table.interfaces";
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
-
-
+import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
+import ItemResultsPage from "../pages/item.create.page";
+import { EResponseCodes } from "../../../common/constants/api.enum";
+import { Controller } from "react-hook-form";
 
 const VotingResultsPage = () => {
-
   const {
     CancelFunction,
     onSubmitCreateVoting,
@@ -23,59 +29,125 @@ const VotingResultsPage = () => {
     deparmetList,
     addItem,
     tableComponentRef,
+    dataGrid,
+    setValCommuneNeighborhood,
+    control
   } = useVotingResults();
 
   const navigate = useNavigate();
-  const { validateActionAccess } = useContext(AppContext);
+  const { validateActionAccess, setMessage } = useContext(AppContext);
 
-    const tableColumns: ITableElement<IVotingSearcheResult>[] = [
-      {
-        fieldName: "numberDocument",
-        header: "Objetivo directo",
-      },
-      {
-        fieldName: "Producto catalogo dnp",
-        header: "Nombres y apellidos",
-      },
-      {
-        fieldName: "email",
-        header: "ódigo catalogo dnp",
-      },
-      {
-        fieldName: "profile",
-        header: "Programa",
-      },
-      {
-        fieldName: "profile",
-        header: "Actividad",
-      },
-      {
-        fieldName: "profile",
-        header: "",
-      },
+
+
+
+  const tableColumns: ITableElement<IVotingSearcheResult>[] = [
+    {
+      fieldName: "directObject",
+      header: "Objetivo directo",
+    },
+    {
+      fieldName: "productCatalog",
+      header: "Producto catalogo dnp",
+    },
+    {
+      fieldName: "productCode",
+      header: "Código catalogo dnp",
+    },
+    {
+      fieldName: "program",
+      header: "Programa",
+    },
+    {
+      fieldName: "activity",
+      header: "Actividad",
+    },
+    {
+      fieldName: "activityValue",
+      header: "Valor Actividad",
+    },
+    {
+      fieldName: "amount",
+      header: "Cantidad",
+    },
+    {
+      fieldName: "totalCost",
+      header: "Costo Total",
+    },
+    {
+      fieldName: "porcentaje123",
+      header: "Porcentaje 123",
+    },
+    {
+      fieldName: "porcentaje456",
+      header: "Porcentaje 456",
+    },
+    // {
+    //   fieldName: "profile",
+    //   header: "",
+    // },
   ];
-  
-    const tableActions: ITableAction<IVotingSearcheResult>[] = [
-      {
-        icon: "Detail",
-        onClick: (row) => {
-          navigate(`/core/usuarios/editar/${row.id}`);
-        },
-        hide: !validateActionAccess("USUARIOS_DETALLE"),
+
+  const tableActions: ITableAction<IVotingSearcheResult>[] = [
+    {
+      icon: "Edit",
+      onClick: (row) => {
+        console.log("row ", row);
+        // navigate(`/core/usuarios/editar/${row.id}`);
+        setMessage({
+          show: true,
+          title: "Editar item",
+          // OkTitle: "Aceptar",
+          // cancelTitle: "Cancelar",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: <ItemResultsPage dataVoting={row} action={"edit"} />,
+          size: "large",
+          style: "mdl-agregarItem-voting",
+        });
       },
-      {
-        icon: "Edit",
-        onClick: (row) => {
-          navigate(`/core/usuarios/editar/${row.id}`);
-        },
-        hide: !validateActionAccess("USUARIOS_EDITAR"),
+      hide: !validateActionAccess("USUARIOS_EDITAR"),
+    },
+    {
+      icon: "Delete",
+      onClick: (row) => {
+        console.log("row ", row);
+          setMessage({
+            show: true,
+            title: "Eliminar registro",
+            description: "Estás segur@ de eliminar este registro?",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            async onOk() {
+              if (dataGrid.find((obj) => obj.ident == row.ident)) {
+                const position = dataGrid.findIndex(
+                  (obj) => obj.ident === row.ident
+                );
+                dataGrid.splice(position, 1);
+                
+                setMessage({
+                  OkTitle: "Aceptar",
+                  description: "Eliminado exitosamente",
+                  title: "Eliminar item",
+                  show: true,
+                  type: EResponseCodes.OK,
+                  background: true,
+                  onOk() {
+                    setMessage({});
+                  },
+                  onClose() {
+                    setMessage({});
+                  },
+                });
+              }
+            },
+            background: true,
+          });
       },
-      {
-        icon: "Delete",
-        onClick: (row) => {},
-        hide: !validateActionAccess("USUARIOS_ELIMINAR"),
-      }
-    ];
+      hide: !validateActionAccess("USUARIOS_ELIMINAR"),
+    },
+  ];
 
   return (
     <Fragment>
@@ -89,44 +161,93 @@ const VotingResultsPage = () => {
               action={onSubmitCreateVoting}
             >
               <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
-                <SelectComponentOld
+                <SelectComponent
                   idInput="communeNeighborhood"
-                  register={register}
-                  className="select-basic medium"
+                  control={control}
+                  className={
+                    "select-basic medium select-disabled-list input-basic input-regular"
+                  }
                   placeholder="Seleccionar"
                   label="Comuna y/o corregimiento "
                   data={deparmetList ? deparmetList : []}
-                  value={null}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
+                  // classNameLabel="text-black big "
+                  classNameLabel="text-black big text-required bold medium label-regular"
                   errors={errors}
                 />
 
-                <InputComponent
-                  idInput="numberProject"
-                  className="input-basic medium form-group"
-                  typeInput="number"
-                  label="Número proyecto"
-                  register={register}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
+                <Controller
+                  control={control}
+                  name={"numberProject"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        typeInput={"text"}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic medium"
+                        classNameLabel="text-black big bold"
+                        label={<>Número proyecto</>}
+                      />
+                    );
+                  }}
                 />
 
-                <InputComponent
+                <Controller
+                  control={control}
+                  name={"validity"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        typeInput={"text"}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic medium"
+                        classNameLabel="text-black big bold"
+                        label={<>Vigencia</>}
+                      />
+                    );
+                  }}
+                />
+
+                <Controller
+                  control={control}
+                  name={"ideaProject"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        typeInput={"text"}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic medium"
+                        classNameLabel="text-black big bold"
+                        label={<>Idea de proyecto</>}
+                      />
+                    );
+                  }}
+                />
+
+                {/* <InputComponent
                   idInput="validity"
                   className="input-basic medium form-group"
                   typeInput="text"
-                  label="Vigencia"
+                  label=""
                   register={register}
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
                   placeholder={""}
-                />
+                /> */}
 
-                <InputComponent
+                {/* <InputComponent
                   idInput="ideaProject"
                   className="input-basic medium form-group"
                   typeInput="text"
@@ -136,7 +257,7 @@ const VotingResultsPage = () => {
                   direction={EDirection.column}
                   errors={errors}
                   placeholder={""}
-                />
+                /> */}
               </div>
             </FormComponent>
 
@@ -151,33 +272,74 @@ const VotingResultsPage = () => {
               />
             </div>
 
-            {/* <TableComponent
-              ref={tableComponentRef}
-              url={`${process.env.urlApiAuth}/api/v1/voting/search`}
-              columns={tableColumns}
-              actions={tableActions}
-              titleMessageModalNoResult="Registro no existente"
-              descriptionModalNoResult="EL registro no existe en el sistema."
-              isShowModal={true}
-            /> */}
+            <div
+              style={
+                dataGrid.length > 0 ? { display: "block" } : { display: "none" }
+              }
+            >
+              {/* <div className="container-form mg-0"> */}
+              <BasicTableComponent
+                ref={tableComponentRef}
+                data={dataGrid}
+                columns={tableColumns}
+                actions={tableActions}
+                titleMessageModalNoResult="Registro no existente"
+                isShowModal={true}
+              />
+              {/* </div> */}
 
-              <div className="container-form-grid mt-24px">
-                <div className="container-form padding-form">
-                  <TableComponentNew
-                    ref={tableComponentRef}
-                    data={{
-                      data: [], // Aquí pasas tu array de datos
-                      pagingInfo: {
-                        total: [].length,
-                      },
-                    }}
-                    columns={tableColumns}
-                    actions={tableActions}
-                    isShowModal={true}
-                  />
+              <br />
+              <br />
+
+              <div>
+                <div className="content-tbl-totales">
+                  <span className="content-tblt">
+                    <p>Totales</p>
+                  </span>
+                  <div className="content-tbltotls">
+                    <div className="content-tbltotlscolumn">
+                      <div className="colorcontetnmin alingcent-textopciones">
+                        <span>Valor de la Actividad</span>
+                      </div>
+                      <span className="txt-center">
+                        <p>5656</p>
+                      </span>
+                    </div>
+                    <div className="content-tbltotlscolumn">
+                      <div className="colorcontetnmin alingcent-textopciones">
+                        <span>Cantidad</span>
+                      </div>
+                      <span className="txt-center">
+                        <p>5656</p>
+                      </span>
+                    </div>
+                    <div className="content-tbltotlscolumn">
+                      <div className="colorcontetnmin alingcent-textopciones">
+                        <span>Costo total</span>
+                      </div>
+                      <span className="txt-center">
+                        <p>5656</p>
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
+              <br />
+              <br />
+
+              <TextAreaComponent
+                id={"observations"}
+                idInput={"observations"}
+                label="Observaciones"
+                classNameLabel="text-black biggest bold text-required"
+                className={`text-area-basic `}
+                placeholder="Escribe aquí"
+                register={register}
+                errors={errors}
+                characters={500}
+              ></TextAreaComponent>
+            </div>
           </div>
 
           <div>

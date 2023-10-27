@@ -17,10 +17,10 @@ const MasterCrudPage = ({ action }) => {
 
     return (
         <Fragment>
-            <div className="title-area">
+            <div className="title-area ">
                 <p className="text-black huge ml-24px mt-20px mg-0">Crear maestro</p>
             </div>
-            <div className="container-form-grid">
+            <div className="container-form-grid mb-24px">
                 <div className="container-form padding-form">
 
                     <div>
@@ -38,7 +38,7 @@ const MasterCrudPage = ({ action }) => {
                                         </>
                                     }
                                     className="select-basic medium select-disabled-list"
-                                    classNameLabel="text-black biggest bold"
+                                    classNameLabel="text-black biggest"
                                     filter={true}
                                     placeholder="Seleccione."                                    
                                 />
@@ -49,7 +49,7 @@ const MasterCrudPage = ({ action }) => {
                                     typeInput="text"
                                     label="Nuevo maestro"
                                     register={register}
-                                    classNameLabel="text-black biggest text-required bold"
+                                    classNameLabel="text-black biggest text-required"
                                     //direction={EDirection.column}
                                     errors={errors}
                                     placeholder={""}
@@ -68,7 +68,7 @@ const MasterCrudPage = ({ action }) => {
                                                 value={`${field.value}`}
                                                 label="Descripción"
                                                 className="text-area-basic"
-                                                classNameLabel="text-black biggest bold"
+                                                classNameLabel="text-black biggest"
                                                 rows={4}
                                                 placeholder="Escribe aquí"
                                                 register={register}
@@ -84,7 +84,7 @@ const MasterCrudPage = ({ action }) => {
                     </div>
                 </div>
 
-                <div className="button-save-container-display-maestros margin-right0 mr-24px">
+                <div className="button-save-container-display-maestros">
                     <ButtonComponent
                         form="createMasterForm"
                         value="Cancelar"
@@ -98,7 +98,7 @@ const MasterCrudPage = ({ action }) => {
                         type="submit"
                         className="button-save large disabled-black"                    
                     />
-                </div>
+                </div>                
             </div>
         </Fragment>
     )

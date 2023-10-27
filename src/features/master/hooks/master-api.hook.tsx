@@ -39,18 +39,12 @@ export default function useMasterApi() {
     ): Promise<ApiResponse<IMaster[]>> {
       return await get(`${serviceTypeMaster}/`);
     }
-
-  /* async function getProgramTypes(
-  ): Promise<ApiResponse<IProgramTypes[]>> {
-    return await get(`${serviceUrl}/programtypes/`);
-  } */
   
 
   return {
     createMaster,
     getMasterById,
-    editMaster,
-    //getProgramTypes,
+    editMaster,    
     getMaster,
     TypeMasterList
   };

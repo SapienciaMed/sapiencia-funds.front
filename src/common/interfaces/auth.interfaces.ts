@@ -16,10 +16,11 @@ export interface IUser {
   lastNames: string;
   typeDocument: string;
   numberDocument: string;
+  email?:string;
   password?: string;
-  userModify: string;
+  userModify?: string;
   dateModify?: Date;
-  userCreate: string;
+  userCreate?: string;
   dateCreate?: Date;
 }
 
