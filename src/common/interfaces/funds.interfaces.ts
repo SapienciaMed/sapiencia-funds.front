@@ -46,7 +46,9 @@ export interface IUploadInformation{
   information: string;
   fileName?: string;
   dateUpload: string;
-  codEmployment?: string;
+  User?: string;
+  dataToSend?:string; 
+  emails?:string[];
 }
 
 export interface IWorker {
@@ -59,8 +61,10 @@ export interface IWorker {
   secondSurname?: string;
 }
 
-export interface IEmail{
+export interface IEmailDataGrid{
   id?: number;
+  user?:string;
   email?: string;
-  lastNames?: string
+  lastNames?: string;
+  ident?: string;
 }

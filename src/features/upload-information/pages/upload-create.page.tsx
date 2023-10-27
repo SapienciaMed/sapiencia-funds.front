@@ -9,8 +9,9 @@ import useSearchUploadHook from "../hooks/search-upload-information.hook";
 import { AppContext } from "../../../common/contexts/app.context";
 import useListData from "../hooks/list.hook";
 import BasicTableComponent from "../../../common/components/basic-table.component";
-import {ITableAction,ITableElement,} from "../../../common/interfaces/table.interfaces";
+import { ITableAction, ITableElement, } from "../../../common/interfaces/table.interfaces";
 import { IUser } from "../../../common/interfaces/auth.interfaces";
+import { IEmailDataGrid } from "../../../common/interfaces/funds.interfaces";
 
 
 const UploadCreatePage = (): React.JSX.Element => {
@@ -18,11 +19,8 @@ const UploadCreatePage = (): React.JSX.Element => {
     control,
     formState,
     register,
-    //setValue,
     tableComponentRef,
     showTable,
-    //tableActions,
-    //setShowTable,
     onSubmit,
     redirectCancel,
     setFilesUploadData,
@@ -30,50 +28,48 @@ const UploadCreatePage = (): React.JSX.Element => {
     activeUserList,
     dataGridEmails,
     setUploadedFileName,
+    addUsergrid,
   } = useCreateUploadHook();
   const { errors, isValid } = formState;
-
   const { commune, validity, information } = useSearchUploadHook()
-
   const { setMessage } = useContext(AppContext);
-
+  const { vigencias } = useListData();
   const handleFileNameChange = (fileName) => {
     setUploadedFileName(fileName);
   };
 
-  const {vigencias} = useListData();
 
-  const tableColumns: ITableElement<IUser>[] = [
+
+  const tableColumnsUsers: ITableElement<IUser>[] = [
     {
-      fieldName: "Email",
-      header: "Correo electronico",
+      fieldName: "user",
+      header: "Usuario",
     }
   ];
 
-  const tableActions: ITableAction<IUser>[] = [
+  const tableActionsUser: ITableAction<IEmailDataGrid>[] = [
     {
       icon: "Delete",
       onClick: (row) => {
-        console.log("row ", row);
-          setMessage({
-            show: true,
-            title: "Eliminar registro",
-            description: "Estás segur@ de eliminar este registro?",
-            OkTitle: "Aceptar",
-            cancelTitle: "Cancelar",
-            onOk() {
-              if (dataGridEmails.find((obj) => obj.email == row.names)) {
-                const position = dataGridEmails.findIndex(
-                  (obj) => obj.email === row.names
-                );
-                dataGridEmails.splice(position, 1);
-                setMessage({})
-              }
-            },
-            background: true,
-          });
+        setMessage({
+          show: true,
+          title: "Eliminar registro",
+          description: "Estás segur@ de eliminar este registro?",
+          OkTitle: "Aceptar",
+          cancelTitle: "Cancelar",
+          onOk() {
+            if (dataGridEmails.find((obj) => obj.ident == row.ident)) {
+              const position = dataGridEmails.findIndex(
+                (obj) => obj.ident === row.ident
+              );
+              dataGridEmails.splice(position, 1);
+              setMessage({})
+            }
+          },
+          background: true,
+        });
       },
-    },
+    }
   ];
 
   return (
@@ -91,7 +87,7 @@ const UploadCreatePage = (): React.JSX.Element => {
             <FormComponent
               id="uploadCreate"
               className="form-signIn"
-              action={onSubmit}
+            action={onSubmit}
             >
               <div className="grid-form-4-container gap-25">
 
@@ -165,11 +161,11 @@ const UploadCreatePage = (): React.JSX.Element => {
               maxSize={1048576}
               dropboxMessage="Arrastra y suelta el archivo aquí"
               multiple={false}
-              onFileChange={handleFileNameChange} 
+              onFileChange={handleFileNameChange}
             />
           </div>
 
-          {/* Seleccionar a usuario para notificar*/}
+
           <div className="title-area">
             <label className="text-black extra-large medium">
               Usuarios a notificar
@@ -177,45 +173,48 @@ const UploadCreatePage = (): React.JSX.Element => {
           </div>
 
           <div className="container-sections-forms">
-            <FormComponent
-              id="uploadCreate"
-              className="form-signIn"
-              action={onSubmit}
-            >
-              <div className="grid-form-3-container gap-25">
-                <SelectComponent
-                  idInput={"codEmployment"}
-                  control={control}
-                  errors={errors}
-                  data={activeUserList}
-                  label={<>Notificar a</>}
-                  className="select-basic medium"
-                  classNameLabel="text-black big bold"
-                  filter={true}
-                  placeholder="Seleccione."
-                />
-              </div>
-            </FormComponent>
+            <div className="grid-form-3-container gap-25">
+              <SelectComponent
+                idInput={"User"}
+                control={control}
+                errors={errors}
+                data={activeUserList}
+                label={<>Notificar a</>}
+                className="select-basic medium"
+                classNameLabel="text-black big bold"
+                filter={true}
+                placeholder="Seleccione."
+              />
+            </div>
+            <div className="button-save-container-display-actas-users margin-right0">
+              <ButtonComponent
+                value="Agregar"
+                action={() => {
+                  addUsergrid();
+                }}
+                className="button-save large disabled-black"
+              />
+            </div>
+
           </div>
-          
+
           <div
-              // style={
-              //   dataGridEmails.length > 0 ? { display: "block" } : { display: "none" }
-              // }
+              style={
+                dataGridEmails.length > 0 ? { display: "block" } : { display: "none" }
+              }
             >
-              <div className="container-form-grid mt-24px">
-                <div className="container-form padding-form">
-                  <BasicTableComponent
-                    ref={tableComponentRef}
-                    data={dataGridEmails}
-                    columns={tableColumns}
-                    actions={tableActions}
-                    titleMessageModalNoResult="Registro no existente"
-                    isShowModal={true}
-                  />
-                </div>
-              </div>
-              </div>
+            <div className="container-sections-forms">
+              <BasicTableComponent
+                ref={tableComponentRef}
+                data={dataGridEmails}
+                columns={tableColumnsUsers}
+                actions={tableActionsUser}
+                titleMessageModalNoResult="Registro no existente"
+                isShowModal={true}
+              />
+            </div>
+          </div>
+
           <div className="button-save-container-display m-top-20">
             <ButtonComponent
               form="uploadCreate"
@@ -236,7 +235,7 @@ const UploadCreatePage = (): React.JSX.Element => {
       </div>
 
     </Fragment>
-    
+
   );
 };
 

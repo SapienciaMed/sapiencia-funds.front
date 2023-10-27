@@ -14,8 +14,15 @@ export default function useUploadApi() {
         return await post(`${serviceUrl}/create`, data);
     }
 
+    async function UserNotificacion(
+      data: IUploadInformation
+    ): Promise<ApiResponse<IUploadInformation>> {
+      return await post(`${serviceUrl}/mail-notification`, data);
+  }
+
     return {
         createUploadInformation,
+        UserNotificacion,
       };
     }
     

@@ -10,7 +10,7 @@ import { IAuthorization } from "../interfaces/auth.interfaces";
 import { IMessage } from "../interfaces/global.interface";
 import {IVotingResultGrid} from "../interfaces/voting.interfaces"
 import { IActaItems } from "../interfaces/actaItems.interface";
-import { IEmail } from "../interfaces/funds.interfaces";
+import { IEmailDataGrid } from "../interfaces/funds.interfaces";
 import { IUserDataGrid } from "../interfaces/usersGridInterface";
 
 interface IAppContext {
@@ -27,8 +27,8 @@ interface IAppContext {
   setDataGrid: Dispatch<SetStateAction<Array<IVotingResultGrid>>>;
   dataGridItems: Array<IActaItems>;
   setDataGridItems: Dispatch<SetStateAction<Array<IActaItems>>>;
-  dataGridEmails: Array<IEmail>;
-  setDataGridEmails: Dispatch<SetStateAction<Array<IEmail>>>;
+  dataGridEmails: Array<IEmailDataGrid>;
+  setDataGridEmails: Dispatch<SetStateAction<Array<IEmailDataGrid>>>;
   dataGridUsers: Array<IUserDataGrid>;
   setDataGridUsers: Dispatch<SetStateAction<Array<IUserDataGrid>>>;
 }
@@ -50,7 +50,7 @@ export const AppContext = createContext<IAppContext>({
   setDataGrid: () => {},
   dataGridItems: {} as Array<IActaItems>,
   setDataGridItems: () => {},
-  dataGridEmails: {} as Array<IEmail>,
+  dataGridEmails: {} as Array<IEmailDataGrid>,
   setDataGridEmails: () => {},
   dataGridUsers: {} as Array<IUserDataGrid>,
   setDataGridUsers: () => {},
@@ -68,7 +68,7 @@ export function AppContextProvider({ children }: IProps) {
   const [disabledFields, setDisabledFields] = useState<boolean>(false);
   const [dataGrid, setDataGrid] = useState(Array<IVotingResultGrid>);
   const [dataGridItems, setDataGridItems] = useState(Array<IActaItems>);
-  const [dataGridEmails, setDataGridEmails] = useState(Array<IEmail>);
+  const [dataGridEmails, setDataGridEmails] = useState(Array<IEmailDataGrid>);
   const [dataGridUsers, setDataGridUsers] = useState(Array<IUserDataGrid>);
 
   // Metodo que verifica si el usuario posee permisos sobre un accion
