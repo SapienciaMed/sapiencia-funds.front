@@ -14,6 +14,7 @@ import useAppCominicator from "./common/hooks/app-communicator.hook";
 import MasterRoutes from "./features/master/master-routes";
 import ActaRoutes from "./features/acta/acta-routes";
 import Socialization from "./features/socialization";
+import Regulation from "./features/regulation";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -46,17 +47,15 @@ function App() {
                 path={"/fondos/maestro/*"}
                 element={<MasterActivityRoutes />}
               />
-              <Route
-                path={"/fondos/maestros/*"}
-                element={<MasterRoutes />}
-              />
-              <Route
-                path={"/fondos/acta/*"}
-                element={<ActaRoutes />}
-              />
+              <Route path={"/fondos/maestros/*"} element={<MasterRoutes />} />
+              <Route path={"/fondos/acta/*"} element={<ActaRoutes />} />
               <Route
                 path={"/fondos/cargar-informacion/*"}
-                element={<UploadInformationRoutes/>}
+                element={<UploadInformationRoutes />}
+              />
+              <Route
+                path={"/fondos/administracion/reglamento/*"}
+                element={<Regulation />}
               />
             </Routes>
           </Suspense>
