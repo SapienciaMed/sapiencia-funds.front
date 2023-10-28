@@ -28,6 +28,7 @@ export default function useSocializationCrud() {
     control: control,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm<ISocialization>({
     resolver,
@@ -58,8 +59,11 @@ export default function useSocializationCrud() {
       if (res?.data[0]) setUpdateData(res?.data[0]);
       setLoading(false);
       return { ...res?.data[0] };
+    } else {
+      setLoading(false);
+
+      return { validity: 2023 };
     }
-    setLoading(false);
   };
 
   const onsubmitCreate = handleSubmit((data: ISocialization) => {

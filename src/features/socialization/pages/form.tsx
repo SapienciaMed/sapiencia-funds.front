@@ -10,6 +10,7 @@ import { TextAreaComponent } from "../../../common/components/Form/input-text-ar
 import useSocializationCrud from "../hooks/createUpdate";
 import { data } from "../service/api";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
+import { Controller } from "react-hook-form";
 
 const Form = () => {
   const {
@@ -43,16 +44,26 @@ const Form = () => {
           <div className="container-form padding-form">
             <div className="firtsGrid">
               <div className="containerInputProyect">
-                <InputComponent
-                  idInput={"noProyect"}
-                  className="input-basic input-size"
-                  typeInput="number"
-                  label="No. de Proyecto"
-                  register={register}
-                  classNameLabel="text-black biggest text-required bold"
-                  errors={errors}
-                  disabled={updateData?.noProyect ? true : false}
-                  placeholder={""}
+                <Controller
+                  control={control}
+                  name={"noProyect"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        defaultValue={`${updateData?.noProyect}`}
+                        typeInput="number"
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest text-required bold"
+                        label="No. de Proyecto"
+                        disabled={updateData?.noProyect ? true : false}
+                      />
+                    );
+                  }}
                 />
               </div>
               <div className="containerCommune">
@@ -89,17 +100,28 @@ const Form = () => {
                 ></DatePickerComponent>
               </div>
               <div className="containerInputProyect">
-                <InputComponent
-                  idInput={"validity"}
-                  className="input-basic input-size"
-                  defaultValue="2023"
-                  typeInput="text"
-                  label="Vigencia"
-                  disabled={updateData?.validity ? true : false}
-                  register={register}
-                  classNameLabel="text-black biggest text-required bold"
-                  errors={errors}
-                  placeholder={""}
+                <Controller
+                  control={control}
+                  name={"validity"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        defaultValue={`${
+                          updateData?.validity ? updateData.validity : "2023"
+                        }`}
+                        typeInput="number"
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest text-required bold"
+                        label="Vigencia"
+                        disabled={updateData?.noProyect ? true : false}
+                      />
+                    );
+                  }}
                 />
               </div>
               <div className="containerGruopValue">
@@ -132,46 +154,77 @@ const Form = () => {
           <div className="container-form padding-form">
             <div className="secondGrid">
               <div className="containerInput">
-                <InputComponent
-                  idInput={"financialPerformance"}
-                  className="input-basic input-size"
-                  typeInput="number"
-                  label="Rendimientos Financieros"
-                  register={register}
-                  classNameLabel="text-black biggest text-required bold "
-                  errors={errors}
-                  placeholder={""}
+                <Controller
+                  control={control}
+                  name={"financialPerformance"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        defaultValue={`${updateData?.financialPerformance}`}
+                        typeInput="number"
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest text-required bold"
+                        label="Rendimientos Financieros"
+                      />
+                    );
+                  }}
                 />
               </div>
               <div className="containerInput">
-                <InputComponent
-                  idInput={"portfolioCollections"}
-                  className="input-basic input-size "
-                  typeInput="number"
-                  label="Recaudos de cartera"
-                  register={register}
-                  classNameLabel="text-black biggest text-required bold "
-                  errors={errors}
-                  placeholder={""}
+                <Controller
+                  control={control}
+                  name={"portfolioCollections"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        typeInput="number"
+                        onChange={field.onChange}
+                        defaultValue={`${updateData?.portfolioCollections}`}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest text-required bold"
+                        label="Recaudos de cartera"
+                      />
+                    );
+                  }}
                 />
               </div>
             </div>
           </div>
         </div>
         <div className="padding-form">
-          <TextAreaComponent
-            id="rew"
-            idInput="description"
-            label="Observaciones"
-            className="text-area-basic"
-            classNameLabel="text-black biggest bold"
-            rows={2}
-            placeholder="Escribe aquí"
-            register={register}
-            errors={errors}
-            onChange={() => {}}
-            characters={500}
-          ></TextAreaComponent>
+          <Controller
+            control={control}
+            name={"description"}
+            render={({ field }) => {
+              return (
+                <TextAreaComponent
+                  idInput={field.name}
+                  id="rew"
+                  label="Observaciones"
+                  className="text-area-basic"
+                  classNameLabel="text-black biggest bold"
+                  defaultValue={`${
+                    updateData?.description ? updateData.description : ""
+                  }`}
+                  rows={2}
+                  onChange={field.onChange}
+                  value={field.value}
+                  placeholder="Escribe aquí"
+                  errors={errors}
+                  characters={500}
+                ></TextAreaComponent>
+              );
+            }}
+          />
         </div>
       </FormComponent>
 
