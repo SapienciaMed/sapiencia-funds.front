@@ -40,3 +40,21 @@
   margin-right: 24px;
   width: 310px;
 }
+
+.containerTabs {
+  display: flex;
+  margin-left: 25px;
+}
+
+.containerButtons {
+  display: flex;
+  justify-content: center;
+}
+
+.container-form-children {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
+  border-radius: 15px;
+  opacity: 1;
+  width: 100%;
+}

@@ -591,3 +591,19 @@ span.select-basic {
   background: white;
   transition: left 0.15s ease-in;
 }
+
+.tab {
+  padding: 12px 16px 12px 16px;
+  border-radius: 30px;
+  margin-right: 8px;
+}
+
+.tab-normal {
+  background-color: #e2e2e2;
+  color: black;
+}
+
+.tab-checked {
+  background-color: #533893;
+  color: white;
+}

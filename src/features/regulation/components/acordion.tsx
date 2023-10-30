@@ -3,18 +3,16 @@ import "./styles.scss";
 
 const Acordion = ({
   title = "test",
-  htmlFor = "test",
   switchElement,
   children,
   onClick,
+  isOpen = false,
 }) => {
   return (
-    <div>
+    <div style={{ margin: "16px 0" }}>
       <details className="details">
         <summary onClick={onClick} className="summary">
-          <label htmlFor={htmlFor} className={"text-black biggest bold"}>
-            {title}
-          </label>
+          <div className={"text-black biggest bold"}>{title}</div>
           {switchElement}
         </summary>
         <div className="contentAcordion">{children}</div>

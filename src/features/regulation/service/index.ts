@@ -21,6 +21,17 @@ export const periods: { value: string; name: string }[] = [
   },
 ];
 
+export const LIST_DATA_GRACE_PERIOD: { value: string; name: string }[] = [
+  {
+    value: "from_date_return",
+    name: "Desde fecha de regreso al departamento",
+  },
+  {
+    value: "after_last_turn",
+    name: "Después de último giro",
+  },
+];
+
 export function useRegulationApi() {
   const baseURL: string = process.env.urlApiFunds || "";
   const serviceUrl: string = "/api/v1/regulation";

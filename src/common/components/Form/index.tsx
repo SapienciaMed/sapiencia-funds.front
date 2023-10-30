@@ -9,3 +9,4 @@ export * from "./transfer-box.component";
 export * from "./fieldset.component";
 export * from "./Upload.component";
 export * from "./switch.component";
+export * from "./tab.component";

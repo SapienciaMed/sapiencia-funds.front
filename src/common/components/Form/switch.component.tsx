@@ -18,6 +18,7 @@ interface ISwitch<T> {
   direction?: EDirection;
   size: string;
   defaultValue?: boolean;
+  onChange?: () => void;
 }
 
 const messageError = ({ idInput, errors, fieldArray }) => {
@@ -62,6 +63,7 @@ const SwitchComponent = ({
   className,
   disabled,
   size,
+  onChange,
 }: ISwitch<any>): React.JSX.Element => {
   const [value, setValue] = useState(false);
   return (
@@ -88,6 +90,7 @@ const SwitchComponent = ({
                 type="checkbox"
                 disabled={disabled}
                 onChange={() => {
+                  onChange && onChange();
                   field.onChange(!value);
                   setValue(!value);
                 }}

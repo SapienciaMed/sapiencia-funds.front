@@ -5,22 +5,30 @@ export interface IRegulation {
   openPeriod?: boolean;
   endPeriod?: string;
   isOpenPeriod?: boolean;
-  percentageSemiannualPayment?: number;
+  theoreticalPercentage?: number;
   applySocialService?: boolean;
-  discountPercentagePerPeriod?: string;
-  hoursPerPeriod?: string;
-  doesKnowledgeTransferApply?: boolean;
-  compliancePercentage?: string;
-  totalHoursPerCredit?: string;
-  doesGracePeriodApply?: boolean;
-  months?: string;
-  applyDate?: string;
-  doApplyContinuousSuspensions?: boolean;
-  ApplyServiceAmount?: string;
-  doApplyDiscontinuousSuspensions?: boolean;
-  ApplyDiscontinuousSuspensionsAmount?: string;
-  doApplySpecialSuspensions?: boolean;
-  ApplySpecialSuspensionsAmount?: string;
-  doesExtensionApply?: boolean;
-  doesExtensionApplyAmount?: string;
+  socialServicePercentage?: string;
+  socialServiceHours?: number;
+  knowledgeTransferApply?: boolean;
+  knowledgeTransferPercentage?: number;
+  knowledgeTransferHours?: number;
+  gracePeriodApply?: boolean;
+  gracePeriodMonths?: number;
+  gracePeriodApplication?: string;
+  continuousSuspensionApplies?: boolean;
+  continuosSuspencionQuantity?: number;
+  applyDiscontinuousSuspension?: boolean;
+  discontinuousSuspensionQuantity?: number;
+  applySpecialSuspensions?: boolean;
+  applySpecialSuspensionsQuantity?: number;
+  extensionApply?: boolean;
+  extensionApplyQuantity?: number;
+  applyCondonationPerformancePeriod?: boolean;
+  periodPerformance?: string;
+  accomulatedIncomeCondonationApplies?: boolean;
+
+  //change
+  active?: boolean;
+  percent?: number;
+  description?: string;
 }

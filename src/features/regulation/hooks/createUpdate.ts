@@ -35,8 +35,6 @@ export default function useRegulationHook() {
     defaultValues: async () => await getUpdateData(),
   });
 
-  console.log(watch());
-
   useEffect(() => {
     getUpdateData();
   }, []);
@@ -150,5 +148,6 @@ export default function useRegulationHook() {
     updateData,
     loading,
     getValues,
+    watch,
   };
 }
