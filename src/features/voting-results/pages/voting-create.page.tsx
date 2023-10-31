@@ -310,12 +310,13 @@ const VotingResultsPage = () => {
                         <p>
                           {
                             dataGrid?.map((e, i) => {
-                            aucumActivity = e.activityValue;
                             let value = aucumActivity;
-                            if (i === 0) {
+                              if (i === 0) {
+                              aucumActivity = Number(e.activityValue);
                               value = Number(e.activityValue);
                             } else {
                               value = (Number(value) + Number(e.activityValue));
+                              aucumActivity = value;
                             }
                             if (Number(dataGrid.length) == Number(i + 1)) {return value; }
                             
@@ -330,13 +331,14 @@ const VotingResultsPage = () => {
                       <span className="txt-center">
                         <p>
                           {
-                            dataGrid?.map((e, i) => {
-                            acumAmount = e.amount
+                            dataGrid?.map((e, i) => {                        
                             let value =  acumAmount;
-                            if ( i === 0) {
+                              if (i === 0) {
+                              acumAmount = Number(e.amount);
                               value = Number(e.amount);
                             } else {
-                              value = (Number(value) + Number(e.amount));1
+                              value = (Number(value) + Number(e.amount));
+                              acumAmount = value;
                             }
                             if (Number(dataGrid.length) == Number(i + 1)) {return value; }
                             })
@@ -352,12 +354,13 @@ const VotingResultsPage = () => {
                         <p>
                           {dataGrid?.map((e, i) => {
                             debugger
-                            acumTotal = e.totalCost;
                             let value = acumTotal;
                             if (i === 0) {
+                              acumTotal = Number(e.totalCost);
                               value = Number(e.totalCost);
                             } else {
                               value = (Number(value) + Number(e.totalCost));
+                              acumTotal = value;
                             }
                             if (Number(dataGrid.length) == Number(i + 1)) {return value; }
                           })}
