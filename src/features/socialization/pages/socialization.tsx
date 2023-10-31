@@ -7,6 +7,7 @@ import {
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import TableComponent from "../../../common/components/table.component";
 import useSearchSocialization from "../hooks/search";
+import { Controller } from "react-hook-form";
 
 export const Socialization = () => {
   const {
@@ -24,6 +25,7 @@ export const Socialization = () => {
     setshowTable,
     loading,
     setLoading,
+    control,
   } = useSearchSocialization();
 
   if (loading) return <></>;
@@ -49,15 +51,24 @@ export const Socialization = () => {
         >
           <div className="containerIndexForm mt-24">
             <div className="mr-24">
-              <InputComponent
-                idInput={"numberProyect"}
-                className="input-basic input-size"
-                typeInput="number"
-                label="Proyecto"
-                register={register}
-                classNameLabel="text-black biggest text-required bold"
-                errors={formState.errors}
-                placeholder={""}
+              <Controller
+                control={control}
+                name={"noProyect"}
+                render={({ field }) => {
+                  return (
+                    <InputComponent
+                      idInput={field.name}
+                      errors={formState.errors}
+                      typeInput="number"
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      value={field.value}
+                      className="input-basic input-size"
+                      classNameLabel="text-black biggest text-required bold"
+                      label="Proyecto"
+                    />
+                  );
+                }}
               />
             </div>
             <div className="mr-24">
@@ -74,15 +85,24 @@ export const Socialization = () => {
               />
             </div>
             <div className="mr-24">
-              <InputComponent
-                idInput={"validity"}
-                className="input-basic input-size"
-                typeInput="text"
-                label="Vigencia"
-                register={register}
-                classNameLabel="text-black biggest text-required bold"
-                errors={formState.errors}
-                placeholder={""}
+              <Controller
+                control={control}
+                name={"validity"}
+                render={({ field }) => {
+                  return (
+                    <InputComponent
+                      idInput={field.name}
+                      errors={formState.errors}
+                      typeInput="number"
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      value={field.value}
+                      className="input-basic input-size"
+                      classNameLabel="text-black biggest text-required bold"
+                      label="Vigencia"
+                    />
+                  );
+                }}
               />
             </div>
           </div>

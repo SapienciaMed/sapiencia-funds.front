@@ -118,7 +118,6 @@ export default function useSearchSocialization() {
     const getCode: any = deparmetList.find(
       (dep) => dep.name === data.communeCode
     );
-
     const buildData = {
       ...data,
       communeCode: getCode.value,
