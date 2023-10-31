@@ -68,3 +68,14 @@ export interface IEmailDataGrid{
   lastNames?: string;
   ident?: string;
 }
+
+export interface ICallBudget {
+  id_comuna: number;
+  presupuesto_comuna: string;
+  legaliza_comuna: string;
+  restante_presupuesto: string;
+  usuarios_comuna: string;
+  periodo: number;
+  puntaje_corte: number;
+}
+ 

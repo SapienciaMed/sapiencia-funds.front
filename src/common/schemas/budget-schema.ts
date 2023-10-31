@@ -1,10 +1,10 @@
 import * as yup from "yup";
 
 export const filterBudget = yup.object({
-    fundCocommune: yup
-    .number()
-    .required("Cargar información"),
-    convocation: yup
+    // id_comuna: yup
+    // .number()
+    // .required("Cargar información"),
+    periodo: yup
     .number()
     .required("Cargar información"),
 

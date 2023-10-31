@@ -1,14 +1,14 @@
 import React, { Fragment, useContext, useState } from "react";
-import { ButtonComponent, FormComponent, SelectComponent } from "../../../common/components/Form";
+import { ButtonComponent, FormComponent, SelectComponent, MultiSelects } from "../../../common/components/Form";
 import useBudgetSearch from "../hooks/search-budget.hook";
 import TableComponent from "../../../common/components/table.component";
+import { EDirection } from "../../../common/constants/input.enum";
 import { BiPlusCircle } from 'react-icons/bi';
-import TableComponentNew from "../../../common/components/tableNew.component";
 import { AppContext } from "../../../common/contexts/app.context";
 
 const SearchBudgetPage = (): React.JSX.Element => {
 
-    const { typeMasterList, control, errors, clearFields, register, setValue, navigate,
+    const { announcementList, budgetList, control, errors, clearFields, register, setValue, navigate,
         tableComponentRef, showTable, tableActions, tableColumns, setShowTable, onSubmit, reset
     } = useBudgetSearch();
     const [tableView, setTableView] = useState<boolean>(false);
@@ -30,41 +30,26 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             action={onSubmit}
                         >
                             <div>
-                                <div className="grid-form-4-container mb-24px">
-                                    <SelectComponent
-                                        idInput={"codtlmo"}
+                                <div className="grid-form-3-container mb-24px">
+
+                                    <MultiSelects
+                                        idInput={"periodo"}
                                         control={control}
                                         errors={errors}
-                                        data={[
-                                            { value: "1", name: "1234", },
-                                            { value: "2", name: "5678", },
-                                            { value: "3", name: "7890", },
-                                        ]}
-                                        label={
-                                            <>
-                                                Fondo comuna <span>*</span>
-                                            </>
-                                        }
+                                        data={budgetList}
+                                        label={<>Fondo Comuna <span>*</span></>}
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
                                         classNameLabel="text-black big medium label-regular"
                                         filter={true}
-                                        placeholder="Seleccione."
-
+                                        placeholder="Seleccionar."
+                                       
                                     />
                                     <SelectComponent
-                                        idInput={"codtlmo"}
+                                        idInput={"periodo"}
                                         control={control}
                                         errors={errors}
-                                        data={[
-                                            { value: "1", name: "2021", },
-                                            { value: "2", name: "2022", },
-                                            { value: "3", name: "2023", },
-                                        ]}
-                                        label={
-                                            <>
-                                                Convocatoria <span>*</span>
-                                            </>
-                                        }
+                                        data={announcementList}
+                                        label={<>Convocatoria <span>*</span></>}
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
                                         classNameLabel="text-black big medium label-regular"
                                         filter={true}
@@ -72,8 +57,6 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     />
                                 </div>
                             </div>
-
-
                             <div className="button-save-container-display m-top-20">
                                 <ButtonComponent
                                     form="searchBudget"
@@ -82,29 +65,29 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     type="button"
                                     action={() => {
                                         reset();
-                                        //tableComponentRef.current.emptyData();
-                                        //setTableView(false);
+                                        tableComponentRef.current.emptyData();
+                                        setTableView(false);
                                     }
                                     }
                                 />
                                 <ButtonComponent
                                     form="searchBudget"
-                                    value={`Guardar`}
+                                    value={`Buscar`}
                                     className="button-save large hover-three disabled-black"
                                 />
                             </div>
                         </FormComponent>
                     </div>
-                    {tableView && (
-                        <div className="container-sections-forms">
-                            <TableComponent
-                                ref={tableComponentRef}
-                                url={`${process.env.urlApiPayroll}/api/v1/vinculation/get-paginated`}
-                                columns={tableColumns}
-                                actions={tableActions}
-                                isShowModal={false}
-                            />
-                        </div>
+                    {showTable && (
+                     
+                        <TableComponent
+                            ref={tableComponentRef}
+                            url={`${process.env.urlApiFunds}/api/v1/sapiencia/getbudget-paginated/`}
+                            columns={tableColumns}
+                            actions={tableActions}
+                            isShowModal={false}
+                        />
+                      
                     )}
                 </div>
             </div>

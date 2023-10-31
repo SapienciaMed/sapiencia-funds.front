@@ -12,6 +12,7 @@ import MasterActivityRoutes from "./features/master-activity/master-activity-rou
 import UploadInformationRoutes from "./features/upload-information/upload-information-routes";
 import useAppCominicator from "./common/hooks/app-communicator.hook";
 import MasterRoutes from "./features/master/master-routes";
+import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -33,10 +34,6 @@ function App() {
           <Suspense fallback={<p>Loading...</p>}>
             <Routes>
               <Route
-                path={"/fondos/socializacion/*"}
-                element={<Socialization />}
-              />
-              <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
               />
@@ -51,10 +48,6 @@ function App() {
               <Route
                 path={"/fondos/presupuesto-convocatoria/*"}
                 element={<BudgetConvocationRoutes />}
-              />
-              <Route
-                path={"/fondos/acta/*"}
-                element={<ActaRoutes />}
               />
               <Route
                 path={"/fondos/cargar-informacion/*"}

@@ -8,3 +8,4 @@ export * from "./select.component";
 export * from "./transfer-box.component";
 export * from "./fieldset.component";
 export * from "./Upload.component";
+export * from "./multiSelect.component"
