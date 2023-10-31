@@ -105,38 +105,31 @@ export default function useBudgetSearch() {
             renderCell: (row) => {
                 return <>{row.usuarios_comuna}</>;
             },
-        },            
+        },
+        {
+            fieldName: "name",
+            header: "Total proyectado",
+            renderCell: (row) => {
+                return <>{}</>;
+            },
+        },  
+        {
+            fieldName: "name",
+            header: "Recurso otorgado de legalizacion",
+            renderCell: (row) => {
+                return <>{row.legaliza_comuna}</>;
+            },
+        },  
+        {
+            fieldName: "name",
+            header: "Diferencia por comprometer",
+            renderCell: (row) => {
+                return <>{}</>;
+            },
+        },              
     ];
 
-    const tableActions: ITableAction<ICallBudget>[] = [
-        {
-            onClick: (row) => {
-                downloadCallBudget(row.id_comuna)
-                  
-                      const buffer = new Uint8Array(row.id_comuna); // Convierte el Array del búfer en Uint8Array
-                      const blob = new Blob([buffer]);
-                      const url = window.URL.createObjectURL(blob);
-                      const a = document.createElement("a");
-                      a.href = url;
-                      a.download = `${row.id_comuna}.xlsx`;
-                      document.body.appendChild(a);
-                      a.click();
-                      window.URL.revokeObjectURL(url);
-                      setMessage({
-                        title: `Descargar excel`,
-                        description: `El archivo fue descargado con éxito`,
-                        show: true,
-                        OkTitle: "Aceptar",
-                        background: true,
-                      });
-                    
-              },
-            customIcon: () => {
-                return <RiFileExcel2Line color="#21A366" />;
-            },
-          
-        },
-    ];
+   
    
 
     function loadTableData(searchCriteria?: object): void {
@@ -184,7 +177,6 @@ export default function useBudgetSearch() {
         setShowTable,
         showTable,
         tableColumns,
-        tableActions,
         tableComponentRef,
         onSubmit,
         reset,

@@ -2,14 +2,13 @@ import React, { Fragment, useContext, useState } from "react";
 import { ButtonComponent, FormComponent, SelectComponent, MultiSelects } from "../../../common/components/Form";
 import useBudgetSearch from "../hooks/search-budget.hook";
 import TableComponent from "../../../common/components/table.component";
-import { EDirection } from "../../../common/constants/input.enum";
-import { BiPlusCircle } from 'react-icons/bi';
-import { AppContext } from "../../../common/contexts/app.context";
+import { RiFileExcel2Line } from "react-icons/ri";
+
 
 const SearchBudgetPage = (): React.JSX.Element => {
 
     const { announcementList, budgetList, control, errors, clearFields, register, setValue, navigate,
-        tableComponentRef, showTable, tableActions, tableColumns, setShowTable, onSubmit, reset
+        tableComponentRef, showTable, tableColumns, setShowTable, onSubmit, reset
     } = useBudgetSearch();
     const [tableView, setTableView] = useState<boolean>(false);
 
@@ -84,11 +83,20 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             ref={tableComponentRef}
                             url={`${process.env.urlApiFunds}/api/v1/sapiencia/getbudget-paginated/`}
                             columns={tableColumns}
-                            actions={tableActions}
                             isShowModal={false}
                         />
                       
                     )}
+                </div>
+                <div className="button-save-container-display-actas-users margin-right40">
+                <div></div>
+                <ButtonComponent
+                    value="Descargar"
+                    action={() => {}}
+                    className="button-save large disabled-black"
+                    disabled = {true}
+                />
+            
                 </div>
             </div>
         </Fragment>
