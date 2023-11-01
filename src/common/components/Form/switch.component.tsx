@@ -6,7 +6,7 @@ import { Control, Controller } from "react-hook-form";
 
 interface ISwitch<T> {
   idInput: string;
-  control: Control<any>;
+  control?: Control<any>;
   className?: string;
   label?: string | React.JSX.Element;
   classNameLabel?: string;

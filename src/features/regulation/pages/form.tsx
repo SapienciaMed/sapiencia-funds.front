@@ -17,7 +17,7 @@ import { TextAreaComponent } from "../../../common/components/Form/input-text-ar
 import InitialSetup from "./modules/initialSetup";
 import Tabs from "./modules/tabs";
 import ForgivenessPercentages from "./modules/ForgivenessPercentages";
-import Requirements from "./modules/Requirements";
+import Requirements from "./modules/requeriments/Requirements";
 import StepButtons from "./modules/stepButtons";
 import Divider from "../../../common/components/Form/divider";
 
@@ -74,13 +74,7 @@ const Form = () => {
           />
         )}
       </FormComponent>
-      {view === 2 && (
-        <Requirements
-          errors={errors}
-          updateData={updateData}
-          control={control}
-        />
-      )}
+      {view === 2 && <Requirements />}
       <StepButtons view={view} setView={setView} />
       <Divider />
       <div

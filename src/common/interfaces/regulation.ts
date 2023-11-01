@@ -1,34 +1,41 @@
 export interface IRegulation {
   id?: number;
-  program?: string;
-  initialPeriod?: string;
-  openPeriod?: boolean;
+  program: string;
+  initialPeriod: string;
+  openPeriod: boolean;
   endPeriod?: string;
-  isOpenPeriod?: boolean;
-  theoreticalPercentage?: number;
-  applySocialService?: boolean;
-  socialServicePercentage?: string;
+  theoreticalPercentage: number;
+  applySocialService: boolean;
+  socialServicePercentage?: number;
   socialServiceHours?: number;
-  knowledgeTransferApply?: boolean;
+  knowledgeTransferApply: boolean;
   knowledgeTransferPercentage?: number;
   knowledgeTransferHours?: number;
-  gracePeriodApply?: boolean;
+  gracePeriodApply: boolean;
   gracePeriodMonths?: number;
   gracePeriodApplication?: string;
-  continuousSuspensionApplies?: boolean;
+  continuousSuspensionApplies: boolean;
   continuosSuspencionQuantity?: number;
-  applyDiscontinuousSuspension?: boolean;
+  applyDiscontinuousSuspension: boolean;
   discontinuousSuspensionQuantity?: number;
-  applySpecialSuspensions?: boolean;
+  applySpecialSuspensions: boolean;
   applySpecialSuspensionsQuantity?: number;
-  extensionApply?: boolean;
+  extensionApply: boolean;
   extensionApplyQuantity?: number;
-  applyCondonationPerformancePeriod?: boolean;
+  applyCondonationPerformancePeriod: boolean;
   periodPerformance?: string;
-  accomulatedIncomeCondonationApplies?: boolean;
+  accomulatedIncomeCondonationApplies: boolean;
+  accomulatedPerformance?: string;
+  modifyUser?: string;
+  modifyDate?: string;
+  createUser: string;
+  createDate: string;
+}
 
-  //change
+export interface IRequeriments {
+  id?: number;
   active?: boolean;
-  percent?: number;
+  active_update?: boolean;
+  percent: number;
   description?: string;
 }
