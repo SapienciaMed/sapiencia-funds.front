@@ -13,6 +13,7 @@ import UploadInformationRoutes from "./features/upload-information/upload-inform
 import useAppCominicator from "./common/hooks/app-communicator.hook";
 import MasterRoutes from "./features/master/master-routes";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
+import RenewalReportRoutes from "./features/renewal-report/renewal-report-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -52,6 +53,10 @@ function App() {
               <Route
                 path={"/fondos/cargar-informacion/*"}
                 element={<UploadInformationRoutes/>}
+              />
+              <Route
+                path={"/fondos/informe-renovacion/*"}
+                element={<RenewalReportRoutes/>}
               />
             </Routes>
           </Suspense>
