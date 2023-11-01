@@ -10,3 +10,4 @@ export * from "./fieldset.component";
 export * from "./Upload.component";
 export * from "./switch.component";
 export * from "./tab.component";
+export * from "./multiSelect.component";

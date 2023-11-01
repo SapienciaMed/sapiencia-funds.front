@@ -15,6 +15,7 @@ import MasterRoutes from "./features/master/master-routes";
 import ActaRoutes from "./features/acta/acta-routes";
 import Socialization from "./features/socialization";
 import Regulation from "./features/regulation";
+import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -36,10 +37,6 @@ function App() {
           <Suspense fallback={<p>Loading...</p>}>
             <Routes>
               <Route
-                path={"/fondos/socializacion/*"}
-                element={<Socialization />}
-              />
-              <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
               />
@@ -53,6 +50,18 @@ function App() {
                 path={"/fondos/cargar-informacion/*"}
                 element={<UploadInformationRoutes />}
               />
+              <Route path={"/fondos/maestros/*"} element={<MasterRoutes />} />
+
+              <Route
+                path={"/fondos/presupuesto-convocatoria/*"}
+                element={<BudgetConvocationRoutes />}
+              />
+
+              <Route
+                path={"/fondos/socializacion/*"}
+                element={<Socialization />}
+              />
+
               <Route
                 path={"/fondos/administracion/reglamento/*"}
                 element={<Regulation />}

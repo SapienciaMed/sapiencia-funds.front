@@ -34,6 +34,8 @@ export const useItemResults = (action, dataVoting) => {
   const [idVoting, setIdVoting] = useState('');
   const [disabledCantidad, setDisabledCantidad] = useState(true)
   const [valueActivity, setValueActivity] = useState(0);
+  const [objectTotales, setObjectTotales] = useState({});
+
 
   // const { onSubmitSearch } = useVotingResultsSearch();
   
@@ -77,16 +79,6 @@ export const useItemResults = (action, dataVoting) => {
     }
   }, [ingresAmount]);
   
-// useEffect(() => {
-//   const subscription = watch((value: IItemCreateForm) => {
-//     console.log(value);
-//     // console.log(type);
-//     if (value.amount != null) {
-//       changeAmountSum({ target: { value: value.amount } });
-//     }
-//   });
-//   return () => subscription.unsubscribe();
-// }, [watch]);
 
     const { 
         getActivityProgram,
@@ -447,6 +439,7 @@ export const useItemResults = (action, dataVoting) => {
       disabledCantidad,
       setDisabledCantidad,
       changeAmountSum,
+      objectTotales,
     };
 };
 
