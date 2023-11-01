@@ -1,0 +1,23 @@
+.summary {
+  width: 100%;
+  height: 75px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 37px;
+  cursor: pointer;
+}
+
+.summary:hover {
+  background-color: #e9ecef;
+}
+
+.details {
+  border: 1px solid #e2e2e2;
+  border-radius: 16px;
+}
+
+.contentAcordion {
+  padding: 16px 24px 16px 24px;
+}

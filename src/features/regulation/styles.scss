@@ -1,0 +1,60 @@
+.containerProgram {
+  width: 572px;
+}
+
+.containerInitialPeriod {
+  width: 424px;
+}
+
+.containerEndPeriod {
+  width: 424px;
+}
+
+.containerIsOpenPeriod {
+  width: 184px;
+}
+
+.containerGroup {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.percentageSemiannualPayment {
+  width: 338px;
+}
+
+.p-24 {
+  padding: 24px;
+}
+
+.mb-24px {
+  margin-bottom: 24px;
+}
+
+.containerApplyService {
+  display: flex;
+}
+
+.containerApplyService div {
+  margin-right: 24px;
+  width: 310px;
+}
+
+.containerTabs {
+  display: flex;
+  margin-left: 25px;
+}
+
+.containerButtons {
+  display: flex;
+  justify-content: center;
+}
+
+.container-form-children {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
+  border-radius: 15px;
+  opacity: 1;
+  width: 100%;
+}
