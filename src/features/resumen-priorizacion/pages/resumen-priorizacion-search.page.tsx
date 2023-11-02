@@ -40,71 +40,71 @@ const VotingResultsSearchPage = () => {
   const { validateActionAccess, setMessage } = useContext(AppContext);
 
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
-    {
-      fieldName: "aimStraight",
-      header: "Objetivo directo",
-    },
-    {
-      fieldName: "productCatalogueDnp",
-      header: "Producto catalogo dnp",
-    },
-    {
-      fieldName: "codProductgueDnp",
-      header: "Código catalogo dnp",
-    },
+    // {
+    //   fieldName: "aimStraight",
+    //   header: "Objetivo directo",
+    // },
+    // {
+    //   fieldName: "productCatalogueDnp",
+    //   header: "Producto catalogo dnp",
+    // },
+    // {
+    //   fieldName: "codProductgueDnp",
+    //   header: "Código catalogo dnp",
+    // },
     {
       fieldName: "activiti.typesProgram.name",
       header: "Programa",
     },
-    {
-      fieldName: "activiti.name",
-      header: "Actividad",
-    },
-    {
-      fieldName: "activiti.totalValue",
-      header: "Valor Actividad",
-    },
-    {
-      fieldName: "amount",
-      header: "Cantidad",
-    },
-    {
-      fieldName: "costTotal",
-      header: "Costo Total",
-    },
+    // {
+    //   fieldName: "activiti.name",
+    //   header: "Actividad",
+    // },
+    // {
+    //   fieldName: "activiti.totalValue",
+    //   header: "Valor Actividad",
+    // },
+    // {
+    //   fieldName: "amount",
+    //   header: "Cantidad",
+    // },
+    // {
+    //   fieldName: "costTotal",
+    //   header: "Costo Total",
+    // },
     {
       fieldName: "percentage123",
       header: "Porcentaje 123",
     },
     {
+      fieldName: "valpor123",
+      header: "Valor porcentaje 123",
+      // renderCell: (row) => {
+      //   const suma =
+      //     row.budgetsMGA.year0.budget +
+      //     row.budgetsMGA.year1.budget +
+      //     row.budgetsMGA.year2.budget +
+      //     row.budgetsMGA.year3.budget +
+      //     row.budgetsMGA.year4.budget;
+      //   return <>{formaterNumberToCurrency(suma)}</>;
+      // },
+    },
+    {
       fieldName: "percentage456",
       header: "Porcentaje 456",
     },
-  ];
-
-  const tableActions: ITableAction<IVotingSearcheResult>[] = [
     {
-      icon: "Edit",
-      onClick: (row) => {
-        setMessage({
-          show: true,
-          title: "Editar item",
-          onOk() {
-            setMessage({});
-          },
-          background: true,
-          description: 'modal prueba',
-          size: "large",
-          style: "mdl-agregarItem-voting",
-          onClose() {
-            //reset();
-            setMessage({});
-          },
-        });
-      },
-      hide: !validateActionAccess("USUARIOS_EDITAR"),
+      fieldName: "valprc456",
+      header: "Valor porcentaje 456",
+    },
+    {
+      fieldName: "valprc456",
+      header: "Cupos",
     },
   ];
+
+  // const tableActions: ITableAction<IVotingSearcheResult>[] = [
+  // ];
 
   return (
     <Fragment>
@@ -204,7 +204,7 @@ const VotingResultsSearchPage = () => {
             ref={tableComponentRef}
             url={`${process.env.urlApiFunds}/api/v1/resumen-priorizacion/get-paginated`}
             columns={tableColumns}
-            actions={tableActions}
+            // actions={tableActions}
             titleMessageModalNoResult="La votación no existe"
             descriptionModalNoResult="La votación no existe en el sistema. 
               Haga clic en el botón crear votación"
