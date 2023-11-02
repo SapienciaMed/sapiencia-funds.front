@@ -9,6 +9,7 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
+import { IResumenPriorizacion } from "../../../common/interfaces/resumenPriorizacion.interfaces";
 
 export const useResumenPriorizacionSearch = () => {
   const { setMessage, authorization, setDataGrid, dataGrid } =
@@ -30,15 +31,15 @@ export const useResumenPriorizacionSearch = () => {
     control,
     formState: { errors },
     reset,
-  } = useForm<IVotingCreate>({ resolver });
+  } = useForm<IResumenPriorizacion>({ resolver });
 
   /*Functions*/
-  const onSubmitSearchVoting = handleSubmit((data: IVotingCreate) => {
+  const onSubmitSearchVoting = handleSubmit((data: IResumenPriorizacion) => {
+    debugger
     loadTableData({
-      communeNeighborhood: valCommuneNeighborhood,
+      communeNeighborhood: data?.communeNeighborhood,
       numberProject: data?.numberProject,
       validity: data?.validity,
-      ideaProject: data?.ideaProject,
     });
   });
 
@@ -48,7 +49,7 @@ export const useResumenPriorizacionSearch = () => {
     }
   }
 
-  const confirmVotingCreation = async (data: IVotingCreate) => {
+  const confirmVotingCreation = async (data: IResumenPriorizacion) => {
     setSending(true);
   };
 
