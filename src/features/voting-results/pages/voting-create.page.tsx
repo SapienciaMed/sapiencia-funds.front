@@ -96,7 +96,6 @@ const VotingResultsPage = () => {
     {
       icon: "Edit",
       onClick: (row) => {
-        console.log("row ", row);
         // navigate(`/core/usuarios/editar/${row.id}`);
         setMessage({
           show: true,
@@ -117,7 +116,6 @@ const VotingResultsPage = () => {
     {
       icon: "Delete",
       onClick: (row) => {
-        console.log("row ", row);
           setMessage({
             show: true,
             title: "Eliminar registro",
@@ -353,7 +351,6 @@ const VotingResultsPage = () => {
                       <span className="txt-center">
                         <p>
                           {dataGrid?.map((e, i) => {
-                            debugger
                             let value = acumTotal;
                             if (i === 0) {
                               acumTotal = Number(e.totalCost);

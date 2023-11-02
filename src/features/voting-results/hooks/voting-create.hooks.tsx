@@ -29,11 +29,6 @@ export const useVotingResults = () => {
     const tableComponentRef = useRef(null);
     const [itemSave, setItemSave] = useState(Array<IItemSave>);
     const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-    // const [objectTotales, setObjectTotales] = useState({
-    //   totalValueActivity: 0,
-    //   totalValueOne: 0,
-    //   amountTotal: 0,
-    // });
   const [amountTotal, setAmountTotal] = useState(0);
   const [totalValueActivity, settotalValueActivity] = useState(0);
   const [totalValueOne, settotalValueOne] = useState(0);
@@ -125,27 +120,6 @@ export const useVotingResults = () => {
         tableComponentRef.current.loadData(searchCriteria);
       }
     }
-
-  // useEffect(() => {
-  //   console.log("dataGrid ", dataGrid);
-
-  //   let totalValueOne = 0;
-  //   let totalValueActivity = 0;
-  //   let amountTotal = 0;
-
-  //   dataGrid.map((e) => {
-  //     console.log("e ", e);
-  //     totalValueOne = Number(totalValueOne) + Number(e.totalCost);
-  //     totalValueActivity =
-  //       Number(totalValueActivity) + Number(e.activityValue);
-  //     amountTotal = Number(amountTotal) + Number(e.amount);
-  //   });
-
-  //   settotalValueOne(totalValueOne);
-  //   settotalValueActivity(totalValueActivity);
-  //   setAmountTotal(amountTotal);
-      
-  //   }, [dataGrid]);
 
     const confirmVotingCreation = async (data: IVotingCreate) => { 
 

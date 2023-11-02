@@ -103,7 +103,9 @@ export const useItemResults = (action, dataVoting) => {
   const changeAmountSum = (e) => {
     if (e) {
       if (Number(e)) {
-        const suma = (Number(e) * Number(valueActivity));
+        const suma =
+          Number(e) *
+          Number(valueActivity != 0 ? valueActivity : selectedActivity ? selectedActivity : 0);
         setValue("totalCost", suma);
       }
     } else {

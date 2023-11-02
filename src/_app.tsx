@@ -16,6 +16,7 @@ import ActaRoutes from "./features/acta/acta-routes";
 import Socialization from "./features/socialization";
 import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
+import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -41,8 +42,8 @@ function App() {
                 element={<VotingResultsRoutes />}
               />
               <Route
-                path={"/fondos/maestro/*"}
-                element={<MasterActivityRoutes />}
+                path={"/fondos/resumen-priorizacion/*"}
+                element={<ResumenPriorizacionRoutes />}
               />
               <Route path={"/fondos/maestros/*"} element={<MasterRoutes />} />
               <Route path={"/fondos/acta/*"} element={<ActaRoutes />} />
