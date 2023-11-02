@@ -4,7 +4,7 @@ import { useGenericListService } from "../../../../../../common/hooks/generic-li
 import useYupValidationResolver from "../../../../../../common/hooks/form-validator.hook";
 import { createRequeriment } from "../../../../../../common/schemas/requeriments-schema";
 import { useRequerimentsApi } from "../../../../service/requeriments";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IRequeriments } from "../../../../../../common/interfaces/regulation";
 import { useForm } from "react-hook-form";
 import { EResponseCodes } from "../../../../../../common/constants/api.enum";
@@ -26,6 +26,7 @@ const useRequerimentsHook = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const tableComponentRef = useRef(null);
   const [codReglament, setCodReglament] = useState<number>();
+  const { id } = useParams();
 
   const {
     handleSubmit,
@@ -35,7 +36,7 @@ const useRequerimentsHook = () => {
     getValues,
     watch,
     formState: { errors },
-  } = useForm<IRequeriments>({
+  } = useForm<any>({
     resolver,
   });
 
@@ -44,7 +45,12 @@ const useRequerimentsHook = () => {
     const getLastIdAction = async () => {
       const { data: dataResponse, operation } = await getLastId();
       if (operation.code === EResponseCodes.OK) {
-        const newId = dataResponse + 1;
+        let newId = 0;
+        if (id) {
+          newId = Number(id);
+        } else {
+          newId = dataResponse + 1;
+        }
         localStorage.setItem("reglamentId", newId.toString());
         setCodReglament(newId);
         if (tableComponentRef.current) {
@@ -64,7 +70,11 @@ const useRequerimentsHook = () => {
         "ocurrio un error inesperado, intente mas tarde por favor",
         false
       );
-    const buildData = { ...data, codReglament: codReglament };
+    const buildData = {
+      ...data,
+      codReglament: codReglament,
+      active: data.active ? true : false,
+    };
     const { data: dataResponse, operation } = await createRequerimentAction(
       buildData
     );
@@ -119,10 +129,10 @@ const useRequerimentsHook = () => {
       fieldName: "row.requeriment.active",
       header: "Activo",
       renderCell: (row) => {
-        setValue("active_update", row.active);
+        setValue(row.id.toString(), row.active);
         return (
           <SwitchComponent
-            idInput={"active_update"}
+            idInput={row.id.toString()}
             control={control}
             size="small"
             className="select-basic select-disabled-list input-size"

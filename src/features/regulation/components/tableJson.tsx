@@ -34,12 +34,24 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
     if (data.percentCondonation.length === 0) {
       setPercentCondonation(DEFAULT_MESSAGE);
       isError = true;
+    } else if (
+      Number(data.percentCondonation) < 1 ||
+      Number(data.percentCondonation) > 100
+    ) {
+      setPercentCondonation("El campo no puede ser mayor a 100 y menor que 1");
+      isError = true;
     } else {
       setPercentCondonation("");
     }
 
     if (tempData.initialAverage.length === 0) {
       setInitialAverage(DEFAULT_MESSAGE);
+      isError = true;
+    } else if (
+      Number(tempData.initialAverage) < 0 ||
+      Number(tempData.initialAverage) > 5
+    ) {
+      setInitialAverage("El campo no puede ser mayor a 5 y menor que cero");
       isError = true;
     } else {
       setInitialAverage("");
@@ -48,12 +60,21 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
     if (tempData.endAverage.length === 0) {
       setEndAverage(DEFAULT_MESSAGE);
       isError = true;
+    } else if (
+      Number(tempData.endAverage) < 0 ||
+      Number(tempData.endAverage) > 5
+    ) {
+      setEndAverage("El campo no puede ser mayor a 5 y menor que cero");
+      isError = true;
     } else {
       setEndAverage("");
     }
 
     if (tempData.percent.length === 0) {
       setPercent(DEFAULT_MESSAGE);
+      isError = true;
+    } else if (Number(tempData.percent) < 1 || Number(tempData.percent) > 100) {
+      setEndAverage("El campo no puede ser mayor a 100 y menor que 1");
       isError = true;
     } else {
       setPercent("");
@@ -95,12 +116,14 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
     }, 500);
   };
 
+  console.log(percentCondonation.length);
+
   return (
     <div>
       <div style={{ marginBottom: "10px" }}>
         <div
           className="containerApplyService"
-          style={{ flexDirection: "column" }}
+          style={{ padding: "10px 0 10px 0" }}
         >
           <InputComponent
             idInput="percentCondonation"
@@ -113,15 +136,22 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
             classNameLabel="text-black biggest text-required bold"
             label="Porcentaje de condonación"
           />
-          {percentCondonation.length > 0 ||
-            (error && (
-              <p
-                style={{ color: "red" }}
-                className="error-message bold not-margin-padding"
-              >
-                {DEFAULT_MESSAGE}
-              </p>
-            ))}
+          {percentCondonation && (
+            <p
+              style={{ color: "red" }}
+              className="error-message bold not-margin-padding"
+            >
+              {percentCondonation}
+            </p>
+          )}
+          {error && (
+            <p
+              style={{ color: "red" }}
+              className="error-message bold not-margin-padding"
+            >
+              {percentCondonation}
+            </p>
+          )}
         </div>
       </div>
       <div className="container-form-children p-24 ">
@@ -131,11 +161,12 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
             display: "flex",
             marginTop: "24px",
             justifyContent: "space-between",
-            width: "70%",
+            width: "100%",
             alignItems: "center",
+            flexWrap: "wrap",
           }}
         >
-          <div style={{ flexDirection: "column" }}>
+          <div style={{ padding: "10px 0 10px 0" }}>
             <InputComponent
               idInput="initialAverage"
               typeInput="number"
@@ -143,7 +174,7 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
                 setTempData({ ...tempData, initialAverage: e.target.value })
               }
               value={tempData.initialAverage}
-              className="input-basic input-size"
+              className="input-basic input-size "
               classNameLabel="text-black biggest text-required bold"
               label="Promedio inicial"
             />
@@ -152,11 +183,11 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
                 style={{ color: "red" }}
                 className="error-message bold not-margin-padding"
               >
-                {DEFAULT_MESSAGE}
+                {initialAverage}
               </p>
             )}
           </div>
-          <div style={{ flexDirection: "column" }}>
+          <div style={{ padding: "10px 0 10px 0" }}>
             <InputComponent
               idInput="endAverage"
               typeInput="number"
@@ -164,7 +195,7 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
                 setTempData({ ...tempData, endAverage: e.target.value })
               }
               value={tempData.endAverage}
-              className="input-basic input-size"
+              className="input-basic input-size "
               classNameLabel="text-black biggest text-required bold"
               label="Promedio final"
             />
@@ -173,11 +204,11 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
                 style={{ color: "red" }}
                 className="error-message bold not-margin-padding"
               >
-                {DEFAULT_MESSAGE}
+                {endAverage}
               </p>
             )}
           </div>
-          <div style={{ flexDirection: "column" }}>
+          <div style={{ padding: "10px 0 10px 0" }}>
             <InputComponent
               idInput="percent"
               typeInput="number"
@@ -185,7 +216,7 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
                 setTempData({ ...tempData, percent: e.target.value })
               }
               value={tempData.percent}
-              className="input-basic input-size"
+              className="input-basic input-size "
               classNameLabel="text-black biggest text-required bold"
               label="Porcentaje"
             />
@@ -194,7 +225,7 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
                 style={{ color: "red" }}
                 className="error-message bold not-margin-padding"
               >
-                {DEFAULT_MESSAGE}
+                {percent}
               </p>
             )}
           </div>
@@ -206,110 +237,122 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
           />
         </div>
         {data.dataTable.length > 0 && (
-          <div style={{ width: "700px", marginTop: "24px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <label
-                style={{ padding: "14px 33px 14px 33px" }}
-                className="text-black  biggest bold"
-              >
-                Promedio Inicial
-              </label>
+          <div className="containerJsonTable">
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <label
+                  style={{ padding: "14px 33px 14px 33px" }}
+                  className="text-black  biggest bold"
+                >
+                  Promedio Inicial
+                </label>
 
-              <label
-                style={{ padding: "14px 33px 14px 33px" }}
-                className="text-black  biggest bold"
-              >
-                Promedio Final
-              </label>
+                <label
+                  style={{ padding: "14px 33px 14px 33px" }}
+                  className="text-black  biggest bold"
+                >
+                  Promedio Final
+                </label>
 
-              <label
-                style={{ padding: "14px 33px 14px 33px" }}
-                className="text-black biggest bold"
-              >
-                Porcentaje
-              </label>
+                <label
+                  style={{ padding: "14px 33px 14px 33px" }}
+                  className="text-black biggest bold"
+                >
+                  Porcentaje
+                </label>
 
-              <label
-                style={{ padding: "14px 33px 14px 33px" }}
-                className="text-black biggest  bold"
-              >
-                Accion
-              </label>
+                <label
+                  style={{ padding: "14px 33px 14px 33px" }}
+                  className="text-black biggest  bold"
+                >
+                  Accion
+                </label>
+              </div>
             </div>
             <div>
-              {data.dataTable.map((item) => {
-                return (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      background: "#F4F4F4",
-                    }}
-                    key={"keyTable"}
-                  >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                }}
+              >
+                {data.dataTable.map((item) => {
+                  return (
                     <div
                       style={{
-                        width: "175px",
                         display: "flex",
-                        justifyContent: "center",
+                        justifyContent: "space-between",
+                        background: "#F4F4F4",
+                        width: "100%",
+                        minWidth: "560px",
                       }}
+                      key={"keyTable"}
                     >
-                      <label
-                        style={{ padding: "16px 23.5px 16px 23.5px" }}
-                        className="text-black  biggest bold"
+                      <div
+                        style={{
+                          width: "175px",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
                       >
-                        {item.initialAverage}
-                      </label>
-                    </div>
-                    <div
-                      style={{
-                        width: "175px",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <label
-                        style={{ padding: "14px 33px 14px 33px" }}
-                        className="text-black  biggest bold"
+                        <label
+                          style={{ padding: "16px 23.5px 16px 23.5px" }}
+                          className="text-black  biggest bold"
+                        >
+                          {item.initialAverage}
+                        </label>
+                      </div>
+                      <div
+                        style={{
+                          width: "175px",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
                       >
-                        {item.endAverage}
-                      </label>
-                    </div>
-                    <div
-                      style={{
-                        width: "175px",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <label
-                        style={{ padding: "14px 33px 14px 33px" }}
-                        className="text-black  biggest bold"
+                        <label
+                          style={{ padding: "14px 33px 14px 33px" }}
+                          className="text-black  biggest bold"
+                        >
+                          {item.endAverage}
+                        </label>
+                      </div>
+                      <div
+                        style={{
+                          width: "175px",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
                       >
-                        {item.percent}
-                      </label>
-                    </div>
-                    <div
-                      style={{
-                        width: "175px",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <label
-                        style={{ padding: "14px 33px 14px 33px" }}
-                        className="text-black  biggest bold"
-                        onClick={() => deleteItem(item.id)}
+                        <label
+                          style={{ padding: "14px 33px 14px 33px" }}
+                          className="text-black  biggest bold"
+                        >
+                          {item.percent}
+                        </label>
+                      </div>
+                      <div
+                        style={{
+                          width: "175px",
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
                       >
-                        <Icons.FaTrashAlt
-                          style={{ color: "red" }}
-                          className="button grid-button button-delete"
-                        />
-                      </label>
+                        <label
+                          style={{ padding: "14px 33px 14px 33px" }}
+                          className="text-black  biggest bold"
+                          onClick={() => deleteItem(item.id)}
+                        >
+                          <Icons.FaTrashAlt
+                            style={{ color: "red" }}
+                            className="button grid-button button-delete"
+                          />
+                        </label>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useRegulationHook from "../hooks/createUpdate";
 import { periods } from "../service";
 import {
@@ -28,16 +28,20 @@ const Form = () => {
     setToggleControl,
     performancePeriodErrors,
     accumulatedPerformanceErrors,
+    id,
+    listPrograms,
   } = useRegulationHook();
   const [view, setView] = useState(0);
 
   if (loading) return <></>;
 
+  if (id && !getValues().id && listPrograms.length === 0) return <></>;
+
   return (
     <div>
       <div className="title-area">
         <p className="text-black text-29 ml-24px mt-20px mg-0">
-          Crear reglamento
+          {`${updateData?.id ? "Actualizar" : "Crear"} reglamento`}
         </p>
       </div>
       <Tabs view={view} />
@@ -59,6 +63,8 @@ const Form = () => {
             watch={watch}
             toggleControl={toggleControl}
             setToggleControl={setToggleControl}
+            loading={loading}
+            listPrograms={listPrograms}
           />
         )}
         {view === 1 && (
@@ -79,9 +85,7 @@ const Form = () => {
       {view === 2 && <Requirements />}
       <StepButtons view={view} setView={setView} />
       <Divider />
-      <div
-        style={{ display: "flex", justifyContent: "end", marginRight: "24px" }}
-      >
+      <div className="buttonsActions">
         <ButtonComponent
           value="Cancelar"
           type="button"

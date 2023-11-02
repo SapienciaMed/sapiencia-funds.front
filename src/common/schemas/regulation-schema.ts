@@ -150,3 +150,15 @@ export const createRegulation = yup.object().shape({
       return schema;
     }),
 });
+
+export const searchRegulation = yup.object({
+  program: yup.string().typeError(MESSAGE_REQUIRED).required(MESSAGE_REQUIRED),
+  initialPeriod: yup
+    .string()
+    .required(MESSAGE_REQUIRED)
+    .typeError(MESSAGE_REQUIRED),
+  endPeriod: yup
+    .string()
+    .required(MESSAGE_REQUIRED)
+    .typeError(MESSAGE_REQUIRED),
+});

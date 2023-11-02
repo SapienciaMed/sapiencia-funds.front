@@ -20,6 +20,8 @@ const InitialSetup = ({
   watch,
   toggleControl,
   setToggleControl,
+  loading,
+  listPrograms,
 }) => {
   return (
     <div className="container-form p-24">
@@ -27,10 +29,14 @@ const InitialSetup = ({
         <SelectComponentOld
           idInput={"program"}
           setValue={(e) => setValue("program", e)}
-          value={getValues().program}
+          value={
+            updateData?.program
+              ? Number(updateData?.program)
+              : getValues().program
+          }
           errors={errors}
           disabled={updateData?.program ? true : false}
-          data={periods ? periods : []} //pendiente
+          data={listPrograms.length ? listPrograms : []}
           label={
             <>
               Programa <span>*</span>
@@ -49,7 +55,6 @@ const InitialSetup = ({
             errors={errors}
             setValue={(e) => setValue("initialPeriod", e)}
             value={getValues().initialPeriod}
-            disabled={updateData?.initialPeriod ? true : false}
             data={periods ? periods : []} //pendiente
             label={
               <>
@@ -61,14 +66,13 @@ const InitialSetup = ({
             placeholder="Seleccionar"
           />
         </div>
-        <div className="containerIsOpenPeriod ml-24px">
+        <div className="containerIsOpenPeriod">
           <SwitchComponent
             idInput={"isOpenPeriod"}
             errors={errors}
             control={control}
             onChange={() => setValue("endPeriod", undefined)}
             size="normal"
-            disabled={updateData?.isOpenPeriod ? true : false}
             label={
               <>
                 Convocatoria abierta <span>*</span>
@@ -79,17 +83,17 @@ const InitialSetup = ({
           />
         </div>
 
-        <div className="containerEndPeriod ml-24px">
+        <div className="containerEndPeriod">
           <SelectComponentOld
             idInput={"endPeriod"}
             errors={errors}
+            disabled={watch().isOpenPeriod ? true : false}
             setValue={(e) => setValue("endPeriod", e)}
             value={getValues().endPeriod}
-            disabled={getValues().isOpenPeriod ? true : false}
-            data={getValues().isOpenPeriod ? [] : periods ? periods : []} //pendiente
+            data={watch().isOpenPeriod ? [] : periods ? periods : []} //pendiente
             label={
               <>
-                Periodo inicial de convocatoria{" "}
+                Periodo final de convocatoria{" "}
                 {!getValues().isOpenPeriod && <span>*</span>}
               </>
             }
@@ -116,7 +120,6 @@ const InitialSetup = ({
                 className="input-basic input-size"
                 classNameLabel="text-black biggest text-required bold"
                 label="Porcentaje de pago teórico semestral"
-                disabled={updateData?.theoreticalPercentage ? true : false}
                 min={0}
                 max={100}
               />
@@ -156,7 +159,6 @@ const InitialSetup = ({
                 setValue("socialServiceHours", undefined);
               }}
               size="small"
-              disabled={updateData?.applySocialService ? true : false}
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest bold"
             />
@@ -177,7 +179,7 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size"
+                      className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Porcentaje de descuento por periodo"
                       disabled={
@@ -246,7 +248,6 @@ const InitialSetup = ({
                 setValue("knowledgeTransferHours", undefined);
               }}
               size="small"
-              disabled={updateData?.knowledgeTransferApply ? true : false}
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest bold"
             />
@@ -267,12 +268,9 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size"
+                      className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Porcentaje de cumplimiento"
-                      disabled={
-                        updateData?.knowledgeTransferPercentage ? true : false
-                      }
                     />
                   );
                 }}
@@ -295,9 +293,6 @@ const InitialSetup = ({
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required bold"
                       label="Horas totales por el crédito"
-                      disabled={
-                        updateData?.knowledgeTransferHours ? true : false
-                      }
                     />
                   );
                 }}
@@ -335,7 +330,6 @@ const InitialSetup = ({
                 setValue("gracePeriodApplication", undefined);
               }}
               size="small"
-              disabled={updateData?.gracePeriodApply ? true : false}
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest bold"
             />
@@ -356,10 +350,9 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size"
+                      className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Meses"
-                      disabled={updateData?.gracePeriodMonths ? true : false}
                     />
                   );
                 }}
@@ -371,7 +364,6 @@ const InitialSetup = ({
                 setValue={(e) => setValue("gracePeriodApplication", e)}
                 value={getValues().gracePeriodApplication}
                 errors={errors}
-                disabled={updateData?.gracePeriodApplication ? true : false}
                 data={LIST_DATA_GRACE_PERIOD ? LIST_DATA_GRACE_PERIOD : []} //pendiente
                 label={
                   <>
@@ -418,7 +410,6 @@ const InitialSetup = ({
                 setValue("continuosSuspencionQuantity", undefined);
               }}
               size="small"
-              disabled={updateData?.continuousSuspensionApplies ? true : false}
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest bold"
             />
@@ -439,12 +430,9 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size"
+                      className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
-                      disabled={
-                        updateData?.continuosSuspencionQuantity ? true : false
-                      }
                     />
                   );
                 }}
@@ -485,7 +473,6 @@ const InitialSetup = ({
                 setValue("discontinuousSuspensionQuantity", undefined);
               }}
               size="small"
-              disabled={updateData?.applyDiscontinuousSuspension ? true : false}
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest bold"
             />
@@ -506,14 +493,9 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size"
+                      className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
-                      disabled={
-                        updateData?.discontinuousSuspensionQuantity
-                          ? true
-                          : false
-                      }
                     />
                   );
                 }}
@@ -552,8 +534,7 @@ const InitialSetup = ({
                 setValue("applySpecialSuspensionsQuantity", undefined);
               }}
               size="small"
-              disabled={updateData?.applySpecialSuspensions ? true : false}
-              className="select-basic select-disabled-list input-size"
+              className="select-basic select-disabled-list input-size mb-24px"
               classNameLabel="text-black biggest bold"
             />
           }
@@ -573,14 +554,9 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size"
+                      className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
-                      disabled={
-                        updateData?.applySpecialSuspensionsQuantity
-                          ? true
-                          : false
-                      }
                     />
                   );
                 }}
@@ -616,7 +592,6 @@ const InitialSetup = ({
                 setValue("extensionApplyQuantity", undefined);
               }}
               size="small"
-              disabled={updateData?.extensionApply ? true : false}
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest bold"
             />
@@ -637,12 +612,9 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size"
+                      className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
-                      disabled={
-                        updateData?.extensionApplyQuantity ? true : false
-                      }
                     />
                   );
                 }}

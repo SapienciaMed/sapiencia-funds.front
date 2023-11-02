@@ -36,7 +36,7 @@ const Requirements = () => {
               size="normal"
               label="Estado"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest text-required bold"
+              classNameLabel="text-black biggest bold"
             />
             <Controller
               control={control}
@@ -51,7 +51,7 @@ const Requirements = () => {
                     onBlur={field.onBlur}
                     value={field.value}
                     className="input-basic input-size"
-                    classNameLabel="text-black biggest text-required bold"
+                    classNameLabel="text-black biggest bold"
                     label="Porcentaje de descuento por periodo"
                   />
                 );
@@ -69,7 +69,7 @@ const Requirements = () => {
                     id="rew"
                     label="Observaciones"
                     className="text-area-basic"
-                    classNameLabel="text-black biggest bold"
+                    classNameLabel="text-black biggest text-required bold"
                     rows={2}
                     onChange={field.onChange}
                     value={field.value}

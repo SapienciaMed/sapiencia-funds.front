@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { useNavigate, useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useRegulationApi } from "../service";
@@ -15,8 +15,12 @@ export default function useRegulationHook() {
   const { id } = useParams();
   const { getListByGrouper } = useGenericListService();
   const resolver = useYupValidationResolver(createRegulation);
-  const { getRegulationById, editRegulation, createRegulationAction } =
-    useRegulationApi();
+  const {
+    getRegulationById,
+    editRegulation,
+    createRegulationAction,
+    getPrograms,
+  } = useRegulationApi();
   const { deleteByReglamentId } = useRequerimentsApi();
   const navigate = useNavigate();
   const [updateData, setUpdateData] = useState<IRegulation>();
@@ -35,6 +39,9 @@ export default function useRegulationHook() {
     applyCondonationPerformancePeriod: boolean;
     accomulatedIncomeCondonationApplies: boolean;
   }>();
+  const [listPrograms, setListPrograms] = useState<
+    { name: string; value: number }[]
+  >([]);
 
   const {
     handleSubmit,
@@ -47,23 +54,64 @@ export default function useRegulationHook() {
     formState: { errors },
   } = useForm<IRegulation>({
     resolver,
-    defaultValues: async () => await getUpdateData(),
+    defaultValues: async () => {
+      const res = await getUpdateData();
+      setLoading(false);
+      return res;
+    },
   });
 
   useEffect(() => {
-    getUpdateData();
+    const getListPrograms = async () => {
+      const res = await getPrograms();
+      if (res?.data) {
+        const buildData = res.data.map((item) => {
+          return {
+            name: item.value,
+            value: item.id,
+          };
+        });
+        setListPrograms(buildData);
+      }
+    };
+
+    getListPrograms();
   }, []);
 
   const getUpdateData = async () => {
     if (id) {
       const res = await getRegulationById(id);
-      if (res?.data[0]) setUpdateData(res?.data[0]);
+      if (res?.data[0]) {
+        for (let clave in res?.data[0]) {
+          if (res?.data[0][clave] === null) {
+            delete res?.data[0][clave];
+          }
+        }
+        setUpdateData(res?.data[0]);
+      }
+      console.log(res?.data[0]);
+      controlToggle(res?.data[0]);
       return { ...res?.data[0] };
     }
-    setLoading(false);
+  };
+
+  const controlToggle = (data) => {
+    setToggleControl({
+      applySocialService: data.applySocialService,
+      knowledgeTransferApply: data.knowledgeTransferApply,
+      gracePeriodApply: data.gracePeriodApply,
+      continuousSuspensionApplies: data.continuousSuspensionApplies,
+      applyDiscontinuousSuspension: data.applyDiscontinuousSuspension,
+      applySpecialSuspensions: data.applySpecialSuspensions,
+      extensionApply: data.extensionApply,
+      applyCondonationPerformancePeriod: data.applyCondonationPerformancePeriod,
+      accomulatedIncomeCondonationApplies:
+        data.accomulatedIncomeCondonationApplies,
+    });
   };
 
   const onsubmitCreate = handleSubmit((data: IRegulation) => {
+    console.log(data);
     if (data.applyCondonationPerformancePeriod && !data.performancePeriod) {
       return setPerformancePeriodErrors(true);
     } else {
@@ -200,5 +248,7 @@ export default function useRegulationHook() {
     setToggleControl,
     performancePeriodErrors,
     accumulatedPerformanceErrors,
+    id,
+    listPrograms,
   };
 }

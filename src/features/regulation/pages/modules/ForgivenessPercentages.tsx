@@ -49,9 +49,6 @@ const ForgivenessPercentages = ({
                 setValue("performancePeriod", "");
               }}
               size="small"
-              disabled={
-                updateData?.applyCondonationPerformancePeriod ? true : false
-              }
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest bold"
             />
@@ -101,9 +98,6 @@ const ForgivenessPercentages = ({
                 setValue("accumulatedPerformance", "");
               }}
               size="small"
-              disabled={
-                updateData?.accomulatedIncomeCondonationApplies ? true : false
-              }
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest bold"
             />
