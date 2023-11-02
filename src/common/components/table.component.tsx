@@ -155,7 +155,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             );
           })}
         </div>
-        {console.log(actions)}
         <div className="card-footer">
           {actions.map((action) => (
             <div key={action.icon} onClick={() => action.onClick(item)}>

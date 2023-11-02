@@ -112,18 +112,6 @@ const VotingResultsSearchPage = () => {
         <div className="container-form padding-form">
           <p className="text-black huge mg-0">Resumen priorización</p>
           <div className="card-table-user">
-            {/* <div className="title-area">
-              <label className="text-black large medium grid-span-4-columns"></label>
-
-              <div
-                className="title-button text-three large"
-                onClick={() => {
-                  navigate("/fondos/resultados-votacion/crear");
-                }}
-              >
-                Crear resultado de votación <AiOutlinePlusCircle />
-              </div>
-            </div> */}
 
             <FormComponent
               id="createVotingForm"

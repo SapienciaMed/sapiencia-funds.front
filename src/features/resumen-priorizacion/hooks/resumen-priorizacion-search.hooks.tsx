@@ -35,7 +35,6 @@ export const useResumenPriorizacionSearch = () => {
 
   /*Functions*/
   const onSubmitSearchVoting = handleSubmit((data: IResumenPriorizacion) => {
-    debugger
     loadTableData({
       communeNeighborhood: data?.communeNeighborhood,
       numberProject: data?.numberProject,

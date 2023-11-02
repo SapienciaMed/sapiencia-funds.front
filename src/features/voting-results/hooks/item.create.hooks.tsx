@@ -101,7 +101,6 @@ export const useItemResults = (action, dataVoting) => {
     };
 
   const changeAmountSum = (e) => {
-    debugger
     if (e) {
       if (Number(e)) {
         const suma =
