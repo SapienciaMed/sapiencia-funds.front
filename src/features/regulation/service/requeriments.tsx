@@ -20,6 +20,12 @@ export function useRequerimentsApi() {
     return await deleted(`${serviceUrl}/delete/${id}`);
   }
 
+  async function deleteByReglamentId(
+    id: number
+  ): Promise<ApiResponse<IRequeriments>> {
+    return await deleted(`${serviceUrl}/delete-by-reglament-id/${id}`);
+  }
+
   async function createRequerimentAction(
     data: IRequeriments
   ): Promise<ApiResponse<IRequeriments>> {
@@ -30,5 +36,6 @@ export function useRequerimentsApi() {
     createRequerimentAction,
     editRequeriment,
     deleteRequeriment,
+    deleteByReglamentId,
   };
 }

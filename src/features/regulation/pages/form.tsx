@@ -1,19 +1,10 @@
 import React, { useState } from "react";
-import SwitchComponent from "../../../common/components/Form/switch.component";
 import useRegulationHook from "../hooks/createUpdate";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { periods } from "../service";
-import { Controller } from "react-hook-form";
 import {
   ButtonComponent,
   FormComponent,
-  InputComponent,
-  SelectComponent,
 } from "../../../common/components/Form/index";
-import Acordion from "../components/acordion";
-import Tab from "../../../common/components/Form/tab.component";
-import TableJson from "../components/tableJson";
-import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 import InitialSetup from "./modules/initialSetup";
 import Tabs from "./modules/tabs";
 import ForgivenessPercentages from "./modules/ForgivenessPercentages";
@@ -33,6 +24,10 @@ const Form = () => {
     setValue,
     getValues,
     watch,
+    toggleControl,
+    setToggleControl,
+    performancePeriodErrors,
+    accumulatedPerformanceErrors,
   } = useRegulationHook();
   const [view, setView] = useState(0);
 
@@ -62,6 +57,8 @@ const Form = () => {
             getValues={getValues}
             setValue={setValue}
             watch={watch}
+            toggleControl={toggleControl}
+            setToggleControl={setToggleControl}
           />
         )}
         {view === 1 && (
@@ -71,6 +68,11 @@ const Form = () => {
             control={control}
             getValues={getValues}
             setValue={setValue}
+            toggleControl={toggleControl}
+            setToggleControl={setToggleControl}
+            watch={watch}
+            performancePeriodErrors={performancePeriodErrors}
+            accumulatedPerformanceErrors={accumulatedPerformanceErrors}
           />
         )}
       </FormComponent>
@@ -87,7 +89,7 @@ const Form = () => {
           action={() => goBack()}
         />
         <ButtonComponent
-          value="Siguiente"
+          value="Guardar"
           form="regulationCreate"
           type="submit"
           className="button-save disabled-black padding-button"

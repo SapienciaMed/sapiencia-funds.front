@@ -34,7 +34,7 @@ export const LIST_DATA_GRACE_PERIOD: { value: string; name: string }[] = [
 
 export function useRegulationApi() {
   const baseURL: string = process.env.urlApiFunds || "";
-  const serviceUrl: string = "/api/v1/regulation";
+  const serviceUrl: string = "/api/v1/reglament";
 
   const { get, post, put } = useCrudService(baseURL);
 
@@ -61,10 +61,15 @@ export function useRegulationApi() {
     return await put(`${serviceUrl}/edit/${id}`, data);
   }
 
+  async function getLastId(): Promise<ApiResponse<number>> {
+    return await get(`${serviceUrl}/get-last-id`);
+  }
+
   return {
     createRegulationAction,
     getRegulationById,
     editRegulation,
     getRegulation,
+    getLastId,
   };
 }

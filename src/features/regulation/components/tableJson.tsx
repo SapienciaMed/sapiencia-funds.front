@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ButtonComponent,
   InputComponent,
@@ -9,13 +9,25 @@ const INIT_DATA = { percentCondonation: "", dataTable: [] };
 const INIT_TEMP_DATA = { initialAverage: "", endAverage: "", percent: "" };
 const DEFAULT_MESSAGE = "Campo requerido";
 
-const TableJson = ({ title, setValue, idInput }) => {
+const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
   const [data, setData] = useState(INIT_DATA);
   const [tempData, setTempData] = useState(INIT_TEMP_DATA);
   const [percentCondonation, setPercentCondonation] = useState("");
   const [initialAverage, setInitialAverage] = useState("");
   const [endAverage, setEndAverage] = useState("");
   const [percent, setPercent] = useState("");
+
+  useEffect(() => {
+    const getData = getValues();
+    if (getData[`${idInput}`]) {
+      const parceData = JSON.parse(getData[`${idInput}`]);
+      console.log(parceData);
+      setData(parceData);
+    } else {
+      setData(INIT_DATA);
+      setTempData(INIT_TEMP_DATA);
+    }
+  }, [isOpen]);
 
   const validateFields = () => {
     let isError = false;
@@ -60,7 +72,6 @@ const TableJson = ({ title, setValue, idInput }) => {
 
   const addItem = () => {
     const isError = validateFields();
-    console.log(isError);
     if (isError) return;
     setData({
       ...data,
@@ -70,7 +81,18 @@ const TableJson = ({ title, setValue, idInput }) => {
       ],
     });
     setTempData(INIT_TEMP_DATA);
-    setValue(idInput, JSON.stringify(data));
+    setTimeout(() => {
+      setValue(
+        idInput,
+        JSON.stringify({
+          ...data,
+          dataTable: [
+            ...data.dataTable,
+            { ...tempData, id: new Date().toISOString() },
+          ],
+        })
+      );
+    }, 500);
   };
 
   return (
@@ -83,6 +105,7 @@ const TableJson = ({ title, setValue, idInput }) => {
           <InputComponent
             idInput="percentCondonation"
             typeInput="number"
+            value={data.percentCondonation}
             onChange={(e) =>
               setData({ ...data, percentCondonation: e.target.value })
             }
@@ -90,14 +113,15 @@ const TableJson = ({ title, setValue, idInput }) => {
             classNameLabel="text-black biggest text-required bold"
             label="Porcentaje de condonación"
           />
-          {percentCondonation.length > 0 && (
-            <p
-              style={{ color: "red" }}
-              className="error-message bold not-margin-padding"
-            >
-              {DEFAULT_MESSAGE}
-            </p>
-          )}
+          {percentCondonation.length > 0 ||
+            (error && (
+              <p
+                style={{ color: "red" }}
+                className="error-message bold not-margin-padding"
+              >
+                {DEFAULT_MESSAGE}
+              </p>
+            ))}
         </div>
       </div>
       <div className="container-form-children p-24 ">
@@ -176,6 +200,7 @@ const TableJson = ({ title, setValue, idInput }) => {
           </div>
           <ButtonComponent
             value="Siguiente"
+            type="button"
             action={addItem}
             className="button-save disabled-black padding-button"
           />

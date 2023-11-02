@@ -13,6 +13,7 @@ import {
   ITableElement,
 } from "../../../../../../common/interfaces/table.interfaces";
 import SwitchComponent from "../../../../../../common/components/Form/switch.component";
+import { useRegulationApi } from "../../../../service";
 
 const useRequerimentsHook = () => {
   const { setMessage, authorization } = useContext(AppContext);
@@ -20,10 +21,11 @@ const useRequerimentsHook = () => {
   const resolver = useYupValidationResolver(createRequeriment);
   const { createRequerimentAction, editRequeriment, deleteRequeriment } =
     useRequerimentsApi();
+  const { getLastId } = useRegulationApi();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const tableComponentRef = useRef(null);
-  const codReglament = localStorage.getItem("codReglament");
+  const [codReglament, setCodReglament] = useState<number>();
 
   const {
     handleSubmit,
@@ -38,13 +40,22 @@ const useRequerimentsHook = () => {
   });
 
   useEffect(() => {
-    if (!codReglament) return;
-    const buildData = {
-      codReglament: codReglament,
+    setLoading(true);
+    const getLastIdAction = async () => {
+      const { data: dataResponse, operation } = await getLastId();
+      if (operation.code === EResponseCodes.OK) {
+        const newId = dataResponse + 1;
+        localStorage.setItem("reglamentId", newId.toString());
+        setCodReglament(newId);
+        if (tableComponentRef.current) {
+          tableComponentRef.current.loadData({ codReglament: newId });
+        }
+      } else {
+        handleModalError(operation.message, false);
+      }
     };
-    if (tableComponentRef.current) {
-      tableComponentRef.current.loadData(buildData);
-    }
+    getLastIdAction();
+    setLoading(false);
   }, []);
 
   const onsubmitCreate = handleSubmit(async (data: IRequeriments) => {

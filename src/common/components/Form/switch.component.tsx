@@ -19,6 +19,7 @@ interface ISwitch<T> {
   size: string;
   defaultValue?: boolean;
   onChange?: () => void;
+  onClick?: () => void;
 }
 
 const messageError = ({ idInput, errors, fieldArray }) => {
@@ -64,6 +65,7 @@ const SwitchComponent = ({
   disabled,
   size,
   onChange,
+  onClick,
 }: ISwitch<any>): React.JSX.Element => {
   const [value, setValue] = useState(false);
   return (
@@ -89,6 +91,9 @@ const SwitchComponent = ({
               <input
                 type="checkbox"
                 disabled={disabled}
+                onClick={() => {
+                  onClick && onClick();
+                }}
                 onChange={() => {
                   onChange && onChange();
                   field.onChange(!value);

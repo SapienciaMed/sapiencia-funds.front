@@ -23,9 +23,9 @@ export interface IRegulation {
   extensionApply: boolean;
   extensionApplyQuantity?: number;
   applyCondonationPerformancePeriod: boolean;
-  periodPerformance?: string;
+  performancePeriod?: string;
   accomulatedIncomeCondonationApplies: boolean;
-  accomulatedPerformance?: string;
+  accumulatedPerformance?: string;
   modifyUser?: string;
   modifyDate?: string;
   createUser: string;

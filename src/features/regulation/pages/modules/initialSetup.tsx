@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormComponent,
   InputComponent,
@@ -18,15 +18,17 @@ const InitialSetup = ({
   getValues,
   setValue,
   watch,
+  toggleControl,
+  setToggleControl,
 }) => {
   return (
     <div className="container-form p-24">
       <div className="containerProgram mb-24px">
         <SelectComponentOld
           idInput={"program"}
-          register={register}
+          setValue={(e) => setValue("program", e)}
+          value={getValues().program}
           errors={errors}
-          value={updateData?.program}
           disabled={updateData?.program ? true : false}
           data={periods ? periods : []} //pendiente
           label={
@@ -44,9 +46,9 @@ const InitialSetup = ({
         <div className="containerInitialPeriod ">
           <SelectComponentOld
             idInput={"initialPeriod"}
-            register={register}
             errors={errors}
-            value={updateData?.initialPeriod}
+            setValue={(e) => setValue("initialPeriod", e)}
+            value={getValues().initialPeriod}
             disabled={updateData?.initialPeriod ? true : false}
             data={periods ? periods : []} //pendiente
             label={
@@ -64,7 +66,7 @@ const InitialSetup = ({
             idInput={"isOpenPeriod"}
             errors={errors}
             control={control}
-            onChange={() => setValue("endPeriod", "")}
+            onChange={() => setValue("endPeriod", undefined)}
             size="normal"
             disabled={updateData?.isOpenPeriod ? true : false}
             label={
@@ -80,9 +82,9 @@ const InitialSetup = ({
         <div className="containerEndPeriod ml-24px">
           <SelectComponentOld
             idInput={"endPeriod"}
-            register={register}
             errors={errors}
-            value={updateData?.endPeriod}
+            setValue={(e) => setValue("endPeriod", e)}
+            value={getValues().endPeriod}
             disabled={getValues().isOpenPeriod ? true : false}
             data={getValues().isOpenPeriod ? [] : periods ? periods : []} //pendiente
             label={
@@ -126,17 +128,32 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica servicio social?"
-          onClick={() =>
-            setValue("applySocialService", !getValues().applySocialService)
-          }
+          isOpen={toggleControl?.applySocialService}
+          onClick={async () => {
+            setValue("applySocialService", !getValues().applySocialService);
+            await setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                applySocialService: getValues().applySocialService,
+              });
+            }, 400);
+            setValue("socialServicePercentage", undefined);
+            setValue("socialServiceHours", undefined);
+          }}
           switchElement={
             <SwitchComponent
               idInput={"applySocialService"}
               errors={errors}
               control={control}
+              onClick={() => {
+                setToggleControl({
+                  ...toggleControl,
+                  applySocialService: !getValues().applySocialService,
+                });
+              }}
               onChange={() => {
-                setValue("socialServicePercentage", "");
-                setValue("socialServiceHours", "");
+                setValue("socialServicePercentage", undefined);
+                setValue("socialServiceHours", undefined);
               }}
               size="small"
               disabled={updateData?.applySocialService ? true : false}
@@ -200,20 +217,33 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica trasferencia de conocimiento?"
-          onClick={() =>
+          isOpen={toggleControl?.knowledgeTransferApply}
+          onClick={async () => {
             setValue(
               "knowledgeTransferApply",
               !getValues().knowledgeTransferApply
-            )
-          }
+            );
+            await setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                knowledgeTransferApply: getValues().knowledgeTransferApply,
+              });
+            }, 400);
+            setValue("knowledgeTransferPercentage", undefined);
+            setValue("knowledgeTransferHours", undefined);
+          }}
           switchElement={
             <SwitchComponent
               idInput={"knowledgeTransferApply"}
               errors={errors}
               control={control}
               onChange={() => {
-                setValue("knowledgeTransferPercentage", "");
-                setValue("knowledgeTransferHours", "");
+                setToggleControl({
+                  ...toggleControl,
+                  knowledgeTransferApply: !getValues().knowledgeTransferApply,
+                });
+                setValue("knowledgeTransferPercentage", undefined);
+                setValue("knowledgeTransferHours", undefined);
               }}
               size="small"
               disabled={updateData?.knowledgeTransferApply ? true : false}
@@ -279,17 +309,30 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica periodo de gracia?"
-          onClick={() =>
-            setValue("gracePeriodApply", !getValues().gracePeriodApply)
-          }
+          isOpen={toggleControl?.gracePeriodApply}
+          onClick={async () => {
+            setValue("gracePeriodApply", !getValues().gracePeriodApply);
+            await setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                gracePeriodApply: getValues().gracePeriodApply,
+              });
+            }, 400);
+            setValue("gracePeriodMonths", undefined);
+            setValue("gracePeriodApplication", undefined);
+          }}
           switchElement={
             <SwitchComponent
               idInput={"gracePeriodApply"}
               errors={errors}
               control={control}
               onChange={() => {
-                setValue("gracePeriodMonths", "");
-                setValue("gracePeriodApplication", "");
+                setToggleControl({
+                  ...toggleControl,
+                  gracePeriodApply: !getValues().gracePeriodApply,
+                });
+                setValue("gracePeriodMonths", undefined);
+                setValue("gracePeriodApplication", undefined);
               }}
               size="small"
               disabled={updateData?.gracePeriodApply ? true : false}
@@ -325,9 +368,9 @@ const InitialSetup = ({
             <div>
               <SelectComponentOld
                 idInput={"gracePeriodApplication"}
-                register={register}
+                setValue={(e) => setValue("gracePeriodApplication", e)}
+                value={getValues().gracePeriodApplication}
                 errors={errors}
-                value={updateData?.gracePeriodApplication}
                 disabled={updateData?.gracePeriodApplication ? true : false}
                 data={LIST_DATA_GRACE_PERIOD ? LIST_DATA_GRACE_PERIOD : []} //pendiente
                 label={
@@ -346,19 +389,33 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica suspensiones continuas?"
-          onClick={() =>
+          isOpen={toggleControl?.continuousSuspensionApplies}
+          onClick={async () => {
             setValue(
               "continuousSuspensionApplies",
               !getValues().continuousSuspensionApplies
-            )
-          }
+            );
+            await setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                continuousSuspensionApplies:
+                  getValues().continuousSuspensionApplies,
+              });
+            }, 400);
+            setValue("continuosSuspencionQuantity", undefined);
+          }}
           switchElement={
             <SwitchComponent
               idInput={"continuousSuspensionApplies"}
               errors={errors}
               control={control}
               onChange={() => {
-                setValue("continuosSuspencionQuantity", "");
+                setToggleControl({
+                  ...toggleControl,
+                  continuousSuspensionApplies:
+                    !getValues().continuousSuspensionApplies,
+                });
+                setValue("continuosSuspencionQuantity", undefined);
               }}
               size="small"
               disabled={updateData?.continuousSuspensionApplies ? true : false}
@@ -399,19 +456,33 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica suspensiones discontinuas?"
-          onClick={() =>
+          isOpen={toggleControl?.applyDiscontinuousSuspension}
+          onClick={async () => {
             setValue(
               "applyDiscontinuousSuspension",
               !getValues().applyDiscontinuousSuspension
-            )
-          }
+            );
+            await setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                applyDiscontinuousSuspension:
+                  getValues().applyDiscontinuousSuspension,
+              });
+            }, 400);
+            setValue("discontinuousSuspensionQuantity", undefined);
+          }}
           switchElement={
             <SwitchComponent
               idInput={"applyDiscontinuousSuspension"}
               errors={errors}
               control={control}
               onChange={() => {
-                setValue("discontinuousSuspensionQuantity", "");
+                setToggleControl({
+                  ...toggleControl,
+                  applyDiscontinuousSuspension:
+                    !getValues().applyDiscontinuousSuspension,
+                });
+                setValue("discontinuousSuspensionQuantity", undefined);
               }}
               size="small"
               disabled={updateData?.applyDiscontinuousSuspension ? true : false}
@@ -454,19 +525,31 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica suspensiones especiales?"
-          onClick={() =>
+          isOpen={toggleControl?.applySpecialSuspensions}
+          onClick={async () => {
             setValue(
               "applySpecialSuspensions",
               !getValues().applySpecialSuspensions
-            )
-          }
+            );
+            await setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                applySpecialSuspensions: getValues().applySpecialSuspensions,
+              });
+            }, 400);
+            setValue("applySpecialSuspensionsQuantity", undefined);
+          }}
           switchElement={
             <SwitchComponent
               idInput={"applySpecialSuspensions"}
               errors={errors}
               control={control}
               onChange={() => {
-                setValue("applySpecialSuspensionsQuantity", "");
+                setToggleControl({
+                  ...toggleControl,
+                  applySpecialSuspensions: !getValues().applySpecialSuspensions,
+                });
+                setValue("applySpecialSuspensionsQuantity", undefined);
               }}
               size="small"
               disabled={updateData?.applySpecialSuspensions ? true : false}
@@ -509,16 +592,28 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica prórroga?"
-          onClick={() =>
-            setValue("extensionApply", !getValues().extensionApply)
-          }
+          isOpen={toggleControl?.extensionApply}
+          onClick={async () => {
+            setValue("extensionApply", !getValues().extensionApply);
+            await setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                extensionApply: getValues().extensionApply,
+              });
+            }, 400);
+            setValue("extensionApplyQuantity", undefined);
+          }}
           switchElement={
             <SwitchComponent
               idInput={"extensionApply"}
               errors={errors}
               control={control}
               onChange={() => {
-                setValue("extensionApplyQuantity", "");
+                setToggleControl({
+                  ...toggleControl,
+                  extensionApply: !getValues().extensionApply,
+                });
+                setValue("extensionApplyQuantity", undefined);
               }}
               size="small"
               disabled={updateData?.extensionApply ? true : false}
