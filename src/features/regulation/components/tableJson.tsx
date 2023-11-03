@@ -78,6 +78,13 @@ const TableJson = ({
       setEndAverage("");
     }
 
+    if (Number(tempData.initialAverage) > Number(tempData.endAverage)) {
+      setInitialAverage(
+        "El promedio inicial no puede ser mayor al promedio final"
+      );
+      isError = true;
+    }
+
     if (tempData.percent.length === 0) {
       setPercent(DEFAULT_MESSAGE);
       isError = true;
@@ -87,6 +94,8 @@ const TableJson = ({
     } else {
       setPercent("");
     }
+
+    isError = validateRanges();
 
     return isError;
   };
@@ -122,6 +131,36 @@ const TableJson = ({
         })
       );
     }, 500);
+  };
+
+  const validateRanges = () => {
+    let isValidRange = false;
+    if (data.dataTable.length === 0) return isValidRange;
+    data.dataTable.map((range) => {
+      if (
+        tempData.initialAverage >= range.initialAverage &&
+        tempData.initialAverage <= range.endAverage
+      ) {
+        isValidRange = true;
+        setInitialAverage(
+          "No se permite agregar el promedio porque se está solapando con otro ya ingresado"
+        );
+      } else {
+        setInitialAverage("");
+      }
+      if (
+        tempData.endAverage >= range.initialAverage &&
+        tempData.endAverage <= range.endAverage
+      ) {
+        isValidRange = true;
+        setEndAverage(
+          "No se permite agregar el promedio porque se está solapando con otro ya ingresado"
+        );
+      } else {
+        setEndAverage("");
+      }
+    });
+    return isValidRange;
   };
 
   return (
@@ -341,7 +380,7 @@ const TableJson = ({
                           style={{ padding: "14px 33px 14px 33px" }}
                           className="text-black  biggest bold"
                         >
-                          {item.percent}
+                          {item.percent}%
                         </label>
                       </div>
                       <div
