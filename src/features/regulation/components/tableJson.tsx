@@ -9,7 +9,15 @@ const INIT_DATA = { percentCondonation: "", dataTable: [] };
 const INIT_TEMP_DATA = { initialAverage: "", endAverage: "", percent: "" };
 const DEFAULT_MESSAGE = "Campo requerido";
 
-const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
+const TableJson = ({
+  title,
+  setValue,
+  idInput,
+  isOpen,
+  getValues,
+  error,
+  onlyView,
+}) => {
   const [data, setData] = useState(INIT_DATA);
   const [tempData, setTempData] = useState(INIT_TEMP_DATA);
   const [percentCondonation, setPercentCondonation] = useState("");
@@ -116,8 +124,6 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
     }, 500);
   };
 
-  console.log(percentCondonation.length);
-
   return (
     <div>
       <div style={{ marginBottom: "10px" }}>
@@ -128,6 +134,7 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
           <InputComponent
             idInput="percentCondonation"
             typeInput="number"
+            disabled={onlyView ? true : false}
             value={data.percentCondonation}
             onChange={(e) =>
               setData({ ...data, percentCondonation: e.target.value })
@@ -170,6 +177,7 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
             <InputComponent
               idInput="initialAverage"
               typeInput="number"
+              disabled={onlyView ? true : false}
               onChange={(e) =>
                 setTempData({ ...tempData, initialAverage: e.target.value })
               }
@@ -191,6 +199,7 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
             <InputComponent
               idInput="endAverage"
               typeInput="number"
+              disabled={onlyView ? true : false}
               onChange={(e) =>
                 setTempData({ ...tempData, endAverage: e.target.value })
               }
@@ -212,6 +221,7 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
             <InputComponent
               idInput="percent"
               typeInput="number"
+              disabled={onlyView ? true : false}
               onChange={(e) =>
                 setTempData({ ...tempData, percent: e.target.value })
               }
@@ -232,7 +242,10 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
           <ButtonComponent
             value="Siguiente"
             type="button"
-            action={addItem}
+            action={() => {
+              if (onlyView) return;
+              addItem();
+            }}
             className="button-save disabled-black padding-button"
           />
         </div>
@@ -341,7 +354,10 @@ const TableJson = ({ title, setValue, idInput, isOpen, getValues, error }) => {
                         <label
                           style={{ padding: "14px 33px 14px 33px" }}
                           className="text-black  biggest bold"
-                          onClick={() => deleteItem(item.id)}
+                          onClick={() => {
+                            if (onlyView) return;
+                            deleteItem(item.id);
+                          }}
                         >
                           <Icons.FaTrashAlt
                             style={{ color: "red" }}

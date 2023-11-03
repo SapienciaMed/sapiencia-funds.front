@@ -14,6 +14,7 @@ const ForgivenessPercentages = ({
   watch,
   performancePeriodErrors,
   accumulatedPerformanceErrors,
+  onlyView,
 }) => {
   return (
     <div className="container-form p-24">
@@ -22,6 +23,7 @@ const ForgivenessPercentages = ({
           title="¿Aplica condonación por rendimiento académico por periodo?"
           isOpen={toggleControl?.applyCondonationPerformancePeriod}
           onClick={async () => {
+            if (onlyView) return;
             setValue(
               "applyCondonationPerformancePeriod",
               !getValues().applyCondonationPerformancePeriod
@@ -41,6 +43,7 @@ const ForgivenessPercentages = ({
               errors={errors}
               control={control}
               onChange={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   applyCondonationPerformancePeriod:
@@ -62,6 +65,7 @@ const ForgivenessPercentages = ({
               title="Agregar promedio y porcentaje de condonación"
               getValues={getValues}
               error={performancePeriodErrors}
+              onlyView={onlyView}
             />
           </div>
         </Acordion>
@@ -71,6 +75,7 @@ const ForgivenessPercentages = ({
           title="¿Aplica condonación por rendimiento académico final acumulado?"
           isOpen={toggleControl?.accomulatedIncomeCondonationApplies}
           onClick={async () => {
+            if (onlyView) return;
             setValue(
               "accomulatedIncomeCondonationApplies",
               !getValues().accomulatedIncomeCondonationApplies
@@ -88,8 +93,10 @@ const ForgivenessPercentages = ({
             <SwitchComponent
               idInput={"accomulatedIncomeCondonationApplies"}
               errors={errors}
+              disabled={onlyView ? true : false}
               control={control}
               onChange={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   accomulatedIncomeCondonationApplies:
@@ -111,6 +118,7 @@ const ForgivenessPercentages = ({
               title="Agregar promedio y porcentaje de condonación"
               getValues={getValues}
               error={accumulatedPerformanceErrors}
+              onlyView={onlyView}
             />
           </div>
         </Acordion>

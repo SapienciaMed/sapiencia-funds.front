@@ -5,21 +5,8 @@ import {
   ITableAction,
   ITableElement,
 } from "../../../common/interfaces/table.interfaces";
-import {
-  IMasterActivityFilter,
-  IMasterActivity,
-} from "../../../common/interfaces/funds.interfaces";
-import { EResponseCodes } from "../../../common/constants/api.enum";
-import { IDropdownProps } from "../../../common/interfaces/select.interface";
-import useActivityService from "../../../common/hooks/activity-service.hook";
 import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
-import {
-  ISocialization,
-  ISocializationSearch,
-} from "../../../common/interfaces/socialization.interface";
-import { searchSocialization } from "../../../common/schemas/socialization-schema";
-import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { searchRegulation } from "../../../common/schemas/regulation-schema";
 import {
   IRegulation,
@@ -76,11 +63,9 @@ export default function useSearchRegulation() {
       fieldName: "row.regulation.program",
       header: <>{"Programa"}</>,
       renderCell: (row) => {
-        console.log(row);
         const getListItem: any = listPrograms.find(
           (item) => item.name === row.program || item.value === row.program
         );
-        console.log(getListItem);
         return <>{getListItem.name}</>;
       },
     },
@@ -173,11 +158,18 @@ export default function useSearchRegulation() {
     },
   ];
 
-  const tableActions: ITableAction<ISocialization>[] = [
+  const tableActions: ITableAction<IRegulation>[] = [
     {
       icon: "Edit",
       onClick: (row) =>
         navigate("/fondos/administracion/reglamento/form/" + row.id),
+    },
+    {
+      icon: "Detail",
+      onClick: (row) =>
+        navigate(
+          "/fondos/administracion/reglamento/form/" + row.id + "onlyView"
+        ),
     },
   ];
 
@@ -185,11 +177,30 @@ export default function useSearchRegulation() {
 
   const newElement = () => navigate("form");
 
-  //servicio de busqueda
   const onSubmit = handleSubmit(async (data: IRegulation) => {
+    const getProgram: any = listPrograms.find(
+      (item) => item.name === data.program || item.value === data.program
+    );
+    const getListItem: any = periods.find(
+      (item) =>
+        item.name === data.initialPeriod || item.value === data.initialPeriod
+    );
+
+    const buildData = {
+      program: getProgram.value,
+      initialPeriod: getListItem.value,
+      endPeriod: data?.endPeriod
+        ? periods.find(
+            (item) =>
+              item.name === data.endPeriod || item.value === data.endPeriod
+          ).value
+        : null,
+    };
+
     setshowTable(true);
+
     if (tableComponentRef.current) {
-      tableComponentRef.current.loadData(data);
+      tableComponentRef.current.loadData(buildData);
     }
   });
 

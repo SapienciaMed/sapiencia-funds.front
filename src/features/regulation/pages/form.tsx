@@ -30,8 +30,11 @@ const Form = () => {
     accumulatedPerformanceErrors,
     id,
     listPrograms,
+    onlyView,
   } = useRegulationHook();
   const [view, setView] = useState(0);
+
+  console.log(onlyView);
 
   if (loading) return <></>;
 
@@ -65,6 +68,7 @@ const Form = () => {
             setToggleControl={setToggleControl}
             loading={loading}
             listPrograms={listPrograms}
+            onlyView={onlyView}
           />
         )}
         {view === 1 && (
@@ -79,10 +83,11 @@ const Form = () => {
             watch={watch}
             performancePeriodErrors={performancePeriodErrors}
             accumulatedPerformanceErrors={accumulatedPerformanceErrors}
+            onlyView={onlyView}
           />
         )}
       </FormComponent>
-      {view === 2 && <Requirements />}
+      {view === 2 && <Requirements onlyView={onlyView} />}
       <StepButtons view={view} setView={setView} />
       <Divider />
       <div className="buttonsActions">
@@ -97,6 +102,7 @@ const Form = () => {
           form="regulationCreate"
           type="submit"
           className="button-save disabled-black padding-button"
+          disabled={onlyView ? true : false}
         />
       </div>
     </div>

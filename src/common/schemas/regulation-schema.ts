@@ -157,8 +157,5 @@ export const searchRegulation = yup.object({
     .string()
     .required(MESSAGE_REQUIRED)
     .typeError(MESSAGE_REQUIRED),
-  endPeriod: yup
-    .string()
-    .required(MESSAGE_REQUIRED)
-    .typeError(MESSAGE_REQUIRED),
+  endPeriod: yup.string().optional(),
 });

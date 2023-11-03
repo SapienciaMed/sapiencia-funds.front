@@ -22,7 +22,10 @@ const InitialSetup = ({
   setToggleControl,
   loading,
   listPrograms,
+  onlyView,
 }) => {
+  if (loading) return <></>;
+
   return (
     <div className="container-form p-24">
       <div className="containerProgram mb-24px">
@@ -35,7 +38,7 @@ const InitialSetup = ({
               : getValues().program
           }
           errors={errors}
-          disabled={updateData?.program ? true : false}
+          disabled={onlyView ? true : updateData?.program ? true : false}
           data={listPrograms.length ? listPrograms : []}
           label={
             <>
@@ -55,7 +58,8 @@ const InitialSetup = ({
             errors={errors}
             setValue={(e) => setValue("initialPeriod", e)}
             value={getValues().initialPeriod}
-            data={periods ? periods : []} //pendiente
+            data={periods ? periods : []}
+            disabled={onlyView ? true : false}
             label={
               <>
                 Periodo inicial de convocatoria <span>*</span>
@@ -73,6 +77,7 @@ const InitialSetup = ({
             control={control}
             onChange={() => setValue("endPeriod", undefined)}
             size="normal"
+            disabled={onlyView ? true : false}
             label={
               <>
                 Convocatoria abierta <span>*</span>
@@ -87,7 +92,7 @@ const InitialSetup = ({
           <SelectComponentOld
             idInput={"endPeriod"}
             errors={errors}
-            disabled={watch().isOpenPeriod ? true : false}
+            disabled={onlyView ? true : watch().isOpenPeriod ? true : false}
             setValue={(e) => setValue("endPeriod", e)}
             value={getValues().endPeriod}
             data={watch().isOpenPeriod ? [] : periods ? periods : []} //pendiente
@@ -112,6 +117,7 @@ const InitialSetup = ({
               <InputComponent
                 idInput={field.name}
                 errors={errors}
+                disabled={onlyView ? true : false}
                 defaultValue={`${updateData?.theoreticalPercentage}`}
                 typeInput="number"
                 onChange={field.onChange}
@@ -133,6 +139,7 @@ const InitialSetup = ({
           title="¿Aplica servicio social?"
           isOpen={toggleControl?.applySocialService}
           onClick={async () => {
+            if (onlyView) return;
             setValue("applySocialService", !getValues().applySocialService);
             await setTimeout(() => {
               setToggleControl({
@@ -147,8 +154,10 @@ const InitialSetup = ({
             <SwitchComponent
               idInput={"applySocialService"}
               errors={errors}
+              disabled={onlyView ? true : false}
               control={control}
               onClick={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   applySocialService: !getValues().applySocialService,
@@ -174,6 +183,7 @@ const InitialSetup = ({
                     <InputComponent
                       idInput={field.name}
                       errors={errors}
+                      disabled={onlyView ? true : false}
                       defaultValue={`${updateData?.socialServicePercentage}`}
                       typeInput="number"
                       onChange={field.onChange}
@@ -182,9 +192,6 @@ const InitialSetup = ({
                       className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Porcentaje de descuento por periodo"
-                      disabled={
-                        updateData?.socialServicePercentage ? true : false
-                      }
                     />
                   );
                 }}
@@ -207,7 +214,7 @@ const InitialSetup = ({
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required bold"
                       label="Horas por periodo"
-                      disabled={updateData?.socialServiceHours ? true : false}
+                      disabled={onlyView ? true : false}
                     />
                   );
                 }}
@@ -221,6 +228,8 @@ const InitialSetup = ({
           title="¿Aplica trasferencia de conocimiento?"
           isOpen={toggleControl?.knowledgeTransferApply}
           onClick={async () => {
+            if (onlyView) return;
+
             setValue(
               "knowledgeTransferApply",
               !getValues().knowledgeTransferApply
@@ -238,8 +247,10 @@ const InitialSetup = ({
             <SwitchComponent
               idInput={"knowledgeTransferApply"}
               errors={errors}
+              disabled={onlyView ? true : false}
               control={control}
               onChange={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   knowledgeTransferApply: !getValues().knowledgeTransferApply,
@@ -266,6 +277,7 @@ const InitialSetup = ({
                       defaultValue={`${updateData?.knowledgeTransferPercentage}`}
                       typeInput="number"
                       onChange={field.onChange}
+                      disabled={onlyView ? true : false}
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size mb-24px"
@@ -293,6 +305,7 @@ const InitialSetup = ({
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required bold"
                       label="Horas totales por el crédito"
+                      disabled={onlyView ? true : false}
                     />
                   );
                 }}
@@ -306,6 +319,7 @@ const InitialSetup = ({
           title="¿Aplica periodo de gracia?"
           isOpen={toggleControl?.gracePeriodApply}
           onClick={async () => {
+            if (onlyView) return;
             setValue("gracePeriodApply", !getValues().gracePeriodApply);
             await setTimeout(() => {
               setToggleControl({
@@ -320,8 +334,10 @@ const InitialSetup = ({
             <SwitchComponent
               idInput={"gracePeriodApply"}
               errors={errors}
+              disabled={onlyView ? true : false}
               control={control}
               onChange={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   gracePeriodApply: !getValues().gracePeriodApply,
@@ -353,6 +369,7 @@ const InitialSetup = ({
                       className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Meses"
+                      disabled={onlyView ? true : false}
                     />
                   );
                 }}
@@ -373,6 +390,7 @@ const InitialSetup = ({
                 className="select-basic select-disabled-list input-size"
                 classNameLabel="text-black biggest bold"
                 placeholder="Seleccionar"
+                disabled={onlyView ? true : false}
               />
             </div>
           </div>
@@ -383,6 +401,7 @@ const InitialSetup = ({
           title="¿Aplica suspensiones continuas?"
           isOpen={toggleControl?.continuousSuspensionApplies}
           onClick={async () => {
+            if (onlyView) return;
             setValue(
               "continuousSuspensionApplies",
               !getValues().continuousSuspensionApplies
@@ -400,8 +419,10 @@ const InitialSetup = ({
             <SwitchComponent
               idInput={"continuousSuspensionApplies"}
               errors={errors}
+              disabled={onlyView ? true : false}
               control={control}
               onChange={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   continuousSuspensionApplies:
@@ -433,6 +454,7 @@ const InitialSetup = ({
                       className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
+                      disabled={onlyView ? true : false}
                     />
                   );
                 }}
@@ -446,6 +468,7 @@ const InitialSetup = ({
           title="¿Aplica suspensiones discontinuas?"
           isOpen={toggleControl?.applyDiscontinuousSuspension}
           onClick={async () => {
+            if (onlyView) return;
             setValue(
               "applyDiscontinuousSuspension",
               !getValues().applyDiscontinuousSuspension
@@ -464,7 +487,9 @@ const InitialSetup = ({
               idInput={"applyDiscontinuousSuspension"}
               errors={errors}
               control={control}
+              disabled={onlyView ? true : false}
               onChange={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   applyDiscontinuousSuspension:
@@ -496,6 +521,7 @@ const InitialSetup = ({
                       className="input-basic input-size mb-24px"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
+                      disabled={onlyView ? true : false}
                     />
                   );
                 }}
@@ -509,6 +535,7 @@ const InitialSetup = ({
           title="¿Aplica suspensiones especiales?"
           isOpen={toggleControl?.applySpecialSuspensions}
           onClick={async () => {
+            if (onlyView) return;
             setValue(
               "applySpecialSuspensions",
               !getValues().applySpecialSuspensions
@@ -523,10 +550,12 @@ const InitialSetup = ({
           }}
           switchElement={
             <SwitchComponent
+              disabled={onlyView ? true : false}
               idInput={"applySpecialSuspensions"}
               errors={errors}
               control={control}
               onChange={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   applySpecialSuspensions: !getValues().applySpecialSuspensions,
@@ -548,6 +577,7 @@ const InitialSetup = ({
                   return (
                     <InputComponent
                       idInput={field.name}
+                      disabled={onlyView ? true : false}
                       errors={errors}
                       defaultValue={`${updateData?.applySpecialSuspensionsQuantity}`}
                       typeInput="number"
@@ -570,6 +600,7 @@ const InitialSetup = ({
           title="¿Aplica prórroga?"
           isOpen={toggleControl?.extensionApply}
           onClick={async () => {
+            if (onlyView) return;
             setValue("extensionApply", !getValues().extensionApply);
             await setTimeout(() => {
               setToggleControl({
@@ -583,8 +614,10 @@ const InitialSetup = ({
             <SwitchComponent
               idInput={"extensionApply"}
               errors={errors}
+              disabled={onlyView ? true : false}
               control={control}
               onChange={() => {
+                if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
                   extensionApply: !getValues().extensionApply,
@@ -607,6 +640,7 @@ const InitialSetup = ({
                     <InputComponent
                       idInput={field.name}
                       errors={errors}
+                      disabled={onlyView ? true : false}
                       defaultValue={`${updateData?.extensionApplyQuantity}`}
                       typeInput="number"
                       onChange={field.onChange}

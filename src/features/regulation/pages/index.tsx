@@ -89,7 +89,7 @@ const Regulation = () => {
                 placeholder="Seleccionar"
                 label={<>Periodo final de convocatoria</>}
                 data={periods.length ? periods : []}
-                classNameLabel="text-black biggest text-required bold"
+                classNameLabel="text-black biggest bold"
                 // direction={EDirection.column}
                 errors={formState.errors}
               />

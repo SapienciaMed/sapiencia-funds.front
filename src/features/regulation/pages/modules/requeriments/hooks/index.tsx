@@ -26,7 +26,7 @@ const useRequerimentsHook = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const tableComponentRef = useRef(null);
   const [codReglament, setCodReglament] = useState<number>();
-  const { id } = useParams();
+  const { id, onlyView } = useParams();
 
   const {
     handleSubmit,
@@ -134,6 +134,7 @@ const useRequerimentsHook = () => {
           <SwitchComponent
             idInput={row.id.toString()}
             control={control}
+            disabled={onlyView ? true : false}
             size="small"
             className="select-basic select-disabled-list input-size"
             onChange={() => updateRequeriment(row.id, row)}
@@ -160,7 +161,10 @@ const useRequerimentsHook = () => {
   const tableActions: ITableAction<IRequeriments>[] = [
     {
       icon: "Delete",
-      onClick: (row) => deleteRequerimentAction(row.id),
+      onClick: (row) => {
+        if (onlyView) return;
+        deleteRequerimentAction(row.id);
+      },
     },
   ];
 

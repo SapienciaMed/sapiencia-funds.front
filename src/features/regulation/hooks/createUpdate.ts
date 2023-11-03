@@ -12,7 +12,7 @@ import { useRequerimentsApi } from "../service/requeriments";
 
 export default function useRegulationHook() {
   const { setMessage, authorization } = useContext(AppContext);
-  const { id } = useParams();
+  const { id, onlyView } = useParams();
   const { getListByGrouper } = useGenericListService();
   const resolver = useYupValidationResolver(createRegulation);
   const {
@@ -250,5 +250,6 @@ export default function useRegulationHook() {
     accumulatedPerformanceErrors,
     id,
     listPrograms,
+    onlyView,
   };
 }

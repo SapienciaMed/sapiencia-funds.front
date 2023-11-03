@@ -10,7 +10,7 @@ import { Controller } from "react-hook-form";
 import useRequerimentsHook from "./hooks";
 import TableComponent from "../../../../../common/components/table.component";
 
-const Requirements = () => {
+const Requirements = ({ onlyView }) => {
   const {
     control,
     errors,
@@ -32,6 +32,7 @@ const Requirements = () => {
             <SwitchComponent
               idInput={"active"}
               errors={errors}
+              disabled={onlyView ? true : false}
               control={control}
               size="normal"
               label="Estado"
@@ -46,6 +47,7 @@ const Requirements = () => {
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
+                    disabled={onlyView ? true : false}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
@@ -71,6 +73,7 @@ const Requirements = () => {
                     className="text-area-basic"
                     classNameLabel="text-black biggest text-required bold"
                     rows={2}
+                    disabled={onlyView ? true : false}
                     onChange={field.onChange}
                     value={field.value}
                     placeholder="Escribe aquí"
@@ -86,6 +89,7 @@ const Requirements = () => {
                 type="submit"
                 className="button-save disabled-black padding-button"
                 form="requerimentCreate"
+                disabled={onlyView ? true : false}
               />
             </div>
           </div>
