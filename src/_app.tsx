@@ -17,6 +17,7 @@ import Socialization from "./features/socialization";
 import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
+import FinancialMonitoringRoutes from "./features/financial-monitoring/financial-monitoring-routes"
 
 function App() {
   const { publish } = useAppCominicator();
@@ -66,6 +67,11 @@ function App() {
               <Route
                 path={"/fondos/administracion/reglamento/*"}
                 element={<Regulation />}
+              />
+
+              <Route
+                path={"/fondos/seguimiento-financiero/*"}
+                element={<FinancialMonitoringRoutes />}
               />
             </Routes>
           </Suspense>
