@@ -2,24 +2,46 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { useNavigate, useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { ISocialization } from "../../../common/interfaces/socialization.interface";
+import { set, useForm } from "react-hook-form";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useRegulationApi } from "../service";
 import { createRegulation } from "../../../common/schemas/regulation-schema";
 import { IRegulation } from "../../../common/interfaces/regulation";
+import { useRequerimentsApi } from "../service/requeriments";
 
 export default function useRegulationHook() {
   const { setMessage, authorization } = useContext(AppContext);
-  const { id } = useParams();
+  const { id, onlyView } = useParams();
   const { getListByGrouper } = useGenericListService();
   const resolver = useYupValidationResolver(createRegulation);
-  const { getRegulationById, editRegulation, createRegulationAction } =
-    useRegulationApi();
+  const {
+    getRegulationById,
+    editRegulation,
+    createRegulationAction,
+    getPrograms,
+  } = useRegulationApi();
+  const { deleteByReglamentId } = useRequerimentsApi();
   const navigate = useNavigate();
   const [updateData, setUpdateData] = useState<IRegulation>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [performancePeriodErrors, setPerformancePeriodErrors] = useState(false);
+  const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
+    useState(false);
+  const [toggleControl, setToggleControl] = useState<{
+    applySocialService: boolean;
+    knowledgeTransferApply: boolean;
+    gracePeriodApply: boolean;
+    continuousSuspensionApplies: boolean;
+    applyDiscontinuousSuspension: boolean;
+    applySpecialSuspensions: boolean;
+    extensionApply: boolean;
+    applyCondonationPerformancePeriod: boolean;
+    accomulatedIncomeCondonationApplies: boolean;
+  }>();
+  const [listPrograms, setListPrograms] = useState<
+    { name: string; value: number }[]
+  >([]);
 
   const {
     handleSubmit,
@@ -32,60 +54,112 @@ export default function useRegulationHook() {
     formState: { errors },
   } = useForm<IRegulation>({
     resolver,
-    defaultValues: async () => await getUpdateData(),
+    defaultValues: async () => {
+      const res = await getUpdateData();
+      setLoading(false);
+      return res;
+    },
   });
 
   useEffect(() => {
-    getUpdateData();
+    const getListPrograms = async () => {
+      const res = await getPrograms();
+      if (res?.data) {
+        const buildData = res.data.map((item) => {
+          return {
+            name: item.value,
+            value: item.id,
+          };
+        });
+        setListPrograms(buildData);
+      }
+    };
+
+    getListPrograms();
   }, []);
 
   const getUpdateData = async () => {
     if (id) {
       const res = await getRegulationById(id);
-      if (res?.data[0]) setUpdateData(res?.data[0]);
+      if (res?.data[0]) {
+        for (let clave in res?.data[0]) {
+          if (res?.data[0][clave] === null) {
+            delete res?.data[0][clave];
+          }
+        }
+        setUpdateData(res?.data[0]);
+      }
+      console.log(res?.data[0]);
+      controlToggle(res?.data[0]);
       return { ...res?.data[0] };
     }
-    setLoading(false);
+  };
+
+  const controlToggle = (data) => {
+    setToggleControl({
+      applySocialService: data.applySocialService,
+      knowledgeTransferApply: data.knowledgeTransferApply,
+      gracePeriodApply: data.gracePeriodApply,
+      continuousSuspensionApplies: data.continuousSuspensionApplies,
+      applyDiscontinuousSuspension: data.applyDiscontinuousSuspension,
+      applySpecialSuspensions: data.applySpecialSuspensions,
+      extensionApply: data.extensionApply,
+      applyCondonationPerformancePeriod: data.applyCondonationPerformancePeriod,
+      accomulatedIncomeCondonationApplies:
+        data.accomulatedIncomeCondonationApplies,
+    });
   };
 
   const onsubmitCreate = handleSubmit((data: IRegulation) => {
-    let buildData = { ...data };
     console.log(data);
-    // const newDate = new Date(data.socializationDate).toISOString();
-    // const getValueGroup: any = dataGroup.find(
-    //   (item) => item.name === data.valueGroup || item.value === data.valueGroup
-    // );
+    if (data.applyCondonationPerformancePeriod && !data.performancePeriod) {
+      return setPerformancePeriodErrors(true);
+    } else {
+      setPerformancePeriodErrors(false);
+    }
+    if (
+      data.accomulatedIncomeCondonationApplies &&
+      !data.accumulatedPerformance
+    ) {
+      return setAccumulatedPerformanceErrors(true);
+    } else {
+      setAccumulatedPerformanceErrors(false);
+    }
 
-    // if (id) {
-    //   buildData = {
-    //     ...data,
-    //     socializationDate: newDate,
-    //     valueGroup: getValueGroup.value,
-    //   };
-    // } else {
-    //   const getCode: any = deparmetList.find(
-    //     (dep) => dep.name === data.communeCode
-    //   );
+    const buildData = {
+      ...data,
+      createUser: "12345",
+      createDate: new Date().toISOString(),
+      openPeriod: data?.openPeriod ? true : false,
+      applySocialService: data?.applySocialService ? true : false,
+      knowledgeTransferApply: data?.knowledgeTransferApply ? true : false,
+      gracePeriodApply: data?.gracePeriodApply ? true : false,
+      continuousSuspensionApplies: data?.continuousSuspensionApplies
+        ? true
+        : false,
+      applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension
+        ? true
+        : false,
+      applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
+      extensionApply: data?.extensionApply ? true : false,
+      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
+        ? true
+        : false,
+      accomulatedIncomeCondonationApplies:
+        data?.accomulatedIncomeCondonationApplies ? true : false,
+    };
 
-    //   buildData = {
-    //     ...data,
-    //     communeCode: getCode.value,
-    //     socializationDate: newDate,
-    //     valueGroup: getValueGroup.value,
-    //   };
-    // }
-
-    // setMessage({
-    //   show: true,
-    //   title: "Guardar información",
-    //   description: "¿Estás segur@ de guardar la información?",
-    //   OkTitle: "Aceptar",
-    //   cancelTitle: "Cancelar",
-    //   onOk() {
-    //     confirmSocializationCreate(buildData);
-    //   },
-    //   background: true,
-    // });
+    setMessage({
+      show: true,
+      title: "Guardar información",
+      description: "¿Estás segur@ de guardar la información?",
+      OkTitle: "Aceptar",
+      cancelTitle: "Cancelar",
+      onOk() {
+        confirmRegulationCreate(buildData);
+      },
+      background: true,
+    });
   });
 
   const confirmRegulationCreate = async (data: IRegulation) => {
@@ -135,7 +209,28 @@ export default function useRegulationHook() {
     });
   };
 
-  const goBack = () => navigate("/fondos/administracion/reglamento/");
+  const goBack = () => {
+    setMessage({
+      show: true,
+      title: "Salir",
+      description: "¿Estás segur@ de salir sin guardar la información?",
+      OkTitle: "Aceptar",
+      cancelTitle: "Cancelar",
+      onOk() {
+        confirmGoBack();
+      },
+      background: true,
+    });
+  };
+
+  const confirmGoBack = async () => {
+    const ReglamentId = Number(localStorage.getItem("reglamentId"));
+    await deleteByReglamentId(ReglamentId);
+    setMessage((prev) => {
+      return { ...prev, show: false };
+    });
+    navigate("/fondos/administracion/reglamento/");
+  };
 
   return {
     control,
@@ -149,5 +244,12 @@ export default function useRegulationHook() {
     loading,
     getValues,
     watch,
+    toggleControl,
+    setToggleControl,
+    performancePeriodErrors,
+    accumulatedPerformanceErrors,
+    id,
+    listPrograms,
+    onlyView,
   };
 }

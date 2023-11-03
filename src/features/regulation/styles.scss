@@ -2,26 +2,18 @@
   width: 572px;
 }
 
-.containerInitialPeriod {
-  width: 424px;
-}
-
-.containerEndPeriod {
-  width: 424px;
-}
-
-.containerIsOpenPeriod {
-  width: 184px;
-}
-
 .containerGroup {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .percentageSemiannualPayment {
   width: 338px;
+}
+
+.containerIsOpenPeriod {
+  width: 100%;
+  padding: 0px 24px 0px 24px;
 }
 
 .p-24 {
@@ -32,18 +24,27 @@
   margin-bottom: 24px;
 }
 
+.mr-12 {
+  margin-right: 12px;
+}
+
 .containerApplyService {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .containerApplyService div {
-  margin-right: 24px;
   width: 310px;
 }
 
 .containerTabs {
   display: flex;
+  flex-wrap: wrap;
   margin-left: 25px;
+}
+
+.containerTabs div {
+  margin-bottom: 16px;
 }
 
 .containerButtons {
@@ -57,4 +58,75 @@
   border-radius: 15px;
   opacity: 1;
   width: 100%;
+}
+
+.buttonsActions {
+  display: flex;
+  justify-content: end;
+  margin-right: 24px;
+  width: 98%;
+}
+
+.containerJsonTable {
+  margin-top: 24px;
+  overflow-x: auto;
+}
+
+.containerTitleRegulation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px 0px 0;
+}
+
+.containerGroupSearch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media only screen and (max-width: 767px) and (min-width: 300px) {
+  .containerProgram {
+    width: 100%;
+  }
+
+  .containerGroup {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .containerInitialPeriod {
+    width: 100%;
+  }
+
+  .containerEndPeriod {
+    width: 100%;
+  }
+
+  .containerIsOpenPeriod {
+    width: 100%;
+    padding: 24px 0 48px 0;
+  }
+
+  .percentageSemiannualPayment {
+    width: 100%;
+  }
+
+  .containerApplyService {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .containerApplyService div {
+    width: 100%;
+  }
+
+  .buttonsActions {
+    justify-content: center;
+    flex-direction: column-reverse;
+  }
+
+  .containerGroupSearch {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
 }

@@ -23,19 +23,25 @@ export interface IRegulation {
   extensionApply: boolean;
   extensionApplyQuantity?: number;
   applyCondonationPerformancePeriod: boolean;
-  periodPerformance?: string;
+  performancePeriod?: string;
   accomulatedIncomeCondonationApplies: boolean;
-  accomulatedPerformance?: string;
+  accumulatedPerformance?: string;
   modifyUser?: string;
   modifyDate?: string;
   createUser: string;
   createDate: string;
 }
 
+export interface IRegulationSearch {
+  program: string;
+  initialPeriod: string;
+  endPeriod: string;
+}
+
 export interface IRequeriments {
   id?: number;
   active?: boolean;
   active_update?: boolean;
-  percent: number;
-  description?: string;
+  percent?: number;
+  description: string;
 }

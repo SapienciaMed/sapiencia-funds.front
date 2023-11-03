@@ -1,19 +1,10 @@
-import React, { useState } from "react";
-import SwitchComponent from "../../../common/components/Form/switch.component";
+import React, { useEffect, useState } from "react";
 import useRegulationHook from "../hooks/createUpdate";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { periods } from "../service";
-import { Controller } from "react-hook-form";
 import {
   ButtonComponent,
   FormComponent,
-  InputComponent,
-  SelectComponent,
 } from "../../../common/components/Form/index";
-import Acordion from "../components/acordion";
-import Tab from "../../../common/components/Form/tab.component";
-import TableJson from "../components/tableJson";
-import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 import InitialSetup from "./modules/initialSetup";
 import Tabs from "./modules/tabs";
 import ForgivenessPercentages from "./modules/ForgivenessPercentages";
@@ -33,16 +24,27 @@ const Form = () => {
     setValue,
     getValues,
     watch,
+    toggleControl,
+    setToggleControl,
+    performancePeriodErrors,
+    accumulatedPerformanceErrors,
+    id,
+    listPrograms,
+    onlyView,
   } = useRegulationHook();
   const [view, setView] = useState(0);
 
+  console.log(onlyView);
+
   if (loading) return <></>;
+
+  if (id && !getValues().id && listPrograms.length === 0) return <></>;
 
   return (
     <div>
       <div className="title-area">
         <p className="text-black text-29 ml-24px mt-20px mg-0">
-          Crear reglamento
+          {`${updateData?.id ? "Actualizar" : "Crear"} reglamento`}
         </p>
       </div>
       <Tabs view={view} />
@@ -62,6 +64,11 @@ const Form = () => {
             getValues={getValues}
             setValue={setValue}
             watch={watch}
+            toggleControl={toggleControl}
+            setToggleControl={setToggleControl}
+            loading={loading}
+            listPrograms={listPrograms}
+            onlyView={onlyView}
           />
         )}
         {view === 1 && (
@@ -71,15 +78,19 @@ const Form = () => {
             control={control}
             getValues={getValues}
             setValue={setValue}
+            toggleControl={toggleControl}
+            setToggleControl={setToggleControl}
+            watch={watch}
+            performancePeriodErrors={performancePeriodErrors}
+            accumulatedPerformanceErrors={accumulatedPerformanceErrors}
+            onlyView={onlyView}
           />
         )}
       </FormComponent>
-      {view === 2 && <Requirements />}
+      {view === 2 && <Requirements onlyView={onlyView} />}
       <StepButtons view={view} setView={setView} />
       <Divider />
-      <div
-        style={{ display: "flex", justifyContent: "end", marginRight: "24px" }}
-      >
+      <div className="buttonsActions">
         <ButtonComponent
           value="Cancelar"
           type="button"
@@ -87,10 +98,11 @@ const Form = () => {
           action={() => goBack()}
         />
         <ButtonComponent
-          value="Siguiente"
+          value="Guardar"
           form="regulationCreate"
           type="submit"
           className="button-save disabled-black padding-button"
+          disabled={onlyView ? true : false}
         />
       </div>
     </div>

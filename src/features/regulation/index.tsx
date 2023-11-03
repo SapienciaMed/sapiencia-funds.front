@@ -28,6 +28,15 @@ function RegulationRoute() {
         }
       />
       <Route
+        path={"/form/:id/:onlyView"}
+        element={
+          <PrivateRoute
+            element={<Form />}
+            allowedAction={"MAESTRO_ACTIVIDAD_CREAR"}
+          />
+        }
+      />
+      <Route
         path={"/form/:id"}
         element={
           <PrivateRoute

@@ -5,19 +5,19 @@ import { ApiResponse } from "../../../common/utils/api-response";
 export const periods: { value: string; name: string }[] = [
   {
     value: "period-1",
-    name: "2022-1(1Enero a 30 Junio)",
+    name: "2022-1",
   },
   {
     value: "period-2",
-    name: "2022-2(1Julio a 31 Diciembre)",
+    name: "2022-2",
   },
   {
     value: "period-3",
-    name: "2023-1(1Enero a 30 Junio)",
+    name: "2023-1",
   },
   {
     value: "period-4",
-    name: "2023-1(1Julio a 31 Diciembre)",
+    name: "2023-1",
   },
 ];
 
@@ -34,7 +34,7 @@ export const LIST_DATA_GRACE_PERIOD: { value: string; name: string }[] = [
 
 export function useRegulationApi() {
   const baseURL: string = process.env.urlApiFunds || "";
-  const serviceUrl: string = "/api/v1/regulation";
+  const serviceUrl: string = "/api/v1/reglament";
 
   const { get, post, put } = useCrudService(baseURL);
 
@@ -61,10 +61,22 @@ export function useRegulationApi() {
     return await put(`${serviceUrl}/edit/${id}`, data);
   }
 
+  async function getLastId(): Promise<ApiResponse<number>> {
+    return await get(`${serviceUrl}/get-last-id`);
+  }
+
+  async function getPrograms(): Promise<
+    ApiResponse<{ value: string; id: number }[]>
+  > {
+    return await get(`${serviceUrl}/programs`);
+  }
+
   return {
     createRegulationAction,
     getRegulationById,
     editRegulation,
     getRegulation,
+    getLastId,
+    getPrograms,
   };
 }

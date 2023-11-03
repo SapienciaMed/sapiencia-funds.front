@@ -4,7 +4,7 @@ import { useGenericListService } from "../../../../../../common/hooks/generic-li
 import useYupValidationResolver from "../../../../../../common/hooks/form-validator.hook";
 import { createRequeriment } from "../../../../../../common/schemas/requeriments-schema";
 import { useRequerimentsApi } from "../../../../service/requeriments";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IRequeriments } from "../../../../../../common/interfaces/regulation";
 import { useForm } from "react-hook-form";
 import { EResponseCodes } from "../../../../../../common/constants/api.enum";
@@ -13,6 +13,7 @@ import {
   ITableElement,
 } from "../../../../../../common/interfaces/table.interfaces";
 import SwitchComponent from "../../../../../../common/components/Form/switch.component";
+import { useRegulationApi } from "../../../../service";
 
 const useRequerimentsHook = () => {
   const { setMessage, authorization } = useContext(AppContext);
@@ -20,10 +21,12 @@ const useRequerimentsHook = () => {
   const resolver = useYupValidationResolver(createRequeriment);
   const { createRequerimentAction, editRequeriment, deleteRequeriment } =
     useRequerimentsApi();
+  const { getLastId } = useRegulationApi();
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const tableComponentRef = useRef(null);
-  const codReglament = localStorage.getItem("codReglament");
+  const [codReglament, setCodReglament] = useState<number>();
+  const { id, onlyView } = useParams();
 
   const {
     handleSubmit,
@@ -33,18 +36,32 @@ const useRequerimentsHook = () => {
     getValues,
     watch,
     formState: { errors },
-  } = useForm<IRequeriments>({
+  } = useForm<any>({
     resolver,
   });
 
   useEffect(() => {
-    if (!codReglament) return;
-    const buildData = {
-      codReglament: codReglament,
+    setLoading(true);
+    const getLastIdAction = async () => {
+      const { data: dataResponse, operation } = await getLastId();
+      if (operation.code === EResponseCodes.OK) {
+        let newId = 0;
+        if (id) {
+          newId = Number(id);
+        } else {
+          newId = dataResponse + 1;
+        }
+        localStorage.setItem("reglamentId", newId.toString());
+        setCodReglament(newId);
+        if (tableComponentRef.current) {
+          tableComponentRef.current.loadData({ codReglament: newId });
+        }
+      } else {
+        handleModalError(operation.message, false);
+      }
     };
-    if (tableComponentRef.current) {
-      tableComponentRef.current.loadData(buildData);
-    }
+    getLastIdAction();
+    setLoading(false);
   }, []);
 
   const onsubmitCreate = handleSubmit(async (data: IRequeriments) => {
@@ -53,7 +70,11 @@ const useRequerimentsHook = () => {
         "ocurrio un error inesperado, intente mas tarde por favor",
         false
       );
-    const buildData = { ...data, codReglament: codReglament };
+    const buildData = {
+      ...data,
+      codReglament: codReglament,
+      active: data.active ? true : false,
+    };
     const { data: dataResponse, operation } = await createRequerimentAction(
       buildData
     );
@@ -108,11 +129,12 @@ const useRequerimentsHook = () => {
       fieldName: "row.requeriment.active",
       header: "Activo",
       renderCell: (row) => {
-        setValue("active_update", row.active);
+        setValue(row.id.toString(), row.active);
         return (
           <SwitchComponent
-            idInput={"active_update"}
+            idInput={row.id.toString()}
             control={control}
+            disabled={onlyView ? true : false}
             size="small"
             className="select-basic select-disabled-list input-size"
             onChange={() => updateRequeriment(row.id, row)}
@@ -139,7 +161,10 @@ const useRequerimentsHook = () => {
   const tableActions: ITableAction<IRequeriments>[] = [
     {
       icon: "Delete",
-      onClick: (row) => deleteRequerimentAction(row.id),
+      onClick: (row) => {
+        if (onlyView) return;
+        deleteRequerimentAction(row.id);
+      },
     },
   ];
 
