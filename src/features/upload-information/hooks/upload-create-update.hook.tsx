@@ -179,7 +179,6 @@ export default function useCreateUploadHook() {
     emailsArray.push(authorization.user.email);
     
     data.emails = emailsArray;
-    console.log("*****", data.emails)
     try {
       const { data: dataResponse, operation } = await UserNotificacion(data);
       if (operation.code === EResponseCodes.OK) {
@@ -193,8 +192,7 @@ export default function useCreateUploadHook() {
     }
   };
 
-  console.log("+++++++++++++",authorization.user.email)
-  
+
   const redirectCancel = () => {
     setMessage({
       title: "Cancelar",
