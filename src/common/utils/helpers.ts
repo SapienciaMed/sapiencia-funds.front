@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export function calculateDifferenceYear(
   dateInit: string | Date,
   dateEnd?: string | Date
@@ -146,3 +148,12 @@ export function caculatePorcentual(valueOriginal: number, valueNew: number) {
 
   return porcentajeAumento;
 }
+
+
+export const jsDateToSQLDate = (jsDate: Date) => {
+  return DateTime.fromJSDate(jsDate).toSQLDate();
+};
+
+export const jsDateToISODate = (jsDate: Date) => {
+  return DateTime.fromJSDate(jsDate).toISODate();
+};

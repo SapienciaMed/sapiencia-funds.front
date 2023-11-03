@@ -1,14 +1,14 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { filterBudget } from "../../../common/schemas/budget-schema";
-import { RiFileExcel2Line } from "react-icons/ri";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import { ITableElement } from "../../../common/interfaces/table.interfaces";
 import useBudgetApi from "./budget-api.hook";
 import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
+import {jsDateToISODate,jsDateToSQLDate,} from "../../../common/utils/helpers";
 
 
 export default function useBudgetSearch() {
@@ -26,16 +26,28 @@ export default function useBudgetSearch() {
     const [typeMasterList, setTypeMasterList] = useState([]);
     const [showTable, setShowTable] = useState(false);
 
+    const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
+    const [formWatch, setFormWatch] = useState({accountNum: "", nit: "",});
+    const [submitDisabled, setSubmitDisabled] = useState(true);
+
+    const { authorization } = useContext(AppContext)
+    console.log(authorization.user.id)
+
     const {
         handleSubmit,
         register,  
         setValue,
         reset,
+        watch,
         control: control,
         formState: { errors },
-    } = useForm<ICallBudget>(
-        { resolver }
+    } = useForm<ICallBudget>({ resolver }
     );
+
+    const [contractCode, expeditionDate] = watch([,
+        "contractCode",
+        "expeditionDate",
+    ]);
 
 
     getbudget()
@@ -52,6 +64,7 @@ export default function useBudgetSearch() {
             );
         }
     })
+    
 
     getAnnouncement()
     .then((response) => {
@@ -112,14 +125,7 @@ export default function useBudgetSearch() {
             renderCell: (row) => {
                 return <>{}</>;
             },
-        },  
-        {
-            fieldName: "name",
-            header: "Recurso otorgado de legalizacion",
-            renderCell: (row) => {
-                return <>{row.legaliza_comuna}</>;
-            },
-        },  
+        },   
         {
             fieldName: "name",
             header: "Diferencia por comprometer",
@@ -129,10 +135,8 @@ export default function useBudgetSearch() {
         },              
     ];
 
-   
-   
-
     function loadTableData(searchCriteria?: object): void {
+
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
@@ -157,7 +161,6 @@ export default function useBudgetSearch() {
         setShowTable(false);
       };
 
-
     const onSubmit = handleSubmit(async (data: ICallBudget) => {        
         setShowTable(true)
 
@@ -165,6 +168,47 @@ export default function useBudgetSearch() {
             tableComponentRef.current.loadData(data);
         }
     });
+
+
+
+
+
+      useEffect(() => {
+        const { accountNum, nit } = formWatch;
+        if (contractCode || expeditionDate || accountNum || nit) {
+          return setSubmitDisabled(false);
+        }
+        setSubmitDisabled(true);
+      }, [contractCode, expeditionDate, formWatch]);
+
+
+    const downloadCollection = useCallback(() => {
+        const { page, perPage } = paginateData;
+        const { accountNum, nit } = formWatch;
+        const url = new URL(
+            `${process.env.urlApiFunds}/api/v1/presupuesto/generate-xlsx`
+        );
+        const params = new URLSearchParams();
+        params.append("page", page + 1);
+        params.append("perPage", perPage);
+        if (contractCode) {
+          params.append("contractCode", contractCode);
+        }
+        if (expeditionDate) {
+          params.append("expeditionDate", jsDateToSQLDate(expeditionDate));
+        }
+        if (accountNum) {
+          params.append("accountNum", accountNum);
+        }
+        if (nit) {
+          params.append("nit", nit);
+        }
+        url.search = params.toString();
+        window.open(url.toString(), "_blank");
+      }, [paginateData, formWatch, contractCode, expeditionDate]);
+
+
+
 
     return {
         announcementList,
@@ -181,6 +225,7 @@ export default function useBudgetSearch() {
         onSubmit,
         reset,
         clearFields,
+        downloadCollection,
       }
 
 }
