@@ -55,6 +55,8 @@ const Requirements = ({ onlyView }) => {
                     className="input-basic input-size"
                     classNameLabel="text-black biggest bold"
                     label="Porcentaje de descuento por periodo"
+                    min={1}
+                    max={100}
                   />
                 );
               }}
@@ -69,7 +71,7 @@ const Requirements = ({ onlyView }) => {
                   <TextAreaComponent
                     idInput={field.name}
                     id="rew"
-                    label="Observaciones"
+                    label="Descripción"
                     className="text-area-basic"
                     classNameLabel="text-black biggest text-required bold"
                     rows={2}
@@ -85,7 +87,7 @@ const Requirements = ({ onlyView }) => {
             />
             <div style={{ display: "flex", justifyContent: "end" }}>
               <ButtonComponent
-                value="Guardar"
+                value="Agregar"
                 type="submit"
                 className="button-save disabled-black padding-button"
                 form="requerimentCreate"
@@ -97,6 +99,7 @@ const Requirements = ({ onlyView }) => {
       </FormComponent>
       {!loading && (
         <TableComponent
+          princialTitle="Requisitos creados"
           ref={tableComponentRef}
           url={`${process.env.urlApiFunds}/api/v1/requeriments/get-paginated`}
           columns={tableColumns}

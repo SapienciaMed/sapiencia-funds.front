@@ -38,6 +38,7 @@ const useRequerimentsHook = () => {
     formState: { errors },
   } = useForm<any>({
     resolver,
+    defaultValues: { active: true },
   });
 
   useEffect(() => {

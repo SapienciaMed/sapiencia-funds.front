@@ -119,10 +119,10 @@ const InitialSetup = ({
                 errors={errors}
                 disabled={onlyView ? true : false}
                 defaultValue={`${updateData?.theoreticalPercentage}`}
-                typeInput="number"
+                typeInput="text"
                 onChange={field.onChange}
                 onBlur={field.onBlur}
-                value={field.value}
+                value={field.value ? field.value : ""}
                 className="input-basic input-size"
                 classNameLabel="text-black biggest text-required bold"
                 label="Porcentaje de pago teórico semestral"
@@ -174,7 +174,7 @@ const InitialSetup = ({
           }
         >
           <div className="containerApplyService">
-            <div>
+            <div className="mb-24px">
               <Controller
                 control={control}
                 name={"socialServicePercentage"}
@@ -189,7 +189,7 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size mb-24px"
+                      className="input-basic input-size "
                       classNameLabel="text-black biggest text-required bold"
                       label="Porcentaje de descuento por periodo"
                     />
@@ -197,7 +197,7 @@ const InitialSetup = ({
                 }}
               />
             </div>
-            <div>
+            <div className="mb-24px">
               <Controller
                 control={control}
                 name={"socialServiceHours"}
@@ -265,7 +265,7 @@ const InitialSetup = ({
           }
         >
           <div className="containerApplyService">
-            <div>
+            <div className="mb-24px">
               <Controller
                 control={control}
                 name={"knowledgeTransferPercentage"}
@@ -280,7 +280,7 @@ const InitialSetup = ({
                       disabled={onlyView ? true : false}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size mb-24px"
+                      className="input-basic input-size "
                       classNameLabel="text-black biggest text-required bold"
                       label="Porcentaje de cumplimiento"
                     />
@@ -288,7 +288,7 @@ const InitialSetup = ({
                 }}
               />
             </div>
-            <div>
+            <div className="mb-24px">
               <Controller
                 control={control}
                 name={"knowledgeTransferHours"}
@@ -352,7 +352,7 @@ const InitialSetup = ({
           }
         >
           <div className="containerApplyService">
-            <div>
+            <div className="mb-24px">
               <Controller
                 control={control}
                 name={"gracePeriodMonths"}
@@ -366,7 +366,7 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size mb-24px"
+                      className="input-basic input-size"
                       classNameLabel="text-black biggest text-required bold"
                       label="Meses"
                       disabled={onlyView ? true : false}
@@ -375,7 +375,7 @@ const InitialSetup = ({
                 }}
               />
             </div>
-            <div>
+            <div className="mb-24px">
               <SelectComponentOld
                 idInput={"gracePeriodApplication"}
                 setValue={(e) => setValue("gracePeriodApplication", e)}
@@ -451,7 +451,7 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size mb-24px"
+                      className="input-basic input-size"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
                       disabled={onlyView ? true : false}
@@ -518,7 +518,7 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size mb-24px"
+                      className="input-basic input-size"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
                       disabled={onlyView ? true : false}
@@ -584,7 +584,7 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size mb-24px"
+                      className="input-basic input-size"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
                     />
@@ -646,7 +646,7 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
-                      className="input-basic input-size mb-24px"
+                      className="input-basic input-size"
                       classNameLabel="text-black biggest text-required bold"
                       label="Cantidad"
                     />

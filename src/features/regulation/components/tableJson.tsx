@@ -95,8 +95,6 @@ const TableJson = ({
       setPercent("");
     }
 
-    isError = validateRanges();
-
     return isError;
   };
 
@@ -110,7 +108,9 @@ const TableJson = ({
 
   const addItem = () => {
     const isError = validateFields();
-    if (isError) return;
+    const isValidRanges = validateRanges();
+
+    if (isError || isValidRanges) return;
     setData({
       ...data,
       dataTable: [
@@ -163,21 +163,36 @@ const TableJson = ({
     return isValidRange;
   };
 
+  const validateDecimales = (number) => {
+    const parts = number.toString().split(".");
+
+    if (parts.length === 2 && parts[1].length === 3) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <div>
       <div style={{ marginBottom: "10px" }}>
         <div
           className="containerApplyService"
-          style={{ padding: "10px 0 10px 0" }}
+          style={{
+            padding: "10px 0 10px 0",
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
           <InputComponent
             idInput="percentCondonation"
             typeInput="number"
             disabled={onlyView ? true : false}
             value={data.percentCondonation}
-            onChange={(e) =>
-              setData({ ...data, percentCondonation: e.target.value })
-            }
+            onChange={(e) => {
+              if (validateDecimales(e.target.value)) return;
+              setData({ ...data, percentCondonation: e.target.value });
+            }}
             className="input-basic input-size"
             classNameLabel="text-black biggest text-required bold"
             label="Porcentaje de condonación"
@@ -217,9 +232,10 @@ const TableJson = ({
               idInput="initialAverage"
               typeInput="number"
               disabled={onlyView ? true : false}
-              onChange={(e) =>
-                setTempData({ ...tempData, initialAverage: e.target.value })
-              }
+              onChange={(e) => {
+                if (validateDecimales(e.target.value)) return;
+                setTempData({ ...tempData, initialAverage: e.target.value });
+              }}
               value={tempData.initialAverage}
               className="input-basic input-size "
               classNameLabel="text-black biggest text-required bold"
@@ -239,9 +255,10 @@ const TableJson = ({
               idInput="endAverage"
               typeInput="number"
               disabled={onlyView ? true : false}
-              onChange={(e) =>
-                setTempData({ ...tempData, endAverage: e.target.value })
-              }
+              onChange={(e) => {
+                if (validateDecimales(e.target.value)) return;
+                setTempData({ ...tempData, endAverage: e.target.value });
+              }}
               value={tempData.endAverage}
               className="input-basic input-size "
               classNameLabel="text-black biggest text-required bold"
@@ -261,9 +278,10 @@ const TableJson = ({
               idInput="percent"
               typeInput="number"
               disabled={onlyView ? true : false}
-              onChange={(e) =>
-                setTempData({ ...tempData, percent: e.target.value })
-              }
+              onChange={(e) => {
+                if (validateDecimales(e.target.value)) return;
+                setTempData({ ...tempData, percent: e.target.value });
+              }}
               value={tempData.percent}
               className="input-basic input-size "
               classNameLabel="text-black biggest text-required bold"
@@ -279,7 +297,7 @@ const TableJson = ({
             )}
           </div>
           <ButtonComponent
-            value="Siguiente"
+            value="Agregar"
             type="button"
             action={() => {
               if (onlyView) return;

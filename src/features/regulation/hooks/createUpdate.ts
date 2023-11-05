@@ -110,8 +110,21 @@ export default function useRegulationHook() {
     });
   };
 
+  const validRangesJsonTable = (data: string) => {
+    let sum = 0;
+    const ranges = JSON.parse(data).dataTable;
+    ranges.map((item) => {
+      const initial = item.initialAverage;
+      const end = item.endAverage;
+      sum = 0.1 + sum + (end - initial);
+    });
+
+    if (sum < 5) return true;
+
+    return false;
+  };
+
   const onsubmitCreate = handleSubmit((data: IRegulation) => {
-    console.log(data);
     if (data.applyCondonationPerformancePeriod && !data.performancePeriod) {
       return setPerformancePeriodErrors(true);
     } else {
@@ -124,6 +137,33 @@ export default function useRegulationHook() {
       return setAccumulatedPerformanceErrors(true);
     } else {
       setAccumulatedPerformanceErrors(false);
+    }
+
+    let validRangesAccumulated = false;
+    let validRangesPerformance = false;
+
+    if (data.accumulatedPerformance?.length) {
+      validRangesAccumulated = validRangesJsonTable(
+        data.accumulatedPerformance
+      );
+    }
+
+    if (data.performancePeriod?.length) {
+      validRangesPerformance = validRangesJsonTable(data.performancePeriod);
+    }
+
+    if (validRangesAccumulated) {
+      handleModalError(
+        "No se ha configurado completamente los rangos de promedios de la condonación por rendimiento académico por periodo, debe finalizarla para poder guardar",
+        false
+      );
+    }
+
+    if (validRangesAccumulated) {
+      handleModalError(
+        "No se ha configurado completamente los rangos de promedios de la condonación por rendimiento académico final acumulado, debe finalizarla para poder guardar",
+        false
+      );
     }
 
     const buildData = {
@@ -212,7 +252,7 @@ export default function useRegulationHook() {
   const goBack = () => {
     setMessage({
       show: true,
-      title: "Salir",
+      title: "Cancelar",
       description: "¿Estás segur@ de salir sin guardar la información?",
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
