@@ -119,6 +119,8 @@ export default function useRegulationHook() {
       sum = 0.1 + sum + (end - initial);
     });
 
+    console.log(sum);
+
     if (sum < 5) return true;
 
     return false;
@@ -153,14 +155,14 @@ export default function useRegulationHook() {
     }
 
     if (validRangesAccumulated) {
-      handleModalError(
+      return handleModalError(
         "No se ha configurado completamente los rangos de promedios de la condonación por rendimiento académico por periodo, debe finalizarla para poder guardar",
         false
       );
     }
 
-    if (validRangesAccumulated) {
-      handleModalError(
+    if (validRangesPerformance) {
+      return handleModalError(
         "No se ha configurado completamente los rangos de promedios de la condonación por rendimiento académico final acumulado, debe finalizarla para poder guardar",
         false
       );
