@@ -34,8 +34,6 @@ const Form = () => {
   } = useRegulationHook();
   const [view, setView] = useState(0);
 
-  console.log(onlyView);
-
   if (loading) return <></>;
 
   if (id && !getValues().id && listPrograms.length === 0) return <></>;
@@ -52,7 +50,11 @@ const Form = () => {
       <FormComponent
         id="regulationCreate"
         className="form-signIn"
-        action={onsubmitCreate}
+        action={(e) => {
+          e.preventDefault();
+          console.log(errors);
+          onsubmitCreate();
+        }}
       >
         {view === 0 && (
           <InitialSetup

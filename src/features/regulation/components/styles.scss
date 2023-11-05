@@ -21,3 +21,13 @@
 .contentAcordion {
   padding: 16px 24px 16px 24px;
 }
+
+.text-font {
+  font-size: 1.25em;
+}
+
+@media only screen and (max-width: 500px) and (min-width: 200px) {
+  .text-font {
+    font-size: 10px;
+  }
+}

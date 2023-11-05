@@ -1,6 +1,10 @@
 import * as yup from "yup";
 
 const MESSAGE_REQUIRED = "Completar información";
+const lessThan = (number: number) =>
+  `El número debe de ser menor o igual a ${number}`;
+const greaterThan = (number: number) =>
+  `El número debe de ser mayor o igual a ${number}`;
 
 export const createRegulation = yup.object().shape({
   program: yup
@@ -25,8 +29,12 @@ export const createRegulation = yup.object().shape({
     .number()
     .typeError(MESSAGE_REQUIRED)
     .required(MESSAGE_REQUIRED)
-    .min(0)
-    .max(100),
+    .min(1, greaterThan(1))
+    .max(100, lessThan(100))
+    .typeError(MESSAGE_REQUIRED)
+    .test("decimal-places", "Ingresa un número con dos decimales", (value) =>
+      /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+    ),
   applySocialService: yup.boolean().optional().nullable(),
   socialServicePercentage: yup
     .number()
@@ -35,8 +43,14 @@ export const createRegulation = yup.object().shape({
         return schema
           .required(MESSAGE_REQUIRED)
           .typeError(MESSAGE_REQUIRED)
-          .min(0)
-          .max(100);
+          .min(1, greaterThan(1))
+          .max(100, lessThan(100))
+          .typeError(MESSAGE_REQUIRED)
+          .test(
+            "decimal-places",
+            "Ingresa un número con dos decimales",
+            (value) => /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+          );
       return schema;
     }),
   socialServiceHours: yup
@@ -45,8 +59,8 @@ export const createRegulation = yup.object().shape({
       if (applySocialService[0])
         return schema
           .required(MESSAGE_REQUIRED)
-          .min(1)
-          .max(999)
+          .min(1, greaterThan(1))
+          .max(999, lessThan(999))
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
@@ -57,9 +71,14 @@ export const createRegulation = yup.object().shape({
       if (knowledgeTransferApply[0])
         return schema
           .required(MESSAGE_REQUIRED)
-          .min(0)
-          .max(100)
-          .typeError(MESSAGE_REQUIRED);
+          .min(1, greaterThan(1))
+          .max(100, lessThan(100))
+          .typeError(MESSAGE_REQUIRED)
+          .test(
+            "decimal-places",
+            "Ingresa un número con dos decimales",
+            (value) => /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+          );
       return schema;
     }),
   knowledgeTransferHours: yup
@@ -68,8 +87,8 @@ export const createRegulation = yup.object().shape({
       if (knowledgeTransferApply[0])
         return schema
           .required(MESSAGE_REQUIRED)
-          .min(1)
-          .max(999)
+          .min(1, greaterThan(1))
+          .max(999, lessThan(999))
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
@@ -80,8 +99,8 @@ export const createRegulation = yup.object().shape({
       if (gracePeriodApply[0])
         return schema
           .required(MESSAGE_REQUIRED)
-          .min(0)
-          .max(99)
+          .min(1, greaterThan(1))
+          .max(99, lessThan(99))
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
@@ -104,8 +123,8 @@ export const createRegulation = yup.object().shape({
         if (continuousSuspensionApplies[0])
           return schema
             .required(MESSAGE_REQUIRED)
-            .min(0)
-            .max(9)
+            .min(1, greaterThan(1))
+            .max(9, lessThan(9))
             .typeError(MESSAGE_REQUIRED);
         return schema;
       }
@@ -119,8 +138,8 @@ export const createRegulation = yup.object().shape({
         if (applyDiscontinuousSuspension[0])
           return schema
             .required(MESSAGE_REQUIRED)
-            .min(0)
-            .max(9)
+            .min(1, greaterThan(1))
+            .max(9, lessThan(9))
             .typeError(MESSAGE_REQUIRED);
         return schema;
       }
@@ -132,8 +151,8 @@ export const createRegulation = yup.object().shape({
       if (applySpecialSuspensions[0])
         return schema
           .required(MESSAGE_REQUIRED)
-          .min(0)
-          .max(9)
+          .min(1, greaterThan(1))
+          .max(9, lessThan(9))
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
@@ -144,8 +163,8 @@ export const createRegulation = yup.object().shape({
       if (extensionApply[0])
         return schema
           .required(MESSAGE_REQUIRED)
-          .min(0)
-          .max(9)
+          .min(1, greaterThan(1))
+          .max(9, lessThan(9))
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
