@@ -336,9 +336,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-           style={
+           /* style={
                    dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-               }  
+               }   */
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
