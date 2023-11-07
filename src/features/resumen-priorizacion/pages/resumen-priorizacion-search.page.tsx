@@ -77,7 +77,7 @@ const VotingResultsSearchPage = () => {
       header: "Porcentaje 123",
     },
     {
-      fieldName: "valpor123",
+      fieldName: "costTotal",
       header: "Valor porcentaje 123",
       // renderCell: (row) => {
       //   const suma =
@@ -94,12 +94,16 @@ const VotingResultsSearchPage = () => {
       header: "Porcentaje 456",
     },
     {
-      fieldName: "valprc456",
+      fieldName: "costTotal",
       header: "Valor porcentaje 456",
     },
     {
       fieldName: "valprc456",
       header: "Cupos",
+    },
+    {
+      fieldName: "Total",
+      header: "Total",
     },
   ];
 
