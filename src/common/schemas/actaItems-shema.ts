@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const createActaItems = yup.object({
-   program: yup
+  /*  program: yup
     .number()
     .required("Completar información"),
     found: yup
@@ -40,7 +40,7 @@ export const createActaItems = yup.object({
     .number()
     .required()
     .typeError("Completar información"), 
-
+ */
 });
 
 
