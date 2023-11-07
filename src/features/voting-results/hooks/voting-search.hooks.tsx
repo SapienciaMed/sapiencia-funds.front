@@ -89,6 +89,11 @@ const [deparmetList, setDeparmentList] = useState([]);
        }
      );
     }, []);
+  
+  
+  const downloadXLSX = () => {
+    
+  }
 
   return {
     onSubmitSearch,
@@ -105,6 +110,7 @@ const [deparmetList, setDeparmentList] = useState([]);
     setValCommuneNeighborhood,
     reset,
     control,
+    downloadXLSX,
   };
 }
 
