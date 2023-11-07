@@ -88,8 +88,7 @@ export default function useCreateUploadHook() {
   };
   const selectedLabelUser = getSelectedLabel(selectedUser, activeUserList)
   const addUsergrid = handleSubmit((data: IUploadInformation) => {
-    console.log("llegue al boton");
-    if (selectedUser) {
+       if (selectedUser) {
       dataGridEmails.push({
         ident: uuidv4(),
         user: selectedLabelUser.name,
@@ -295,7 +294,6 @@ export default function useCreateUploadHook() {
 
 
   return {
-
     register,
     control,
     formState,

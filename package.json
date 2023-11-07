@@ -62,6 +62,7 @@
     "@types/systemjs": "^6.1.1",
     "@types/webpack-env": "^1.16.2",
     "axios": "^1.4.0",
+    "file-saver": "^2.0.5",
     "luxon": "^3.3.0",
     "primereact": "^9.5.0",
     "react": "^17.0.2",
@@ -72,6 +73,7 @@
     "single-spa": "^5.9.3",
     "single-spa-react": "^4.3.1",
     "url-loader": "^4.1.1",
+    "xlsx": "^0.18.5",
     "yup": "^1.2.0"
   },
   "types": "dist/sapiencia-funds.d.ts"

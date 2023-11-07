@@ -1,14 +1,17 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { filterBudget } from "../../../common/schemas/budget-schema";
-import { RiFileExcel2Line } from "react-icons/ri";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import { ITableElement } from "../../../common/interfaces/table.interfaces";
 import useBudgetApi from "./budget-api.hook";
 import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
+import {jsDateToISODate,jsDateToSQLDate,} from "../../../common/utils/helpers";
+import { urlApiFunds } from "../../../common/utils/base-url";
+import axios from 'axios';
+import { ApiResponse } from "../../../common/utils/api-response";
 
 
 export default function useBudgetSearch() {
@@ -26,16 +29,29 @@ export default function useBudgetSearch() {
     const [typeMasterList, setTypeMasterList] = useState([]);
     const [showTable, setShowTable] = useState(false);
 
+    const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
+    const [formWatch, setFormWatch] = useState({id_comuna: "", periodo: "",});
+    const [submitDisabled, setSubmitDisabled] = useState(true);
+    const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
+
+    const { authorization } = useContext(AppContext)
+    console.log(authorization.user.id)
+
     const {
         handleSubmit,
         register,  
         setValue,
         reset,
+        watch,
         control: control,
         formState: { errors },
-    } = useForm<ICallBudget>(
-        { resolver }
+    } = useForm<ICallBudget>({ resolver }
     );
+
+    const [contractCode, expeditionDate] = watch([,
+        "contractCode",
+        "expeditionDate",
+    ]);
 
 
     getbudget()
@@ -52,6 +68,7 @@ export default function useBudgetSearch() {
             );
         }
     })
+    
 
     getAnnouncement()
     .then((response) => {
@@ -105,41 +122,25 @@ export default function useBudgetSearch() {
             renderCell: (row) => {
                 return <>{row.usuarios_comuna}</>;
             },
-        },            
-    ];
-
-    const tableActions: ITableAction<ICallBudget>[] = [
-        {
-            onClick: (row) => {
-                downloadCallBudget(row.id_comuna)
-                  
-                      const buffer = new Uint8Array(row.id_comuna); // Convierte el Array del búfer en Uint8Array
-                      const blob = new Blob([buffer]);
-                      const url = window.URL.createObjectURL(blob);
-                      const a = document.createElement("a");
-                      a.href = url;
-                      a.download = `${row.id_comuna}.xlsx`;
-                      document.body.appendChild(a);
-                      a.click();
-                      window.URL.revokeObjectURL(url);
-                      setMessage({
-                        title: `Descargar excel`,
-                        description: `El archivo fue descargado con éxito`,
-                        show: true,
-                        OkTitle: "Aceptar",
-                        background: true,
-                      });
-                    
-              },
-            customIcon: () => {
-                return <RiFileExcel2Line color="#21A366" />;
-            },
-          
         },
+        {
+            fieldName: "name",
+            header: "Total proyectado",
+            renderCell: (row) => {
+                return <>{}</>;
+            },
+        },   
+        {
+            fieldName: "name",
+            header: "Diferencia por comprometer",
+            renderCell: (row) => {
+                return <>{}</>;
+            },
+        },              
     ];
-   
 
     function loadTableData(searchCriteria?: object): void {
+
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
@@ -164,7 +165,6 @@ export default function useBudgetSearch() {
         setShowTable(false);
       };
 
-
     const onSubmit = handleSubmit(async (data: ICallBudget) => {        
         setShowTable(true)
 
@@ -172,6 +172,44 @@ export default function useBudgetSearch() {
             tableComponentRef.current.loadData(data);
         }
     });
+
+
+    const postRequest   = async (url: any, data: any) => {
+        try {
+          const response = await axios.post(url, data, {
+            responseType: 'blob', // Especifica que esperas una respuesta de tipo archivo.
+          });
+          // Verifica si la respuesta es un archivo descargable.
+          if (response.headers['content-type'].includes('application/octet-stream')) {
+            // Crea una URL para el archivo y abre una nueva ventana para la descarga.
+            const blob = new Blob([response.data], { type: 'application/octet-stream' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'cuentas_cobro.xlsx'; // Nombre del archivo
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+          }
+        } catch (error) {
+          console.error('Error al realizar la solicitud POST', error);
+        }
+      };
+
+      const downloadCollection = useCallback(() => {
+        const { page, perPage } = paginateData;
+        const { id_comuna, periodo } = formWatch;
+        const url = `${urlApiFunds}/api/v1/presupuesto/generate-xlsx`;
+        const data = {
+          page: page + 1,
+          perPage: perPage + 10,
+          id_comuna: 4123,
+          periodo: 10,
+        };
+      
+        postRequest(url, data);
+      }, [paginateData, formWatch]);
+
 
     return {
         announcementList,
@@ -184,11 +222,11 @@ export default function useBudgetSearch() {
         setShowTable,
         showTable,
         tableColumns,
-        tableActions,
         tableComponentRef,
         onSubmit,
         reset,
         clearFields,
+        downloadCollection,
       }
 
 }
