@@ -29,16 +29,19 @@ const Requirements = ({ onlyView }) => {
         <div className="container-form p-24">
           <p className="text-black text-29 mg-0">Requisitos</p>
           <div style={{ display: "flex" }}>
-            <SwitchComponent
-              idInput={"active"}
-              errors={errors}
-              disabled={onlyView ? true : false}
-              control={control}
-              size="normal"
-              label="Estado"
-              className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
-            />
+            <div style={{ marginRight: "24px" }}>
+              <SwitchComponent
+                idInput={"active"}
+                errors={errors}
+                disabled={onlyView ? true : false}
+                control={control}
+                size="normal"
+                label="Estado"
+                className="select-basic select-disabled-list input-size mr-12"
+                classNameLabel="text-black biggest font-500"
+              />
+            </div>
+
             <Controller
               control={control}
               name={"percent"}
@@ -52,11 +55,9 @@ const Requirements = ({ onlyView }) => {
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     value={field.value}
-                    className="input-basic input-size ml-24"
-                    classNameLabel="text-black biggest bold ml-24"
+                    className="input-basic input-size "
+                    classNameLabel="text-black biggest font-500 "
                     label="Porcentaje de descuento por periodo"
-                    min={1}
-                    max={100}
                   />
                 );
               }}
@@ -73,7 +74,7 @@ const Requirements = ({ onlyView }) => {
                     id="rew"
                     label="Descripción"
                     className="text-area-basic"
-                    classNameLabel="text-black biggest text-required bold"
+                    classNameLabel="text-black biggest text-required font-500"
                     rows={2}
                     disabled={onlyView ? true : false}
                     onChange={field.onChange}

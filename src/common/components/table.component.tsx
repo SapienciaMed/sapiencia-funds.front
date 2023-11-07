@@ -274,6 +274,12 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <Icons.FaTrashAlt className="button grid-button button-delete" />
       );
+    case "DeleteFill":
+      return element == "name" ? (
+        "Eliminar"
+      ) : (
+        <IconsBS.BsTrash className="button grid-button button-delete" />
+      );
     case "Link":
       return element == "name" ? (
         "Vincular"
