@@ -2,8 +2,7 @@ import React, { Fragment, useContext, useState } from "react";
 import { ButtonComponent, FormComponent, SelectComponent, MultiSelects } from "../../../common/components/Form";
 import useBudgetSearch from "../hooks/search-budget.hook";
 import TableComponent from "../../../common/components/table.component";
-import { excel } from "../../../common/components/icons/excel";
-import { RiFileExcel2Line } from "react-icons/ri";
+import Svgs from "../../../public/images/icons/svgs";
 
 
 const SearchBudgetPage = (): React.JSX.Element => {
@@ -89,24 +88,32 @@ const SearchBudgetPage = (): React.JSX.Element => {
 
                     )}
                 </div>
-                <div className="button-save-container-display-actas-users margin-right0">
-                    <ButtonComponent
-                        value={
-                            <>
-                                <div className="container-buttonText">
-                                    <span>Descargar</span>
-                                    <img alt="excel"src="https://imagizer.imageshack.com/img923/4716/oT1FZM.png" width={23.593} height={28.505} />
-                                </div>
-                            </>
-                        }
-                        className="button-download large "
-                        action={downloadCollection}
-                    />
+
+                <div>
+                    <br />
+                    <hr className="barra-spacing" />
+                </div>
+                <div className="button-save-container-display mr-24px">
+                    {("CUENTA_COBRO_EXCEL") && (
+                        <ButtonComponent
+                            value={
+                                <>
+                                    <div className="container-buttonText">
+                                        <span>Descargar</span>
+                                        <Svgs svg="excel" width={23.593} height={28.505} />
+                                    </div>
+                                </>
+                            }
+                            className="button-download large "
+                            action={downloadCollection}
+                        />
+                    )}
                 </div>
             </div>
         </Fragment>
     );
 
 };
+
 
 export default React.memo(SearchBudgetPage);

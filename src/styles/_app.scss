@@ -1,3 +1,5 @@
+@import "./mixins.scss";
+@import "./button.scss";
 // :root {
 //   --color-black: #0b060e;
 //   --color-gray: #535353;
@@ -527,5 +529,3 @@ border: 1px solid var(--border-table, #F2F2F2);
 .button-container {
   margin-bottom: 200px;  /* Ajusta el valor según la separación que desees */
 }
-
-

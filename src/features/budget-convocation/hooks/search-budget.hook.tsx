@@ -9,6 +9,9 @@ import useBudgetApi from "./budget-api.hook";
 import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import {jsDateToISODate,jsDateToSQLDate,} from "../../../common/utils/helpers";
+import { urlApiFunds } from "../../../common/utils/base-url";
+import axios from 'axios';
+import { ApiResponse } from "../../../common/utils/api-response";
 
 
 export default function useBudgetSearch() {
@@ -27,8 +30,9 @@ export default function useBudgetSearch() {
     const [showTable, setShowTable] = useState(false);
 
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
-    const [formWatch, setFormWatch] = useState({accountNum: "", nit: "",});
+    const [formWatch, setFormWatch] = useState({id_comuna: "", periodo: "",});
     const [submitDisabled, setSubmitDisabled] = useState(true);
+    const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
 
     const { authorization } = useContext(AppContext)
     console.log(authorization.user.id)
@@ -170,44 +174,41 @@ export default function useBudgetSearch() {
     });
 
 
-
-
-
-      useEffect(() => {
-        const { accountNum, nit } = formWatch;
-        if (contractCode || expeditionDate || accountNum || nit) {
-          return setSubmitDisabled(false);
+    const postRequest   = async (url: any, data: any) => {
+        try {
+          const response = await axios.post(url, data, {
+            responseType: 'blob', // Especifica que esperas una respuesta de tipo archivo.
+          });
+          // Verifica si la respuesta es un archivo descargable.
+          if (response.headers['content-type'].includes('application/octet-stream')) {
+            // Crea una URL para el archivo y abre una nueva ventana para la descarga.
+            const blob = new Blob([response.data], { type: 'application/octet-stream' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'cuentas_cobro.xlsx'; // Nombre del archivo
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+          }
+        } catch (error) {
+          console.error('Error al realizar la solicitud POST', error);
         }
-        setSubmitDisabled(true);
-      }, [contractCode, expeditionDate, formWatch]);
+      };
 
-
-    const downloadCollection = useCallback(() => {
+      const downloadCollection = useCallback(() => {
         const { page, perPage } = paginateData;
-        const { accountNum, nit } = formWatch;
-        const url = new URL(
-            `${process.env.urlApiFunds}/api/v1/presupuesto/generate-xlsx`
-        );
-        const params = new URLSearchParams();
-        params.append("page", page + 1);
-        params.append("perPage", perPage);
-        if (contractCode) {
-          params.append("contractCode", contractCode);
-        }
-        if (expeditionDate) {
-          params.append("expeditionDate", jsDateToSQLDate(expeditionDate));
-        }
-        if (accountNum) {
-          params.append("accountNum", accountNum);
-        }
-        if (nit) {
-          params.append("nit", nit);
-        }
-        url.search = params.toString();
-        window.open(url.toString(), "_blank");
-      }, [paginateData, formWatch, contractCode, expeditionDate]);
-
-
+        const { id_comuna, periodo } = formWatch;
+        const url = `${urlApiFunds}/api/v1/presupuesto/generate-xlsx`;
+        const data = {
+          page: page + 1,
+          perPage: perPage + 10,
+          id_comuna: 4123,
+          periodo: 10,
+        };
+      
+        postRequest(url, data);
+      }, [paginateData, formWatch]);
 
 
     return {
