@@ -52,8 +52,8 @@ const Requirements = ({ onlyView }) => {
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     value={field.value}
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest bold"
+                    className="input-basic input-size ml-24"
+                    classNameLabel="text-black biggest bold ml-24"
                     label="Porcentaje de descuento por periodo"
                     min={1}
                     max={100}

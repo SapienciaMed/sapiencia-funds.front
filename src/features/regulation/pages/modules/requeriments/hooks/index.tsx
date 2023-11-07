@@ -118,8 +118,10 @@ const useRequerimentsHook = () => {
   };
 
   const deleteRequerimentAction = async (id: number) => {
+    setLoading(true);
     const { data: dataResponse, operation } = await deleteRequeriment(id);
     if (operation.code === EResponseCodes.OK) {
+      setLoading(false);
     } else {
       handleModalError(operation.message, false);
     }
