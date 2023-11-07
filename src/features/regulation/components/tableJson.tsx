@@ -312,28 +312,28 @@ const TableJson = ({
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <label
                   style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black  biggest bold"
+                  className="text-black  biggest bold-500"
                 >
                   Promedio Inicial
                 </label>
 
                 <label
                   style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black  biggest bold"
+                  className="text-black  biggest bold-500"
                 >
                   Promedio Final
                 </label>
 
                 <label
                   style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black biggest bold"
+                  className="text-black biggest bold-500"
                 >
                   Porcentaje
                 </label>
 
                 <label
                   style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black biggest  bold"
+                  className="text-black biggest  bold-500"
                 >
                   Accion
                 </label>
@@ -368,7 +368,7 @@ const TableJson = ({
                       >
                         <label
                           style={{ padding: "16px 23.5px 16px 23.5px" }}
-                          className="text-black  biggest bold"
+                          className="text-black  biggest"
                         >
                           {item.initialAverage}
                         </label>
@@ -382,7 +382,7 @@ const TableJson = ({
                       >
                         <label
                           style={{ padding: "14px 33px 14px 33px" }}
-                          className="text-black  biggest bold"
+                          className="text-black  biggest"
                         >
                           {item.endAverage}
                         </label>
@@ -396,7 +396,7 @@ const TableJson = ({
                       >
                         <label
                           style={{ padding: "14px 33px 14px 33px" }}
-                          className="text-black  biggest bold"
+                          className="text-black  biggest"
                         >
                           {item.percent}%
                         </label>
@@ -410,7 +410,7 @@ const TableJson = ({
                       >
                         <label
                           style={{ padding: "14px 33px 14px 33px" }}
-                          className="text-black  biggest bold"
+                          className="text-black  biggest"
                           onClick={() => {
                             if (onlyView) return;
                             deleteItem(item.id);
