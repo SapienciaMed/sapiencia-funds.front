@@ -45,7 +45,7 @@ function App() {
                 path={"/fondos/resumen-priorizacion/*"}
                 element={<ResumenPriorizacionRoutes />}
               />
-              <Route path={"/fondos/maestros/*"} element={<MasterRoutes />} />
+              <Route path={"/fondos/maestros-actividad/*"} element={<MasterActivityRoutes />} />
               <Route path={"/fondos/acta/*"} element={<ActaRoutes />} />
               <Route
                 path={"/fondos/cargar-informacion/*"}

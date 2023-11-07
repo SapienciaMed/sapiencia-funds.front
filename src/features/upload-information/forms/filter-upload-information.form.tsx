@@ -41,7 +41,7 @@ export const FilterUploadInformationForm = ({
   return (
     <div className="container-sections-forms">
       <div className="title-area">
-        <label className="text-black extra-large bold"></label>
+        <label className="text-black extra-large medium"></label>
 
         <div
           className="title-button text-main biggest pointer"
@@ -62,11 +62,11 @@ export const FilterUploadInformationForm = ({
                   data={commune}
                   label={
                     <>
-                    Comuna y/o corregimiento <span>*</span>
+                    Comuna y/o corregimiento
                     </>
                   }
-                  className="select-basic medium select-disabled-list"
-                  classNameLabel="text-black big bold"
+                  className="select-basic medium"
+                  classNameLabel="text-black big text-required"
                   filter={true}
                   placeholder="Seleccione."
                   //disabled={action === "edit" ? true : false} 
@@ -79,11 +79,11 @@ export const FilterUploadInformationForm = ({
                   data={vigencias}
                   label={
                     <>
-                    Vigencia <span>*</span>
+                    Vigencia
                     </>
                   }
-                  className="select-basic medium select-disabled-list"
-                  classNameLabel="text-black big bold"
+                  className="select-basic medium"
+                  classNameLabel="text-black big text-required"
                   filter={true}
                   placeholder="Seleccione."
                   //disabled={action === "edit" ? true : false} 
@@ -96,11 +96,11 @@ export const FilterUploadInformationForm = ({
                   data={information}
                   label={
                     <>
-                    información <span>*</span>
+                    Información
                     </>
                   }
-                  className="select-basic medium select-disabled-list"
-                  classNameLabel="text-black big bold"
+                  className="select-basic medium"
+                  classNameLabel="text-black big text-required"
                   filter={true}
                   placeholder="Seleccione."
                   //disabled={action === "edit" ? true : false} 

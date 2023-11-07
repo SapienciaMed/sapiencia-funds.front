@@ -88,8 +88,7 @@ export default function useCreateUploadHook() {
   };
   const selectedLabelUser = getSelectedLabel(selectedUser, activeUserList)
   const addUsergrid = handleSubmit((data: IUploadInformation) => {
-    console.log("llegue al boton");
-    if (selectedUser) {
+       if (selectedUser) {
       dataGridEmails.push({
         ident: uuidv4(),
         user: selectedLabelUser.name,
@@ -277,16 +276,16 @@ export default function useCreateUploadHook() {
         if (data.operation.code === EResponseCodes.OK) {
           setFilesUploadData([]);
           setShowDialog(false);
-          resolve(); // Resuelve la promesa
+          resolve();
         
         } else {
           setFilesUploadData([]);
           setShowDialog(false);
-          reject(data.operation.message); // Rechaza la promesa con el mensaje de error
+          reject(data.operation.message);
         }
       }).catch(err => {
         setShowDialog(false);
-        reject(String(err)); // Rechaza la promesa con el error
+        reject(String(err));
       });
     });
   }
@@ -295,7 +294,6 @@ export default function useCreateUploadHook() {
 
 
   return {
-
     register,
     control,
     formState,

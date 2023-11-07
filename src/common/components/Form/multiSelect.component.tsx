@@ -101,8 +101,8 @@ export function MultiSelects({
             render={({ field }) => (
               <MultiSelect
                 id={field.name}
-                value={selectedCities}
-                onChange={(e: MultiSelectChangeEvent) => setSelectedCities(e.value)}
+                value={field.value}
+                onChange={(e: MultiSelectChangeEvent) => field.onChange(e.value)} 
                 options={data}
                 optionLabel="name"
                 placeholder={placeholder}
