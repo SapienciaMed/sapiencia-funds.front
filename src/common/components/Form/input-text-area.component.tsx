@@ -51,7 +51,7 @@ function TextAreaElement({
   rows,
   cols,
   optionsRegister = {},
-  setCount
+  setCount,
 }): React.JSX.Element {
   return (
     <textarea
@@ -92,7 +92,7 @@ export function TextAreaComponent({
   rows,
   cols,
   optionsRegister = {},
-  characters
+  characters,
 }: IInputProps<any>): React.JSX.Element {
   const [count, setCount] = useState(0);
   const messageError = () => {
@@ -148,18 +148,26 @@ export function TextAreaComponent({
         )}
       </div>
       {messageError() && (
-        <p className="error-message bold not-margin-padding">
+        <p className="error-message font-500 not-margin-padding">
           {messageError()}
         </p>
       )}
-      {characters > 0 ? <CharactersComponent characters={characters} count={count} /> : <></>}
+      {characters > 0 ? (
+        <CharactersComponent characters={characters} count={count} />
+      ) : (
+        <></>
+      )}
       {children}
     </div>
   );
 }
 
-const CharactersComponent = ({characters, count}) => {
-  return (
-    count > 0 ? <label className="label-max-textarea">{characters-count} caracteres restantes</label> : <label className="label-max-textarea">Máx. {characters} caracteres</label>
-  )
-}
+const CharactersComponent = ({ characters, count }) => {
+  return count > 0 ? (
+    <label className="label-max-textarea">
+      {characters - count} caracteres restantes
+    </label>
+  ) : (
+    <label className="label-max-textarea">Máx. {characters} caracteres</label>
+  );
+};
