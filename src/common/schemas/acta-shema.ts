@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const createActas = yup.object({
- numberProject: yup
+numberProject: yup
     .number()
     .required("Completar información"),
   periodVigency: yup
