@@ -10,6 +10,7 @@ import { AppContext } from "../../../common/contexts/app.context";
 import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
 import { Checkbox } from "primereact/checkbox";
 import { Controller } from "react-hook-form";
+import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 const ActaCreatePage = () => {
 
@@ -287,16 +288,22 @@ const ActaCreatePage = () => {
 
                                     }}
                                 />
-                                <InputComponent
-                                    idInput={"salaryMin"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Salario mínimo"
-                                    register={register}
-                                    classNameLabel="text-black biggest"
+                             
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`salaryMin`}
+                                    label="valor"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'Seleccionar'}
+                                    classNameLabel="text-black biggest bold text-required"
                                     errors={errors}
-                                    placeholder={""}
-                                    disabled
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                   disabled
                                 />
 
                             </div>
@@ -482,7 +489,7 @@ const ActaCreatePage = () => {
                                 placeholder={""}
                                 disabled
                                 value={String(subtotalVigency)}
-                            />
+                            />                            
                             <InputComponent
                                 idInput={"totalCostBillsOperation"}
                                 className="input-basic medium"
