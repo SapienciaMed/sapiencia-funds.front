@@ -97,57 +97,8 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     classNameLabel="text-black biggest"
                                     filter={true}
                                     placeholder="Seleccionar."
-                                />
-                                {/* <InputComponent
-                                    idInput={"costOperation"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Costo promedio"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
-                                /> */}
+                                />                             
 
-                               {/*  <InputNumberComponent
-                                    control={control}
-                                    idInput={`costOperation`}
-                                    label="Comisión operador financiero"
-                                    className="inputNumber-basic medium"
-                                    placeholder={'0'}
-                                    classNameLabel="text-black biggest bold text-required"
-                                    errors={errors}
-                                    mode="currency"
-                                    currency="COP"
-                                    locale="es-CO"
-                                    fieldArray={true}
-                                    minFractionDigits={0}
-                                    maxFractionDigits={0}
-                                   
-                                /> */}
-
-                                 {/* <Controller
-                                    control={control}
-                                    name={"costOperation"}
-                                    render={({ field }) => {
-                                        return (
-                                            <InputComponent
-                                                idInput={"costOperation"}
-                                                className="input-basic medium"
-                                                typeInput="number"
-                                                label="Comisión operador financiero"
-                                                register={register}
-                                                classNameLabel="text-black biggest text-required"
-                                                errors={errors}
-                                                placeholder={""}
-                                                //disabled={checked}
-                                                {...field}
-                                            />
-                                        )
-
-                                    }}
-                                /> */}
 
                                 <Controller
                                     control={control}
@@ -187,17 +138,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                             </div>
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
-                                    {/*  <InputComponent
-                                        idInput={"quantityPeriod1"}
-                                        className="input-basic medium"
-                                        typeInput="text"
-                                        label="Cantidad"
-                                        register={register}
-                                        classNameLabel="text-black biggest text-required"
-                                        //direction={EDirection.column}
-                                        errors={errors}
-                                        placeholder={""}
-                                    /> */}
+                                    
                                     <Controller
                                         control={control}
                                         name={"quantityPeriod1"}
@@ -219,20 +160,6 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
 
                                         }}
                                     />
-
-
-
-                                    {/*  <InputComponent
-                                        idInput={"valuePeriod1"}
-                                        className="input-basic medium"
-                                        typeInput="text"
-                                        label="Costo promedio"
-                                        register={register}
-                                        classNameLabel="text-black biggest text-required"
-                                        //direction={EDirection.column}
-                                        errors={errors}
-                                        placeholder={""}
-                                    /> */}
 
                                     <Controller
                                         control={control}
@@ -268,17 +195,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                             </div>
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
-                                    {/*  <InputComponent
-                                        idInput={"quantityPeriod2"}
-                                        className="input-basic medium"
-                                        typeInput="text"
-                                        label="Cantidad"
-                                        register={register}
-                                        classNameLabel="text-black biggest text-required"
-                                        //direction={EDirection.column}
-                                        errors={errors}
-                                        placeholder={""}
-                                    /> */}
+                                    
                                     <Controller
                                         control={control}
                                         name={"quantityPeriod2"}
@@ -300,17 +217,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
 
                                         }}
                                     />
-                                    {/*  <InputComponent
-                                        idInput={"valuePeriod2"}
-                                        className="input-basic medium"
-                                        typeInput="text"
-                                        label="Costo promedio"
-                                        register={register}
-                                        classNameLabel="text-black biggest text-required"
-                                        //direction={EDirection.column}
-                                        errors={errors}
-                                        placeholder={""}
-                                    /> */}
+                                 
                                     <Controller
                                         control={control}
                                         name={"valuePeriod2"}
@@ -342,18 +249,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                 <div className="container-form-grid-actas">
                     <div className="container-form padding-form">
                         <div>
-                            <div className='grid-form-3-container mb-24px'>
-                                {/*    <InputComponent
-                                    idInput={"subtotalVigency"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label=" Subtotal vigencia"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    errors={errors}
-                                    placeholder={""}
-                                    onChange={handleInputChange}
-                                /> */}
+                            <div className='grid-form-3-container mb-24px'>                               
 
                                 <Controller
                                     control={control}
@@ -369,31 +265,14 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                             placeholder={""}
                                             value={value}
                                             onChange={(e) => {
-                                                onChange(e); // Esto informa a react-hook-form del cambio
-                                                setModifiedIdcCountercredit(Number(e.target.value)); // Aquí ejecutas tu lógica adicional
+                                                onChange(e); 
+                                                setModifiedIdcCountercredit(Number(e.target.value)); 
                                             }}
-                                            onBlur={onBlur} // Esto es opcional si necesitas el evento onBlur
+                                            onBlur={onBlur} 
 
                                         />
                                     )}
                                 />
-
-
-
-
-
-
-                                {/*   <InputComponent
-                                    idInput={"costBillsOperation"}
-                                    className="input-basic medium"
-                                    typeInput="number"
-                                    label="Costos y gastos de operación"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    errors={errors}
-                                    disabled
-                                    value={costBillsOperation}
-                                /> */}
 
                                 <InputNumberComponent
                                     control={control}
@@ -411,20 +290,6 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     maxFractionDigits={0}
                                     disabled
                                 />
-
-                                {/*  <InputComponent
-                                    idInput={"net"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Neto"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
-                                    disabled
-                                    value={neto}
-                                /> */}
 
                                 <InputNumberComponent
                                     control={control}
@@ -444,20 +309,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                 />
 
                             </div>
-                            <div className='grid-form-3-container '>
-                                {/*  <InputComponent
-                                    idInput={"financialOperatorCommission"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Comisión operador financiero"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
-                                    disabled
-                                    value={financialOperatorCommission}
-                                /> */}
+                            <div className='grid-form-3-container '>                                
 
                                 <InputNumberComponent
                                     control={control}
@@ -475,21 +327,6 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     maxFractionDigits={0}
                                     disabled
                                 />
-
-
-                                {/*  <InputComponent
-                                    idInput={"resourcesCredit"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Recursos para crédito"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
-                                    disabled
-                                    value={resourcesCredit}
-                                /> */}
 
                                 <InputNumberComponent
                                     control={control}
@@ -512,14 +349,8 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     </div>
                 </div>
 
-
-
-
-
-
-
             </FormComponent>
-            <div className="button-save-container-display-maestros margin-right0 mr-24px">
+            <div className="button-save-container-display-maestros-actas margin-right0 mr-24px">
                 <ButtonComponent
                     form="createItemsForm"
                     value="Cancelar"
