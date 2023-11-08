@@ -27,6 +27,12 @@ numberProject: yup
 
 });
 
+export const searchActas = yup.object({
+  id: yup
+    .string()
+    .required("Cargar información"),
+})
+
 
 
 
