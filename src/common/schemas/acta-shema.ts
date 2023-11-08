@@ -1,17 +1,15 @@
 import * as yup from "yup";
 
 export const createActas = yup.object({
-numberProject: yup
+/* numberProject: yup
     .number()
     .required("Completar información"),
   periodVigency: yup
     .number()
-    .required()
-    .typeError("Completar información"),
+    .required("Completar información"),
   announcementInitial: yup
     .number()
-    .required()
-    .typeError("Completar información"),
+    .required("Completar información"),
   costsExpenses: yup
     .number()
     .required()
@@ -24,7 +22,7 @@ numberProject: yup
     .number()
     .required()
     .typeError("Completar información"), 
-
+ */
 });
 
 

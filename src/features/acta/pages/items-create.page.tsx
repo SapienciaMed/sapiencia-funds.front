@@ -6,6 +6,7 @@ import useActaCreate from "../hooks/acta-create.hook";
 import { IActa } from '../../../common/interfaces/acta.interface';
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { Controller } from "react-hook-form";
+import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 
 const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, actaItems?: IActaItems }) => {
@@ -109,7 +110,24 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     placeholder={""}
                                 /> */}
 
-                                <Controller
+                               {/*  <InputNumberComponent
+                                    control={control}
+                                    idInput={`costOperation`}
+                                    label="Comisión operador financiero"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'0'}
+                                    classNameLabel="text-black biggest bold text-required"
+                                    errors={errors}
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                   
+                                /> */}
+
+                                 {/* <Controller
                                     control={control}
                                     name={"costOperation"}
                                     render={({ field }) => {
@@ -124,6 +142,32 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                                 errors={errors}
                                                 placeholder={""}
                                                 //disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
+                                /> */}
+
+                                <Controller
+                                    control={control}
+                                    name={"costOperation"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputNumberComponent
+                                                control={control}
+                                                idInput={`costOperation`}
+                                                label="Costo promedio"
+                                                className="inputNumber-basic medium"
+                                                placeholder={'0'}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                mode="currency"
+                                                currency="COP"
+                                                locale="es-CO"
+                                                fieldArray={true}
+                                                minFractionDigits={0}
+                                                maxFractionDigits={0}
                                                 {...field}
                                             />
                                         )
@@ -175,6 +219,9 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
 
                                         }}
                                     />
+
+
+
                                     {/*  <InputComponent
                                         idInput={"valuePeriod1"}
                                         className="input-basic medium"
@@ -196,7 +243,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                                     idInput={"valuePeriod1"}
                                                     className="input-basic medium"
                                                     typeInput="number"
-                                                    label="Costo promedio"
+                                                    label="Valor"
                                                     register={register}
                                                     classNameLabel="text-black biggest text-required"
                                                     errors={errors}
@@ -273,7 +320,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                                     idInput={"valuePeriod2"}
                                                     className="input-basic medium"
                                                     typeInput="number"
-                                                    label="Costo promedio"
+                                                    label="Valor"
                                                     register={register}
                                                     classNameLabel="text-black biggest text-required"
                                                     errors={errors}
@@ -326,14 +373,17 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                                 setModifiedIdcCountercredit(Number(e.target.value)); // Aquí ejecutas tu lógica adicional
                                             }}
                                             onBlur={onBlur} // Esto es opcional si necesitas el evento onBlur
-                                           
+
                                         />
                                     )}
                                 />
 
 
 
-                                <InputComponent
+
+
+
+                                {/*   <InputComponent
                                     idInput={"costBillsOperation"}
                                     className="input-basic medium"
                                     typeInput="number"
@@ -343,8 +393,26 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     errors={errors}
                                     disabled
                                     value={costBillsOperation}
+                                /> */}
+
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`costBillsOperation`}
+                                    label="Costos y gastos de operación"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'0'}
+                                    classNameLabel="text-black biggest text-required"
+                                    errors={errors}
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                    disabled
                                 />
-                                <InputComponent
+
+                                {/*  <InputComponent
                                     idInput={"net"}
                                     className="input-basic medium"
                                     typeInput="text"
@@ -356,10 +424,28 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     placeholder={""}
                                     disabled
                                     value={neto}
+                                /> */}
+
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`net`}
+                                    label="Neto"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'0'}
+                                    classNameLabel="text-black biggest text-required"
+                                    errors={errors}
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                    disabled
                                 />
+
                             </div>
                             <div className='grid-form-3-container '>
-                                <InputComponent
+                                {/*  <InputComponent
                                     idInput={"financialOperatorCommission"}
                                     className="input-basic medium"
                                     typeInput="text"
@@ -371,8 +457,27 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     placeholder={""}
                                     disabled
                                     value={financialOperatorCommission}
+                                /> */}
+
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`financialOperatorCommission`}
+                                    label="Comisión operador financiero"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'0'}
+                                    classNameLabel="text-black biggest text-required"
+                                    errors={errors}
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                    disabled
                                 />
-                                <InputComponent
+
+
+                                {/*  <InputComponent
                                     idInput={"resourcesCredit"}
                                     className="input-basic medium"
                                     typeInput="text"
@@ -384,6 +489,23 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     placeholder={""}
                                     disabled
                                     value={resourcesCredit}
+                                /> */}
+
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`resourcesCredit`}
+                                    label="Recursos para crédito"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'0'}
+                                    classNameLabel="text-black biggest  text-required"
+                                    errors={errors}
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                    disabled
                                 />
                             </div>
                         </div>

@@ -127,6 +127,17 @@ export default function useActaCreate() {
         setSubtotalVigency(totalSubtotalVigency)
         setVigency1(vigency1);
 
+        setValue("tQuantity1", totalQuantityPeriod1);
+        setValue("tValue1", totalValuePeriod1);
+        setValue("tQuantity2", totalQuantityPeriod2);
+        setValue("tValue2", totalValuePeriod2);
+        setValue("subtotalVigency", totalSubtotalVigency);
+        setValue("totalCostBillsOperation", totalCostBillsOperation);
+        setValue("totalNet", totalNet);
+        setValue("totalResourcesCredit", totalResourcesCredit);
+        setValue("totalFinancialOperatorCommission", totalFinancialOperatorCommission);
+        setValue("vigency1", vigency1);
+        setValue("vigency2", totalSubtotalVigency);
 
         
         return {
@@ -259,7 +270,8 @@ export default function useActaCreate() {
         const selectedProjectMeta = projectList[selectedProject]?.meta;
         if (selectedProjectMeta) {
             const integerPart = parseInt(selectedProjectMeta, 10);         
-            setProjectMeta(integerPart);  
+            setProjectMeta(integerPart); 
+            setValue('techo',projectMeta) 
         }
     }, [selectedProject, projectList]);
 
@@ -390,7 +402,7 @@ export default function useActaCreate() {
     useEffect(() => {
         if (Number(projectMeta) < vigency1 || Number(projectMeta)<subtotalVigency) {
             setMessage({           
-                title: "Crear Acta",
+                title: "Guardar",
                 description: "El acta no podrá ser guardada por superar el valor del techo",
                 show: true,
                 OkTitle: "Aceptar",
@@ -407,7 +419,7 @@ export default function useActaCreate() {
         setMessage({
           show: true,
           title: "Cancelar",
-          description: "¿Estás segur@ de cancelar esta acción en el sistema?",
+          description: "¿Segur@ que desea cancelar la creación del acta?",
           OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
           onOk() {
