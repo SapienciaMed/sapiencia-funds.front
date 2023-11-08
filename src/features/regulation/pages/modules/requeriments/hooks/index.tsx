@@ -163,7 +163,7 @@ const useRequerimentsHook = () => {
 
   const tableActions: ITableAction<IRequeriments>[] = [
     {
-      icon: "Delete",
+      icon: "DeleteFill",
       onClick: (row) => {
         if (onlyView) return;
         deleteRequerimentAction(row.id);

@@ -46,7 +46,7 @@ const InitialSetup = ({
             </>
           }
           className="select-basic select-disabled-list input-size"
-          classNameLabel="text-black biggest bold"
+          classNameLabel="text-black biggest font-500"
           placeholder="Seleccionar"
         />
       </div>
@@ -66,7 +66,7 @@ const InitialSetup = ({
               </>
             }
             className="select-basic select-disabled-list input-size"
-            classNameLabel="text-black biggest bold"
+            classNameLabel="text-black biggest font-500"
             placeholder="Seleccionar"
           />
         </div>
@@ -84,7 +84,7 @@ const InitialSetup = ({
               </>
             }
             className="select-basic select-disabled-list input-size"
-            classNameLabel="text-black biggest bold"
+            classNameLabel="text-black biggest font-500"
           />
         </div>
 
@@ -103,7 +103,7 @@ const InitialSetup = ({
               </>
             }
             className="select-basic select-disabled-list input-size"
-            classNameLabel="text-black biggest bold"
+            classNameLabel="text-black biggest font-500"
             placeholder="Seleccionar"
           />
         </div>
@@ -124,7 +124,7 @@ const InitialSetup = ({
                 onBlur={field.onBlur}
                 value={field.value ? field.value : ""}
                 className="input-basic input-size"
-                classNameLabel="text-black biggest text-required bold"
+                classNameLabel="text-black biggest text-required font-500"
                 label="Porcentaje de pago teórico semestral"
                 min={0}
                 max={100}
@@ -169,7 +169,7 @@ const InitialSetup = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >
@@ -190,7 +190,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size "
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Porcentaje de descuento por periodo"
                     />
                   );
@@ -212,7 +212,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size"
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Horas por periodo"
                       disabled={onlyView ? true : false}
                     />
@@ -260,7 +260,7 @@ const InitialSetup = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >
@@ -281,7 +281,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size "
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Porcentaje de cumplimiento"
                     />
                   );
@@ -303,7 +303,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size"
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Horas totales por el crédito"
                       disabled={onlyView ? true : false}
                     />
@@ -347,7 +347,7 @@ const InitialSetup = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >
@@ -367,7 +367,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size"
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Meses"
                       disabled={onlyView ? true : false}
                     />
@@ -388,7 +388,7 @@ const InitialSetup = ({
                   </>
                 }
                 className="select-basic select-disabled-list input-size"
-                classNameLabel="text-black biggest bold"
+                classNameLabel="text-black biggest font-500"
                 placeholder="Seleccionar"
                 disabled={onlyView ? true : false}
               />
@@ -432,7 +432,7 @@ const InitialSetup = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >
@@ -452,7 +452,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size"
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Cantidad"
                       disabled={onlyView ? true : false}
                     />
@@ -499,7 +499,7 @@ const InitialSetup = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >
@@ -519,7 +519,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size"
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Cantidad"
                       disabled={onlyView ? true : false}
                     />
@@ -564,7 +564,7 @@ const InitialSetup = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size mb-24px"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >
@@ -585,7 +585,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size"
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Cantidad"
                     />
                   );
@@ -626,7 +626,7 @@ const InitialSetup = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >
@@ -647,7 +647,7 @@ const InitialSetup = ({
                       onBlur={field.onBlur}
                       value={field.value}
                       className="input-basic input-size"
-                      classNameLabel="text-black biggest text-required bold"
+                      classNameLabel="text-black biggest text-required font-500"
                       label="Cantidad"
                     />
                   );

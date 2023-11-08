@@ -53,7 +53,7 @@ const ForgivenessPercentages = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >
@@ -106,7 +106,7 @@ const ForgivenessPercentages = ({
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
-              classNameLabel="text-black biggest bold"
+              classNameLabel="text-black biggest font-500"
             />
           }
         >

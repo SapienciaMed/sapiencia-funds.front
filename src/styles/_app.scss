@@ -610,26 +610,25 @@ span.select-basic {
   color: white;
 }
 
-.tooltip {
-  position: relative;
-  display: inline-block;
+
+.button-download.large {
+  width: 9.5em;
+  height: 2.5em;
+  font-size: 16px;
+}
+
+.button-download {
+  background-color: rgba(0,0,0,0);
+  color: #533893;
+  border-radius: 100px;
+  border: 1px solid #533893;
   cursor: pointer;
+  margin: 0.5em;
 }
 
-.tooltip .tooltiptext {
-  display: none;
-  position: absolute;
-  background-color: #333;
-  color: #fff;
-  padding: 5px;
-  border-radius: 5px;
-  white-space: normal; /* Permite que el texto completo sea visible en el tooltip */
-  z-index: 1;
-  top: 100%;
-  left: 0;
-  font-weight: 300;
-}
-
-.tooltip:hover .tooltiptext {
-  display: block; /* Muestra el tooltip cuando se coloca el cursor sobre el elemento */
+.container-buttonText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
 }

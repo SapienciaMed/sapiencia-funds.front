@@ -194,13 +194,13 @@ const TableJson = ({
               setData({ ...data, percentCondonation: e.target.value });
             }}
             className="input-basic input-size"
-            classNameLabel="text-black biggest text-required bold"
+            classNameLabel="text-black biggest text-required font-500"
             label="Porcentaje de condonación"
           />
           {percentCondonation && (
             <p
               style={{ color: "red" }}
-              className="error-message bold not-margin-padding"
+              className="error-message font-500 not-margin-padding"
             >
               {percentCondonation}
             </p>
@@ -208,7 +208,7 @@ const TableJson = ({
           {error && (
             <p
               style={{ color: "red" }}
-              className="error-message bold not-margin-padding"
+              className="error-message font-500 not-margin-padding"
             >
               {percentCondonation}
             </p>
@@ -216,7 +216,7 @@ const TableJson = ({
         </div>
       </div>
       <div className="container-form-children p-24 ">
-        <label className={"text-black biggest bold"}>{title}</label>
+        <label className={"text-black biggest font-500"}>{title}</label>
         <div
           style={{
             display: "flex",
@@ -238,13 +238,13 @@ const TableJson = ({
               }}
               value={tempData.initialAverage}
               className="input-basic input-size "
-              classNameLabel="text-black biggest text-required bold"
+              classNameLabel="text-black biggest text-required font-500"
               label="Promedio inicial"
             />
             {initialAverage.length > 0 && (
               <p
                 style={{ color: "red" }}
-                className="error-message bold not-margin-padding"
+                className="error-message font-500 not-margin-padding"
               >
                 {initialAverage}
               </p>
@@ -261,13 +261,13 @@ const TableJson = ({
               }}
               value={tempData.endAverage}
               className="input-basic input-size "
-              classNameLabel="text-black biggest text-required bold"
+              classNameLabel="text-black biggest text-required font-500"
               label="Promedio final"
             />
             {endAverage.length > 0 && (
               <p
                 style={{ color: "red" }}
-                className="error-message bold not-margin-padding"
+                className="error-message font-500 not-margin-padding"
               >
                 {endAverage}
               </p>
@@ -284,13 +284,13 @@ const TableJson = ({
               }}
               value={tempData.percent}
               className="input-basic input-size "
-              classNameLabel="text-black biggest text-required bold"
+              classNameLabel="text-black biggest text-required font-500"
               label="Porcentaje"
             />
             {percent.length > 0 && (
               <p
                 style={{ color: "red" }}
-                className="error-message bold not-margin-padding"
+                className="error-message font-500 not-margin-padding"
               >
                 {percent}
               </p>
