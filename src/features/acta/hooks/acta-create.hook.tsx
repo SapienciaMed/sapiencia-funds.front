@@ -16,6 +16,7 @@ import { ICitation } from '../../../common/interfaces/citationInterface';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router-dom";
 
+
 export default function useActaCreate() {
     const resolver = useYupValidationResolver(createActas);
 
@@ -149,7 +150,7 @@ export default function useActaCreate() {
     }, [dataGridItems]);
 
     const addItem = handleSubmit((data: IActa) => {
-        //console.log('datos',data)
+        console.log('datos',data)
         data.idStatus = 1;
         setDatosActa(data)
         setMessage({

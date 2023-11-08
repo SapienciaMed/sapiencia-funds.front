@@ -9,6 +9,7 @@ import ItemsCreatePage from "./items-create.page";
 import { AppContext } from "../../../common/contexts/app.context";
 import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
 import { Checkbox } from "primereact/checkbox";
+import { Controller } from "react-hook-form";
 
 const ActaCreatePage = () => {
 
@@ -241,27 +242,50 @@ const ActaCreatePage = () => {
                                     filter={true}
                                     placeholder="Seleccionar."
                                 />
-                                <InputComponent
-                                    idInput={"periodVigency"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Periodos por vigencia"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    errors={errors}
-                                    placeholder={""}
+                                <Controller
+                                    control={control}
+                                    name={"periodVigency"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"periodVigency"}
+                                                className="input-basic medium"
+                                                typeInput="number"
+                                                label="Periodos por vigencia"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
                                 />
+
                             </div>
                             <div className='grid-form-3-container mt-20px'>
-                                <InputComponent
-                                    idInput={"announcementInitial"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Convocatoria inicial"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    errors={errors}
-                                    placeholder={""}
+                                <Controller
+                                    control={control}
+                                    name={"announcementInitial"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"announcementInitial"}
+                                                className="input-basic medium"
+                                                typeInput="number"
+                                                label="Convocatoria inicial"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
                                 />
                                 <InputComponent
                                     idInput={"salaryMin"}
@@ -269,12 +293,12 @@ const ActaCreatePage = () => {
                                     typeInput="text"
                                     label="Salario mínimo"
                                     register={register}
-                                    classNameLabel="text-black biggest"                                   
+                                    classNameLabel="text-black biggest"
                                     errors={errors}
                                     placeholder={""}
                                     disabled
                                 />
-                                
+
                             </div>
 
                         </div>
@@ -285,38 +309,71 @@ const ActaCreatePage = () => {
                                 <label className="text-black extra-large grid-span-4-columns mb-18px">Tasas</label>
                             </div>
                             <div className='grid-form-3-container mb-24px'>
-                                <InputComponent
-                                    idInput={"costsExpenses"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Costo y gastos de operación logística"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
+
+                                <Controller
+                                    control={control}
+                                    name={"costsExpenses"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"costsExpenses"}
+                                                className="input-basic medium"
+                                                typeInput="number"
+                                                label="Costo y gastos de operación logística"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
                                 />
-                                <InputComponent
-                                    idInput={"OperatorCommission"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Comisión operador financiero"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
+
+                                <Controller
+                                    control={control}
+                                    name={"OperatorCommission"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"OperatorCommission"}
+                                                className="input-basic medium"
+                                                typeInput="number"
+                                                label="Comisión operador financiero"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
                                 />
-                                <InputComponent
-                                    idInput={"financialOperation"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Operación finaciera MB"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
+
+                                <Controller
+                                    control={control}
+                                    name={"financialOperation"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"financialOperation"}
+                                                className="input-basic medium"
+                                                typeInput="number"
+                                                label="Operación finaciera MB"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
                                 />
                             </div>
 
@@ -336,9 +393,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-           style={
-                   dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-               }   
+                style={
+                    dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
+                }
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
@@ -377,7 +434,7 @@ const ActaCreatePage = () => {
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Valor periodo 1"
-                                register={register}
+                                //register={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
@@ -390,7 +447,7 @@ const ActaCreatePage = () => {
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Cantidad periodo 2"
-                                register={register}
+                                //register={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
@@ -403,7 +460,7 @@ const ActaCreatePage = () => {
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Valor periodo 2"
-                                register={register}
+                                //={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
@@ -431,7 +488,7 @@ const ActaCreatePage = () => {
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Costo y gasto de operación"
-                                register={register}
+                                //register={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
@@ -444,7 +501,7 @@ const ActaCreatePage = () => {
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Neto"
-                                register={register}
+                                //register={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
@@ -473,7 +530,7 @@ const ActaCreatePage = () => {
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Total comisión operador financiero"
-                                register={register}
+                                //register={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
@@ -508,7 +565,7 @@ const ActaCreatePage = () => {
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Verificador 2"
-                                register={register}
+                                //register={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
@@ -516,19 +573,19 @@ const ActaCreatePage = () => {
                                 disabled
                                 value={String(subtotalVigency)}
                             />
-                           <InputComponent
+                            <InputComponent
                                 idInput={"techo"}
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="techo"
-                                register={register}
+                                // register={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
                                 placeholder={""}
                                 disabled
                                 value={String(projectMeta)}
-                            />                           
+                            />
                         </div>
 
                     </div>
