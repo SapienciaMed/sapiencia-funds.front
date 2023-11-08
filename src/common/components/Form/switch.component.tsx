@@ -66,6 +66,7 @@ const SwitchComponent = ({
   size,
   onChange,
   onClick,
+  defaultValue,
 }: ISwitch<any>): React.JSX.Element => {
   const [value, setValue] = useState(false);
   return (
@@ -86,6 +87,7 @@ const SwitchComponent = ({
           name={idInput}
           control={control}
           rules={optionsRegister}
+          defaultValue={defaultValue}
           render={({ field }) => (
             <label id={field.name} className="toggle-control">
               <input

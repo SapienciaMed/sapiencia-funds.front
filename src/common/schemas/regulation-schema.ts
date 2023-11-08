@@ -171,10 +171,7 @@ export const createRegulation = yup.object().shape({
 });
 
 export const searchRegulation = yup.object({
-  program: yup.string().typeError(MESSAGE_REQUIRED).required(MESSAGE_REQUIRED),
-  initialPeriod: yup
-    .string()
-    .required(MESSAGE_REQUIRED)
-    .typeError(MESSAGE_REQUIRED),
+  program: yup.string().optional(),
+  initialPeriod: yup.string().optional(),
   endPeriod: yup.string().optional(),
 });

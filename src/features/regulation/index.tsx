@@ -14,7 +14,7 @@ function RegulationRoute() {
         element={
           <PrivateRoute
             element={<Regulation />}
-            allowedAction={"CREAR_REGLAMENTO"}
+            allowedAction={"CONSULTAR_REGLAMENTO"}
           />
         }
       />
@@ -26,12 +26,20 @@ function RegulationRoute() {
       />
       <Route
         path={"/form/:id/:onlyView"}
-        element={<PrivateRoute element={<Form />} allowedAction={""} />}
+        element={
+          <PrivateRoute
+            element={<Form />}
+            allowedAction={"EDITAR_REGLAMENTO"}
+          />
+        }
       />
       <Route
         path={"/form/:id"}
         element={
-          <PrivateRoute element={<Form />} allowedAction={"CREAR_REGLAMENTO"} />
+          <PrivateRoute
+            element={<Form />}
+            allowedAction={"EDITAR_REGLAMENTO"}
+          />
         }
       />
     </Routes>

@@ -15,7 +15,7 @@ import {
 import SwitchComponent from "../../../../../../common/components/Form/switch.component";
 import { useRegulationApi } from "../../../../service";
 
-const useRequerimentsHook = () => {
+const useRequerimentsHook = (setOnlyView, idSearch) => {
   const { setMessage, authorization } = useContext(AppContext);
   const { getListByGrouper } = useGenericListService();
   const resolver = useYupValidationResolver(createRequeriment);
@@ -47,7 +47,9 @@ const useRequerimentsHook = () => {
       const { data: dataResponse, operation } = await getLastId();
       if (operation.code === EResponseCodes.OK) {
         let newId = 0;
-        if (id) {
+        if (setOnlyView && idSearch) {
+          newId = Number(idSearch);
+        } else if (id) {
           newId = Number(id);
         } else {
           newId = dataResponse + 1;
@@ -133,16 +135,20 @@ const useRequerimentsHook = () => {
       header: "Activo",
       renderCell: (row) => {
         setValue(row.id.toString(), row.active);
-        return (
-          <SwitchComponent
-            idInput={row.id.toString()}
-            control={control}
-            disabled={onlyView ? true : false}
-            size="small"
-            className="select-basic select-disabled-list input-size"
-            onChange={() => updateRequeriment(row.id, row)}
-          />
-        );
+        if (setOnlyView) {
+          return <p>{row.active ? "SI" : "NO"}</p>;
+        } else {
+          return (
+            <SwitchComponent
+              idInput={row.id.toString()}
+              control={control}
+              disabled={onlyView ? true : false}
+              size="small"
+              className="select-basic select-disabled-list input-size"
+              onChange={() => updateRequeriment(row.id, row)}
+            />
+          );
+        }
       },
     },
     {
@@ -161,15 +167,17 @@ const useRequerimentsHook = () => {
     },
   ];
 
-  const tableActions: ITableAction<IRequeriments>[] = [
-    {
-      icon: "DeleteFill",
-      onClick: (row) => {
-        if (onlyView) return;
-        deleteRequerimentAction(row.id);
-      },
-    },
-  ];
+  const tableActions: ITableAction<IRequeriments>[] = !setOnlyView
+    ? [
+        {
+          icon: "DeleteFill",
+          onClick: (row) => {
+            if (onlyView) return;
+            deleteRequerimentAction(row.id);
+          },
+        },
+      ]
+    : [];
 
   return {
     control,
