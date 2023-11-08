@@ -610,7 +610,6 @@ span.select-basic {
   color: white;
 }
 
-
 .button-download.large {
   width: 9.5em;
   height: 2.5em;
@@ -618,7 +617,7 @@ span.select-basic {
 }
 
 .button-download {
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   color: #533893;
   border-radius: 100px;
   border: 1px solid #533893;
@@ -627,8 +626,34 @@ span.select-basic {
 }
 
 .container-buttonText {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  display: none;
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: normal;
+  z-index: 1;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.tooltip:hover .tooltiptext {
+  display: block; /* Muestra el tooltip cuando se coloca el cursor sobre el elemento */
 }

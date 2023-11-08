@@ -41,6 +41,7 @@ interface IProps<T> {
   isShowModal: boolean;
   titleMessageModalNoResult?: string;
   descriptionModalNoResult?: string;
+  classname?: string;
 }
 
 interface IRef {
@@ -58,6 +59,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     isShowModal,
     emptyMessage = "No hay resultados.",
     princialTitle,
+    classname = "",
   } = props;
 
   // States
@@ -142,7 +144,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const mobilTemplate = (item: any) => {
     return (
       <div className="card-grid-item">
-        <div className="card-header">
+        <div className={` card-header ${classname}`}>
           {columns.map((column) => {
             const properties = column.fieldName.split(".");
             let field =
@@ -181,7 +183,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
-      <div className="card-user">
+      <div className="card-user ">
         <div className="spc-common-table">
           {title && <div className="spc-table-title">{title}</div>}
 
@@ -215,7 +217,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                     />
                   ))}
 
-                  {actions && (
+                  {actions && actions.length && (
                     <Column
                       className="spc-table-actions"
                       header={

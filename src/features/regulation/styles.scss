@@ -88,6 +88,98 @@
   font-weight: 500;
 }
 
+.table-header {
+  height: auto !important;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.modal-reglament {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 1154px;
+  height: 757px;
+  max-width: 90%;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  margin: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 35px;
+  font-weight: 600;
+  line-height: 42px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #533893;
+}
+
+.title-modal-reglament {
+  font-size: 29px;
+  font-weight: 500;
+  line-height: 35px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #533893;
+  margin-top: 82px;
+}
+
+.container-modal-body {
+  margin: 32px;
+  height: 75%;
+  overflow-y: auto;
+}
+
+.container-modal-acordion-title {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #6c757d;
+}
+
+.title-disable-jsonTable {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-right: 16px;
+}
+
+.data-disable-jsonTable {
+  width: 71px;
+  height: 41px;
+  padding: 12px 16px 12px 16px;
+  border-radius: 8px;
+  border: 1px;
+  gap: 8px;
+  background: linear-gradient(0deg, #e2e2e2, #e2e2e2),
+    linear-gradient(0deg, #d9d9d9, #d9d9d9);
+}
+
+.container-disable-jsonTable {
+  display: flex;
+}
+
 @media only screen and (max-width: 767px) and (min-width: 300px) {
   .containerProgram {
     width: 100%;

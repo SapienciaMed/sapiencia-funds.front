@@ -7,12 +7,15 @@ const Acordion = ({
   children,
   onClick,
   isOpen = false,
+  classname = "",
 }) => {
   return (
     <div style={{ margin: "16px 0" }}>
       <details className="details" open={isOpen}>
         <summary onClick={onClick} className="summary">
-          <div className={"text-black bold-500 text-font"}>{title}</div>
+          <div className={` text-black bold-500 text-font ${classname}`}>
+            {title}
+          </div>
           <div onClick={(e) => e.stopPropagation()}>{switchElement}</div>
         </summary>
         <div className="contentAcordion">{children}</div>

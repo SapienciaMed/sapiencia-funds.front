@@ -17,6 +17,7 @@ const TableJson = ({
   getValues,
   error,
   onlyView,
+  dataRead = {},
 }) => {
   const [data, setData] = useState(INIT_DATA);
   const [tempData, setTempData] = useState(INIT_TEMP_DATA);
@@ -26,10 +27,14 @@ const TableJson = ({
   const [percent, setPercent] = useState("");
 
   useEffect(() => {
-    const getData = getValues();
+    let getData;
+    if (onlyView) {
+      getData = dataRead;
+    } else {
+      getData = getValues();
+    }
     if (getData[`${idInput}`]) {
       const parceData = JSON.parse(getData[`${idInput}`]);
-      console.log(parceData);
       setData(parceData);
     } else {
       setData(INIT_DATA);
@@ -176,136 +181,147 @@ const TableJson = ({
   return (
     <div>
       <div style={{ marginBottom: "10px" }}>
-        <div
-          className="containerApplyService"
-          style={{
-            padding: "10px 0 10px 0",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <InputComponent
-            idInput="percentCondonation"
-            typeInput="number"
-            disabled={onlyView ? true : false}
-            value={data.percentCondonation}
-            onChange={(e) => {
-              if (validateDecimales(e.target.value)) return;
-              setData({ ...data, percentCondonation: e.target.value });
+        {!onlyView ? (
+          <div
+            className="containerApplyService"
+            style={{
+              padding: "10px 0 10px 0",
+              display: "flex",
+              flexDirection: "column",
             }}
-            className="input-basic input-size"
-            classNameLabel="text-black biggest text-required font-500"
-            label="Porcentaje de condonación"
-          />
-          {percentCondonation && (
-            <p
-              style={{ color: "red" }}
-              className="error-message font-500 not-margin-padding"
-            >
-              {percentCondonation}
-            </p>
-          )}
-          {error && (
-            <p
-              style={{ color: "red" }}
-              className="error-message font-500 not-margin-padding"
-            >
-              {percentCondonation}
-            </p>
-          )}
-        </div>
+          >
+            <InputComponent
+              idInput="percentCondonation"
+              typeInput="number"
+              disabled={onlyView ? true : false}
+              value={data.percentCondonation}
+              onChange={(e) => {
+                if (validateDecimales(e.target.value)) return;
+                setData({ ...data, percentCondonation: e.target.value });
+              }}
+              className="input-basic input-size"
+              classNameLabel="text-black biggest text-required font-500"
+              label="Porcentaje de condonación"
+            />
+            {percentCondonation && (
+              <p
+                style={{ color: "red" }}
+                className="error-message font-500 not-margin-padding"
+              >
+                {percentCondonation}
+              </p>
+            )}
+            {error && (
+              <p
+                style={{ color: "red" }}
+                className="error-message font-500 not-margin-padding"
+              >
+                {percentCondonation}
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="container-disable-jsonTable">
+            <p className="title-disable-jsonTable">Porcentaje de condonación</p>
+            <div className="data-disable-jsonTable">
+              {data?.percentCondonation}
+            </div>
+          </div>
+        )}
       </div>
       <div className="container-form-children p-24 ">
         <label className={"text-black biggest font-500"}>{title}</label>
-        <div
-          style={{
-            display: "flex",
-            marginTop: "24px",
-            justifyContent: "space-between",
-            width: "100%",
-            alignItems: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          <div style={{ padding: "10px 0 10px 0" }}>
-            <InputComponent
-              idInput="initialAverage"
-              typeInput="number"
-              disabled={onlyView ? true : false}
-              onChange={(e) => {
-                if (validateDecimales(e.target.value)) return;
-                setTempData({ ...tempData, initialAverage: e.target.value });
-              }}
-              value={tempData.initialAverage}
-              className="input-basic input-size "
-              classNameLabel="text-black biggest text-required font-500"
-              label="Promedio inicial"
-            />
-            {initialAverage.length > 0 && (
-              <p
-                style={{ color: "red" }}
-                className="error-message font-500 not-margin-padding"
-              >
-                {initialAverage}
-              </p>
-            )}
-          </div>
-          <div style={{ padding: "10px 0 10px 0" }}>
-            <InputComponent
-              idInput="endAverage"
-              typeInput="number"
-              disabled={onlyView ? true : false}
-              onChange={(e) => {
-                if (validateDecimales(e.target.value)) return;
-                setTempData({ ...tempData, endAverage: e.target.value });
-              }}
-              value={tempData.endAverage}
-              className="input-basic input-size "
-              classNameLabel="text-black biggest text-required font-500"
-              label="Promedio final"
-            />
-            {endAverage.length > 0 && (
-              <p
-                style={{ color: "red" }}
-                className="error-message font-500 not-margin-padding"
-              >
-                {endAverage}
-              </p>
-            )}
-          </div>
-          <div style={{ padding: "10px 0 10px 0" }}>
-            <InputComponent
-              idInput="percent"
-              typeInput="number"
-              disabled={onlyView ? true : false}
-              onChange={(e) => {
-                if (validateDecimales(e.target.value)) return;
-                setTempData({ ...tempData, percent: e.target.value });
-              }}
-              value={tempData.percent}
-              className="input-basic input-size "
-              classNameLabel="text-black biggest text-required font-500"
-              label="Porcentaje"
-            />
-            {percent.length > 0 && (
-              <p
-                style={{ color: "red" }}
-                className="error-message font-500 not-margin-padding"
-              >
-                {percent}
-              </p>
-            )}
-          </div>
-          <ButtonComponent
-            value="Agregar"
-            type="button"
-            action={() => {
-              if (onlyView) return;
-              addItem();
+        {!onlyView && (
+          <div
+            style={{
+              display: "flex",
+              marginTop: "24px",
+              justifyContent: "space-between",
+              width: "100%",
+              alignItems: "center",
+              flexWrap: "wrap",
             }}
-            className="button-save disabled-black padding-button"
-          />
-        </div>
+          >
+            <div style={{ padding: "10px 0 10px 0" }}>
+              <InputComponent
+                idInput="initialAverage"
+                typeInput="number"
+                disabled={onlyView ? true : false}
+                onChange={(e) => {
+                  if (validateDecimales(e.target.value)) return;
+                  setTempData({ ...tempData, initialAverage: e.target.value });
+                }}
+                value={tempData.initialAverage}
+                className="input-basic input-size "
+                classNameLabel="text-black biggest text-required font-500"
+                label="Promedio inicial"
+              />
+              {initialAverage.length > 0 && (
+                <p
+                  style={{ color: "red" }}
+                  className="error-message font-500 not-margin-padding"
+                >
+                  {initialAverage}
+                </p>
+              )}
+            </div>
+            <div style={{ padding: "10px 0 10px 0" }}>
+              <InputComponent
+                idInput="endAverage"
+                typeInput="number"
+                disabled={onlyView ? true : false}
+                onChange={(e) => {
+                  if (validateDecimales(e.target.value)) return;
+                  setTempData({ ...tempData, endAverage: e.target.value });
+                }}
+                value={tempData.endAverage}
+                className="input-basic input-size "
+                classNameLabel="text-black biggest text-required font-500"
+                label="Promedio final"
+              />
+              {endAverage.length > 0 && (
+                <p
+                  style={{ color: "red" }}
+                  className="error-message font-500 not-margin-padding"
+                >
+                  {endAverage}
+                </p>
+              )}
+            </div>
+            <div style={{ padding: "10px 0 10px 0" }}>
+              <InputComponent
+                idInput="percent"
+                typeInput="number"
+                disabled={onlyView ? true : false}
+                onChange={(e) => {
+                  if (validateDecimales(e.target.value)) return;
+                  setTempData({ ...tempData, percent: e.target.value });
+                }}
+                value={tempData.percent}
+                className="input-basic input-size "
+                classNameLabel="text-black biggest text-required font-500"
+                label="Porcentaje"
+              />
+              {percent.length > 0 && (
+                <p
+                  style={{ color: "red" }}
+                  className="error-message font-500 not-margin-padding"
+                >
+                  {percent}
+                </p>
+              )}
+            </div>
+            <ButtonComponent
+              value="Agregar"
+              type="button"
+              action={() => {
+                if (onlyView) return;
+                addItem();
+              }}
+              className="button-save disabled-black padding-button"
+            />
+          </div>
+        )}
         {data.dataTable.length > 0 && (
           <div className="containerJsonTable">
             <div>
@@ -331,12 +347,14 @@ const TableJson = ({
                   Porcentaje
                 </label>
 
-                <label
-                  style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black biggest  bold-500"
-                >
-                  Accion
-                </label>
+                {!onlyView && (
+                  <label
+                    style={{ padding: "14px 33px 14px 33px" }}
+                    className="text-black biggest  bold-500"
+                  >
+                    Accion
+                  </label>
+                )}
               </div>
             </div>
             <div>
@@ -401,27 +419,29 @@ const TableJson = ({
                           {item.percent}%
                         </label>
                       </div>
-                      <div
-                        style={{
-                          width: "175px",
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <label
-                          style={{ padding: "14px 33px 14px 33px" }}
-                          className="text-black  biggest"
-                          onClick={() => {
-                            if (onlyView) return;
-                            deleteItem(item.id);
+                      {!onlyView && (
+                        <div
+                          style={{
+                            width: "175px",
+                            display: "flex",
+                            justifyContent: "center",
                           }}
                         >
-                          <Icons.FaTrashAlt
-                            style={{ color: "red" }}
-                            className="button grid-button button-delete"
-                          />
-                        </label>
-                      </div>
+                          <label
+                            style={{ padding: "14px 33px 14px 33px" }}
+                            className="text-black  biggest"
+                            onClick={() => {
+                              if (onlyView) return;
+                              deleteItem(item.id);
+                            }}
+                          >
+                            <Icons.FaTrashAlt
+                              style={{ color: "red" }}
+                              className="button grid-button button-delete"
+                            />
+                          </label>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
