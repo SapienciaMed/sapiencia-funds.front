@@ -346,7 +346,7 @@ export default function useActaCreate() {
 
         const actaData = {
             numberProject: data.numberProject,
-            periodVigency: data.periodVigency,
+            periodVigency: Number(data.periodVigency),
             announcementInitial: data.announcementInitial,
             salaryMin: data.salaryMin,
             costsExpenses: data.costsExpenses,
@@ -356,8 +356,7 @@ export default function useActaCreate() {
             items: actaItems,
             citation: citation
         };
-
-        console.log('asi va al back',actaData)
+       
        
     const res = await createActa(actaData);
 
@@ -400,7 +399,7 @@ export default function useActaCreate() {
 
     
     useEffect(() => {
-        if (Number(projectMeta) < vigency1 || Number(projectMeta)<subtotalVigency) {
+        if (Number(projectMeta) < Number(vigency1) || Number(projectMeta)< Number(subtotalVigency)) {
             setMessage({           
                 title: "Guardar",
                 description: "El acta no podrá ser guardada por superar el valor del techo",

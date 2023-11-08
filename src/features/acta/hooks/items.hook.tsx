@@ -11,11 +11,12 @@ import useActaApi from "./acta-api.hook";
 import { IActa } from "../../../common/interfaces/acta.interface";
 import { v4 as uuidv4 } from 'uuid';
 import { createActaItems } from "../../../common/schemas/actaItems-shema";
+import { vigencyActas } from "../../../common/schemas/vigency-acta-shema";
 
 
 export default function useActaItems(action, acta: IActa, actaItems: IActaItems, modifiedIdcCountercredit: number) {
 
-   
+    
     //contex
     const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
@@ -25,11 +26,15 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems,
     //refs
     const tableComponentRef = useRef(null);
 
-    //Validaciones
-    //const resolver = useYupValidationResolver(createActaItems);
-    const { periodVigency } = acta; // Asumiendo que este es el valor actual que determina la condición
-const actaItemsSchema = createActaItems(periodVigency);
-const resolver = useYupValidationResolver(actaItemsSchema);
+    //Validaciones   
+
+    let resolver:any;
+
+    if (acta.periodVigency == 2) {
+        resolver = useYupValidationResolver(vigencyActas);
+    } else {
+        resolver = useYupValidationResolver(createActaItems);
+    }
 
     //states
     const [showTable, setShowTable] = useState(false);
@@ -46,7 +51,11 @@ const resolver = useYupValidationResolver(actaItemsSchema);
     const [financialOperatorCommission, setFinancialOperatorCommission] = useState("0");
     const [resourcesCredit, setResourcesCredit] = useState("0");
     const [dataActa, setDataActa] = useState<IActa>(acta);
+    const [periods, setPeriods] = useState("");
 
+   /*  setPeriods(String(acta.announcementInitial))
+
+    console.log('periodos',periods) */
     //form
     const {
         handleSubmit,
@@ -101,6 +110,7 @@ const resolver = useYupValidationResolver(actaItemsSchema);
           }
       };  */
 
+     
     useEffect(() => {
         // Solo se ejecuta si modifiedIdcCountercredit es un número válido y acta.costsExpenses está definido
         if (!isNaN(modifiedIdcCountercredit) && acta.costsExpenses) {
@@ -122,7 +132,7 @@ const resolver = useYupValidationResolver(actaItemsSchema);
             setFinancialOperatorCommission("0");
             setResourcesCredit("0");
         }
-        
+
     }, [modifiedIdcCountercredit, acta, selectedLabelFound]);
 
 
@@ -281,6 +291,8 @@ const resolver = useYupValidationResolver(actaItemsSchema);
                 }
             })
 
+          
+
         getAnnouncement()
             .then((response) => {
                 if (response && response?.operation?.code === EResponseCodes.OK) {
@@ -340,8 +352,19 @@ const resolver = useYupValidationResolver(actaItemsSchema);
             })
 
         setDataActa(acta)
+
+        
     }, []);
 
+
+    useEffect(() => {
+        // Asegúrate de que announcementInitial es un número antes de convertirlo a cadena.
+        if (acta && acta.announcementInitial != null) {
+          setPeriods(String(acta.announcementInitial));
+        }
+      }, [acta.announcementInitial]);
+
+      console.log(periods)
 
 
     //editar items al crear actas
@@ -408,6 +431,7 @@ const resolver = useYupValidationResolver(actaItemsSchema);
         resourcesCredit,
         /* handleInputChange */
         handleSelectChange,
-        CancelFunction
+        CancelFunction,
+        periods
     }
 }
