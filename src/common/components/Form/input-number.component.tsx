@@ -7,7 +7,7 @@ import { Control, Controller } from "react-hook-form";
 
 interface IInputnumber<T> {
   idInput: string;
-  control: Control<any>;
+  control?: Control<any>;
   className?: string;
   placeholder?: string;
   label?: string | React.JSX.Element;
