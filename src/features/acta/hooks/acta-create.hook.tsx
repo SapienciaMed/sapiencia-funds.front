@@ -160,8 +160,7 @@ export default function useActaCreate() {
         calculateTotals(dataGridItems);
     }, [dataGridItems]);
 
-    const addItem = handleSubmit((data: IActa) => {
-        console.log('datos',data)
+    const addItem = handleSubmit((data: IActa) => {        
         data.idStatus = 1;
         setDatosActa(data)
         setMessage({
