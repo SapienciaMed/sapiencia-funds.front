@@ -13,8 +13,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { createActaItems } from "../../../common/schemas/actaItems-shema";
 
 
-export default function useActaItems(action, acta: IActa, actaItems: IActaItems) {
+export default function useActaItems(action, acta: IActa, actaItems: IActaItems,modifiedIdcCountercredit: number) {
 
+    console.log(modifiedIdcCountercredit)
     //contex
     const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
@@ -76,8 +77,11 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     const selectedLabelAnnouncement = getSelectedLabel(selectedAnnouncement, announcementList);
     const selectedLabelConcept = getSelectedLabel(selectedConcept, conceptList);
 
+    modifiedIdcCountercredit
 
-    const handleInputChange = (event) => {
+   
+
+  /*   const handleInputChange = (event) => {
         const { name, value } = event.target;
 
         if (name === "subtotalVigency" && value && acta.costsExpenses) {
@@ -92,7 +96,31 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
             setFinancialOperatorCommission("0");
             setResourcesCredit("0");
         }
-    };
+    };  */
+
+    useEffect(() => {
+        // Solo se ejecuta si modifiedIdcCountercredit es un número válido y acta.costsExpenses está definido
+        if (!isNaN(modifiedIdcCountercredit) && acta.costsExpenses) {
+            const results = calculateValues(
+                modifiedIdcCountercredit,
+                acta.costsExpenses,
+                selectedLabelFound,
+                acta.financialOperation,
+                acta.OperatorCommission
+            );
+    
+            setNet(results.net);
+            setCostBillsOperationt(results.costBillsOperation);
+            setFinancialOperatorCommission(results.financialOperatorCommission);
+            setResourcesCredit(results.resourcesCredit);
+        } else {
+            setCostBillsOperationt("0");
+            setNet("0");
+            setFinancialOperatorCommission("0");
+            setResourcesCredit("0");
+        }
+    }, [modifiedIdcCountercredit, acta, selectedLabelFound]);
+    
 
     const calculateValues = (subtotalVigency, costsExpenses, selectedLabel, financialOperation, OperatorCommission) => {
         const multiplicacion = parseInt(subtotalVigency) * costsExpenses / 100;
@@ -117,8 +145,12 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
             financialOperatorCommission,
             resourcesCredit
         };
-    };
+    };   
+  
+     
+        
 
+    
 
     const onsubmitAddItem = handleSubmit((data: IActaItems) => {       
         if (data) {
@@ -362,7 +394,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
         neto,
         financialOperatorCommission,
         resourcesCredit,
-        handleInputChange,
+        /* handleInputChange */
         handleSelectChange,
         CancelFunction  
     }
