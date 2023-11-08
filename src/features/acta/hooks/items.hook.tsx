@@ -1,12 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { IActaItems } from "../../../common/interfaces/actaItems.interface";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
-import { createActas } from "../../../common/schemas/acta-shema";
 import { useForm } from "react-hook-form";
 import { AppContext } from "../../../common/contexts/app.context";
 import { EResponseCodes } from "../../../common/constants/api.enum";
-import useVotingItemApi from "../../voting-results/hooks/voting-items-api.hooks";
 import useActaApi from "./acta-api.hook";
 import { IActa } from "../../../common/interfaces/acta.interface";
 import { v4 as uuidv4 } from 'uuid';
@@ -16,9 +13,9 @@ import { vigencyActas } from "../../../common/schemas/vigency-acta-shema";
 
 export default function useActaItems(action, acta: IActa, actaItems: IActaItems, modifiedIdcCountercredit: number) {
 
-    
+
     //contex
-    const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
+    const { setMessage, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
     //peticiones api
     const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
@@ -26,9 +23,9 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems,
     //refs
     const tableComponentRef = useRef(null);
 
-    //Validaciones   
+    //Validaciones  
 
-    let resolver:any;
+    let resolver: any;
 
     if (acta.periodVigency == 2) {
         resolver = useYupValidationResolver(vigencyActas);
@@ -53,9 +50,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems,
     const [dataActa, setDataActa] = useState<IActa>(acta);
     const [periods, setPeriods] = useState("");
 
-   /*  setPeriods(String(acta.announcementInitial))
-
-    console.log('periodos',periods) */
+    
     //form
     const {
         handleSubmit,
@@ -110,7 +105,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems,
           }
       };  */
 
-     
+
     useEffect(() => {
         // Solo se ejecuta si modifiedIdcCountercredit es un número válido y acta.costsExpenses está definido
         if (!isNaN(modifiedIdcCountercredit) && acta.costsExpenses) {
@@ -291,7 +286,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems,
                 }
             })
 
-          
+
 
         getAnnouncement()
             .then((response) => {
@@ -353,19 +348,26 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems,
 
         setDataActa(acta)
 
-        
+
     }, []);
 
 
-    useEffect(() => {
+   /*  useEffect(() => {
         // Asegúrate de que announcementInitial es un número antes de convertirlo a cadena.
         if (acta && acta.announcementInitial != null) {
-          setPeriods(String(acta.announcementInitial));
+            setPeriods(String(acta.announcementInitial));
+        }
+    }, [acta.announcementInitial]); */
+
+
+    useEffect(() => {
+        if (acta && acta.announcementInitial != null) {
+          // Dividir el valor por el guion y tomar solo la primera parte (el año)
+          const periodWithoutSuffix = String(acta.announcementInitial).split('-')[0];
+          setPeriods(periodWithoutSuffix);
         }
       }, [acta.announcementInitial]);
-
-      console.log(periods)
-
+      
 
     //editar items al crear actas
 

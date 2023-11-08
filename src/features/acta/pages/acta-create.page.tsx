@@ -114,8 +114,7 @@ const ActaCreatePage = () => {
     const tableActions: ITableAction<IActaItems>[] = [
         {
             icon: "Edit",
-            onClick: (row) => {
-                //console.log(row.ident)
+            onClick: (row) => {             
 
                 setMessage({
                     show: true,
@@ -301,7 +300,7 @@ const ActaCreatePage = () => {
                                             <InputComponent
                                                 idInput={"announcementInitial"}
                                                 className="input-basic medium"
-                                                typeInput="number"
+                                                typeInput="text"
                                                 label="Convocatoria inicial"
                                                 register={register}
                                                 classNameLabel="text-black biggest text-required"
