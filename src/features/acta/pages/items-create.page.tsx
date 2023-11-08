@@ -12,7 +12,7 @@ import { InputNumberComponent } from "../../../common/components/Form/input-numb
 const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, actaItems?: IActaItems }) => {
 
     const [modifiedIdcCountercredit, setModifiedIdcCountercredit] = useState(0)
-    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList, costBillsOperation,/* handleInputChange */ neto, financialOperatorCommission, resourcesCredit, programList, CancelFunction } = useActaItems(action, acta, actaItems, modifiedIdcCountercredit);
+    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,periods, costBillsOperation,/* handleInputChange */ neto, financialOperatorCommission, resourcesCredit, programList, CancelFunction } = useActaItems(action, acta, actaItems, modifiedIdcCountercredit);
 
     return (
         <Fragment>
@@ -183,7 +183,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     <div className="container-form-grid-actas flex-half">
                         <div className="container-form padding-form">
                             <div className="label-container">
-                                <label className="text-black large medium grid-span-2-columns mb-24px">Período 1</label>
+                                <label className="text-black large medium grid-span-2-columns mb-24px">Período 1 {periods}-1</label>
                             </div>
                             <div>
                                 <div className='grid-form-2-container mb-24px'>
@@ -264,7 +264,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                     <div className="container-form-grid-actas flex-half">
                         <div className="container-form padding-form">
                             <div className="label-container">
-                                <label className="text-black large medium grid-span-2-columns mb-24px">Período 2</label>
+                                <label className="text-black large medium grid-span-2-columns mb-24px">Período 2 {periods}-2</label>
                             </div>
                             <div>
                                 <div className='grid-form-2-container mb-24px'>

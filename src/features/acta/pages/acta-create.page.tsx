@@ -293,7 +293,7 @@ const ActaCreatePage = () => {
 
                             </div>
                             <div className='grid-form-3-container mt-20px'>
-                                {/* <Controller
+                               <Controller
                                     control={control}
                                     name={"announcementInitial"}
                                     render={({ field }) => {
@@ -313,9 +313,9 @@ const ActaCreatePage = () => {
                                         )
 
                                     }}
-                                /> */}
+                                /> 
 
-                                <SelectComponent
+                              {/*   <SelectComponent
                                     idInput={"announcementInitial"}
                                     control={control}
                                     errors={errors}
@@ -329,7 +329,7 @@ const ActaCreatePage = () => {
                                     classNameLabel="text-black biggest"
                                     filter={true}
                                     placeholder="Seleccionar."
-                                />
+                                /> */}
 
                                 <InputNumberComponent
                                     control={control}
