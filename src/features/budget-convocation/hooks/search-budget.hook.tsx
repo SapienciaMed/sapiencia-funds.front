@@ -198,9 +198,6 @@ export default function useBudgetSearch() {
             params.append("periodo", String(periodo));
         }
 
-        console.log("periodo", idComunaString)
-        console.log("id_comuna", periodo)
-
         url.search = params.toString();
         window.open(url.toString(), "_blank");
 
