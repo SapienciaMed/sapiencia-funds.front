@@ -8,10 +8,8 @@ import { ITableElement } from "../../../common/interfaces/table.interfaces";
 import useBudgetApi from "./budget-api.hook";
 import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
-import {jsDateToISODate,jsDateToSQLDate,} from "../../../common/utils/helpers";
 import { urlApiFunds } from "../../../common/utils/base-url";
-import axios from 'axios';
-import { ApiResponse } from "../../../common/utils/api-response";
+
 
 
 export default function useBudgetSearch() {
@@ -24,19 +22,19 @@ export default function useBudgetSearch() {
     //peticiones api
     const { getAnnouncement, getbudget, downloadCallBudget } = useBudgetApi();
 
-    const tableComponentRef = useRef(null);
-    
     const [typeMasterList, setTypeMasterList] = useState([]);
     const [showTable, setShowTable] = useState(false);
+    const [showDownload, setShowDownload] = useState(false);
 
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
-    const [formWatch, setFormWatch] = useState({id_comuna: "", periodo: "",});
-    const [submitDisabled, setSubmitDisabled] = useState(true);
-    const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
+    const [formWatch, setFormWatch] = useState({ id_comuna: "", periodo: "", });
+
+    //ref
+    const tableComponentRef = useRef(null);
 
     const {
         handleSubmit,
-        register,  
+        register,
         setValue,
         reset,
         watch,
@@ -52,35 +50,35 @@ export default function useBudgetSearch() {
 
 
     getbudget()
-    .then((response) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-            setbudgetList(
-                response.data.map((item) => {
-                    const list = {
-                        name: item.id_comuna,
-                        value: item.id_comuna,
-                    };
-                    return list;
-                })
-            );
-        }
-    })
-    
+        .then((response) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {
+                setbudgetList(
+                    response.data.map((item) => {
+                        const list = {
+                            name: item.id_comuna,
+                            value: item.id_comuna,
+                        };
+                        return list;
+                    })
+                );
+            }
+        })
+
 
     getAnnouncement()
-    .then((response) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-            setAnnouncementList(
-                response.data.map((item) => {
-                    const list = {
-                        name: item.name,
-                        value: item.id,
-                    };
-                    return list;
-                })
-            );
-        }
-    })
+        .then((response) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {
+                setAnnouncementList(
+                    response.data.map((item) => {
+                        const list = {
+                            name: item.name,
+                            value: item.id,
+                        };
+                        return list;
+                    })
+                );
+            }
+        })
 
 
 
@@ -98,7 +96,7 @@ export default function useBudgetSearch() {
             renderCell: (row) => {
                 return <>{row.presupuesto_comuna}</>;
             },
-        },       
+        },
         {
             fieldName: "name",
             header: "Recurso otorgado de legalizacion",
@@ -126,14 +124,14 @@ export default function useBudgetSearch() {
             renderCell: (row) => {
                 return <>{row.total_proyectado}</>;
             },
-        },   
+        },
         {
             fieldName: "name",
             header: "Diferencia por comprometer",
             renderCell: (row) => {
                 return <>{row.Diferencia}</>;
             },
-        },              
+        },
     ];
 
     function loadTableData(searchCriteria?: object): void {
@@ -146,24 +144,27 @@ export default function useBudgetSearch() {
 
     useEffect(() => {
         loadTableData()
-    },[])
+    }, [])
 
-    useEffect(() => {            
+    useEffect(() => {
         reset();
-        if(showTable)  {
+        if (showTable) {
             tableComponentRef.current.emptyData();
             setShowTable(false);
+            setShowDownload(false);
         }
-    }, []); 
+    }, []);
 
     const clearFields = () => {
         reset();
         tableComponentRef.current?.emptyData();
         setShowTable(false);
-      };
+        setShowDownload(false);
+    };
 
-    const onSubmit = handleSubmit(async (data: ICallBudget) => {        
+    const onSubmit = handleSubmit(async (data: ICallBudget) => {
         setShowTable(true)
+        setShowDownload(true);
 
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(data);
@@ -182,32 +183,32 @@ export default function useBudgetSearch() {
         const params = new URLSearchParams();
         params.append("page", page + 1)
         params.append("perPage", perPage + 1)
-       
+
         let idComunaString = '';
         if (Array.isArray(id_comuna)) {
-            idComunaString = id_comuna.join(','); 
-          } else if (typeof id_comuna === 'number') {
+            idComunaString = id_comuna.join(',');
+        } else if (typeof id_comuna === 'number') {
             idComunaString = String(id_comuna);
-          }
-    
+        }
+
         if (id_comuna) {
             params.append("id_comuna", idComunaString);
         }
         if (periodo) {
-          params.append("periodo", String(periodo));
+            params.append("periodo", String(periodo));
         }
-        
-        console.log("periodo",idComunaString)
-        console.log("id_comuna",periodo)
-    
+
+        console.log("periodo", idComunaString)
+        console.log("id_comuna", periodo)
+
         url.search = params.toString();
         window.open(url.toString(), "_blank");
-       
-        
-      }, [paginateData, formWatch, id_comuna, periodo]
-       
-      );
-      
+
+
+    }, [paginateData, formWatch, id_comuna, periodo]
+
+    );
+
 
     return {
         announcementList,
@@ -216,7 +217,7 @@ export default function useBudgetSearch() {
         errors,
         register,
         setValue,
-        navigate,       
+        navigate,
         setShowTable,
         showTable,
         tableColumns,
@@ -225,6 +226,7 @@ export default function useBudgetSearch() {
         reset,
         clearFields,
         downloadCollection,
-      }
+        showDownload,
+    }
 
 }

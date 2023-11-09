@@ -70,7 +70,7 @@ export interface IEmailDataGrid{
 }
 
 export interface ICallBudget {
-  id_comuna: number;  //id_comuna
+  id_comuna: number | number[] | string;
   presupuesto_comuna: string; //presupuesto_comuna
   acumulado_legali_comuna: string; //legaliza_comuna
   restante_presupuesto_comuna: string; //restante_presupuesto
