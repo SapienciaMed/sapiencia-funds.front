@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { searchActas } from "../../../common/schemas/acta-shema";
 import { IActaSearch } from "../interface/Acta";
 import { useEffect, useState } from "react";
 
-export function useActaData() {
+export default function useActaData() {
     
     const navigate = useNavigate();
     const resolver = useYupValidationResolver(searchActas);
@@ -18,28 +18,34 @@ export function useActaData() {
         reset,
         watch,
         control,
-        setValue
     } = useForm<IActaSearch>({
         resolver,
-        mode: 'onChange'
+        mode: 'all'
     })
 
-    const inputValue =  watch('id')
+    const inputValue =  watch(['actaNro'])
 
     useEffect(() => {
-        // setIsBtnDisable(inputValue.some(value => value != '' && value != undefined))
-        console.log("entro");
-        
+        setIsBtnDisable(inputValue.some(value => value != '' && value != undefined))
     },[inputValue])
 
-    const onSubmit = handleSubmit(async (data: IActaSearch) => {
+    const onSubmitSearch = handleSubmit((data: IActaSearch) => {
         console.log("🚀 ~ file: acta.hook.tsx:22 ~ onSubmit ~ data:", data)  
+        navigate('../visualizar')
     })
+
+    const onAddvalues = async (data) => {
+        // navigate('./modificar-acta')
+        console.log("Crear la vista de modificar");  
+    };
+    
+    const handleModifyActa = () => handleSubmit(onAddvalues)();
 
     return{
         navigate,
         register,
-        onSubmit,
+        onSubmitSearch,
+        handleModifyActa,
         reset,
         errors,
         isBtnDisable,

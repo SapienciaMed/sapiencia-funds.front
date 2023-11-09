@@ -28,7 +28,7 @@ numberProject: yup
 });
 
 export const searchActas = yup.object({
-  id: yup
+  actaNro: yup
     .string()
     .required("Cargar información"),
 })

@@ -1,17 +1,19 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { BiPlusCircle } from "react-icons/bi";
 import { useWidth } from "../../../common/hooks/use-width";
 import { FiEdit2 } from "react-icons/fi";
 import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
 import { EDirection } from "../../../common/constants/input.enum";
-import { useActaData } from "../hooks/acta.hook";
-import { Controller } from 'react-hook-form';
+import useActaData from "../hooks/acta.hook";
+import { Controller, useForm } from 'react-hook-form';
+import { IActaSearch } from "../interface/Acta";
 
 
 function ActaPage(){
     const {width} = useWidth()
     const { errors, isBtnDisable, control, navigate, register, 
-        onSubmit, reset } = useActaData()
+        onSubmitSearch, reset, handleModifyActa } = useActaData()
+
 
     return(
         <div className="main-page">
@@ -29,7 +31,7 @@ function ActaPage(){
                         </div>
                         <div
                             className={`title-button ${width < 300 ? 'font-medium' :'font-big' }`}
-                            onClick={() => {}}
+                            onClick={handleModifyActa}
                         >
                             <div className="button-border">
                                 Modificar acta <FiEdit2 />
@@ -40,11 +42,11 @@ function ActaPage(){
 
                 </section>
 
-                <FormComponent action={onSubmit}>
+                <FormComponent id="searchActaForm" action={onSubmitSearch}>
                     <div className="one-filter-container">
                         <Controller
                             control={control}
-                            name={"id"}
+                            name={"actaNro"}
                             defaultValue='' 
                             render={({ field }) => {
                                 return(
@@ -54,16 +56,15 @@ function ActaPage(){
                                         className="input-basic color-default-value"
                                         typeInput="text"
                                         register={register}
-                                        label='Consecutivo de acta nro'
-                                        classNameLabel="text-black weight-500 big text-required"
+                                        label="Consecutivo de acta nro"
+                                        classNameLabel="text-black weight-500 biggest text-required"
                                         direction={EDirection.column}
+                                        onChange={(value) => { field.onChange(value) }}
                                         errors={errors}
-                                        // onChange={(value) => console.log(value.target.value) }
                                     />
                                 )
                             }}
                         />
-
                     </div>
                     <div className="funcionality-buttons-container">
                         <span className="bold text-center button" 
@@ -77,7 +78,8 @@ function ActaPage(){
                             className="button-main huge hover-three"
                             value="Buscar"
                             type="submit"
-                            // disabled={!isBtnDisable}
+                            form="searchActaForm"
+                            disabled={!isBtnDisable}
                         />
                     </div>
 
