@@ -24,7 +24,7 @@ import useCrudService from "../hooks/crud-service.hook";
 import { EResponseCodes } from "../constants/api.enum";
 import { classNames } from "primereact/utils";
 import * as Icons from "react-icons/fa";
-import * as IconsBS from 'react-icons/bs';
+import * as IconsBS from "react-icons/bs";
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
 import { AppContext } from "../contexts/app.context";
@@ -34,12 +34,14 @@ interface IProps<T> {
   url: string;
   emptyMessage?: string;
   title?: string;
+  princialTitle?: string;
   columns: ITableElement<T>[];
   actions?: ITableAction<T>[];
   searchItems?: object;
   isShowModal: boolean;
   titleMessageModalNoResult?: string;
   descriptionModalNoResult?: string;
+  classname?: string;
 }
 
 interface IRef {
@@ -56,6 +58,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     descriptionModalNoResult,
     isShowModal,
     emptyMessage = "No hay resultados.",
+    princialTitle,
+    classname = "",
   } = props;
 
   // States
@@ -140,7 +144,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const mobilTemplate = (item: any) => {
     return (
       <div className="card-grid-item">
-        <div className="card-header">
+        <div className={` card-header ${classname}`}>
           {columns.map((column) => {
             const properties = column.fieldName.split(".");
             let field =
@@ -155,7 +159,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             );
           })}
         </div>
-        {console.log(actions)}
         <div className="card-footer">
           {actions.map((action) => (
             <div key={action.icon} onClick={() => action.onClick(item)}>
@@ -180,7 +183,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
-      <div className="card-user">
+      <div className="card-user ">
         <div className="spc-common-table">
           {title && <div className="spc-table-title">{title}</div>}
 
@@ -193,7 +196,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               rows={perPage}
               totalRecords={resultData?.meta?.total || 0}
               onPageChange={onPageChange}
-              leftContent={leftContent}
+              leftContent={leftContent(princialTitle)}
             />
 
             {width > 830 ? (
@@ -214,7 +217,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                     />
                   ))}
 
-                  {actions && (
+                  {actions && actions.length && (
                     <Column
                       className="spc-table-actions"
                       header={
@@ -273,6 +276,12 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <Icons.FaTrashAlt className="button grid-button button-delete" />
       );
+    case "DeleteFill":
+      return element == "name" ? (
+        "Eliminar"
+      ) : (
+        <IconsBS.BsTrash className="button grid-button button-delete" />
+      );
     case "Link":
       return element == "name" ? (
         "Vincular"
@@ -285,23 +294,23 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <ImProfile className="button grid-button button-link" />
       );
-      case "download":
-        return element == "name" ? (
-          "descargar"
-        ) : (
-          <IconsBS.BsDownload 
-          className="button grid-button button-download" 
-          style={{ color: '#533893' }}
-          />
-        );
+    case "download":
+      return element == "name" ? (
+        "descargar"
+      ) : (
+        <IconsBS.BsDownload
+          className="button grid-button button-download"
+          style={{ color: "#533893" }}
+        />
+      );
     default:
       return "";
   }
 }
 
-let leftContent = (
+const leftContent = (title: string) => (
   <p className="header-information text-black bold biggest">
-    Resultados de búsqueda
+    {title ? title : "Resultados de búsqueda"}
   </p>
 );
 // Metodo que retorna el icono o nombre de la accion

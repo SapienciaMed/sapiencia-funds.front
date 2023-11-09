@@ -1,5 +1,5 @@
 export interface ITableElement<T> {
-  header: string;
+  header: string | JSX.Element;
   fieldName: string;
   required?: boolean;
   sorteable?: boolean;
@@ -11,7 +11,7 @@ export interface ITableElement<T> {
 export interface IGroupTableElement<T> {
   header: string;
   fieldName: string;
-  parent?: string
+  parent?: string;
   required?: boolean;
   dataList?: IListTableElement[];
   renderCell?: (row: T) => JSX.Element;
@@ -25,7 +25,7 @@ export interface IListTableElement {
 }
 
 export interface ITableAction<T> {
-  icon?: "Detail" | "Edit" | "Delete" | "Link" | "download" |  "";
+  icon?: "Detail" | "Edit" | "Delete" | "Link" | "download" | "DeleteFill" | "";
   onClick: (row: T) => void;
   customName?: string;
   customIcon?: () => JSX.Element;

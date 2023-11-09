@@ -24,12 +24,15 @@ export const useVotingResults = () => {
       useContext(AppContext);
     const navigate = useNavigate();
     const resolver = useYupValidationResolver(createVotings);
-    const { getListByParent } = useGenericListService();
+    const { getListByParent, getListByGroupers } = useGenericListService();
     const [deparmetList, setDeparmentList] = useState([]);
     const tableComponentRef = useRef(null);
     const [itemSave, setItemSave] = useState(Array<IItemSave>);
     const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-
+  const [amountTotal, setAmountTotal] = useState(0);
+  const [totalValueActivity, settotalValueActivity] = useState(0);
+  const [totalValueOne, settotalValueOne] = useState(0);
+  
     const { createVotingResults } = useVotingItemApi();
 
 
@@ -118,9 +121,8 @@ export const useVotingResults = () => {
       }
     }
 
-
     const confirmVotingCreation = async (data: IVotingCreate) => { 
-debugger
+
       setItemSave([]);
          setSending(true);
       
@@ -129,8 +131,8 @@ debugger
               aimStraight: e.directObject,
               productCatalogueDnp: e.productCatalog,
               codProductgueDnp: e.productCode,
-              codPmaProgram: 1,
-              codMtaTeacherActivity: 1,
+              codPmaProgram: e.idProgram,
+              codMtaTeacherActivity: e.idActivity,
               amount: e.amount,
               costTotal: e.totalCost,
               percentage123: e.porcentaje123,
@@ -181,21 +183,23 @@ debugger
         } 
     };
 
-      useEffect(() => {
-        getListByParent({ grouper: "DEPARTAMENTOS", parentItemCode: "COL" })
-        .then((response: ApiResponse<IGenericList[]>) => {       
-            if (response && response?.operation?.code === EResponseCodes.OK) {
+  useEffect(() => {
+         const groupers = ["COMUNA_CORREGIMIENTO"];  
+        getListByGroupers(
+          groupers,
+        ).then((response: ApiResponse<IGenericList[]>) => {
+          if (response && response?.operation?.code === EResponseCodes.OK) {
             setDeparmentList(
-                response.data.map((item) => {
+              response.data.map((item) => {
                 const list = {
-                    name: item.itemDescription,
-                    value: item.itemCode,
+                  name: item.itemDescription,
+                  value: item.itemCode,
                 };
                 return list;
-                })
+              })
             );
-            }
-        })
+          }
+        });
         
     }, []);
 
@@ -215,7 +219,13 @@ debugger
       dataGrid,
       valCommuneNeighborhood,
       setValCommuneNeighborhood,
-      control
+      control,
+      amountTotal,
+      totalValueActivity,
+      totalValueOne,
+      settotalValueOne,
+      settotalValueActivity,
+      setAmountTotal,
     };
 };
 

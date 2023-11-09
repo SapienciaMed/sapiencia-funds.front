@@ -20,7 +20,7 @@ export const useVotingResultsSearch = () => {
   const tableComponentRef = useRef(null);
 const [sending, setSending] = useState(false);
 const [deparmetList, setDeparmentList] = useState([]);
-    const { getListByParent } = useGenericListService();
+    const { getListByParent, getListByGroupers } = useGenericListService();
       const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
 
   const onSubmitSearch = async () => {
@@ -72,23 +72,28 @@ const [deparmetList, setDeparmentList] = useState([]);
     };
 
     useEffect(() => {
-    getListByParent({
-        grouper: "DEPARTAMENTOS",
-        parentItemCode: "COL",
-    }).then((response: ApiResponse<IGenericList[]>) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-        setDeparmentList(
-            response.data.map((item) => {
-            const list = {
-                name: item.itemDescription,
-                value: item.itemCode,
-            };
-            return list;
-            })
-        );
-        }
-    });
+     const groupers = ["COMUNA_CORREGIMIENTO"];
+     getListByGroupers(groupers).then(
+       (response: ApiResponse<IGenericList[]>) => {
+         if (response && response?.operation?.code === EResponseCodes.OK) {
+           setDeparmentList(
+             response.data.map((item) => {
+               const list = {
+                 name: item.itemDescription,
+                 value: item.itemCode,
+               };
+               return list;
+             })
+           );
+         }
+       }
+     );
     }, []);
+  
+  
+  const downloadXLSX = () => {
+    
+  }
 
   return {
     onSubmitSearch,
@@ -105,6 +110,7 @@ const [deparmetList, setDeparmentList] = useState([]);
     setValCommuneNeighborhood,
     reset,
     control,
+    downloadXLSX,
   };
 }
 

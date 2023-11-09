@@ -17,7 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 export default function useCreateUploadHook() {
-  const { setMessage, dataGridEmails, setDataGridEmails } = useContext(AppContext);
+  const { setMessage, dataGridEmails, setDataGridEmails, authorization  } = useContext(AppContext);
   const [showTable, setshowTable] = useState(false);
   const [activeWorkerList, setActiveWorkerList] = useState([]);
   const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
@@ -95,7 +95,6 @@ export default function useCreateUploadHook() {
         email: selectedLabelUser.email,
       });
     }
-    
    const emails = dataGridEmails.map((e) => e.email).join(',');
     
   });
@@ -175,9 +174,10 @@ export default function useCreateUploadHook() {
   const handleUserNotificacion = async (data: IUploadInformation) => {
     // Crear un arreglo de correos electrónicos a partir de dataGridEmails
     const emailsArray = dataGridEmails.map((e) => e.email);
+    // Agregar el correo electrónico del usuario conectado
+    emailsArray.push(authorization.user.email);
     
     data.emails = emailsArray;
-
     try {
       const { data: dataResponse, operation } = await UserNotificacion(data);
       if (operation.code === EResponseCodes.OK) {
@@ -276,16 +276,16 @@ export default function useCreateUploadHook() {
         if (data.operation.code === EResponseCodes.OK) {
           setFilesUploadData([]);
           setShowDialog(false);
-          resolve(); // Resuelve la promesa
+          resolve();
         
         } else {
           setFilesUploadData([]);
           setShowDialog(false);
-          reject(data.operation.message); // Rechaza la promesa con el mensaje de error
+          reject(data.operation.message);
         }
       }).catch(err => {
         setShowDialog(false);
-        reject(String(err)); // Rechaza la promesa con el error
+        reject(String(err));
       });
     });
   }

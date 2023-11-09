@@ -38,7 +38,7 @@ export const createSocialization = yup.object({
 });
 
 export const searchSocialization = yup.object({
-  numberProyect: yup
+  noProyect: yup
     .number()
     .typeError(MESSAGE_REQUIRED)
     .required(MESSAGE_REQUIRED),

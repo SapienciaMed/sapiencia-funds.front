@@ -77,7 +77,7 @@ const UploadCreatePage = (): React.JSX.Element => {
       <div className="main-page">
         <div className="card-table">
           <div className="title-area">
-            <label className="text-black extra-large bold">
+            <label className="text-black extra-large medium">
               Cargar archivo
             </label>
           </div>
@@ -98,11 +98,11 @@ const UploadCreatePage = (): React.JSX.Element => {
                   data={commune}
                   label={
                     <>
-                      Comuna y/o corregimiento <span>*</span>
+                      Comuna y/o corregimiento
                     </>
                   }
-                  className="select-basic medium select-disabled-list"
-                  classNameLabel="text-black big bold"
+                  className="select-basic medium"
+                  classNameLabel="text-black big text-required"
                   filter={true}
                   placeholder="Seleccione."
                 //disabled={action === "edit" ? true : false} 
@@ -115,11 +115,11 @@ const UploadCreatePage = (): React.JSX.Element => {
                   data={vigencias}
                   label={
                     <>
-                      Vigencia <span>*</span>
+                      Vigencia
                     </>
                   }
-                  className="select-basic medium select-disabled-list"
-                  classNameLabel="text-black big bold"
+                  className="select-basic medium"
+                  classNameLabel="text-black big text-required"
                   filter={true}
                   placeholder="Seleccione."
                 //disabled={action === "edit" ? true : false} 
@@ -132,11 +132,11 @@ const UploadCreatePage = (): React.JSX.Element => {
                   data={information}
                   label={
                     <>
-                      información <span>*</span>
+                      Información
                     </>
                   }
-                  className="select-basic medium select-disabled-list"
-                  classNameLabel="text-black big bold"
+                  className="select-basic medium"
+                  classNameLabel="text-black big text-required"
                   filter={true}
                   placeholder="Seleccione."
                 //disabled={action === "edit" ? true : false} 

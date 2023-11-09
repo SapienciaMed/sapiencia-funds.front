@@ -9,6 +9,8 @@ import ItemsCreatePage from "./items-create.page";
 import { AppContext } from "../../../common/contexts/app.context";
 import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
 import { Checkbox } from "primereact/checkbox";
+import { Controller } from "react-hook-form";
+import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 const ActaCreatePage = () => {
 
@@ -113,7 +115,6 @@ const ActaCreatePage = () => {
         {
             icon: "Edit",
             onClick: (row) => {
-                //console.log(row.ident)
 
                 setMessage({
                     show: true,
@@ -199,6 +200,17 @@ const ActaCreatePage = () => {
         }
     ];
 
+    const periods = [
+        {
+            name: "1",
+            value: "1"
+        },
+        {
+            name: "2",
+            value: "2"
+        }
+    ]
+
     return (
         <Fragment>
             <div className="title-area">
@@ -241,40 +253,64 @@ const ActaCreatePage = () => {
                                     filter={true}
                                     placeholder="Seleccionar."
                                 />
-                                <InputComponent
+                                
+                                <SelectComponent
                                     idInput={"periodVigency"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Periodos por vigencia"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
+                                    control={control}
                                     errors={errors}
-                                    placeholder={""}
+                                    data={periods}
+                                    label={
+                                        <>
+                                            Periodos por vigencia <span>*</span>
+                                        </>
+                                    }
+                                    className="select-basic medium select-disabled-list"
+                                    classNameLabel="text-black biggest"
+                                    filter={true}
+                                    placeholder="Seleccionar."
                                 />
+
                             </div>
                             <div className='grid-form-3-container mt-20px'>
-                                <InputComponent
-                                    idInput={"announcementInitial"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Convocatoria inicial"
-                                    register={register}
+                                <Controller
+                                    control={control}
+                                    name={"announcementInitial"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"announcementInitial"}
+                                                className="input-basic medium"
+                                                typeInput="text"
+                                                label="Convocatoria inicial"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
+                                />
+
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`salaryMin`}
+                                    label="valor"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'Seleccionar'}
                                     classNameLabel="text-black biggest text-required"
                                     errors={errors}
-                                    placeholder={""}
-                                />
-                                <InputComponent
-                                    idInput={"salaryMin"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Salario mínimo"
-                                    register={register}
-                                    classNameLabel="text-black biggest"                                   
-                                    errors={errors}
-                                    placeholder={""}
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
                                     disabled
                                 />
-                                
+
                             </div>
 
                         </div>
@@ -285,38 +321,71 @@ const ActaCreatePage = () => {
                                 <label className="text-black extra-large grid-span-4-columns mb-18px">Tasas</label>
                             </div>
                             <div className='grid-form-3-container mb-24px'>
-                                <InputComponent
-                                    idInput={"costsExpenses"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Costo y gastos de operación logística"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
+
+                                <Controller
+                                    control={control}
+                                    name={"costsExpenses"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"costsExpenses"}
+                                                className="input-basic medium"
+                                                typeInput="number"
+                                                label="Costo y gastos de operación logística"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
                                 />
-                                <InputComponent
-                                    idInput={"OperatorCommission"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Comisión operador financiero"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
+
+                                <Controller
+                                    control={control}
+                                    name={"OperatorCommission"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"OperatorCommission"}
+                                                className="input-basic medium"
+                                                typeInput="number"
+                                                label="Comisión operador financiero"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
                                 />
-                                <InputComponent
-                                    idInput={"financialOperation"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Operación finaciera MB"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
+
+                                <Controller
+                                    control={control}
+                                    name={"financialOperation"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"financialOperation"}
+                                                className="input-basic medium"
+                                                typeInput="number"
+                                                label="Operación finaciera MB"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""}
+                                                disabled={checked}
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
                                 />
                             </div>
 
@@ -336,9 +405,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-           style={
-                   dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-               }  
+                style={
+                    dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
+                }
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
@@ -364,7 +433,7 @@ const ActaCreatePage = () => {
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Cantidad periodo 1"
-                                //register={register}
+                                register={register}
                                 classNameLabel="text-black biggest text-required"
                                 //direction={EDirection.column}
                                 errors={errors}
@@ -372,18 +441,22 @@ const ActaCreatePage = () => {
                                 disabled
                                 value={String(totalQuantityPeriod1)}
                             />
-                            <InputComponent
-                                idInput={"tValue1"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`tValue1`}
                                 label="Valor periodo 1"
-                                register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(totalValuePeriod1)}
                             />
                             <InputComponent
                                 idInput={"tQuantity2"}
@@ -398,88 +471,113 @@ const ActaCreatePage = () => {
                                 disabled
                                 value={String(totalQuantityPeriod2)}
                             />
-                            <InputComponent
-                                idInput={"tValue2"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`tValue2`}
                                 label="Valor periodo 2"
-                                register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(totalValuePeriod2)}
                             />
                         </div>
                         <div className='grid-form-3-container mb-24px'>
-                            <InputComponent
-                                idInput={"tQuantity1"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`subtotalVigency`}
                                 label="Subtotal vigencia"
-                                //register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(subtotalVigency)}
                             />
-                            <InputComponent
-                                idInput={"totalCostBillsOperation"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`totalCostBillsOperation`}
                                 label="Costo y gasto de operación"
-                                register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(totalCostBillsOperation)}
                             />
-                            <InputComponent
-                                idInput={"totalNet"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`totalNet`}
                                 label="Neto"
-                                register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(totalNet)}
                             />
 
                         </div>
                         <div className='grid-form-2-container mb-24px'>
-                            <InputComponent
-                                idInput={"totalResourcesCredit"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`totalResourcesCredit`}
                                 label="Recursos para el crédito"
-                                //register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(totalResourcesCredit)}
                             />
-                            <InputComponent
-                                idInput={"totalFinancialOperatorCommission"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`totalFinancialOperatorCommission`}
                                 label="Total comisión operador financiero"
-                                register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(totalFinancialOperatorCommission)}
                             />
 
                         </div>
@@ -490,45 +588,57 @@ const ActaCreatePage = () => {
                 <div className="container-form padding-form">
                     <div>
                         <div className='grid-form-3-container mb-24px'>
-                            <InputComponent
-                                idInput={"vigency1"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`vigency1`}
                                 label="Verificador 1"
-                                //register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(vigency1)}
                             />
-                            <InputComponent
-                                idInput={"vigency2"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`vigency2`}
                                 label="Verificador 2"
-                                register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(subtotalVigency)}
                             />
-                           <InputComponent
-                                idInput={"techo"}
-                                className="input-basic medium"
-                                typeInput="text"
+
+                            <InputNumberComponent
+                                control={control}
+                                idInput={`techo`}
                                 label="techo"
-                                register={register}
+                                className="inputNumber-basic medium"
+                                placeholder={'0'}
                                 classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
                                 errors={errors}
-                                placeholder={""}
+                                mode="currency"
+                                currency="COP"
+                                locale="es-CO"
+                                fieldArray={true}
+                                minFractionDigits={0}
+                                maxFractionDigits={0}
                                 disabled
-                                value={String(projectMeta)}
-                            />                           
+                            />
                         </div>
 
                     </div>
@@ -619,16 +729,7 @@ const ActaCreatePage = () => {
                         />
                     </div>
                 </div>
-
-
-
-
             </div>
-
-
-
-
-
 
             <hr />
             <br />
@@ -649,8 +750,6 @@ const ActaCreatePage = () => {
                 />
             </div>
             <br />
-
-
 
         </Fragment>
 

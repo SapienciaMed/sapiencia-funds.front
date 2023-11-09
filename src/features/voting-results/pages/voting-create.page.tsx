@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { useVotingResults } from "../hooks/voting-create.hooks";
 import {
   ButtonComponent,
@@ -30,15 +30,20 @@ const VotingResultsPage = () => {
     addItem,
     tableComponentRef,
     dataGrid,
-    setValCommuneNeighborhood,
-    control
+    amountTotal,
+    totalValueActivity,
+    totalValueOne,
+    control,
+    settotalValueOne,
+    settotalValueActivity,
+    setAmountTotal,
   } = useVotingResults();
 
   const navigate = useNavigate();
   const { validateActionAccess, setMessage } = useContext(AppContext);
-
-
-
+  let aucumActivity = 0;
+  let acumTotal = 0;
+  let acumAmount = 0;
 
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
     {
@@ -91,7 +96,6 @@ const VotingResultsPage = () => {
     {
       icon: "Edit",
       onClick: (row) => {
-        console.log("row ", row);
         // navigate(`/core/usuarios/editar/${row.id}`);
         setMessage({
           show: true,
@@ -112,7 +116,6 @@ const VotingResultsPage = () => {
     {
       icon: "Delete",
       onClick: (row) => {
-        console.log("row ", row);
           setMessage({
             show: true,
             title: "Eliminar registro",
@@ -234,30 +237,6 @@ const VotingResultsPage = () => {
                     );
                   }}
                 />
-
-                {/* <InputComponent
-                  idInput="validity"
-                  className="input-basic medium form-group"
-                  typeInput="text"
-                  label=""
-                  register={register}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
-                /> */}
-
-                {/* <InputComponent
-                  idInput="ideaProject"
-                  className="input-basic medium form-group"
-                  typeInput="text"
-                  label="Idea de proyecto"
-                  register={register}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
-                /> */}
               </div>
             </FormComponent>
 
@@ -302,7 +281,21 @@ const VotingResultsPage = () => {
                         <span>Valor de la Actividad</span>
                       </div>
                       <span className="txt-center">
-                        <p>5656</p>
+                        <p>
+                          {
+                            dataGrid?.map((e, i) => {
+                            let value = aucumActivity;
+                              if (i === 0) {
+                              aucumActivity = Number(e.activityValue);
+                              value = Number(e.activityValue);
+                            } else {
+                              value = (Number(value) + Number(e.activityValue));
+                              aucumActivity = value;
+                            }
+                            if (Number(dataGrid.length) == Number(i + 1)) {return value; }
+                            
+                          })}
+                        </p>
                       </span>
                     </div>
                     <div className="content-tbltotlscolumn">
@@ -310,7 +303,21 @@ const VotingResultsPage = () => {
                         <span>Cantidad</span>
                       </div>
                       <span className="txt-center">
-                        <p>5656</p>
+                        <p>
+                          {
+                            dataGrid?.map((e, i) => {                        
+                            let value =  acumAmount;
+                              if (i === 0) {
+                              acumAmount = Number(e.amount);
+                              value = Number(e.amount);
+                            } else {
+                              value = (Number(value) + Number(e.amount));
+                              acumAmount = value;
+                            }
+                            if (Number(dataGrid.length) == Number(i + 1)) {return value; }
+                            })
+                          }
+                        </p>
                       </span>
                     </div>
                     <div className="content-tbltotlscolumn">
@@ -318,7 +325,19 @@ const VotingResultsPage = () => {
                         <span>Costo total</span>
                       </div>
                       <span className="txt-center">
-                        <p>5656</p>
+                        <p>
+                          {dataGrid?.map((e, i) => {
+                            let value = acumTotal;
+                            if (i === 0) {
+                              acumTotal = Number(e.totalCost);
+                              value = Number(e.totalCost);
+                            } else {
+                              value = (Number(value) + Number(e.totalCost));
+                              acumTotal = value;
+                            }
+                            if (Number(dataGrid.length) == Number(i + 1)) {return value; }
+                          })}
+                        </p>
                       </span>
                     </div>
                   </div>
@@ -332,7 +351,7 @@ const VotingResultsPage = () => {
                 id={"observations"}
                 idInput={"observations"}
                 label="Observaciones"
-                classNameLabel="text-black biggest bold text-required"
+                classNameLabel="text-black biggest bold "
                 className={`text-area-basic `}
                 placeholder="Escribe aquí"
                 register={register}

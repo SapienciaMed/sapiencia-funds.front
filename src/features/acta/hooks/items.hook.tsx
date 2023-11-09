@@ -1,22 +1,21 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { IActaItems } from "../../../common/interfaces/actaItems.interface";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
-import { createActas } from "../../../common/schemas/acta-shema";
 import { useForm } from "react-hook-form";
 import { AppContext } from "../../../common/contexts/app.context";
 import { EResponseCodes } from "../../../common/constants/api.enum";
-import useVotingItemApi from "../../voting-results/hooks/voting-items-api.hooks";
 import useActaApi from "./acta-api.hook";
 import { IActa } from "../../../common/interfaces/acta.interface";
 import { v4 as uuidv4 } from 'uuid';
 import { createActaItems } from "../../../common/schemas/actaItems-shema";
+import { vigencyActas } from "../../../common/schemas/vigency-acta-shema";
 
 
-export default function useActaItems(action, acta: IActa, actaItems: IActaItems) {
+export default function useActaItems(action, acta: IActa, actaItems: IActaItems, modifiedIdcCountercredit: number) {
+
 
     //contex
-    const { setMessage, authorization, setDataGridItems, dataGridItems, } = useContext(AppContext);
+    const { setMessage, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
     //peticiones api
     const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
@@ -24,8 +23,15 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     //refs
     const tableComponentRef = useRef(null);
 
-    //Validaciones
-    const resolver = useYupValidationResolver(createActaItems);
+    //Validaciones  
+
+    let resolver: any;
+
+    if (acta.periodVigency == 2) {
+        resolver = useYupValidationResolver(vigencyActas);
+    } else {
+        resolver = useYupValidationResolver(createActaItems);
+    }
 
     //states
     const [showTable, setShowTable] = useState(false);
@@ -42,7 +48,9 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     const [financialOperatorCommission, setFinancialOperatorCommission] = useState("0");
     const [resourcesCredit, setResourcesCredit] = useState("0");
     const [dataActa, setDataActa] = useState<IActa>(acta);
+    const [periods, setPeriods] = useState("");
 
+    
     //form
     const {
         handleSubmit,
@@ -76,23 +84,52 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     const selectedLabelAnnouncement = getSelectedLabel(selectedAnnouncement, announcementList);
     const selectedLabelConcept = getSelectedLabel(selectedConcept, conceptList);
 
+    modifiedIdcCountercredit
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
 
-        if (name === "subtotalVigency" && value && acta.costsExpenses) {
-            const results = calculateValues(value, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
+
+    /*   const handleInputChange = (event) => {
+          const { name, value } = event.target;
+  
+          if (name === "subtotalVigency" && value && acta.costsExpenses) {
+              const results = calculateValues(value, acta.costsExpenses, selectedLabelFound, acta.financialOperation, acta.OperatorCommission);
+              setNet(results.net);
+              setCostBillsOperationt(results.costBillsOperation);
+              setFinancialOperatorCommission(results.financialOperatorCommission);
+              setResourcesCredit(results.resourcesCredit);
+          } else if (name === "subtotalVigency") {
+              setCostBillsOperationt("0");
+              setNet("0");
+              setFinancialOperatorCommission("0");
+              setResourcesCredit("0");
+          }
+      };  */
+
+
+    useEffect(() => {
+        // Solo se ejecuta si modifiedIdcCountercredit es un número válido y acta.costsExpenses está definido
+        if (!isNaN(modifiedIdcCountercredit) && acta.costsExpenses) {
+            const results = calculateValues(
+                modifiedIdcCountercredit,
+                acta.costsExpenses,
+                selectedLabelFound,
+                acta.financialOperation,
+                acta.OperatorCommission
+            );
+
             setNet(results.net);
             setCostBillsOperationt(results.costBillsOperation);
             setFinancialOperatorCommission(results.financialOperatorCommission);
             setResourcesCredit(results.resourcesCredit);
-        } else if (name === "subtotalVigency") {
+        } else {
             setCostBillsOperationt("0");
             setNet("0");
             setFinancialOperatorCommission("0");
             setResourcesCredit("0");
         }
-    };
+
+    }, [modifiedIdcCountercredit, acta, selectedLabelFound]);
+
 
     const calculateValues = (subtotalVigency, costsExpenses, selectedLabel, financialOperation, OperatorCommission) => {
         const multiplicacion = parseInt(subtotalVigency) * costsExpenses / 100;
@@ -110,7 +147,10 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 resourcesCredit = String(resultadoOperacion2);
             }
         }
-       
+        setValue("costBillsOperation", Number(costBillsOperation));
+        setValue("net", Number(neto));
+        setValue("financialOperatorCommission", Number(financialOperatorCommission));
+        setValue("resourcesCredit", Number(resourcesCredit));
         return {
             net: resta.toString(),
             costBillsOperation: multiplicacion.toString(),
@@ -120,7 +160,13 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
     };
 
 
-    const onsubmitAddItem = handleSubmit((data: IActaItems) => {       
+
+
+
+
+    const onsubmitAddItem = handleSubmit((data: IActaItems) => {
+
+        console.log(data)
         if (data) {
             const updatedItem = {
                 ident: uuidv4(),
@@ -148,7 +194,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 idConcept: selectedConcept
             };
 
-            if (actaItems) {                
+            if (actaItems) {
                 // Continuación de tu lógica de edición
                 const editingIndex = dataGridItems.findIndex(item => item.ident === actaItems.ident);
                 if (editingIndex !== -1) {
@@ -240,6 +286,8 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                 }
             })
 
+
+
         getAnnouncement()
             .then((response) => {
                 if (response && response?.operation?.code === EResponseCodes.OK) {
@@ -262,7 +310,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
                     const foundData = response.data.filter(item => item.typeMasterList.name === 'Fondo');
                     const lineData = response.data.filter(item => item.typeMasterList.name === 'Línea');
                     const conceptData = response.data.filter(item => item.typeMasterList.name === 'Concepto');
-                   
+
                     setFoundList(
                         foundData.map((item) => {
                             const list = {
@@ -298,22 +346,40 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
 
             })
 
-            setDataActa(acta)
+        setDataActa(acta)
+
+
     }, []);
 
 
+   /*  useEffect(() => {
+        // Asegúrate de que announcementInitial es un número antes de convertirlo a cadena.
+        if (acta && acta.announcementInitial != null) {
+            setPeriods(String(acta.announcementInitial));
+        }
+    }, [acta.announcementInitial]); */
+
+
+    useEffect(() => {
+        if (acta && acta.announcementInitial != null) {
+          // Dividir el valor por el guion y tomar solo la primera parte (el año)
+          const periodWithoutSuffix = String(acta.announcementInitial).split('-')[0];
+          setPeriods(periodWithoutSuffix);
+        }
+      }, [acta.announcementInitial]);
+      
 
     //editar items al crear actas
 
     useEffect(() => {
-        if (!actaItems || !acta) return;          
-        if (action === "edit") {  
+        if (!actaItems || !acta) return;
+        if (action === "edit") {
             const results = calculateValues(Number(actaItems.subtotalVigency), Number(acta.costsExpenses), selectedLabelFound, Number(acta.financialOperation), Number(acta.OperatorCommission));
             setNet(results.net);
             setCostBillsOperationt(results.costBillsOperation);
             setFinancialOperatorCommission(results.financialOperatorCommission);
             setResourcesCredit(results.resourcesCredit);
-            
+
             setValue("found", actaItems.idFound);
             setValue("line", actaItems.idLine);
             setValue("program", actaItems.idProgram);
@@ -323,20 +389,23 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
             setValue("subtotalVigency", actaItems.subtotalVigency);
             setValue("costBillsOperation", parseInt(costBillsOperation));
             setValue("net", parseInt(neto));
-            setValue("resourcesCredit", parseInt(resourcesCredit));
+            //setValue("resourcesCredit", parseInt(resourcesCredit));
             setValue("quantityPeriod1", actaItems.periods.quantityPeriod1);
             setValue("valuePeriod1", actaItems.periods.valuePeriod1);
             setValue("quantityPeriod2", actaItems.periods.quantityPeriod2);
             setValue("valuePeriod2", actaItems.periods.valuePeriod2);
-            setValue("financialOperatorCommission", parseInt(financialOperatorCommission));           
-        }        
-    }, [actaItems,acta,selectedLabelFound]);
+            //setValue("financialOperatorCommission", Number(financialOperatorCommission));
+
+            //costBillsOperation
+            //financialOperatorCommission
+        }
+    }, [actaItems, acta, selectedLabelFound]);
 
 
     const CancelFunction = () => {
-       
-                setMessage((prev) => ({ ...prev, show: false }));
-          
+
+        setMessage((prev) => ({ ...prev, show: false }));
+
     };
 
 
@@ -362,8 +431,9 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems)
         neto,
         financialOperatorCommission,
         resourcesCredit,
-        handleInputChange,
+        /* handleInputChange */
         handleSelectChange,
-        CancelFunction  
+        CancelFunction,
+        periods
     }
 }
