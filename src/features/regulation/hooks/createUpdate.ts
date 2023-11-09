@@ -192,58 +192,6 @@ export default function useRegulationHook(auth) {
       ...data,
       createUser: user.numberDocument,
       createDate: new Date().toISOString(),
-      openPeriod: data?.isOpenPeriod ? true : false,
-      endPeriod: data?.isOpenPeriod ? " " : data?.endPeriod,
-      applySocialService: data?.applySocialService ? true : false,
-      socialServicePercentage: data?.applySocialService
-        ? data?.socialServicePercentage
-        : 0,
-      socialServiceHours: data?.applySocialService
-        ? data?.socialServiceHours
-        : 0,
-      knowledgeTransferApply: data?.knowledgeTransferApply ? true : false,
-      knowledgeTransferPercentage: data?.knowledgeTransferApply
-        ? data?.knowledgeTransferPercentage
-        : 0,
-      knowledgeTransferHours: data?.knowledgeTransferApply
-        ? data?.knowledgeTransferHours
-        : 0,
-      gracePeriodApply: data?.gracePeriodApply ? true : false,
-      gracePeriodMonths: data?.gracePeriodApply ? data?.gracePeriodMonths : 0,
-      gracePeriodApplication: data?.gracePeriodApply
-        ? data?.gracePeriodApplication
-        : " ",
-      continuousSuspensionApplies: data?.continuousSuspensionApplies
-        ? true
-        : false,
-      continuosSuspencionQuantity: data?.continuousSuspensionApplies
-        ? data?.continuosSuspencionQuantity
-        : 0,
-      applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension
-        ? true
-        : false,
-      discontinuousSuspensionQuantity: data?.applyDiscontinuousSuspension
-        ? data?.discontinuousSuspensionQuantity
-        : 0,
-      applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
-      applySpecialSuspensionsQuantity: data?.applySpecialSuspensions
-        ? data?.applySpecialSuspensionsQuantity
-        : 0,
-      extensionApply: data?.extensionApply ? true : false,
-      extensionApplyQuantity: data?.extensionApply
-        ? data?.extensionApplyQuantity
-        : 0,
-      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
-        ? true
-        : false,
-      performancePeriod: data?.applyCondonationPerformancePeriod
-        ? data?.performancePeriod
-        : "",
-      accomulatedIncomeCondonationApplies:
-        data?.accomulatedIncomeCondonationApplies ? true : false,
-      accumulatedPerformance: data?.accomulatedIncomeCondonationApplies
-        ? data?.accumulatedPerformance
-        : "",
     };
 
     setMessage({
