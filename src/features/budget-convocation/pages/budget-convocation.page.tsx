@@ -8,7 +8,7 @@ import Svgs from "../../../public/images/icons/svgs";
 const SearchBudgetPage = (): React.JSX.Element => {
 
     const { announcementList, budgetList, control, errors, clearFields, register, setValue, navigate,
-        tableComponentRef, showTable, tableColumns, setShowTable, onSubmit, reset, downloadCollection,
+        tableComponentRef, showTable, tableColumns, showDownload, onSubmit, reset, downloadCollection,
     } = useBudgetSearch();
     const [tableView, setTableView] = useState<boolean>(false);
 
@@ -63,7 +63,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     className="button-clean medium"
                                     type="button"
                                     action={() => {
-                                        reset();
+                                        clearFields();
                                         tableComponentRef.current.emptyData();
                                         setTableView(false);
                                     }
@@ -81,20 +81,20 @@ const SearchBudgetPage = (): React.JSX.Element => {
 
                         <TableComponent
                             ref={tableComponentRef}
-                            url={`${process.env.urlApiFunds}/api/v1/sapiencia/getbudget-paginated/`}
+                            url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
                             columns={tableColumns}
+                            titleMessageModalNoResult="Registro no existente"
                             isShowModal={false}
                         />
-
                     )}
                 </div>
-
+                
                 <div>
                     <br />
                     <hr className="barra-spacing" />
                 </div>
                 <div className="button-save-container-display mr-24px">
-                    {("CUENTA_COBRO_EXCEL") && (
+                    {showDownload && (
                         <ButtonComponent
                             value={
                                 <>

@@ -10,7 +10,7 @@ import { periods } from "../service";
 import TableComponent from "../../../common/components/table.component";
 import DetailReglament from "./detailt";
 
-const Regulation = () => {
+const Regulation = ({ auth, authDetail, authEdit }) => {
   const {
     tableComponentRef,
     tableActions,
@@ -33,11 +33,9 @@ const Regulation = () => {
     detailData,
     setValue,
     getValues,
-  } = useSearchRegulation();
+  } = useSearchRegulation(auth, authDetail, authEdit);
 
   if (loading) return <></>;
-
-  console.log(detailData);
 
   return (
     <div>
