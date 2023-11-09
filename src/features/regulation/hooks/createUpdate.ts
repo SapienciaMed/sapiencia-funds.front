@@ -10,7 +10,7 @@ import { createRegulation } from "../../../common/schemas/regulation-schema";
 import { IRegulation } from "../../../common/interfaces/regulation";
 import { useRequerimentsApi } from "../service/requeriments";
 
-export default function useRegulationHook() {
+export default function useRegulationHook(auth) {
   const { setMessage, authorization } = useContext(AppContext);
   const { id, onlyView } = useParams();
   const { getListByGrouper } = useGenericListService();
@@ -61,6 +61,28 @@ export default function useRegulationHook() {
     },
   });
 
+  //permissions
+  useEffect(() => {
+    const findPermission = authorization?.allowedActions?.findIndex(
+      (i) => i == auth
+    );
+    if (!findPermission) return;
+    if (findPermission <= 0) {
+      setMessage({
+        title: "¡Acceso no autorizado!",
+        description: "Consulte con el admimistrador del sistema.",
+        show: true,
+        OkTitle: "Aceptar",
+        onOk: () => {
+          navigate("/core");
+          setMessage({});
+        },
+        background: true,
+      });
+      return;
+    }
+  }, [auth, authorization]);
+
   useEffect(() => {
     const getListPrograms = async () => {
       const res = await getPrograms();
@@ -89,7 +111,6 @@ export default function useRegulationHook() {
         }
         setUpdateData(res?.data[0]);
       }
-      console.log(res?.data[0]);
       controlToggle(res?.data[0]);
       return { ...res?.data[0] };
     }
@@ -119,8 +140,6 @@ export default function useRegulationHook() {
       sum = 0.1 + sum + (end - initial);
     });
 
-    console.log(sum);
-
     if (sum < 5) return true;
 
     return false;
@@ -143,6 +162,7 @@ export default function useRegulationHook() {
 
     let validRangesAccumulated = false;
     let validRangesPerformance = false;
+    const user = JSON.parse(localStorage.getItem("credentials"));
 
     if (data.accumulatedPerformance?.length) {
       validRangesAccumulated = validRangesJsonTable(
@@ -170,25 +190,60 @@ export default function useRegulationHook() {
 
     const buildData = {
       ...data,
-      createUser: "12345",
+      createUser: user.numberDocument,
       createDate: new Date().toISOString(),
-      openPeriod: data?.openPeriod ? true : false,
+      openPeriod: data?.isOpenPeriod ? true : false,
+      endPeriod: data?.isOpenPeriod ? " " : data?.endPeriod,
       applySocialService: data?.applySocialService ? true : false,
+      socialServicePercentage: data?.applySocialService
+        ? data?.socialServicePercentage
+        : 0,
+      socialServiceHours: data?.applySocialService
+        ? data?.socialServiceHours
+        : 0,
       knowledgeTransferApply: data?.knowledgeTransferApply ? true : false,
+      knowledgeTransferPercentage: data?.knowledgeTransferApply
+        ? data?.knowledgeTransferPercentage
+        : 0,
+      knowledgeTransferHours: data?.knowledgeTransferApply
+        ? data?.knowledgeTransferHours
+        : 0,
       gracePeriodApply: data?.gracePeriodApply ? true : false,
+      gracePeriodMonths: data?.gracePeriodApply ? data?.gracePeriodMonths : 0,
+      gracePeriodApplication: data?.gracePeriodApply
+        ? data?.gracePeriodApplication
+        : " ",
       continuousSuspensionApplies: data?.continuousSuspensionApplies
         ? true
         : false,
+      continuosSuspencionQuantity: data?.continuousSuspensionApplies
+        ? data?.continuosSuspencionQuantity
+        : 0,
       applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension
         ? true
         : false,
+      discontinuousSuspensionQuantity: data?.applyDiscontinuousSuspension
+        ? data?.discontinuousSuspensionQuantity
+        : 0,
       applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
+      applySpecialSuspensionsQuantity: data?.applySpecialSuspensions
+        ? data?.applySpecialSuspensionsQuantity
+        : 0,
       extensionApply: data?.extensionApply ? true : false,
+      extensionApplyQuantity: data?.extensionApply
+        ? data?.extensionApplyQuantity
+        : 0,
       applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
         ? true
         : false,
+      performancePeriod: data?.applyCondonationPerformancePeriod
+        ? data?.performancePeriod
+        : "",
       accomulatedIncomeCondonationApplies:
         data?.accomulatedIncomeCondonationApplies ? true : false,
+      accumulatedPerformance: data?.accomulatedIncomeCondonationApplies
+        ? data?.accumulatedPerformance
+        : "",
     };
 
     setMessage({
@@ -205,7 +260,7 @@ export default function useRegulationHook() {
   });
 
   const confirmRegulationCreate = async (data: IRegulation) => {
-    const { data: dataResponse, operation } = updateData?.id
+    const { data: dataResponse, operation } = data?.id
       ? await editRegulation(data.id, data)
       : await createRegulationAction(data);
 
@@ -293,5 +348,6 @@ export default function useRegulationHook() {
     id,
     listPrograms,
     onlyView,
+    reset,
   };
 }
