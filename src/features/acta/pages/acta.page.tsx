@@ -1,12 +1,11 @@
-import React, { Fragment, useEffect } from "react";
+import React from "react";
 import { BiPlusCircle } from "react-icons/bi";
 import { useWidth } from "../../../common/hooks/use-width";
 import { FiEdit2 } from "react-icons/fi";
 import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
 import { EDirection } from "../../../common/constants/input.enum";
 import useActaData from "../hooks/acta.hook";
-import { Controller, useForm } from 'react-hook-form';
-import { IActaSearch } from "../interface/Acta";
+import { Controller } from 'react-hook-form';
 
 
 function ActaPage(){
