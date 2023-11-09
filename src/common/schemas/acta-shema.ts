@@ -9,7 +9,7 @@ numberProject: yup
     .required()
     .typeError("Completar información"),
   announcementInitial: yup
-    .number()
+    .string()
     .required()
     .typeError("Completar información"),
   costsExpenses: yup
