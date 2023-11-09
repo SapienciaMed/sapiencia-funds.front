@@ -12,7 +12,7 @@ import Requirements from "./modules/requeriments/Requirements";
 import StepButtons from "./modules/stepButtons";
 import Divider from "../../../common/components/Form/divider";
 
-const Form = () => {
+const Form = ({ auth }) => {
   const {
     control,
     errors,
@@ -31,7 +31,8 @@ const Form = () => {
     id,
     listPrograms,
     onlyView,
-  } = useRegulationHook();
+    reset,
+  } = useRegulationHook(auth);
   const [view, setView] = useState(0);
 
   if (loading) return <></>;
@@ -52,7 +53,6 @@ const Form = () => {
         className="form-signIn"
         action={(e) => {
           e.preventDefault();
-          console.log(errors);
           onsubmitCreate();
         }}
       >
@@ -71,6 +71,7 @@ const Form = () => {
             loading={loading}
             listPrograms={listPrograms}
             onlyView={onlyView}
+            reset={reset}
           />
         )}
         {view === 1 && (

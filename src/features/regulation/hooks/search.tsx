@@ -15,9 +15,9 @@ import {
 import { periods, useRegulationApi } from "../service";
 import Tooltip from "../../../common/components/Form/tooltip";
 
-export default function useSearchRegulation() {
+export default function useSearchRegulation(auth, authDetail, authEdit) {
   // Context
-  const { setMessage } = useContext(AppContext);
+  const { setMessage, authorization } = useContext(AppContext);
   const [showTable, setshowTable] = useState(false);
   const tableComponentRef = useRef(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -50,6 +50,60 @@ export default function useSearchRegulation() {
   } = useForm<IRegulationSearch>({ resolver });
 
   const [deparmetList, setDeparmentList] = useState([]);
+
+  //permisions
+  useEffect(() => {
+    const findPermission = authorization?.allowedActions?.findIndex(
+      (i) => i == auth
+    );
+    if (findPermission <= 0) {
+      setMessage({
+        title: "¡Acceso no autorizado!",
+        description: "Consulte con el admimistrador del sistema.",
+        show: true,
+        OkTitle: "Aceptar",
+        onOk: () => {
+          navigate("/core");
+          setMessage({});
+        },
+        background: true,
+      });
+      return;
+    }
+  }, [auth, authorization]);
+
+  //permissions
+  const getActions = () => {
+    const actions = [];
+
+    const detailPermissions = authorization?.allowedActions?.findIndex(
+      (i) => i == authDetail
+    );
+
+    const editPermissions = authorization?.allowedActions?.findIndex(
+      (i) => i == authEdit
+    );
+
+    if (detailPermissions > 0) {
+      actions.push({
+        icon: "Edit",
+        onClick: (row) =>
+          navigate("/fondos/administracion/reglamento/form/" + row.id),
+      });
+    }
+
+    if (editPermissions > 0) {
+      actions.push({
+        icon: "Detail",
+        onClick: (row) => {
+          setDetailData(row);
+          setShowDetailModal(true);
+        },
+      });
+    }
+
+    return actions;
+  };
 
   useEffect(() => {
     const getListPrograms = async () => {
@@ -183,23 +237,7 @@ export default function useSearchRegulation() {
     },
   ];
 
-  const tableActions: ITableAction<IRegulation>[] = [
-    {
-      icon: "Edit",
-      onClick: (row) =>
-        navigate("/fondos/administracion/reglamento/form/" + row.id),
-    },
-    {
-      icon: "Detail",
-      onClick: (row) => {
-        setDetailData(row);
-        setShowDetailModal(true);
-      },
-      // navigate(
-      //   "/fondos/administracion/reglamento/form/" + row.id + "/onlyView"
-      // ),
-    },
-  ];
+  const tableActions: ITableAction<IRegulation>[] = getActions();
 
   const formValues = watch();
 
