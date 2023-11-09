@@ -70,12 +70,16 @@ export interface IEmailDataGrid{
 }
 
 export interface ICallBudget {
-  id_comuna: number;
-  presupuesto_comuna: string;
-  legaliza_comuna: string;
-  restante_presupuesto: string;
-  usuarios_comuna: string;
-  periodo: number;
-  puntaje_corte: number;
+  id_comuna: number;  //id_comuna
+  presupuesto_comuna: string; //presupuesto_comuna
+  acumulado_legali_comuna: string; //legaliza_comuna
+  restante_presupuesto_comuna: string; //restante_presupuesto
+  numero_usuarios_comuna: number; //usuarios_comuna
+  periodo: number; //periodo
+  puntaje_corte: number; //puntaje_corte
+  cierre: number;
+  total_proyectado: string;
+  Diferencia: string;
+
 }
  

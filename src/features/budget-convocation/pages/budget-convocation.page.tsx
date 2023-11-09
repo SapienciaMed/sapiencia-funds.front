@@ -81,11 +81,10 @@ const SearchBudgetPage = (): React.JSX.Element => {
 
                         <TableComponent
                             ref={tableComponentRef}
-                            url={`${process.env.urlApiFunds}/api/v1/sapiencia/getbudget-paginated/`}
+                            url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
                             columns={tableColumns}
                             isShowModal={false}
                         />
-
                     )}
                 </div>
 
