@@ -20,6 +20,7 @@ interface ISwitch<T> {
   defaultValue?: boolean;
   onChange?: () => void;
   onClick?: () => void;
+  classNameSwitch?: string;
 }
 
 const messageError = ({ idInput, errors, fieldArray }) => {
@@ -67,6 +68,7 @@ const SwitchComponent = ({
   onChange,
   onClick,
   defaultValue,
+  classNameSwitch,
 }: ISwitch<any>): React.JSX.Element => {
   const [value, setValue] = useState(false);
   return (
@@ -89,7 +91,10 @@ const SwitchComponent = ({
           rules={optionsRegister}
           defaultValue={defaultValue}
           render={({ field }) => (
-            <label id={field.name} className="toggle-control">
+            <label
+              id={field.name}
+              className={`toggle-control ${classNameSwitch} `}
+            >
               <input
                 type="checkbox"
                 disabled={disabled}
