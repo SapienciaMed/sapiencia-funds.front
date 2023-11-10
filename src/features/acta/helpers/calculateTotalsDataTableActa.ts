@@ -42,18 +42,7 @@ export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseF
         totalSubtotalVigency += isNaN(subtotalVigency) ? 0 : subtotalVigency;
     });
 
-    const vigency1 = totalValuePeriod1 + totalValuePeriod2 + totalCostBillsOperation + totalFinancialOperatorCommission;
-
-    // setTotalQuantityPeriod1(totalQuantityPeriod1);
-    // setTotalValuePeriod1(totalValuePeriod1);
-    // setTotalQuantityPeriod2(totalQuantityPeriod2);
-    // setTotalValuePeriod2(totalValuePeriod2);
-    // setTotalCostBillsOperation(totalCostBillsOperation);
-    // setTotalNet(totalNet);
-    // setTotalFinancialOperatorCommission(totalFinancialOperatorCommission);
-    // setTotalResourcesCredit(totalResourcesCredit);
-    // setSubtotalVigency(totalSubtotalVigency)
-    // setVigency1(vigency1);
+    const vigency1 = totalValuePeriod1 + totalValuePeriod2 + totalCostBillsOperation + totalFinancialOperatorCommission;;
 
     setValue("tQuantity1", totalQuantityPeriod1);
     setValue("tValue1", totalValuePeriod1);
@@ -66,7 +55,6 @@ export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseF
     setValue("totalFinancialOperatorCommission", totalFinancialOperatorCommission);
     setValue("vigency1", vigency1);
     setValue("vigency2", totalSubtotalVigency);
-
     
     return {
         totalQuantityPeriod1,

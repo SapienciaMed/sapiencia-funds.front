@@ -1,25 +1,27 @@
 import React from "react";
-import { ButtonComponent, FormComponent, InputComponent } from "../../../common/components/Form";
+import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import { EDirection } from "../../../common/constants/input.enum";
 import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import useSearcResult from "../hooks/search-result.hook";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 import Svgs from "../../../public/images/icons/svgs";
+import { Controller } from 'react-hook-form';
+import { ISearchResult } from "../interface/Acta";
+import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
 
-function SearchResulPage() {
+function SearchResulPage({ valueAction }: Readonly<ISearchResult>) {
     
-    const { arrayCitation, control, tableComponentRef, tableColumns, dataTableServices, tableColumnsUsers, dataGridUsersServices, 
-        register, actionBodyTemplate } = useSearcResult()
+    const { control, tableComponentRef, tableColumns, dataTableServices, tableColumnsUsers, dataGridUsersServices, 
+        errors, times, activeUserList, dataGridUsers, dataGridItems, tableActionsUser,
+        register, addItem, onSubmit, addUser, onCancel } = useSearcResult({ valueAction })
 
     return(
         <div className='main-page'>
             <div className="title-area">
-                <p className="text-black huge">Visualizar acta</p>
+                <p className="text-black huge">{valueAction == 'edit' ? 'Modificar acta' : 'Visualizar acta'}</p>
             </div>
 
-            <FormComponent action={() => {}}>
+            <FormComponent action={onSubmit} id="acta-form">
                 <section className="card-user">
                     <div className='grid-form-3-container gap-15'>
                         <InputComponent
@@ -31,6 +33,7 @@ function SearchResulPage() {
                             classNameLabel="text-black big text-with-colons"
                             direction={EDirection.column}
                             disabled
+                            defaultValue="941000313"
                         />
                         <InputComponent
                             idInput={"consecutiveNro"}
@@ -41,38 +44,62 @@ function SearchResulPage() {
                             classNameLabel="text-black big text-with-colons"
                             direction={EDirection.column}
                             disabled
+                            defaultValue="Pendiente aprobación"
                         />
-                        <InputComponent
+                         <SelectComponent
                             idInput={"projectNumber"}
-                            className="input-basic medium"
-                            typeInput="text"
+                            control={control}
+                            errors={errors}
+                            data={[
+                                {name: '1234', value: '1'},
+                                {name: '4321', value: '2'},
+                            ]}
                             label="Número proyecto"
-                            register={register}
-                            classNameLabel="text-black big text-with-colons"
+                            className="select-basic medium select-disabled-list"
+                            classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
+                            filter={true}
+                            placeholder="Seleccionar."
                             direction={EDirection.column}
-                            disabled
+                            disabled={valueAction != 'edit'}
                         />
                     </div>
                     <div className='grid-form-3-container gap-15'>
-                        <InputComponent
-                            idInput={"periodsByTerm"}
-                            className="input-basic medium"
-                            typeInput="text"
+                        <SelectComponent
+                            idInput={"periodVigency"}
+                            control={control}
+                            errors={errors}
+                            data={[
+                                {name: '1', value: '1'},
+                                {name: '2', value: '2'},
+                            ]}
                             label="Periodos por vigencia"
-                            register={register}
-                            classNameLabel="text-black big text-with-colons"
+                            className="select-basic medium select-disabled-list"
+                            classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
                             direction={EDirection.column}
-                            disabled
+                            filter={true}
+                            placeholder="Seleccionar."
+                            disabled={valueAction != 'edit'}
                         />
-                        <InputComponent
-                            idInput={"initialCall"}
-                            className="input-basic medium"
-                            typeInput="text"
-                            label="Convocatoria inicial"
-                            register={register}
-                            classNameLabel="text-black big text-with-colons"
-                            direction={EDirection.column}
-                            disabled
+                        <Controller
+                            control={control}
+                            name={"initialCall"}
+                            render={({ field }) => {
+                                return (
+                                    <InputComponent
+                                        id={field.name}
+                                        idInput={field.name}
+                                        className="input-basic medium"
+                                        typeInput="text"
+                                        label="Convocatoria inicial"
+                                        register={register}
+                                        classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
+                                        errors={errors}
+                                        disabled={valueAction != 'edit'}
+                                        {...field}
+                                    />
+                                )
+
+                            }}
                         />
                         <InputComponent
                             idInput={"minimumSalary"}
@@ -92,44 +119,76 @@ function SearchResulPage() {
                         <label className="text-black large" style={{margin: '0px'}}>Tasas</label>
                     </div>
                     <div className='grid-form-3-container gap-15'>
-                        <InputComponent
-                            idInput={"costAndLogistics"}
-                            className="input-basic medium" 
-                            typeInput="text"
+                        <InputNumberComponent
+                            idInput='costAndLogistics'
+                            className="inputNumber-basic medium"
                             label="Costo y gastos de operación logística"
-                            register={register}
-                            classNameLabel="text-black big text-with-colons"
+                            classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
+                            errors={errors}
+                            placeholder={""}
                             direction={EDirection.column}
-                            disabled
+                            disabled={valueAction != 'edit'}
+                            suffix="%"
+                            mode="decimal"
+                            minFractionDigits={1}
+                            maxFractionDigits={1}
+                            min={0}
+                            max={100}
+                            control={control}
                         />
-                        <InputComponent
-                            idInput={"financialOperator"}
-                            className="input-basic medium" 
-                            typeInput="text"
+                        <InputNumberComponent
+                            idInput='financialOperator'
+                            className="inputNumber-basic medium"
                             label="Comisión operador financiero"
-                            register={register}
-                            classNameLabel="text-black big text-with-colons"
+                            classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
+                            errors={errors}
+                            placeholder={""}
                             direction={EDirection.column}
-                            disabled
+                            disabled={valueAction != 'edit'}
+                            suffix="%"
+                            mode="decimal"
+                            minFractionDigits={1}
+                            maxFractionDigits={1}
+                            min={0}
+                            max={100}
+                            control={control}
                         />
-                        <InputComponent
-                            idInput={"financialTransactionMB"}
-                            className="input-basic medium" 
-                            typeInput="text"
-                            label="Operación financiera MB"
-                            register={register}
-                            classNameLabel="text-black big text-with-colons"
+                         <InputNumberComponent
+                            idInput='financialTransactionMB'
+                            className="inputNumber-basic medium"
+                            label="Operación finaciera MB"
+                            classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
+                            errors={errors}
+                            placeholder={""}
                             direction={EDirection.column}
-                            disabled
+                            disabled={valueAction != 'edit'}
+                            suffix="%"
+                            mode="decimal"
+                            minFractionDigits={1}
+                            maxFractionDigits={1}
+                            min={0}
+                            max={100}
+                            control={control}
                         />
                     </div>
                 </section>
+
+                {
+                    valueAction == 'edit' &&
+                    <div className="button-save-container-display-actas margin-right0 mr-24px">
+                        <ButtonComponent
+                            value="Agregar item"
+                            action={() => { addItem() }}
+                            className="button-save large disabled-black"
+                        />
+                    </div>
+                }
 
                 <section className="card-user mt-14px">
 
                     <BasicTableComponent
                         ref={tableComponentRef}
-                        data={dataTableServices}
+                        data={valueAction ? dataGridItems : dataTableServices}
                         columns={tableColumns}
                         titleMessageModalNoResult="Registro no existente"
                         isShowModal={true}
@@ -217,7 +276,7 @@ function SearchResulPage() {
                             <InputNumberComponent
                                 control={control}
                                 idInput={`totalCostBillsOperation`}
-                                label="Costo y gasto de operación"
+                                label="Costos y gastos de operación"
                                 className="inputNumber-basic medium "
                                 placeholder={'0'}
                                 classNameLabel="text-black big"
@@ -334,59 +393,128 @@ function SearchResulPage() {
                     </div>
                 </section>
 
-                <section className="card-user mt-14px">
-                    {/* <div className="title-area">
-                        <label className="text-black large" style={{margin: '0px'}}>Citación</label>
-                    </div>
-                    <section className="spc-common-table-citation">
-                        <DataTable
-                            className={`spc-table full-height`}
-                            value={arrayCitation}
-                            scrollable={true}
-                        >
-                            <Column 
-                                className="spc-table-actions" 
-                                header={
-                                    <div>
-                                        <div className="spc-header-title">Aprobar</div>
-                                    </div>
-                                }
-                                body={actionBodyTemplate}
+                {
+                    valueAction == 'edit' ? (
+                       <>
+                            <section className="card-user mt-14px">
+                                <div className="title-area">
+                                    <label className="text-black extra-large grid-span-4-columns mb-18px">Citar</label>
+                                </div>
+                                <div className='grid-form-3-container mb-24px'>
+                                    <DatePickerComponent
+                                        idInput="dateCitation"
+                                        control={control}
+                                        label={"Fecha"}
+                                        errors={errors}
+                                        classNameLabel="text-black biggest medium text-required"
+                                        className="dataPicker-basic  medium "
+                                        placeholder="DD/MM/YYYY"
+                                        dateFormat="dd/mm/yy"
+                                    />
+
+                                    <SelectComponent
+                                        idInput={"timeCitation"}
+                                        control={control}
+                                        errors={errors}
+                                        data={times}
+                                        label='Hora'
+                                        className="select-basic medium select-disabled-list"
+                                        classNameLabel="text-black biggest text-required"
+                                        filter={true}
+                                        placeholder="Seleccionar."
+
+                                    />
+                                    <SelectComponent
+                                        idInput={"user"}
+                                        control={control}
+                                        errors={errors}
+                                        data={activeUserList}
+                                        label='Usuario-Nombre completo'
+                                        className="select-basic medium select-disabled-list"
+                                        classNameLabel="text-black biggest text-required"
+                                        filter={true}
+                                        placeholder="Seleccionar."
+
+                                    />
+
+                                </div>
+                                <div className="button-save-container-display-actas-users margin-right0">
+                                    <ButtonComponent
+                                        value="Agregar"
+                                        action={() => {
+                                            addUser();
+                                        }}
+                                        className="button-save large disabled-black"
+                                    />
+                                </div>
+                            </section>
+
+                            <section className="card-user mt-14px">
+                                <BasicTableComponent
+                                    ref={tableComponentRef}
+                                    data={dataGridUsers}
+                                    columns={tableColumnsUsers}
+                                    actions={tableActionsUser}
+                                    titleMessageModalNoResult="Registro no existente"
+                                    isShowModal={true}
+                                    secondaryTitle={""}
+                                />
+                            </section>
+                       </> 
+                    ):
+                    (
+                        <section className="card-user mt-14px">
+                            <div className="title-area">
+                                <label className="text-black large" style={{margin: '0px'}}>Citación</label>
+                            </div>
+                            <BasicTableComponent
+                                ref={tableComponentRef}
+                                data={dataGridUsersServices}
+                                columns={tableColumnsUsers}
+                                isShowModal={true}
+                                secondaryTitle={"Citación"}  
+                                showPaginator={false}   
                             />
-                            <Column field="user" header="Usuario"></Column>
-                            <Column field="date" header="Fecha de aprobación"></Column>
-                        
-                        </DataTable>    
+                        </section>               
+                    )
+                    
+                }
 
-                    </section> */}
-                        <div className="title-area">
-                            <label className="text-black large" style={{margin: '0px'}}>Citación</label>
-                        </div>
-                        <BasicTableComponent
-                            ref={tableComponentRef}
-                            data={dataGridUsersServices}
-                            columns={tableColumnsUsers}
-                            isShowModal={true}
-                            secondaryTitle={"Citación"}  
-                            showPaginator={false}   
-                        />
-
-                </section>
-                
             </FormComponent>
 
-            <div className="display-justify-flex-end ">
-                <ButtonComponent
-                    value={
-                        <div className="container-buttonText">
-                            <span>Descargar</span>
-                            <Svgs svg="excel" width={23.593} height={28.505} />
-                        </div>
-                    }
-                    className="button-download large "
-                    // action={downloadCollection}
-                />
-            </div>
+            {
+                valueAction != 'edit' ?
+                    <div className="display-justify-flex-end ">
+                        <ButtonComponent
+                            value={
+                                <div className="container-buttonText">
+                                    <span>Descargar</span>
+                                    <Svgs svg="excel" width={23.593} height={28.505} />
+                                </div>
+                            }
+                            className="button-download large "
+                            // action={downloadCollection}
+                        />
+                    </div>
+                :
+                <div className="funcionality-buttons-container">
+                    <ButtonComponent
+                        form='useQueryForm'
+                        value="Cancelar"
+                        type="button"
+                        className="button-clean-fields bold"
+                        action={onCancel}
+                    />
+                    <ButtonComponent
+                        className="button-main huge hover-three"
+                        value="Guardar"
+                        type="submit"
+                        form="acta-form"
+                        // disabled={!isBtnDisable}
+                    />
+                </div>
+            }
+
 
         </div>
            

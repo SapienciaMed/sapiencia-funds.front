@@ -47,6 +47,16 @@ function ActaRoutes() {
         }
       />
 
+      <Route
+        path={"/consultar/modificar-acta/:actaNro"}
+        element={
+          <PrivateRoute
+            element={<SearchResultPage valueAction="edit" />}
+            allowedAction={"MAESTROS_CONSULTAR"}
+          />
+        }
+      />
+
     </Routes>
   );
 

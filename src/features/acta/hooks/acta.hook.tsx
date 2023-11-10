@@ -34,9 +34,9 @@ export default function useActaData() {
         navigate('../visualizar')
     })
 
-    const onAddvalues = async (data) => {
-        // navigate('./modificar-acta')
-        console.log("Crear la vista de modificar");  
+    const onAddvalues = async (data: IActaSearch) => {
+
+        navigate(`./modificar-acta/${data.actaNro}`) 
     };
     
     const handleModifyActa = () => handleSubmit(onAddvalues)();
