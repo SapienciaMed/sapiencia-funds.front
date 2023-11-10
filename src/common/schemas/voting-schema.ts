@@ -6,7 +6,7 @@ export const createVotings = yup.object({
   numberProject: yup .string()
     .required("El campo número de proyecto es obligatorio")
     .test('len', 'Solo se permiten 30 caracteres', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
-  validity: yup.string().required("La vigencia es obligatoria"),
+  validity: yup.string().required("La vigencia es obligatoria").test('len', 'Solo se permiten 4 caracteres', (val) => { if (val && val.toString().length > 4) return val.toString().length < 30; else return true}),
   ideaProject: yup.string().required("La idea de proyecto es obligatoria"),
 });
 

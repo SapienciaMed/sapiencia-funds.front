@@ -100,7 +100,7 @@ export const useVotingResults = () => {
     const onSubmitCreateVoting = handleSubmit((data: IVotingCreate) => {    
         setMessage({
           show: true,
-          title: "Crear votación",
+          title: "Resultados de Votación",
           description: "Estás segur@ de guardar los resultados de votación?",
           OkTitle: "Crear",
           cancelTitle: "Cancelar",
