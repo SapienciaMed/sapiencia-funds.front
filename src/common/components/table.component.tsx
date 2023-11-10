@@ -222,7 +222,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                       className="spc-table-actions"
                       header={
                         <div>
-                          <div className="spc-header-title">Acciones</div>
+                          <div
+                            className="spc-header-title"
+                            style={{ fontWeight: 400 }}
+                          >
+                            Acciones
+                          </div>
                         </div>
                       }
                       body={(row) => (
@@ -270,6 +275,12 @@ function getIconElement(icon: string, element: "name" | "src") {
       ) : (
         <Icons.FaPencilAlt className="button grid-button button-edit" />
       );
+    case "EditFill":
+      return element == "name" ? (
+        "Editar"
+      ) : (
+        <IconsBS.BsPencil className="button grid-button button-edit" />
+      );
     case "Delete":
       return element == "name" ? (
         "Eliminar"
@@ -309,7 +320,7 @@ function getIconElement(icon: string, element: "name" | "src") {
 }
 
 const leftContent = (title: string) => (
-  <p className="header-information text-black bold biggest">
+  <p className="header-information text-black  biggest">
     {title ? title : "Resultados de búsqueda"}
   </p>
 );

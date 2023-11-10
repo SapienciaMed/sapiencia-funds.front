@@ -84,14 +84,6 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       (i) => i == authEdit
     );
 
-    if (detailPermissions > 0) {
-      actions.push({
-        icon: "Edit",
-        onClick: (row) =>
-          navigate("/fondos/administracion/reglamento/form/" + row.id),
-      });
-    }
-
     if (editPermissions > 0) {
       actions.push({
         icon: "Detail",
@@ -99,6 +91,14 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
           setDetailData(row);
           setShowDetailModal(true);
         },
+      });
+    }
+
+    if (detailPermissions > 0) {
+      actions.push({
+        icon: "EditFill",
+        onClick: (row) =>
+          navigate("/fondos/administracion/reglamento/form/" + row.id),
       });
     }
 
@@ -126,7 +126,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const tableColumns: ITableElement<IRegulation>[] = [
     {
       fieldName: "row.regulation.program",
-      header: <>{"Programa"}</>,
+      header: <div style={{ fontWeight: 400 }}>{"Programa"}</div>,
       renderCell: (row) => {
         const getListItem: any = listPrograms.find(
           (item) => item.name === row.program || item.value === row.program
@@ -136,7 +136,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     },
     {
       fieldName: "row.regulation.initialPeriod",
-      header: "Periodo inicial",
+      header: <div style={{ fontWeight: 400 }}>{"Periodo inicial"}</div>,
       renderCell: (row) => {
         const getListItem: any = periods.find(
           (item) =>
@@ -147,7 +147,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     },
     {
       fieldName: "row.regulation.endPeriod",
-      header: "Periodo Final",
+      header: <div style={{ fontWeight: 400 }}>{"Periodo Final"}</div>,
       renderCell: (row) => {
         const getListItem: any = periods.find(
           (item) => item.name === row.endPeriod || item.value === row.endPeriod
@@ -157,7 +157,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     },
     {
       fieldName: "row.regulation.endPeriod",
-      header: "% Pago Teorico",
+      header: <div style={{ fontWeight: 400 }}>{"% Pago Teorico"}</div>,
       renderCell: (row) => {
         return <>{row.theoreticalPercentage}%</>;
       },

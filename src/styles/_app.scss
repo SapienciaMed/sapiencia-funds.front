@@ -636,6 +636,7 @@ span.select-basic {
   position: relative;
   display: inline-block;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .tooltip .tooltiptext {
@@ -657,7 +658,6 @@ span.select-basic {
 .tooltip:hover .tooltiptext {
   display: block; /* Muestra el tooltip cuando se coloca el cursor sobre el elemento */
 }
-
 
 .button-save-container-display-maestros-actas {
   display: flex;
