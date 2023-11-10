@@ -86,19 +86,19 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
 
     if (editPermissions > 0) {
       actions.push({
-        icon: "Detail",
-        onClick: (row) => {
-          setDetailData(row);
-          setShowDetailModal(true);
-        },
+        icon: "EditFill",
+        onClick: (row) =>
+          navigate("/fondos/administracion/reglamento/form/" + row.id),
       });
     }
 
     if (detailPermissions > 0) {
       actions.push({
-        icon: "EditFill",
-        onClick: (row) =>
-          navigate("/fondos/administracion/reglamento/form/" + row.id),
+        icon: "Detail",
+        onClick: (row) => {
+          setDetailData(row);
+          setShowDetailModal(true);
+        },
       });
     }
 
