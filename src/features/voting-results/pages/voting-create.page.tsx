@@ -206,7 +206,7 @@ const VotingResultsPage = () => {
                       <InputComponent
                         idInput={field.name}
                         errors={errors}
-                        typeInput={"text"}
+                        typeInput={"number"}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
