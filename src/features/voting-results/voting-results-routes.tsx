@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "../../common/utils/auth-private-guard";
+import ResourcePrioritizationPage from "./pages/resource-prioritization.page";
 
 function VotingResultsRoutes() {
   const VotingResultsPage = lazy(() => import("./pages/voting-create.page"));
@@ -26,6 +27,16 @@ function VotingResultsRoutes() {
           <PrivateRoute
             element={<VotingResultsPage />}
             allowedAction={"VOTACION_CREAR"}
+          />
+        }
+      />
+
+      <Route
+        path={"/priorizacion-recurso"}
+        element={
+          <PrivateRoute
+            element={<ResourcePrioritizationPage />}
+            allowedAction={"PRIORIZACION_RECURSOS_PP"}
           />
         }
       />
