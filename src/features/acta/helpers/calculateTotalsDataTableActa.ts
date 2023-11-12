@@ -1,7 +1,8 @@
-import { UseFormSetValue, FieldValues } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
+import { IActa } from '../../../common/interfaces';
 
-export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseFormSetValue<FieldValues>) => {
+export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseFormSetValue<IActa>) => {
     let totalQuantityPeriod1 = 0;
     let totalValuePeriod1 = 0;
     let totalQuantityPeriod2 = 0;

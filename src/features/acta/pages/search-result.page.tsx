@@ -6,10 +6,10 @@ import useSearcResult from "../hooks/search-result.hook";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 import Svgs from "../../../public/images/icons/svgs";
 import { Controller } from 'react-hook-form';
-import { ISearchResult } from "../interface/Acta";
+import { ISearchResultProp } from "../interface/Acta";
 import { DatePickerComponent } from "../../../common/components/Form/input-date.component";
 
-function SearchResulPage({ valueAction }: Readonly<ISearchResult>) {
+function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
     
     const { control, tableComponentRef, tableColumns, dataTableServices, tableColumnsUsers, dataGridUsersServices, 
         errors, times, activeUserList, dataGridUsers, dataGridItems, tableActionsUser,
@@ -33,10 +33,9 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResult>) {
                             classNameLabel="text-black big text-with-colons"
                             direction={EDirection.column}
                             disabled
-                            defaultValue="941000313"
                         />
                         <InputComponent
-                            idInput={"consecutiveNro"}
+                            idInput={"idStatus"}
                             className="input-basic medium"
                             typeInput="text"
                             label="Estado"
@@ -44,45 +43,71 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResult>) {
                             classNameLabel="text-black big text-with-colons"
                             direction={EDirection.column}
                             disabled
-                            defaultValue="Pendiente aprobación"
                         />
-                         <SelectComponent
-                            idInput={"projectNumber"}
-                            control={control}
-                            errors={errors}
-                            data={[
-                                {name: '1234', value: '1'},
-                                {name: '4321', value: '2'},
-                            ]}
-                            label="Número proyecto"
-                            className="select-basic medium select-disabled-list"
-                            classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
-                            filter={true}
-                            placeholder="Seleccionar."
-                            direction={EDirection.column}
-                            disabled={valueAction != 'edit'}
-                        />
+                        {
+                            valueAction == 'edit' ?
+                                <SelectComponent
+                                    idInput={"numberProject"}
+                                    control={control}
+                                    errors={errors}
+                                    data={[
+                                        {name: '1', value: '1'},
+                                        {name: '2', value: '2'},
+                                    ]}
+                                    label="Número proyecto"
+                                    className="select-basic medium select-disabled-list"
+                                    classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
+                                    filter={true}
+                                    placeholder="Seleccionar."
+                                    direction={EDirection.column}
+                                    disabled={valueAction != 'edit'}
+                                />
+                            :    <InputComponent
+                                    idInput={"numberProject"}
+                                    className="input-basic medium"
+                                    typeInput="text"
+                                    label="Número proyecto"
+                                    register={register}
+                                    classNameLabel="text-black big text-with-colons"
+                                    direction={EDirection.column}
+                                    disabled
+                                />
+                        }
                     </div>
                     <div className='grid-form-3-container gap-15'>
-                        <SelectComponent
-                            idInput={"periodVigency"}
-                            control={control}
-                            errors={errors}
-                            data={[
-                                {name: '1', value: '1'},
-                                {name: '2', value: '2'},
-                            ]}
-                            label="Periodos por vigencia"
-                            className="select-basic medium select-disabled-list"
-                            classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
-                            direction={EDirection.column}
-                            filter={true}
-                            placeholder="Seleccionar."
-                            disabled={valueAction != 'edit'}
-                        />
+
+                        {
+                            valueAction == 'edit' ?
+                                <SelectComponent
+                                    idInput={"periodVigency"}
+                                    control={control}
+                                    errors={errors}
+                                    data={[
+                                        {name: '1', value: '1'},
+                                        {name: '2', value: '2'},
+                                    ]}
+                                    label="Periodos por vigencia"
+                                    className="select-basic medium select-disabled-list"
+                                    classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
+                                    direction={EDirection.column}
+                                    filter={true}
+                                    placeholder="Seleccionar."
+                                    disabled={valueAction != 'edit'}
+                                />
+                            :   <InputComponent
+                                    idInput={"periodVigency"}
+                                    className="input-basic medium"
+                                    typeInput="text"
+                                    label="Número proyecto"
+                                    register={register}
+                                    classNameLabel="text-black big text-with-colons"
+                                    direction={EDirection.column}
+                                    disabled
+                                />
+                        }
                         <Controller
                             control={control}
-                            name={"initialCall"}
+                            name={"announcementInitial"}
                             render={({ field }) => {
                                 return (
                                     <InputComponent
@@ -102,7 +127,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResult>) {
                             }}
                         />
                         <InputComponent
-                            idInput={"minimumSalary"}
+                            idInput={"salaryMin"}
                             className="input-basic medium"
                             typeInput="text"
                             label="Salario mínimo"
@@ -120,7 +145,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResult>) {
                     </div>
                     <div className='grid-form-3-container gap-15'>
                         <InputNumberComponent
-                            idInput='costAndLogistics'
+                            idInput='costsExpenses'
                             className="inputNumber-basic medium"
                             label="Costo y gastos de operación logística"
                             classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
@@ -137,7 +162,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResult>) {
                             control={control}
                         />
                         <InputNumberComponent
-                            idInput='financialOperator'
+                            idInput='OperatorCommission'
                             className="inputNumber-basic medium"
                             label="Comisión operador financiero"
                             classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
@@ -154,7 +179,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResult>) {
                             control={control}
                         />
                          <InputNumberComponent
-                            idInput='financialTransactionMB'
+                            idInput='financialOperation'
                             className="inputNumber-basic medium"
                             label="Operación finaciera MB"
                             classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}

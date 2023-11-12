@@ -38,7 +38,7 @@ function ActaRoutes() {
       />
 
       <Route
-        path={"/visualizar"}
+        path={"/visualizar/:actaNro"}
         element={
           <PrivateRoute
             element={<SearchResultPage />}

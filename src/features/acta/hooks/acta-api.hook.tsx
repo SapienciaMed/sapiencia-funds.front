@@ -16,7 +16,7 @@ export default function useActaApi() {
     const serviceUrlActivity: string = "/api/v1/activities";
     const serviceUrlSapiencia: string = "/api/v1/sapiencia";   
     const serviceUrlStausList: string = "/api/v1/estatusList";   
-    const serviceActaCreate: string = "/api/v1/actas";   
+    const serviceUrlActa: string = "/api/v1/actas";   
     const serviceUrlProjects: string = "/api/v1/project";  
     const serviceUrlUsers: string = "/api/v1/user";  
 
@@ -50,7 +50,7 @@ export default function useActaApi() {
   async function createActa(
     data: IActa
     ): Promise<ApiResponse<IActa>> {
-      return await post(`${serviceActaCreate}/create`, data);
+      return await post(`${serviceUrlActa}/create`, data);
     }
     
     async function getUserList(): Promise<ApiResponse<IUser[]>> {
@@ -113,14 +113,20 @@ export default function useActaApi() {
     return hours;
   }
 
-    return {
-        getProgramTypes,
-        getMaster,
-        getAnnouncement,
-        getStatusList,
-        getProjectsList,
-        createActa,
-        getUserList,
-        getHours  
-    };
+  async function getActa(id: object): Promise<ApiResponse<IActa[]>> {
+    const endpoint: string = "/getActa"; 
+    return post(`${serviceUrlActa}${endpoint}`, id);
+  }
+
+  return {
+    getProgramTypes,
+    getMaster,
+    getAnnouncement,
+    getStatusList,
+    getProjectsList,
+    createActa,
+    getUserList,
+    getHours,
+    getActa
+  };
 }

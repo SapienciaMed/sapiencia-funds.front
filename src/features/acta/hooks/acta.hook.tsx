@@ -5,6 +5,7 @@ import { searchActas } from "../../../common/schemas/acta-shema";
 import { IActaSearch } from "../interface/Acta";
 import { useEffect, useState } from "react";
 
+
 export default function useActaData() {
     
     const navigate = useNavigate();
@@ -30,13 +31,11 @@ export default function useActaData() {
     },[inputValue])
 
     const onSubmitSearch = handleSubmit((data: IActaSearch) => {
-        console.log("🚀 ~ file: acta.hook.tsx:22 ~ onSubmit ~ data:", data)  
-        navigate('../visualizar')
+        navigate(`../visualizar/${data.actaNro}`)
     })
 
     const onAddvalues = async (data: IActaSearch) => {
-
-        navigate(`./modificar-acta/${data.actaNro}`) 
+        // navigate(`./modificar-acta/${data.actaNro}`) 
     };
     
     const handleModifyActa = () => handleSubmit(onAddvalues)();
@@ -49,6 +48,6 @@ export default function useActaData() {
         reset,
         errors,
         isBtnDisable,
-        control
+        control,
     }
 }

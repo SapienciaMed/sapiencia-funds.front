@@ -6,130 +6,107 @@ import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { editActas } from "../../../common/schemas/acta-shema";
 import ItemsCreatePage from "../pages/items-create.page";
-import { ISearchResult } from "../interface/Acta";
+import { ISearchResultProp } from "../interface/Acta";
 import useActaApi from "./acta-api.hook";
 import useAuthService from "../../../common/hooks/auth-service.hook";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IActa, IActaItems, ITableAction, ITableElement, IUser, IUserDataGrid } from "../../../common/interfaces";
 
-export default function useSearcResult({ valueAction }: Readonly<ISearchResult>) {
+export default function useSearcResult({ valueAction }: Readonly<ISearchResultProp>) {
 
     const resolver = useYupValidationResolver(editActas);
-    const { setMessage, authorization, setDataGridItems, dataGridItems, setDataGridUsers, dataGridUsers } = useContext(AppContext);
+    //dataGridItems = Se usa cuando esta editando (Se neceita?)
+    const { setMessage, authorization, dataGridItems, setDataGridUsers, dataGridUsers } = useContext(AppContext);
     const tableComponentRef = useRef(null);
-    const [ arrayCitation, setArrayCitation] = useState<any[]>([])
     const [ checked, setChecked ] = useState(false);
     const [ dataTableServices, setDataTableServices ] = useState<IActaItems[]>([])
     const [ dataGridUsersServices, setDataGridUsersServices ] = useState<IUserDataGrid[]>([])
     const [ selectedUserData, setSelectedUserData ] = useState<IUserDataGrid[]>([])
-    const [ datosActa, setDatosActa] = useState<IActa>();
-    const { getHours } = useActaApi();
+    const { getHours, getActa } = useActaApi();
     const [ times, setTimes ] = useState([]);
     const [ activeUserList, setActiveUserList ] = useState([]);
     const { getUser } = useAuthService();
     const navigate = useNavigate();
+    const { actaNro } = useParams();
 
-    const { 
-        register, 
-        handleSubmit, 
-        formState: { errors }, 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
         control,
         setValue,
         watch
-    } = useForm({
+    } = useForm<IActa>({
         resolver,
         mode: 'all'
     });
 
-
-    useEffect(() =>  {
-        //Peticion
-        const citationMock = {
-            user: '********',
-            date: '********',
-        }
-        valueAction != 'edit' && setArrayCitation([citationMock])
-
-        const valorTableMock = [
-            {
-                ident: "e15641ef-cfbb-4e37-b1f0-d3fd199081ff",
-                found: "pruebas",
-                line: "prueba",
-                program: "PROGRAMA",
-                announcement: "2019-1",
-                concept: "test",
-                costOperation: "1",
-                subtotalVigency: 1,
-                costBillsOperation: 0,
-                financialOperatorCommission: 0,
-                net: 0,
-                resourcesCredit: 0,
-                periods: {
-                    quantityPeriod1: "1",
-                    valuePeriod1: "1",
-                    quantityPeriod2: "1",
-                    valuePeriod2: "1"
-                },
-                idFound: "3",
-                idLine: "11",
-                idProgram: "4",
-                idAnnouncement: "1",
-                idConcept: "10"
-            },
-            {
-                ident: "e15641ef-cfbb-4e37-b1f0-d3fd199081ff",
-                found: "pruebas",
-                line: "prueba",
-                program: "PROGRAMA",
-                announcement: "2019-1",
-                concept: "test",
-                costOperation: "1",
-                subtotalVigency: 1,
-                costBillsOperation: 0,
-                financialOperatorCommission: 0,
-                net: 0,
-                resourcesCredit: 0,
-                periods: {
-                    quantityPeriod1: "1",
-                    valuePeriod1: "1",
-                    quantityPeriod2: "1",
-                    valuePeriod2: "1"
-                },
-                idFound: "3",
-                idLine: "11",
-                idProgram: "4",
-                idAnnouncement: "1",
-                idConcept: "10"
-            }
-        ]
-        valueAction != 'edit' && setDataTableServices(valorTableMock)
-
-        const gridUserMock = [ 
-            {
-                timeCitation: '*****',
-                user: 'Usuario1',
-                status: 1
-            },
-            {
-                timeCitation: '*****',
-                user: 'Usuario2',
-                status: 1
-            },
-            {
-                timeCitation: '*****',
-                user: 'Usuario3',
-                status: 1
-            }
-        ]
-        valueAction != 'edit' && setDataGridUsersServices(gridUserMock)
-    },[])
-
     useEffect(() => {
         loadTableData()
     }, [])
+
+    useEffect(() => {
+        const id = {
+            id: actaNro
+        }
+        if (valueAction != 'edit') {
+            getActa( id ).then(response => {
+                if (response.operation.code == EResponseCodes.OK) {
+                    const dinamicData = response?.data;
+                    const valueTableActaControl: IActaItems[] = dinamicData[0].items.map( data => {
+                        return {
+                            found: data?.idFound, //validar ya que Back ya que estos valores no vienen
+                            line: data?.idLine, //validar ya que Back ya que estos valores no vienen
+                            program: data?.idProgram, //validar ya que Back ya que estos valores no vienen
+                            announcement: data?.idAnnouncement, //validar ya que Back ya que estos valores no vienen
+                            concept: data?.idConcept, //validar ya que Back ya que estos valores no vienen
+                            costOperation: data?.costOperation,
+                            subtotalVigency: data?.subtotalVigency,
+                            costBillsOperation: 0,
+                            financialOperatorCommission: data.financialOperatorCommission,
+                            net: data?.net,
+                            resourcesCredit: data.resourcesCredit,
+                            periods: {
+                                valuePeriod1: data?.periods.valuePeriod1,
+                                valuePeriod2: data?.periods.valuePeriod2,
+                                quantityPeriod1: data?.periods.quantityPeriod1,
+                                quantityPeriod2: data?.periods.quantityPeriod2
+                            },
+                            idFound: data?.idFound,
+                            idLine: data?.idLine,
+                            idProgram: data?.idProgram,
+                            idAnnouncement: data?.idAnnouncement,
+                            idConcept: data?.idConcept
+                        }
+                    })
+                    setDataTableServices(valueTableActaControl)
+
+                    const valueCitation = dinamicData[0].citation.map(dataCita => {
+                        return {
+                            user: dataCita.user,
+                            timeCitation: dataCita.dateAprobation,
+                            status: dataCita.status
+                        }
+                    })
+                    setDataGridUsersServices(valueCitation)
+
+                    dinamicData.forEach(dataSearch => {
+                        setValue('idStatus', dataSearch.typeMasterList.name)
+                        setValue('numberProject', dataSearch.numberProject)
+                        setValue('periodVigency', dataSearch.periodVigency)
+                        setValue('announcementInitial', dataSearch.announcementInitial)
+                        setValue('salaryMin', dataSearch.salaryMin)
+                        setValue('costsExpenses', dataSearch.costsExpenses)
+                        setValue('OperatorCommission', dataSearch.OperatorCommission)
+                        setValue('financialOperation', dataSearch.financialOperation)
+                    });
+                }
+            }).catch(error => console.log(error))
+        }
+    },[])
 
     useEffect(() => {
         calculateTotalsDataTableActa(dataTableServices, setValue);
@@ -137,20 +114,14 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
 
     useEffect(() => {
         if (checked) {
-            console.log("mostrar modal");  
+            console.log("mostrar modal");
         }
     },[checked])
 
     useEffect(() => {
-        dataGridItems.length > 0 && setDataTableServices(dataGridItems)
-    },[dataGridItems])
-
-    useEffect(() => {
         return () => {
-            setDataGridItems([])
             setDataTableServices([])
             setSelectedUserData([])
-            setArrayCitation([])
             setDataGridUsersServices([])
             setChecked(false)
             setActiveUserList([])
@@ -240,7 +211,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
             fieldName: "aproved",
             header: 'Aprobar',
             renderCell: (rowData) => {
-                
+
                 return (
                     <div className="spc-table-action-button">
                         <Checkbox value={rowData} onChange={onCategoryChange} checked={selectedUserData.some((item) => item?.user == rowData?.user)}/>
@@ -260,7 +231,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
 
     const onCategoryChange = (e) => {
         let _selectedUser = [...selectedUserData];
-        
+
         if (e.checked){
             _selectedUser.push(e.value);
         }else{
@@ -282,7 +253,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
 
     // useEffect(() => {
     //     if (Number(projectMeta) < Number(vigency1) || Number(projectMeta)< Number(subtotalVigency)) {
-    //         setMessage({           
+    //         setMessage({
     //             title: "Guardar",
     //             description: "El acta no podrá ser guardada por superar el valor del techo",
     //             show: true,
@@ -293,7 +264,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
     //     }else{
     //         setSend(false)
     //     }
-    
+
     // }, [projectMeta, vigency1, subtotalVigency]);
 
     const tableActionsUser: ITableAction<IActaItems>[] = [
@@ -321,9 +292,9 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
         }
     ];
 
-    const addItem = handleSubmit((data: IActa) => {    
+    const addItem = handleSubmit((data: IActa) => {
         data.idStatus = 1;
-        setDatosActa(data)
+
         setMessage({
             show: true,
             title: "Agregar ítem",
@@ -361,17 +332,17 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
             .catch((err) => { });
     };
 
-    const selectedUser = watch('user');    
-    const selectedTime= watch('timeCitation');    
-    const selectedDate= watch('dateCitation');   
-    
+    const selectedUser = watch('user');
+    const selectedTime= watch('timeCitation');
+    const selectedDate= watch('dateCitation');
+
     const getSelectedLabel = (value, list) => {
         const selectedOption = list.find(option => option.value === value);
         return selectedOption ? { email: selectedOption.email, name: selectedOption.name } : null;
     };
 
     const selectedLabelUser = getSelectedLabel(selectedUser, activeUserList);
-    
+
     const addUser = handleSubmit((data: IActa) => {
         if (selectedUser ) {
             const date = new Date(selectedDate);
@@ -383,9 +354,9 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
                 timeCitation: selectedTime,
                 status: 0,
                 email: selectedLabelUser.email,
-            });               
+            });
         }
-        
+
     });
 
     const onCancel = () => {
@@ -406,7 +377,6 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResult>)
     return{
         errors,
         control,
-        arrayCitation,
         tableComponentRef,
         tableColumns,
         dataTableServices,

@@ -11,7 +11,7 @@ export interface IActa {
     OperatorCommission: number;
     financialOperation: number;
     creationDate?: string;
-    idStatus: number;
+    idStatus: number | string;
     items?: IActaItems[];
     citation?: ICitation[];  
 
@@ -35,4 +35,10 @@ export interface IActa {
     vigency1?: number;
     vigency2?: number;
     techo?: number;
+    typeMasterList?: ITypeMasterList
+}
+
+export interface ITypeMasterList {
+    id?: number;
+    name: string;
 }
