@@ -53,7 +53,7 @@ export const useItemResults = (action, dataVoting) => {
     defaultValues: {
       porcentaje456: action == "edit" ? dataVoting.porcentaje456 : null,
       porcentaje123: action == "edit" ? dataVoting.porcentaje123 : null,
-      totalCost: action == "edit" ? dataVoting.totalCost : null,
+      //totalCost: action == "edit" ? dataVoting.totalCost : null,
       amount: action == "edit" ? dataVoting.amount : null,
       activityValue: action == "edit" ? dataVoting.activityValue : null,
       productCode: action == "edit" ? dataVoting.productCode : null,
@@ -101,6 +101,7 @@ export const useItemResults = (action, dataVoting) => {
     };
 
   const changeAmountSum = (e) => {
+    
     if (e) {
       if (Number(e)) {
         const suma =
@@ -108,8 +109,6 @@ export const useItemResults = (action, dataVoting) => {
           Number(valueActivity != 0 ? valueActivity : selectedActivity ? selectedActivity : 0);
         setValue("totalCost", suma);
       }
-    } else {
-      
     }
   };
     /*Functions*/
@@ -335,24 +334,25 @@ export const useItemResults = (action, dataVoting) => {
             "porcentaje456", action == "edit" ? dataVoting.porcentaje456 : action == "editVoting" ? dataVoting.percentage456 : null
           );
           setValue(
-            "program", action == "edit" ? dataVoting.idProgram : action == "editVoting" ? Number(dataVoting.activiti.typesProgram.id) : null
+            "program", action == "edit" ? dataVoting.idProgram : action == "editVoting" ? Number(dataVoting.activity.typesProgram.id) : null
           );
-          setProgramSelected(Number(dataVoting.activiti.typesProgram.id));
-          setActivitySelected(Number(dataVoting.activiti.id));
+          setProgramSelected(Number(dataVoting.activity.typesProgram.id));
+          setActivitySelected(Number(dataVoting.activity.id));
           setValue(
-            "activity", action == "edit" ? dataVoting.idActivity : action == "editVoting" ? Number(dataVoting.activiti.id) : null
-          );
+            "activity", action == "edit" ? dataVoting.idActivity : action == "editVoting" ? Number(dataVoting.activity.id) : null
+        );
+        setValue(
+            "activityValue", action == "edit" ? dataVoting.activityValue : action == "editVoting" ? Number(dataVoting.activity.totalValue) : null
+        );
+        setValueActivity(Number(dataVoting.activity.totalValue));
           setValue(
             "porcentaje123", action == "edit" ? dataVoting.porcentaje123 : action == "editVoting" ? Number(dataVoting.percentage123) : null
           );
           setValue(
             "totalCost", action == "edit" ? dataVoting.totalCost : action == "editVoting" ? Number(dataVoting.costTotal) : null
-          );
+        );
           setValue(
             "amount", action == "edit" ? dataVoting.amount : action == "editVoting" ? Number(dataVoting.amount) : null
-          );
-          setValue(
-            "activityValue", action == "edit" ? dataVoting.activityValue : action == "editVoting" ? Number(dataVoting.activiti.totalValue) : null
           );
           setValue(
             "productCode", action == "edit" ? dataVoting.productCode : action == "editVoting" ? Number(dataVoting.codProductgueDnp) : null
