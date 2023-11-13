@@ -17,6 +17,7 @@ import Socialization from "./features/socialization";
 import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
+import ControlReportsRoutes from "./features/control-report/control-report-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -45,7 +46,10 @@ function App() {
                 path={"/fondos/resumen-priorizacion/*"}
                 element={<ResumenPriorizacionRoutes />}
               />
-              <Route path={"/fondos/maestros-actividad/*"} element={<MasterActivityRoutes />} />
+              <Route
+                path={"/fondos/maestros-actividad/*"}
+                element={<MasterActivityRoutes />}
+              />
               <Route path={"/fondos/acta/*"} element={<ActaRoutes />} />
               <Route
                 path={"/fondos/cargar-informacion/*"}
@@ -66,6 +70,11 @@ function App() {
               <Route
                 path={"/fondos/administracion/reglamento/*"}
                 element={<Regulation />}
+              />
+
+              <Route
+                path={"/fondos/seguimiento-financiero/*"}
+                element={<ControlReportsRoutes />}
               />
             </Routes>
           </Suspense>
