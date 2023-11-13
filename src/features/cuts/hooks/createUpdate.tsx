@@ -7,6 +7,7 @@ import { useCutApi } from "../services";
 import { ICut } from "../../../common/interfaces/cut";
 import { useForm } from "react-hook-form";
 import { EResponseCodes } from "../../../common/constants/api.enum";
+import { jwtDecode } from "jwt-decode";
 
 export default function useCutHook(auth) {
   const { setMessage, authorization } = useContext(AppContext);
@@ -83,13 +84,23 @@ export default function useCutHook(auth) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
+  const getUser = () => {
+    const token = localStorage.getItem("token");
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded;
+    } catch (error) {
+      console.error("Error al deserializar el token:", error.message);
+    }
+  };
+
   const onsubmitCreate = handleSubmit((data: ICut) => {
-    const user = JSON.parse(localStorage.getItem("credentials"));
+    const user = getUser();
     const buildData = {
       ...data,
       from: formatToMySQLDateTime(new Date(data.from)),
       until: formatToMySQLDateTime(new Date(data.until)),
-      createUser: user.numberDocument,
+      createUser: user?.document ? user?.document : "797940",
       createDate: formatToMySQLDateTime(new Date()),
     };
 
