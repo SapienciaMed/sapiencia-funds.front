@@ -38,6 +38,11 @@ function App() {
           <Suspense fallback={<p>Loading...</p>}>
             <Routes>
               <Route
+                path={"/fondos/priorizacion-recurso/*"}
+                element={<ResumenPriorizacionRoutes />}
+              />
+
+              <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
               />

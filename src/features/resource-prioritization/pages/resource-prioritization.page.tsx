@@ -13,7 +13,7 @@ import { EDirection } from "../../../common/constants/input.enum";
 import { AppContext } from "../../../common/contexts/app.context";
 import TableComponent from "../../../common/components/table.component";
 import { Controller, useForm } from "react-hook-form";
-import Svgs from "../../../../src/public/images/icons/svgs";
+import Svgs from "../../../public/images/icons/svgs";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { ResourcePrioritizationSearch } from "../../../common/schemas/voting-schema";
 import { useRegulationApi } from "../../regulation/service";
