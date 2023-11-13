@@ -3,7 +3,10 @@ import Acordion from "../components/acordion";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { Controller } from "react-hook-form";
-import { InputComponent } from "../../../common/components/Form";
+import {
+  ButtonComponent,
+  InputComponent,
+} from "../../../common/components/Form";
 import TableJson from "../components/tableJson";
 import Requirements from "./modules/requeriments/Requirements";
 import { LIST_DATA_GRACE_PERIOD, periods } from "../service";
@@ -601,6 +604,25 @@ const DetailReglament = ({
           >
             <Requirements onlyView id={detailData.id} />
           </Acordion>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              height: "40%",
+              alignItems: "end",
+            }}
+          >
+            <div>
+              <ButtonComponent
+                value="Cerrar"
+                form="regulationCreate"
+                action={onClose}
+                type="button"
+                className="button-save disabled-black padding-button"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
