@@ -27,6 +27,7 @@ interface IInputProps<T> {
   max?: number;
   min?: number;
   checked?: boolean;
+  maxLength?: number;
 }
 
 function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
@@ -56,6 +57,7 @@ function InputElement({
   max,
   min,
   checked,
+  maxLength,
 }): React.JSX.Element {
   return (
     <input
@@ -73,6 +75,7 @@ function InputElement({
       max={max}
       min={min}
       checked={checked}
+      maxLength={maxLength}
     />
   );
 }
@@ -99,6 +102,7 @@ export function InputComponent({
   max,
   min,
   checked,
+  maxLength,
 }: IInputProps<any>): React.JSX.Element {
   const messageError = () => {
     const keysError = idInput.split(".");
@@ -146,6 +150,7 @@ export function InputComponent({
           max={max}
           min={min}
           checked={checked}
+          maxLength={maxLength}
         />
         {messageError() && (
           <MdOutlineError

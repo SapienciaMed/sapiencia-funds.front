@@ -46,3 +46,26 @@ export const searchVotings = yup.object({
   validity: yup.string().required("La vigencia es obligatoria"),
   ideaProject: yup.string().required("La idea de proyecto es obligatoria"),
 });
+
+
+
+
+export const ResourcePrioritizationSearch = yup.object({
+  projectNumber: yup.number().required("Requerido!"),
+  programId: yup.number().required("Requerido!"),
+  validity: yup.number().required("Requerido!"),
+  generalRate: yup.number().required("Requerido!"),
+  operatorCommissionAct: yup.number().required("Requerido!"),
+  operatorCommissionBalance: yup.number().required("Requerido!"),
+  operatorCommission: yup.number().required("Requerido!"),
+});
+
+
+
+export const  ResourcePrioritizationSchema = yup.object({
+  financialPerformances: yup.number().required("Requerido!"),
+  generalRate: yup.number().required("Requerido!"),
+  averageCost: yup.number().required("Requerido!"),
+  balanceResources: yup.number().required("Requerido!"),
+ });
+
