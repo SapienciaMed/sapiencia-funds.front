@@ -17,6 +17,7 @@ import Socialization from "./features/socialization";
 import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
+import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -39,7 +40,7 @@ function App() {
             <Routes>
               <Route
                 path={"/fondos/priorizacion-recurso/*"}
-                element={<ResumenPriorizacionRoutes />}
+                element={<ResourcePrioritizationRoutes />}
               />
 
               <Route
