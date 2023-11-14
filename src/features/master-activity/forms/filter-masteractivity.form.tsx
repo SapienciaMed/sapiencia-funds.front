@@ -5,7 +5,7 @@ import {
   ButtonComponent,
   InputComponent,
 } from "../../../common/components/Form";
-import { Control, FieldValues, FormState } from "react-hook-form";
+import { Control, Controller, FieldValues, FormState } from "react-hook-form";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { IMasterActivityFilter } from "../../../common/interfaces/funds.interfaces";
 interface IPropsFilterMasterActivity {
@@ -41,16 +41,30 @@ export const FilterMasterActivityForm = ({
 
       <div>
         <FormComponent className="form-signIn" action={onSubmit}>
-          <div className="grid-form-3-container gap-25">
-            <InputComponent
-              register={control.register}
-              idInput="name"
-              className="input-basic medium"
-              typeInput="text"
-              label="Actividad"
-              classNameLabel="text-black big text-required"
-              errors={errors}
-            />
+          <div className="grid-form-3-container gap-25">            
+          <Controller
+            control={control}
+            name={"name"}
+            render={({ field }) => {
+              return (
+                <InputComponent
+                  idInput={field.name}
+                  errors={errors}
+                  typeInput={"text"}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  value={field.value}
+                  className="input-basic medium"
+                  classNameLabel="text-black big medium"
+                  label={
+                    <>
+                      Actividad <span>*</span>
+                    </>
+                  }
+                />
+              );
+            }}
+          />
           </div>
 
           <div className="button-save-container-display">
