@@ -32,6 +32,7 @@ const VotingResultsSearchPage = () => {
     downloadXLSX,
     sendingXLSX,
     dataTblTotal,
+    projectList,
   } = useVotingResultsSearch();
 
   const navigate = useNavigate();
@@ -147,7 +148,19 @@ const VotingResultsSearchPage = () => {
                   errors={errors}
                 />
 
-                <Controller
+                <SelectComponent
+                  idInput="numberProject"
+                  control={control}
+                  className="select-basic medium"
+                  placeholder="Seleccionar"
+                  label="Número proyecto"
+                  data={projectList ? projectList : []}
+                  classNameLabel="text-black big text-required bold"
+                  direction={EDirection.column}
+                  errors={errors}
+                />
+
+                {/* <Controller
                   control={control}
                   name={"numberProject"}
                   render={({ field }) => {
@@ -165,7 +178,7 @@ const VotingResultsSearchPage = () => {
                       />
                     );
                   }}
-                />
+                /> */}
 
                 <Controller
                   control={control}
@@ -259,7 +272,8 @@ const VotingResultsSearchPage = () => {
                             aucumActivity = Number(e.activity.totalValue);
                             value = Number(e.activity.totalValue);
                           } else {
-                            value = Number(value) + Number(e.activity.totalValue);
+                            value =
+                              Number(value) + Number(e.activity.totalValue);
                             aucumActivity = value;
                           }
                           if (Number(dataTblTotal.length) == Number(i + 1)) {

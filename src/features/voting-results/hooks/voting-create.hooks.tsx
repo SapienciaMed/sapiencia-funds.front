@@ -32,8 +32,11 @@ export const useVotingResults = () => {
     const [amountTotal, setAmountTotal] = useState(0);
     const [totalValueActivity, settotalValueActivity] = useState(0);
     const [totalValueOne, settotalValueOne] = useState(0);
+    const [projectList, setProjectsList] = useState([]);
+
   
-    const { createVotingResults } = useVotingItemApi();
+  
+    const { createVotingResults, getProjectsList } = useVotingItemApi();
 
 
 
@@ -201,6 +204,21 @@ export const useVotingResults = () => {
           }
         });
         
+          getProjectsList().then((response) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {
+              setProjectsList(
+                response.data.map((item) => {
+                  const list = {
+                    value: item.id,
+                    name: item.bpin,
+                    meta: item.goal,
+                  };
+                  return list;
+                })
+              );
+            }
+          });
+    
     }, []);
 
 
@@ -226,6 +244,7 @@ export const useVotingResults = () => {
       settotalValueOne,
       settotalValueActivity,
       setAmountTotal,
+      projectList,
     };
 };
 

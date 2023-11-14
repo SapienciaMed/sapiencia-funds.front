@@ -10,19 +10,22 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
+import useVotingItemApi from "./voting-items-api.hooks";
 
 export const useVotingResultsSearch = () => {
   const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
   const navigate = useNavigate();
   const resolver = useYupValidationResolver(searchVotings);
-  const { downloadFile,consultVoting } = useVotingService();
+  const { downloadFile,consultVoting, } = useVotingService();
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
   const [deparmetList, setDeparmentList] = useState([]);
-  const { getListByParent, getListByGroupers } = useGenericListService();
+  const { getListByGroupers } = useGenericListService();
   const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
   const [sendingXLSX, setSendingXLSX] = useState(false);
   const [dataTblTotal, setDataTblTotal] = useState([]);
+  const { getProjectsList } = useVotingItemApi();
+  const [projectList, setProjectsList] = useState([]);
 
 
   const onSubmitSearch = async () => {
@@ -35,7 +38,15 @@ export const useVotingResultsSearch = () => {
     getValues,
     formState: { errors },
     reset,
-    } = useForm<IVotingCreate>({ resolver });
+  } = useForm<IVotingCreate>({
+    resolver,
+    defaultValues: {
+      communeNeighborhood: null,
+      numberProject: null,
+      validity: "",
+      ideaProject: "",
+    },
+  });
 
     /*Functions*/
   const onSubmitSearchVoting = handleSubmit(async (data: IVotingCreate) => {
@@ -96,7 +107,23 @@ export const useVotingResultsSearch = () => {
            );
          }
        }
-     );
+      );
+      
+      getProjectsList().then((response) => {
+        if (response && response?.operation?.code === EResponseCodes.OK) {
+          setProjectsList(
+            response.data.map((item) => {
+              const list = {
+                value: item.id,
+                name: item.bpin,
+                meta: item.goal,
+              };
+              return list;
+            })
+          );
+        }
+      });
+
     }, []);
   
   
@@ -142,6 +169,7 @@ export const useVotingResultsSearch = () => {
     setSendingXLSX,
     dataTblTotal,
     setDataTblTotal,
+    projectList,
   };
 }
 

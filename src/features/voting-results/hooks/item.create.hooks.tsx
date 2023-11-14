@@ -223,8 +223,8 @@ export const useItemResults = (action, dataVoting) => {
           async onOk() {
             const votingItesData = {
               aimStraight: String(data.directObject),
-              productCatalogueDnp: Number(data.productCatalog),
-              codProductgueDnp: Number(data.productCode),
+              productCatalogueDnp: data.productCatalog,
+              codProductgueDnp: data.productCode,
               codPmaProgram: Number(programSelected),
               codMtaTeacherActivity: Number(activitySelected),
               amount: String(data.amount),
