@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useState } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useRenewaReportSearch from "../hooks/renewal-report.hook";
 import TableComponent from "../../../common/components/table.component";
+import Svgs from "../../../public/images/icons/svgs";
 
 const SearchRenewalReportPage = (): React.JSX.Element => {
     const {
@@ -130,6 +131,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             label="Nro habilitados"
                             classNameLabel="text-black big text-required"
                             errors={errors}
+                            
                         />
                         <InputComponent
                             register={control.register}
@@ -154,11 +156,22 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     </div>
                 </div>
                 <div>
-                <ButtonComponent
-                        form="searchBudget"
-                        value={`Descargar`}
-                        className="button-save large hover-three disabled-black"
-                    />
+                <div className="button-save-container-display mr-24px">
+                    </div>
+
+                        <ButtonComponent
+                            value={
+                                <>
+                                    <div className="container-buttonText">
+                                        <span>Descargar</span>
+                                        <Svgs svg="excel" width={23.593} height={28.505} />
+                                    </div>
+                                </>
+                            }
+                            className="button-download large "
+                            //action={downloadCollection}
+                        />
+                    
                 </div>
                 <div className="button-save-container-display m-top-20">
                     <ButtonComponent
