@@ -29,7 +29,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             action={onSubmit}
                         >
                             <div>
-                                <div className="grid-form-3-container mb-24px">
+                                <div className="grid-form-4-container mb-24px">
 
                                     <MultiSelects
                                         idInput={"id_comuna"}
@@ -39,8 +39,8 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                         label={<>Fondo Comuna <span>*</span></>}
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
                                         classNameLabel="text-black big medium label-regular"
-                                        filter={true}
                                         placeholder="Seleccionar."
+                                        filter={true}
 
                                     />
                                     <SelectComponent

@@ -200,7 +200,13 @@ export default function useBudgetSearch() {
 
         url.search = params.toString();
         window.open(url.toString(), "_blank");
-
+        setMessage({
+            title: "Descargar",
+            description: "Información descargada exitosamente",
+            show: true,
+            background: true,
+            OkTitle: "Aceptar"
+          });
 
     }, [paginateData, formWatch, id_comuna, periodo]
 
