@@ -29,6 +29,8 @@ interface IProps<T> {
   isShowModal: boolean;
   titleMessageModalNoResult?: string;
   data: Array<T>;
+  classSizeTable?: string;
+  showPaginator?: boolean
 }
 
 interface IRef {
@@ -42,6 +44,8 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     columns,
     actions,
     emptyMessage = "No hay resultados.",
+    classSizeTable,
+    showPaginator = true
   } = props;
 
   // States
@@ -88,26 +92,29 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     <div className="spc-common-table">
       {title && <div className="spc-table-title">{title}</div>}
 
-      <Paginator
-        className="between spc-table-paginator"
-        template={paginatorHeader}
-        rows={perPage}
-        onPageChange={(i) => setPerPage(i.rows)}
-        totalRecords={props.data.length} // Cambia 'meta' por 'pagingInfo'
-        leftContent={
-          <p className="header-information text-black biggest">
-            {secondaryTitle ?? "Resultados de búsqueda"}
-          </p>
-        }
-      />
+      {
+        showPaginator && 
+          <Paginator
+            className="between spc-table-paginator"
+            template={paginatorHeader}
+            rows={perPage}
+            onPageChange={(i) => setPerPage(i.rows)}
+            totalRecords={props.data.length} // Cambia 'meta' por 'pagingInfo'
+            leftContent={
+              <p className="header-information text-black biggest">
+                {secondaryTitle ?? "Resultados de búsqueda"}
+              </p>
+            }
+          />
+      }
 
       {width > 830 ? (
-        <div style={{ maxWidth: width - 390 }}>
+        <div>
           <DataTable
-            className="spc-table full-height"
+            className={`spc-table full-height ${classSizeTable}`}
             value={props.data}
             scrollable={true}
-            paginator={true}
+            paginator={showPaginator}
             rows={perPage}
             scrollHeight="400px"
             emptyMessage={emptyMessage}

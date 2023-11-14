@@ -12,6 +12,10 @@ function ActaRoutes() {
     () => import("./pages/acta-create.page")
   );
 
+  const SearchResultPage = lazy(
+    () => import("./pages/search-result.page")
+  );
+
   return (
     <Routes>
       <Route
@@ -29,6 +33,16 @@ function ActaRoutes() {
           <PrivateRoute
             element={<ActaCreatePage />}
             allowedAction={"MAESTROS_CREAR"}
+          />
+        }
+      />
+
+      <Route
+        path={"/visualizar"}
+        element={
+          <PrivateRoute
+            element={<SearchResultPage />}
+            allowedAction={"MAESTROS_CONSULTAR"}
           />
         }
       />

@@ -12,16 +12,18 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 
 export const useVotingResultsSearch = () => {
-  const { setMessage, authorization, setDataGrid, dataGrid } =
-    useContext(AppContext);
+  const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
   const navigate = useNavigate();
   const resolver = useYupValidationResolver(searchVotings);
-  const { createVoting } = useVotingService();
+  const { downloadFile,consultVoting } = useVotingService();
   const tableComponentRef = useRef(null);
-const [sending, setSending] = useState(false);
-const [deparmetList, setDeparmentList] = useState([]);
-    const { getListByParent, getListByGroupers } = useGenericListService();
-      const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
+  const [sending, setSending] = useState(false);
+  const [deparmetList, setDeparmentList] = useState([]);
+  const { getListByParent, getListByGroupers } = useGenericListService();
+  const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
+  const [sendingXLSX, setSendingXLSX] = useState(false);
+  const [dataTblTotal, setDataTblTotal] = useState([]);
+
 
   const onSubmitSearch = async () => {
     loadTableData({});
@@ -30,18 +32,25 @@ const [deparmetList, setDeparmentList] = useState([]);
     handleSubmit,
     register,
     control,
+    getValues,
     formState: { errors },
     reset,
     } = useForm<IVotingCreate>({ resolver });
 
     /*Functions*/
-    const onSubmitSearchVoting = handleSubmit((data: IVotingCreate) => {
+  const onSubmitSearchVoting = handleSubmit(async (data: IVotingCreate) => {
         loadTableData({
-          communeNeighborhood: valCommuneNeighborhood,
+          communeNeighborhood: data?.communeNeighborhood,
           numberProject: data?.numberProject,
           validity: data?.validity,
           ideaProject: data?.ideaProject,
         });
+      if (data?.numberProject && data?.validity && data?.ideaProject && data?.communeNeighborhood) {
+        setSendingXLSX(true);
+        const dataConsult : any = await consultVoting(data);
+        setDataTblTotal(dataConsult.data)
+      }
+      
     });
     
     function loadTableData(searchCriteria?: object): void {
@@ -91,8 +100,26 @@ const [deparmetList, setDeparmentList] = useState([]);
     }, []);
   
   
-  const downloadXLSX = () => {
-    
+  const downloadXLSX = async () => {
+    const dataForm = getValues();
+    await downloadFile(dataForm).then((resp: any) => {
+      const buffer = new Uint8Array(resp.data.data); // Convierte el Array del búfer en Uint8Array
+      const blob = new Blob([buffer]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `ResultadosVotacion.xls`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      setMessage({
+        title: `Descargar excel`,
+        description: `El archivo fue descargado con éxito`,
+        show: true,
+        OkTitle: "Aceptar",
+        background: true,
+      });
+    });
   }
 
   return {
@@ -111,6 +138,10 @@ const [deparmetList, setDeparmentList] = useState([]);
     reset,
     control,
     downloadXLSX,
+    sendingXLSX,
+    setSendingXLSX,
+    dataTblTotal,
+    setDataTblTotal,
   };
 }
 

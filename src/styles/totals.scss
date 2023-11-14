@@ -1,0 +1,27 @@
+.app2-totals-column-content {
+  display: flex;
+  flex-direction: column;
+
+  .column-head {
+    display: flex;
+    padding: 10px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    height: 60px !important;
+    flex-shrink: 0;
+    border-radius: var(--spacing-spacing-0, 0px);
+    text-align: center;
+    background: #f8f9fa;
+    font-weight: bold;
+  }
+  .column-body {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    height: 60px !important;
+    flex-shrink: 0;
+    border-radius: var(--spacing-spacing-0, 0px);
+  }
+}
