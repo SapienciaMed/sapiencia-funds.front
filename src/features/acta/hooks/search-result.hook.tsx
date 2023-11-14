@@ -25,9 +25,10 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     const [ dataTableServices, setDataTableServices ] = useState<IActaItems[]>([])
     const [ dataGridUsersServices, setDataGridUsersServices ] = useState<IUserDataGrid[]>([])
     const [ selectedUserData, setSelectedUserData ] = useState<IUserDataGrid[]>([])
-    const { getHours, getActa } = useActaApi();
+    const { getHours, getActa, getProjectsList } = useActaApi();
     const [ times, setTimes ] = useState([]);
     const [ activeUserList, setActiveUserList ] = useState([]);
+    const [projectList, setProjectsList] = useState([]);
     const { getUser } = useAuthService();
     const navigate = useNavigate();
     const { actaNro } = useParams();
@@ -44,6 +45,8 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         mode: 'all'
     });
 
+    const selectedProject = watch('numberProject');  
+
     useEffect(() => {
         loadTableData()
     }, [])
@@ -58,11 +61,11 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                     const dinamicData = response?.data;
                     const valueTableActaControl: IActaItems[] = dinamicData[0].items.map( data => {
                         return {
-                            found: data?.idFound, //validar ya que Back ya que estos valores no vienen
-                            line: data?.idLine, //validar ya que Back ya que estos valores no vienen
-                            program: data?.idProgram, //validar ya que Back ya que estos valores no vienen
-                            announcement: data?.idAnnouncement, //validar ya que Back ya que estos valores no vienen
-                            concept: data?.idConcept, //validar ya que Back ya que estos valores no vienen
+                            found: data?.idFound, 
+                            line: data?.idLine, 
+                            program: data?.idProgram, 
+                            announcement: data?.idAnnouncement, 
+                            concept: data?.idConcept, 
                             costOperation: data?.costOperation,
                             subtotalVigency: data?.subtotalVigency,
                             costBillsOperation: 0,
@@ -75,11 +78,11 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                                 quantityPeriod1: data?.periods.quantityPeriod1,
                                 quantityPeriod2: data?.periods.quantityPeriod2
                             },
-                            idFound: data?.idFound,
-                            idLine: data?.idLine,
-                            idProgram: data?.idProgram,
-                            idAnnouncement: data?.idAnnouncement,
-                            idConcept: data?.idConcept
+                            // idFound: data?.idFound,
+                            // idLine: data?.idLine,
+                            // idProgram: data?.idProgram,
+                            // idAnnouncement: data?.idAnnouncement,
+                            // idConcept: data?.idConcept
                         }
                     })
                     setDataTableServices(valueTableActaControl)
@@ -105,6 +108,21 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                     });
                 }
             }).catch(error => console.log(error))
+
+            getProjectsList().then((response) => {
+                    if (response && response?.operation?.code === EResponseCodes.OK) {
+                        setProjectsList(
+                            response.data.map((item) => {
+                                const list = {
+                                    value: item.id,
+                                    name: item.bpin,
+                                    meta: item.goal,
+                                };
+                                return list;
+                            })
+                        );
+                    }
+            }).catch(error => console.log(error))
         }
     },[])
 
@@ -117,6 +135,14 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
             console.log("mostrar modal");
         }
     },[checked])
+
+    useEffect(() => {
+        const selectedProjectMeta = projectList.find(us => us.value == selectedProject)?.meta;
+        if (selectedProjectMeta) {
+            const integerPart = parseInt(selectedProjectMeta, 10);         
+            setValue('techo',integerPart) 
+        }
+    }, [selectedProject, projectList]);
 
     useEffect(() => {
         return () => {
@@ -388,7 +414,6 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         dataGridUsers,
         tableActionsUser,
         register,
-        actionBodyTemplate,
         addItem,
         onSubmit,
         addUser,

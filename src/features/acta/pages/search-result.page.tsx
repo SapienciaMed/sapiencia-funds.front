@@ -98,7 +98,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                     idInput={"periodVigency"}
                                     className="input-basic medium"
                                     typeInput="text"
-                                    label="Número proyecto"
+                                    label="Periodos por vigencia"
                                     register={register}
                                     classNameLabel="text-black big text-with-colons"
                                     direction={EDirection.column}
