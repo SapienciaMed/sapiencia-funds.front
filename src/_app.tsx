@@ -37,7 +37,7 @@ function App() {
                 element={<VotingResultsRoutes />}
               />
               <Route
-                path={"/fondos/maestro/*"}
+                path={"/fondos/maestros-actividad/*"}
                 element={<MasterActivityRoutes />}
               />
             </Routes>

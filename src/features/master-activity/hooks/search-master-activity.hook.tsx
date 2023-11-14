@@ -97,7 +97,7 @@ export default function useSearchMasterHook() {
   const tableActions: ITableAction<IMasterActivity>[] = [
     {
       icon: "Edit",
-      onClick: (row) => navigate("/fondos/maestro/editar/" + row.id),
+      onClick: (row) => navigate("/fondos/maestros-actividad/editar/" + row.id),
     },
   ];
 
