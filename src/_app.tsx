@@ -17,6 +17,8 @@ import Socialization from "./features/socialization";
 import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
+import Cortes from "./features/cuts";
+import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -38,6 +40,11 @@ function App() {
           <Suspense fallback={<p>Loading...</p>}>
             <Routes>
               <Route
+                path={"/fondos/priorizacion-recurso/*"}
+                element={<ResourcePrioritizationRoutes />}
+              />
+
+              <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
               />
@@ -45,7 +52,10 @@ function App() {
                 path={"/fondos/resumen-priorizacion/*"}
                 element={<ResumenPriorizacionRoutes />}
               />
-              <Route path={"/fondos/maestros-actividad/*"} element={<MasterActivityRoutes />} />
+              <Route 
+                path={"/fondos/maestros-actividad/*"} 
+                element={<MasterActivityRoutes />} 
+              />
               <Route path={"/fondos/acta/*"} element={<ActaRoutes />} />
               <Route
                 path={"/fondos/cargar-informacion/*"}
@@ -66,6 +76,11 @@ function App() {
               <Route
                 path={"/fondos/administracion/reglamento/*"}
                 element={<Regulation />}
+              />
+
+              <Route
+                path={"/fondos/administracion/cortes/*"}
+                element={<Cortes />}
               />
             </Routes>
           </Suspense>

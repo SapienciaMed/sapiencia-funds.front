@@ -192,6 +192,23 @@ export default function useRegulationHook(auth) {
       ...data,
       createUser: user.numberDocument,
       createDate: new Date().toISOString(),
+      isOpenPeriod: data?.isOpenPeriod ? true : false,
+      applySocialService: data?.applySocialService ? true : false,
+      knowledgeTransferApply: data?.knowledgeTransferApply ? true : false,
+      gracePeriodApply: data?.gracePeriodApply ? true : false,
+      continuousSuspensionApplies: data?.continuousSuspensionApplies
+        ? true
+        : false,
+      applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension
+        ? true
+        : false,
+      applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
+      extensionApply: data?.extensionApply ? true : false,
+      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
+        ? true
+        : false,
+      accomulatedIncomeCondonationApplies:
+        data?.accomulatedIncomeCondonationApplies ? true : false,
     };
 
     setMessage({

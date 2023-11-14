@@ -5,8 +5,8 @@ import { ApiResponse, IPagingData } from "../utils/api-response";
 import useCrudService from "./crud-service.hook";
 
 export function useVotingService() {
-  const baseURL: string = process.env.urlApiAuth;
-  const userUrl: string = "/api/v1/user";
+  const baseURL: string = process.env.urlApiFunds;
+  const userUrl: string = "/api/v1/voting";
   const { get, post, put, deleted } = useCrudService(baseURL);
 
   async function getPagination(
@@ -42,11 +42,36 @@ export function useVotingService() {
     return deleted(`${userUrl}${endpoint}`);
   }
 
+  async function consultVoting(data: Object): Promise<ApiResponse<IVotingCreate>> {
+    const endpoint: string = "/get-paginatedtotal";
+    return post(`${userUrl}${endpoint}`, data);
+  }
+
+  async function downloadFile(
+      data: Object
+    ): Promise<ApiResponse<any>> {
+      try {
+        // const endpoint: string = `/get-report`;
+        // return await post(`/api/v1/summary-priorizacion${endpoint}`, data);
+        const endpoint: string = "/get-paginatedxlsx";
+        return await post(`${userUrl}${endpoint}`, data);
+
+      } catch (error) {
+        return new ApiResponse(
+          false,
+          EResponseCodes.FAIL,
+          "Error no controlado"
+        );
+      }
+    }
+
   return {
     getPagination,
     getVoting,
     createVoting,
     updateVoting,
     deleteVoting,
+    consultVoting,
+    downloadFile,
   };
 }

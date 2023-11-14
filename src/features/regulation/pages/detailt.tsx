@@ -3,7 +3,10 @@ import Acordion from "../components/acordion";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { Controller } from "react-hook-form";
-import { InputComponent } from "../../../common/components/Form";
+import {
+  ButtonComponent,
+  InputComponent,
+} from "../../../common/components/Form";
 import TableJson from "../components/tableJson";
 import Requirements from "./modules/requeriments/Requirements";
 import { LIST_DATA_GRACE_PERIOD, periods } from "../service";
@@ -21,6 +24,10 @@ const DetailReglament = ({
   if (!isOpen || !detailData) {
     return null;
   }
+
+  const preventClick = (e) => {
+    return e.preventDefault();
+  };
 
   return (
     <div className="modal-overlay">
@@ -120,21 +127,24 @@ const DetailReglament = ({
                   }}
                 />
               </div>
-              <div>
+              <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica servicio social?"
                   isOpen={detailData?.applySocialService}
                   onClick={() => {}}
+                  onlyView
                   switchElement={
                     <SwitchComponent
                       idInput={"applySocialService"}
                       errors={errors}
                       disabled={true}
+                      defaultValue={detailData?.applySocialService}
                       control={control}
                       onClick={() => {}}
                       onChange={() => {}}
                       size="small"
-                      className="select-basic select-disabled-list input-size"
+                      classNameSwitch="opacity"
+                      className="select-basic select-disabled-list input-size opacity"
                       classNameLabel="text-black biggest font-500"
                     />
                   }
@@ -189,11 +199,12 @@ const DetailReglament = ({
                   </div>
                 </Acordion>
               </div>
-              <div>
+              <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica trasferencia de conocimiento?"
                   isOpen={detailData?.knowledgeTransferApply}
                   onClick={() => {}}
+                  onlyView
                   switchElement={
                     <SwitchComponent
                       idInput={"knowledgeTransferApply"}
@@ -202,6 +213,7 @@ const DetailReglament = ({
                       control={control}
                       onChange={() => {}}
                       size="small"
+                      classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
                       classNameLabel="text-black biggest font-500"
                     />
@@ -257,11 +269,12 @@ const DetailReglament = ({
                   </div>
                 </Acordion>
               </div>
-              <div>
+              <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica periodo de gracia?"
                   isOpen={detailData?.gracePeriodApply}
                   onClick={async () => {}}
+                  onlyView
                   switchElement={
                     <SwitchComponent
                       idInput={"gracePeriodApply"}
@@ -270,6 +283,7 @@ const DetailReglament = ({
                       control={control}
                       onChange={() => {}}
                       size="small"
+                      classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
                       classNameLabel="text-black biggest font-500"
                     />
@@ -315,11 +329,12 @@ const DetailReglament = ({
                   </div>
                 </Acordion>
               </div>
-              <div>
+              <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica suspensiones continuas?"
                   isOpen={detailData?.continuousSuspensionApplies}
                   onClick={() => {}}
+                  onlyView
                   switchElement={
                     <SwitchComponent
                       idInput={"continuousSuspensionApplies"}
@@ -328,6 +343,7 @@ const DetailReglament = ({
                       control={control}
                       onChange={() => {}}
                       size="small"
+                      classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
                       classNameLabel="text-black biggest font-500"
                     />
@@ -360,11 +376,12 @@ const DetailReglament = ({
                   </div>
                 </Acordion>
               </div>
-              <div>
+              <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica suspensiones discontinuas?"
                   isOpen={detailData?.applyDiscontinuousSuspension}
                   onClick={async () => {}}
+                  onlyView
                   switchElement={
                     <SwitchComponent
                       idInput={"applyDiscontinuousSuspension"}
@@ -373,6 +390,7 @@ const DetailReglament = ({
                       disabled={true}
                       onChange={() => {}}
                       size="small"
+                      classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
                       classNameLabel="text-black biggest font-500"
                     />
@@ -405,11 +423,12 @@ const DetailReglament = ({
                   </div>
                 </Acordion>
               </div>
-              <div>
+              <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica suspensiones especiales?"
                   isOpen={detailData?.applySpecialSuspensions}
                   onClick={async () => {}}
+                  onlyView
                   switchElement={
                     <SwitchComponent
                       disabled={true}
@@ -418,6 +437,7 @@ const DetailReglament = ({
                       control={control}
                       onChange={() => {}}
                       size="small"
+                      classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size mb-24px"
                       classNameLabel="text-black biggest font-500"
                     />
@@ -450,11 +470,12 @@ const DetailReglament = ({
                   </div>
                 </Acordion>
               </div>
-              <div>
+              <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica prórroga?"
                   isOpen={detailData?.extensionApply}
                   onClick={async () => {}}
+                  onlyView
                   switchElement={
                     <SwitchComponent
                       idInput={"extensionApply"}
@@ -463,6 +484,7 @@ const DetailReglament = ({
                       control={control}
                       onChange={() => {}}
                       size="small"
+                      classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
                       classNameLabel="text-black biggest font-500"
                     />
@@ -504,65 +526,74 @@ const DetailReglament = ({
             switchElement={<></>}
           >
             <>
-              <Acordion
-                title="¿Aplica condonación por rendimiento académico por periodo?"
-                isOpen={detailData?.applyCondonationPerformancePeriod}
-                onClick={async () => {}}
-                switchElement={
-                  <SwitchComponent
-                    idInput={"applyCondonationPerformancePeriod"}
-                    errors={errors}
-                    control={control}
-                    onChange={() => {}}
-                    size="small"
-                    className="select-basic select-disabled-list input-size"
-                    classNameLabel="text-black biggest font-500"
-                  />
-                }
-              >
-                <div>
-                  <TableJson
-                    idInput="performancePeriod"
-                    isOpen={detailData?.applyCondonationPerformancePeriod}
-                    setValue={setValue}
-                    title="promedio y porcentaje de condonación"
-                    onlyView={true}
-                    getValues={getValues}
-                    error={errors}
-                    dataRead={detailData}
-                  />
-                </div>
-              </Acordion>
-              <Acordion
-                title="¿Aplica condonación por rendimiento académico final acumulado?"
-                isOpen={detailData?.accomulatedIncomeCondonationApplies}
-                onClick={async () => {}}
-                switchElement={
-                  <SwitchComponent
-                    idInput={"accomulatedIncomeCondonationApplies"}
-                    errors={errors}
-                    disabled={true}
-                    control={control}
-                    onChange={() => {}}
-                    size="small"
-                    className="select-basic select-disabled-list input-size"
-                    classNameLabel="text-black biggest font-500"
-                  />
-                }
-              >
-                <div>
-                  <TableJson
-                    isOpen={detailData?.accomulatedIncomeCondonationApplies}
-                    idInput="accumulatedPerformance"
-                    setValue={setValue}
-                    title="Agregar promedio y porcentaje de condonación"
-                    getValues={getValues}
-                    error={errors}
-                    onlyView={true}
-                    dataRead={detailData}
-                  />
-                </div>
-              </Acordion>
+              <div onClick={preventClick}>
+                <Acordion
+                  title="¿Aplica condonación por rendimiento académico por periodo?"
+                  isOpen={detailData?.applyCondonationPerformancePeriod}
+                  onClick={async () => {}}
+                  onlyView
+                  switchElement={
+                    <SwitchComponent
+                      idInput={"applyCondonationPerformancePeriod"}
+                      errors={errors}
+                      control={control}
+                      disabled={true}
+                      classNameSwitch="opacity"
+                      onChange={() => {}}
+                      size="small"
+                      className="select-basic select-disabled-list input-size"
+                      classNameLabel="text-black biggest font-500"
+                    />
+                  }
+                >
+                  <div>
+                    <TableJson
+                      idInput="performancePeriod"
+                      isOpen={detailData?.applyCondonationPerformancePeriod}
+                      setValue={setValue}
+                      title="promedio y porcentaje de condonación"
+                      onlyView={true}
+                      getValues={getValues}
+                      error={errors}
+                      dataRead={detailData}
+                    />
+                  </div>
+                </Acordion>
+              </div>
+              <div onClick={preventClick}>
+                <Acordion
+                  title="¿Aplica condonación por rendimiento académico final acumulado?"
+                  isOpen={detailData?.accomulatedIncomeCondonationApplies}
+                  onClick={async () => {}}
+                  onlyView
+                  switchElement={
+                    <SwitchComponent
+                      idInput={"accomulatedIncomeCondonationApplies"}
+                      errors={errors}
+                      disabled={true}
+                      control={control}
+                      onChange={() => {}}
+                      classNameSwitch="opacity"
+                      size="small"
+                      className="select-basic select-disabled-list input-size"
+                      classNameLabel="text-black biggest font-500"
+                    />
+                  }
+                >
+                  <div>
+                    <TableJson
+                      isOpen={detailData?.accomulatedIncomeCondonationApplies}
+                      idInput="accumulatedPerformance"
+                      setValue={setValue}
+                      title="Agregar promedio y porcentaje de condonación"
+                      getValues={getValues}
+                      error={errors}
+                      onlyView={true}
+                      dataRead={detailData}
+                    />
+                  </div>
+                </Acordion>
+              </div>
             </>
           </Acordion>
           <Acordion
@@ -573,6 +604,25 @@ const DetailReglament = ({
           >
             <Requirements onlyView id={detailData.id} />
           </Acordion>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              height: "40%",
+              alignItems: "end",
+            }}
+          >
+            <div>
+              <ButtonComponent
+                value="Cerrar"
+                form="regulationCreate"
+                action={onClose}
+                type="button"
+                className="button-save disabled-black padding-button"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

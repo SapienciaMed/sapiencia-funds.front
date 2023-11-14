@@ -9,6 +9,16 @@
   cursor: pointer;
 }
 
+.onlyView {
+  width: 100%;
+  height: 75px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 37px;
+}
+
 .summary:hover {
   background-color: #e9ecef;
 }
@@ -32,6 +42,14 @@
 
 .ml-24 {
   margin-left: 24px;
+}
+
+.details.disabled {
+  pointer-events: none;
+}
+
+.summary.disabled {
+  cursor: not-allowed; /* Cambia el cursor para indicar que no se puede interactuar */
 }
 
 @media only screen and (max-width: 500px) and (min-width: 200px) {
