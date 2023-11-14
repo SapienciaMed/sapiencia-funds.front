@@ -194,7 +194,7 @@ const VotingResultsSearchPage = () => {
                         value={field.value}
                         className="input-basic medium"
                         classNameLabel="text-black big bold"
-                        label={<>Vigencia</>}
+                        label={<>Vigencia <span>*</span> </>}
                       />
                     );
                   }}
@@ -214,7 +214,11 @@ const VotingResultsSearchPage = () => {
                         value={field.value}
                         className="input-basic medium"
                         classNameLabel="text-black big bold"
-                        label={<>Idea de proyecto</>}
+                        label={
+                          <>
+                            Idea de proyecto <span>*</span>
+                          </>
+                        }
                       />
                     );
                   }}

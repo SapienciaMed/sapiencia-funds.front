@@ -175,6 +175,7 @@ const VotingResultsSearchPage = () => {
             columns={tableColumns}
             // actions={tableActions}
             titleMessageModalNoResult="No se encontraron resultados"
+            descriptionModalNoResult=""
             isShowModal={true}
           />
           <div style={{ display: sendingReportXlsx ? "block" : "none" }} >
