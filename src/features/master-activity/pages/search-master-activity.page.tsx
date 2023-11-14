@@ -1,9 +1,9 @@
 import React from "react";
-import { FilterMasterActivityForm } from "../forms/filter-masteractivity.form";
 import useSearchMasterHook from "../hooks/search-master-activity.hook";
 import TableComponent from "../../../common/components/table.component";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { Controller } from "react-hook-form";
 
 const SearchMasterPage = (): React.JSX.Element => {
   const {
@@ -43,17 +43,29 @@ const SearchMasterPage = (): React.JSX.Element => {
 
           <div>
             <FormComponent className="form-signIn" action={onSubmit}>
-            <div className='grid-form-4-container mb-24px'>
-                <SelectComponent
-                  idInput="name"
+              <div className='grid-form-4-container mb-24px'>
+                <Controller
                   control={control}
-                  errors={errors}
-                  data={activity}
-                  label="Actividad"
-                  className="select-basic medium select-disabled-list"
-                  classNameLabel="text-black biggest"
-                  placeholder="Seleccione."
-                  
+                  name={"name"}
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput={field.name}
+                        errors={errors}
+                        typeInput={"text"}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        value={field.value}
+                        className="input-basic medium"
+                        classNameLabel="text-black big medium"
+                        label={
+                          <>
+                            Actividad <span>*</span>
+                          </>
+                        }
+                      />
+                    );
+                  }}
                 />
               </div>
 
