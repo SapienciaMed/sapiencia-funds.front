@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export function calculateDifferenceYear(
   dateInit: string | Date,
   dateEnd?: string | Date
@@ -146,3 +148,55 @@ export function caculatePorcentual(valueOriginal: number, valueNew: number) {
 
   return porcentajeAumento;
 }
+
+export const jsDateToSQLDate = (jsDate: Date) => {
+  return DateTime.fromJSDate(jsDate).toSQLDate();
+};
+
+export const jsDateToISODate = (jsDate: Date) => {
+  return DateTime.fromJSDate(jsDate).toISODate();
+};
+
+// funcion que transforma un valor numerico a formato dinero
+export const formatMoney = (value, forceDecimal: boolean = false): string => {
+  value = value.toString().replace(/,/g, "");
+
+  let entero = Number(value.split(".")[0]).toString();
+  let decimal = value.split(".")[1]
+    ? Number(value.split(".")[1]).toString()
+    : "NaN";
+
+  if (value.split(".")[1] && decimal === "NaN") return null;
+  if (entero === "NaN") return null;
+
+  let formated = Intl.NumberFormat("en-us").format(Number(entero));
+
+  if (value.substring(value.length - 1, value.length) === ".")
+    formated = formated.concat(".");
+
+  if (decimal !== "NaN") {
+    let strgDecimal = value.split(".")[1];
+
+    if (forceDecimal) {
+      strgDecimal =
+        strgDecimal.length === 0
+          ? strgDecimal.concat("00")
+          : strgDecimal.length === 1
+          ? strgDecimal.concat("0")
+          : strgDecimal.length === 2
+          ? strgDecimal
+          : strgDecimal.length >= 3
+          ? strgDecimal.substr(0, 2)
+          : "00";
+    } else {
+      if (strgDecimal.length >= 3) strgDecimal = strgDecimal.substr(0, 2);
+    }
+
+    formated = formated.concat(".").concat(strgDecimal);
+  } else {
+    if (forceDecimal) formated = formated.concat(".00");
+  }
+
+  if (formated === null) return "0";
+  return formated;
+};

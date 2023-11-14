@@ -12,8 +12,14 @@ import MasterActivityRoutes from "./features/master-activity/master-activity-rou
 import UploadInformationRoutes from "./features/upload-information/upload-information-routes";
 import useAppCominicator from "./common/hooks/app-communicator.hook";
 import MasterRoutes from "./features/master/master-routes";
+import ActaRoutes from "./features/acta/acta-routes";
+import Socialization from "./features/socialization";
+import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 import RenewalReportRoutes from "./features/renewal-report/renewal-report-routes";
+import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
+import Cortes from "./features/cuts";
+import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -35,24 +41,47 @@ function App() {
           <Suspense fallback={<p>Loading...</p>}>
             <Routes>
               <Route
+                path={"/fondos/priorizacion-recurso/*"}
+                element={<ResourcePrioritizationRoutes />}
+              />
+
+              <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
               />
               <Route
-                path={"/fondos/maestro/*"}
-                element={<MasterActivityRoutes />}
+                path={"/fondos/resumen-priorizacion/*"}
+                element={<ResumenPriorizacionRoutes />}
               />
+              <Route 
+                path={"/fondos/maestros-actividad/*"} 
+                element={<MasterActivityRoutes />} 
+              />
+              <Route path={"/fondos/acta/*"} element={<ActaRoutes />} />
               <Route
-                path={"/fondos/maestros/*"}
-                element={<MasterRoutes />}
+                path={"/fondos/cargar-informacion/*"}
+                element={<UploadInformationRoutes />}
               />
+              <Route path={"/fondos/maestros/*"} element={<MasterRoutes />} />
+
               <Route
                 path={"/fondos/presupuesto-convocatoria/*"}
                 element={<BudgetConvocationRoutes />}
               />
+
               <Route
-                path={"/fondos/cargar-informacion/*"}
-                element={<UploadInformationRoutes/>}
+                path={"/fondos/socializacion/*"}
+                element={<Socialization />}
+              />
+
+              <Route
+                path={"/fondos/administracion/reglamento/*"}
+                element={<Regulation />}
+              />
+
+              <Route
+                path={"/fondos/administracion/cortes/*"}
+                element={<Cortes />}
               />
               <Route
                 path={"/fondos/informe-renovacion/*"}

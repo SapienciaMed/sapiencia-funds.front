@@ -1,0 +1,62 @@
+.containerTitleCut {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px 0px 0;
+}
+
+.container-form-children {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
+  border-radius: 15px;
+  opacity: 1;
+  width: 100%;
+}
+
+.containerGroupSearch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.mb-24px {
+  margin-bottom: 24px;
+}
+
+.font-500 {
+  font-weight: 500;
+}
+
+.container-input {
+  padding: 24px 24px 0 24px;
+}
+
+.buttonsActions {
+  display: flex;
+  justify-content: end;
+  margin-right: 24px;
+  width: 98%;
+}
+
+@media only screen and (max-width: 767px) and (min-width: 300px) {
+  .containerGroupSearch {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .containerInitialPeriod {
+    width: 100%;
+  }
+
+  .containerEndPeriod {
+    width: 100%;
+  }
+
+  .container-input {
+    padding: 0 24px 0 24px;
+  }
+
+  .buttonsActions {
+    justify-content: center;
+    flex-direction: column-reverse;
+  }
+}

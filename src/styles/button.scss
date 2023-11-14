@@ -1,0 +1,30 @@
+
+.button-download {
+    @include generate-button(100px, #533893, transparent, 1px solid #533893);
+    margin: 0.5em;
+  
+    &.large {
+      width: 9.5em;
+      height: 2.5em;
+      font-size: 16px;
+    }
+}
+
+.container-buttonText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+
+  span {
+    font-weight: 600;
+  }
+}
+
+.button-border{
+  border-radius: 100px;
+  border: 1px solid #533893;
+  padding: 0.4rem;
+  align-items: center;
+  gap: 0.2rem;
+}

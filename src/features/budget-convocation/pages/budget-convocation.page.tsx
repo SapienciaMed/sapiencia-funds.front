@@ -2,14 +2,13 @@ import React, { Fragment, useContext, useState } from "react";
 import { ButtonComponent, FormComponent, SelectComponent, MultiSelects } from "../../../common/components/Form";
 import useBudgetSearch from "../hooks/search-budget.hook";
 import TableComponent from "../../../common/components/table.component";
-import { EDirection } from "../../../common/constants/input.enum";
-import { BiPlusCircle } from 'react-icons/bi';
-import { AppContext } from "../../../common/contexts/app.context";
+import Svgs from "../../../public/images/icons/svgs";
+
 
 const SearchBudgetPage = (): React.JSX.Element => {
 
     const { announcementList, budgetList, control, errors, clearFields, register, setValue, navigate,
-        tableComponentRef, showTable, tableActions, tableColumns, setShowTable, onSubmit, reset
+        tableComponentRef, showTable, tableColumns, showDownload, onSubmit, reset, downloadCollection,
     } = useBudgetSearch();
     const [tableView, setTableView] = useState<boolean>(false);
 
@@ -30,19 +29,19 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             action={onSubmit}
                         >
                             <div>
-                                <div className="grid-form-3-container mb-24px">
+                                <div className="grid-form-4-container mb-24px">
 
                                     <MultiSelects
-                                        idInput={"periodo"}
+                                        idInput={"id_comuna"}
                                         control={control}
                                         errors={errors}
                                         data={budgetList}
                                         label={<>Fondo Comuna <span>*</span></>}
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
                                         classNameLabel="text-black big medium label-regular"
-                                        filter={true}
                                         placeholder="Seleccionar."
-                                       
+                                        filter={true}
+
                                     />
                                     <SelectComponent
                                         idInput={"periodo"}
@@ -64,7 +63,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     className="button-clean medium"
                                     type="button"
                                     action={() => {
-                                        reset();
+                                        clearFields();
                                         tableComponentRef.current.emptyData();
                                         setTableView(false);
                                     }
@@ -79,15 +78,35 @@ const SearchBudgetPage = (): React.JSX.Element => {
                         </FormComponent>
                     </div>
                     {showTable && (
-                     
+
                         <TableComponent
                             ref={tableComponentRef}
-                            url={`${process.env.urlApiFunds}/api/v1/sapiencia/getbudget-paginated/`}
+                            url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
                             columns={tableColumns}
-                            actions={tableActions}
+                            titleMessageModalNoResult="Registro no existente"
                             isShowModal={false}
                         />
-                      
+                    )}
+                </div>
+                
+                <div>
+                    <br />
+                    <hr className="barra-spacing" />
+                </div>
+                <div className="button-save-container-display mr-24px">
+                    {showDownload && (
+                        <ButtonComponent
+                            value={
+                                <>
+                                    <div className="container-buttonText">
+                                        <span>Descargar</span>
+                                        <Svgs svg="excel" width={23.593} height={28.505} />
+                                    </div>
+                                </>
+                            }
+                            className="button-download large "
+                            action={downloadCollection}
+                        />
                     )}
                 </div>
             </div>
@@ -95,5 +114,6 @@ const SearchBudgetPage = (): React.JSX.Element => {
     );
 
 };
+
 
 export default React.memo(SearchBudgetPage);

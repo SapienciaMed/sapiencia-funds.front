@@ -1,14 +1,15 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { filterBudget } from "../../../common/schemas/budget-schema";
-import { RiFileExcel2Line } from "react-icons/ri";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import { ITableElement } from "../../../common/interfaces/table.interfaces";
 import useBudgetApi from "./budget-api.hook";
 import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
+import { urlApiFunds } from "../../../common/utils/base-url";
+
 
 
 export default function useBudgetSearch() {
@@ -21,52 +22,63 @@ export default function useBudgetSearch() {
     //peticiones api
     const { getAnnouncement, getbudget, downloadCallBudget } = useBudgetApi();
 
-    const tableComponentRef = useRef(null);
-    
     const [typeMasterList, setTypeMasterList] = useState([]);
     const [showTable, setShowTable] = useState(false);
+    const [showDownload, setShowDownload] = useState(false);
+
+    const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
+    const [formWatch, setFormWatch] = useState({ id_comuna: "", periodo: "", });
+
+    //ref
+    const tableComponentRef = useRef(null);
 
     const {
         handleSubmit,
-        register,  
+        register,
         setValue,
         reset,
+        watch,
         control: control,
         formState: { errors },
-    } = useForm<ICallBudget>(
-        { resolver }
+    } = useForm<ICallBudget>({ resolver }
     );
+
+    const [contractCode, expeditionDate] = watch([,
+        "contractCode",
+        "expeditionDate",
+    ]);
 
 
     getbudget()
-    .then((response) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-            setbudgetList(
-                response.data.map((item) => {
-                    const list = {
-                        name: item.id_comuna,
-                        value: item.id_comuna,
-                    };
-                    return list;
-                })
-            );
-        }
-    })
+        .then((response) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {
+                setbudgetList(
+                    response.data.map((item) => {
+                        const list = {
+                            name: item.id_comuna,
+                            value: item.id_comuna,
+                        };
+                        return list;
+                    })
+                );
+            }
+        })
+
 
     getAnnouncement()
-    .then((response) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-            setAnnouncementList(
-                response.data.map((item) => {
-                    const list = {
-                        name: item.name,
-                        value: item.id,
-                    };
-                    return list;
-                })
-            );
-        }
-    })
+        .then((response) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {
+                setAnnouncementList(
+                    response.data.map((item) => {
+                        const list = {
+                            name: item.name,
+                            value: item.id,
+                        };
+                        return list;
+                    })
+                );
+            }
+        })
 
 
 
@@ -84,62 +96,46 @@ export default function useBudgetSearch() {
             renderCell: (row) => {
                 return <>{row.presupuesto_comuna}</>;
             },
-        },       
+        },
         {
             fieldName: "name",
             header: "Recurso otorgado de legalizacion",
             renderCell: (row) => {
-                return <>{row.legaliza_comuna}</>;
+                return <>{row.acumulado_legali_comuna}</>;
             },
         },
         {
             fieldName: "name",
             header: "Restante",
             renderCell: (row) => {
-                return <>{row.restante_presupuesto}</>;
+                return <>{row.restante_presupuesto_comuna}</>;
             },
         },
         {
             fieldName: "name",
             header: "Usuarios por comuna",
             renderCell: (row) => {
-                return <>{row.usuarios_comuna}</>;
+                return <>{row.numero_usuarios_comuna}</>;
             },
-        },            
-    ];
-
-    const tableActions: ITableAction<ICallBudget>[] = [
+        },
         {
-            onClick: (row) => {
-                downloadCallBudget(row.id_comuna)
-                  
-                      const buffer = new Uint8Array(row.id_comuna); // Convierte el Array del búfer en Uint8Array
-                      const blob = new Blob([buffer]);
-                      const url = window.URL.createObjectURL(blob);
-                      const a = document.createElement("a");
-                      a.href = url;
-                      a.download = `${row.id_comuna}.xlsx`;
-                      document.body.appendChild(a);
-                      a.click();
-                      window.URL.revokeObjectURL(url);
-                      setMessage({
-                        title: `Descargar excel`,
-                        description: `El archivo fue descargado con éxito`,
-                        show: true,
-                        OkTitle: "Aceptar",
-                        background: true,
-                      });
-                    
-              },
-            customIcon: () => {
-                return <RiFileExcel2Line color="#21A366" />;
+            fieldName: "name",
+            header: "Total proyectado",
+            renderCell: (row) => {
+                return <>{row.total_proyectado}</>;
             },
-          
+        },
+        {
+            fieldName: "name",
+            header: "Diferencia por comprometer",
+            renderCell: (row) => {
+                return <>{row.Diferencia}</>;
+            },
         },
     ];
-   
 
     function loadTableData(searchCriteria?: object): void {
+
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
@@ -148,30 +144,74 @@ export default function useBudgetSearch() {
 
     useEffect(() => {
         loadTableData()
-    },[])
+    }, [])
 
-    useEffect(() => {            
+    useEffect(() => {
         reset();
-        if(showTable)  {
+        if (showTable) {
             tableComponentRef.current.emptyData();
             setShowTable(false);
+            setShowDownload(false);
         }
-    }, []); 
+    }, []);
 
     const clearFields = () => {
         reset();
         tableComponentRef.current?.emptyData();
         setShowTable(false);
-      };
+        setShowDownload(false);
+    };
 
-
-    const onSubmit = handleSubmit(async (data: ICallBudget) => {        
+    const onSubmit = handleSubmit(async (data: ICallBudget) => {
         setShowTable(true)
+        setShowDownload(true);
 
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(data);
         }
     });
+
+    const [id_comuna, periodo] = watch([
+        "id_comuna", "periodo",
+    ])
+
+    const downloadCollection = useCallback(() => {
+        const { page, perPage } = paginateData;
+        const id_comuna = watch('id_comuna');
+        const periodo = watch('periodo');
+        const url = new URL(`${urlApiFunds}/api/v1/presupuesto/generate-xlsx`);
+        const params = new URLSearchParams();
+        params.append("page", page + 1)
+        params.append("perPage", perPage + 1)
+
+        let idComunaString = '';
+        if (Array.isArray(id_comuna)) {
+            idComunaString = id_comuna.join(',');
+        } else if (typeof id_comuna === 'number') {
+            idComunaString = String(id_comuna);
+        }
+
+        if (id_comuna) {
+            params.append("id_comuna", idComunaString);
+        }
+        if (periodo) {
+            params.append("periodo", String(periodo));
+        }
+
+        url.search = params.toString();
+        window.open(url.toString(), "_blank");
+        setMessage({
+            title: "Descargar",
+            description: "Información descargada exitosamente",
+            show: true,
+            background: true,
+            OkTitle: "Aceptar"
+          });
+
+    }, [paginateData, formWatch, id_comuna, periodo]
+
+    );
+
 
     return {
         announcementList,
@@ -180,15 +220,16 @@ export default function useBudgetSearch() {
         errors,
         register,
         setValue,
-        navigate,       
+        navigate,
         setShowTable,
         showTable,
         tableColumns,
-        tableActions,
         tableComponentRef,
         onSubmit,
         reset,
         clearFields,
-      }
+        downloadCollection,
+        showDownload,
+    }
 
 }

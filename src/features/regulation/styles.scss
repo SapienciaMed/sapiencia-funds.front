@@ -1,0 +1,242 @@
+.containerProgram {
+  width: 572px;
+}
+
+.containerGroup {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.percentageSemiannualPayment {
+  width: 338px;
+}
+
+.containerIsOpenPeriod {
+  width: 100%;
+  padding: 0px 24px 0px 24px;
+}
+
+.p-24 {
+  padding: 24px;
+}
+
+.mb-24px {
+  margin-bottom: 24px;
+}
+
+.mr-12 {
+  margin-right: 12px;
+}
+
+.containerApplyService {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.containerApplyService div {
+  width: 310px;
+}
+
+.containerTabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 25px;
+}
+
+.containerTabs div {
+  margin-bottom: 16px;
+}
+
+.containerButtons {
+  display: flex;
+  justify-content: center;
+}
+
+.container-form-children {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
+  border-radius: 15px;
+  opacity: 1;
+  width: 100%;
+}
+
+.buttonsActions {
+  display: flex;
+  justify-content: end;
+  margin-right: 24px;
+  width: 98%;
+}
+
+.containerJsonTable {
+  margin-top: 24px;
+  overflow-x: auto;
+}
+
+.containerTitleRegulation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px 0px 0;
+}
+
+.containerGroupSearch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.font-500 {
+  font-weight: 500;
+}
+
+.table-header {
+  height: auto !important;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+.modal-reglament {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 1154px;
+  height: 757px;
+  max-width: 90%;
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  margin: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 35px;
+  font-weight: 600;
+  line-height: 42px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #533893;
+}
+
+.title-modal-reglament {
+  font-size: 29px;
+  font-weight: 500;
+  line-height: 35px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #533893;
+  margin-top: 82px;
+}
+
+.container-modal-body {
+  margin: 32px;
+  height: 75%;
+  overflow-y: auto;
+}
+
+.container-modal-acordion-title {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #6c757d;
+}
+
+.title-disable-jsonTable {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-right: 16px;
+}
+
+.data-disable-jsonTable {
+  width: 71px;
+  height: 41px;
+  padding: 12px 16px 12px 16px;
+  border-radius: 8px;
+  border: 1px;
+  gap: 8px;
+  background: linear-gradient(0deg, #e2e2e2, #e2e2e2),
+    linear-gradient(0deg, #d9d9d9, #d9d9d9);
+}
+
+.container-disable-jsonTable {
+  display: flex;
+}
+
+.opacity {
+  opacity: 0.5;
+}
+
+.btn-back {
+  color: #533893;
+  background: white;
+  border: 1px solid #533893;
+}
+
+@media only screen and (max-width: 767px) and (min-width: 300px) {
+  .containerProgram {
+    width: 100%;
+  }
+
+  .containerGroup {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .containerInitialPeriod {
+    width: 100%;
+  }
+
+  .containerEndPeriod {
+    width: 100%;
+  }
+
+  .containerIsOpenPeriod {
+    width: 100%;
+    padding: 24px 0 48px 0;
+  }
+
+  .percentageSemiannualPayment {
+    width: 100%;
+  }
+
+  .containerApplyService {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .containerApplyService div {
+    width: 100%;
+  }
+
+  .buttonsActions {
+    justify-content: center;
+    flex-direction: column-reverse;
+  }
+
+  .containerGroupSearch {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .p-24 {
+    padding: 16px;
+  }
+}

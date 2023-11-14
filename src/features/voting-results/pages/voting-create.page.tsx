@@ -96,7 +96,6 @@ const VotingResultsPage = () => {
     {
       icon: "Edit",
       onClick: (row) => {
-        console.log("row ", row);
         // navigate(`/core/usuarios/editar/${row.id}`);
         setMessage({
           show: true,
@@ -117,7 +116,6 @@ const VotingResultsPage = () => {
     {
       icon: "Delete",
       onClick: (row) => {
-        console.log("row ", row);
           setMessage({
             show: true,
             title: "Eliminar registro",
@@ -208,7 +206,7 @@ const VotingResultsPage = () => {
                       <InputComponent
                         idInput={field.name}
                         errors={errors}
-                        typeInput={"text"}
+                        typeInput={"number"}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
@@ -239,30 +237,6 @@ const VotingResultsPage = () => {
                     );
                   }}
                 />
-
-                {/* <InputComponent
-                  idInput="validity"
-                  className="input-basic medium form-group"
-                  typeInput="text"
-                  label=""
-                  register={register}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
-                /> */}
-
-                {/* <InputComponent
-                  idInput="ideaProject"
-                  className="input-basic medium form-group"
-                  typeInput="text"
-                  label="Idea de proyecto"
-                  register={register}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={errors}
-                  placeholder={""}
-                /> */}
               </div>
             </FormComponent>
 
@@ -353,7 +327,6 @@ const VotingResultsPage = () => {
                       <span className="txt-center">
                         <p>
                           {dataGrid?.map((e, i) => {
-                            debugger
                             let value = acumTotal;
                             if (i === 0) {
                               acumTotal = Number(e.totalCost);
@@ -378,7 +351,7 @@ const VotingResultsPage = () => {
                 id={"observations"}
                 idInput={"observations"}
                 label="Observaciones"
-                classNameLabel="text-black biggest bold text-required"
+                classNameLabel="text-black biggest bold "
                 className={`text-area-basic `}
                 placeholder="Escribe aquí"
                 register={register}

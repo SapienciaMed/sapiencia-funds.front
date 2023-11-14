@@ -16,6 +16,7 @@ import { ICitation } from '../../../common/interfaces/citationInterface';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from "react-router-dom";
 
+
 export default function useActaCreate() {
     const resolver = useYupValidationResolver(createActas);
 
@@ -126,6 +127,17 @@ export default function useActaCreate() {
         setSubtotalVigency(totalSubtotalVigency)
         setVigency1(vigency1);
 
+        setValue("tQuantity1", totalQuantityPeriod1);
+        setValue("tValue1", totalValuePeriod1);
+        setValue("tQuantity2", totalQuantityPeriod2);
+        setValue("tValue2", totalValuePeriod2);
+        setValue("subtotalVigency", totalSubtotalVigency);
+        setValue("totalCostBillsOperation", totalCostBillsOperation);
+        setValue("totalNet", totalNet);
+        setValue("totalResourcesCredit", totalResourcesCredit);
+        setValue("totalFinancialOperatorCommission", totalFinancialOperatorCommission);
+        setValue("vigency1", vigency1);
+        setValue("vigency2", totalSubtotalVigency);
 
         
         return {
@@ -148,8 +160,7 @@ export default function useActaCreate() {
         calculateTotals(dataGridItems);
     }, [dataGridItems]);
 
-    const addItem = handleSubmit((data: IActa) => {
-        //console.log('datos',data)
+    const addItem = handleSubmit((data: IActa) => {        
         data.idStatus = 1;
         setDatosActa(data)
         setMessage({
@@ -258,7 +269,8 @@ export default function useActaCreate() {
         const selectedProjectMeta = projectList[selectedProject]?.meta;
         if (selectedProjectMeta) {
             const integerPart = parseInt(selectedProjectMeta, 10);         
-            setProjectMeta(integerPart);  
+            setProjectMeta(integerPart); 
+            setValue('techo',projectMeta) 
         }
     }, [selectedProject, projectList]);
 
@@ -333,7 +345,7 @@ export default function useActaCreate() {
 
         const actaData = {
             numberProject: data.numberProject,
-            periodVigency: data.periodVigency,
+            periodVigency: Number(data.periodVigency),
             announcementInitial: data.announcementInitial,
             salaryMin: data.salaryMin,
             costsExpenses: data.costsExpenses,
@@ -343,8 +355,7 @@ export default function useActaCreate() {
             items: actaItems,
             citation: citation
         };
-
-        console.log('asi va al back',actaData)
+       
        
     const res = await createActa(actaData);
 
@@ -387,9 +398,9 @@ export default function useActaCreate() {
 
     
     useEffect(() => {
-        if (Number(projectMeta) < vigency1 || Number(projectMeta)<subtotalVigency) {
+        if (Number(projectMeta) < Number(vigency1) || Number(projectMeta)< Number(subtotalVigency)) {
             setMessage({           
-                title: "Crear Acta",
+                title: "Guardar",
                 description: "El acta no podrá ser guardada por superar el valor del techo",
                 show: true,
                 OkTitle: "Aceptar",
@@ -406,7 +417,7 @@ export default function useActaCreate() {
         setMessage({
           show: true,
           title: "Cancelar",
-          description: "¿Estás segur@ de cancelar esta acción en el sistema?",
+          description: "¿Segur@ que desea cancelar la creación del acta?",
           OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
           onOk() {

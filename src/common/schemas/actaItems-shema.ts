@@ -10,9 +10,9 @@ export const createActaItems = yup.object({
     line: yup
     .number()
     .required("Completar información"),
-    announcement: yup
+   /*  announcement: yup
     .number()
-    .required("Completar información"),
+    .required("Completar información"), */
     concept: yup
     .number()
     .required("Completar información"),
@@ -28,18 +28,17 @@ export const createActaItems = yup.object({
     .number()
     .required()
     .typeError("Completar información"),
-    quantityPeriod2: yup
+   /*  quantityPeriod2: yup
     .number()
     .required()
     .typeError("Completar información"),
     valuePeriod2: yup
     .number()
     .required()
-    .typeError("Completar información"),
+    .typeError("Completar información"), */
     subtotalVigency: yup
-    .number()
-    .required()
-    .typeError("Completar información"), 
+    .number()    
+    .required("Completar información"), 
 
 });
 
