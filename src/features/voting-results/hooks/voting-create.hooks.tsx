@@ -114,7 +114,7 @@ export const useVotingResults = () => {
           show: true,
           title: "Resultados de Votación",
           description: "Estás segur@ de guardar los resultados de votación?",
-          OkTitle: "Crear",
+          OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
           onOk() {
             confirmVotingCreation(data);
