@@ -1,3 +1,4 @@
+import * as XLSX from "xlsx"
 import { Checkbox } from "primereact/checkbox";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from 'react-hook-form';
@@ -14,6 +15,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from "react-router-dom";
 import { IActa, IActaItems, ITableAction, ITableElement, IUser, IUserDataGrid } from "../../../common/interfaces";
+import { dataActasdf } from "../helpers/dataPqrsdf";
 
 export default function useSearcResult({ valueAction }: Readonly<ISearchResultProp>) {
 
@@ -24,11 +26,13 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     const [ checked, setChecked ] = useState(false);
     const [ dataTableServices, setDataTableServices ] = useState<IActaItems[]>([])
     const [ dataGridUsersServices, setDataGridUsersServices ] = useState<IUserDataGrid[]>([])
-    const [ selectedUserData, setSelectedUserData ] = useState<IUserDataGrid[]>([])
-    const { getHours, getActa, getProjectsList } = useActaApi();
+    const { getHours, getActa, getProjectsList, approveCitation } = useActaApi();
     const [ times, setTimes ] = useState([]);
     const [ activeUserList, setActiveUserList ] = useState([]);
-    const [projectList, setProjectsList] = useState([]);
+    const [projectList, setProjectsList] = useState<any[]>([]);
+    const [ idCitation, setIdCitation ] = useState({
+        id: ''
+    })
     const { getUser } = useAuthService();
     const navigate = useNavigate();
     const { actaNro } = useParams();
@@ -78,22 +82,21 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                                 quantityPeriod1: data?.periods.quantityPeriod1,
                                 quantityPeriod2: data?.periods.quantityPeriod2
                             },
-                            // idFound: data?.idFound,
-                            // idLine: data?.idLine,
-                            // idProgram: data?.idProgram,
-                            // idAnnouncement: data?.idAnnouncement,
-                            // idConcept: data?.idConcept
                         }
                     })
                     setDataTableServices(valueTableActaControl)
 
-                    const valueCitation = dinamicData[0].citation.map(dataCita => {
-                        return {
-                            user: dataCita.user,
-                            timeCitation: dataCita.dateAprobation,
-                            status: dataCita.status
-                        }
+                    const valueCitation = dinamicData[0].citation.filter((value, index, self) =>
+                        index === self.findIndex((v) => (
+                            v.user === value.user &&
+                            v.timeCitation === value.timeCitation &&
+                            v.status === value.status
+                        ))
+                    ).map(({ user, dateAprobation: timeCitation, status }) => ({ user, timeCitation, status }));
+                    setIdCitation({
+                        id: String(dinamicData[0].citation[0].idCitation)
                     })
+
                     setDataGridUsersServices(valueCitation)
 
                     dinamicData.forEach(dataSearch => {
@@ -132,7 +135,26 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
 
     useEffect(() => {
         if (checked) {
-            console.log("mostrar modal");
+            approveCitation (idCitation).then(response => {
+                if (response.operation.code == EResponseCodes.OK) {
+                    setMessage({
+                        description: "¡Guardado exitosamente!",
+                        title: "Guardado",
+                        OkTitle: "Cerrar",
+                        show: true,
+                        type: EResponseCodes.OK,
+                        background: true,
+                        onOk() {
+                            setMessage({});
+                            navigate(-1);
+                        },
+                        onClose() {
+                            setMessage({});
+                            navigate(-1);
+                        },
+                    });
+                }
+            })
         }
     },[checked])
 
@@ -147,7 +169,6 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     useEffect(() => {
         return () => {
             setDataTableServices([])
-            setSelectedUserData([])
             setDataGridUsersServices([])
             setChecked(false)
             setActiveUserList([])
@@ -155,13 +176,42 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         }
     },[])
 
-    const actionBodyTemplate = (row) => {
-        return (
-            <div className="spc-table-action-button">
-                <Checkbox onChange={e => setChecked(e.checked)} checked={checked}/>
-            </div>
-        );
-    };
+    function downloadCollection() {
+        const id = {
+            id: actaNro
+        }
+
+        getActa( id ).then(response => {
+            if (response.operation.code == EResponseCodes.OK) {
+                const dinamicData = response?.data;
+                
+                const book = XLSX.utils.book_new()
+                const sheet = XLSX.utils.json_to_sheet( dataActasdf(dinamicData) )
+
+                XLSX.utils.book_append_sheet(book, sheet, "DATAFOUND")
+
+                setTimeout(() => {
+                    XLSX.writeFile(book, "DATAFOUND.xlsx")
+                    setMessage({
+                        title: "Descargar",
+                        description: "Información descargada exitosamente ",
+                        OkTitle: "Cerrar",
+                        show: true,
+                        type: EResponseCodes.OK,
+                        background: true,
+                        onOk() {
+                            setMessage({});
+                            navigate(-1);
+                        },
+                        onClose() {
+                            setMessage({});
+                            navigate(-1);
+                        },
+                    });
+                }, 1000) 
+            }
+        })
+    }
 
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
@@ -237,10 +287,10 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
             fieldName: "aproved",
             header: 'Aprobar',
             renderCell: (rowData) => {
-
+            const isEdit = authorization.user.names != rowData.user
                 return (
                     <div className="spc-table-action-button">
-                        <Checkbox value={rowData} onChange={onCategoryChange} checked={selectedUserData.some((item) => item?.user == rowData?.user)}/>
+                        <Checkbox onChange={e => setChecked(e.checked)} checked={checked || rowData.status == 1} disabled={rowData.status == 1 || isEdit} />
                     </div>
                 )
             }
@@ -251,20 +301,23 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         },
         {
             fieldName: 'timeCitation',
-            header: 'Fecha de aprobación'
+            header: 'Fecha de aprobación',
+            renderCell(row) {
+                const date = new Date(row.timeCitation);
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+                const year = date.getFullYear();
+                return(
+                    <div>
+                        {
+                            row.timeCitation == undefined ? '' : 
+                            `${year}/${ month < 10 ? '0'+ month :  month }/${ day < 10 ? '0' + day :  day}`
+                        }
+                    </div>
+                )
+            },
         }
     ]
-
-    const onCategoryChange = (e) => {
-        let _selectedUser = [...selectedUserData];
-
-        if (e.checked){
-            _selectedUser.push(e.value);
-        }else{
-            _selectedUser = _selectedUser.filter(category => category?.user !== e.value.user);
-        }
-        setSelectedUserData(_selectedUser);
-    };
 
     const onSubmit = handleSubmit((data: any) => {})
 
@@ -320,7 +373,6 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
 
     const addItem = handleSubmit((data: IActa) => {
         data.idStatus = 1;
-
         setMessage({
             show: true,
             title: "Agregar ítem",
@@ -417,6 +469,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         addItem,
         onSubmit,
         addUser,
-        onCancel
+        onCancel,
+        downloadCollection
     }
 }

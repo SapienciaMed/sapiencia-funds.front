@@ -4,6 +4,8 @@ import useYupValidationResolver from "../../../common/hooks/form-validator.hook"
 import { searchActas } from "../../../common/schemas/acta-shema";
 import { IActaSearch } from "../interface/Acta";
 import { useEffect, useState } from "react";
+import useActaApi from "./acta-api.hook";
+import { EResponseCodes } from "../../../common/constants/api.enum";
 
 
 export default function useActaData() {
@@ -11,6 +13,7 @@ export default function useActaData() {
     const navigate = useNavigate();
     const resolver = useYupValidationResolver(searchActas);
     const [ isBtnDisable, setIsBtnDisable ] = useState<boolean>(false)
+    const { getLastId } = useActaApi();
 
     const {
         handleSubmit,
@@ -19,10 +22,20 @@ export default function useActaData() {
         reset,
         watch,
         control,
+        setValue
     } = useForm<IActaSearch>({
         resolver,
         mode: 'all'
     })
+
+    useEffect(() => {
+        getLastId().then(response => {
+            if (response.operation.code == EResponseCodes.OK) {
+                const dinamicData = response?.data;
+                setValue('actaNro', Object.values(dinamicData).find(us => us))
+            }
+        })
+    },[])
 
     const inputValue =  watch(['actaNro'])
 

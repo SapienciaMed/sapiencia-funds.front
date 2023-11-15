@@ -619,6 +619,10 @@ div[id="single-spa-application:@sapiencia/funds"] {
   width: 9.5em;
   height: 2.5em;
   font-size: 16px;
+
+  @media (max-width: 550px) {
+    width: 100%;
+  }
 }
 
 .button-download {

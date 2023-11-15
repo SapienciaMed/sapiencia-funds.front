@@ -118,6 +118,16 @@ export default function useActaApi() {
     return post(`${serviceUrlActa}${endpoint}`, id);
   }
 
+  async function approveCitation(id: object):  Promise<ApiResponse<any>> {
+    const endpoint: string = "/updateCitation"
+    return put(`${serviceUrlActa}${endpoint}`, id);
+  }
+  
+  async function getLastId():  Promise<ApiResponse<number>> {
+    const endpoint: string = "/getLastId"
+    return get(`${serviceUrlActa}${endpoint}`);
+  }
+
   return {
     getProgramTypes,
     getMaster,
@@ -127,6 +137,8 @@ export default function useActaApi() {
     createActa,
     getUserList,
     getHours,
-    getActa
+    getActa,
+    approveCitation,
+    getLastId
   };
 }

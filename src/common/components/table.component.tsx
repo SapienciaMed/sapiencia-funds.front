@@ -42,6 +42,7 @@ interface IProps<T> {
   titleMessageModalNoResult?: string;
   descriptionModalNoResult?: string;
   classname?: string;
+  isDisabled?: boolean;
 }
 
 interface IRef {
@@ -60,6 +61,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     emptyMessage = "No hay resultados.",
     princialTitle,
     classname = "",
+    isDisabled,
   } = props;
 
   // States
@@ -160,11 +162,20 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           })}
         </div>
         <div className="card-footer">
-          {actions.map((action) => (
-            <div key={action.icon} onClick={() => action.onClick(item)}>
-              {getIconElement(action.icon, "src")}
-            </div>
-          ))}
+          <section className="position-absolute top text-black bold text-center">
+              {" "}
+              Acciones{" "}
+            </section>
+            <section className="section-action">
+              {actions?.map((action) => (
+                <div
+                  key={action.icon}
+                  onClick={() => !isDisabled && action.onClick(item)}
+                >
+                  {getIconElement(action.icon, "src", isDisabled)}
+                </div>
+              ))}
+            </section>
         </div>
       </div>
     );
@@ -231,7 +242,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                       </div>
                     }
                     body={(row) => (
-                      <ActionComponent row={row} actions={actions} />
+                      <ActionComponent row={row} actions={actions} isDisabled={isDisabled} />
                     )}
                   />
                 )}
@@ -260,7 +271,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   }
 });
 
-function getIconElement(icon: string, element: "name" | "src") {
+function getIconElement(icon: string, element: "name" | "src", isDisabled: boolean) {
   switch (icon) {
     case "Detail":
       return element == "name" ? (
@@ -421,6 +432,7 @@ const paginatorFooter: PaginatorTemplateOptions = {
 const ActionComponent = (props: {
   row: any;
   actions: ITableAction<any>[];
+  isDisabled: boolean;
 }): React.JSX.Element => {
   return (
     <div className="spc-table-action-button">
@@ -435,7 +447,7 @@ const ActionComponent = (props: {
               {action.customIcon()}
             </div>
           ) : (
-            getIconElement(action.icon, "src")
+            getIconElement(action.icon, "src", props.isDisabled)
           )}
         </div>
       ))}
