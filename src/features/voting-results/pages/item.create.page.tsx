@@ -7,7 +7,7 @@ import { Controller } from "react-hook-form";
 
 
 
-const ItemResultsPage = ({ dataVoting, action }) => {
+const ItemResultsPage = ({ dataVoting, action, collback }) => {
   const {
     disabledCantidad,
     CancelFunction,
@@ -19,7 +19,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
     activity,
     control,
     changeAmountSum,
-  } = useItemResults(action, dataVoting);
+  } = useItemResults(action, dataVoting, collback);
 
   return (
     <Fragment>

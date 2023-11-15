@@ -108,7 +108,7 @@ const VotingResultsPage = () => {
             setMessage({});
           },
           background: true,
-          description: <ItemResultsPage dataVoting={row} action={"edit"} />,
+          description: <ItemResultsPage dataVoting={row} action={"edit"} collback={false} />,
           size: "large",
           style: "mdl-agregarItem-voting",
         });

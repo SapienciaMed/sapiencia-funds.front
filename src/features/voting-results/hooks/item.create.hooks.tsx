@@ -13,11 +13,10 @@ import { IGenericList } from "../../../common/interfaces/global.interface";
 import useVotingItemApi from "./voting-items-api.hooks";
 import { useVotingResults } from "./voting-create.hooks";
 import { number } from "yup";
-// import { useVotingResultsSearch } from "./voting-search.hooks";
 
 
 
-export const useItemResults = (action, dataVoting) => {
+export const useItemResults = (action, dataVoting, collback) => {
 
   const [sending, setSending] = useState(false);
   const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
@@ -37,8 +36,6 @@ export const useItemResults = (action, dataVoting) => {
   const [valueActivity, setValueActivity] = useState(0);
   const [objectTotales, setObjectTotales] = useState({});
 
-
-  // const { onSubmitSearch } = useVotingResultsSearch();
   
   
   const {
@@ -249,6 +246,9 @@ export const useItemResults = (action, dataVoting) => {
                 type: EResponseCodes.OK,
                 background: true,
                 onOk() {
+                  if (collback) {
+                    collback();
+                  }
                   setMessage({});
                 },
                 onClose() {

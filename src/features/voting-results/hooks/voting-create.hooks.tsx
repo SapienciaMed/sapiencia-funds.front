@@ -83,7 +83,7 @@ export const useVotingResults = () => {
                 setMessage({});
               },
               background: true,
-              description: <ItemResultsPage dataVoting={data} action={"new"} />,
+              description: <ItemResultsPage dataVoting={data} action={"new"} collback={false} />,
               size: "items",
               style: "mdl-agregarItem-voting",
               onClose() {

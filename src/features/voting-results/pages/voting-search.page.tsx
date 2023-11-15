@@ -35,6 +35,7 @@ const VotingResultsSearchPage = () => {
     projectList,
     setDataTblTotal,
     setSendingXLSX,
+    onSubmitSearch,
   } = useVotingResultsSearch();
 
   const navigate = useNavigate();
@@ -99,7 +100,11 @@ const VotingResultsSearchPage = () => {
             },
             background: true,
             description: (
-              <ItemResultsPage dataVoting={row} action={"editVoting"} />
+              <ItemResultsPage
+                dataVoting={row}
+                action={"editVoting"}
+                collback={onSubmitSearch}
+              />
             ),
             size: "items",
             style: "mdl-agregarItem-voting",

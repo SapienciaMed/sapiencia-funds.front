@@ -28,9 +28,7 @@ export const useVotingResultsSearch = () => {
   const [projectList, setProjectsList] = useState([]);
 
 
-  const onSubmitSearch = async () => {
-    loadTableData({});
-  };
+
   const {
     handleSubmit,
     register,
@@ -49,6 +47,12 @@ export const useVotingResultsSearch = () => {
     },
   });
 
+  const dataForm = getValues();
+
+    const onSubmitSearch = async () => {
+      loadTableData(dataForm);
+    };
+  
     /*Functions*/
   const onSubmitSearchVoting = handleSubmit(async (data: IVotingCreate) => {
         loadTableData({
@@ -129,7 +133,7 @@ export const useVotingResultsSearch = () => {
   
   
   const downloadXLSX = async () => {
-    const dataForm = getValues();
+    
     await downloadFile(dataForm).then((resp: any) => {
       const buffer = new Uint8Array(resp.data.data); // Convierte el Array del búfer en Uint8Array
       const blob = new Blob([buffer]);
