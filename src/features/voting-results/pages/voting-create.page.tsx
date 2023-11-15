@@ -388,23 +388,31 @@ const VotingResultsPage = () => {
           <div>
             <hr className="barra-spacing" />
           </div>
-
-          <div className="button-save-container-display-users margin-right0">
-            <ButtonComponent
-              form="createVotingForm"
-              value="Cancelar"
-              type="button"
-              className="button-cancel-text large hover-three disabled-black"
-              action={() => CancelFunction()}
-              disabled={sending}
-            />
-            <ButtonComponent
-              form="createVotingForm"
-              value="Guardar"
-              type="submit"
-              className="button-save large disabled-black"
-              disabled={sending}
-            />
+          <div
+            style={
+              dataGrid.length > 0 ? { display: "block" } : { display: "none" }
+            }
+          >
+            <div className="button-save-container-display-users margin-right0">
+              <ButtonComponent
+                form="createVotingForm"
+                value="Cancelar"
+                type="button"
+                className="button-cancel-text large hover-three disabled-black"
+                action={() => {
+                  CancelFunction()
+                  
+                }}
+                disabled={sending}
+              />
+              <ButtonComponent
+                form="createVotingForm"
+                value="Guardar"
+                type="submit"
+                className="button-save large disabled-black"
+                disabled={sending}
+              />
+            </div>
           </div>
         </div>
       </div>
