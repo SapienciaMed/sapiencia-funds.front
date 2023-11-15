@@ -8,8 +8,9 @@ import { SelectComponentOld } from "../../../common/components/Form/select.compo
 import useSearchRegulation from "../hooks/search";
 import { periods } from "../service";
 import TableComponent from "../../../common/components/table.component";
+import DetailReglament from "./detailt";
 
-const Regulation = () => {
+const Regulation = ({ auth, authDetail, authEdit }) => {
   const {
     tableComponentRef,
     tableActions,
@@ -27,7 +28,12 @@ const Regulation = () => {
     control,
     listPrograms,
     tableColumns,
-  } = useSearchRegulation();
+    showDetailModal,
+    setShowDetailModal,
+    detailData,
+    setValue,
+    getValues,
+  } = useSearchRegulation(auth, authDetail, authEdit);
 
   if (loading) return <></>;
 
@@ -59,7 +65,7 @@ const Regulation = () => {
                 placeholder="Seleccionar"
                 label={<>Programa</>}
                 data={listPrograms.length ? listPrograms : []}
-                classNameLabel="text-black biggest text-required bold"
+                classNameLabel="text-black biggest font-500"
                 // direction={EDirection.column}
                 errors={formState.errors}
               />
@@ -75,7 +81,7 @@ const Regulation = () => {
                 placeholder="Seleccionar"
                 label={<>Periodo inicial de convocatoria</>}
                 data={periods.length ? periods : []}
-                classNameLabel="text-black biggest text-required bold"
+                classNameLabel="text-black biggest font-500"
                 // direction={EDirection.column}
                 errors={formState.errors}
               />
@@ -89,7 +95,7 @@ const Regulation = () => {
                 placeholder="Seleccionar"
                 label={<>Periodo final de convocatoria</>}
                 data={periods.length ? periods : []}
-                classNameLabel="text-black biggest bold"
+                classNameLabel="text-black biggest font-500"
                 // direction={EDirection.column}
                 errors={formState.errors}
               />
@@ -118,15 +124,28 @@ const Regulation = () => {
       {showTable && (
         <div className="container-form padding-form ">
           <TableComponent
-            title="Resultados disponibles socializados"
             ref={tableComponentRef}
             url={`${process.env.urlApiFunds}/api/v1/reglament/get-paginated`}
             columns={tableColumns}
             actions={tableActions}
-            isShowModal={false}
+            titleMessageModalNoResult="No hay resultados"
+            isShowModal={true}
+            descriptionModalNoResult="No hay resultados"
+            emptyMessage="No hay resultados"
+            classname="table-header"
           />
         </div>
       )}
+      <DetailReglament
+        isOpen={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
+        detailData={detailData}
+        errors={formState.errors}
+        control={control}
+        setValue={setValue}
+        getValues={getValues}
+        listPrograms={listPrograms}
+      />
     </div>
   );
 };

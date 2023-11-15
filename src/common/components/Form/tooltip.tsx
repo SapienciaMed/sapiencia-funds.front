@@ -1,12 +1,12 @@
 import React from "react";
 
 const Tooltip = ({ text }) => {
-  const truncate = text.slice(0, 17 - 1) + "…";
+  const truncate = text.slice(0, 16 - 1) + "…";
 
   return (
-    <div className="tooltip">
-      <span className="tooltiptext">{text}</span>
-      <span className="truncate">{truncate}</span>
+    <div style={{ width: "100%" }} className="tooltip">
+      <p className="tooltiptext">{text}</p>
+      <p className="truncate">{truncate}</p>
     </div>
   );
 };

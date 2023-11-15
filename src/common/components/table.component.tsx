@@ -41,6 +41,7 @@ interface IProps<T> {
   isShowModal: boolean;
   titleMessageModalNoResult?: string;
   descriptionModalNoResult?: string;
+  classname?: string;
 }
 
 interface IRef {
@@ -58,6 +59,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     isShowModal,
     emptyMessage = "No hay resultados.",
     princialTitle,
+    classname = "",
   } = props;
 
   // States
@@ -142,7 +144,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const mobilTemplate = (item: any) => {
     return (
       <div className="card-grid-item">
-        <div className="card-header">
+        <div className={` card-header ${classname}`}>
           {columns.map((column) => {
             const properties = column.fieldName.split(".");
             let field =
@@ -181,73 +183,77 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
-      <div className="card-user">
+      <div className="card-user ">
         <div className="spc-common-table">
           {title && <div className="spc-table-title">{title}</div>}
 
           {/* Verificar si resultData.array tiene elementos */}
-          <>
-            <Paginator
-              className="between spc-table-paginator"
-              template={paginatorHeader}
-              first={first}
-              rows={perPage}
-              totalRecords={resultData?.meta?.total || 0}
-              onPageChange={onPageChange}
-              leftContent={leftContent(princialTitle)}
-            />
 
-            {width > 830 ? (
-              <div style={{ maxWidth: width - 400 }}>
-                <DataTable
-                  className="spc-table full-height"
-                  value={resultData?.array || []}
-                  loading={loading}
-                  scrollable={true}
-                  emptyMessage={emptyMessage}
-                >
-                  {columns.map((col) => (
-                    <Column
-                      key={col.fieldName}
-                      field={col.fieldName}
-                      header={col.header}
-                      body={col.renderCell}
-                    />
-                  ))}
+          <Paginator
+            className="between spc-table-paginator"
+            template={paginatorHeader}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+            leftContent={leftContent(princialTitle)}
+          />
 
-                  {actions && (
-                    <Column
-                      className="spc-table-actions"
-                      header={
-                        <div>
-                          <div className="spc-header-title">Acciones</div>
-                        </div>
-                      }
-                      body={(row) => (
-                        <ActionComponent row={row} actions={actions} />
-                      )}
-                    />
-                  )}
-                </DataTable>
-              </div>
-            ) : (
-              <DataView
+          {width > 830 ? (
+            <div style={{ maxWidth: width - 400 }}>
+              <DataTable
+                className="spc-table full-height"
                 value={resultData?.array || []}
-                itemTemplate={mobilTemplate}
-                rows={5}
+                loading={loading}
+                scrollable={true}
                 emptyMessage={emptyMessage}
-              />
-            )}
+              >
+                {columns.map((col) => (
+                  <Column
+                    key={col.fieldName}
+                    field={col.fieldName}
+                    header={col.header}
+                    body={col.renderCell}
+                  />
+                ))}
 
-            <Paginator
-              className="spc-table-paginator"
-              template={paginatorFooter}
-              first={first}
-              rows={perPage}
-              totalRecords={resultData?.meta?.total || 0}
-              onPageChange={onPageChange}
+                {actions && actions.length && (
+                  <Column
+                    className="spc-table-actions"
+                    header={
+                      <div>
+                        <div
+                          className="spc-header-title"
+                          style={{ fontWeight: 400 }}
+                        >
+                          Acciones
+                        </div>
+                      </div>
+                    }
+                    body={(row) => (
+                      <ActionComponent row={row} actions={actions} />
+                    )}
+                  />
+                )}
+              </DataTable>
+            </div>
+          ) : (
+            <DataView
+              value={resultData?.array || []}
+              itemTemplate={mobilTemplate}
+              rows={5}
+              emptyMessage={emptyMessage}
             />
-          </>
+          )}
+
+          <Paginator
+            className="spc-table-paginator"
+            template={paginatorFooter}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+          />
         </div>
       </div>
     );
@@ -267,6 +273,12 @@ function getIconElement(icon: string, element: "name" | "src") {
         "Editar"
       ) : (
         <Icons.FaPencilAlt className="button grid-button button-edit" />
+      );
+    case "EditFill":
+      return element == "name" ? (
+        "Editar"
+      ) : (
+        <IconsBS.BsPencil className="button grid-button button-edit" />
       );
     case "Delete":
       return element == "name" ? (
@@ -307,7 +319,7 @@ function getIconElement(icon: string, element: "name" | "src") {
 }
 
 const leftContent = (title: string) => (
-  <p className="header-information text-black bold biggest">
+  <p className="header-information text-black  biggest">
     {title ? title : "Resultados de búsqueda"}
   </p>
 );

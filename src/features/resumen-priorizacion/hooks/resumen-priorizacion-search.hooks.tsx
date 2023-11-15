@@ -10,7 +10,7 @@ import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { IResumenPriorizacion } from "../../../common/interfaces/resumenPriorizacion.interfaces";
-
+import useSumaryPrioricions from "../hooks/resumen-priorizacion-api.hooks"
 export const useResumenPriorizacionSearch = () => {
   const { setMessage, authorization, setDataGrid, dataGrid } =
     useContext(AppContext);
@@ -18,10 +18,11 @@ export const useResumenPriorizacionSearch = () => {
   const resolver = useYupValidationResolver(searchResumenPriorizacion);
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
+  const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
   const [deparmetList, setDeparmentList] = useState([]);
   const { getListByGroupers } = useGenericListService();
   const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-
+  const { downloadFile } = useSumaryPrioricions();
   const onSubmitSearch = async () => {
     loadTableData({});
   };
@@ -29,6 +30,7 @@ export const useResumenPriorizacionSearch = () => {
     handleSubmit,
     register,
     control,
+    getValues,
     formState: { errors },
     reset,
   } = useForm<IResumenPriorizacion>({ resolver });
@@ -40,7 +42,12 @@ export const useResumenPriorizacionSearch = () => {
       numberProject: data?.numberProject,
       validity: data?.validity,
     });
+    if (data?.communeNeighborhood && data?.numberProject && data?.validity) {
+      setSendingReportXlsx(true);
+    }
   });
+
+  
 
   function loadTableData(searchCriteria?: object): void {
     if (tableComponentRef.current) {
@@ -65,6 +72,28 @@ export const useResumenPriorizacionSearch = () => {
       },
       background: true,
     });
+  };
+
+  const downloadXLSX = async () => {
+    const dataForm = getValues();
+    await downloadFile(dataForm).then((resp : any) => {
+          const buffer = new Uint8Array(resp.data.data); // Convierte el Array del búfer en Uint8Array
+          const blob = new Blob([buffer]);
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `ResumenPriorizacion.xls`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          setMessage({
+            title: `Descargar excel`,
+            description: `El archivo fue descargado con éxito`,
+            show: true,
+            OkTitle: "Aceptar",
+            background: true,
+          });
+    })
   };
 
   useEffect(() => {
@@ -101,5 +130,8 @@ export const useResumenPriorizacionSearch = () => {
     setValCommuneNeighborhood,
     reset,
     control,
+    downloadXLSX,
+    setSendingReportXlsx,
+    sendingReportXlsx,
   };
 };

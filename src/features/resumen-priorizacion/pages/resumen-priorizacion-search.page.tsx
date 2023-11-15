@@ -20,6 +20,7 @@ import { AppContext } from "../../../common/contexts/app.context";
 import TableComponent from "../../../common/components/table.component";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Controller } from "react-hook-form";
+import Svgs from "../../../public/images/icons/svgs";
 
 const VotingResultsSearchPage = () => {
   const {
@@ -33,6 +34,8 @@ const VotingResultsSearchPage = () => {
     setValCommuneNeighborhood,
     reset,
     control,
+    downloadXLSX,
+    sendingReportXlsx,
   } = useResumenPriorizacionSearch();
 
   const navigate = useNavigate();
@@ -40,75 +43,38 @@ const VotingResultsSearchPage = () => {
   const { validateActionAccess, setMessage } = useContext(AppContext);
 
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
-    // {
-    //   fieldName: "aimStraight",
-    //   header: "Objetivo directo",
-    // },
-    // {
-    //   fieldName: "productCatalogueDnp",
-    //   header: "Producto catalogo dnp",
-    // },
-    // {
-    //   fieldName: "codProductgueDnp",
-    //   header: "Código catalogo dnp",
-    // },
+
     {
-      fieldName: "activiti.typesProgram.name",
+      fieldName: "program",
       header: "Programa",
     },
-    // {
-    //   fieldName: "activiti.name",
-    //   header: "Actividad",
-    // },
-    // {
-    //   fieldName: "activiti.totalValue",
-    //   header: "Valor Actividad",
-    // },
-    // {
-    //   fieldName: "amount",
-    //   header: "Cantidad",
-    // },
-    // {
-    //   fieldName: "costTotal",
-    //   header: "Costo Total",
-    // },
+
     {
-      fieldName: "percentage123",
+      fieldName: "pct123",
       header: "Porcentaje 123",
     },
     {
-      fieldName: "costTotal",
+      fieldName: "total123",
       header: "Valor porcentaje 123",
-      // renderCell: (row) => {
-      //   const suma =
-      //     row.budgetsMGA.year0.budget +
-      //     row.budgetsMGA.year1.budget +
-      //     row.budgetsMGA.year2.budget +
-      //     row.budgetsMGA.year3.budget +
-      //     row.budgetsMGA.year4.budget;
-      //   return <>{formaterNumberToCurrency(suma)}</>;
-      // },
+
     },
     {
-      fieldName: "percentage456",
+      fieldName: "pct456",
       header: "Porcentaje 456",
     },
     {
-      fieldName: "costTotal",
+      fieldName: "total456",
       header: "Valor porcentaje 456",
     },
     {
-      fieldName: "valprc456",
+      fieldName: "quota",
       header: "Cupos",
     },
     {
-      fieldName: "Total",
+      fieldName: "total",
       header: "Total",
     },
   ];
-
-  // const tableActions: ITableAction<IVotingSearcheResult>[] = [
-  // ];
 
   return (
     <Fragment>
@@ -116,7 +82,6 @@ const VotingResultsSearchPage = () => {
         <div className="container-form padding-form">
           <p className="text-black huge mg-0">Resumen priorización</p>
           <div className="card-table-user">
-
             <FormComponent
               id="createVotingForm"
               className="form-signIn"
@@ -206,14 +171,28 @@ const VotingResultsSearchPage = () => {
           </div>
           <TableComponent
             ref={tableComponentRef}
-            url={`${process.env.urlApiFunds}/api/v1/resumen-priorizacion/get-paginated`}
+            url={`${process.env.urlApiFunds}/api/v1/summary-priorizacion/get-paginated`}
             columns={tableColumns}
             // actions={tableActions}
-            titleMessageModalNoResult="La votación no existe"
-            descriptionModalNoResult="La votación no existe en el sistema. 
-              Haga clic en el botón crear votación"
+            titleMessageModalNoResult="No se encontraron resultados"
             isShowModal={true}
           />
+          <div style={{ display: sendingReportXlsx ? "block" : "none" }} >
+            <div className="button-save-container-display-users margin-right0">
+              <ButtonComponent
+                value={
+                  <>
+                    <div className="container-buttonText">
+                      <span>Descargar</span>
+                      <Svgs svg="excel" width={23.593} height={28.505} />
+                    </div>
+                  </>
+                }
+                className="button-download large "
+                action={downloadXLSX}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </Fragment>
