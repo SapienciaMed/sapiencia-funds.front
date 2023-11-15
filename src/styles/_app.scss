@@ -706,3 +706,34 @@ div[id="single-spa-application:@sapiencia/funds"] {
     }
   }
 }
+
+
+.funcionality-filters-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
+    padding: 0 0 0.8rem 0;
+    row-gap: 1rem;
+  }
+
+@media (min-width: 1024px) {
+
+.funcionality-filters-container {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-rows: 1fr;
+        column-gap: 1rem;
+        row-gap: 0rem;
+    }
+}
+
+@media (max-width: 390px) {
+    .funcionality-filters-container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+  
+ @media (max-width: 250px) {
+    .funcionality-filters-container {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+ }
