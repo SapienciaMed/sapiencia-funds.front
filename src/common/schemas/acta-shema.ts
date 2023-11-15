@@ -31,6 +31,37 @@ export const searchActas = yup.object({
     .required("Cargar información"),
 })
 
+export const editActas = yup.object({
+  projectNumber: yup
+    .number()
+    .required("Completar información"),
+  periodVigency: yup
+    .number()
+    .required("Completar información"),
+  initialCall: yup
+    .string()
+    .required("Completar información"),
+  costAndLogistics: yup
+    .string()
+    .required("Completar información"),
+  financialOperator: yup
+    .number()
+    .required("Completar información"),
+  financialTransactionMB: yup
+    .number()
+    .required("Completar información"),
+  dateCitation: yup
+    .date()
+    .required("Completar información")
+    .typeError("Fecha invalida"),
+  timeCitation: yup
+    .string()
+    .required("Completar información"),
+  user: yup
+    .string()
+    .required("Completar información"),
+});
+
 
 
 

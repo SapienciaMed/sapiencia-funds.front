@@ -48,3 +48,12 @@
         gap: 0.5rem;
     }
 }
+
+@media (max-width: 350px) {
+    .tabs-component{
+        .tabs-selection{
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+}

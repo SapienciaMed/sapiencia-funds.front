@@ -412,6 +412,12 @@ export default function useActaCreate() {
         }
     
     }, [projectMeta,vigency1,subtotalVigency]);
+
+    useEffect(() => {
+        return () => {
+            setDataGridItems([])
+        }
+    },[])
      
     const CancelFunction = () => {
         setMessage({

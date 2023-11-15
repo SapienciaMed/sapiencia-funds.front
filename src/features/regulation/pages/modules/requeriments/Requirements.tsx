@@ -102,15 +102,17 @@ const Requirements = ({ onlyView, id = null }) => {
       )}
 
       {!loading && (
-        <TableComponent
-          princialTitle="Requisitos creados"
-          ref={tableComponentRef}
-          url={`${process.env.urlApiFunds}/api/v1/requeriments/get-paginated`}
-          columns={tableColumns}
-          actions={tableActions}
-          isShowModal={false}
-          descriptionModalNoResult="No existen resultados"
-        />
+        <div className="container-form padding-form ">
+          <TableComponent
+            princialTitle="Requisitos creados"
+            ref={tableComponentRef}
+            url={`${process.env.urlApiFunds}/api/v1/requeriments/get-paginated`}
+            columns={tableColumns}
+            actions={tableActions}
+            isShowModal={false}
+            descriptionModalNoResult="No existen resultados"
+          />
+        </div>
       )}
     </>
   );

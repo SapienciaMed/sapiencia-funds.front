@@ -29,9 +29,9 @@ export const useVotingResults = () => {
     const tableComponentRef = useRef(null);
     const [itemSave, setItemSave] = useState(Array<IItemSave>);
     const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-  const [amountTotal, setAmountTotal] = useState(0);
-  const [totalValueActivity, settotalValueActivity] = useState(0);
-  const [totalValueOne, settotalValueOne] = useState(0);
+    const [amountTotal, setAmountTotal] = useState(0);
+    const [totalValueActivity, settotalValueActivity] = useState(0);
+    const [totalValueOne, settotalValueOne] = useState(0);
   
     const { createVotingResults } = useVotingItemApi();
 
@@ -72,7 +72,7 @@ export const useVotingResults = () => {
               },
               background: true,
               description: <ItemResultsPage dataVoting={data} action={"new"} />,
-              size: "large",
+              size: "items",
               style: "mdl-agregarItem-voting",
               onClose() {
                 //reset();
