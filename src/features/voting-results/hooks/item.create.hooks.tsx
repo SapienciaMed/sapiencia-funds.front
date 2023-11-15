@@ -12,6 +12,7 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import useVotingItemApi from "./voting-items-api.hooks";
 import { useVotingResults } from "./voting-create.hooks";
+import { number } from "yup";
 // import { useVotingResultsSearch } from "./voting-search.hooks";
 
 
@@ -101,12 +102,12 @@ export const useItemResults = (action, dataVoting) => {
     };
 
   const changeAmountSum = (e) => {
-    debugger
+  
     if (e) {
       if (Number(e)) {
         const suma =
           Number(e) *
-          Number(valueActivity != 0 ? valueActivity : selectedActivity ? selectedActivity : 0);
+          Number(valueActivity != 0 ? valueActivity : selectedActivity ? selectedActivity :  action == 'edit' ? Number(dataVoting.activityValue) : 0);
         setValue("totalCost", suma);
       }
     }
@@ -283,7 +284,7 @@ export const useItemResults = (action, dataVoting) => {
       );
       setDisabledCantidad(false);
       setValueActivity(
-        activity.find((obj) => obj.value == activitySelected).total
+        activity.find((obj) => obj.value == activitySelected)?.total
       );
         setValue(
           "amount", null
@@ -383,7 +384,8 @@ export const useItemResults = (action, dataVoting) => {
       if (action == 'edit') {
          setValue(
             "program", dataVoting.idProgram 
-          );
+        );
+        setValueActivity(Number(dataVoting.activityValue));
           setProgramSelected(Number(dataVoting.idProgram));
           setActivitySelected(Number(dataVoting.idActivity));
           setValue("activity", dataVoting.idActivity);
