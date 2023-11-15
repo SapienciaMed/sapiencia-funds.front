@@ -1,7 +1,8 @@
-import { UseFormSetValue, FieldValues } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
+import { IActa } from '../../../common/interfaces';
 
-export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseFormSetValue<FieldValues>) => {
+export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseFormSetValue<IActa>) => {
     let totalQuantityPeriod1 = 0;
     let totalValuePeriod1 = 0;
     let totalQuantityPeriod2 = 0;
@@ -42,18 +43,7 @@ export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseF
         totalSubtotalVigency += isNaN(subtotalVigency) ? 0 : subtotalVigency;
     });
 
-    const vigency1 = totalValuePeriod1 + totalValuePeriod2 + totalCostBillsOperation + totalFinancialOperatorCommission;
-
-    // setTotalQuantityPeriod1(totalQuantityPeriod1);
-    // setTotalValuePeriod1(totalValuePeriod1);
-    // setTotalQuantityPeriod2(totalQuantityPeriod2);
-    // setTotalValuePeriod2(totalValuePeriod2);
-    // setTotalCostBillsOperation(totalCostBillsOperation);
-    // setTotalNet(totalNet);
-    // setTotalFinancialOperatorCommission(totalFinancialOperatorCommission);
-    // setTotalResourcesCredit(totalResourcesCredit);
-    // setSubtotalVigency(totalSubtotalVigency)
-    // setVigency1(vigency1);
+    const vigency1 = totalValuePeriod1 + totalValuePeriod2 + totalCostBillsOperation + totalFinancialOperatorCommission;;
 
     setValue("tQuantity1", totalQuantityPeriod1);
     setValue("tValue1", totalValuePeriod1);
@@ -66,7 +56,6 @@ export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseF
     setValue("totalFinancialOperatorCommission", totalFinancialOperatorCommission);
     setValue("vigency1", vigency1);
     setValue("vigency2", totalSubtotalVigency);
-
     
     return {
         totalQuantityPeriod1,
