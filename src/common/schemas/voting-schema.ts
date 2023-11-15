@@ -33,9 +33,9 @@ export const createItems = yup.object({
     .required("El campo costo total es obligatorio"),
   porcentaje123: yup.number()
     .required("El campo porcentaje 123 es obligatorio")
-    .max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
+    .max(100, "El porcentaje debe ser inferior a 100").min(0, 'El porcentaje debe ser superior a 0'),
   porcentaje456: yup.number()
-    .required("El campo porcentaje 456 es obligatorio").max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
+    .required("El campo porcentaje 456 es obligatorio").max(100, "El porcentaje debe ser inferior a 100").min(0, 'El porcentaje debe ser superior a 0'),
 });
 
 
