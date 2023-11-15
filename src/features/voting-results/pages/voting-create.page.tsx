@@ -156,16 +156,16 @@ const VotingResultsPage = () => {
 
   return (
     <Fragment>
-      <div className=" container-form-grid">
+      <div className=" main-page">
         <div className="container-form padding-form">
           <p className="text-black huge mg-0">Resultados votación</p>
           <div>
             <FormComponent
               id="createVotingForm"
-              className="form-signIn"
+              className="main-page full-width"
               action={onSubmitCreateVoting}
             >
-              <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+              <section className="funcionality-filters-container gap-15">
                 <SelectComponent
                   idInput="communeNeighborhood"
                   control={control}
@@ -175,7 +175,6 @@ const VotingResultsPage = () => {
                   placeholder="Seleccionar"
                   label="Comuna y/o corregimiento "
                   data={deparmetList ? deparmetList : []}
-                  // classNameLabel="text-black big "
                   classNameLabel="text-black big text-required bold medium label-regular"
                   errors={errors}
                 />
@@ -192,26 +191,6 @@ const VotingResultsPage = () => {
                   errors={errors}
                 />
 
-                {/* <Controller
-                  control={control}
-                  name={"numberProject"}
-                  render={({ field }) => {
-                    return (
-                      <InputComponent
-                        idInput={field.name}
-                        errors={errors}
-                        typeInput={"text"}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        value={field.value}
-                        className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={<>Número proyecto</>}
-                      />
-                    );
-                  }}
-                /> */}
-
                 <Controller
                   control={control}
                   name={"validity"}
@@ -225,12 +204,8 @@ const VotingResultsPage = () => {
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={
-                          <>
-                            Vigencia <span>*</span>
-                          </>
-                        }
+                        classNameLabel="text-black big bold text-required"
+                        label="Vigencia"
                       />
                     );
                   }}
@@ -249,17 +224,13 @@ const VotingResultsPage = () => {
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={
-                          <>
-                            Idea de proyecto <span>*</span>
-                          </>
-                        }
+                        classNameLabel="text-black big bold text-required"
+                        label="Idea de proyecto"
                       />
                     );
                   }}
                 />
-              </div>
+              </section>
             </FormComponent>
 
             <div className="button-save-container-display-users margin-right0">
@@ -278,7 +249,6 @@ const VotingResultsPage = () => {
                 dataGrid.length > 0 ? { display: "block" } : { display: "none" }
               }
             >
-              {/* <div className="container-form mg-0"> */}
               <BasicTableComponent
                 ref={tableComponentRef}
                 data={dataGrid}
@@ -286,8 +256,8 @@ const VotingResultsPage = () => {
                 actions={tableActions}
                 titleMessageModalNoResult="Registro no existente"
                 isShowModal={true}
+                classSizeTable="size-table-wd-150"
               />
-              {/* </div> */}
 
               <br />
               <br />
@@ -400,8 +370,7 @@ const VotingResultsPage = () => {
                 type="button"
                 className="button-cancel-text large hover-three disabled-black"
                 action={() => {
-                  CancelFunction()
-                  
+                  CancelFunction();
                 }}
                 disabled={sending}
               />
