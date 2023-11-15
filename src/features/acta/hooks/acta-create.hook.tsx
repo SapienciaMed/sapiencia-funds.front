@@ -346,7 +346,7 @@ export default function useActaCreate() {
         const actaData = {
             numberProject: data.numberProject,
             periodVigency: Number(data.periodVigency),
-            announcementInitial: data.announcementInitial,
+            announcementInitial: String(data.announcementInitial),
             salaryMin: data.salaryMin,
             costsExpenses: data.costsExpenses,
             OperatorCommission: data.OperatorCommission,
@@ -354,8 +354,8 @@ export default function useActaCreate() {
             idStatus: 1,
             items: actaItems,
             citation: citation
-        };
-       
+        };       
+     
        
     const res = await createActa(actaData);
 
@@ -390,7 +390,7 @@ export default function useActaCreate() {
                 background: true,
             });
 
-        }  
+        }   
     };
 
     const handleInputChange = 0;

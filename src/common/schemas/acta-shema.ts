@@ -6,12 +6,10 @@ numberProject: yup
     .required("Completar información"),
   periodVigency: yup
     .number()
-    .required()
-    .typeError("Completar información"),
+    .required("Completar información"),   
   announcementInitial: yup
-    .string()
-    .required()
-    .typeError("Completar información"),
+    .string()   
+    .required("Completar información"),
   costsExpenses: yup
     .number()
     .required()
