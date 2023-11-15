@@ -355,13 +355,13 @@ export const useItemResults = (action, dataVoting) => {
             "amount", action == "edit" ? dataVoting.amount : action == "editVoting" ? Number(dataVoting.amount) : null
           );
           setValue(
-            "productCode", action == "edit" ? dataVoting.productCode : action == "editVoting" ? Number(dataVoting.codProductgueDnp) : null
+            "productCode", action == "edit" ? dataVoting.productCode : action == "editVoting" ? dataVoting.codProductgueDnp : null
           );
           setValue(
-            "productCatalog", action == "edit" ? dataVoting.productCatalog : action == "editVoting" ? Number(dataVoting.productCatalogueDnp) : null
+            "productCatalog", action == "edit" ? dataVoting.productCatalog : action == "editVoting" ? dataVoting.productCatalogueDnp : null
           );
           setValue(
-            "directObject", action == "edit" ? dataVoting.directObject : action == "editVoting" ? Number(dataVoting.aimStraight) : null
+            "directObject", action == "edit" ? dataVoting.directObject : action == "editVoting" ? dataVoting.aimStraight : null
         );
         setIdItemEdit(dataVoting.id);
         setIdVoting(dataVoting.codRtVotingResult);
