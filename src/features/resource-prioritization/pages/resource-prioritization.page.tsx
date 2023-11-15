@@ -244,7 +244,6 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                       className="input-basic medium"
                       classNameLabel="text-black big bold text-required"
                       label={<>Vigencia</>}
-                      maxLength={4}
                     />
                   );
                 }}
@@ -265,9 +264,6 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                       className="input-basic medium"
                       classNameLabel="text-black big bold text-required"
                       label={<>Tasa general costos y gastos</>}
-                      max={100}
-                      min={0}
-                      maxLength={4}
                     />
                   );
                 }}
@@ -288,9 +284,6 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                       className="input-basic medium"
                       classNameLabel="text-black big bold text-required"
                       label={<>Comisión operador financiero acta</>}
-                      max={100}
-                      min={0}
-                      maxLength={4}
                     />
                   );
                 }}
@@ -311,9 +304,6 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                       className="input-basic medium"
                       classNameLabel="text-black big bold text-required"
                       label={<>Comisión operador financiero balance</>}
-                      max={100}
-                      min={0}
-                      maxLength={4}
                     />
                   );
                 }}
@@ -334,9 +324,6 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                       className="input-basic medium"
                       classNameLabel="text-black big bold text-required"
                       label={<>Comisión operador financiero</>}
-                      max={100}
-                      min={0}
-                      maxLength={4}
                     />
                   );
                 }}

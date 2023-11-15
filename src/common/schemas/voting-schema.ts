@@ -51,21 +51,21 @@ export const searchVotings = yup.object({
 
 
 export const ResourcePrioritizationSearch = yup.object({
-  projectNumber: yup.number().required("Requerido!"),
+  projectNumber: yup.number().max(999999999999999, 'valor invalido').required("Requerido!"),
   programId: yup.number().required("Requerido!"),
-  validity: yup.number().required("Requerido!"),
-  generalRate: yup.number().required("Requerido!"),
-  operatorCommissionAct: yup.number().required("Requerido!"),
-  operatorCommissionBalance: yup.number().required("Requerido!"),
-  operatorCommission: yup.number().required("Requerido!"),
+  validity: yup.number().min(2000,'Año invalido').max(3000, 'Año invalido').required("Requerido!"),
+  generalRate: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
+  operatorCommissionAct: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
+  operatorCommissionBalance: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
+  operatorCommission: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
 });
 
 
 
 export const  ResourcePrioritizationSchema = yup.object({
-  financialPerformances: yup.number().required("Requerido!"),
-  generalRate: yup.number().required("Requerido!"),
-  averageCost: yup.number().required("Requerido!"),
-  balanceResources: yup.number().required("Requerido!"),
+  financialPerformances: yup.number().max(999999999999999, 'valor invalido').required("Requerido!"),
+  generalRate: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
+  averageCost: yup.number().max(999999999999999, 'valor invalido').required("Requerido!"),
+  balanceResources: yup.number().max(999999999999999, 'valor invalido').required("Requerido!"),
  });
 
