@@ -27,8 +27,7 @@ export const createItems = yup.object({
     .required("El campo valor actividad es obligatorio")
     .test('len', 'Solo se permiten 30 inidades', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
   amount: yup.number()
-    .required("El campo cantidad es obligatorio")
-    .max(11, "Solo se permiten 11 caracteres"),
+    .required("El campo cantidad es obligatorio"),
   totalCost: yup.number()
     .required("El campo costo total es obligatorio"),
   porcentaje123: yup.number()
