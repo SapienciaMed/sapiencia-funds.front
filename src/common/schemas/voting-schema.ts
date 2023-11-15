@@ -7,10 +7,10 @@ export const createVotings = yup.object({
     .required("El campo número de proyecto es obligatorio")
     .test('len', 'Solo se permiten 30 caracteres', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
   validity: yup
-      .number()
-      .required("La vigencia es obligatoria")
-    .max(3000, "Año invalido")
-  .min(2000, 'Año invalido'),
+      ?.number()
+      ?.required("La vigencia es obligatoria")
+    ?.max(3000, "Año invalido")
+  ?.min(2000, 'Año invalido'),
   ideaProject: yup.string().required("La idea de proyecto es obligatoria").test('len', 'Solo se permiten 500 caracteres', (val) => { if (val && val.toString().length > 500) return val.toString().length < 30; else return true}),
 });
 
@@ -30,13 +30,12 @@ export const createItems = yup.object({
     .required("El campo cantidad es obligatorio")
     .max(11, "Solo se permiten 11 caracteres"),
   totalCost: yup.number()
-    .required("El campo costo total es obligatorio")
-    .max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
+    .required("El campo costo total es obligatorio"),
   porcentaje123: yup.number()
     .required("El campo porcentaje 123 es obligatorio")
     .max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
   porcentaje456: yup.number()
-    .required("El campo porcentaje 456 es obligatorio")
+    .required("El campo porcentaje 456 es obligatorio").max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
 });
 
 
@@ -47,10 +46,10 @@ export const searchVotings = yup.object({
     .required("El campo número de proyecto es obligatorio")
     .test('len', 'Solo se permiten 30 caracteres', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
   validity: yup
-      .number()
-      .required("La vigencia es obligatoria")
-    .max(3000, "Año invalido")
-  .min(2000, 'Año invalido'),
+      ?.number()
+      ?.required("La vigencia es obligatoria")
+    ?.max(3000, "Año invalido")
+  ?.min(2000, 'Año invalido'),
   ideaProject: yup.string().required("La idea de proyecto es obligatoria").test('len', 'Solo se permiten 500 caracteres', (val) => { if (val && val.toString().length > 500) return val.toString().length < 500; else return true}),
 });
 

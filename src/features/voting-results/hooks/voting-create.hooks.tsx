@@ -41,12 +41,21 @@ export const useVotingResults = () => {
 
 
     const {
-        handleSubmit,
-        register,
-        control,
-        formState: { errors },
-        reset,
-    } = useForm<IVotingCreate>({ resolver, mode: 'all' });
+      handleSubmit,
+      register,
+      control,
+      formState: { errors },
+      reset,
+    } = useForm<IVotingCreate>({
+      resolver,
+      mode: "all",
+      defaultValues: {
+        communeNeighborhood: null,
+        numberProject: null,
+        validity: null,
+        ideaProject: "",
+      },
+    });
     
     const CancelFunction = () => {
         setMessage({
@@ -209,7 +218,7 @@ export const useVotingResults = () => {
               setProjectsList(
                 response.data.map((item) => {
                   const list = {
-                    value: item.id,
+                    value: item.bpin,
                     name: item.bpin,
                     meta: item.goal,
                   };

@@ -53,7 +53,7 @@ export const useItemResults = (action, dataVoting) => {
     defaultValues: {
       porcentaje456: action == "edit" ? dataVoting.porcentaje456 : null,
       porcentaje123: action == "edit" ? dataVoting.porcentaje123 : null,
-      //totalCost: action == "edit" ? dataVoting.totalCost : null,
+      totalCost: action == "edit" ? dataVoting.totalCost : null,
       amount: action == "edit" ? dataVoting.amount : null,
       activityValue: action == "edit" ? dataVoting.activityValue : null,
       productCode: action == "edit" ? dataVoting.productCode : null,
@@ -101,7 +101,7 @@ export const useItemResults = (action, dataVoting) => {
     };
 
   const changeAmountSum = (e) => {
-    
+    debugger
     if (e) {
       if (Number(e)) {
         const suma =

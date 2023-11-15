@@ -44,7 +44,7 @@ export const useVotingResultsSearch = () => {
     defaultValues: {
       communeNeighborhood: null,
       numberProject: null,
-      validity: "",
+      validity: null,
       ideaProject: "",
     },
   });
@@ -115,7 +115,7 @@ export const useVotingResultsSearch = () => {
           setProjectsList(
             response.data.map((item) => {
               const list = {
-                value: item.id,
+                value: item.bpin,
                 name: item.bpin,
                 meta: item.goal,
               };
