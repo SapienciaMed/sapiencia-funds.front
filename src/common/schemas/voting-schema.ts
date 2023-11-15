@@ -6,34 +6,38 @@ export const createVotings = yup.object({
   numberProject: yup .string()
     .required("El campo número de proyecto es obligatorio")
     .test('len', 'Solo se permiten 30 caracteres', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
-  validity: yup.string().required("La vigencia es obligatoria").test('len', 'Solo se permiten 4 caracteres', (val) => { if (val && val.toString().length > 4) return val.toString().length < 30; else return true}),
-  ideaProject: yup.string().required("La idea de proyecto es obligatoria"),
+    validity: yup
+      .string()
+      .required("La vigencia es obligatoria")
+    .max(4, "Solo se permiten 4 caracteres")
+  .min(4, 'Solo se permiten 4 caracteres"'),
+  ideaProject: yup.string().required("La idea de proyecto es obligatoria").test('len', 'Solo se permiten 500 caracteres', (val) => { if (val && val.toString().length > 500) return val.toString().length < 30; else return true}),
 });
 
 
 export const createItems = yup.object({
-  directObject: yup.string().required("El campo objetivo es obligatorio"),
+  directObject: yup.string().required("El campo objetivo es obligatorio").test('len', 'Solo se permiten 500 caracteres', (val) => { if (val && val.toString().length > 500) return val.toString().length < 500; else return true}),
   productCatalog:yup .string()
     .required("El campo producto catalogo dnp es obligatorio")
-    .test('len', 'Solo se permiten 30 inidades', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
-  productCode: yup.string().required("El Código producto dnp es obligatorio"),
+    .test('len', 'Solo se permiten 20 caracteres', (val) => { if (val && val.toString().length > 20) return val.toString().length < 20; else return true}),
+  productCode: yup.string().required("El Código producto dnp es obligatorio").test('len', 'Solo se permiten 20 caracteres', (val) => { if (val && val.toString().length > 20) return val.toString().length < 20; else return true}),
   program: yup.string().required("El campo programa es obligatorio"),
   activity: yup.string().required("El campo actividad del item es obligatorio"),
   activityValue: yup.string()
     .required("El campo valor actividad es obligatorio")
     .test('len', 'Solo se permiten 30 inidades', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
-  amount: yup.string()
+  amount: yup.number()
     .required("El campo cantidad es obligatorio")
-    .test('len', 'Solo se permiten 30 inidades', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
-  totalCost: yup.string()
+    .max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
+  totalCost: yup.number()
     .required("El campo costo total es obligatorio")
-    .test('len', 'Solo se permiten 30 inidades', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
-  porcentaje123: yup.string()
+    .max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
+  porcentaje123: yup.number()
     .required("El campo porcentaje 123 es obligatorio")
-    .test('len', 'Solo se permiten 30 inidades', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
-  porcentaje456: yup.string()
+    .max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
+  porcentaje456: yup.number()
     .required("El campo porcentaje 456 es obligatorio")
-    .test('len', 'Solo se permiten 30 inidades', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
+    .max(11, "Solo se permiten 11 caracteres").min(1, 'Debe haber minimo un carater'),
 });
 
 
@@ -43,8 +47,12 @@ export const searchVotings = yup.object({
   numberProject: yup .string()
     .required("El campo número de proyecto es obligatorio")
     .test('len', 'Solo se permiten 30 caracteres', (val) => { if (val && val.toString().length > 30) return val.toString().length < 30; else return true}),
-  validity: yup.string().required("La vigencia es obligatoria"),
-  ideaProject: yup.string().required("La idea de proyecto es obligatoria"),
+  validity: yup
+      .string()
+      .required("La vigencia es obligatoria")
+    .max(4, "Solo se permiten 4 caracteres")
+  .min(4, 'Solo se permiten 4 caracteres"'),
+  ideaProject: yup.string().required("La idea de proyecto es obligatoria").test('len', 'Solo se permiten 500 caracteres', (val) => { if (val && val.toString().length > 500) return val.toString().length < 30; else return true}),
 });
 
 

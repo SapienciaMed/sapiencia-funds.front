@@ -40,6 +40,7 @@ export const useVotingResultsSearch = () => {
     reset,
   } = useForm<IVotingCreate>({
     resolver,
+    mode: 'all',
     defaultValues: {
       communeNeighborhood: null,
       numberProject: null,

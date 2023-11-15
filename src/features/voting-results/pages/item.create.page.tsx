@@ -208,7 +208,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
                 <InputComponent
                   idInput={field.name}
                   errors={errors}
-                  typeInput={"text"}
+                  typeInput={"number"}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
                   value={field.value}
@@ -246,7 +246,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
                 <InputComponent
                   idInput={field.name}
                   errors={errors}
-                  typeInput={"text"}
+                  typeInput={"number"}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
                   value={field.value}
@@ -284,7 +284,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
                 <InputComponent
                   idInput={field.name}
                   errors={errors}
-                  typeInput={"text"}
+                  typeInput={"number"}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
                   value={field.value}
@@ -320,7 +320,7 @@ const ItemResultsPage = ({ dataVoting, action }) => {
                 <InputComponent
                   idInput={field.name}
                   errors={errors}
-                  typeInput={"text"}
+                  typeInput={"number"}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
                   value={field.value}

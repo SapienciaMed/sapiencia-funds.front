@@ -33,6 +33,8 @@ const VotingResultsSearchPage = () => {
     sendingXLSX,
     dataTblTotal,
     projectList,
+    setDataTblTotal,
+    setSendingXLSX,
   } = useVotingResultsSearch();
 
   const navigate = useNavigate();
@@ -188,7 +190,7 @@ const VotingResultsSearchPage = () => {
                       <InputComponent
                         idInput={field.name}
                         errors={errors}
-                        typeInput={"text"}
+                        typeInput={"number"}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
@@ -235,6 +237,9 @@ const VotingResultsSearchPage = () => {
               action={() => {
                 reset();
                 tableComponentRef.current.emptyData();
+                setDataTblTotal([])
+                setSendingXLSX(false)
+
               }}
             />
             <ButtonComponent
