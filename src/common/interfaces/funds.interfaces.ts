@@ -83,3 +83,10 @@ export interface ICallBudget {
 
 }
  
+export interface ICallRenewal {
+  periodo?: number;
+  Fondo?:string;
+  No_Habilitados?:string;
+  No_Renovados?:string;
+  Porcentaje?:string;
+}

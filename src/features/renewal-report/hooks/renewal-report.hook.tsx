@@ -6,7 +6,7 @@ import { RiFileExcel2Line } from "react-icons/ri";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
-import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
+import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import useRenewalReportApi from "./renewal-report-api.hook";
 
@@ -30,8 +30,8 @@ export default function useRenewaReportSearch() {
         reset,
         control: control,
         formState: { errors },
-    } = useForm<ICallBudget>(
-        { resolver }
+    } = useForm<ICallRenewal>(
+        {  }
     );
 
 
@@ -50,47 +50,47 @@ export default function useRenewaReportSearch() {
         }
     })
 
-    const tableColumns: ITableElement<ICallBudget>[] = [
+    const tableColumns: ITableElement<ICallRenewal>[] = [
         {
             fieldName: "announcementList",
             header: "Fondo",
             renderCell: (row) => {
-                return <>{row.id_comuna}</>;
+                return <>{row.Fondo}</>;
             },
         },
         {
             fieldName: "name",
             header: "Nro habilitados",
             renderCell: (row) => {
-                return <>{}</>;
+                return <>{row.No_Habilitados}</>;
             },
         },       
         {
             fieldName: "name",
             header: "Nro renovados",
             renderCell: (row) => {
-                return <>{}</>;
+                return <>{row.No_Renovados}</>;
             },
         },
         {
             fieldName: "name",
             header: "Porcentaje",
             renderCell: (row) => {
-                return <>{}</>;
+                return <>{row.Porcentaje}</>;
             },
         },
         
     ];
 
-    const tableActions: ITableAction<ICallBudget>[] = [
+    const tableActions: ITableAction<ICallRenewal>[] = [
         {
           icon: "Edit",
-          onClick: (row) => navigate("/" + row.id_comuna),
+          onClick: (row) => navigate("/" + row.periodo),
         },
       ];
 
 
-    const onSubmit = handleSubmit(async (data: ICallBudget) => {        
+    const onSubmit = handleSubmit(async (data: ICallRenewal) => {        
         setShowTable(true)
 
         if (tableComponentRef.current) {

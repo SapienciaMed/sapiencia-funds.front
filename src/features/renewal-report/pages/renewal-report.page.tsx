@@ -69,11 +69,12 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     
                     <TableComponent
                         ref={tableComponentRef}
-                        url={`${process.env.urlApiFunds}/api/v1/sapiencia/getbudget-paginated/`}
+                        url={`${process.env.urlApiFunds}/api/v1/renovacion/getrenewal-paginated/`}
                         columns={tableColumns}
                         actions={tableActions}
                         isShowModal={false}
                     />
+                   
                     
                 )}
                 
