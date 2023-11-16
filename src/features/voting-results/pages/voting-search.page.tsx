@@ -28,13 +28,20 @@ const VotingResultsSearchPage = () => {
     deparmetList,
     setValCommuneNeighborhood,
     reset,
-    control, 
-  downloadXLSX,
+    control,
+    downloadXLSX,
+    sendingXLSX,
+    dataTblTotal,
+    projectList,
+    setDataTblTotal,
+    setSendingXLSX,
+    onSubmitSearch,
   } = useVotingResultsSearch();
 
-  console.log("ref", tableComponentRef);
   const navigate = useNavigate();
-  
+  let aucumActivity = 0;
+  let acumTotal = 0;
+  let acumAmount = 0;
   const { validateActionAccess, setMessage } = useContext(AppContext);
 
 
@@ -52,15 +59,15 @@ const VotingResultsSearchPage = () => {
       header: "Código catalogo dnp",
     },
     {
-      fieldName: "activiti.typesProgram.name",
+      fieldName: "activity.typesProgram.name",
       header: "Programa",
     },
     {
-      fieldName: "activiti.name",
+      fieldName: "activity.name",
       header: "Actividad",
     },
     {
-      fieldName: "activiti.totalValue",
+      fieldName: "activity.totalValue",
       header: "Valor Actividad",
     },
     {
@@ -93,9 +100,13 @@ const VotingResultsSearchPage = () => {
             },
             background: true,
             description: (
-              <ItemResultsPage dataVoting={row} action={"editVoting"} />
+              <ItemResultsPage
+                dataVoting={row}
+                action={"editVoting"}
+                collback={onSubmitSearch}
+              />
             ),
-            size: "large",
+            size: "items",
             style: "mdl-agregarItem-voting",
             onClose() {
               //reset();
@@ -144,7 +155,19 @@ const VotingResultsSearchPage = () => {
                   errors={errors}
                 />
 
-                <Controller
+                <SelectComponent
+                  idInput="numberProject"
+                  control={control}
+                  className="select-basic medium"
+                  placeholder="Seleccionar"
+                  label="Número proyecto"
+                  data={projectList ? projectList : []}
+                  classNameLabel="text-black big text-required bold"
+                  direction={EDirection.column}
+                  errors={errors}
+                />
+
+                {/* <Controller
                   control={control}
                   name={"numberProject"}
                   render={({ field }) => {
@@ -162,7 +185,7 @@ const VotingResultsSearchPage = () => {
                       />
                     );
                   }}
-                />
+                /> */}
 
                 <Controller
                   control={control}
@@ -172,13 +195,13 @@ const VotingResultsSearchPage = () => {
                       <InputComponent
                         idInput={field.name}
                         errors={errors}
-                        typeInput={"text"}
+                        typeInput={"number"}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
                         classNameLabel="text-black big bold"
-                        label={<>Vigencia</>}
+                        label={<>Vigencia <span>*</span> </>}
                       />
                     );
                   }}
@@ -198,7 +221,11 @@ const VotingResultsSearchPage = () => {
                         value={field.value}
                         className="input-basic medium"
                         classNameLabel="text-black big bold"
-                        label={<>Idea de proyecto</>}
+                        label={
+                          <>
+                            Idea de proyecto <span>*</span>
+                          </>
+                        }
                       />
                     );
                   }}
@@ -215,6 +242,9 @@ const VotingResultsSearchPage = () => {
               action={() => {
                 reset();
                 tableComponentRef.current.emptyData();
+                setDataTblTotal([])
+                setSendingXLSX(false)
+
               }}
             />
             <ButtonComponent
@@ -235,94 +265,101 @@ const VotingResultsSearchPage = () => {
               Haga clic en el botón crear votación"
             isShowModal={true}
           />
-          {/* <div>
-            <div className="content-tbl-totales">
-              <span className="content-tblt">
-                <p>Totales</p>
-              </span>
-              <div className="content-tbltotls">
-                <div className="content-tbltotlscolumn">
-                  <div className="colorcontetnmin alingcent-textopciones">
-                    <span>Valor de la Actividad</span>
+          <br />
+          <br />
+          <div style={{ display: dataTblTotal.length > 0 ? "block" : "none" }}>
+            <div>
+              <div className="content-tbl-totales">
+                <span className="content-tblt">
+                  <p>Totales</p>
+                </span>
+                <div className="content-tbltotls">
+                  <div className="content-tbltotlscolumn">
+                    <div className="colorcontetnmin alingcent-textopciones">
+                      <span>Valor de la Actividad</span>
+                    </div>
+                    <span className="txt-center">
+                      <p>
+                        {dataTblTotal?.map((e, i) => {
+                          let value = aucumActivity;
+                          if (i === 0) {
+                            aucumActivity = Number(e.activity.totalValue);
+                            value = Number(e.activity.totalValue);
+                          } else {
+                            value =
+                              Number(value) + Number(e.activity.totalValue);
+                            aucumActivity = value;
+                          }
+                          if (Number(dataTblTotal.length) == Number(i + 1)) {
+                            return value;
+                          }
+                        })}
+                      </p>
+                    </span>
                   </div>
-                  <span className="txt-center">
-                    <p>
-                      {dataGrid?.map((e, i) => {
-                        let value = aucumActivity;
-                        if (i === 0) {
-                          aucumActivity = Number(e.activityValue);
-                          value = Number(e.activityValue);
-                        } else {
-                          value = Number(value) + Number(e.activityValue);
-                          aucumActivity = value;
-                        }
-                        if (Number(dataGrid.length) == Number(i + 1)) {
-                          return value;
-                        }
-                      })}
-                    </p>
-                  </span>
-                </div>
-                <div className="content-tbltotlscolumn">
-                  <div className="colorcontetnmin alingcent-textopciones">
-                    <span>Cantidad</span>
+                  <div className="content-tbltotlscolumn">
+                    <div className="colorcontetnmin alingcent-textopciones">
+                      <span>Cantidad</span>
+                    </div>
+                    <span className="txt-center">
+                      <p>
+                        {dataTblTotal?.map((e, i) => {
+                          let value = acumAmount;
+                          if (i === 0) {
+                            acumAmount = Number(e.amount);
+                            value = Number(e.amount);
+                          } else {
+                            value = Number(value) + Number(e.amount);
+                            acumAmount = value;
+                          }
+                          if (Number(dataTblTotal.length) == Number(i + 1)) {
+                            return value;
+                          }
+                        })}
+                      </p>
+                    </span>
                   </div>
-                  <span className="txt-center">
-                    <p>
-                      {dataGrid?.map((e, i) => {
-                        let value = acumAmount;
-                        if (i === 0) {
-                          acumAmount = Number(e.amount);
-                          value = Number(e.amount);
-                        } else {
-                          value = Number(value) + Number(e.amount);
-                          acumAmount = value;
-                        }
-                        if (Number(dataGrid.length) == Number(i + 1)) {
-                          return value;
-                        }
-                      })}
-                    </p>
-                  </span>
-                </div>
-                <div className="content-tbltotlscolumn">
-                  <div className="colorcontetnmin alingcent-textopciones">
-                    <span>Costo total</span>
+                  <div className="content-tbltotlscolumn">
+                    <div className="colorcontetnmin alingcent-textopciones">
+                      <span>Costo total</span>
+                    </div>
+                    <span className="txt-center">
+                      <p>
+                        {dataTblTotal?.map((e, i) => {
+                          let value = acumTotal;
+                          if (i === 0) {
+                            acumTotal = Number(e.costTotal);
+                            value = Number(e.costTotal);
+                          } else {
+                            value = Number(value) + Number(e.costTotal);
+                            acumTotal = value;
+                          }
+                          if (Number(dataTblTotal.length) == Number(i + 1)) {
+                            return value;
+                          }
+                        })}
+                      </p>
+                    </span>
                   </div>
-                  <span className="txt-center">
-                    <p>
-                      {dataGrid?.map((e, i) => {
-                        let value = acumTotal;
-                        if (i === 0) {
-                          acumTotal = Number(e.totalCost);
-                          value = Number(e.totalCost);
-                        } else {
-                          value = Number(value) + Number(e.totalCost);
-                          acumTotal = value;
-                        }
-                        if (Number(dataGrid.length) == Number(i + 1)) {
-                          return value;
-                        }
-                      })}
-                    </p>
-                  </span>
                 </div>
               </div>
             </div>
-          </div> */}
-          <div className="button-save-container-display-users margin-right0">
-            <ButtonComponent
-              value={
-                <>
-                  <div className="container-buttonText">
-                    <span>Descargar</span>
-                    <Svgs svg="excel" width={23.593} height={28.505} />
-                  </div>
-                </>
-              }
-              className="button-download large "
-              action={downloadXLSX}
-            />
+          </div>
+          <div style={{ display: sendingXLSX ? "block" : "none" }}>
+            <div className="button-save-container-display-users margin-right0">
+              <ButtonComponent
+                value={
+                  <>
+                    <div className="container-buttonText">
+                      <span>Descargar</span>
+                      <Svgs svg="excel" width={23.593} height={28.505} />
+                    </div>
+                  </>
+                }
+                className="button-download large "
+                action={downloadXLSX}
+              />
+            </div>
           </div>
         </div>
       </div>

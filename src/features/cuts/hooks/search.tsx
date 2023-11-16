@@ -11,6 +11,7 @@ import {
   ITableElement,
 } from "../../../common/interfaces/table.interfaces";
 import { EResponseCodes } from "../../../common/constants/api.enum";
+import moment from "moment";
 
 export default function useSearchCut(auth, authDelete, authEdit) {
   // Context
@@ -89,14 +90,6 @@ export default function useSearchCut(auth, authDelete, authEdit) {
     return actions;
   };
 
-  function formatDate(date) {
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-  }
-
   const tableColumns: ITableElement<ICut>[] = [
     {
       fieldName: "row.cut.name",
@@ -109,14 +102,14 @@ export default function useSearchCut(auth, authDelete, authEdit) {
       fieldName: "row.cut.from",
       header: <div style={{ fontWeight: 400 }}>{"Fecha inicial"}</div>,
       renderCell: (row) => {
-        return <>{formatDate(new Date(row.from))}</>;
+        return <>{moment(row.from).utc().format("DD/MM/YYYY")}</>;
       },
     },
     {
       fieldName: "row.cut.until",
       header: <div style={{ fontWeight: 400 }}>{"Fecha final"}</div>,
       renderCell: (row) => {
-        return <>{formatDate(new Date(row.until))}</>;
+        return <>{moment(row.until).utc().format("DD/MM/YYYY")}</>;
       },
     },
   ];
@@ -164,7 +157,7 @@ export default function useSearchCut(auth, authDelete, authEdit) {
   const handleModalSuccess = () => {
     setMessage({
       title: "Eliminar",
-      description: `Información eliminada con éxito`,
+      description: `Información eliminada satisfactoriamente`,
       show: true,
       OkTitle: "Aceptar",
       onOk: () => {

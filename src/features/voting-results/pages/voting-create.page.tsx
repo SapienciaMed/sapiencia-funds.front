@@ -18,6 +18,7 @@ import { TextAreaComponent } from "../../../common/components/Form/input-text-ar
 import ItemResultsPage from "../pages/item.create.page";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { Controller } from "react-hook-form";
+import { EDirection } from "../../../common/constants/input.enum";
 
 const VotingResultsPage = () => {
   const {
@@ -37,6 +38,7 @@ const VotingResultsPage = () => {
     settotalValueOne,
     settotalValueActivity,
     setAmountTotal,
+    projectList
   } = useVotingResults();
 
   const navigate = useNavigate();
@@ -106,7 +108,7 @@ const VotingResultsPage = () => {
             setMessage({});
           },
           background: true,
-          description: <ItemResultsPage dataVoting={row} action={"edit"} />,
+          description: <ItemResultsPage dataVoting={row} action={"edit"} collback={false} />,
           size: "large",
           style: "mdl-agregarItem-voting",
         });
@@ -178,7 +180,19 @@ const VotingResultsPage = () => {
                   errors={errors}
                 />
 
-                <Controller
+                <SelectComponent
+                  idInput="numberProject"
+                  control={control}
+                  className="select-basic medium"
+                  placeholder="Seleccionar"
+                  label="Número proyecto"
+                  data={projectList ? projectList : []}
+                  classNameLabel="text-black big text-required bold"
+                  direction={EDirection.column}
+                  errors={errors}
+                />
+
+                {/* <Controller
                   control={control}
                   name={"numberProject"}
                   render={({ field }) => {
@@ -196,7 +210,7 @@ const VotingResultsPage = () => {
                       />
                     );
                   }}
-                />
+                /> */}
 
                 <Controller
                   control={control}
@@ -206,13 +220,17 @@ const VotingResultsPage = () => {
                       <InputComponent
                         idInput={field.name}
                         errors={errors}
-                        typeInput={"text"}
+                        typeInput={"number"}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
                         classNameLabel="text-black big bold"
-                        label={<>Vigencia</>}
+                        label={
+                          <>
+                            Vigencia <span>*</span>
+                          </>
+                        }
                       />
                     );
                   }}
@@ -232,7 +250,11 @@ const VotingResultsPage = () => {
                         value={field.value}
                         className="input-basic medium"
                         classNameLabel="text-black big bold"
-                        label={<>Idea de proyecto</>}
+                        label={
+                          <>
+                            Idea de proyecto <span>*</span>
+                          </>
+                        }
                       />
                     );
                   }}
@@ -282,18 +304,18 @@ const VotingResultsPage = () => {
                       </div>
                       <span className="txt-center">
                         <p>
-                          {
-                            dataGrid?.map((e, i) => {
+                          {dataGrid?.map((e, i) => {
                             let value = aucumActivity;
-                              if (i === 0) {
+                            if (i === 0) {
                               aucumActivity = Number(e.activityValue);
                               value = Number(e.activityValue);
                             } else {
-                              value = (Number(value) + Number(e.activityValue));
+                              value = Number(value) + Number(e.activityValue);
                               aucumActivity = value;
                             }
-                            if (Number(dataGrid.length) == Number(i + 1)) {return value; }
-                            
+                            if (Number(dataGrid.length) == Number(i + 1)) {
+                              return value;
+                            }
                           })}
                         </p>
                       </span>
@@ -304,19 +326,19 @@ const VotingResultsPage = () => {
                       </div>
                       <span className="txt-center">
                         <p>
-                          {
-                            dataGrid?.map((e, i) => {                        
-                            let value =  acumAmount;
-                              if (i === 0) {
+                          {dataGrid?.map((e, i) => {
+                            let value = acumAmount;
+                            if (i === 0) {
                               acumAmount = Number(e.amount);
                               value = Number(e.amount);
                             } else {
-                              value = (Number(value) + Number(e.amount));
+                              value = Number(value) + Number(e.amount);
                               acumAmount = value;
                             }
-                            if (Number(dataGrid.length) == Number(i + 1)) {return value; }
-                            })
-                          }
+                            if (Number(dataGrid.length) == Number(i + 1)) {
+                              return value;
+                            }
+                          })}
                         </p>
                       </span>
                     </div>
@@ -332,10 +354,12 @@ const VotingResultsPage = () => {
                               acumTotal = Number(e.totalCost);
                               value = Number(e.totalCost);
                             } else {
-                              value = (Number(value) + Number(e.totalCost));
+                              value = Number(value) + Number(e.totalCost);
                               acumTotal = value;
                             }
-                            if (Number(dataGrid.length) == Number(i + 1)) {return value; }
+                            if (Number(dataGrid.length) == Number(i + 1)) {
+                              return value;
+                            }
                           })}
                         </p>
                       </span>

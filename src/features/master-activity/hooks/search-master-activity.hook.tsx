@@ -47,7 +47,7 @@ export default function useSearchMasterHook() {
       const activityList = data.map((item) => {
         return {
           name: item.name,
-          value: item.id,
+          value: item.name,
         };
       });
 

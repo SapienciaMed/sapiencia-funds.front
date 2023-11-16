@@ -4,12 +4,16 @@ import useYupValidationResolver from "../../../common/hooks/form-validator.hook"
 import { searchActas } from "../../../common/schemas/acta-shema";
 import { IActaSearch } from "../interface/Acta";
 import { useEffect, useState } from "react";
+import useActaApi from "./acta-api.hook";
+import { EResponseCodes } from "../../../common/constants/api.enum";
+
 
 export default function useActaData() {
     
     const navigate = useNavigate();
     const resolver = useYupValidationResolver(searchActas);
     const [ isBtnDisable, setIsBtnDisable ] = useState<boolean>(false)
+    const { getLastId } = useActaApi();
 
     const {
         handleSubmit,
@@ -18,10 +22,20 @@ export default function useActaData() {
         reset,
         watch,
         control,
+        setValue
     } = useForm<IActaSearch>({
         resolver,
         mode: 'all'
     })
+
+    useEffect(() => {
+        getLastId().then(response => {
+            if (response.operation.code == EResponseCodes.OK) {
+                const dinamicData = response?.data;
+                setValue('actaNro', Object.values(dinamicData).find(us => us))
+            }
+        })
+    },[])
 
     const inputValue =  watch(['actaNro'])
 
@@ -30,13 +44,11 @@ export default function useActaData() {
     },[inputValue])
 
     const onSubmitSearch = handleSubmit((data: IActaSearch) => {
-        console.log("🚀 ~ file: acta.hook.tsx:22 ~ onSubmit ~ data:", data)  
-        navigate('../visualizar')
+        navigate(`../visualizar/${data.actaNro}`)
     })
 
-    const onAddvalues = async (data) => {
-        // navigate('./modificar-acta')
-        console.log("Crear la vista de modificar");  
+    const onAddvalues = async (data: IActaSearch) => {
+        // navigate(`./modificar-acta/${data.actaNro}`) 
     };
     
     const handleModifyActa = () => handleSubmit(onAddvalues)();
@@ -49,6 +61,6 @@ export default function useActaData() {
         reset,
         errors,
         isBtnDisable,
-        control
+        control,
     }
 }

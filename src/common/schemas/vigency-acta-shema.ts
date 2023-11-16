@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const vigencyActas = yup.object({
-   program: yup
+    program: yup
     .number()
     .required("Completar información"),
     found: yup
@@ -38,7 +38,7 @@ export const vigencyActas = yup.object({
     .typeError("Completar información"),
     subtotalVigency: yup
     .number()    
-    .required("Completar información"), 
+    .required("Completar información"),  
 
 });
 

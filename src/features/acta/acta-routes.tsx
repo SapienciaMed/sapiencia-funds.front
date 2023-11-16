@@ -38,10 +38,20 @@ function ActaRoutes() {
       />
 
       <Route
-        path={"/visualizar"}
+        path={"/visualizar/:actaNro"}
         element={
           <PrivateRoute
             element={<SearchResultPage />}
+            allowedAction={"MAESTROS_CONSULTAR"}
+          />
+        }
+      />
+
+      <Route
+        path={"/consultar/modificar-acta/:actaNro"}
+        element={
+          <PrivateRoute
+            element={<SearchResultPage valueAction="edit" />}
             allowedAction={"MAESTROS_CONSULTAR"}
           />
         }

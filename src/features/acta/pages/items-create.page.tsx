@@ -1,8 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useActaItems from "../hooks/items.hook";
-import TableGridComponent from "../../../common/components/tableGrid.component";
-import useActaCreate from "../hooks/acta-create.hook";
 import { IActa } from '../../../common/interfaces/acta.interface';
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
 import { Controller } from "react-hook-form";
@@ -12,7 +10,8 @@ import { InputNumberComponent } from "../../../common/components/Form/input-numb
 const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, actaItems?: IActaItems }) => {
 
     const [modifiedIdcCountercredit, setModifiedIdcCountercredit] = useState(0)
-    const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, foundList, lineList, conceptList, announcementList,periods, costBillsOperation,/* handleInputChange */ neto, financialOperatorCommission, resourcesCredit, programList, CancelFunction } = useActaItems(action, acta, actaItems, modifiedIdcCountercredit);
+    const { errors, register, onsubmitAddItem, control, foundList, lineList, conceptList, 
+        announcementList,periods, programList, CancelFunction } = useActaItems(action, acta, actaItems, modifiedIdcCountercredit);
 
     return (
         <Fragment>
@@ -153,7 +152,6 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                                     classNameLabel="text-black biggest text-required"
                                                     errors={errors}
                                                     placeholder={""}
-                                                    //disabled={checked}
                                                     {...field}
                                                 />
                                             )
@@ -175,7 +173,6 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                                     classNameLabel="text-black biggest text-required"
                                                     errors={errors}
                                                     placeholder={""}
-                                                    //disabled={checked}
                                                     {...field}
                                                 />
                                             )
@@ -210,7 +207,6 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                                     classNameLabel="text-black biggest text-required"
                                                     errors={errors}
                                                     placeholder={""}
-                                                    //disabled={checked}
                                                     {...field}
                                                 />
                                             )
@@ -232,7 +228,6 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                                     classNameLabel="text-black biggest text-required"
                                                     errors={errors}
                                                     placeholder={""}
-                                                    //disabled={checked}
                                                     {...field}
                                                 />
                                             )

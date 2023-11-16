@@ -8,7 +8,7 @@ import {
 } from "react";
 import { IAuthorization } from "../interfaces/auth.interfaces";
 import { IMessage } from "../interfaces/global.interface";
-import {IVotingResultGrid} from "../interfaces/voting.interfaces"
+import { IVotingResultGrid } from "../interfaces/voting.interfaces";
 import { IActaItems } from "../interfaces/actaItems.interface";
 import { IEmailDataGrid } from "../interfaces/funds.interfaces";
 import { IUserDataGrid } from "../interfaces/usersGridInterface";
@@ -19,6 +19,12 @@ interface IAppContext {
   message: IMessage;
   setMessage: Dispatch<SetStateAction<IMessage>>;
   validateActionAccess: (indicator: string) => boolean;
+
+  /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+  /*+++++++++++++++++++++++ NO AGREGAR MAS STATES EN EL CONTEXT ++++++++++++++++++++++++++++*/
+  /*+++++++++++++++++++++++ ESTOS 6 SE DEBERAN REFACTORIZAR  +++++++++++++++++++++++++++++++++++*/
+  /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
   step: number;
   setStep: Dispatch<SetStateAction<number>>;
   disabledFields: boolean;
@@ -54,7 +60,6 @@ export const AppContext = createContext<IAppContext>({
   setDataGridEmails: () => {},
   dataGridUsers: {} as Array<IUserDataGrid>,
   setDataGridUsers: () => {},
-  
 });
 
 export function AppContextProvider({ children }: IProps) {
@@ -94,7 +99,7 @@ export function AppContextProvider({ children }: IProps) {
       dataGridEmails,
       setDataGridEmails,
       setDataGridUsers,
-      dataGridUsers
+      dataGridUsers,
     };
   }, [
     message,
