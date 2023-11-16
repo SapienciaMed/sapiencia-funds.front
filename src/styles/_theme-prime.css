@@ -1097,6 +1097,7 @@
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   appearance: none;
   border-radius: 6px;
+  width: 100%;
 }
 .p-inputtext:enabled:hover {
   border-color: #533893;

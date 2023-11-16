@@ -227,7 +227,7 @@ export const useVotingResults = () => {
               );
             }
           });
-    
+    setDataGrid([])
     }, []);
 
 
