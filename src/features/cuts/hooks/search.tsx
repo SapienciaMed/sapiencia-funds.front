@@ -164,7 +164,7 @@ export default function useSearchCut(auth, authDelete, authEdit) {
   const handleModalSuccess = () => {
     setMessage({
       title: "Eliminar",
-      description: `Información eliminada con éxito`,
+      description: `Información eliminada satisfactoriamente`,
       show: true,
       OkTitle: "Aceptar",
       onOk: () => {
