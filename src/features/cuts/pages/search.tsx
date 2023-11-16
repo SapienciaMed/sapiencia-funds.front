@@ -104,9 +104,10 @@ export const Search = ({ auth, authDelete, authEdit }) => {
           type="button"
           className="button-cancel-text hover-three disabled-black padding-button"
           action={() => {
-            setshowTable(false);
             setLoading(true);
+            setshowTable(false);
             reset();
+            setLoading(false);
           }}
         />
         <ButtonComponent
