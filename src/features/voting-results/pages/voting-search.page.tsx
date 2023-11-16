@@ -43,7 +43,6 @@ const VotingResultsSearchPage = () => {
   let acumTotal = 0;
   let acumAmount = 0;
   const { validateActionAccess, setMessage } = useContext(AppContext);
-
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
     {
       fieldName: "aimStraight",

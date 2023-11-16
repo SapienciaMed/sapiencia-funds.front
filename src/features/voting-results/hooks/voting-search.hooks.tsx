@@ -42,7 +42,7 @@ export const useVotingResultsSearch = () => {
     defaultValues: {
       communeNeighborhood: null,
       numberProject: null,
-      validity: null,
+      validity: '',
       ideaProject: "",
     },
   });
