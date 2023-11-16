@@ -35,7 +35,9 @@ export interface IActa {
     vigency1?: number;
     vigency2?: number;
     techo?: number;
-    typeMasterList?: ITypeMasterList
+    typeMasterList?: ITypeMasterList,
+    consecutiveNroPrevious?: string,
+    lastId?:  number
 }
 
 export interface ITypeMasterList {

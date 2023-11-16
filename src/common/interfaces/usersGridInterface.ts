@@ -7,4 +7,5 @@ export interface IUserDataGrid {
     dateAprobation?: Date;
     email?:          string;
     ident?: string;
+    idCitation?: number
 }

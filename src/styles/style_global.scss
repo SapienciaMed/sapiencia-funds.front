@@ -29,6 +29,19 @@
     padding: 0 0 0.8rem 0;
     row-gap: 1rem;
 }
+
+.width-style{
+    width: 100%;
+
+    &.width-70{
+        width: 70%;
+    }
+
+    &.width-50{
+        width: 50%;
+    }
+}
+
   
 @media (min-width: 1024px) {
     .one-filter-container {
@@ -52,6 +65,18 @@
     }
 }
 
+//650px
+@media (max-width: 750px) {
+    .display-align-flex-center{
+        flex-direction: column
+    }
+
+    .card-user{
+        width: 100%;
+    }
+}
+
+
 @media (max-width: 450px) {
 
     .title-area{
@@ -63,7 +88,11 @@
         gap: 0.5rem;
     }
 }
-
+@media (max-width: 390px) {
+    .funcionality-filters-container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
 @media (max-width: 350px) {
     .tabs-component{
         .tabs-selection{

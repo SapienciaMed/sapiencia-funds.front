@@ -128,6 +128,11 @@ export default function useActaApi() {
     return get(`${serviceUrlActa}${endpoint}`);
   }
 
+  async function updateActa(data: object):  Promise<ApiResponse<any>> {
+    const endpoint: string = "/updateActa"
+    return put(`${serviceUrlActa}${endpoint}`, data);
+  }
+
   return {
     getProgramTypes,
     getMaster,
@@ -139,6 +144,7 @@ export default function useActaApi() {
     getHours,
     getActa,
     approveCitation,
-    getLastId
+    getLastId,
+    updateActa
   };
 }
