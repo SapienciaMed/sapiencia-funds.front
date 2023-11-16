@@ -41,12 +41,21 @@ export const useVotingResults = () => {
 
 
     const {
-        handleSubmit,
-        register,
-        control,
-        formState: { errors },
-        reset,
-    } = useForm<IVotingCreate>({ resolver, mode: 'all' });
+      handleSubmit,
+      register,
+      control,
+      formState: { errors },
+      reset,
+    } = useForm<IVotingCreate>({
+      resolver,
+      mode: "all",
+      defaultValues: {
+        communeNeighborhood: null,
+        numberProject: null,
+        validity: null,
+        ideaProject: "",
+      },
+    });
     
     const CancelFunction = () => {
         setMessage({
@@ -74,7 +83,7 @@ export const useVotingResults = () => {
                 setMessage({});
               },
               background: true,
-              description: <ItemResultsPage dataVoting={data} action={"new"} />,
+              description: <ItemResultsPage dataVoting={data} action={"new"} collback={false} />,
               size: "items",
               style: "mdl-agregarItem-voting",
               onClose() {
@@ -105,7 +114,7 @@ export const useVotingResults = () => {
           show: true,
           title: "Resultados de Votación",
           description: "Estás segur@ de guardar los resultados de votación?",
-          OkTitle: "Crear",
+          OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
           onOk() {
             confirmVotingCreation(data);
@@ -209,7 +218,7 @@ export const useVotingResults = () => {
               setProjectsList(
                 response.data.map((item) => {
                   const list = {
-                    value: item.id,
+                    value: item.bpin,
                     name: item.bpin,
                     meta: item.goal,
                   };
@@ -218,7 +227,7 @@ export const useVotingResults = () => {
               );
             }
           });
-    
+    setDataGrid([])
     }, []);
 
 

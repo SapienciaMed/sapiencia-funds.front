@@ -276,9 +276,7 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
                   className="input-basic medium"
                   classNameLabel="text-black big bold text-required"
                   label={<>Tasa general</>}
-                  max={100}
-                  min={0}
-                  maxLength={4}
+    
                 />
               );
             }}

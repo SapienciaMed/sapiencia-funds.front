@@ -28,9 +28,7 @@ export const useVotingResultsSearch = () => {
   const [projectList, setProjectsList] = useState([]);
 
 
-  const onSubmitSearch = async () => {
-    loadTableData({});
-  };
+
   const {
     handleSubmit,
     register,
@@ -40,14 +38,21 @@ export const useVotingResultsSearch = () => {
     reset,
   } = useForm<IVotingCreate>({
     resolver,
+    mode: 'all',
     defaultValues: {
       communeNeighborhood: null,
       numberProject: null,
-      validity: "",
+      validity: '',
       ideaProject: "",
     },
   });
 
+  const dataForm = getValues();
+
+    const onSubmitSearch = async () => {
+      loadTableData(dataForm);
+    };
+  
     /*Functions*/
   const onSubmitSearchVoting = handleSubmit(async (data: IVotingCreate) => {
         loadTableData({
@@ -58,8 +63,8 @@ export const useVotingResultsSearch = () => {
         });
       if (data?.numberProject && data?.validity && data?.ideaProject && data?.communeNeighborhood) {
         setSendingXLSX(true);
-        const dataConsult : any = await consultVoting(data);
-        setDataTblTotal(dataConsult.data)
+        const dataConsult: any = await consultVoting(data);
+        setDataTblTotal(dataConsult.data.data);
       }
       
     });
@@ -114,7 +119,7 @@ export const useVotingResultsSearch = () => {
           setProjectsList(
             response.data.map((item) => {
               const list = {
-                value: item.id,
+                value: item.bpin,
                 name: item.bpin,
                 meta: item.goal,
               };
@@ -128,7 +133,7 @@ export const useVotingResultsSearch = () => {
   
   
   const downloadXLSX = async () => {
-    const dataForm = getValues();
+    
     await downloadFile(dataForm).then((resp: any) => {
       const buffer = new Uint8Array(resp.data.data); // Convierte el Array del búfer en Uint8Array
       const blob = new Blob([buffer]);
@@ -140,8 +145,8 @@ export const useVotingResultsSearch = () => {
       a.click();
       window.URL.revokeObjectURL(url);
       setMessage({
-        title: `Descargar excel`,
-        description: `El archivo fue descargado con éxito`,
+        title: `Resultados de votación`,
+        description: `Información descargada exitosamente`,
         show: true,
         OkTitle: "Aceptar",
         background: true,

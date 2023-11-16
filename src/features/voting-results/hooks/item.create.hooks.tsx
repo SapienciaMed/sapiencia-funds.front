@@ -12,11 +12,11 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import useVotingItemApi from "./voting-items-api.hooks";
 import { useVotingResults } from "./voting-create.hooks";
-// import { useVotingResultsSearch } from "./voting-search.hooks";
+import { number } from "yup";
 
 
 
-export const useItemResults = (action, dataVoting) => {
+export const useItemResults = (action, dataVoting, collback) => {
 
   const [sending, setSending] = useState(false);
   const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
@@ -36,8 +36,6 @@ export const useItemResults = (action, dataVoting) => {
   const [valueActivity, setValueActivity] = useState(0);
   const [objectTotales, setObjectTotales] = useState({});
 
-
-  // const { onSubmitSearch } = useVotingResultsSearch();
   
   
   const {
@@ -53,7 +51,7 @@ export const useItemResults = (action, dataVoting) => {
     defaultValues: {
       porcentaje456: action == "edit" ? dataVoting.porcentaje456 : null,
       porcentaje123: action == "edit" ? dataVoting.porcentaje123 : null,
-      //totalCost: action == "edit" ? dataVoting.totalCost : null,
+      totalCost: action == "edit" ? dataVoting.totalCost : null,
       amount: action == "edit" ? dataVoting.amount : null,
       activityValue: action == "edit" ? dataVoting.activityValue : null,
       productCode: action == "edit" ? dataVoting.productCode : null,
@@ -101,12 +99,12 @@ export const useItemResults = (action, dataVoting) => {
     };
 
   const changeAmountSum = (e) => {
-    
+  
     if (e) {
       if (Number(e)) {
         const suma =
           Number(e) *
-          Number(valueActivity != 0 ? valueActivity : selectedActivity ? selectedActivity : 0);
+          Number(valueActivity != 0 ? valueActivity : selectedActivity ? selectedActivity :  action == 'edit' ? Number(dataVoting.activityValue) : 0);
         setValue("totalCost", suma);
       }
     }
@@ -215,8 +213,8 @@ export const useItemResults = (action, dataVoting) => {
         await setMessage({
           OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
-          description: "Estás segur@ de editar este registro?",
-          title: "Editar registro",
+          description: "Estás segur@ de guardar los resultados de votación?",
+          title: "Resultados de votación",
           show: true,
           type: EResponseCodes.OK,
           background: true,
@@ -242,12 +240,15 @@ export const useItemResults = (action, dataVoting) => {
             if (res && res?.operation?.code === EResponseCodes.OK) {
               setMessage({
                 OkTitle: "Aceptar",
-                description: "Registro actualizado correctamente",
-                title: "Editar registro",
+                description: "Guardado exitosamente",
+                title: "Resultados de votación",
                 show: true,
                 type: EResponseCodes.OK,
                 background: true,
                 onOk() {
+                  if (collback) {
+                    collback();
+                  }
                   setMessage({});
                 },
                 onClose() {
@@ -283,7 +284,7 @@ export const useItemResults = (action, dataVoting) => {
       );
       setDisabledCantidad(false);
       setValueActivity(
-        activity.find((obj) => obj.value == activitySelected).total
+        activity.find((obj) => obj.value == activitySelected)?.total
       );
         setValue(
           "amount", null
@@ -355,13 +356,13 @@ export const useItemResults = (action, dataVoting) => {
             "amount", action == "edit" ? dataVoting.amount : action == "editVoting" ? Number(dataVoting.amount) : null
           );
           setValue(
-            "productCode", action == "edit" ? dataVoting.productCode : action == "editVoting" ? Number(dataVoting.codProductgueDnp) : null
+            "productCode", action == "edit" ? dataVoting.productCode : action == "editVoting" ? dataVoting.codProductgueDnp : null
           );
           setValue(
-            "productCatalog", action == "edit" ? dataVoting.productCatalog : action == "editVoting" ? Number(dataVoting.productCatalogueDnp) : null
+            "productCatalog", action == "edit" ? dataVoting.productCatalog : action == "editVoting" ? dataVoting.productCatalogueDnp : null
           );
           setValue(
-            "directObject", action == "edit" ? dataVoting.directObject : action == "editVoting" ? Number(dataVoting.aimStraight) : null
+            "directObject", action == "edit" ? dataVoting.directObject : action == "editVoting" ? dataVoting.aimStraight : null
         );
         setIdItemEdit(dataVoting.id);
         setIdVoting(dataVoting.codRtVotingResult);
@@ -383,7 +384,8 @@ export const useItemResults = (action, dataVoting) => {
       if (action == 'edit') {
          setValue(
             "program", dataVoting.idProgram 
-          );
+        );
+        setValueActivity(Number(dataVoting.activityValue));
           setProgramSelected(Number(dataVoting.idProgram));
           setActivitySelected(Number(dataVoting.idActivity));
           setValue("activity", dataVoting.idActivity);

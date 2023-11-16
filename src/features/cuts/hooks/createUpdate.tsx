@@ -106,7 +106,7 @@ export default function useCutHook(auth) {
 
     setMessage({
       show: true,
-      title: "Guardar información",
+      title: id ? "Editar corte" : "Guardar corte",
       description: "¿Estás segur@ de guardar la información?",
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
@@ -125,14 +125,17 @@ export default function useCutHook(auth) {
     if (operation.code === EResponseCodes.OK) {
       handleModalSuccess();
     } else {
-      handleModalError(operation.message, false);
+      handleModalError(
+        "Ya existe un Corte para el rango de fechas seleccionadas, por favor verifique",
+        false
+      );
     }
   };
 
   const handleModalSuccess = () => {
     setMessage({
-      title: "Cambios guardados",
-      description: `¡Cambios guardados exitosamente!`,
+      title: "Guardar",
+      description: id ? "Actualización exitosa" : `Creación exitosa`,
       show: true,
       OkTitle: "Aceptar",
       onOk: () => {

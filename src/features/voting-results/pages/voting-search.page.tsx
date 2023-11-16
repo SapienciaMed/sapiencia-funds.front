@@ -33,6 +33,9 @@ const VotingResultsSearchPage = () => {
     sendingXLSX,
     dataTblTotal,
     projectList,
+    setDataTblTotal,
+    setSendingXLSX,
+    onSubmitSearch,
   } = useVotingResultsSearch();
 
   const navigate = useNavigate();
@@ -40,8 +43,6 @@ const VotingResultsSearchPage = () => {
   let acumTotal = 0;
   let acumAmount = 0;
   const { validateActionAccess, setMessage } = useContext(AppContext);
-
-
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
     {
       fieldName: "aimStraight",
@@ -97,7 +98,11 @@ const VotingResultsSearchPage = () => {
             },
             background: true,
             description: (
-              <ItemResultsPage dataVoting={row} action={"editVoting"} />
+              <ItemResultsPage
+                dataVoting={row}
+                action={"editVoting"}
+                collback={onSubmitSearch}
+              />
             ),
             size: "items",
             style: "mdl-agregarItem-voting",
@@ -132,10 +137,10 @@ const VotingResultsSearchPage = () => {
 
             <FormComponent
               id="createVotingForm"
-              className="form-signIn"
+              className="main-page full-width"
               action={onSubmitSearchVoting}
             >
-              <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+              <section className="funcionality-filters-container gap-15">
                 <SelectComponent
                   idInput="communeNeighborhood"
                   control={control}
@@ -160,26 +165,6 @@ const VotingResultsSearchPage = () => {
                   errors={errors}
                 />
 
-                {/* <Controller
-                  control={control}
-                  name={"numberProject"}
-                  render={({ field }) => {
-                    return (
-                      <InputComponent
-                        idInput={field.name}
-                        errors={errors}
-                        typeInput={"text"}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        value={field.value}
-                        className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={<>Número proyecto</>}
-                      />
-                    );
-                  }}
-                /> */}
-
                 <Controller
                   control={control}
                   name={"validity"}
@@ -188,13 +173,13 @@ const VotingResultsSearchPage = () => {
                       <InputComponent
                         idInput={field.name}
                         errors={errors}
-                        typeInput={"text"}
+                        typeInput={"number"}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={<>Vigencia <span>*</span> </>}
+                        classNameLabel="text-black big bold text-required"
+                        label="Vigencia"
                       />
                     );
                   }}
@@ -213,17 +198,13 @@ const VotingResultsSearchPage = () => {
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={
-                          <>
-                            Idea de proyecto <span>*</span>
-                          </>
-                        }
+                        classNameLabel="text-black big bold text-required"
+                        label="Idea de proyecto"
                       />
                     );
                   }}
                 />
-              </div>
+              </section>
             </FormComponent>
           </div>
           <div className="button-save-container-display-users margin-right0">
@@ -235,6 +216,8 @@ const VotingResultsSearchPage = () => {
               action={() => {
                 reset();
                 tableComponentRef.current.emptyData();
+                setDataTblTotal([]);
+                setSendingXLSX(false);
               }}
             />
             <ButtonComponent
