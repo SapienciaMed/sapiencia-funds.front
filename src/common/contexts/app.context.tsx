@@ -10,7 +10,7 @@ import { IAuthorization } from "../interfaces/auth.interfaces";
 import { IMessage } from "../interfaces/global.interface";
 import {IVotingResultGrid} from "../interfaces/voting.interfaces"
 import { IActaItems } from "../interfaces/actaItems.interface";
-import { IEmailDataGrid } from "../interfaces/funds.interfaces";
+import { IEmailDataGrid, IRenewalDataGrid } from "../interfaces/funds.interfaces";
 import { IUserDataGrid } from "../interfaces/usersGridInterface";
 
 interface IAppContext {
@@ -31,6 +31,8 @@ interface IAppContext {
   setDataGridEmails: Dispatch<SetStateAction<Array<IEmailDataGrid>>>;
   dataGridUsers: Array<IUserDataGrid>;
   setDataGridUsers: Dispatch<SetStateAction<Array<IUserDataGrid>>>;
+  dataGridRenewal: Array<IRenewalDataGrid>;
+  setdataGridRenewal: Dispatch<SetStateAction<Array<IRenewalDataGrid>>>;
 }
 interface IProps {
   children: ReactElement | ReactElement[];
@@ -54,6 +56,8 @@ export const AppContext = createContext<IAppContext>({
   setDataGridEmails: () => {},
   dataGridUsers: {} as Array<IUserDataGrid>,
   setDataGridUsers: () => {},
+  dataGridRenewal: {} as Array<IRenewalDataGrid>,
+  setdataGridRenewal: () => {},
   
 });
 
@@ -70,6 +74,7 @@ export function AppContextProvider({ children }: IProps) {
   const [dataGridItems, setDataGridItems] = useState(Array<IActaItems>);
   const [dataGridEmails, setDataGridEmails] = useState(Array<IEmailDataGrid>);
   const [dataGridUsers, setDataGridUsers] = useState(Array<IUserDataGrid>);
+  const [dataGridRenewal, setdataGridRenewal] = useState(Array<IRenewalDataGrid>);
 
   // Metodo que verifica si el usuario posee permisos sobre un accion
   function validateActionAccess(indicator: string): boolean {
@@ -94,7 +99,9 @@ export function AppContextProvider({ children }: IProps) {
       dataGridEmails,
       setDataGridEmails,
       setDataGridUsers,
-      dataGridUsers
+      dataGridUsers,
+      dataGridRenewal,
+      setdataGridRenewal
     };
   }, [
     message,

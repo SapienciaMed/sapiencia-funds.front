@@ -1,11 +1,12 @@
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import useCrudService from "../../../common/hooks/crud-service.hook";
-import { ICallBudget, IProgramTypes } from "../../../common/interfaces/funds.interfaces";
+import { ICallRenewal, IProgramTypes, IRenewalDataGrid } from "../../../common/interfaces/funds.interfaces";
 import { ApiResponse } from "../../../common/utils/api-response";
 
 
 export default function useRenewalReportApi() {
     const baseURL: string = process.env.urlApiFunds || "";
+    const serviceUrl: string = "/api/v1/renovacion";
     const serviceUrlSapiencia: string = "/api/v1/sapiencia";
 
     const { get, post, put } = useCrudService(baseURL);
@@ -21,8 +22,14 @@ export default function useRenewalReportApi() {
             );
         }
     }
+    async function getRenewalReport(
+        data: ICallRenewal
+      ): Promise<ApiResponse<ICallRenewal[]>> {
+        return await post(`${serviceUrl}/getrenewal-paginated/`, data);
+      }
     
     return {
         getAnnouncement,
+        getRenewalReport,
     }
 }

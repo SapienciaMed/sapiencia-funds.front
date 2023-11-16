@@ -85,6 +85,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             columns={tableColumns}
                             titleMessageModalNoResult="Registro no existente"
                             isShowModal={false}
+                            princialTitle="Informe legalización"
                         />
                     )}
                 </div>

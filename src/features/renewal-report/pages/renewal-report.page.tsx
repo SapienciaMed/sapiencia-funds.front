@@ -3,13 +3,61 @@ import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from 
 import useRenewaReportSearch from "../hooks/renewal-report.hook";
 import TableComponent from "../../../common/components/table.component";
 import Svgs from "../../../public/images/icons/svgs";
+import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
+import { AppContext } from "../../../common/contexts/app.context";
+import BasicTableComponent from "../../../common/components/basic-table.component";
 
 const SearchRenewalReportPage = (): React.JSX.Element => {
+    const { setMessage } = useContext(AppContext);
+
     const {
         control, errors, clearFields, register, setValue, navigate, tableComponentRef, showTable,
-        setShowTable, onSubmit, reset, announcementList, tableColumns, tableActions,
+        setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal,
     } = useRenewaReportSearch();
     const [tableView, setTableView] = useState<boolean>(false);
+
+
+    const tableColumnsRenewal: ITableElement<ICallRenewal>[] = [
+        {
+            fieldName: "Fondo",
+            header: "Fondo",
+        },
+        {
+            fieldName: "No_Habilitados",
+            header: "Nro habilitados"
+        },
+        {
+            fieldName: "No_Renovados",
+            header: "Nro renovados",
+        },
+        {
+            fieldName: "Porcentaje",
+            header: "Porcentaje",
+        },
+
+    ];
+
+    const tableActionsRenewal: ITableAction<ICallRenewal>[] = [
+        {
+            icon: "Edit",
+            onClick: (row) => {
+                setMessage({
+                    show: true,
+                    title: "Editar ítem",
+                    description: "",
+                    background: true,
+                    size: "items",
+                    items: true,
+                    onOk() {
+                        setMessage({});
+                    },
+                });
+            },
+        },
+
+    ];
+
 
     return (
         <Fragment>
@@ -58,26 +106,30 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             <ButtonComponent
                                 form="searchBudget"
                                 value={`Buscar`}
+                                action={() => {
+                                    searchRenewal();
+                                }}
                                 className="button-save large hover-three disabled-black"
                             />
                         </div>
                     </FormComponent>
                 </div>
 
-                
-                {showTable && (
-                    
-                    <TableComponent
+
+                <div className="container-sections-forms">
+
+                    <BasicTableComponent
                         ref={tableComponentRef}
-                        url={`${process.env.urlApiFunds}/api/v1/renovacion/getrenewal-paginated/`}
-                        columns={tableColumns}
-                        actions={tableActions}
-                        isShowModal={false}
+                        data={dataGridRenewal}
+                        columns={tableColumnsRenewal}
+                        actions={tableActionsRenewal}
+                        titleMessageModalNoResult="Registro no existente"
+                        isShowModal={true}
+                        secondaryTitle={"Resultados de búsqueda"}
                     />
-                   
-                    
-                )}
-                
+
+                </div>
+
 
                 <div className="container-sections-forms">
                     <div className="title-area">
@@ -92,7 +144,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             label="Nro habilitados"
                             classNameLabel="text-black big text-required"
                             errors={errors}
-                            disabled= {true}
+                            disabled={true}
                         />
                         <InputComponent
                             register={control.register}
@@ -102,7 +154,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             label="Nro renovados"
                             classNameLabel="text-black big text-required"
                             errors={errors}
-                            disabled= {true}
+                            disabled={true}
                         />
                         <InputComponent
                             register={control.register}
@@ -112,7 +164,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             label="Porcentaje"
                             classNameLabel="text-black big text-required"
                             errors={errors}
-                            disabled= {true}
+                            disabled={true}
                         />
                     </div>
                 </div>
@@ -132,7 +184,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             label="Nro habilitados"
                             classNameLabel="text-black big text-required"
                             errors={errors}
-                            
+
                         />
                         <InputComponent
                             register={control.register}
@@ -142,7 +194,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             label="Nro renovados"
                             classNameLabel="text-black big text-required"
                             errors={errors}
-                            disabled= {true}
+                            disabled={true}
                         />
                         <InputComponent
                             register={control.register}
@@ -152,27 +204,27 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             label="Porcentaje"
                             classNameLabel="text-black big text-required"
                             errors={errors}
-                            disabled= {true}
+                            disabled={true}
                         />
                     </div>
                 </div>
                 <div>
-                <div className="button-save-container-display mr-24px">
+                    <div className="button-save-container-display mr-24px">
                     </div>
 
-                        <ButtonComponent
-                            value={
-                                <>
-                                    <div className="container-buttonText">
-                                        <span>Descargar</span>
-                                        <Svgs svg="excel" width={23.593} height={28.505} />
-                                    </div>
-                                </>
-                            }
-                            className="button-download large "
-                            //action={downloadCollection}
-                        />
-                    
+                    <ButtonComponent
+                        value={
+                            <>
+                                <div className="container-buttonText">
+                                    <span>Descargar</span>
+                                    <Svgs svg="excel" width={23.593} height={28.505} />
+                                </div>
+                            </>
+                        }
+                        className="button-download large "
+                    //action={downloadCollection}
+                    />
+
                 </div>
                 <div className="button-save-container-display m-top-20">
                     <ButtonComponent
