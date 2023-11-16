@@ -125,7 +125,10 @@ export default function useCutHook(auth) {
     if (operation.code === EResponseCodes.OK) {
       handleModalSuccess();
     } else {
-      handleModalError(operation.message, false);
+      handleModalError(
+        "Ya existe un Corte para el rango de fechas seleccionadas, por favor verifique",
+        false
+      );
     }
   };
 
