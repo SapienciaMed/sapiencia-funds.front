@@ -17,7 +17,7 @@ import Svgs from "../../../public/images/icons/svgs";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { ResourcePrioritizationSearch } from "../../../common/schemas/voting-schema";
 import { useRegulationApi } from "../../regulation/service";
-import { formatMoney } from "../../../common/utils/helpers";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
@@ -27,6 +27,7 @@ import {
   IResourcePrioritization,
 } from "../../../common/interfaces/resource-prioritization.interface";
 import useResourcePrioritizationApi from "../hooks/resource-prioritization.hook";
+import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 const ResourcePrioritizationPage = (): JSX.Element => {
   // Servicios
@@ -93,7 +94,7 @@ const ResourcePrioritizationPage = (): JSX.Element => {
   const tableColumns: ITableElement<IResourcePrioritization>[] = [
     {
       fieldName: "communeId",
-      header: "Comuna / Corregimiento",
+      header: "Comuna y/o corregimiento",
       renderCell: (row) => (
         <>
           {
@@ -105,18 +106,18 @@ const ResourcePrioritizationPage = (): JSX.Element => {
     },
     {
       fieldName: "total123",
-      header: "Estratos 123",
-      renderCell: (row) => <>{formatMoney(row.total123)}</>,
+      header: "Porcentaje 123",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.total123)}</>,
     },
     {
       fieldName: "total456",
-      header: "Estratos 456",
-      renderCell: (row) => <>{formatMoney(row.total456)}</>,
+      header: "Porcentaje 456",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.total456)}</>,
     },
     {
       fieldName: "value",
       header: "Valor",
-      renderCell: (row) => <>{formatMoney(row.value)}</>,
+      renderCell: (row) => <>{formaterNumberToCurrency(row.value)}</>,
     },
     { fieldName: "places", header: "Cupos" },
     { fieldName: "averageCost", header: " Costo promedio" },
@@ -128,26 +129,27 @@ const ResourcePrioritizationPage = (): JSX.Element => {
     {
       fieldName: "grossValue",
       header: "Valor bruto",
-      renderCell: (row) => <>{formatMoney(row.grossValue)}</>,
+      renderCell: (row) => <>{formaterNumberToCurrency(row.grossValue)}</>,
     },
     { fieldName: "financialPerformances", header: "Recurso del balance" },
     { fieldName: "balanceResources", header: "Rendimientos financieros" },
+    { fieldName: "operatorCommission", header: "Comisión operador financiero" },
+    {
+      fieldName: "operatorCommissionBalance",
+      header: "Comisión operador financiero balance",
+    },
     {
       fieldName: "operatorCommissionAct",
       header: "Comisión operador financiero acta",
     },
     {
-      fieldName: "operatorCommissionBalance",
-      header: "Comisión operador financiero balance",
-    },
-    { fieldName: "operatorCommission", header: "Comisión operador financiero" },
-    {
       fieldName: "resourceForCredit",
       header: "Recurso para crédito",
-      renderCell: (row) => <>{formatMoney(row.resourceForCredit)}</>,
+      renderCell: (row) => (
+        <>{formaterNumberToCurrency(row.resourceForCredit)}</>
+      ),
     },
   ];
-
   const tableActions: ITableAction<IResourcePrioritization>[] = [
     {
       icon: "Edit",
@@ -160,13 +162,11 @@ const ResourcePrioritizationPage = (): JSX.Element => {
           },
           background: true,
           description: (
-            <>
-              <ResourcePrioritizationForm
-                data={row}
-                critetira={form.getValues()}
-                communeList={communeList}
-              />
-            </>
+            <ResourcePrioritizationForm
+              data={row}
+              critetira={form.getValues()}
+              communeList={communeList}
+            />
           ),
           size: "large",
           style: "mdl-agregarItem-voting",
@@ -248,85 +248,60 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                   );
                 }}
               />
-
-              <Controller
+              <InputNumberComponent
+                idInput="generalRate"
                 control={form.control}
-                name={"generalRate"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput={field.name}
-                      errors={form.formState.errors}
-                      typeInput={"number"}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field.value}
-                      className="input-basic medium"
-                      classNameLabel="text-black big bold text-required"
-                      label={<>Tasa general costos y gastos</>}
-                    />
-                  );
-                }}
+                label={<>Tasa general costos y gastos</>}
+                errors={form.formState.errors}
+                classNameLabel="text-black big bold text-required"
+                className="inputNumber-basic medium "
+                mode="decimal"
+                prefix="% "
+                maxFractionDigits={2}
+                max={100}
+                min={0}
               />
 
-              <Controller
+              <InputNumberComponent
+                idInput="operatorCommission"
                 control={form.control}
-                name={"operatorCommissionAct"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput={field.name}
-                      errors={form.formState.errors}
-                      typeInput={"number"}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field.value}
-                      className="input-basic medium"
-                      classNameLabel="text-black big bold text-required"
-                      label={<>Comisión operador financiero acta</>}
-                    />
-                  );
-                }}
+                label={<>Comisión operador financiero</>}
+                errors={form.formState.errors}
+                classNameLabel="text-black big bold text-required"
+                className="inputNumber-basic medium "
+                mode="decimal"
+                prefix="% "
+                maxFractionDigits={2}
+                max={100}
+                min={0}
               />
 
-              <Controller
+              <InputNumberComponent
+                idInput="operatorCommissionBalance"
                 control={form.control}
-                name={"operatorCommissionBalance"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput={field.name}
-                      errors={form.formState.errors}
-                      typeInput={"number"}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field.value}
-                      className="input-basic medium"
-                      classNameLabel="text-black big bold text-required"
-                      label={<>Comisión operador financiero balance</>}
-                    />
-                  );
-                }}
+                label={<>Comisión operador financiero balance</>}
+                errors={form.formState.errors}
+                classNameLabel="text-black big bold text-required"
+                className="inputNumber-basic medium "
+                mode="decimal"
+                prefix="% "
+                maxFractionDigits={2}
+                max={100}
+                min={0}
               />
 
-              <Controller
+              <InputNumberComponent
+                idInput="operatorCommissionAct"
                 control={form.control}
-                name={"operatorCommission"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput={field.name}
-                      errors={form.formState.errors}
-                      typeInput={"number"}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field.value}
-                      className="input-basic medium"
-                      classNameLabel="text-black big bold text-required"
-                      label={<>Comisión operador financiero</>}
-                    />
-                  );
-                }}
+                label={<>Comisión operador financiero acta</>}
+                errors={form.formState.errors}
+                classNameLabel="text-black big bold text-required"
+                className="inputNumber-basic medium "
+                mode="decimal"
+                prefix="% "
+                maxFractionDigits={2}
+                max={100}
+                min={0}
               />
             </div>
           </FormComponent>
@@ -355,8 +330,9 @@ const ResourcePrioritizationPage = (): JSX.Element => {
           columns={tableColumns}
           actions={tableActions}
           titleMessageModalNoResult="Datos no localizados"
-          descriptionModalNoResult="No se encontraron coincidenas con los datos ingresados."
+          descriptionModalNoResult="No se encontraron coincidencias con los datos ingresados."
           isShowModal={true}
+          horizontalScroll={true}
         />
       </div>
       {totals && (
@@ -372,7 +348,9 @@ const ResourcePrioritizationPage = (): JSX.Element => {
           >
             <div className="app2-totals-column-content">
               <div className="column-head">Valor</div>
-              <div className="column-body">{formatMoney(totals.value)}</div>
+              <div className="column-body">
+                {formaterNumberToCurrency(totals.value)}
+              </div>
             </div>
             <div className="app2-totals-column-content">
               <div className="column-head">Cupos</div>
@@ -381,44 +359,44 @@ const ResourcePrioritizationPage = (): JSX.Element => {
             <div className="app2-totals-column-content">
               <div className="column-head">Costo promedio</div>
               <div className="column-body">
-                {formatMoney(totals.averageCost)}
+                {formaterNumberToCurrency(totals.averageCost)}
               </div>
             </div>
             <div className="app2-totals-column-content">
               <div className="column-head">Tasa general</div>
               <div className="column-body">
-                {formatMoney(totals.generalRate)}
+                {formaterNumberToCurrency(totals.generalRate)}
               </div>
             </div>
             <div className="app2-totals-column-content">
               <div className="column-head">Costo y gasto de operación</div>
               <div className="column-body">
-                {formatMoney(totals.operatingCostAndExpense)}
+                {formaterNumberToCurrency(totals.operatingCostAndExpense)}
               </div>
             </div>
             <div className="app2-totals-column-content">
               <div className="column-head">Total bruto</div>
               <div className="column-body">
-                {formatMoney(totals.grossValue)}
+                {formaterNumberToCurrency(totals.grossValue)}
               </div>
             </div>
 
             <div className="app2-totals-column-content">
               <div className="column-head">Recurso del balance</div>
               <div className="column-body">
-                {formatMoney(totals.balanceResources)}
+                {formaterNumberToCurrency(totals.balanceResources)}
               </div>
             </div>
             <div className="app2-totals-column-content">
-              <div className="column-head">Rendimiento financieros</div>
+              <div className="column-head">Rendimientos financieros</div>
               <div className="column-body">
-                {formatMoney(totals.financialPerformances)}
+                {formaterNumberToCurrency(totals.financialPerformances)}
               </div>
             </div>
             <div className="app2-totals-column-content">
               <div className="column-head">Comisión operador financiero</div>
               <div className="column-body">
-                {formatMoney(totals.operatorCommission)}
+                {formaterNumberToCurrency(totals.operatorCommission)}
               </div>
             </div>
             <div className="app2-totals-column-content">
@@ -426,7 +404,7 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                 Comisión operador financiero balance
               </div>
               <div className="column-body">
-                {formatMoney(totals.operatorCommissionBalance)}
+                {formaterNumberToCurrency(totals.operatorCommissionBalance)}
               </div>
             </div>
             <div className="app2-totals-column-content">
@@ -434,13 +412,13 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                 Comisión operador financiero acta
               </div>
               <div className="column-body">
-                {formatMoney(totals.operatorCommissionAct)}
+                {formaterNumberToCurrency(totals.operatorCommissionAct)}
               </div>
             </div>
             <div className="app2-totals-column-content">
               <div className="column-head">Recurso para crédito</div>
               <div className="column-body">
-                {formatMoney(totals.resourceForCredit)}
+                {formaterNumberToCurrency(totals.resourceForCredit)}
               </div>
             </div>
           </div>
