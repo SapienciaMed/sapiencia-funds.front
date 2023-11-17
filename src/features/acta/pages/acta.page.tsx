@@ -16,12 +16,12 @@ function ActaPage(){
 
     return(
         <div className="main-page">
-            <div className="text-black weight-500 bold extra-large">Acta</div>
+            <div className="text-black weight-500 extra-large">Acta</div>
             <div className='card-table gap-0 mt-14px'>
-                <section className="title-area">
+                <section className="title-area-2">
                     <div className="text-black large">Buscar acta</div>
 
-                    <div className={`${width < 800 ? 'display-justify-space-between-pac' : 'display-align-flex-center'} gap-0 gap-05`}>
+                    <div className={`${width < 1024 ? 'display-justify-flex-center' : 'display-align-flex-center'} gap-0 gap-05`}>
                         <div 
                             className={`title-button ${width < 300 ? 'font-medium' :'font-big' }`}
                             onClick={() => { navigate('../crear') }}
@@ -66,7 +66,7 @@ function ActaPage(){
                         />
                     </div>
                     <div className="funcionality-buttons-container">
-                        <span className="bold text-center button" 
+                        <span className="bold text-center text-black biggest button" 
                             onClick={() => {
                                 reset()
                             }}
