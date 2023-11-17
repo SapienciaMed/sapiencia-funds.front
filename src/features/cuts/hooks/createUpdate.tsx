@@ -8,6 +8,7 @@ import { ICut } from "../../../common/interfaces/cut";
 import { useForm } from "react-hook-form";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { jwtDecode } from "jwt-decode";
+import moment from "moment";
 
 export default function useCutHook(auth) {
   const { setMessage, authorization } = useContext(AppContext);
@@ -63,7 +64,10 @@ export default function useCutHook(auth) {
     if (id) {
       const res = await getCutById(id);
       if (res?.data[0]) {
-        setUpdateData(res?.data[0]);
+        const { from, until } = res?.data[0];
+        const newFrom = moment(new Date(from)).startOf("day").toDate();
+        const newUntil = moment(new Date(until)).startOf("day").toDate();
+        setUpdateData({ ...res?.data[0], from: newFrom, until: newUntil });
       }
       return { ...res?.data[0] };
     }
