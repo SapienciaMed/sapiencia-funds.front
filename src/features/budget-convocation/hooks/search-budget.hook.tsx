@@ -9,6 +9,7 @@ import useBudgetApi from "./budget-api.hook";
 import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import { urlApiFunds } from "../../../common/utils/base-url";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 
 
@@ -28,6 +29,8 @@ export default function useBudgetSearch() {
 
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
     const [formWatch, setFormWatch] = useState({ id_comuna: "", periodo: "", });
+    const [showDownloadButton, setShowDownloadButton] = useState(false);
+
 
     //ref
     const tableComponentRef = useRef(null);
@@ -94,21 +97,21 @@ export default function useBudgetSearch() {
             fieldName: "name",
             header: "Presupuesto fondo comuna",
             renderCell: (row) => {
-                return <>{row.presupuesto_comuna}</>;
+                return <>{formaterNumberToCurrency(Number(row.presupuesto_comuna))}</>;
             },
         },
         {
             fieldName: "name",
-            header: "Recurso otorgado de legalizacion",
+            header: "Recurso otorgado de legalización",
             renderCell: (row) => {
-                return <>{row.acumulado_legali_comuna}</>;
+                return <>{formaterNumberToCurrency(Number(row.acumulado_legali_comuna))}</>;
             },
         },
         {
             fieldName: "name",
             header: "Restante",
             renderCell: (row) => {
-                return <>{row.restante_presupuesto_comuna}</>;
+                return <>{formaterNumberToCurrency(Number(row.restante_presupuesto_comuna))}</>;
             },
         },
         {
@@ -122,14 +125,14 @@ export default function useBudgetSearch() {
             fieldName: "name",
             header: "Total proyectado",
             renderCell: (row) => {
-                return <>{row.total_proyectado}</>;
+                return <>{formaterNumberToCurrency(Number(row.total_proyectado))}</>;
             },
         },
         {
             fieldName: "name",
             header: "Diferencia por comprometer",
             renderCell: (row) => {
-                return <>{row.Diferencia}</>;
+                return <>{formaterNumberToCurrency(Number(row.Diferencia))}</>;
             },
         },
     ];
@@ -164,7 +167,7 @@ export default function useBudgetSearch() {
 
     const onSubmit = handleSubmit(async (data: ICallBudget) => {
         setShowTable(true)
-        setShowDownload(true);
+        setShowDownloadButton(true);
 
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(data);
@@ -205,7 +208,7 @@ export default function useBudgetSearch() {
             description: "Información descargada exitosamente",
             show: true,
             background: true,
-            OkTitle: "Aceptar"
+            OkTitle: "Cerrar"
           });
 
     }, [paginateData, formWatch, id_comuna, periodo]
@@ -229,7 +232,7 @@ export default function useBudgetSearch() {
         reset,
         clearFields,
         downloadCollection,
-        showDownload,
+        showDownloadButton,
     }
 
 }
