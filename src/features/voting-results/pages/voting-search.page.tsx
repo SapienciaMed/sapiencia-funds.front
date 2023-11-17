@@ -12,6 +12,7 @@ import ItemResultsPage from "../pages/item.create.page";
 import { Controller } from "react-hook-form";
 import Svgs from "../../../../src/public/images/icons/svgs";
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import { useWidth } from "../../../common/hooks/use-width";
 
 
 
@@ -35,7 +36,7 @@ const VotingResultsSearchPage = () => {
     setSendingXLSX,
     onSubmitSearch,
   } = useVotingResultsSearch();
-
+const { width } = useWidth();
   const navigate = useNavigate();
   let aucumActivity = 0;
   let acumTotal = 0;
@@ -241,6 +242,7 @@ const VotingResultsSearchPage = () => {
             descriptionModalNoResult="La votación no existe en el sistema. 
               Haga clic en el botón crear votación"
             isShowModal={true}
+            horizontalScroll
           />
           <br />
           <br />
