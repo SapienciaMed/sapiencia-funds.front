@@ -9,8 +9,8 @@ const SearchBudgetPage = (): React.JSX.Element => {
 
     const { announcementList, budgetList, control, errors, clearFields, register, setValue, navigate,
         tableComponentRef, showTable, tableColumns, showDownloadButton, onSubmit, reset, downloadCollection,
+        tableActions
     } = useBudgetSearch();
-    const [tableView, setTableView] = useState<boolean>(false);
 
     return (
         <Fragment>
@@ -66,7 +66,6 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     action={() => {
                                         clearFields();
                                         tableComponentRef.current.emptyData();
-                                        setTableView(false);
                                     }
                                     }
                                 />
@@ -88,6 +87,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     ref={tableComponentRef}
                                     url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
                                     columns={tableColumns}
+                                    actions={tableActions}
                                     titleMessageModalNoResult="Buscar"
                                     princialTitle="Informe legalización"
                                     isShowModal={true}
