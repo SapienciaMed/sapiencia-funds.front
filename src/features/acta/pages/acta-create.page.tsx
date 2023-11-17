@@ -298,7 +298,7 @@ const ActaCreatePage = () => {
                                 <InputNumberComponent
                                     control={control}
                                     idInput={`salaryMin`}
-                                    label="valor"
+                                    label="Salario mínimo"
                                     className="inputNumber-basic medium"
                                     placeholder={'Seleccionar'}
                                     classNameLabel="text-black biggest text-required"
