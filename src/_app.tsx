@@ -16,6 +16,7 @@ import ActaRoutes from "./features/acta/acta-routes";
 import Socialization from "./features/socialization";
 import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
+import RenewalReportRoutes from "./features/renewal-report/renewal-report-routes";
 import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
 import Cortes from "./features/cuts";
 import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
@@ -81,6 +82,10 @@ function App() {
               <Route
                 path={"/fondos/administracion/cortes/*"}
                 element={<Cortes />}
+              />
+              <Route
+                path={"/fondos/informe-renovacion/*"}
+                element={<RenewalReportRoutes/>}
               />
             </Routes>
           </Suspense>

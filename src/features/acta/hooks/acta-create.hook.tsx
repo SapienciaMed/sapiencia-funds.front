@@ -308,7 +308,7 @@ export default function useActaCreate() {
         setMessage({
             show: true,
             title: "Guardar acta",
-            description: "¿Estas segur@ de guardar de guardar la información?",
+            description: "Estas segur@ de guardar de guardar la información",
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {

@@ -83,3 +83,29 @@ export interface ICallBudget {
 
 }
  
+export interface ICallRenewal {
+  periodo?: string;
+  Fondo?:string;
+  No_Habilitados:string;
+  No_Renovados?:string;
+  Porcentaje?:string;
+  page?: number;
+  perPage?: number;
+}
+
+export interface ICallRenewalFilter {
+  periodo?: string;
+  page?: number;
+  perPage?: number;
+
+}
+
+export interface IRenewalDataGrid{
+  periodo?:string;
+  Fondo?:string;
+  No_Habilitados?:string;
+  No_Renovados?:string;
+  Porcentaje?:string;
+  page?: number;
+  perPage?: number;
+}

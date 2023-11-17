@@ -52,7 +52,7 @@ function ActaRoutes() {
         element={
           <PrivateRoute
             element={<SearchResultPage valueAction="edit" />}
-            allowedAction={"MAESTROS_CONSULTAR"}
+            allowedAction={"MAESTRO_ACTIVIDAD_EDITAR"}
           />
         }
       />

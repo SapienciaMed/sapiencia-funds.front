@@ -70,13 +70,13 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 100%;
 }
 
-.grid {
-  display: grid;
+// .grid {
+//   display: grid;
 
-  &.gap-25 {
-    gap: 25px;
-  }
-}
+//   &.gap-25 {
+//     gap: 25px;
+//   }
+// }
 
 .container-form {
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -266,7 +266,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
   margin-bottom: 20px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 700px) {
     flex-direction: column;
     margin-left: 4px;
 

@@ -1,11 +1,8 @@
 import * as XLSX from "xlsx"
-import { Checkbox } from "primereact/checkbox";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from 'react-hook-form';
 import { calculateTotalsDataTableActa } from "../helpers/calculateTotalsDataTableActa";
 import { AppContext } from "../../../common/contexts/app.context";
-import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
-import { editActas } from "../../../common/schemas/acta-shema";
 import ItemsCreatePage from "../pages/items-create.page";
 import { ISearchResultProp } from "../interface/Acta";
 import useActaApi from "./acta-api.hook";
@@ -14,28 +11,39 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from "react-router-dom";
-import { IActa, IActaItems, ITableAction, ITableElement, IUser, IUserDataGrid } from "../../../common/interfaces";
+import { IActa, IUser, IUserDataGrid } from "../../../common/interfaces";
 import { dataActasdf } from "../helpers/dataPqrsdf";
+import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
+import { editActas } from "../../../common/schemas/acta-shema";
+import usetableColumnsActa from "../utils/table-columns-acta";
 
 export default function useSearcResult({ valueAction }: Readonly<ISearchResultProp>) {
 
+    const { actaNro } = useParams();
+    const id = { id: actaNro }
     const resolver = useYupValidationResolver(editActas);
-    //dataGridItems = Se usa cuando esta editando (Se neceita?)
-    const { setMessage, authorization, dataGridItems, setDataGridUsers, dataGridUsers } = useContext(AppContext);
+    const { setMessage, authorization, dataGridItems, setDataGridItems, setDataGridUsers, } = useContext(AppContext);
     const tableComponentRef = useRef(null);
-    const [ checked, setChecked ] = useState(false);
-    const [ dataTableServices, setDataTableServices ] = useState<IActaItems[]>([])
+    const [ dataTableServices, setDataTableServices ] = useState<any[]>([])
     const [ dataGridUsersServices, setDataGridUsersServices ] = useState<IUserDataGrid[]>([])
-    const { getHours, getActa, getProjectsList, approveCitation } = useActaApi();
+    const { getHours, getActa, getProjectsList, updateActa, createActa } = useActaApi();
     const [ times, setTimes ] = useState([]);
     const [ activeUserList, setActiveUserList ] = useState([]);
-    const [projectList, setProjectsList] = useState<any[]>([]);
-    const [ idCitation, setIdCitation ] = useState({
-        id: ''
-    })
+    const [projectList, setProjectList] = useState([]);
     const { getUser } = useAuthService();
     const navigate = useNavigate();
-    const { actaNro } = useParams();
+    const [projectMeta, setProjectMeta] = useState(0);
+    const [vigency1, setVigency1] = useState(0);
+    const [subtotalVigency, setSubtotalVigency] = useState(0);
+    const [ canBeEdited, setCanBeEdited ] = useState(true)
+    const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
+    const [programList, setProgramList] = useState([]);
+    const [foundList, setFoundList] = useState([]);
+    const [lineList, setLineList] = useState([]);
+    const [announcementList, setAnnouncementList] = useState([]);
+    const [conceptList, setConceptList] = useState([]);
+    const [totalQuantityPeriod2, setTotalQuantityPeriod2] = useState(0);
+    const [totalQuantityPeriod1, setTotalQuantityPeriod1] = useState(0);
 
     const {
         register,
@@ -43,33 +51,181 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         formState: { errors },
         control,
         setValue,
-        watch
-    } = useForm<IActa>({
-        resolver,
-        mode: 'all'
-    });
+        watch,
+        getValues
+    } = useForm<IActa>({ resolver });
 
-    const selectedProject = watch('numberProject');  
+    const {tableActionsEdit, tableActionsUser,
+        tableColumns, tableColumnsUsers } = usetableColumnsActa({ authorization, dataGridUsersServices, valueAction, dataTableServices, getValues, setMessage })
 
-    useEffect(() => {
-        loadTableData()
-    }, [])
+    const selectedProject = watch('numberProject');
 
     useEffect(() => {
-        const id = {
-            id: actaNro
+        getProgramTypes()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setProgramList(
+                        response.data.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+
+        getAnnouncement()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setAnnouncementList(
+                        response.data.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+
+        getMaster()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+
+                    const foundData = response.data.filter(item => item.typeMasterList.name === 'Fondo');
+                    const lineData = response.data.filter(item => item.typeMasterList.name === 'Línea');
+                    const conceptData = response.data.filter(item => item.typeMasterList.name === 'Concepto');
+
+                    setFoundList(
+                        foundData.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                                description: item.description
+                            };
+                            return list;
+                        })
+                    );
+
+                    setLineList(
+                        lineData.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+
+                    setConceptList(
+                        conceptData.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+
+                }
+
+            })
+    }, []);
+
+    useEffect(() => {
+        if (dataGridItems.length > 0) {
+            setDataTableServices(prevDataTableServices => {
+                const updatedDataGridItems = dataGridItems.map(us => {
+                    const existingItemIndex = prevDataTableServices.findIndex(item => item.id === (us?.id || us.ident));
+                    if (existingItemIndex !== -1) {
+                        // Si el elemento ya existe, actualiza sus propiedades
+                        return {
+                            ...prevDataTableServices[existingItemIndex],
+                            found: us?.found,
+                            line: us?.line,
+                            program: us?.program,
+                            announcement: us?.announcement,
+                            concept: us?.concept,
+                            costOperation: us?.costOperation,
+                            subtotalVigency: us?.subtotalVigency,
+                            costBillsOperation: 0,
+                            financialOperatorCommission: us.financialOperatorCommission,
+                            net: us?.net,
+                            resourcesCredit: us.resourcesCredit,
+                            periods: {
+                                valuePeriod1: us?.periods.valuePeriod1,
+                                valuePeriod2: us?.periods.valuePeriod2,
+                                quantityPeriod1: us?.periods.quantityPeriod1,
+                                quantityPeriod2: us?.periods.quantityPeriod2
+                            },
+                            id: us?.id || us.ident,
+                            idFound: parseInt(us.idFound),
+                            idLine: parseInt(us.idLine),
+                            idProgram: parseInt(us.idProgram),
+                            idAnnouncement: parseInt(us.idAnnouncement),
+                            idConcept: parseInt(us.idConcept),
+                        };
+                    } else {
+                        return {
+                            found: us?.found,
+                            line: us?.line,
+                            program: us?.program,
+                            announcement: us?.announcement,
+                            concept: us?.concept,
+                            costOperation: us?.costOperation,
+                            subtotalVigency: us?.subtotalVigency,
+                            costBillsOperation: 0,
+                            financialOperatorCommission: us.financialOperatorCommission,
+                            net: us?.net,
+                            resourcesCredit: us.resourcesCredit,
+                            periods: {
+                                valuePeriod1: us?.periods.valuePeriod1,
+                                valuePeriod2: us?.periods.valuePeriod2,
+                                quantityPeriod1: us?.periods.quantityPeriod1,
+                                quantityPeriod2: us?.periods.quantityPeriod2
+                            },
+                            id: us.id,
+                            idFound: parseInt(us.idFound),
+                            idLine: parseInt(us.idLine),
+                            idProgram: parseInt(us.idProgram),
+                            idAnnouncement: parseInt(us.idAnnouncement),
+                            idConcept: parseInt(us.idConcept),
+                        };
+                    }
+                });
+                const combinedArray = prevDataTableServices.map(item => {
+                    const updatedItem = updatedDataGridItems.find(us => us.id === (item?.id || item.ident));
+                    return updatedItem || item;
+                })
+        
+                return [...combinedArray, ...updatedDataGridItems.filter(us => !combinedArray.find(item => item.id === (us?.id || us.ident)))];
+            });    
         }
-        if (valueAction != 'edit') {
+    }, [dataGridItems]);
+
+    useEffect(() => { loadTableData() }, [])
+
+    useEffect(() => {
+        if (programList.length > 0 && foundList.length > 0 &&  lineList.length > 0 &&  announcementList.length > 0 && conceptList.length > 0) {      
             getActa( id ).then(response => {
                 if (response.operation.code == EResponseCodes.OK) {
                     const dinamicData = response?.data;
-                    const valueTableActaControl: IActaItems[] = dinamicData[0].items.map( data => {
+                    const valueTableActaControl = dinamicData[0].items.map( data => {
+                        const selectedLabelFound = foundList.find(option => option.value === parseInt(data.idFound));
+                        const selectedLabelLine  = lineList.find(option => option.value === parseInt(data.idLine));
+                        const selectedLabelProgram =  programList.find(option => option.value === parseInt(data.idProgram));
+                        const selectedLabelAnnouncement =  announcementList.find(option => option.value === parseInt(data.idAnnouncement));
+                        const selectedLabelConcept = conceptList.find(option => option.value === parseInt(data.idConcept));
+
                         return {
-                            found: data?.idFound, 
-                            line: data?.idLine, 
-                            program: data?.idProgram, 
-                            announcement: data?.idAnnouncement, 
-                            concept: data?.idConcept, 
+                            found: selectedLabelFound?.name,
+                            line: selectedLabelLine?.name,
+                            program: selectedLabelProgram?.name,
+                            announcement: selectedLabelAnnouncement?.name,
+                            concept: selectedLabelConcept?.name,
                             costOperation: data?.costOperation,
                             subtotalVigency: data?.subtotalVigency,
                             costBillsOperation: 0,
@@ -82,23 +238,27 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                                 quantityPeriod1: data?.periods.quantityPeriod1,
                                 quantityPeriod2: data?.periods.quantityPeriod2
                             },
+                            id: data.id,
+                            idFound: parseInt(data.idFound),
+                            idLine: parseInt(data.idLine),
+                            idProgram: data.idProgram,
+                            idAnnouncement: parseInt(data.idAnnouncement),
+                            idConcept: parseInt(data.idConcept),
                         }
                     })
                     setDataTableServices(valueTableActaControl)
-
+    
                     const valueCitation = dinamicData[0].citation.filter((value, index, self) =>
                         index === self.findIndex((v) => (
                             v.user === value.user &&
                             v.timeCitation === value.timeCitation &&
-                            v.status === value.status
+                            v.status === value.status &&
+                            v.idCitation === value.idCitation
                         ))
-                    ).map(({ user, dateAprobation: timeCitation, status }) => ({ user, timeCitation, status }));
-                    setIdCitation({
-                        id: String(dinamicData[0].citation[0].idCitation)
-                    })
-
+                    ).map(({ user, dateAprobation: timeCitation, status, dateCitation, email, idCitation }) => ({ user, timeCitation, status, dateCitation, email, idCitation }));
+    
                     setDataGridUsersServices(valueCitation)
-
+    
                     dinamicData.forEach(dataSearch => {
                         setValue('idStatus', dataSearch.typeMasterList.name)
                         setValue('numberProject', dataSearch.numberProject)
@@ -108,13 +268,14 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                         setValue('costsExpenses', dataSearch.costsExpenses)
                         setValue('OperatorCommission', dataSearch.OperatorCommission)
                         setValue('financialOperation', dataSearch.financialOperation)
+                        setValue('consecutiveNroPrevious', String(dataSearch?.lastId || '') )
                     });
                 }
             }).catch(error => console.log(error))
-
+    
             getProjectsList().then((response) => {
                     if (response && response?.operation?.code === EResponseCodes.OK) {
-                        setProjectsList(
+                        setProjectList(
                             response.data.map((item) => {
                                 const list = {
                                     value: item.id,
@@ -127,42 +288,18 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                     }
             }).catch(error => console.log(error))
         }
-    },[])
+    },[programList, foundList, lineList, announcementList, conceptList])
 
     useEffect(() => {
-        calculateTotalsDataTableActa(dataTableServices, setValue);
+        valueAction != 'edit' && calculateTotalsDataTableActa(dataTableServices, setValue, setVigency1, setSubtotalVigency, setTotalQuantityPeriod2, setTotalQuantityPeriod1);
     }, [dataTableServices]);
 
     useEffect(() => {
-        if (checked) {
-            approveCitation (idCitation).then(response => {
-                if (response.operation.code == EResponseCodes.OK) {
-                    setMessage({
-                        description: "¡Guardado exitosamente!",
-                        title: "Guardado",
-                        OkTitle: "Cerrar",
-                        show: true,
-                        type: EResponseCodes.OK,
-                        background: true,
-                        onOk() {
-                            setMessage({});
-                            navigate(-1);
-                        },
-                        onClose() {
-                            setMessage({});
-                            navigate(-1);
-                        },
-                    });
-                }
-            })
-        }
-    },[checked])
-
-    useEffect(() => {
-        const selectedProjectMeta = projectList.find(us => us.value == selectedProject)?.meta;
+        const selectedProjectMeta = projectList[selectedProject]?.meta;
         if (selectedProjectMeta) {
             const integerPart = parseInt(selectedProjectMeta, 10);         
-            setValue('techo',integerPart) 
+            setProjectMeta(integerPart); 
+            setValue('techo', integerPart) 
         }
     }, [selectedProject, projectList]);
 
@@ -170,21 +307,36 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         return () => {
             setDataTableServices([])
             setDataGridUsersServices([])
-            setChecked(false)
             setActiveUserList([])
             setDataGridUsers([])
+            setDataGridItems([])
+            setCanBeEdited(false)
+            setProgramList([])
+            setFoundList([])
+            setLineList([])
+            setAnnouncementList([])
+            setConceptList([])
+            setTotalQuantityPeriod2(0)
+            setTotalQuantityPeriod1(0)
         }
     },[])
 
-    function downloadCollection() {
-        const id = {
-            id: actaNro
+    useEffect(() => {
+        if (valueAction == 'edit') {
+            getWorkersActive();
+            getHours().then(result => setTimes(result));
         }
+    },[valueAction])
 
+    useEffect(() => {
+       valueAction == 'edit' && calculateTotalsDataTableActa(dataGridItems, setValue, setVigency1, setSubtotalVigency, setTotalQuantityPeriod2, setTotalQuantityPeriod1);
+    }, [dataGridItems]);
+
+    function downloadCollection() {
         getActa( id ).then(response => {
             if (response.operation.code == EResponseCodes.OK) {
                 const dinamicData = response?.data;
-                
+
                 const book = XLSX.utils.book_new()
                 const sheet = XLSX.utils.json_to_sheet( dataActasdf(dinamicData) )
 
@@ -208,7 +360,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                             navigate(-1);
                         },
                     });
-                }, 1000) 
+                }, 1000)
             }
         })
     }
@@ -219,160 +371,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         }
     }
 
-    const tableColumns: ITableElement<any>[] = [
-        {
-            fieldName: "program",
-            header: "Programa",
-        },
-        {
-            fieldName: "found",
-            header: "Fondo"
-        },
-        {
-            fieldName: "line",
-            header: "Linea",
-        },
-        {
-            fieldName: "announcement",
-            header: "Convocatoria",
-        },
-        {
-            fieldName: "concept",
-            header: "Concepto",
-        },
-        {
-            fieldName: "costOperation",
-            header: "Costo promedio",
-        },
-        {
-            fieldName: "periods.quantityPeriod1",
-            header: "Cantidad Periodo 1",
-        },
-        {
-            fieldName: "periods.valuePeriod1",
-            header: "Valor Periodo 1",
-        },
-        {
-            fieldName: "periods.quantityPeriod2",
-            header: "Cantidad Periodo 2",
-        },
-        {
-            fieldName: "periods.valuePeriod2",
-            header: "Valor Periodo 2",
-        },
-        {
-            fieldName: "subtotalVigency",
-            header: "Subtotal vigencia",
-        },
-        {
-            fieldName: "costBillsOperation",
-            header: "Costos y gastos de operación",
-        },
-        {
-            fieldName: "net",
-            header: "Neto",
-        },
-        {
-            fieldName: "financialOperatorCommission",
-            header: "Comisión operador financiero",
-        },
-        {
-            fieldName: "resourcesCredit",
-            header: "Recursos para crédito",
-        },
-    ];
-
-    const tableColumnsUsers: ITableElement<any>[] = [
-        {
-            fieldName: "aproved",
-            header: 'Aprobar',
-            renderCell: (rowData) => {
-            const isEdit = authorization.user.names != rowData.user
-                return (
-                    <div className="spc-table-action-button">
-                        <Checkbox onChange={e => setChecked(e.checked)} checked={checked || rowData.status == 1} disabled={rowData.status == 1 || isEdit} />
-                    </div>
-                )
-            }
-        },
-        {
-            fieldName: 'user',
-            header: 'Usuario'
-        },
-        {
-            fieldName: 'timeCitation',
-            header: 'Fecha de aprobación',
-            renderCell(row) {
-                const date = new Date(row.timeCitation);
-                const day = date.getDate();
-                const month = date.getMonth() + 1;
-                const year = date.getFullYear();
-                return(
-                    <div>
-                        {
-                            row.timeCitation == undefined ? '' : 
-                            `${year}/${ month < 10 ? '0'+ month :  month }/${ day < 10 ? '0' + day :  day}`
-                        }
-                    </div>
-                )
-            },
-        }
-    ]
-
-    const onSubmit = handleSubmit((data: any) => {})
-
-    //Todo: Acciones cuando se vaya a modificar un acta.
-
-    useEffect(() => {
-        if (valueAction == 'edit') {
-            getWorkersActive();
-            getHours().then(result => setTimes(result));
-        }
-    },[valueAction])
-
-    // useEffect(() => {
-    //     if (Number(projectMeta) < Number(vigency1) || Number(projectMeta)< Number(subtotalVigency)) {
-    //         setMessage({
-    //             title: "Guardar",
-    //             description: "El acta no podrá ser guardada por superar el valor del techo",
-    //             show: true,
-    //             OkTitle: "Aceptar",
-    //             background: true,
-    //         });
-    //         setSend(true)
-    //     }else{
-    //         setSend(false)
-    //     }
-
-    // }, [projectMeta, vigency1, subtotalVigency]);
-
-    const tableActionsUser: ITableAction<IActaItems>[] = [
-        {
-            icon: "Delete",
-            onClick: (row) => {
-                setMessage({
-                    show: true,
-                    title: "Eliminar registro",
-                    description: "Estás segur@ de eliminar este registro?",
-                    OkTitle: "Aceptar",
-                    cancelTitle: "Cancelar",
-                    onOk() {
-                        if (dataGridUsers.find((obj) => obj.ident == row.ident)) {
-                            const position = dataGridUsers.findIndex(
-                                (obj) => obj.ident === row.ident
-                            );
-                            dataGridUsers.splice(position, 1);
-                            setMessage({})
-                        }
-                    },
-                    background: true,
-                });
-            },
-        }
-    ];
-
-    const addItem = handleSubmit((data: IActa) => {
-        data.idStatus = 1;
+    const addItem = handleSubmit(async (data: IActa) => {
         setMessage({
             show: true,
             title: "Agregar ítem",
@@ -422,19 +421,16 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     const selectedLabelUser = getSelectedLabel(selectedUser, activeUserList);
 
     const addUser = handleSubmit((data: IActa) => {
-        if (selectedUser ) {
-            const date = new Date(selectedDate);
-            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-            dataGridUsers.push({
+        if (selectedUser) {
+            dataGridUsersServices.push({
                 ident: uuidv4(),
                 user: selectedLabelUser.name,
-                dateCitation: formattedDate,
+                dateCitation: selectedDate,
                 timeCitation: selectedTime,
                 status: 0,
                 email: selectedLabelUser.email,
             });
         }
-
     });
 
     const onCancel = () => {
@@ -452,6 +448,143 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         });
     };
 
+    const onSaveEdit = handleSubmit(async(data: IActa) => {
+        if (Number(projectMeta) < Number(vigency1) || Number(projectMeta)< Number(subtotalVigency)) {
+            setMessage({
+                title: "Guardar",
+                description: "El acta no podrá ser guardada por superar el valor del techo",
+                show: true,
+                OkTitle: "Aceptar",
+                background: true,
+            });
+        }else{
+            setMessage({
+                show: true,
+                title: "Guardar acta",
+                description: "¿Estas segur@ de guardar de guardar la información?",
+                OkTitle: "Aceptar",
+                cancelTitle: "Cancelar",
+                onOk() {
+                    confirmActaUpdate(data);
+                },
+                background: true,
+            });
+        }
+
+    })
+
+    const confirmActaUpdate = async (data: IActa) => {
+        const actaItems = dataTableServices.map((e) => ({
+            costOperation: String(e.costOperation),
+            subtotalVigency: e.subtotalVigency,
+            costBillsOperation: e.costBillsOperation,
+            financialOperatorCommission: e.financialOperatorCommission,
+            resourcesCredit: e.resourcesCredit,
+            periods: e.periods,
+            net: e.net,
+            idFound: e.idFound ,
+            idLine: e.idLine ,
+            idProgram: e.idProgram ,
+            idAnnouncement: e.idAnnouncement,
+            idConcept: e.idConcept,
+            id: e?.id || 0
+        }));
+        
+        const citation = dataGridUsersServices.map((e) => {
+            const date = new Date(e.dateCitation);
+            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            return {
+                user: e.user,
+                dateCitation: formattedDate,
+                timeCitation: e.timeCitation,
+                status: e.status,
+                email: e.email,
+                idCitation: e.idCitation
+            }
+        });
+
+        const state = getValues('idStatus');
+
+        const actaData = {      
+            [(state === 'Aprobado' || state == 'Aprobado - Modificado' ) ? 'idLast' : 'id']: parseInt(actaNro),
+            numberProject: data.numberProject,
+            periodVigency: Number(data.periodVigency),
+            announcementInitial: String(data.announcementInitial),
+            salaryMin: data.salaryMin,
+            costsExpenses: data.costsExpenses,
+            OperatorCommission: data.OperatorCommission,
+            financialOperation: data.financialOperation,
+            idStatus: 1,
+            items: actaItems,
+            citation: citation
+        };
+ 
+       if (state == 'Aprobado' || state == 'Aprobado - Modificado') {
+            createActa(actaData).then(response => {
+                if (response.operation.code == EResponseCodes.OK) {
+                    setMessage({
+                        OkTitle: "Guardar",
+                        description: "¡Guardado exitosamente!",
+                        title: "Guardar",
+                        show: true,
+                        type: EResponseCodes.OK,
+                        background: true,
+                        onOk() {
+                            setMessage({});
+                            navigate(-1);
+                        },
+                        onClose() {
+                            setMessage({});
+                            navigate(-1);
+                        },
+                    });
+                }else{
+                    setMessage({
+                        type: EResponseCodes.FAIL,
+                        title: "Crear Acta",
+                        description: "Ocurrió un error en el sistema",
+                        show: true,
+                        OkTitle: "Aceptar",
+                        background: true,
+                    });
+                }
+     
+            }).catch(error => console.log(error))
+       }else {
+           updateActa(actaData).then(response => {
+               if (response.operation.code == EResponseCodes.OK) {
+                   setMessage({
+                       OkTitle: "Guardar",
+                       description: "¡Guardado exitosamente!",
+                       title: "Guardar",
+                       show: true,
+                       type: EResponseCodes.OK,
+                       background: true,
+                       onOk() {
+                           setMessage({});
+                           navigate(-1);
+                       },
+                       onClose() {
+                           setMessage({});
+                           navigate(-1);
+                       },
+                   });
+               }else{
+                   setMessage({
+                       type: EResponseCodes.FAIL,
+                       title: "Crear Acta",
+                       description: "Ocurrió un error en el sistema",
+                       show: true,
+                       OkTitle: "Aceptar",
+                       background: true,
+                   });
+               }
+    
+           }).catch(error => console.log(error))
+       }
+
+    };
+
     return{
         errors,
         control,
@@ -460,16 +593,20 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         dataTableServices,
         tableColumnsUsers,
         dataGridUsersServices,
-        dataGridItems,
         times,
         activeUserList,
-        dataGridUsers,
         tableActionsUser,
+        projectList,
+        tableActionsEdit,
+        canBeEdited,
+        totalQuantityPeriod2,
+        totalQuantityPeriod1,
         register,
         addItem,
-        onSubmit,
         addUser,
         onCancel,
+        handleSubmit,
+        onSaveEdit,
         downloadCollection
     }
 }

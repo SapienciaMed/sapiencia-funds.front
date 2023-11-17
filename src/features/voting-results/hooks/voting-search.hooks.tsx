@@ -13,10 +13,10 @@ import { useGenericListService } from "../../../common/hooks/generic-list-servic
 import useVotingItemApi from "./voting-items-api.hooks";
 
 export const useVotingResultsSearch = () => {
-  const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
+  const { setMessage, authorization, setDataGrid, dataGrid, message } = useContext(AppContext);
   const navigate = useNavigate();
   const resolver = useYupValidationResolver(searchVotings);
-  const { downloadFile,consultVoting, } = useVotingService();
+  const { downloadFile, consultVoting, consultDataGrid } = useVotingService();
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
   const [deparmetList, setDeparmentList] = useState([]);
@@ -42,7 +42,7 @@ export const useVotingResultsSearch = () => {
     defaultValues: {
       communeNeighborhood: null,
       numberProject: null,
-      validity: null,
+      validity: '',
       ideaProject: "",
     },
   });
@@ -62,9 +62,15 @@ export const useVotingResultsSearch = () => {
           ideaProject: data?.ideaProject,
         });
       if (data?.numberProject && data?.validity && data?.ideaProject && data?.communeNeighborhood) {
-        setSendingXLSX(true);
-        const dataConsult : any = await consultVoting(data);
-        setDataTblTotal(dataConsult.data)
+        const dataConsult: any = await consultVoting(data);
+        const dataGrid: any = await consultDataGrid(data)
+        if (dataGrid.data.array.length > 0) {
+            setSendingXLSX(true);
+            setDataTblTotal(dataConsult.data.data);
+        } else {
+          setSendingXLSX(false);
+          setDataTblTotal([])
+        }
       }
       
     });
@@ -145,8 +151,8 @@ export const useVotingResultsSearch = () => {
       a.click();
       window.URL.revokeObjectURL(url);
       setMessage({
-        title: `Descargar excel`,
-        description: `El archivo fue descargado con éxito`,
+        title: `Resultados de votación`,
+        description: `Información descargada exitosamente`,
         show: true,
         OkTitle: "Aceptar",
         background: true,
