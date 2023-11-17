@@ -8,7 +8,7 @@ import Svgs from "../../../public/images/icons/svgs";
 const SearchBudgetPage = (): React.JSX.Element => {
 
     const { announcementList, budgetList, control, errors, clearFields, register, setValue, navigate,
-        tableComponentRef, showTable, tableColumns, showDownload, onSubmit, reset, downloadCollection,
+        tableComponentRef, showTable, tableColumns, showDownloadButton, onSubmit, reset, downloadCollection,
     } = useBudgetSearch();
     const [tableView, setTableView] = useState<boolean>(false);
 
@@ -83,34 +83,36 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             ref={tableComponentRef}
                             url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
                             columns={tableColumns}
-                            titleMessageModalNoResult="Registro no existente"
-                            isShowModal={false}
+                            titleMessageModalNoResult="Buscar"
                             princialTitle="Informe legalización"
+                            isShowModal={true}
+                            descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
                         />
                     )}
                 </div>
-                
-                <div>
-                    <br />
-                    <hr className="barra-spacing" />
+
+                    <div>
+                        <br />
+                        <hr className="barra-spacing" />
+                    </div>
+                    <div className="button-save-container-display mr-24px">
+                        
+                        {showDownloadButton && (
+                            <ButtonComponent
+                                value={
+                                    <>
+                                        <div className="container-buttonText">
+                                            <span>Descargar</span>
+                                            <Svgs svg="excel" width={23.593} height={28.505} />
+                                        </div>
+                                    </>
+                                }
+                                className="button-download large "
+                                action={downloadCollection}
+                            />
+                        )}
+                    </div>
                 </div>
-                <div className="button-save-container-display mr-24px">
-                    {showDownload && (
-                        <ButtonComponent
-                            value={
-                                <>
-                                    <div className="container-buttonText">
-                                        <span>Descargar</span>
-                                        <Svgs svg="excel" width={23.593} height={28.505} />
-                                    </div>
-                                </>
-                            }
-                            className="button-download large "
-                            action={downloadCollection}
-                        />
-                    )}
-                </div>
-            </div>
         </Fragment>
     );
 
