@@ -39,6 +39,7 @@ interface IProps<T> {
   actions?: ITableAction<T>[];
   searchItems?: object;
   isShowModal: boolean;
+  setPaginateData?: ({}) => {};
   titleMessageModalNoResult?: string;
   descriptionModalNoResult?: string;
   classname?: string;
@@ -60,6 +61,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     emptyMessage = "No hay resultados.",
     princialTitle,
     classname = "",
+    setPaginateData,
   } = props;
 
   // States

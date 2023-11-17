@@ -16,7 +16,7 @@ const SearchBudgetPage = () => {
     errors,
     isValid,
     handleClean,
-    // setPaginateData,
+    setPaginateData,
     submitDisabled,
     register,
     handleChange,
@@ -34,7 +34,7 @@ const SearchBudgetPage = () => {
       handleChange={handleChange}
       // equipmentStatusData={equipmentStatusData}
       submitDisabled={submitDisabled}
-      // setPaginateData={setPaginateData}
+      setPaginateData={setPaginateData}
       urlGet={urlGet}
       tableComponentRef={tableComponentRef}
       tableView={tableView}

@@ -43,24 +43,17 @@ export const useConsultControlReport = (config: IConfig) => {
     watch,
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
-  const [urlGet, setUrlGet] = useState("endpoint/backend/funds");
-  const urlGetConsult = `fondos/seguimiento-financiero`;
+  const [urlGet, setUrlGet] = useState(`fondos/seguimiento-financiero`);
+  const urlGetConsult = `fondos/seguimiento-financiero`; // Endpoint del backend, (se colocan aquí)
   const [formWatch, setFormWatch] = useState({});
   const [tableColumns, setTableColumns] = useState([]);
   const [controlReport] = watch(["controlReport"]);
 
   const tableActions: ITableAction<IProperty>[] = [
     {
-      icon: "Detail",
-      onClick: (row) => {
-        navigate(`/contabilidad/activos-fijos/detalle/${row.id}`);
-      },
-      //   hide: !validateActionAccess("BIEN_MUEBLE_DETALLE"),
-    },
-    {
       icon: "Edit",
       onClick: (row) => {
-        navigate(`/contabilidad/activos-fijos/editar/${row.id}`);
+        // navigate(`/contabilidad/activos-fijos/editar/${row.id}`);
       },
       //   hide: !validateActionAccess("BIEN_MUEBLE_EDITAR"),
     },
@@ -115,7 +108,7 @@ export const useConsultControlReport = (config: IConfig) => {
 
   return {
     tableComponentRef,
-    // setPaginateData,
+    setPaginateData,
     urlGet,
     tableView,
     onSubmit,

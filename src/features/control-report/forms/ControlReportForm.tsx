@@ -17,6 +17,7 @@ export const ManagePropertyForm = ({
   tableComponentRef,
   tableView,
   onSubmit,
+  setPaginateData,
   tableActions,
   tableColumns,
   control,
@@ -127,7 +128,7 @@ export const ManagePropertyForm = ({
         <>
           <div className="container-sections-forms ml-20px mr-20px">
             <TableComponent
-              //   setPaginateData={setPaginateData}
+              setPaginateData={setPaginateData}
               ref={tableComponentRef}
               url={urlGet}
               columns={tableColumns}
