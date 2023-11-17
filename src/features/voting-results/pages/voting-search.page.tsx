@@ -1,8 +1,5 @@
 import React, { Fragment, useContext } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
-import BasicTableComponent from "../../../common/components/basic-table.component";
-import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useVotingResultsSearch } from "../hooks/voting-search.hooks";
@@ -14,6 +11,7 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import ItemResultsPage from "../pages/item.create.page";
 import { Controller } from "react-hook-form";
 import Svgs from "../../../../src/public/images/icons/svgs";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 
 
@@ -67,6 +65,9 @@ const VotingResultsSearchPage = () => {
     {
       fieldName: "activity.totalValue",
       header: "Valor Actividad",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.activity.totalValue)}</>;
+      },
     },
     {
       fieldName: "amount",
@@ -75,6 +76,9 @@ const VotingResultsSearchPage = () => {
     {
       fieldName: "costTotal",
       header: "Costo Total",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.costTotal)}</>;
+      },
     },
     {
       fieldName: "percentage123",
@@ -264,7 +268,7 @@ const VotingResultsSearchPage = () => {
                             aucumActivity = value;
                           }
                           if (Number(dataTblTotal.length) == Number(i + 1)) {
-                            return value;
+                            return formaterNumberToCurrency(value);
                           }
                         })}
                       </p>
@@ -308,7 +312,7 @@ const VotingResultsSearchPage = () => {
                             acumTotal = value;
                           }
                           if (Number(dataTblTotal.length) == Number(i + 1)) {
-                            return value;
+                            return formaterNumberToCurrency(value);
                           }
                         })}
                       </p>
