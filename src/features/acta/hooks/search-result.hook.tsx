@@ -11,11 +11,11 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from "react-router-dom";
-import { IActa, IActaItems, IUser, IUserDataGrid } from "../../../common/interfaces";
+import { IActa, IUser, IUserDataGrid } from "../../../common/interfaces";
 import { dataActasdf } from "../helpers/dataPqrsdf";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { editActas } from "../../../common/schemas/acta-shema";
-import tableColumnsActa from "../utils/table-columns-acta";
+import usetableColumnsActa from "../utils/table-columns-acta";
 
 export default function useSearcResult({ valueAction }: Readonly<ISearchResultProp>) {
 
@@ -24,18 +24,17 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     const resolver = useYupValidationResolver(editActas);
     const { setMessage, authorization, dataGridItems, setDataGridItems, setDataGridUsers, } = useContext(AppContext);
     const tableComponentRef = useRef(null);
-    const [ dataTableServices, setDataTableServices ] = useState([])
+    const [ dataTableServices, setDataTableServices ] = useState<any[]>([])
     const [ dataGridUsersServices, setDataGridUsersServices ] = useState<IUserDataGrid[]>([])
     const { getHours, getActa, getProjectsList, updateActa, createActa } = useActaApi();
     const [ times, setTimes ] = useState([]);
     const [ activeUserList, setActiveUserList ] = useState([]);
-    const [ projectList, setProjectsList ] = useState<any[]>([]);
+    const [projectList, setProjectList] = useState([]);
     const { getUser } = useAuthService();
     const navigate = useNavigate();
     const [projectMeta, setProjectMeta] = useState(0);
     const [vigency1, setVigency1] = useState(0);
     const [subtotalVigency, setSubtotalVigency] = useState(0);
-    const [ isBtnDisabled, setIsBtnDeisabled ] = useState(false);
     const [ canBeEdited, setCanBeEdited ] = useState(true)
     const { getProgramTypes, getMaster, getAnnouncement } = useActaApi();
     const [programList, setProgramList] = useState([]);
@@ -57,10 +56,9 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     } = useForm<IActa>({ resolver });
 
     const {tableActionsEdit, tableActionsUser,
-        tableColumns, tableColumnsUsers } = tableColumnsActa({ authorization, dataGridUsersServices, valueAction, getValues, setMessage })
+        tableColumns, tableColumnsUsers } = usetableColumnsActa({ authorization, dataGridUsersServices, valueAction, dataTableServices, getValues, setMessage })
 
     const selectedProject = watch('numberProject');
-    const statusActaWatch = watch('idStatus')
 
     useEffect(() => {
         getProgramTypes()
@@ -138,38 +136,75 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     }, []);
 
     useEffect(() => {
-        if(dataGridItems.length > 0 ){
-            const dataGridAddItems = dataGridItems.map( us => {
-                return {
-                    found: us?.found,
-                    line: us?.line,
-                    program: us?.program,
-                    announcement: us?.announcement,
-                    concept: us?.concept,
-                    costOperation: us?.costOperation,
-                    subtotalVigency: us?.subtotalVigency,
-                    costBillsOperation: 0,
-                    financialOperatorCommission: us.financialOperatorCommission,
-                    net: us?.net,
-                    resourcesCredit: us.resourcesCredit,
-                    periods: {
-                        valuePeriod1: us?.periods.valuePeriod1,
-                        valuePeriod2: us?.periods.valuePeriod2,
-                        quantityPeriod1: us?.periods.quantityPeriod1,
-                        quantityPeriod2: us?.periods.quantityPeriod2
-                    },
-                    id: us.id,
-                    idFound: parseInt(us.idFound),
-                    idLine: parseInt(us.idLine),
-                    idProgram: parseInt(us.idProgram),
-                    idAnnouncement: parseInt(us.idAnnouncement),
-                    idConcept: parseInt(us.idConcept),
-                }
-            })
-
-            setDataTableServices(prevDataGridItems => [...prevDataGridItems, dataGridAddItems[0]])
+        if (dataGridItems.length > 0) {
+            setDataTableServices(prevDataTableServices => {
+                const updatedDataGridItems = dataGridItems.map(us => {
+                    const existingItemIndex = prevDataTableServices.findIndex(item => item.id === (us?.id || us.ident));
+                    if (existingItemIndex !== -1) {
+                        // Si el elemento ya existe, actualiza sus propiedades
+                        return {
+                            ...prevDataTableServices[existingItemIndex],
+                            found: us?.found,
+                            line: us?.line,
+                            program: us?.program,
+                            announcement: us?.announcement,
+                            concept: us?.concept,
+                            costOperation: us?.costOperation,
+                            subtotalVigency: us?.subtotalVigency,
+                            costBillsOperation: 0,
+                            financialOperatorCommission: us.financialOperatorCommission,
+                            net: us?.net,
+                            resourcesCredit: us.resourcesCredit,
+                            periods: {
+                                valuePeriod1: us?.periods.valuePeriod1,
+                                valuePeriod2: us?.periods.valuePeriod2,
+                                quantityPeriod1: us?.periods.quantityPeriod1,
+                                quantityPeriod2: us?.periods.quantityPeriod2
+                            },
+                            id: us?.id || us.ident,
+                            idFound: parseInt(us.idFound),
+                            idLine: parseInt(us.idLine),
+                            idProgram: parseInt(us.idProgram),
+                            idAnnouncement: parseInt(us.idAnnouncement),
+                            idConcept: parseInt(us.idConcept),
+                        };
+                    } else {
+                        return {
+                            found: us?.found,
+                            line: us?.line,
+                            program: us?.program,
+                            announcement: us?.announcement,
+                            concept: us?.concept,
+                            costOperation: us?.costOperation,
+                            subtotalVigency: us?.subtotalVigency,
+                            costBillsOperation: 0,
+                            financialOperatorCommission: us.financialOperatorCommission,
+                            net: us?.net,
+                            resourcesCredit: us.resourcesCredit,
+                            periods: {
+                                valuePeriod1: us?.periods.valuePeriod1,
+                                valuePeriod2: us?.periods.valuePeriod2,
+                                quantityPeriod1: us?.periods.quantityPeriod1,
+                                quantityPeriod2: us?.periods.quantityPeriod2
+                            },
+                            id: us.id,
+                            idFound: parseInt(us.idFound),
+                            idLine: parseInt(us.idLine),
+                            idProgram: parseInt(us.idProgram),
+                            idAnnouncement: parseInt(us.idAnnouncement),
+                            idConcept: parseInt(us.idConcept),
+                        };
+                    }
+                });
+                const combinedArray = prevDataTableServices.map(item => {
+                    const updatedItem = updatedDataGridItems.find(us => us.id === (item?.id || item.ident));
+                    return updatedItem || item;
+                })
+        
+                return [...combinedArray, ...updatedDataGridItems.filter(us => !combinedArray.find(item => item.id === (us?.id || us.ident)))];
+            });    
         }
-    },[dataGridItems])
+    }, [dataGridItems]);
 
     useEffect(() => { loadTableData() }, [])
 
@@ -204,16 +239,14 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                                 quantityPeriod2: data?.periods.quantityPeriod2
                             },
                             id: data.id,
-                            idFound: (data.idFound),
-                            idLine: (data.idLine),
+                            idFound: parseInt(data.idFound),
+                            idLine: parseInt(data.idLine),
                             idProgram: data.idProgram,
-                            idAnnouncement: (data.idAnnouncement),
-                            idConcept: (data.idConcept),
+                            idAnnouncement: parseInt(data.idAnnouncement),
+                            idConcept: parseInt(data.idConcept),
                         }
                     })
-    
                     setDataTableServices(valueTableActaControl)
-                    // setDataGridItems(valueTableActaControl)
     
                     const valueCitation = dinamicData[0].citation.filter((value, index, self) =>
                         index === self.findIndex((v) => (
@@ -242,7 +275,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     
             getProjectsList().then((response) => {
                     if (response && response?.operation?.code === EResponseCodes.OK) {
-                        setProjectsList(
+                        setProjectList(
                             response.data.map((item) => {
                                 const list = {
                                     value: item.id,
@@ -255,11 +288,10 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                     }
             }).catch(error => console.log(error))
         }
-
     },[programList, foundList, lineList, announcementList, conceptList])
 
     useEffect(() => {
-        calculateTotalsDataTableActa(dataTableServices, setValue, setVigency1, setSubtotalVigency, setTotalQuantityPeriod2, setTotalQuantityPeriod1);
+        valueAction != 'edit' && calculateTotalsDataTableActa(dataTableServices, setValue, setVigency1, setSubtotalVigency, setTotalQuantityPeriod2, setTotalQuantityPeriod1);
     }, [dataTableServices]);
 
     useEffect(() => {
@@ -390,11 +422,6 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
 
     const addUser = handleSubmit((data: IActa) => {
         if (selectedUser) {
-            const date = new Date(selectedDate);
-            const day = date.getDate();
-            const month = date.getMonth() + 1;
-            const year = date.getFullYear();
-
             dataGridUsersServices.push({
                 ident: uuidv4(),
                 user: selectedLabelUser.name,
@@ -463,18 +490,22 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
             id: e?.id || 0
         }));
         
-        const citation = dataGridUsersServices.map((e) => ({
-            user: e.user || '',
-            dateCitation: e.dateCitation || '',
-            timeCitation: e.timeCitation || '' ,
-            email: e.email || '',
-            status: e.status ,
-            id: e.idCitation
-        }));
+        const citation = dataGridUsersServices.map((e) => {
+            const date = new Date(e.dateCitation);
+            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            return {
+                user: e.user,
+                dateCitation: formattedDate,
+                timeCitation: e.timeCitation,
+                status: e.status,
+                email: e.email,
+                idCitation: e.idCitation
+            }
+        });
 
         const state = getValues('idStatus');
 
-        const actaData = {
+        const actaData = {      
             [(state === 'Aprobado' || state == 'Aprobado - Modificado' ) ? 'idLast' : 'id']: parseInt(actaNro),
             numberProject: data.numberProject,
             periodVigency: Number(data.periodVigency),
@@ -487,7 +518,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
             items: actaItems,
             citation: citation
         };
-        
+ 
        if (state == 'Aprobado' || state == 'Aprobado - Modificado') {
             createActa(actaData).then(response => {
                 if (response.operation.code == EResponseCodes.OK) {
@@ -567,7 +598,6 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         tableActionsUser,
         projectList,
         tableActionsEdit,
-        isBtnDisabled,
         canBeEdited,
         totalQuantityPeriod2,
         totalQuantityPeriod1,

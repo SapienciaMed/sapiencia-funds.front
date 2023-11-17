@@ -1,11 +1,9 @@
 import { Checkbox } from "primereact/checkbox";
 import { IActa, IActaItems, IAuthorization, ITableAction, ITableElement, IUserDataGrid } from "../../../common/interfaces";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../common/contexts/app.context";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IMessage } from "../../../common/interfaces/global.interface";
 import ItemsCreatePage from "../pages/items-create.page";
 import { UseFormGetValues } from 'react-hook-form';
-import { ISearchResultProp } from "../interface/Acta";
 import useActaApi from "../hooks/acta-api.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
@@ -16,9 +14,10 @@ interface IPropTableColumnsActa{
     setMessage: Dispatch<SetStateAction<IMessage>>,
     getValues: UseFormGetValues<IActa>
     valueAction: string,
+    dataTableServices: any[]
 }
 
-export default function tableColumnsActa({ dataGridUsersServices, authorization, valueAction, getValues, setMessage }: IPropTableColumnsActa) {
+export default function usetableColumnsActa({ dataGridUsersServices, authorization, valueAction, dataTableServices, getValues, setMessage }: IPropTableColumnsActa) {
 
     const [ idCitation, setIdCitation ] = useState({ id: '' })
     const { approveCitation } = useActaApi();
@@ -179,17 +178,17 @@ export default function tableColumnsActa({ dataGridUsersServices, authorization,
                     techo: getValues('techo'),
                 }
 
-                // setMessage({
-                //     show: true,
-                //     title: "Agregar ítem",
-                //     description: <ItemsCreatePage acta={dataEditTable} actaItems={row} action={"edit"} />,
-                //     background: true,
-                //     size: "items",
-                //     items: true,
-                //     onOk() {
-                //         setMessage({});
-                //     },
-                // });
+                setMessage({
+                    show: true,
+                    title: "Agregar ítem",
+                    description: <ItemsCreatePage acta={dataEditTable} actaItems={row} action={"edit"} dataTableServices={dataTableServices} />,
+                    background: true,
+                    size: "items",
+                    items: true,
+                    onOk() {
+                        setMessage({});
+                    },
+                });
             },
         }
     ];
