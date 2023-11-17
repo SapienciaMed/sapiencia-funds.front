@@ -52,36 +52,30 @@ export default function useBudgetSearch() {
     ]);
 
 
-    getbudget()
-        .then((response) => {
-            if (response && response?.operation?.code === EResponseCodes.OK) {
-                setbudgetList(
-                    response.data.map((item) => {
-                        const list = {
-                            name: item.id_comuna,
-                            value: item.id_comuna,
-                        };
-                        return list;
-                    })
-                );
-            }
-        })
+// carga combos
+useEffect(() => {
+    getbudget().then((response) => {
+      if (response && response?.operation?.code === EResponseCodes.OK) {
+        setbudgetList(
+          response.data.map((item) => ({
+            name: item.id_comuna,
+            value: item.id_comuna,
+          }))
+        );
+      }
+    });
 
-
-    getAnnouncement()
-        .then((response) => {
-            if (response && response?.operation?.code === EResponseCodes.OK) {
-                setAnnouncementList(
-                    response.data.map((item) => {
-                        const list = {
-                            name: item.name,
-                            value: item.id,
-                        };
-                        return list;
-                    })
-                );
-            }
-        })
+    getAnnouncement().then((response) => {
+      if (response && response?.operation?.code === EResponseCodes.OK) {
+        setAnnouncementList(
+          response.data.map((item) => ({
+            name: item.name,
+            value: item.id,
+          }))
+        );
+      }
+    });
+  }, []);
 
 
 
@@ -185,18 +179,14 @@ export default function useBudgetSearch() {
         const url = new URL(`${urlApiFunds}/api/v1/presupuesto/generate-xlsx`);
         const params = new URLSearchParams();
         params.append("page", page + 1)
-        params.append("perPage", perPage + 1)
+        params.append("perPage", perPage + 10)
 
-        let idComunaString = '';
-        if (Array.isArray(id_comuna)) {
-            idComunaString = id_comuna.join(',');
+        if (Array.isArray(id_comuna) && id_comuna.length > 0) {
+            params.append("id_comuna", id_comuna.join(','));
         } else if (typeof id_comuna === 'number') {
-            idComunaString = String(id_comuna);
+            params.append("id_comuna", String(id_comuna));
         }
-
-        if (id_comuna) {
-            params.append("id_comuna", idComunaString);
-        }
+        
         if (periodo) {
             params.append("periodo", String(periodo));
         }
