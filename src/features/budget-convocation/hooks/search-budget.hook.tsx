@@ -4,7 +4,7 @@ import useYupValidationResolver from "../../../common/hooks/form-validator.hook"
 import { filterBudget } from "../../../common/schemas/budget-schema";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
-import { ITableElement } from "../../../common/interfaces/table.interfaces";
+import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import useBudgetApi from "./budget-api.hook";
 import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
@@ -131,6 +131,10 @@ useEffect(() => {
         },
     ];
 
+    const tableActions: ITableAction<ICallBudget>[] = [
+
+      ];
+
     function loadTableData(searchCriteria?: object): void {
 
         if (tableComponentRef.current) {
@@ -223,6 +227,7 @@ useEffect(() => {
         clearFields,
         downloadCollection,
         showDownloadButton,
+        tableActions,
     }
 
 }
