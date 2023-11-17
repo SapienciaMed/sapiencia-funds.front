@@ -56,6 +56,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     />
                                 </div>
                             </div>
+
                             <div className="button-save-container-display m-top-20">
                                 <ButtonComponent
                                     form="searchBudget"
@@ -77,42 +78,48 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             </div>
                         </FormComponent>
                     </div>
-                    {showTable && (
 
-                        <TableComponent
-                            ref={tableComponentRef}
-                            url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
-                            columns={tableColumns}
-                            titleMessageModalNoResult="Buscar"
-                            princialTitle="Informe legalización"
-                            isShowModal={true}
-                            descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
-                        />
+                    {showTable && (
+                        <>
+                            <div>
+
+
+                                <TableComponent
+                                    ref={tableComponentRef}
+                                    url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
+                                    columns={tableColumns}
+                                    titleMessageModalNoResult="Buscar"
+                                    princialTitle="Informe legalización"
+                                    isShowModal={true}
+                                    descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
+                                />
+
+
+
+                                <div>
+                                    <br />
+                                    <hr className="barra-spacing" />
+                                </div>
+
+                                <div className="button-save-container-display mr-24px">
+                                        <ButtonComponent
+                                            value={
+                                                <>
+                                                    <div className="container-buttonText">
+                                                        <span>Descargar</span>
+                                                        <Svgs svg="excel" width={23.593} height={28.505} />
+                                                    </div>
+                                                </>
+                                            }
+                                            className="button-download large "
+                                            action={downloadCollection}
+                                        />
+                                </div>
+                            </div>
+                        </>
                     )}
                 </div>
-
-                    <div>
-                        <br />
-                        <hr className="barra-spacing" />
-                    </div>
-                    <div className="button-save-container-display mr-24px">
-                        
-                        {showDownloadButton && (
-                            <ButtonComponent
-                                value={
-                                    <>
-                                        <div className="container-buttonText">
-                                            <span>Descargar</span>
-                                            <Svgs svg="excel" width={23.593} height={28.505} />
-                                        </div>
-                                    </>
-                                }
-                                className="button-download large "
-                                action={downloadCollection}
-                            />
-                        )}
-                    </div>
-                </div>
+            </div>
         </Fragment>
     );
 
