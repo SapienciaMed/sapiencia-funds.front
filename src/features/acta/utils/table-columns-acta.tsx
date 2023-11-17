@@ -82,7 +82,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
             renderCell(row) {
                 return(
                     <div>
-                       $ {row.costOperation.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                       ${row.costOperation.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                     </div>
                 )
             },
@@ -97,7 +97,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
             renderCell(row) {
                 return(
                     <div>
-                       $ {row.periods.valuePeriod1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                       ${row.periods.valuePeriod1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                     </div>
                 )
             }
@@ -112,7 +112,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
             renderCell(row) {
                 return(
                     <div>
-                       $ {row.periods.valuePeriod2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                       ${row.periods.valuePeriod2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                     </div>
                 )
             }
@@ -123,7 +123,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
             renderCell(row) {
                 return(
                     <div>
-                       $ {row.subtotalVigency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                       ${row.subtotalVigency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                     </div>
                 )
             }
@@ -134,7 +134,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
             renderCell(row) {
                 return(
                     <div>
-                       $ {row.costBillsOperation.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                       ${row.costBillsOperation.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                     </div>
                 )
             }
@@ -142,6 +142,13 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
         {
             fieldName: "net",
             header: "Neto",
+            renderCell(row) {
+                return(
+                    <div>
+                       ${row.net.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "financialOperatorCommission",
@@ -149,7 +156,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
             renderCell(row) {
                 return(
                     <div>
-                       $ {row.financialOperatorCommission.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                       ${row.financialOperatorCommission.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                     </div>
                 )
             }
@@ -160,7 +167,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
             renderCell(row) {
                 return(
                     <div>
-                       $ {row.resourcesCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                       ${row.resourcesCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                     </div>
                 )
             }
@@ -229,7 +236,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
 
                 setMessage({
                     show: true,
-                    title: "Agregar ítem",
+                    title: "Editar ítem",
                     description: <ItemsCreatePage acta={dataEditTable} actaItems={row} action={"edit"} dataTableServices={dataTableServices} />,
                     background: true,
                     size: "items",

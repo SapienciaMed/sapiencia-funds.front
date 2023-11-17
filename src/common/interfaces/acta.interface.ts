@@ -37,6 +37,7 @@ export interface IActa {
     techo?: number;
     typeMasterList?: ITypeMasterList,
     consecutiveNroPrevious?: string,
+    consecutiveNro?: string,
     lastId?:  number
 }
 
