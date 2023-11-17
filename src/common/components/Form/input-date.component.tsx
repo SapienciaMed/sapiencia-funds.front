@@ -4,6 +4,7 @@ import { LabelComponent } from "./label.component";
 import { Controller, Control } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { IoCalendarOutline } from "react-icons/io5";
+import moment from "moment";
 
 interface IDateProps<T> {
   idInput: string;
@@ -102,7 +103,10 @@ export function DatePickerComponent({
                 </span>
               }
               showButtonBar
-              value={field.value && new Date(field.value)}
+              value={
+                field.value &&
+                moment(new Date(field.value)).add(5, "hours").toDate()
+              }
               onChange={(e) => field.onChange(e.value)}
               inputStyle={{ borderRight: "none" }}
               minDate={minDate}
