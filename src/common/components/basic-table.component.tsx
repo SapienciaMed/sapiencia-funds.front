@@ -8,6 +8,7 @@ import {
   Paginator,
   PaginatorCurrentPageReportOptions,
   PaginatorNextPageLinkOptions,
+  PaginatorPageChangeEvent,
   PaginatorPageLinksOptions,
   PaginatorPrevPageLinkOptions,
   PaginatorRowsPerPageDropdownOptions,
@@ -53,7 +54,13 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   // States
 
   const [perPage, setPerPage] = useState<number>(10);
+  const [first, setFirst] = useState<number>(0);
   const { width } = useWidth();
+
+  function onPageChange(event: PaginatorPageChangeEvent): void {
+    setPerPage(event.rows);
+    setFirst(event.first);
+  }
 
   const mobilTemplate = (item) => {
     return (
@@ -106,9 +113,10 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           <Paginator
             className="between spc-table-paginator"
             template={paginatorHeader}
+            first={first}
             rows={perPage}
-            onPageChange={(i) => setPerPage(i.rows)}
-            totalRecords={props.data.length} // Cambia 'meta' por 'pagingInfo'
+            onPageChange={onPageChange}
+            totalRecords={props.data.length || 0} // Cambia 'meta' por 'pagingInfo'
             leftContent={
               <p className="header-information text-black biggest">
                 {secondaryTitle ?? "Resultados de búsqueda"}
@@ -117,15 +125,12 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           />
       }
 
-      {width > 830 ? (
+      { width > 830 ? (
         <div>
           <DataTable
             className={`spc-table full-height ${classSizeTable}`}
             value={props.data}
             scrollable={true}
-            paginator={showPaginator}
-            rows={perPage}
-            scrollHeight="400px"
             emptyMessage={emptyMessage}
           >
             {columns.map((col) => (
@@ -158,6 +163,14 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           emptyMessage={emptyMessage}
         />
       )}
+      <Paginator
+        className="spc-table-paginator"
+        template={paginatorFooter}
+        first={first}
+        rows={perPage}
+        totalRecords={props.data.length || 0}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 });
@@ -282,19 +295,16 @@ export const paginatorFooter: PaginatorTemplateOptions = {
           ...
         </span>
       );
-    }
-
-    
+    } 
 
     return (
       <button
-      type="button"
-      className={classNames(options.className, "border-round")}
-      onClick={options.onClick}
-      //disabled={options.disabled}
-    >
-      <span className="p-3 table-next"></span>
-    </button>
+        type="button"
+        className={options.className}
+        onClick={options.onClick}
+      >
+        {options.page + 1}
+      </button>
     );
   },
 };

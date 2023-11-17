@@ -27,7 +27,20 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
 
             <FormComponent action={onSaveEdit}  id="acta-form">
                 <section className="card-user">
-                    <div className='grid-form-3-container gap-15'>
+                    <div className='grid-form-4-container gap-15'>
+                        {
+                            valueAction !== 'edit' && 
+                            <InputComponent
+                                idInput={"consecutiveNro"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Consecutivo de acta nro"
+                                register={register}
+                                classNameLabel="text-black big text-with-colons"
+                                direction={EDirection.column}
+                                disabled
+                            />
+                        }
                         <InputComponent
                             idInput={"consecutiveNroPrevious"}
                             className="input-basic medium"

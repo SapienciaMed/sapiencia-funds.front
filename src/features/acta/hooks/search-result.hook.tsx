@@ -151,7 +151,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                             concept: us?.concept,
                             costOperation: us?.costOperation,
                             subtotalVigency: us?.subtotalVigency,
-                            costBillsOperation: 0,
+                            costBillsOperation: us.costBillsOperation,
                             financialOperatorCommission: us.financialOperatorCommission,
                             net: us?.net,
                             resourcesCredit: us.resourcesCredit,
@@ -177,7 +177,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                             concept: us?.concept,
                             costOperation: us?.costOperation,
                             subtotalVigency: us?.subtotalVigency,
-                            costBillsOperation: 0,
+                            costBillsOperation: us.costBillsOperation,
                             financialOperatorCommission: us.financialOperatorCommission,
                             net: us?.net,
                             resourcesCredit: us.resourcesCredit,
@@ -228,7 +228,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                             concept: selectedLabelConcept?.name,
                             costOperation: data?.costOperation,
                             subtotalVigency: data?.subtotalVigency,
-                            costBillsOperation: 0,
+                            costBillsOperation: data?.costBillsOperation,
                             financialOperatorCommission: data.financialOperatorCommission,
                             net: data?.net,
                             resourcesCredit: data.resourcesCredit,
@@ -270,6 +270,8 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                         setValue('financialOperation', dataSearch.financialOperation)
                         setValue('consecutiveNroPrevious', String(dataSearch?.lastId || '') )
                     });
+
+                    setValue('consecutiveNro', actaNro)
                 }
             }).catch(error => console.log(error))
     
@@ -291,7 +293,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     },[programList, foundList, lineList, announcementList, conceptList])
 
     useEffect(() => {
-        valueAction != 'edit' && calculateTotalsDataTableActa(dataTableServices, setValue, setVigency1, setSubtotalVigency, setTotalQuantityPeriod2, setTotalQuantityPeriod1);
+        calculateTotalsDataTableActa(dataTableServices, setValue, setVigency1, setSubtotalVigency, setTotalQuantityPeriod2, setTotalQuantityPeriod1);
     }, [dataTableServices]);
 
     useEffect(() => {
