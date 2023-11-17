@@ -14,7 +14,7 @@ import TabSearchResultMobil from "./tab-search-result-mobil";
 function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
     
     const { control, tableComponentRef, tableColumns, tableColumnsUsers, dataGridUsersServices, 
-        errors, times, activeUserList, tableActionsUser, projectList, dataTableServices, tableActionsEdit, isBtnDisabled, totalQuantityPeriod2,
+        errors, times, activeUserList, tableActionsUser, projectList, dataTableServices, tableActionsEdit, totalQuantityPeriod2,
         totalQuantityPeriod1, register, addItem, addUser, onCancel, downloadCollection, onSaveEdit } = useSearcResult({ valueAction })
 
     const { width } = useWidth()

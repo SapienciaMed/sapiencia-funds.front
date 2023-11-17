@@ -1,11 +1,9 @@
 import { Checkbox } from "primereact/checkbox";
 import { IActa, IActaItems, IAuthorization, ITableAction, ITableElement, IUserDataGrid } from "../../../common/interfaces";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../common/contexts/app.context";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IMessage } from "../../../common/interfaces/global.interface";
 import ItemsCreatePage from "../pages/items-create.page";
 import { UseFormGetValues } from 'react-hook-form';
-import { ISearchResultProp } from "../interface/Acta";
 import useActaApi from "../hooks/acta-api.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
@@ -16,9 +14,10 @@ interface IPropTableColumnsActa{
     setMessage: Dispatch<SetStateAction<IMessage>>,
     getValues: UseFormGetValues<IActa>
     valueAction: string,
+    dataTableServices: any[]
 }
 
-export default function tableColumnsActa({ dataGridUsersServices, authorization, valueAction, getValues, setMessage }: IPropTableColumnsActa) {
+export default function usetableColumnsActa({ dataGridUsersServices, authorization, valueAction, dataTableServices, getValues, setMessage }: IPropTableColumnsActa) {
 
     const [ idCitation, setIdCitation ] = useState({ id: '' })
     const { approveCitation } = useActaApi();
@@ -56,7 +55,7 @@ export default function tableColumnsActa({ dataGridUsersServices, authorization,
         }
     },[checked])
 
-    const tableColumns: ITableElement<any>[] = [
+    const tableColumns: ITableElement<IActaItems>[] = [
         {
             fieldName: "program",
             header: "Programa",
@@ -80,6 +79,13 @@ export default function tableColumnsActa({ dataGridUsersServices, authorization,
         {
             fieldName: "costOperation",
             header: "Costo promedio",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.costOperation.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            },
         },
         {
             fieldName: "periods.quantityPeriod1",
@@ -88,6 +94,13 @@ export default function tableColumnsActa({ dataGridUsersServices, authorization,
         {
             fieldName: "periods.valuePeriod1",
             header: "Valor Periodo 1",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.periods.valuePeriod1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "periods.quantityPeriod2",
@@ -96,14 +109,35 @@ export default function tableColumnsActa({ dataGridUsersServices, authorization,
         {
             fieldName: "periods.valuePeriod2",
             header: "Valor Periodo 2",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.periods.valuePeriod2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "subtotalVigency",
             header: "Subtotal vigencia",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.subtotalVigency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "costBillsOperation",
             header: "Costos y gastos de operación",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.costBillsOperation.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "net",
@@ -112,10 +146,24 @@ export default function tableColumnsActa({ dataGridUsersServices, authorization,
         {
             fieldName: "financialOperatorCommission",
             header: "Comisión operador financiero",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.financialOperatorCommission.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "resourcesCredit",
             header: "Recursos para crédito",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.resourcesCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
     ];
 
@@ -179,17 +227,17 @@ export default function tableColumnsActa({ dataGridUsersServices, authorization,
                     techo: getValues('techo'),
                 }
 
-                // setMessage({
-                //     show: true,
-                //     title: "Agregar ítem",
-                //     description: <ItemsCreatePage acta={dataEditTable} actaItems={row} action={"edit"} />,
-                //     background: true,
-                //     size: "items",
-                //     items: true,
-                //     onOk() {
-                //         setMessage({});
-                //     },
-                // });
+                setMessage({
+                    show: true,
+                    title: "Agregar ítem",
+                    description: <ItemsCreatePage acta={dataEditTable} actaItems={row} action={"edit"} dataTableServices={dataTableServices} />,
+                    background: true,
+                    size: "items",
+                    items: true,
+                    onOk() {
+                        setMessage({});
+                    },
+                });
             },
         }
     ];

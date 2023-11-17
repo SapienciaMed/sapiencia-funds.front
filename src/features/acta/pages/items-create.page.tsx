@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment, SetStateAction, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import useActaItems from "../hooks/items.hook";
 import { IActa } from '../../../common/interfaces/acta.interface';
@@ -8,11 +8,11 @@ import { InputNumberComponent } from "../../../common/components/Form/input-numb
 import { IUserDataGrid } from "../../../common/interfaces";
 
 
-const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, actaItems?: IActaItems }) => {
+const ItemsCreatePage = ({ action, acta, actaItems, dataTableServices }: { action, acta?: IActa, actaItems?: IActaItems, dataTableServices?: any[] }) => {
 
     const [modifiedIdcCountercredit, setModifiedIdcCountercredit] = useState(0)
     const { errors, register, onsubmitAddItem, control, foundList, lineList, conceptList, 
-        announcementList,periods, programList, CancelFunction } = useActaItems(action, acta, actaItems, modifiedIdcCountercredit);
+        announcementList,periods, programList, CancelFunction } = useActaItems(action, acta, actaItems, modifiedIdcCountercredit, dataTableServices);
 
     return (
         <Fragment>
@@ -29,6 +29,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                             classNameLabel="text-black biggest text-required"
                             filter={true}
                             placeholder="Seleccionar."
+                            
                         />
                         <SelectComponent
                             idInput={"found"}
@@ -40,6 +41,7 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                             classNameLabel="text-black biggest text-required"
                             filter={true}
                             placeholder="Seleccionar."
+                            fieldArray
                         />
                         <SelectComponent
                             idInput={"line"}
@@ -139,12 +141,15 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     name={"valuePeriod1"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
+                                            <InputNumberComponent
+                                                control={control}
                                                 idInput={"valuePeriod1"}
-                                                className="input-basic medium"
-                                                typeInput="number"
+                                                className="inputNumber-basic medium"
+                                                mode="currency"
+                                                currency="COP"
+                                                locale="es-CO"
+                                                fieldArray={true}
                                                 label="Valor"
-                                                register={register}
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
                                                 placeholder={""}
@@ -187,12 +192,15 @@ const ItemsCreatePage = ({ action, acta, actaItems }: { action, acta?: IActa, ac
                                     name={"valuePeriod2"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
+                                            <InputNumberComponent
+                                                control={control}
                                                 idInput={"valuePeriod2"}
-                                                className="input-basic medium"
-                                                typeInput="number"
+                                                className="inputNumber-basic medium"
+                                                mode="currency"
+                                                currency="COP"
+                                                locale="es-CO"
+                                                fieldArray={true}
                                                 label="Valor"
-                                                register={register}
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
                                                 placeholder={""}
