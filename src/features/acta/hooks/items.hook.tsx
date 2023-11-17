@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { IActaItems } from "../../../common/interfaces/actaItems.interface";
 import { useForm } from "react-hook-form";
@@ -9,9 +9,10 @@ import { IActa } from "../../../common/interfaces/acta.interface";
 import { v4 as uuidv4 } from 'uuid';
 import { createActaItems } from "../../../common/schemas/actaItems-shema";
 import { vigencyActas } from "../../../common/schemas/vigency-acta-shema";
+import { IUserDataGrid } from "../../../common/interfaces";
 
 
-export default function useActaItems(action, acta: IActa, actaItems: IActaItems, modifiedIdcCountercredit: number) {
+export default function useActaItems(action, acta: IActa, actaItems: IActaItems, modifiedIdcCountercredit: number, dataTableServices?: any[]) {
     //contex
     const { setMessage, setDataGridItems, dataGridItems, } = useContext(AppContext);
 
@@ -141,6 +142,7 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems,
         if (data) {
             const updatedItem = {
                 ident: uuidv4(),
+                id: dataTableServices?.find(us => us).id,
                 found: selectedLabelFound,
                 line: selectedLabelLine,
                 program: selectedLabelProgram,
@@ -167,11 +169,13 @@ export default function useActaItems(action, acta: IActa, actaItems: IActaItems,
             if (actaItems) {
                 // Continuación de tu lógica de edición
                 const editingIndex = dataGridItems.findIndex(item => item.ident === actaItems.ident);
+                const editingIndex2 = dataTableServices?.findIndex(item => item.id === actaItems.id)
 
-                if (editingIndex !== -1) {
+                if (editingIndex !== -1 || editingIndex2 !== -1) {
                     setDataGridItems(prevDataGridItems => {
                         const updatedDataGridItems = [...prevDataGridItems];
-                        updatedDataGridItems[editingIndex] = updatedItem;
+                        const index = editingIndex !== -1 ? editingIndex : editingIndex2;
+                        updatedDataGridItems[index] = updatedItem;
                         return updatedDataGridItems;
                     });
 
