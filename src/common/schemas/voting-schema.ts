@@ -56,21 +56,21 @@ export const searchVotings = yup.object({
 
 
 export const ResourcePrioritizationSearch = yup.object({
-  projectNumber: yup.number().max(999999999999999, 'valor invalido').required("Requerido!"),
-  programId: yup.number().required("Requerido!"),
-  validity: yup.number().min(2000,'Año invalido').max(3000, 'Año invalido').required("Requerido!"),
-  generalRate: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
-  operatorCommissionAct: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
-  operatorCommissionBalance: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
-  operatorCommission: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
+  projectNumber: yup.number().max(999999999999999, 'valor invalido').required("Completar información"),
+  programId: yup.number().required("Completar información"),
+  validity: yup.number().min(2000,'Año invalido').max(3000, 'Año invalido').required("Completar información"),
+  generalRate: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Completar información"),
+  operatorCommissionAct: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Completar información"),
+  operatorCommissionBalance: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Completar información"),
+  operatorCommission: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Completar información"),
 });
 
 
 
 export const  ResourcePrioritizationSchema = yup.object({
-  financialPerformances: yup.number().max(999999999999999, 'valor invalido').required("Requerido!"),
-  generalRate: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Requerido!"),
-  averageCost: yup.number().max(999999999999999, 'valor invalido').required("Requerido!"),
-  balanceResources: yup.number().max(999999999999999, 'valor invalido').required("Requerido!"),
+  financialPerformances: yup.number().max(999999999999999, 'valor invalido').required("Completar información"),
+  generalRate: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Completar información"),
+  averageCost: yup.number().max(999999999999999, 'valor invalido').required("Completar información"),
+  balanceResources: yup.number().max(999999999999999, 'valor invalido').required("Completar información"),
  });
 
