@@ -19,6 +19,7 @@ import ItemResultsPage from "../pages/item.create.page";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { Controller } from "react-hook-form";
 import { EDirection } from "../../../common/constants/input.enum";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 const VotingResultsPage = () => {
   const {
@@ -71,6 +72,9 @@ const VotingResultsPage = () => {
     {
       fieldName: "activityValue",
       header: "Valor Actividad",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.activityValue)}</>;
+      },
     },
     {
       fieldName: "amount",
@@ -79,6 +83,9 @@ const VotingResultsPage = () => {
     {
       fieldName: "totalCost",
       header: "Costo Total",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.totalCost)}</>;
+      },
     },
     {
       fieldName: "porcentaje123",
@@ -284,7 +291,7 @@ const VotingResultsPage = () => {
                               aucumActivity = value;
                             }
                             if (Number(dataGrid.length) == Number(i + 1)) {
-                              return value;
+                              return formaterNumberToCurrency(value);
                             }
                           })}
                         </p>
@@ -328,7 +335,7 @@ const VotingResultsPage = () => {
                               acumTotal = value;
                             }
                             if (Number(dataGrid.length) == Number(i + 1)) {
-                              return value;
+                              return formaterNumberToCurrency(value);
                             }
                           })}
                         </p>
@@ -342,8 +349,8 @@ const VotingResultsPage = () => {
               <br />
 
               <TextAreaComponent
-                id={"observations"}
-                idInput={"observations"}
+                id={"observation"}
+                idInput={"observation"}
                 label="Observaciones"
                 classNameLabel="text-black biggest bold "
                 className={`text-area-basic `}

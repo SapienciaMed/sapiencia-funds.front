@@ -44,6 +44,8 @@ interface IProps<T> {
   classname?: string;
   isDisabled?: boolean;
   onResult?: (rows: T[]) => void;
+  widthTable?: string;
+  horizontalScroll?: boolean;
 }
 
 interface IRef {
@@ -63,6 +65,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     princialTitle,
     classname = "",
     isDisabled,
+    widthTable,
+    horizontalScroll = false
   } = props;
 
   // States
@@ -77,6 +81,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const { setMessage } = useContext(AppContext);
 
   // Declaraciones
+  const widthColumns = width / ((columns.length + 1) * 2);
   const { post } = useCrudService(url);
   useImperativeHandle(ref, () => ({
     loadData: loadData,
@@ -221,6 +226,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                 loading={loading}
                 scrollable={true}
                 emptyMessage={emptyMessage}
+                style={{ maxWidth: widthTable }}
               >
                 {columns.map((col) => (
                   <Column
@@ -228,11 +234,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                     field={col.fieldName}
                     header={col.header}
                     body={col.renderCell}
+                    style={horizontalScroll ? {} : { maxWidth: `${widthColumns}px`, minHeight: `${widthColumns}px`, width: `${widthColumns}px` }}
                   />
                 ))}
 
                 {actions && actions.length && (
-                  <Column
+                  <Column style={horizontalScroll ? {} : { maxWidth: `${widthColumns}px`, minHeight: `${widthColumns}px`, width: `${widthColumns}px` }}
                     className="spc-table-actions"
                     header={
                       <div>

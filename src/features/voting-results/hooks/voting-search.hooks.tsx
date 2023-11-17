@@ -13,10 +13,10 @@ import { useGenericListService } from "../../../common/hooks/generic-list-servic
 import useVotingItemApi from "./voting-items-api.hooks";
 
 export const useVotingResultsSearch = () => {
-  const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
+  const { setMessage } = useContext(AppContext);
   const navigate = useNavigate();
   const resolver = useYupValidationResolver(searchVotings);
-  const { downloadFile,consultVoting, } = useVotingService();
+  const { downloadFile, consultVoting } = useVotingService();
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
   const [deparmetList, setDeparmentList] = useState([]);
@@ -27,8 +27,6 @@ export const useVotingResultsSearch = () => {
   const { getProjectsList } = useVotingItemApi();
   const [projectList, setProjectsList] = useState([]);
 
-
-
   const {
     handleSubmit,
     register,
@@ -38,102 +36,96 @@ export const useVotingResultsSearch = () => {
     reset,
   } = useForm<IVotingCreate>({
     resolver,
-    mode: 'all',
+    mode: "all",
     defaultValues: {
       communeNeighborhood: null,
       numberProject: null,
-      validity: '',
+      validity: "",
       ideaProject: "",
     },
   });
 
   const dataForm = getValues();
 
-    const onSubmitSearch = async () => {
-      loadTableData(dataForm);
-    };
-  
-    /*Functions*/
+  const onSubmitSearch = async () => {
+    loadTableData(dataForm);
+  };
+
+  /*Functions*/
   const onSubmitSearchVoting = handleSubmit(async (data: IVotingCreate) => {
-        loadTableData({
-          communeNeighborhood: data?.communeNeighborhood,
-          numberProject: data?.numberProject,
-          validity: data?.validity,
-          ideaProject: data?.ideaProject,
-        });
-      if (data?.numberProject && data?.validity && data?.ideaProject && data?.communeNeighborhood) {
-        setSendingXLSX(true);
-        const dataConsult: any = await consultVoting(data);
-        setDataTblTotal(dataConsult.data.data);
-      }
-      
+    loadTableData({
+      communeNeighborhood: data?.communeNeighborhood,
+      numberProject: data?.numberProject,
+      validity: data?.validity,
+      ideaProject: data?.ideaProject,
     });
-    
-    function loadTableData(searchCriteria?: object): void {
-        if (tableComponentRef.current) {
-        tableComponentRef.current.loadData(searchCriteria);
-        }
+    if (
+      data?.numberProject &&
+      data?.validity &&
+      data?.ideaProject &&
+      data?.communeNeighborhood
+    ) {
+      const dataConsult: any = await consultVoting(data);
+      setDataTblTotal(dataConsult.data.data);
     }
-    
-    const confirmVotingCreation = async (data: IVotingCreate) => {
-        setSending(true);
+  });
 
-    };
+  function loadTableData(searchCriteria?: object): void {
+    if (tableComponentRef.current) {
+      tableComponentRef.current.loadData(searchCriteria);
+    }
+  }
 
+  const CancelFunction = () => {
+    setMessage({
+      show: true,
+      title: "Cancelar",
+      description: "¿Estás segur@ de cancelar esta acción en el sistema?",
+      OkTitle: "Aceptar",
+      cancelTitle: "Cancelar",
+      onOk() {
+        navigate("/core/usuarios/consultar");
+        setMessage((prev) => ({ ...prev, show: false }));
+      },
+      background: true,
+    });
+  };
 
-    const CancelFunction = () => {
-        setMessage({
-        show: true,
-        title: "Cancelar",
-        description: "¿Estás segur@ de cancelar esta acción en el sistema?",
-        OkTitle: "Aceptar",
-        cancelTitle: "Cancelar",
-        onOk() {
-            navigate("/core/usuarios/consultar");
-            setMessage((prev) => ({ ...prev, show: false }));
-        },
-        background: true,
-        });
-    };
-
-    useEffect(() => {
-     const groupers = ["COMUNA_CORREGIMIENTO"];
-     getListByGroupers(groupers).then(
-       (response: ApiResponse<IGenericList[]>) => {
-         if (response && response?.operation?.code === EResponseCodes.OK) {
-           setDeparmentList(
-             response.data.map((item) => {
-               const list = {
-                 name: item.itemDescription,
-                 value: item.itemCode,
-               };
-               return list;
-             })
-           );
-         }
-       }
-      );
-      
-      getProjectsList().then((response) => {
+  useEffect(() => {
+    const groupers = ["COMUNA_CORREGIMIENTO"];
+    getListByGroupers(groupers).then(
+      (response: ApiResponse<IGenericList[]>) => {
         if (response && response?.operation?.code === EResponseCodes.OK) {
-          setProjectsList(
+          setDeparmentList(
             response.data.map((item) => {
               const list = {
-                value: item.bpin,
-                name: item.bpin,
-                meta: item.goal,
+                name: item.itemDescription,
+                value: item.itemCode,
               };
               return list;
             })
           );
         }
-      });
+      }
+    );
 
-    }, []);
-  
-  
+    getProjectsList().then((response) => {
+      if (response && response?.operation?.code === EResponseCodes.OK) {
+        setProjectsList(
+          response.data.map((item) => {
+            const list = {
+              value: item.bpin,
+              name: item.bpin,
+              meta: item.goal,
+            };
+            return list;
+          })
+        );
+      }
+    });
+  }, []);
+
   const downloadXLSX = async () => {
-    
     await downloadFile(dataForm).then((resp: any) => {
       const buffer = new Uint8Array(resp.data.data); // Convierte el Array del búfer en Uint8Array
       const blob = new Blob([buffer]);
@@ -152,7 +144,7 @@ export const useVotingResultsSearch = () => {
         background: true,
       });
     });
-  }
+  };
 
   return {
     onSubmitSearch,
@@ -176,5 +168,4 @@ export const useVotingResultsSearch = () => {
     setDataTblTotal,
     projectList,
   };
-}
-
+};

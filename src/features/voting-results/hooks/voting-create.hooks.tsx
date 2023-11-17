@@ -158,6 +158,7 @@ export const useVotingResults = () => {
           validity: data.validity,
           ideaProject: data.ideaProject,
           items: itemSave,
+          observation: data.observation,
         };
 
         const res = await createVotingResults(votingData);
