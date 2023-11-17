@@ -55,7 +55,7 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
         }
     },[checked])
 
-    const tableColumns: ITableElement<any>[] = [
+    const tableColumns: ITableElement<IActaItems>[] = [
         {
             fieldName: "program",
             header: "Programa",
@@ -79,6 +79,13 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
         {
             fieldName: "costOperation",
             header: "Costo promedio",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.costOperation.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            },
         },
         {
             fieldName: "periods.quantityPeriod1",
@@ -87,6 +94,13 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
         {
             fieldName: "periods.valuePeriod1",
             header: "Valor Periodo 1",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.periods.valuePeriod1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "periods.quantityPeriod2",
@@ -95,14 +109,35 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
         {
             fieldName: "periods.valuePeriod2",
             header: "Valor Periodo 2",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.periods.valuePeriod2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "subtotalVigency",
             header: "Subtotal vigencia",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.subtotalVigency.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "costBillsOperation",
             header: "Costos y gastos de operación",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.costBillsOperation.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "net",
@@ -111,10 +146,24 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
         {
             fieldName: "financialOperatorCommission",
             header: "Comisión operador financiero",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.financialOperatorCommission.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
         {
             fieldName: "resourcesCredit",
             header: "Recursos para crédito",
+            renderCell(row) {
+                return(
+                    <div>
+                       $ {row.resourcesCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+                    </div>
+                )
+            }
         },
     ];
 

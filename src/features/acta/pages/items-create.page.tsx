@@ -141,12 +141,15 @@ const ItemsCreatePage = ({ action, acta, actaItems, dataTableServices }: { actio
                                     name={"valuePeriod1"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
+                                            <InputNumberComponent
+                                                control={control}
                                                 idInput={"valuePeriod1"}
-                                                className="input-basic medium"
-                                                typeInput="number"
+                                                className="inputNumber-basic medium"
+                                                mode="currency"
+                                                currency="COP"
+                                                locale="es-CO"
+                                                fieldArray={true}
                                                 label="Valor"
-                                                register={register}
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
                                                 placeholder={""}
@@ -189,12 +192,15 @@ const ItemsCreatePage = ({ action, acta, actaItems, dataTableServices }: { actio
                                     name={"valuePeriod2"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
+                                            <InputNumberComponent
+                                                control={control}
                                                 idInput={"valuePeriod2"}
-                                                className="input-basic medium"
-                                                typeInput="number"
+                                                className="inputNumber-basic medium"
+                                                mode="currency"
+                                                currency="COP"
+                                                locale="es-CO"
+                                                fieldArray={true}
                                                 label="Valor"
-                                                register={register}
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
                                                 placeholder={""}
