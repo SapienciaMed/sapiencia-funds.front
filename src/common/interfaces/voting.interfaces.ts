@@ -4,6 +4,7 @@ export interface IVotingCreate {
   numberProject: number;
   validity: string;
   ideaProject: string;
+  observation?: string;
 }
 
 export interface IItemCreate {
@@ -19,6 +20,8 @@ export interface IItemCreate {
 }
 
 export interface IVotingSearcheResult {
+  activity: any;
+  total: any
   id?: number;
   aimStraight: number;
   productCatalogueDnp: number;
@@ -29,6 +32,10 @@ export interface IVotingSearcheResult {
   percentage456: string;
   codRtVotingResult: string;
   ident: number;
+  total456: number;
+  total123: number;
+  activityValue: number;
+  totalCost: number;
 }
 
 export interface IVotingResultGrid {

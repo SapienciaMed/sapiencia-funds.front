@@ -4,7 +4,7 @@ import { ITabsMenuTemplate } from "../../../common/interfaces/tabs-menu.interfac
 import TabListComponent from "../../../common/components/tab-list.component";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 import { InputComponent } from "../../../common/components/Form";
-import { IActa, IActaItems, ITableElement } from "../../../common/interfaces";
+import { IActa, IActaItems, ITableAction, ITableElement } from "../../../common/interfaces";
 import { EDirection } from "../../../common/constants/input.enum";
 import { Control, UseFormRegister } from "react-hook-form";
 import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
@@ -13,15 +13,15 @@ interface IPropTabSearch{
     tableComponentRef: React.MutableRefObject<any>,
     valueAction?: "edit";
     dataGridItems: IActaItems[];
-    dataTableServices: IActaItems[];
+    tableActionsEdit: ITableAction<IActaItems>[]
     tableColumns: ITableElement<any>[];
     register: UseFormRegister<IActa>;
     control: Control<IActa, any>
 }
 
 
-function TabSearchResultMobil({ control, dataGridItems, dataTableServices, register, 
-    tableColumns, tableComponentRef, valueAction }:IPropTabSearch ) {
+function TabSearchResultMobil({ control, dataGridItems, register, 
+    tableColumns, tableComponentRef, valueAction, tableActionsEdit }:IPropTabSearch ) {
 
     const { option } = useParams();
 
@@ -33,8 +33,9 @@ function TabSearchResultMobil({ control, dataGridItems, dataTableServices, regis
                 <section className="card-user mt-14px">
                     <BasicTableComponent
                         ref={tableComponentRef}
-                        data={valueAction ? dataGridItems : dataTableServices}
+                        data={dataGridItems}
                         columns={tableColumns}
+                        actions={valueAction ? tableActionsEdit : undefined}
                         titleMessageModalNoResult="Registro no existente"
                         isShowModal={true}
                         secondaryTitle={"Acta control financiero"}
@@ -113,7 +114,6 @@ function TabSearchResultMobil({ control, dataGridItems, dataTableServices, regis
                                 classNameLabel="text-black big"
                                 direction={EDirection.column}
                                 disabled
-                                // value={String(totalQuantityPeriod1)}
                             />
                             <InputNumberComponent
                                 control={control}
@@ -140,7 +140,6 @@ function TabSearchResultMobil({ control, dataGridItems, dataTableServices, regis
                                 direction={EDirection.column}
                                 placeholder={""}
                                 disabled
-                                // value={String(totalQuantityPeriod2)}
                             />
                             <InputNumberComponent
                                 control={control}

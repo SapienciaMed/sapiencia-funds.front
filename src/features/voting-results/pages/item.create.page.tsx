@@ -25,10 +25,10 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
     <Fragment>
       <FormComponent
         id="createItemForm"
-        className="form-signIn"
+        className="main-page full-width"
         action={onSubmitCreateItem}
       >
-        <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+        <section className="funcionality-filters-container gap-15">
           <Controller
             control={control}
             name={"directObject"}
@@ -52,18 +52,6 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
               );
             }}
           />
-
-          {/* <InputComponent
-            idInput="directObject"
-            className="input-basic medium form-group"
-            typeInput="text"
-            label="Objetivo directo"
-            register={register}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-            placeholder={""}
-          /> */}
 
           <Controller
             control={control}
@@ -89,18 +77,6 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
             }}
           />
 
-          {/* <InputComponent
-            idInput="productCatalog"
-            className="input-basic medium form-group"
-            typeInput="number"
-            label="Producto catalogo dnp"
-            register={register}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-            placeholder={""}
-          /> */}
-
           <Controller
             control={control}
             name={"productCode"}
@@ -125,18 +101,6 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
             }}
           />
 
-          {/* <InputComponent
-            idInput="productCode"
-            className="input-basic medium form-group"
-            typeInput="text"
-            label="Código producto dnp"
-            register={register}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-            placeholder={""}
-          /> */}
-
           <SelectComponent
             idInput="program"
             control={control}
@@ -149,7 +113,8 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
             errors={errors}
             // setValue={setProgramSelected}
           />
-
+        </section>
+        <section className="funcionality-filters-container gap-15">
           <SelectComponent
             idInput="activity"
             control={control}
@@ -187,19 +152,6 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
             }}
           />
 
-          {/* <InputComponent
-            idInput="activityValue"
-            className="input-basic medium form-group"
-            typeInput="number"
-            label="Valor actividad"
-            register={register}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-            placeholder={""}
-            disabled={true}
-          /> */}
-
           <Controller
             control={control}
             name={"amount"}
@@ -223,20 +175,6 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
               );
             }}
           />
-
-          {/* <InputComponent
-            idInput="amount"
-            className="input-basic medium form-group"
-            typeInput="number"
-            label="Cantidad"
-            register={register}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-            placeholder={""}
-            disabled={disabledCantidad}
-            onChange={changeAmountSum}
-          /> */}
 
           <Controller
             control={control}
@@ -262,20 +200,8 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
               );
             }}
           />
-
-          {/* <InputComponent
-            idInput="totalCost"
-            className="input-basic medium form-group"
-            typeInput="number"
-            label="Costo total"
-            register={register}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-            placeholder={""}
-            disabled={true}
-          /> */}
-
+        </section>
+        <section className="funcionality-filters-container gap-15">
           <Controller
             control={control}
             name={"porcentaje123"}
@@ -300,18 +226,6 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
             }}
           />
 
-          {/* <InputComponent
-            idInput="porcentaje123"
-            className="input-basic medium form-group"
-            typeInput="number"
-            label="Porcentaje 123"
-            register={register}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-            placeholder={""}
-          /> */}
-
           <Controller
             control={control}
             name={"porcentaje456"}
@@ -335,19 +249,7 @@ const ItemResultsPage = ({ dataVoting, action, collback }) => {
               );
             }}
           />
-
-          {/* <InputComponent
-            idInput="porcentaje456"
-            className="input-basic medium form-group"
-            typeInput="number"
-            label="Porcentaje 456"
-            register={register}
-            classNameLabel="text-black big text-required bold"
-            direction={EDirection.column}
-            errors={errors}
-            placeholder={""}
-          /> */}
-        </div>
+        </section>
 
         <div className="button-save-container-display-users margin-right0">
           <ButtonComponent

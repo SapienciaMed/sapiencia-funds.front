@@ -213,8 +213,8 @@ export const useItemResults = (action, dataVoting, collback) => {
         await setMessage({
           OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
-          description: "Estás segur@ de editar este registro?",
-          title: "Editar registro",
+          description: "Estás segur@ de guardar los resultados de votación?",
+          title: "Resultados de votación",
           show: true,
           type: EResponseCodes.OK,
           background: true,
@@ -240,8 +240,8 @@ export const useItemResults = (action, dataVoting, collback) => {
             if (res && res?.operation?.code === EResponseCodes.OK) {
               setMessage({
                 OkTitle: "Aceptar",
-                description: "Registro actualizado correctamente",
-                title: "Editar registro",
+                description: "Guardado exitosamente",
+                title: "Resultados de votación",
                 show: true,
                 type: EResponseCodes.OK,
                 background: true,

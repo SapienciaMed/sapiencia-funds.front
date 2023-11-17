@@ -47,6 +47,11 @@ export function useVotingService() {
     return post(`${userUrl}${endpoint}`, data);
   }
 
+  async function consultDataGrid(data: Object): Promise<ApiResponse<IVotingCreate>> {
+    const endpoint: string = "/get-paginated";
+    return post(`${userUrl}${endpoint}`, data);
+  }
+
   async function downloadFile(
       data: Object
     ): Promise<ApiResponse<any>> {
@@ -73,5 +78,6 @@ export function useVotingService() {
     deleteVoting,
     consultVoting,
     downloadFile,
+    consultDataGrid
   };
 }

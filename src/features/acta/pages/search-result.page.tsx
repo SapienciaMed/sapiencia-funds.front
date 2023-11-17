@@ -13,10 +13,10 @@ import TabSearchResultMobil from "./tab-search-result-mobil";
 
 function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
     
-    const { control, tableComponentRef, tableColumns, dataTableServices, tableColumnsUsers, dataGridUsersServices, 
-        errors, times, activeUserList, dataGridUsers, dataGridItems, tableActionsUser,
-        register, addItem, onSubmit, addUser, onCancel, downloadCollection } = useSearcResult({ valueAction })
-    
+    const { control, tableComponentRef, tableColumns, tableColumnsUsers, dataGridUsersServices, 
+        errors, times, activeUserList, tableActionsUser, projectList, dataTableServices, tableActionsEdit, totalQuantityPeriod2,
+        totalQuantityPeriod1, register, addItem, addUser, onCancel, downloadCollection, onSaveEdit } = useSearcResult({ valueAction })
+
     const { width } = useWidth()
 
     return(
@@ -25,7 +25,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                 <p className="text-black huge">{valueAction == 'edit' ? 'Modificar acta' : 'Visualizar acta'}</p>
             </div>
 
-            <FormComponent action={onSubmit} id="acta-form">
+            <FormComponent action={onSaveEdit}  id="acta-form">
                 <section className="card-user">
                     <div className='grid-form-3-container gap-15'>
                         <InputComponent
@@ -54,17 +54,13 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                     idInput={"numberProject"}
                                     control={control}
                                     errors={errors}
-                                    data={[
-                                        {name: '1', value: '1'},
-                                        {name: '2', value: '2'},
-                                    ]}
+                                    data={projectList}
                                     label="Número proyecto"
                                     className="select-basic medium select-disabled-list"
                                     classNameLabel={`text-black big text-with-colons ${valueAction == 'edit' && 'text-required'}`}
                                     filter={true}
                                     placeholder="Seleccionar."
                                     direction={EDirection.column}
-                                    disabled={valueAction != 'edit'}
                                 />
                             :    <InputComponent
                                     idInput={"numberProject"}
@@ -87,8 +83,8 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                     control={control}
                                     errors={errors}
                                     data={[
-                                        {name: '1', value: '1'},
-                                        {name: '2', value: '2'},
+                                        {name: '1', value: 1},
+                                        {name: '2', value: 2},
                                     ]}
                                     label="Periodos por vigencia"
                                     className="select-basic medium select-disabled-list"
@@ -96,7 +92,6 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                     direction={EDirection.column}
                                     filter={true}
                                     placeholder="Seleccionar."
-                                    disabled={valueAction != 'edit'}
                                 />
                             :   <InputComponent
                                     idInput={"periodVigency"}
@@ -130,14 +125,19 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
 
                             }}
                         />
-                        <InputComponent
-                            idInput={"salaryMin"}
-                            className="input-basic medium"
-                            typeInput="text"
+                        <InputNumberComponent
+                            control={control}
+                            idInput={`salaryMin`}
                             label="Salario mínimo"
-                            register={register}
-                            classNameLabel="text-black big text-with-colons"
-                            direction={EDirection.column}
+                            className="inputNumber-basic medium"
+                            placeholder={'0'}
+                            classNameLabel="text-black big"
+                            mode="currency"
+                            currency="COP"
+                            locale="es-CO"
+                            fieldArray={true}
+                            minFractionDigits={0}
+                            maxFractionDigits={0}
                             disabled
                         />
                     </div>
@@ -201,335 +201,329 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                         />
                     </div>
                 </section>
+            </FormComponent>
 
-                {
-                    valueAction == 'edit' &&
+            {
+                valueAction == 'edit' &&
                     <div className="button-save-container-display-actas margin-right0 mr-24px">
                         <ButtonComponent
                             value="Agregar item"
-                            action={() => { addItem() }}
+                            action={addItem}
                             className="button-save large disabled-black"
                         />
                     </div>
-                }
+            }
 
-                {
-                    width <= 830 
-                    ? ( 
-                        <TabSearchResultMobil 
-                            control={control}
-                            dataGridItems={dataGridItems}
-                            tableColumns={tableColumns}
-                            tableComponentRef={tableComponentRef}
-                            dataTableServices={dataTableServices}
-                            register={register}
-                            valueAction={valueAction}
-                        />
-                    )
-                    : (
-                        <> 
-                            <section className="card-user mt-14px">
+            {
+                width <= 830 
+                ? ( 
+                    <TabSearchResultMobil 
+                        control={control}
+                        dataGridItems={dataTableServices}
+                        tableColumns={tableColumns}
+                        tableComponentRef={tableComponentRef}
+                        register={register}
+                        valueAction={valueAction}
+                        tableActionsEdit={tableActionsEdit}
+                    />
+                )
+                : (
+                    <> 
+                        <section className="card-user mt-14px">
 
-                                <BasicTableComponent
-                                    ref={tableComponentRef}
-                                    data={valueAction ? dataGridItems : dataTableServices}
-                                    columns={tableColumns}
-                                    titleMessageModalNoResult="Registro no existente"
-                                    isShowModal={true}
-                                    secondaryTitle={"Acta control financiero"}
-                                    classSizeTable="size-table-wd-150"
-                                />
-                                
-                                <div className="card-user">
-                                    <div className="title-area">
-                                        <label className="text-black large" style={{margin: '0px'}}>Totales</label>
-                                    </div>
-
-                                    <div className='grid-form-4-container'>
-                                        <InputComponent
-                                            idInput={"tQuantity1"}
-                                            className="input-basic medium"
-                                            typeInput="text"
-                                            label="Cantidad periodo 1"
-                                            register={register}
-                                            classNameLabel="text-black big"
-                                            direction={EDirection.column}
-                                            disabled
-                                            // value={String(totalQuantityPeriod1)}
-                                        />
-                                        <InputNumberComponent
-                                            control={control}
-                                            idInput={`tValue1`}
-                                            label="Valor periodo 1"
-                                            className="inputNumber-basic medium "
-                                            placeholder={'0'}
-                                            classNameLabel="text-black big"
-                                            mode="currency"
-                                            currency="COP"
-                                            locale="es-CO"
-                                            fieldArray={true}
-                                            minFractionDigits={0}
-                                            maxFractionDigits={0}
-                                            disabled
-                                        />
-                                        <InputComponent
-                                            idInput={"tQuantity2"}
-                                            className="input-basic medium"
-                                            typeInput="text"
-                                            label="Cantidad periodo 2"
-                                            register={register}
-                                            classNameLabel="text-black big"
-                                            direction={EDirection.column}
-                                            placeholder={""}
-                                            disabled
-                                            // value={String(totalQuantityPeriod2)}
-                                        />
-                                        <InputNumberComponent
-                                            control={control}
-                                            idInput={`tValue2`}
-                                            label="Valor periodo 2"
-                                            className="inputNumber-basic medium "
-                                            placeholder={'0'}
-                                            classNameLabel="text-black big"
-                                            mode="currency"
-                                            currency="COP"
-                                            locale="es-CO"
-                                            fieldArray={true}
-                                            minFractionDigits={0}
-                                            maxFractionDigits={0}
-                                            disabled
-                                        />
-                                    </div>
-
-                                    <div className='grid-form-3-container gap-15'>
-                                        <InputNumberComponent
-                                            control={control}
-                                            idInput={`subtotalVigency`}
-                                            label="Subtotal vigencia"
-                                            className="inputNumber-basic medium "
-                                            placeholder={'0'}
-                                            classNameLabel="text-black big"
-                                            mode="currency"
-                                            currency="COP"
-                                            locale="es-CO"
-                                            fieldArray={true}
-                                            minFractionDigits={0}
-                                            maxFractionDigits={0}
-                                            disabled
-                                        />
-                                        <InputNumberComponent
-                                            control={control}
-                                            idInput={`totalCostBillsOperation`}
-                                            label="Costos y gastos de operación"
-                                            className="inputNumber-basic medium "
-                                            placeholder={'0'}
-                                            classNameLabel="text-black big"
-                                            mode="currency"
-                                            currency="COP"
-                                            locale="es-CO"
-                                            fieldArray={true}
-                                            minFractionDigits={0}
-                                            maxFractionDigits={0}
-                                            disabled
-                                        />
-                                        <InputNumberComponent
-                                            control={control}
-                                            idInput={`totalNet`}
-                                            label="Neto"
-                                            className="inputNumber-basic medium "
-                                            placeholder={'0'}
-                                            classNameLabel="text-black big"
-                                            mode="currency"
-                                            currency="COP"
-                                            locale="es-CO"
-                                            fieldArray={true}
-                                            minFractionDigits={0}
-                                            maxFractionDigits={0}
-                                            disabled
-                                        />
-                                    </div>
-
-                                    <div className='grid-form-2-container gap-15'>
-                                        
-                                        <InputNumberComponent
-                                            control={control}
-                                            idInput={`totalResourcesCredit`}
-                                            label="Recursos para el crédito"
-                                            className="inputNumber-basic medium "
-                                            placeholder={'0'}
-                                            classNameLabel="text-black big"
-                                            mode="currency"
-                                            currency="COP"
-                                            locale="es-CO"
-                                            fieldArray={true}
-                                            minFractionDigits={0}
-                                            maxFractionDigits={0}
-                                            disabled
-                                        />
-
-                                        <InputNumberComponent
-                                            control={control}
-                                            idInput={`totalFinancialOperatorCommission`}
-                                            label="Total comisión operador financiero"
-                                            className="inputNumber-basic medium "
-                                            placeholder={'0'}
-                                            classNameLabel="text-black big"
-                                            mode="currency"
-                                            currency="COP"
-                                            locale="es-CO"
-                                            fieldArray={true}
-                                            minFractionDigits={0}
-                                            maxFractionDigits={0}
-                                            disabled
-                                        />      
-                                    </div>
-
-                                </div>
-                            </section>
-
-                            <section className="card-user mt-14px">
-                                <div className='grid-form-3-container'>
-                                    <InputNumberComponent
-                                        control={control}
-                                        idInput={`vigency1`}
-                                        label="Verificador 1"
-                                        className="inputNumber-basic medium"
-                                        placeholder={'0'}
-                                        classNameLabel="text-black big"
-                                        mode="currency"
-                                        currency="COP"
-                                        locale="es-CO"
-                                        fieldArray={true}
-                                        minFractionDigits={0}
-                                        maxFractionDigits={0}
-                                        disabled
-                                    />
-                                    <InputNumberComponent
-                                        control={control}
-                                        idInput={`vigency2`}
-                                        label="Verificador 2"
-                                        className="inputNumber-basic medium"
-                                        placeholder={'0'}
-                                        classNameLabel="text-black big"
-                                        mode="currency"
-                                        currency="COP"
-                                        locale="es-CO"
-                                        fieldArray={true}
-                                        minFractionDigits={0}
-                                        maxFractionDigits={0}
-                                        disabled
-                                    />
-                                    <InputNumberComponent
-                                        control={control}
-                                        idInput={`techo`}
-                                        label="techo"
-                                        className="inputNumber-basic medium"
-                                        placeholder={'0'}
-                                        classNameLabel="text-black big"
-                                        mode="currency"
-                                        currency="COP"
-                                        locale="es-CO"
-                                        fieldArray={true}
-                                        minFractionDigits={0}
-                                        maxFractionDigits={0}
-                                        disabled
-                                    />
-                                </div>
-                            </section>
-                        
-                        </>
-
-                    )
-                }
-
-                {
-                    valueAction == 'edit' ? (
-                       <>
-                            <section className="card-user mt-14px">
+                            <BasicTableComponent
+                                ref={tableComponentRef}
+                                data={dataTableServices}
+                                columns={tableColumns}
+                                actions={valueAction ? tableActionsEdit : undefined}
+                                titleMessageModalNoResult="Registro no existente"
+                                isShowModal={true}
+                                secondaryTitle={"Acta control financiero"}
+                                classSizeTable="size-table-wd-150"
+                            />
+                            
+                            <div className="card-user">
                                 <div className="title-area">
-                                    <label className="text-black extra-large grid-span-4-columns mb-18px">Citar</label>
+                                    <label className="text-black large" style={{margin: '0px'}}>Totales</label>
                                 </div>
-                                <div className='grid-form-3-container mb-24px'>
-                                    <DatePickerComponent
-                                        idInput="dateCitation"
-                                        control={control}
-                                        label={"Fecha"}
-                                        errors={errors}
-                                        classNameLabel="text-black biggest medium text-required"
-                                        className="dataPicker-basic  medium "
-                                        placeholder="DD/MM/YYYY"
-                                        dateFormat="dd/mm/yy"
+
+                                <div className='grid-form-4-container'>
+                                    <InputComponent
+                                        idInput={"tQuantity1"}
+                                        className="input-basic medium"
+                                        typeInput="text"
+                                        label="Cantidad periodo 1"
+                                        register={register}
+                                        classNameLabel="text-black big"
+                                        direction={EDirection.column}
+                                        disabled
+                                        value={String(totalQuantityPeriod1)}
                                     />
-
-                                    <SelectComponent
-                                        idInput={"timeCitation"}
+                                    <InputNumberComponent
                                         control={control}
-                                        errors={errors}
-                                        data={times}
-                                        label='Hora'
-                                        className="select-basic medium select-disabled-list"
-                                        classNameLabel="text-black biggest text-required"
-                                        filter={true}
-                                        placeholder="Seleccionar."
-
+                                        idInput={`tValue1`}
+                                        label="Valor periodo 1"
+                                        className="inputNumber-basic medium "
+                                        placeholder={'0'}
+                                        classNameLabel="text-black big"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        minFractionDigits={0}
+                                        maxFractionDigits={0}
+                                        disabled
                                     />
-                                    <SelectComponent
-                                        idInput={"user"}
+                                    <InputComponent
+                                        idInput={"tQuantity2"}
+                                        className="input-basic medium"
+                                        typeInput="text"
+                                        label="Cantidad periodo 2"
+                                        register={register}
+                                        classNameLabel="text-black big"
+                                        direction={EDirection.column}
+                                        placeholder={""}
+                                        disabled
+                                        value={String(totalQuantityPeriod2)}
+                                    />
+                                    <InputNumberComponent
                                         control={control}
-                                        errors={errors}
-                                        data={activeUserList}
-                                        label='Usuario-Nombre completo'
-                                        className="select-basic medium select-disabled-list"
-                                        classNameLabel="text-black biggest text-required"
-                                        filter={true}
-                                        placeholder="Seleccionar."
-
+                                        idInput={`tValue2`}
+                                        label="Valor periodo 2"
+                                        className="inputNumber-basic medium "
+                                        placeholder={'0'}
+                                        classNameLabel="text-black big"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        minFractionDigits={0}
+                                        maxFractionDigits={0}
+                                        disabled
                                     />
-
                                 </div>
-                                <div className="button-save-container-display-actas-users margin-right0">
-                                    <ButtonComponent
-                                        value="Agregar"
-                                        action={() => {
-                                            addUser();
-                                        }}
-                                        className="button-save large disabled-black"
+
+                                <div className='grid-form-3-container gap-15'>
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={`subtotalVigency`}
+                                        label="Subtotal vigencia"
+                                        className="inputNumber-basic medium "
+                                        placeholder={'0'}
+                                        classNameLabel="text-black big"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        minFractionDigits={0}
+                                        maxFractionDigits={0}
+                                        disabled
+                                    />
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={`totalCostBillsOperation`}
+                                        label="Costos y gastos de operación"
+                                        className="inputNumber-basic medium "
+                                        placeholder={'0'}
+                                        classNameLabel="text-black big"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        minFractionDigits={0}
+                                        maxFractionDigits={0}
+                                        disabled
+                                    />
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={`totalNet`}
+                                        label="Neto"
+                                        className="inputNumber-basic medium "
+                                        placeholder={'0'}
+                                        classNameLabel="text-black big"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        minFractionDigits={0}
+                                        maxFractionDigits={0}
+                                        disabled
                                     />
                                 </div>
-                            </section>
 
-                            <section className="card-user mt-14px">
-                                <BasicTableComponent
-                                    ref={tableComponentRef}
-                                    data={dataGridUsers}
-                                    columns={tableColumnsUsers}
-                                    actions={tableActionsUser}
-                                    titleMessageModalNoResult="Registro no existente"
-                                    isShowModal={true}
-                                    secondaryTitle={""}
+                                <div className='grid-form-2-container gap-15'>
+                                    
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={`totalResourcesCredit`}
+                                        label="Recursos para el crédito"
+                                        className="inputNumber-basic medium "
+                                        placeholder={'0'}
+                                        classNameLabel="text-black big"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        minFractionDigits={0}
+                                        maxFractionDigits={0}
+                                        disabled
+                                    />
+
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={`totalFinancialOperatorCommission`}
+                                        label="Total comisión operador financiero"
+                                        className="inputNumber-basic medium "
+                                        placeholder={'0'}
+                                        classNameLabel="text-black big"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        minFractionDigits={0}
+                                        maxFractionDigits={0}
+                                        disabled
+                                    />      
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <section className="card-user mt-14px">
+                            <div className='grid-form-3-container'>
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`vigency1`}
+                                    label="Verificador 1"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'0'}
+                                    classNameLabel="text-black big"
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                    disabled
                                 />
-                            </section>
-                       </> 
-                    ):
-                    (
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`vigency2`}
+                                    label="Verificador 2"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'0'}
+                                    classNameLabel="text-black big"
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                    disabled
+                                />
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`techo`}
+                                    label="techo"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'0'}
+                                    classNameLabel="text-black big"
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                    disabled
+                                />
+                            </div>
+                        </section>
+                    
+                    </>
+
+                    )
+            }
+            {
+                valueAction == 'edit' ? (
+                    <>
                         <section className="card-user mt-14px">
                             <div className="title-area">
-                                <label className="text-black large" style={{margin: '0px'}}>Citación</label>
+                                <label className="text-black extra-large grid-span-4-columns mb-18px">Citar</label>
                             </div>
+                            <div className='grid-form-3-container mb-24px'>
+                                <DatePickerComponent
+                                    idInput="dateCitation"
+                                    control={control}
+                                    label={"Fecha"}
+                                    errors={errors}
+                                    classNameLabel="text-black biggest medium text-required"
+                                    className="dataPicker-basic  medium "
+                                    placeholder="DD/MM/YYYY"
+                                    dateFormat="dd/mm/yy"
+                                />
+
+                                <SelectComponent
+                                    idInput={"timeCitation"}
+                                    control={control}
+                                    errors={errors}
+                                    data={times}
+                                    label='Hora'
+                                    className="select-basic medium select-disabled-list"
+                                    classNameLabel="text-black biggest text-required"
+                                    filter={true}
+                                    placeholder="Seleccionar."
+                                />
+                                <SelectComponent
+                                    idInput={"user"}
+                                    control={control}
+                                    errors={errors}
+                                    data={activeUserList}
+                                    label='Usuario-Nombre completo'
+                                    className="select-basic medium select-disabled-list"
+                                    classNameLabel="text-black biggest text-required"
+                                    filter={true}
+                                    placeholder="Seleccionar."
+                                />
+
+                            </div>
+                            <div className="button-save-container-display-actas-users margin-right0">
+                                <ButtonComponent
+                                    value="Agregar"
+                                    action={addUser}
+                                    className="button-save large disabled-black"
+                                />
+                            </div>
+                        </section>
+
+                        <section className="card-user mt-14px">
                             <BasicTableComponent
                                 ref={tableComponentRef}
                                 data={dataGridUsersServices}
                                 columns={tableColumnsUsers}
+                                actions={tableActionsUser}
+                                titleMessageModalNoResult="Registro no existente"
                                 isShowModal={true}
-                                secondaryTitle={"Citación"}  
-                                showPaginator={false}   
+                                secondaryTitle={""}
                             />
-                        </section>               
-                    )
-                    
-                }
-
-            </FormComponent>
+                        </section>
+                    </> 
+                ):
+                (
+                    <section className="card-user mt-14px">
+                        <div className="title-area">
+                            <label className="text-black large" style={{margin: '0px'}}>Citación</label>
+                        </div>
+                        <BasicTableComponent
+                            ref={tableComponentRef}
+                            data={dataGridUsersServices}
+                            columns={tableColumnsUsers}
+                            isShowModal={true}
+                            secondaryTitle={"Citación"}  
+                            showPaginator={false}   
+                        />
+                    </section>               
+                )
+                
+            }
 
             {
                 valueAction != 'edit' ?
@@ -548,7 +542,6 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                 :
                 <div className="funcionality-buttons-container">
                     <ButtonComponent
-                        form='useQueryForm'
                         value="Cancelar"
                         type="button"
                         className="button-clean-fields bold"
@@ -559,7 +552,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                         value="Guardar"
                         type="submit"
                         form="acta-form"
-                        // disabled={!isBtnDisable}
+                        // disabled={!isBtnDisabled}
                     />
                 </div>
             }
