@@ -102,8 +102,8 @@ export default function useCutHook(auth) {
     const user = getUser();
     const buildData = {
       ...data,
-      from: formatToMySQLDateTime(new Date(data.from)),
-      until: formatToMySQLDateTime(new Date(data.until)),
+      from: moment(new Date(data.from)).utc().format("YYYY-MM-DD HH:MM:SS"),
+      until: moment(new Date(data.until)).utc().format("YYYY-MM-DD HH:MM:SS"),
       createUser: user?.document ? user?.document : "797940",
       createDate: formatToMySQLDateTime(new Date()),
     };
