@@ -23,10 +23,18 @@ export default function useDatingApi() {
             );
         }
     }
-    async function getProgramTypes(): Promise<ApiResponse<IProgramTypes[]>> {
-        return await get(`${serviceUrlActivity}/programtypes/`);
-    }
 
+    async function getProgramTypes(): Promise<ApiResponse<IProgramTypes[]>> {
+        try {
+            return await get(`${serviceUrlSapiencia}/call-fondo/get-all`);
+        } catch (error) {
+            return new ApiResponse(
+                {} as IProgramTypes[],
+                EResponseCodes.FAIL,
+                "Error no controlado"
+            );
+        }
+    }
 
     async function downloadCallDating(id: number): Promise<ApiResponse<any>> {
         try {
