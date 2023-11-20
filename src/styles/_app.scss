@@ -264,11 +264,11 @@ div[id="single-spa-application:@sapiencia/funds"] {
   justify-content: end;
   flex-direction: row;
 
-  margin-bottom: 20px;
+  margin: 15px 0 ;
 
   @media (max-width: 700px) {
     flex-direction: column;
-    margin-left: 4px;
+    // margin-left: 4px;
 
     .button-cancel-text {
       order: 2;

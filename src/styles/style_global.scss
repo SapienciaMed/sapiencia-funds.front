@@ -31,6 +31,9 @@
     
 }
 
+.no-margin{
+    margin: 0px;
+}
 
 .title-area-2{
     @include card-component-title-area(flex, space-between, column-reverse, 1.5rem, null, 1rem null)
