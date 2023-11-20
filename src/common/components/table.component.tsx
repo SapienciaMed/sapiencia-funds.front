@@ -45,7 +45,8 @@ interface IProps<T> {
   isDisabled?: boolean;
   widthTable?: string;
   horizontalScroll?: boolean;
-  isMobil?: boolean
+  isMobil?: boolean;
+  onResult?: (rows: T[]) => void;
 }
 
 interface IRef {
@@ -97,6 +98,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     if (newSearchCriteria) {
       setSearchCriteria(newSearchCriteria);
     }
+
     const body = newSearchCriteria || searchCriteria || {};
     const res = await post<IPagingData<any>>(url, {
       ...body,
@@ -105,7 +107,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
-
+      if (props.onResult) props.onResult(res?.data?.array || []);
       if (res.data.array.length <= 0 && isShowModal) {
         setMessage({
           title: `${titleMessageModalNoResult || ""}`,
