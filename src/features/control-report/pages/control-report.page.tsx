@@ -23,9 +23,12 @@ const SearchBudgetPage = () => {
   } = useConsultControlReport({
     columnsTable: true,
     listConfigColumns: {
-      "901": columnsConsolidados,
-      "902": columns123,
-      "903": columns456,
+      "1": columnsConsolidados,
+      "2": columns123,
+      "3": columns456,
+      "4": columns456,
+      "5": columns456,
+      "6": columns456,
     },
   });
   return (
