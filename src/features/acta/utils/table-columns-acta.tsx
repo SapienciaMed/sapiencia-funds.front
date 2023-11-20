@@ -199,13 +199,13 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
             header: 'Usuario'
         },
         {
-            fieldName: 'timeCitation',
+            fieldName: 'dateAprobation',
             header: 'Fecha de aprobación',
             renderCell(row) {
-                const date = new Date(row.timeCitation);
-                const day = date.getDate();
-                const month = date.getMonth() + 1;
-                const year = date.getFullYear();
+                const date = new Date(row.dateAprobation);
+                const day = date.getUTCDate();
+                const month = date.getUTCMonth() + 1;
+                const year = date.getUTCFullYear();
 
                 return(
                     <div>
