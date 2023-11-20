@@ -24,12 +24,15 @@ function ActaPage(){
                     <div className="text-black large">Buscar acta</div>
 
                     <div className={`${width < 1024 ? 'display-justify-flex-center' : 'display-align-flex-center'} gap-0 gap-05`}>
-                        <div 
-                            className={`title-button ${width < 300 ? 'font-medium' :'font-big' }`}
-                            onClick={() => { navigate('../crear') }}
-                        >
-                            Crear acta <BiPlusCircle />
-                        </div>
+                        {validateActionAccess('CREAR_ACTAS') && (
+                            <div 
+                                className={`title-button ${width < 300 ? 'font-medium' :'font-big' }`}
+                                onClick={() => { navigate('../crear') }}
+                            >
+                                Crear acta <BiPlusCircle />
+                            </div>
+                        )}
+
                         {
                             validateActionAccess('EDITAR_ACTAS') &&
                                 <div
