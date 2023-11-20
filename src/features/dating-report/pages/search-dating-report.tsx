@@ -7,7 +7,7 @@ import Svgs from "../../../public/images/icons/svgs";
 
 const DatingReportRoutes = (): React.JSX.Element => {
 
-    const { announcementList, budgetList, control, errors, clearFields, register, setValue, navigate,
+    const { announcementList, programList, control, errors, clearFields, register, setValue, navigate,
         tableComponentRef, showTable, tableColumns, setShowTable, onSubmit, reset, downloadCollection,
     } = useDatingSearch();
     const [tableView, setTableView] = useState<boolean>(false);
@@ -29,30 +29,29 @@ const DatingReportRoutes = (): React.JSX.Element => {
                             action={onSubmit}
                         >
                             <div>
-                                <div className="grid-form-3-container mb-24px">
-
-                                    <MultiSelects
-                                        idInput={"id_comuna"}
+                                <div className="grid-form-4-container mb-24px">
+                                    <SelectComponent
+                                        idInput={"convocatoria"}
                                         control={control}
                                         errors={errors}
-                                        data={budgetList}
+                                        data={announcementList}
                                         label={<>Convocatoria <span>*</span></>}
+                                        className={"select-basic medium select-disabled-list input-basic input-regular"}
+                                        classNameLabel="text-black big medium label-regular"
+                                        filter={true}
+                                        placeholder="Seleccione."
+                                    />
+                                    <MultiSelects
+                                        idInput={"programa"}
+                                        control={control}
+                                        errors={errors}
+                                        data={programList}
+                                        label={<>Línea Programa <span>*</span></>}
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
                                         classNameLabel="text-black big medium label-regular"
                                         filter={true}
                                         placeholder="Seleccionar."
 
-                                    />
-                                    <SelectComponent
-                                        idInput={"periodo"}
-                                        control={control}
-                                        errors={errors}
-                                        data={announcementList}
-                                        label={<>Línea Programa <span>*</span></>}
-                                        className={"select-basic medium select-disabled-list input-basic input-regular"}
-                                        classNameLabel="text-black big medium label-regular"
-                                        filter={true}
-                                        placeholder="Seleccione."
                                     />
                                 </div>
                             </div>

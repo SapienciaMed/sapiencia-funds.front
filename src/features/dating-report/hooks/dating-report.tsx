@@ -5,13 +5,14 @@ import { filterBudget } from "../../../common/schemas/budget-schema";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
 import { ITableElement } from "../../../common/interfaces/table.interfaces";
-//import useDatingApi from "./dating-api.hook";
 import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import {jsDateToISODate,jsDateToSQLDate,} from "../../../common/utils/helpers";
 import { urlApiFunds } from "../../../common/utils/base-url";
 import axios from 'axios';
 import { ApiResponse } from "../../../common/utils/api-response";
+import useDatingApi from "./dating-api.hook";
+import { ICallDating } from "../../../common/interfaces/dating.interface";
 
 
 export default function useDatingSearch() {
@@ -19,20 +20,19 @@ export default function useDatingSearch() {
     const resolver = useYupValidationResolver(filterBudget);
     const navigate = useNavigate();
     const [announcementList, setAnnouncementList] = useState([]);
-    const [budgetList, setbudgetList] = useState([]);
+    const [programList, setProgramList] = useState([]);
+ 
 
-    //peticiones api
-    //const { getAnnouncement, getbudget, downloadCallBudget } = useDatingApi();
+   //peticiones api
+   const { getProgramTypes, getAnnouncement } = useDatingApi();
 
     const tableComponentRef = useRef(null);
     
-    const [typeMasterList, setTypeMasterList] = useState([]);
     const [showTable, setShowTable] = useState(false);
 
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
     const [formWatch, setFormWatch] = useState({id_comuna: "", periodo: "",});
-    const [submitDisabled, setSubmitDisabled] = useState(true);
-    const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
+
 
     const { authorization } = useContext(AppContext)
     console.log(authorization.user.id)
@@ -45,7 +45,7 @@ export default function useDatingSearch() {
         watch,
         control: control,
         formState: { errors },
-    } = useForm<ICallBudget>({ resolver }
+    } = useForm<ICallDating>({ resolver }
     );
 
     const [contractCode, expeditionDate] = watch([,
@@ -54,37 +54,36 @@ export default function useDatingSearch() {
     ]);
 
 
-    // getbudget()
-    // .then((response) => {
-    //     if (response && response?.operation?.code === EResponseCodes.OK) {
-    //         setbudgetList(
-    //             response.data.map((item) => {
-    //                 const list = {
-    //                     name: item.id_comuna,
-    //                     value: item.id_comuna,
-    //                 };
-    //                 return list;
-    //             })
-    //         );
-    //     }
-    // })
-    
-
-    // getAnnouncement()
-    // .then((response) => {
-    //     if (response && response?.operation?.code === EResponseCodes.OK) {
-    //         setAnnouncementList(
-    //             response.data.map((item) => {
-    //                 const list = {
-    //                     name: item.name,
-    //                     value: item.id,
-    //                 };
-    //                 return list;
-    //             })
-    //         );
-    //     }
-    // })
-
+    useEffect(() => {
+        getProgramTypes()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setProgramList(
+                        response.data.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+        getAnnouncement()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setAnnouncementList(
+                        response.data.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+    }, []);
 
 
     const tableColumns: ITableElement<ICallBudget>[] = [
@@ -173,47 +172,44 @@ export default function useDatingSearch() {
         }
     });
 
-
-    const postRequest   = async (url: any, data: any) => {
-        try {
-          const response = await axios.post(url, data, {
-            responseType: 'blob', // Especifica que esperas una respuesta de tipo archivo.
-          });
-          // Verifica si la respuesta es un archivo descargable.
-          if (response.headers['content-type'].includes('application/octet-stream')) {
-            // Crea una URL para el archivo y abre una nueva ventana para la descarga.
-            const blob = new Blob([response.data], { type: 'application/octet-stream' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'cuentas_cobro.xlsx'; // Nombre del archivo
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-          }
-        } catch (error) {
-          console.error('Error al realizar la solicitud POST', error);
-        }
-      };
-
-      const downloadCollection = useCallback(() => {
+    const downloadCollection = useCallback(() => {
         const { page, perPage } = paginateData;
-        const { id_comuna, periodo } = formWatch;
-        const url = `${urlApiFunds}/api/v1/presupuesto/generate-xlsx`;
-        const data = {
-          page: page + 1,
-          perPage: perPage + 10,
-          id_comuna: 4123,
-          periodo: 10,
-        };
-      
-        postRequest(url, data);
-      }, [paginateData, formWatch]);
+        const programa = watch('programa');
+        const convocatoria = watch('convocatoria');
+        const url = new URL(`${urlApiFunds}/api/v1/citas/generate-xlsx`);
+        const params = new URLSearchParams();
+        params.append("page", page + 1)
+        params.append("perPage", perPage + 10)
+
+        if (Array.isArray(programa) && programa.length > 0) {
+            params.append("programa", programa.join(','));
+        } else if (typeof programa === 'number') {
+            params.append("programa", String(programa));
+        }
+        
+        if (convocatoria) {
+            params.append("convocatoria", String(convocatoria));
+        }
+
+        url.search = params.toString();
+        window.open(url.toString(), "_blank");
+        setMessage({
+            title: "Descargar",
+            description: "Información descargada exitosamente",
+            show: true,
+            background: true,
+            OkTitle: "Cerrar"
+          });
+
+    }, [paginateData, formWatch,]
+
+    );
+
 
 
     return {
         announcementList,
-        budgetList,
+        programList,
         control,
         errors,
         register,

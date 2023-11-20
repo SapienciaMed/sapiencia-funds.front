@@ -6,6 +6,8 @@ import { ApiResponse } from "../../../common/utils/api-response";
 
 export default function useDatingApi() {
     const baseURL: string = process.env.urlApiFunds || "";
+
+    const serviceUrlActivity: string = "/api/v1/activities";
     const serviceUrlSapiencia: string = "/api/v1/sapiencia";
 
     const { get, post, put } = useCrudService(baseURL);
@@ -21,19 +23,12 @@ export default function useDatingApi() {
             );
         }
     }
-    async function getbudget(): Promise<ApiResponse<ICallBudget[]>> {
-        try{
-            return await get(`${serviceUrlSapiencia}/call-budget/get-all`);
-        } catch (error) {
-            return new ApiResponse(
-                {} as ICallBudget[],
-                EResponseCodes.FAIL,
-                "Error no controlado"
-            );
-        }
+    async function getProgramTypes(): Promise<ApiResponse<IProgramTypes[]>> {
+        return await get(`${serviceUrlActivity}/programtypes/`);
     }
 
-    async function downloadCallBudget(id: number): Promise<ApiResponse<any>> {
+
+    async function downloadCallDating(id: number): Promise<ApiResponse<any>> {
         try {
           const endpoint: string = `/download/${id}`;
           return await get(`${serviceUrlSapiencia}${endpoint}`);
@@ -44,7 +39,7 @@ export default function useDatingApi() {
 
     return {
         getAnnouncement,
-        getbudget,
-        downloadCallBudget,
+        getProgramTypes,
+        downloadCallDating,
     }
 }
