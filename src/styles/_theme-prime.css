@@ -64,7 +64,7 @@
 
 .p-disabled, .p-component:disabled {
   opacity: 0.8;
-  background: #f0eeee !important;
+  background: #f0eeee;
 }
 
 .p-error {
@@ -1089,7 +1089,7 @@
 
 .p-inputtext {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: #495057;
   background: #ffffff;
   padding: 0.25rem 0.5rem;
@@ -1098,6 +1098,7 @@
   appearance: none;
   border-radius: 6px;
   width: 100%;
+  font-weight: 400;
 }
 .p-inputtext:enabled:hover {
   border-color: #533893;
@@ -2668,7 +2669,7 @@
   padding: 0.8rem 0.8rem;
   border: 1px solid #e9ecef;
   border-width: 0 0 0 0;
-  font-weight: bold;
+  font-weight: 500;
   color: #000;
   background: #ffffff;
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
@@ -2730,6 +2731,8 @@
   border: none;
   border-width: 0 0 1px 0;
   padding: 0.5rem 0.5rem;
+  font-weight: 400;
+  font-size: 0.875rem;
 }
 .p-datatable .p-datatable-tbody > tr > td .p-row-toggler,
 .p-datatable .p-datatable-tbody > tr > td .p-row-editor-init,
@@ -3531,7 +3534,7 @@
 .p-paginator .p-paginator-last {
   background-color: transparent;
   border: 0 none;
-  color: #6c757d;
+  color: #000000;
   min-width: 2.357rem;
   height: 2.357rem;
   margin: 0px;
@@ -3580,7 +3583,7 @@
 .p-paginator .p-paginator-pages .p-paginator-page {
   background-color: transparent;
   border: 0 none;
-  color: #6c757d;
+  color: #000000;
   min-width: 2.357rem;
   height: 2.357rem;
   margin: 0px;

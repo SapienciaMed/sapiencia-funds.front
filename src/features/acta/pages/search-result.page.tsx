@@ -15,7 +15,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
     
     const { control, tableComponentRef, tableColumns, tableColumnsUsers, dataGridUsersServices, 
         errors, times, activeUserList, tableActionsUser, projectList, dataTableServices, tableActionsEdit, totalQuantityPeriod2,
-        totalQuantityPeriod1, register, addItem, addUser, onCancel, downloadCollection, onSaveEdit } = useSearcResult({ valueAction })
+        totalQuantityPeriod1, messageError, register, addItem, addUser, onCancel, downloadCollection, onSaveEdit } = useSearcResult({ valueAction })
 
     const { width } = useWidth()
 
@@ -27,7 +27,20 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
 
             <FormComponent action={onSaveEdit}  id="acta-form">
                 <section className="card-user">
-                    <div className='grid-form-3-container gap-15'>
+                    <div className='grid-form-4-container gap-15'>
+                        {
+                            valueAction !== 'edit' && 
+                            <InputComponent
+                                idInput={"consecutiveNro"}
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Consecutivo de acta nro"
+                                register={register}
+                                classNameLabel="text-black big text-with-colons"
+                                direction={EDirection.column}
+                                disabled
+                            />
+                        }
                         <InputComponent
                             idInput={"consecutiveNroPrevious"}
                             className="input-basic medium"
@@ -205,11 +218,11 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
 
             {
                 valueAction == 'edit' &&
-                    <div className="button-save-container-display-actas margin-right0 mr-24px">
+                    <div className="button-save-container-display-actas">
                         <ButtonComponent
                             value="Agregar item"
                             action={addItem}
-                            className="button-save large disabled-black"
+                            className="button-save large no-margin disabled-black"
                         />
                     </div>
             }
@@ -229,7 +242,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                 )
                 : (
                     <> 
-                        <section className="card-user mt-14px">
+                        <section className="card-user mt-20px">
 
                             <BasicTableComponent
                                 ref={tableComponentRef}
@@ -240,9 +253,10 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                 isShowModal={true}
                                 secondaryTitle={"Acta control financiero"}
                                 classSizeTable="size-table-wd-150"
+                                isMobil={false}
                             />
                             
-                            <div className="card-user">
+                            <div className="card-user mt-14px">
                                 <div className="title-area">
                                     <label className="text-black large" style={{margin: '0px'}}>Totales</label>
                                 </div>
@@ -454,7 +468,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                     idInput="dateCitation"
                                     control={control}
                                     label={"Fecha"}
-                                    errors={errors}
+                                    errors={messageError}
                                     classNameLabel="text-black biggest medium text-required"
                                     className="dataPicker-basic  medium "
                                     placeholder="DD/MM/YYYY"
@@ -464,7 +478,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                 <SelectComponent
                                     idInput={"timeCitation"}
                                     control={control}
-                                    errors={errors}
+                                    errors={messageError}
                                     data={times}
                                     label='Hora'
                                     className="select-basic medium select-disabled-list"
@@ -475,7 +489,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                 <SelectComponent
                                     idInput={"user"}
                                     control={control}
-                                    errors={errors}
+                                    errors={messageError}
                                     data={activeUserList}
                                     label='Usuario-Nombre completo'
                                     className="select-basic medium select-disabled-list"
@@ -503,6 +517,8 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                                 titleMessageModalNoResult="Registro no existente"
                                 isShowModal={true}
                                 secondaryTitle={""}
+                                isMobil={false}
+                                classSizeTable="size-table-wd-content" 
                             />
                         </section>
                     </> 
@@ -518,7 +534,9 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
                             columns={tableColumnsUsers}
                             isShowModal={true}
                             secondaryTitle={"Citación"}  
-                            showPaginator={false}   
+                            showPaginator={false}  
+                            isMobil={false} 
+                            classSizeTable="size-table-wd-content"
                         />
                     </section>               
                 )

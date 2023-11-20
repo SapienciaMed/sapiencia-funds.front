@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BiPlusCircle } from "react-icons/bi";
 import { useWidth } from "../../../common/hooks/use-width";
 import { FiEdit2 } from "react-icons/fi";
@@ -6,36 +6,42 @@ import { ButtonComponent, FormComponent, InputComponent } from "../../../common/
 import { EDirection } from "../../../common/constants/input.enum";
 import useActaData from "../hooks/acta.hook";
 import { Controller } from 'react-hook-form';
+import { AppContext } from "../../../common/contexts/app.context";
 
 
 function ActaPage(){
     const {width} = useWidth()
+    const { validateActionAccess } = useContext(AppContext);
     const { errors, isBtnDisable, control, navigate, register, 
         onSubmitSearch, reset, handleModifyActa } = useActaData()
 
 
     return(
         <div className="main-page">
-            <div className="text-black weight-500 bold extra-large">Acta</div>
+            <div className="text-black weight-500 extra-large">Acta</div>
             <div className='card-table gap-0 mt-14px'>
-                <section className="title-area">
+                <section className="title-area-2">
                     <div className="text-black large">Buscar acta</div>
 
-                    <div className={`${width < 800 ? 'display-justify-space-between-pac' : 'display-align-flex-center'} gap-0 gap-05`}>
+                    <div className={`${width < 1024 ? 'display-justify-flex-center' : 'display-align-flex-center'} gap-0 gap-05`}>
                         <div 
                             className={`title-button ${width < 300 ? 'font-medium' :'font-big' }`}
                             onClick={() => { navigate('../crear') }}
                         >
                             Crear acta <BiPlusCircle />
                         </div>
-                        <div
-                            className={`title-button ${width < 300 ? 'font-medium' :'font-big' }`}
-                            onClick={handleModifyActa}
-                        >
-                            <div className="button-border">
-                                Modificar acta <FiEdit2 />
-                            </div>
-                        </div>
+                        {
+                            validateActionAccess('EDITAR_ACTAS') &&
+                                <div
+                                    className={`title-button ${width < 300 ? 'font-medium' :'font-big' }`}
+                                    onClick={handleModifyActa}
+                                >
+                                    <div className="button-border">
+                                        Modificar acta <FiEdit2 />
+                                    </div>
+                                </div>
+                        }
+                        
 
                     </div>
 
@@ -66,7 +72,7 @@ function ActaPage(){
                         />
                     </div>
                     <div className="funcionality-buttons-container">
-                        <span className="bold text-center button" 
+                        <span className="bold text-center text-black biggest button" 
                             onClick={() => {
                                 reset()
                             }}

@@ -1,20 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   FormComponent,
-  InputComponent,
   ButtonComponent,
 } from "../../../common/components/Form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { ResourcePrioritizationSchema } from "../../../common/schemas/voting-schema";
 import { AppContext } from "../../../common/contexts/app.context";
-import { formatMoney } from "../../../common/utils/helpers";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 import {
   IResourcePrioritization,
   IResourcePrioritizationSearch,
 } from "../../../common/interfaces/resource-prioritization.interface";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import useResourcePrioritizationApi from "../hooks/resource-prioritization.hook";
+import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 interface IProps {
   data: IResourcePrioritization;
@@ -29,8 +29,10 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
   const { setMessage } = useContext(AppContext);
   const form = useForm<IResourcePrioritization>({
     resolver,
+
     defaultValues: {
       ...props.data,
+      validity: props.data.validity || null,
       financialPerformances:
         props.data.financialPerformances == 0
           ? null
@@ -141,15 +143,21 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
         </div>
         <div className="app2-totals-column-content">
           <div className="column-head">Estratos 123</div>
-          <div className="column-body">{formatMoney(formData?.total123)}</div>
+          <div className="column-body">
+            {formaterNumberToCurrency(formData?.total123)}
+          </div>
         </div>
         <div className="app2-totals-column-content">
           <div className="column-head">Estratos 456</div>
-          <div className="column-body">{formatMoney(formData?.total456)}</div>
+          <div className="column-body">
+            {formaterNumberToCurrency(formData?.total456)}
+          </div>
         </div>
         <div className="app2-totals-column-content">
           <div className="column-head">Valor</div>
-          <div className="column-body">{formatMoney(formData?.value)}</div>
+          <div className="column-body">
+            {formaterNumberToCurrency(formData?.value)}
+          </div>
         </div>
         <div className="app2-totals-column-content">
           <div className="column-head">Cupos</div>
@@ -159,18 +167,20 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
         <div className="app2-totals-column-content">
           <div className="column-head">Costo y gasto de operación</div>
           <div className="column-body">
-            {formatMoney(formData?.operatingCostAndExpense)}
+            {formaterNumberToCurrency(formData?.operatingCostAndExpense)}
           </div>
         </div>
         <div className="app2-totals-column-content">
           <div className="column-head">Valor bruto</div>
-          <div className="column-body">{formatMoney(formData?.grossValue)}</div>
+          <div className="column-body">
+            {formaterNumberToCurrency(formData?.grossValue)}
+          </div>
         </div>
 
         <div className="app2-totals-column-content">
           <div className="column-head">Comisión operador financiero</div>
           <div className="column-body">
-            {formatMoney(formData?.operatorCommission)}
+            {formaterNumberToCurrency(formData?.operatorCommission)}
           </div>
         </div>
         <div className="app2-totals-column-content">
@@ -178,19 +188,19 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
             Comisión operador financiero balance
           </div>
           <div className="column-body">
-            {formatMoney(formData?.operatorCommissionBalance)}
+            {formaterNumberToCurrency(formData?.operatorCommissionBalance)}
           </div>
         </div>
         <div className="app2-totals-column-content">
           <div className="column-head">Comisión operador financiero acta</div>
           <div className="column-body">
-            {formatMoney(formData?.operatorCommissionAct)}
+            {formaterNumberToCurrency(formData?.operatorCommissionAct)}
           </div>
         </div>
         <div className="app2-totals-column-content">
-          <div className="column-head">Recurso para credito</div>
+          <div className="column-head">Recurso para crédito</div>
           <div className="column-body">
-            {formatMoney(formData?.resourceForCredit)}
+            {formaterNumberToCurrency(formData?.resourceForCredit)}
           </div>
         </div>
       </div>
@@ -201,85 +211,60 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
         action={onSubmit}
       >
         <div className="grid-form-4-container gap-25">
-          <Controller
+          <InputNumberComponent
+            idInput="balanceResources"
             control={form.control}
-            name={"balanceResources"}
-            render={({ field }) => {
-              return (
-                <InputComponent
-                  idInput={field.name}
-                  errors={form.formState.errors}
-                  typeInput={"number"}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  value={field.value}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold text-required"
-                  label={<>Recursos del balance</>}
-                />
-              );
-            }}
+            label={<>Recurso del balance</>}
+            errors={form.formState.errors}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="currency"
+            currency="COP"
+            locale="es-CO"
+            minFractionDigits={2}
+            maxFractionDigits={2}
           />
 
-          <Controller
+          <InputNumberComponent
+            idInput="financialPerformances"
             control={form.control}
-            name={"financialPerformances"}
-            render={({ field }) => {
-              return (
-                <InputComponent
-                  idInput={field.name}
-                  errors={form.formState.errors}
-                  typeInput={"number"}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  value={field.value}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold text-required"
-                  label={<>Rendimientos financieros</>}
-                />
-              );
-            }}
+            label={<>Rendimientos financieros</>}
+            errors={form.formState.errors}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="currency"
+            currency="COP"
+            locale="es-CO"
+            minFractionDigits={2}
+            maxFractionDigits={2}
           />
 
-          <Controller
+          <InputNumberComponent
+            idInput="averageCost"
             control={form.control}
-            name={"averageCost"}
-            render={({ field }) => {
-              return (
-                <InputComponent
-                  idInput={field.name}
-                  errors={form.formState.errors}
-                  typeInput={"number"}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  value={field.value}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold text-required"
-                  label={<>Costo Promedio</>}
-                />
-              );
-            }}
+            label={<>Costo Promedio</>}
+            errors={form.formState.errors}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="currency"
+            currency="COP"
+            locale="es-CO"
+            minFractionDigits={2}
+            maxFractionDigits={2}
           />
 
-          <Controller
+          <InputNumberComponent
+            idInput="generalRate"
             control={form.control}
-            name={"generalRate"}
-            render={({ field }) => {
-              return (
-                <InputComponent
-                  idInput={field.name}
-                  errors={form.formState.errors}
-                  typeInput={"number"}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  value={field.value}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold text-required"
-                  label={<>Tasa general</>}
-    
-                />
-              );
-            }}
+            label={<>Tasa general</>}
+            errors={form.formState.errors}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="decimal"
+            prefix="% "
+            maxFractionDigits={2}
+            max={100}
+            min={0}
           />
         </div>
 

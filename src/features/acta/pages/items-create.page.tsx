@@ -10,9 +10,8 @@ import { IUserDataGrid } from "../../../common/interfaces";
 
 const ItemsCreatePage = ({ action, acta, actaItems, dataTableServices }: { action, acta?: IActa, actaItems?: IActaItems, dataTableServices?: any[] }) => {
 
-    const [modifiedIdcCountercredit, setModifiedIdcCountercredit] = useState(0)
     const { errors, register, onsubmitAddItem, control, foundList, lineList, conceptList, 
-        announcementList,periods, programList, CancelFunction } = useActaItems(action, acta, actaItems, modifiedIdcCountercredit, dataTableServices);
+        announcementList,periods, programList, CancelFunction } = useActaItems(action, acta, actaItems, dataTableServices);
 
     return (
         <Fragment>
@@ -110,7 +109,7 @@ const ItemsCreatePage = ({ action, acta, actaItems, dataTableServices }: { actio
 
                 <section className="card-user mt-14px">
                     <div className="display-align-flex-center gap-1">
-                        <div className="card-user width-style width-50" >
+                        <div className="card-user width-style" >
                             <div className="title-area">
                                 <p className="text-black biggest">Período 1 {periods}-1</p>
                             </div>
@@ -162,7 +161,7 @@ const ItemsCreatePage = ({ action, acta, actaItems, dataTableServices }: { actio
                             </div>
                         </div>
 
-                        <div className="card-user width-style width-50" >
+                        <div className="card-user width-style" >
                             <div className="title-area">
                                 <p className="text-black biggest">Período 2 {periods}-2</p>
                             </div>
@@ -204,6 +203,8 @@ const ItemsCreatePage = ({ action, acta, actaItems, dataTableServices }: { actio
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
                                                 placeholder={""}
+                                                minFractionDigits={0}
+                                                maxFractionDigits={0}
                                                 {...field}
                                             />
                                         )
@@ -221,22 +222,21 @@ const ItemsCreatePage = ({ action, acta, actaItems, dataTableServices }: { actio
                         <Controller
                             control={control}
                             name={"subtotalVigency"}
-                            render={({ field: { onChange, onBlur, value, ref } }) => (
-                                <InputComponent
-                                    idInput={"subtotalVigency"}
-                                    className="input-basic medium"
-                                    typeInput="number"
+                            render={({ field }) => (
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={field.name}
+                                    className="inputNumber-basic medium"
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
                                     label="Subtotal vigencia"
                                     classNameLabel="text-black biggest text-required"
                                     errors={errors}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
                                     placeholder={""}
-                                    value={value}
-                                    onChange={(e) => {
-                                        onChange(e); 
-                                        setModifiedIdcCountercredit(Number(e.target.value)); 
-                                    }}
-                                    onBlur={onBlur} 
-
                                 />
                             )}
                         />
