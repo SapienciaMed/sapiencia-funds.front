@@ -17,13 +17,12 @@ export const useResumenPriorizacionSearch = () => {
   const resolver = useYupValidationResolver(searchResumenPriorizacion);
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
-  const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
   const [deparmetList, setDeparmentList] = useState<
     { name: string; value: string }[]
   >([]);
   const { getListByGroupers } = useGenericListService();
   const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-  const { downloadFile, consultSummary } = useSumaryPrioricions();
+  const { downloadFile } = useSumaryPrioricions();
   const onSubmitSearch = async () => {
     loadTableData({});
   };
@@ -51,14 +50,6 @@ export const useResumenPriorizacionSearch = () => {
       numberProject: data?.numberProject,
       validity: data?.validity,
     });
-    if (data?.communeNeighborhood && data?.numberProject && data?.validity) {
-      const dataGrid: any = await consultSummary(data);
-      if (dataGrid.data.array.length > 0) {
-        setSendingReportXlsx(true);
-      } else {
-        setSendingReportXlsx(false);
-      }
-    }
   });
 
   
@@ -144,8 +135,6 @@ export const useResumenPriorizacionSearch = () => {
     setValCommuneNeighborhood,
     reset,
     control,
-    downloadXLSX,
-    setSendingReportXlsx,
-    sendingReportXlsx,
+    downloadXLSX
   };
 };
