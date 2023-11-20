@@ -20,7 +20,7 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport} = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
@@ -29,92 +29,64 @@ export default function useRenewaReportSearch() {
 
     const {
         handleSubmit,
-        register,  
+        register,
         setValue,
         reset,
         control: control,
         formState: { errors },
         watch,
     } = useForm<ICallRenewal>(
-        {  }
+        {}
     );
 
     useEffect(() => {
-    getAnnouncement()
-    .then((response) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-            setAnnouncementList(
-                response.data.map((item) => {
-                    const list = {
-                        name: item.name,
-                        value: item.id,
-                    };
-                    return list;
-                })
-            );
-        }
-    })
-}, []);
+        getAnnouncement()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setAnnouncementList(
+                        response.data.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+    }, []);
 
 
 
-  // carga combos
-  useEffect(() => {
-    searchRenewal();
-    console.log("*****cargar ...", renewalReport)
-  }, []);
-
-
-
-    const searchRenewal = handleSubmit(async (data: ICallRenewal) => {        
+    const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
         // Cambio en el selector del periodo
         const selectedperiodo = watch('period');
         data.period = selectedperiodo;
         data.page = 1;
         data.perPage = 10;
-        
-        getRenewalReport(data)
-            .then((response) => {
-                console.log("******response", response);
-     
-                if (response && response?.operation?.code === EResponseCodes.OK) {
-                    let dataArray;
-     
-                    if (Array.isArray(response.data)) {
-                        dataArray = response.data;
-                    } else if (typeof response.data === 'object' && response.data !== null) {
-                        // Tratar la respuesta como un objeto individual
-                        dataArray = [response.data];
-                    } else {
-                        console.error('La propiedad "data" de la respuesta de la API no es un array:', response.data);
-                        return;
-                    }
-                      const renewal = dataArray.map((e) => ({
-                            fund: e.fund,
-                            enabled: e.enabled,
-                            renewed: e.renewed,
-                        }))
-                        setRenewalReport(renewal);
-                    
-                        console.log("*****++AAAAAA", renewal)
-                }
+
+        const responservice: any = await getRenewalReport(data)
+            .then(async (response) => {
+
+                return response
+
             });
-            console.log("*****++BBBBB", dataGridRenewal)
 
-            dataGridRenewal.push(
-                {
-                fund: "Beca Mejores Bachilleres Renueva",
-                enabled: "142",
-                renewed:"385",
-                percentage:"89%"
+        responservice.data.array.map((e) => {
+            const list = {
+                fund: e.fund,
+                enabled: e.enabled,
+                renewed: e.renewed,
+                percentage: "90"
+            }
+            dataGridRenewal.push(list)
 
-            },
-            )
 
+        })
     });
-    
 
-    const onSubmit = handleSubmit(async (data: ICallRenewal) => {        
+
+    const onSubmit = handleSubmit(async (data: ICallRenewal) => {
         setShowTable(true)
 
         if (tableComponentRef.current) {
@@ -127,16 +99,16 @@ export default function useRenewaReportSearch() {
         reset();
         tableComponentRef.current?.emptyData();
         setShowTable(false);
-      };
+    };
 
-      const downloadCollection = useCallback(() => {
+    const downloadCollection = useCallback(() => {
         const { page, perPage } = paginateData;
         const periodo = watch('period');
         const url = new URL(`${urlApiFunds}/api/v1/renovacion/generate-xlsx`);
         const params = new URLSearchParams();
         params.append("page", page + 1)
         params.append("perPage", perPage + 10)
-        
+
         if (periodo) {
             params.append("periodo", String(periodo));
         }
@@ -149,7 +121,7 @@ export default function useRenewaReportSearch() {
             show: true,
             background: true,
             OkTitle: "Cerrar"
-          });
+        });
 
     }, [paginateData,]
 
@@ -161,7 +133,7 @@ export default function useRenewaReportSearch() {
         errors,
         register,
         setValue,
-        navigate,       
+        navigate,
         setShowTable,
         showTable,
         tableComponentRef,
@@ -173,5 +145,5 @@ export default function useRenewaReportSearch() {
         dataGridRenewal,
         searchRenewal,
         downloadCollection,
-      }
+    }
 }
