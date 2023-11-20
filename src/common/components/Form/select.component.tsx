@@ -22,6 +22,7 @@ interface ISelectProps<T> {
   filter?: boolean;
   emptyMessage?: string;
   customClass?: string;  
+  optionSeleccione?: boolean;
 }
 
 function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
@@ -51,13 +52,20 @@ export function SelectComponent({
   filter,
   emptyMessage = "Sin resultados.",
   customClass,
+  optionSeleccione = true,
 }: ISelectProps<any>): React.JSX.Element {
   if (data) {
-    const seleccione: IDropdownProps = { name: "Seleccione", value: null };
-    const dataSelect = data.find(
-      (item) => item.name === seleccione.name && item.value === seleccione.value
-    );
-    if (!dataSelect) data.unshift(seleccione);
+    if (optionSeleccione) {
+      const seleccione: IDropdownProps = {
+        name: "Seleccione",
+        value: null,
+      };
+      const dataSelect = data.find(
+        (item) =>
+          item.name === seleccione.name && item.value === seleccione.value
+      );
+      if (!dataSelect) data.unshift(seleccione);
+    }
   }
   const messageError = () => {
     const keysError = idInput.split(".");

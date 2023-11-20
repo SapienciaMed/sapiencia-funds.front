@@ -45,6 +45,7 @@ interface IProps<T> {
   isDisabled?: boolean;
   widthTable?: string;
   horizontalScroll?: boolean;
+  isMobil?: boolean
 }
 
 interface IRef {
@@ -65,7 +66,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     classname = "",
     isDisabled,
     widthTable,
-    horizontalScroll = false
+    horizontalScroll = true,
+    isMobil = true
   } = props;
 
   // States
@@ -166,10 +168,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             );
           })}
         </div>
+
+        {actions ? (
         <div className="card-footer">
           <section className="position-absolute top text-black bold text-center">
               {" "}
-              Acciones{" "}
+              Acciones2{" "}
             </section>
             <section className="section-action">
               {actions?.map((action) => (
@@ -181,7 +185,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                 </div>
               ))}
             </section>
-        </div>
+        </div> ) : ''}
       </div>
     );
   };
@@ -215,7 +219,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             leftContent={leftContent(princialTitle)}
           />
 
-          {width > 830 ? (
+          {width > 830 || !isMobil ? (
             <div style={{ maxWidth: width - 400 }}>
               <DataTable
                 className="spc-table full-height"
@@ -231,12 +235,29 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                     field={col.fieldName}
                     header={col.header}
                     body={col.renderCell}
-                    style={horizontalScroll ? {} : { maxWidth: `${widthColumns}px`, minHeight: `${widthColumns}px`, width: `${widthColumns}px` }}
+                    style={
+                      horizontalScroll
+                        ? {}
+                        : {
+                            maxWidth: `${widthColumns}px`,
+                            minHeight: `${widthColumns}px`,
+                            width: `${widthColumns}px`,
+                          }
+                    }
                   />
                 ))}
 
                 {actions && actions.length && (
-                  <Column style={horizontalScroll ? {} : { maxWidth: `${widthColumns}px`, minHeight: `${widthColumns}px`, width: `${widthColumns}px` }}
+                  <Column
+                    style={
+                      horizontalScroll
+                        ? {}
+                        : {
+                            maxWidth: `${widthColumns}px`,
+                            minHeight: `${widthColumns}px`,
+                            width: `${widthColumns}px`,
+                          }
+                    }
                     className="spc-table-actions"
                     header={
                       <div>
@@ -249,7 +270,11 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                       </div>
                     }
                     body={(row) => (
-                      <ActionComponent row={row} actions={actions} isDisabled={isDisabled} />
+                      <ActionComponent
+                        row={row}
+                        actions={actions}
+                        isDisabled={isDisabled}
+                      />
                     )}
                   />
                 )}
