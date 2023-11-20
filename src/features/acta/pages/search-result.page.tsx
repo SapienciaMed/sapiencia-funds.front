@@ -218,11 +218,11 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
 
             {
                 valueAction == 'edit' &&
-                    <div className="button-save-container-display-actas margin-right0 mr-24px">
+                    <div className="button-save-container-display-actas">
                         <ButtonComponent
                             value="Agregar item"
                             action={addItem}
-                            className="button-save large disabled-black"
+                            className="button-save large no-margin disabled-black"
                         />
                     </div>
             }
