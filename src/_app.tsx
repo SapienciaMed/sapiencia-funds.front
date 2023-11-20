@@ -17,6 +17,7 @@ import Socialization from "./features/socialization";
 import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
+import DatingReportRoutes from "./features/dating-report/dating-report-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -66,6 +67,11 @@ function App() {
               <Route
                 path={"/fondos/administracion/reglamento/*"}
                 element={<Regulation />}
+              />
+              
+              <Route
+                path={"/fondos/informe-citas/*"}
+                element={<DatingReportRoutes />}
               />
             </Routes>
           </Suspense>
