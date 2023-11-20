@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { filterBudget } from "../../../common/schemas/budget-schema";
@@ -10,6 +10,7 @@ import { ICallRenewal, IRenewalDataGrid } from "../../../common/interfaces/funds
 import { AppContext } from "../../../common/contexts/app.context";
 import useRenewalReportApi from "./renewal-report-api.hook";
 import { data } from "../../socialization/service/api";
+import { urlApiFunds } from "../../../common/utils/base-url";
 
 
 export default function useRenewaReportSearch() {
@@ -24,6 +25,7 @@ export default function useRenewaReportSearch() {
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
     const [renewalReport, setRenewalReport] = useState([]);
+    const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
 
     const {
         handleSubmit,
@@ -37,7 +39,7 @@ export default function useRenewaReportSearch() {
         {  }
     );
 
-
+    useEffect(() => {
     getAnnouncement()
     .then((response) => {
         if (response && response?.operation?.code === EResponseCodes.OK) {
@@ -52,6 +54,8 @@ export default function useRenewaReportSearch() {
             );
         }
     })
+}, []);
+
 
 
   // carga combos
@@ -95,13 +99,46 @@ export default function useRenewaReportSearch() {
                 }
             });
 
-            dataGridRenewal.push({
+            dataGridRenewal.push(
+                {
                 Fondo: "Beca Mejores Bachilleres Renueva",
                 No_Habilitados: "142",
                 No_Renovados:"385",
                 Porcentaje:"89%"
 
-            })
+            },
+            {
+                Fondo: "Becas Mejores Deportistas",
+                No_Habilitados: "142",
+                No_Renovados:"385",
+                Porcentaje:"89%"
+            },
+            {
+                Fondo: "Extendiendo Fronteras",
+                No_Habilitados: "142",
+                No_Renovados:"385",
+                Porcentaje:"89%"
+            },
+            {
+                Fondo: "Fondo EPM",
+                No_Habilitados: "142",
+                No_Renovados:"385",
+                Porcentaje:"89%"
+            },
+            {
+                Fondo: "Formación Avanzada",
+                No_Habilitados: "142",
+                No_Renovados:"385",
+                Porcentaje:"89%"
+            },
+            {
+                Fondo: "Presupuesto Participativo",
+                No_Habilitados: "142",
+                No_Renovados:"385",
+                Porcentaje:"89%"
+            }
+            
+            )
 
     });
     
@@ -121,6 +158,32 @@ export default function useRenewaReportSearch() {
         setShowTable(false);
       };
 
+      const downloadCollection = useCallback(() => {
+        const { page, perPage } = paginateData;
+        const periodo = watch('periodo');
+        const url = new URL(`${urlApiFunds}/api/v1/renovacion/generate-xlsx`);
+        const params = new URLSearchParams();
+        params.append("page", page + 1)
+        params.append("perPage", perPage + 10)
+        
+        if (periodo) {
+            params.append("periodo", String(periodo));
+        }
+
+        url.search = params.toString();
+        window.open(url.toString(), "_blank");
+        setMessage({
+            title: "Descargar",
+            description: "Información descargada exitosamente",
+            show: true,
+            background: true,
+            OkTitle: "Cerrar"
+          });
+
+    }, [paginateData,]
+
+    );
+
     return {
 
         control,
@@ -138,5 +201,6 @@ export default function useRenewaReportSearch() {
         setdataGridRenewal,
         dataGridRenewal,
         searchRenewal,
+        downloadCollection,
       }
 }
