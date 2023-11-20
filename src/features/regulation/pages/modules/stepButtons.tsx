@@ -8,7 +8,7 @@ const StepButtons = ({ view, setView }) => {
         <ButtonComponent
           value="Anterior"
           type="button"
-          className="button-cancel-text hover-three disabled-black padding-button"
+          className="button-save disabled-black padding-button btn-back"
           action={() => setView(view - 1)}
         />
       )}

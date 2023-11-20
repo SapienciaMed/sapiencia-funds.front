@@ -8,6 +8,7 @@ import {
   Paginator,
   PaginatorCurrentPageReportOptions,
   PaginatorNextPageLinkOptions,
+  PaginatorPageChangeEvent,
   PaginatorPageLinksOptions,
   PaginatorPrevPageLinkOptions,
   PaginatorRowsPerPageDropdownOptions,
@@ -30,7 +31,8 @@ interface IProps<T> {
   titleMessageModalNoResult?: string;
   data: Array<T>;
   classSizeTable?: string;
-  showPaginator?: boolean
+  showPaginator?: boolean;
+  isDisabled?: boolean;
 }
 
 interface IRef {
@@ -45,13 +47,20 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     actions,
     emptyMessage = "No hay resultados.",
     classSizeTable,
-    showPaginator = true
+    showPaginator = true,
+    isDisabled,
   } = props;
 
   // States
 
   const [perPage, setPerPage] = useState<number>(10);
+  const [first, setFirst] = useState<number>(0);
   const { width } = useWidth();
+
+  function onPageChange(event: PaginatorPageChangeEvent): void {
+    setPerPage(event.rows);
+    setFirst(event.first);
+  }
 
   const mobilTemplate = (item) => {
     return (
@@ -71,19 +80,26 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             );
           })}
         </div>
-        <div className="card-footer">
-          <section className="position-absolute top text-black text-center">
-            {" "}
-            Acciones{" "}
-          </section>
-          <section className="section-action">
-            {actions?.map((action) => (
-              <div key={action.icon} onClick={() => action.onClick(item)}>
-                {getIconElement(action.icon, "src")}
-              </div>
-            ))}
-          </section>
-        </div>
+        {
+          actions && (
+            <div className="card-footer">
+              <section className="position-absolute top text-black bold text-center">
+                {" "}
+                Acciones{" "}
+              </section>
+              <section className="section-action">
+                {actions?.map((action) => (
+                  <div
+                    key={action.icon}
+                    onClick={() => !isDisabled && action.onClick(item)}
+                  >
+                    {getIconElement(action.icon, "src", isDisabled)}
+                  </div>
+                ))}
+              </section>
+            </div>
+          )
+        }
       </div>
     );
   };
@@ -97,9 +113,10 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           <Paginator
             className="between spc-table-paginator"
             template={paginatorHeader}
+            first={first}
             rows={perPage}
-            onPageChange={(i) => setPerPage(i.rows)}
-            totalRecords={props.data.length} // Cambia 'meta' por 'pagingInfo'
+            onPageChange={onPageChange}
+            totalRecords={props.data.length || 0} // Cambia 'meta' por 'pagingInfo'
             leftContent={
               <p className="header-information text-black biggest">
                 {secondaryTitle ?? "Resultados de búsqueda"}
@@ -108,15 +125,12 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           />
       }
 
-      {width > 830 ? (
+      { width > 830 ? (
         <div>
           <DataTable
             className={`spc-table full-height ${classSizeTable}`}
             value={props.data}
             scrollable={true}
-            paginator={showPaginator}
-            rows={perPage}
-            scrollHeight="400px"
             emptyMessage={emptyMessage}
           >
             {columns.map((col) => (
@@ -136,7 +150,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                     <div className="spc-header-title">Acciones</div>
                   </div>
                 }
-                body={(row) => <ActionComponent row={row} actions={actions} />}
+                body={(row) => <ActionComponent row={row} actions={actions} isDisabled={isDisabled} />}
               />
             )}
           </DataTable>
@@ -149,12 +163,20 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           emptyMessage={emptyMessage}
         />
       )}
+      <Paginator
+        className="spc-table-paginator"
+        template={paginatorFooter}
+        first={first}
+        rows={perPage}
+        totalRecords={props.data.length || 0}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 });
 
 // Metodo que retorna el icono o nombre de la accion
-function getIconElement(icon: string, element: "name" | "src") {
+function getIconElement(icon: string, element: "name" | "src", isDisabled: boolean) {
   switch (icon) {
     case "Detail":
       return element == "name" ? (
@@ -273,19 +295,16 @@ export const paginatorFooter: PaginatorTemplateOptions = {
           ...
         </span>
       );
-    }
-
-    
+    } 
 
     return (
       <button
-      type="button"
-      className={classNames(options.className, "border-round")}
-      onClick={options.onClick}
-      //disabled={options.disabled}
-    >
-      <span className="p-3 table-next"></span>
-    </button>
+        type="button"
+        className={options.className}
+        onClick={options.onClick}
+      >
+        {options.page + 1}
+      </button>
     );
   },
 };
@@ -294,12 +313,13 @@ export const paginatorFooter: PaginatorTemplateOptions = {
 const ActionComponent = (props: {
   row: any;
   actions: ITableAction<any>[];
+  isDisabled: boolean;
 }): React.JSX.Element => {
   return (
     <div className="spc-table-action-button">
       {props.actions.map((action) => (
         <div key={action.icon} onClick={() => action.onClick(props.row)}>
-          {getIconElement(action.icon, "src")}
+          {getIconElement(action.icon, "src", props.isDisabled)}
         </div>
       ))}
     </div>

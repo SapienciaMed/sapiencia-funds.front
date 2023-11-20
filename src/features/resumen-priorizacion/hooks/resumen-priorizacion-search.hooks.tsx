@@ -22,7 +22,7 @@ export const useResumenPriorizacionSearch = () => {
   const [deparmetList, setDeparmentList] = useState([]);
   const { getListByGroupers } = useGenericListService();
   const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-  const { downloadFile } = useSumaryPrioricions();
+  const { downloadFile, consultSummary } = useSumaryPrioricions();
   const onSubmitSearch = async () => {
     loadTableData({});
   };
@@ -33,17 +33,30 @@ export const useResumenPriorizacionSearch = () => {
     getValues,
     formState: { errors },
     reset,
-  } = useForm<IResumenPriorizacion>({ resolver });
+  } = useForm<IResumenPriorizacion>({
+    resolver,
+    defaultValues: {
+      communeNeighborhood: null,
+      numberProject: "",
+      validity: '',
+    }
+  }
+  );
 
   /*Functions*/
-  const onSubmitSearchVoting = handleSubmit((data: IResumenPriorizacion) => {
+  const onSubmitSearchVoting = handleSubmit(async (data: IResumenPriorizacion) => {
     loadTableData({
       communeNeighborhood: data?.communeNeighborhood,
       numberProject: data?.numberProject,
       validity: data?.validity,
     });
     if (data?.communeNeighborhood && data?.numberProject && data?.validity) {
-      setSendingReportXlsx(true);
+      const dataGrid: any = await consultSummary(data);
+      if (dataGrid.data.array.length > 0) {
+        setSendingReportXlsx(true);
+      } else {
+        setSendingReportXlsx(false);
+      }
     }
   });
 

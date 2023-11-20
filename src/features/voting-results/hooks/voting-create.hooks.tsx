@@ -29,21 +29,33 @@ export const useVotingResults = () => {
     const tableComponentRef = useRef(null);
     const [itemSave, setItemSave] = useState(Array<IItemSave>);
     const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-  const [amountTotal, setAmountTotal] = useState(0);
-  const [totalValueActivity, settotalValueActivity] = useState(0);
-  const [totalValueOne, settotalValueOne] = useState(0);
+    const [amountTotal, setAmountTotal] = useState(0);
+    const [totalValueActivity, settotalValueActivity] = useState(0);
+    const [totalValueOne, settotalValueOne] = useState(0);
+    const [projectList, setProjectsList] = useState([]);
+
   
-    const { createVotingResults } = useVotingItemApi();
+  
+    const { createVotingResults, getProjectsList } = useVotingItemApi();
 
 
 
     const {
-        handleSubmit,
-        register,
-        control,
-        formState: { errors },
-        reset,
-    } = useForm<IVotingCreate>({ resolver, mode: 'all' });
+      handleSubmit,
+      register,
+      control,
+      formState: { errors },
+      reset,
+    } = useForm<IVotingCreate>({
+      resolver,
+      mode: "all",
+      defaultValues: {
+        communeNeighborhood: null,
+        numberProject: null,
+        validity: null,
+        ideaProject: "",
+      },
+    });
     
     const CancelFunction = () => {
         setMessage({
@@ -71,8 +83,8 @@ export const useVotingResults = () => {
                 setMessage({});
               },
               background: true,
-              description: <ItemResultsPage dataVoting={data} action={"new"} />,
-              size: "large",
+              description: <ItemResultsPage dataVoting={data} action={"new"} collback={false} />,
+              size: "items",
               style: "mdl-agregarItem-voting",
               onClose() {
                 //reset();
@@ -102,7 +114,7 @@ export const useVotingResults = () => {
           show: true,
           title: "Resultados de Votación",
           description: "Estás segur@ de guardar los resultados de votación?",
-          OkTitle: "Crear",
+          OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
           onOk() {
             confirmVotingCreation(data);
@@ -146,6 +158,7 @@ export const useVotingResults = () => {
           validity: data.validity,
           ideaProject: data.ideaProject,
           items: itemSave,
+          observation: data.observation,
         };
 
         const res = await createVotingResults(votingData);
@@ -201,6 +214,21 @@ export const useVotingResults = () => {
           }
         });
         
+          getProjectsList().then((response) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {
+              setProjectsList(
+                response.data.map((item) => {
+                  const list = {
+                    value: item.bpin,
+                    name: item.bpin,
+                    meta: item.goal,
+                  };
+                  return list;
+                })
+              );
+            }
+          });
+    setDataGrid([])
     }, []);
 
 
@@ -226,6 +254,7 @@ export const useVotingResults = () => {
       settotalValueOne,
       settotalValueActivity,
       setAmountTotal,
+      projectList,
     };
 };
 

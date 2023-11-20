@@ -3,6 +3,8 @@
 @import "./style_global.scss";
 @import "./texts.scss";
 @import "./tables.scss";
+@import "./input.scss";
+@import "./totals.scss";
 // :root {
 //   --color-black: #0b060e;
 //   --color-gray: #535353;
@@ -68,13 +70,13 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 100%;
 }
 
-.grid {
-  display: grid;
+// .grid {
+//   display: grid;
 
-  &.gap-25 {
-    gap: 25px;
-  }
-}
+//   &.gap-25 {
+//     gap: 25px;
+//   }
+// }
 
 .container-form {
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -264,7 +266,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
   margin-bottom: 20px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 700px) {
     flex-direction: column;
     margin-left: 4px;
 
@@ -339,35 +341,35 @@ div[id="single-spa-application:@sapiencia/funds"] {
   //cursor: not-allowed;
 }
 
-.input-basic {
-  font-weight: regular;
-  font-family: "Rubik" !important;
-  font-size: 14px;
-}
+// .input-basic {
+//   font-weight: regular;
+//   font-family: "Rubik" !important;
+//   font-size: 14px;
+// }
 
-.input-regular {
-  font-weight: regular;
-  font-family: "Rubik" !important;
-  font-size: 14px;
-}
+// .input-regular {
+//   font-weight: regular;
+//   font-family: "Rubik" !important;
+//   font-size: 14px;
+// }
 
-span.select-basic {
-  font-weight: regular !important;
-  font-family: "Rubik" !important;
-  font-size: 7px !important;
-}
+// span.select-basic {
+//   font-weight: regular !important;
+//   font-family: "Rubik" !important;
+//   font-size: 7px !important;
+// }
 
-.select-basic .p-dropdown-label {
-  font-weight: regular !important;
-  font-family: "Rubik" !important;
-  font-size: 14px !important;
-}
+// .select-basic .p-dropdown-label {
+//   font-weight: regular !important;
+//   font-family: "Rubik" !important;
+//   font-size: 14px !important;
+// }
 
-.p-datatable-tbody {
-  font-weight: regular !important;
-  font-family: "Rubik" !important;
-  font-size: 14px !important;
-}
+// .p-datatable-tbody {
+//   font-weight: regular !important;
+//   font-family: "Rubik" !important;
+//   font-size: 14px !important;
+// }
 
 .mg-0 {
   margin: 0;
@@ -617,6 +619,10 @@ span.select-basic {
   width: 9.5em;
   height: 2.5em;
   font-size: 16px;
+
+  @media (max-width: 550px) {
+    width: 100%;
+  }
 }
 
 .button-download {

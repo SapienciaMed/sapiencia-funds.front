@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const createActaItems = yup.object({
-   program: yup
+    program: yup
     .number()
     .required("Completar información"),
     found: yup
@@ -10,9 +10,7 @@ export const createActaItems = yup.object({
     line: yup
     .number()
     .required("Completar información"),
-   /*  announcement: yup
-    .number()
-    .required("Completar información"), */
+
     concept: yup
     .number()
     .required("Completar información"),
@@ -27,18 +25,10 @@ export const createActaItems = yup.object({
     valuePeriod1: yup
     .number()
     .required()
-    .typeError("Completar información"),
-   /*  quantityPeriod2: yup
-    .number()
-    .required()
-    .typeError("Completar información"),
-    valuePeriod2: yup
-    .number()
-    .required()
-    .typeError("Completar información"), */
+    .typeError("Completar información"),  
     subtotalVigency: yup
     .number()    
-    .required("Completar información"), 
+    .required("Completar información"),  
 
 });
 
