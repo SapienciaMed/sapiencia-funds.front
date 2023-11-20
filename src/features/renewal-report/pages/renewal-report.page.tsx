@@ -22,19 +22,19 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
     const tableColumnsRenewal: ITableElement<ICallRenewal>[] = [
         {
-            fieldName: "Fondo",
+            fieldName: "fund",
             header: "Fondo",
         },
         {
-            fieldName: "No_Habilitados",
+            fieldName: "enabled",
             header: "Nro habilitados"
         },
         {
-            fieldName: "No_Renovados",
+            fieldName: "renewed",
             header: "Nro renovados",
         },
         {
-            fieldName: "Porcentaje",
+            fieldName: "percentage",
             header: "Porcentaje",
         },
 
@@ -80,7 +80,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             <div className="grid-form-4-container mb-24px">
 
                                 <SelectComponent
-                                    idInput={"periodo"}
+                                    idInput={"period"}
                                     control={control}
                                     errors={errors}
                                     data={announcementList}

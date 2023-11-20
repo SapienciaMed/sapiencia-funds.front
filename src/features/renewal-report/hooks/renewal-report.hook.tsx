@@ -68,8 +68,8 @@ export default function useRenewaReportSearch() {
 
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {        
         // Cambio en el selector del periodo
-        const selectedperiodo = watch('periodo');
-        data.periodo = selectedperiodo;
+        const selectedperiodo = watch('period');
+        data.period = selectedperiodo;
         data.page = 1;
         data.perPage = 10;
         
@@ -89,55 +89,26 @@ export default function useRenewaReportSearch() {
                         console.error('La propiedad "data" de la respuesta de la API no es un array:', response.data);
                         return;
                     }
-                      const renewal = dataArray.map((item) => ({
-                            Fondo: item.Fondo,
-                            No_Habilitados: item.No_Habilitados,
-                            No_Renovados: item.No_Renovados,
+                      const renewal = dataArray.map((e) => ({
+                            fund: e.fund,
+                            enabled: e.enabled,
+                            renewed: e.renewed,
                         }))
                         setRenewalReport(renewal);
- 
+                    
+                        console.log("*****++AAAAAA", renewal)
                 }
             });
+            console.log("*****++BBBBB", dataGridRenewal)
 
             dataGridRenewal.push(
                 {
-                Fondo: "Beca Mejores Bachilleres Renueva",
-                No_Habilitados: "142",
-                No_Renovados:"385",
-                Porcentaje:"89%"
+                fund: "Beca Mejores Bachilleres Renueva",
+                enabled: "142",
+                renewed:"385",
+                percentage:"89%"
 
             },
-            {
-                Fondo: "Becas Mejores Deportistas",
-                No_Habilitados: "142",
-                No_Renovados:"385",
-                Porcentaje:"89%"
-            },
-            {
-                Fondo: "Extendiendo Fronteras",
-                No_Habilitados: "142",
-                No_Renovados:"385",
-                Porcentaje:"89%"
-            },
-            {
-                Fondo: "Fondo EPM",
-                No_Habilitados: "142",
-                No_Renovados:"385",
-                Porcentaje:"89%"
-            },
-            {
-                Fondo: "Formación Avanzada",
-                No_Habilitados: "142",
-                No_Renovados:"385",
-                Porcentaje:"89%"
-            },
-            {
-                Fondo: "Presupuesto Participativo",
-                No_Habilitados: "142",
-                No_Renovados:"385",
-                Porcentaje:"89%"
-            }
-            
             )
 
     });
@@ -160,7 +131,7 @@ export default function useRenewaReportSearch() {
 
       const downloadCollection = useCallback(() => {
         const { page, perPage } = paginateData;
-        const periodo = watch('periodo');
+        const periodo = watch('period');
         const url = new URL(`${urlApiFunds}/api/v1/renovacion/generate-xlsx`);
         const params = new URLSearchParams();
         params.append("page", page + 1)
