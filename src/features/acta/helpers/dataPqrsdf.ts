@@ -47,7 +47,7 @@ export const dataActasdf = ( dinamicData: IActa[]) => {
                     v.timeCitation === value.timeCitation &&
                     v.status === value.status
                 ))
-            ).find(us => us)?.status == 1 ? 'No Aprobado': 'Aprobado',
+            ).find(us => us)?.status == 1 ? 'Aprobado': 'No Aprobado',
         }
     })
 

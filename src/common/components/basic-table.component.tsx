@@ -33,6 +33,7 @@ interface IProps<T> {
   classSizeTable?: string;
   showPaginator?: boolean;
   isDisabled?: boolean;
+  isMobil?: boolean
 }
 
 interface IRef {
@@ -49,6 +50,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     classSizeTable,
     showPaginator = true,
     isDisabled,
+    isMobil = true
   } = props;
 
   // States
@@ -125,7 +127,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           />
       }
 
-      { width > 830 ? (
+      { (width > 830 || !isMobil) ? (
         <div>
           <DataTable
             className={`spc-table full-height ${classSizeTable}`}

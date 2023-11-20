@@ -44,6 +44,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     const [conceptList, setConceptList] = useState([]);
     const [totalQuantityPeriod2, setTotalQuantityPeriod2] = useState(0);
     const [totalQuantityPeriod1, setTotalQuantityPeriod1] = useState(0);
+    const [messageError, setMessageError] = useState({})
 
     const {
         register,
@@ -253,9 +254,10 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                             v.user === value.user &&
                             v.timeCitation === value.timeCitation &&
                             v.status === value.status &&
-                            v.idCitation === value.idCitation
+                            v.idCitation === value.idCitation &&
+                            v.dateAprobation === value.dateAprobation
                         ))
-                    ).map(({ user, dateAprobation: timeCitation, status, dateCitation, email, idCitation }) => ({ user, timeCitation, status, dateCitation, email, idCitation }));
+                    ).map(({ user, dateAprobation: timeCitation, status, dateCitation, email, idCitation, dateAprobation }) => ({ user, timeCitation, status, dateCitation, email, idCitation, dateAprobation }));
     
                     setDataGridUsersServices(valueCitation)
     
@@ -342,10 +344,10 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                 const book = XLSX.utils.book_new()
                 const sheet = XLSX.utils.json_to_sheet( dataActasdf(dinamicData) )
 
-                XLSX.utils.book_append_sheet(book, sheet, "DATAFOUND")
+                XLSX.utils.book_append_sheet(book, sheet, `Acta_${actaNro}`)
 
                 setTimeout(() => {
-                    XLSX.writeFile(book, "DATAFOUND.xlsx")
+                    XLSX.writeFile(book, `Acta_${actaNro}.xlsx`)
                     setMessage({
                         title: "Descargar",
                         description: "Información descargada exitosamente ",
@@ -423,7 +425,9 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
     const selectedLabelUser = getSelectedLabel(selectedUser, activeUserList);
 
     const addUser = handleSubmit((data: IActa) => {
-        if (selectedUser) {
+
+        if (selectedUser && data.user && data.timeCitation &&  data.dateCitation) {
+            setMessageError({})
             dataGridUsersServices.push({
                 ident: uuidv4(),
                 user: selectedLabelUser.name,
@@ -432,6 +436,27 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                 status: 0,
                 email: selectedLabelUser.email,
             });
+        }else{ // Se realiza una validacion manual del error.
+            setMessageError({
+                ...(data.dateCitation ? {} : {
+                    "dateCitation": {
+                        "type": "optionality",
+                        "message": "Completar información"
+                    }
+                }),
+                ...(data.timeCitation ? {} : {
+                    "timeCitation": {
+                        "type": "optionality",
+                        "message": "Completar información"
+                    }
+                }),
+                ...(data.user ? {} : {
+                    "user": {
+                        "type": "optionality",
+                        "message": "Completar información"
+                    }
+                })
+            });
         }
     });
 
@@ -439,7 +464,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         setMessage({
           show: true,
           title: "Cancelar",
-          description: "¿Segur@ que desea cancelar la creación del acta?",
+          description: "¿Segur@ que deseas cancelar la modificación del acta?",
           OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
           onOk() {
@@ -463,7 +488,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
             setMessage({
                 show: true,
                 title: "Guardar acta",
-                description: "¿Estas segur@ de guardar de guardar la información?",
+                description: "¿Estás segur@ de guardar la información?",
                 OkTitle: "Aceptar",
                 cancelTitle: "Cancelar",
                 onOk() {
@@ -603,6 +628,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
         canBeEdited,
         totalQuantityPeriod2,
         totalQuantityPeriod1,
+        messageError,
         register,
         addItem,
         addUser,

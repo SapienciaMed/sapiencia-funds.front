@@ -30,7 +30,7 @@ function TabSearchResultMobil({ control, dataGridItems, register,
             id: "actaFinanciero", 
             title: "Acta control financiero", 
             content:(
-                <section className="card-user mt-14px">
+                <section className="card-user mt-20px">
                     <BasicTableComponent
                         ref={tableComponentRef}
                         data={dataGridItems}
@@ -40,9 +40,10 @@ function TabSearchResultMobil({ control, dataGridItems, register,
                         isShowModal={true}
                         secondaryTitle={"Acta control financiero"}
                         classSizeTable="size-table-wd-150"
+                        isMobil={false}
                     />
                     
-                    <div className='grid-form-3-container'>
+                    <div className='grid-form-3-container mt-14px'>
                         <InputNumberComponent
                             control={control}
                             idInput={`vigency1`}
