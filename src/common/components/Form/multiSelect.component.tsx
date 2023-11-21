@@ -26,7 +26,8 @@ interface ISelectProps<T> {
   fieldArray?: boolean;
   filter?: boolean;
   emptyMessage?: string;
-  customClass?: string;  
+  customClass?: string;
+  showDefaultOption?: boolean
 }
 
 function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
@@ -41,28 +42,23 @@ function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
 }
 
 export function MultiSelects({
-    idInput,
-    control,
-    label,
-    className = "select-basic",
-    classNameLabel = "text-main",
-    placeholder,
-    fieldArray,
-    data = [{} as IMultiSelectProps],
-    errors = {},
-    disabled,
-    filter,
-    direction = EDirection.column,
-    customClass,
-  }: ISelectProps<any>): React.JSX.Element {
-    const [selectedCities, setSelectedCities] = useState<IMultiSelectProps | null>(null);
-    if (data) {
-      const seleccione: IMultiSelectProps = { name: placeholder, value: "" };
-      const dataSelect = data?.find(
-        (item) => item.name === seleccione.name && item.value === seleccione.value
-      );
-      if (!dataSelect) data.unshift(seleccione);
-    }
+  idInput,
+  control,
+  label,
+  className = "select-basic",
+  classNameLabel = "text-main",
+  placeholder,
+  fieldArray,
+  data = [{} as IMultiSelectProps],
+  errors = {},
+  disabled,
+  filter,
+  direction = EDirection.column,
+  customClass,
+  showDefaultOption = true,  // Nueva prop para controlar la primera opción
+}: ISelectProps<any>): React.JSX.Element {
+  const [selectedCities, setSelectedCities] = useState<IMultiSelectProps | null>(null);
+
   
     const messageError = () => {
       const keysError = idInput.split(".");
@@ -83,17 +79,12 @@ export function MultiSelects({
   
   
     return (
-      <div
-      className={
-        messageError() ? `${direction} container-icon_error` : direction
-      }
-      >
-          <LabelElement
-            label={label}
-            idInput={idInput}
-            classNameLabel={classNameLabel}
-          />
-     
+      <div className={messageError() ? `${direction} container-icon_error` : direction}>
+        <LabelElement
+          label={label}
+          idInput={idInput}
+          classNameLabel={classNameLabel}
+        />
         <div className={`select-element ${customClass}`}>
           <Controller
             name={idInput}
@@ -102,10 +93,10 @@ export function MultiSelects({
               <MultiSelect
                 id={field.name}
                 value={field.value}
-                onChange={(e: MultiSelectChangeEvent) => field.onChange(e.value)} 
+                onChange={(e: MultiSelectChangeEvent) => field.onChange(e.value)}
                 options={data}
                 optionLabel="name"
-                placeholder={placeholder}
+                placeholder={showDefaultOption ? placeholder || "Seleccionar" : ""}
                 filter={filter}
                 disabled={disabled}
                 maxSelectedLabels={3}
@@ -116,11 +107,10 @@ export function MultiSelects({
           {messageError() && <span className="icon-error"></span>}
         </div>
         {messageError() && (
-        <p className="error-message medium not-margin-padding">
-          {messageError()}
-        </p>
-      )}
+          <p className="error-message medium not-margin-padding">
+            {messageError()}
+          </p>
+        )}
       </div>
     );
   }
-  
