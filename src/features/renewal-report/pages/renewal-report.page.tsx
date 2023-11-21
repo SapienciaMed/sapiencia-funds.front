@@ -8,31 +8,33 @@ import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import BasicTableComponent from "../../../common/components/basic-table.component";
 
+import ItemsEditePage from "./items-edit.page";
+
 const SearchRenewalReportPage = (): React.JSX.Element => {
     const { setMessage } = useContext(AppContext);
 
     const {
         control, errors, clearFields, register, setValue, navigate, tableComponentRef, showTable,
-        setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal,
+        setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal,downloadCollection
     } = useRenewaReportSearch();
     const [tableView, setTableView] = useState<boolean>(false);
 
 
     const tableColumnsRenewal: ITableElement<ICallRenewal>[] = [
         {
-            fieldName: "Fondo",
+            fieldName: "fund",
             header: "Fondo",
         },
         {
-            fieldName: "No_Habilitados",
+            fieldName: "enabled",
             header: "Nro habilitados"
         },
         {
-            fieldName: "No_Renovados",
+            fieldName: "renewed",
             header: "Nro renovados",
         },
         {
-            fieldName: "Porcentaje",
+            fieldName: "percentage",
             header: "Porcentaje",
         },
 
@@ -45,7 +47,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                 setMessage({
                     show: true,
                     title: "Editar ítem",
-                    description: "",
+                    //description: <ItemsEditePage acta={datosActa} actaItems={row} action={"edit"} />,
                     background: true,
                     size: "items",
                     items: true,
@@ -78,7 +80,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             <div className="grid-form-4-container mb-24px">
 
                                 <SelectComponent
-                                    idInput={"periodo"}
+                                    idInput={"period"}
                                     control={control}
                                     errors={errors}
                                     data={announcementList}
@@ -138,33 +140,36 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     <div className="grid-form-3-container mb-24px">
                         <InputComponent
                             register={control.register}
-                            idInput="name"
+                            idInput="142"
                             className="input-basic medium"
                             typeInput="text"
                             label="Nro habilitados"
                             classNameLabel="text-black big text-required"
                             errors={errors}
                             disabled={true}
+                            value ='142'
                         />
                         <InputComponent
                             register={control.register}
-                            idInput="name"
+                            idInput="385"
                             className="input-basic medium"
                             typeInput="text"
                             label="Nro renovados"
                             classNameLabel="text-black big text-required"
                             errors={errors}
                             disabled={true}
+                            value ='385'
                         />
                         <InputComponent
                             register={control.register}
-                            idInput="name"
+                            idInput="89%"
                             className="input-basic medium"
                             typeInput="text"
                             label="Porcentaje"
                             classNameLabel="text-black big text-required"
                             errors={errors}
                             disabled={true}
+                            value ='89%'
                         />
                     </div>
                 </div>
@@ -188,23 +193,25 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                         />
                         <InputComponent
                             register={control.register}
-                            idInput="name"
+                            idInput="385"
                             className="input-basic medium"
                             typeInput="text"
                             label="Nro renovados"
                             classNameLabel="text-black big text-required"
                             errors={errors}
                             disabled={true}
+                            value="385"
                         />
                         <InputComponent
                             register={control.register}
-                            idInput="name"
+                            idInput="89%"
                             className="input-basic medium"
                             typeInput="text"
                             label="Porcentaje"
                             classNameLabel="text-black big text-required"
                             errors={errors}
                             disabled={true}
+                            value="89%"
                         />
                     </div>
                 </div>
@@ -222,7 +229,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             </>
                         }
                         className="button-download large "
-                    //action={downloadCollection}
+                    action={downloadCollection}
                     />
 
                 </div>

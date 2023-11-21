@@ -32,7 +32,7 @@ function ActaRoutes() {
         element={
           <PrivateRoute
             element={<ActaCreatePage />}
-            allowedAction={"MAESTROS_CREAR"}
+            allowedAction={"CREAR_ACTAS"}
           />
         }
       />
