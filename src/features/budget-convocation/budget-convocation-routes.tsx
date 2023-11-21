@@ -14,7 +14,7 @@ function BudgetConvocationRoutes() {
         element={
           <PrivateRoute
             element={<SearchBudgetConvocationPage />}
-            allowedAction={"MAESTRO_ACTIVIDAD_CONSULTAR"}
+            allowedAction={"PRESPUESTO_CONVOCATORIA_CONSULTAR"}
           />
         }
         />
