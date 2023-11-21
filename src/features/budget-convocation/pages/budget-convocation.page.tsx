@@ -41,7 +41,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                         label={<>Fondo Comuna <span>*</span></>}
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
                                         classNameLabel="text-black big medium label-regular"
-                                        placeholder="Seleccionar."
+                                        placeholder="Seleccionar"
                                         filter={true}
 
                                     />
