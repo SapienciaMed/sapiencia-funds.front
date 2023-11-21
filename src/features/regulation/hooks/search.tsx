@@ -15,9 +15,9 @@ import {
 import { periods, useRegulationApi } from "../service";
 import Tooltip from "../../../common/components/Form/tooltip";
 
-export default function useSearchRegulation() {
+export default function useSearchRegulation(auth, authDetail, authEdit) {
   // Context
-  const { setMessage } = useContext(AppContext);
+  const { setMessage, authorization } = useContext(AppContext);
   const [showTable, setshowTable] = useState(false);
   const tableComponentRef = useRef(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -51,6 +51,60 @@ export default function useSearchRegulation() {
 
   const [deparmetList, setDeparmentList] = useState([]);
 
+  //permisions
+  useEffect(() => {
+    const findPermission = authorization?.allowedActions?.findIndex(
+      (i) => i == auth
+    );
+    if (findPermission <= 0) {
+      setMessage({
+        title: "¡Acceso no autorizado!",
+        description: "Consulte con el admimistrador del sistema.",
+        show: true,
+        OkTitle: "Aceptar",
+        onOk: () => {
+          navigate("/core");
+          setMessage({});
+        },
+        background: true,
+      });
+      return;
+    }
+  }, [auth, authorization]);
+
+  //permissions
+  const getActions = () => {
+    const actions = [];
+
+    const detailPermissions = authorization?.allowedActions?.findIndex(
+      (i) => i == authDetail
+    );
+
+    const editPermissions = authorization?.allowedActions?.findIndex(
+      (i) => i == authEdit
+    );
+
+    if (editPermissions > 0) {
+      actions.push({
+        icon: "EditFill",
+        onClick: (row) =>
+          navigate("/fondos/administracion/reglamento/form/" + row.id),
+      });
+    }
+
+    if (detailPermissions > 0) {
+      actions.push({
+        icon: "Detail",
+        onClick: (row) => {
+          setDetailData(row);
+          setShowDetailModal(true);
+        },
+      });
+    }
+
+    return actions;
+  };
+
   useEffect(() => {
     const getListPrograms = async () => {
       const res = await getPrograms();
@@ -72,7 +126,7 @@ export default function useSearchRegulation() {
   const tableColumns: ITableElement<IRegulation>[] = [
     {
       fieldName: "row.regulation.program",
-      header: <>{"Programa"}</>,
+      header: <div style={{ fontWeight: 400 }}>{"Programa"}</div>,
       renderCell: (row) => {
         const getListItem: any = listPrograms.find(
           (item) => item.name === row.program || item.value === row.program
@@ -82,7 +136,7 @@ export default function useSearchRegulation() {
     },
     {
       fieldName: "row.regulation.initialPeriod",
-      header: "Periodo inicial",
+      header: <div style={{ fontWeight: 400 }}>{"Periodo inicial"}</div>,
       renderCell: (row) => {
         const getListItem: any = periods.find(
           (item) =>
@@ -93,7 +147,7 @@ export default function useSearchRegulation() {
     },
     {
       fieldName: "row.regulation.endPeriod",
-      header: "Periodo Final",
+      header: <div style={{ fontWeight: 400 }}>{"Periodo Final"}</div>,
       renderCell: (row) => {
         const getListItem: any = periods.find(
           (item) => item.name === row.endPeriod || item.value === row.endPeriod
@@ -103,7 +157,7 @@ export default function useSearchRegulation() {
     },
     {
       fieldName: "row.regulation.endPeriod",
-      header: "% Pago Teorico",
+      header: <div style={{ fontWeight: 400 }}>{"% Pago Teorico"}</div>,
       renderCell: (row) => {
         return <>{row.theoreticalPercentage}%</>;
       },
@@ -183,23 +237,7 @@ export default function useSearchRegulation() {
     },
   ];
 
-  const tableActions: ITableAction<IRegulation>[] = [
-    {
-      icon: "Edit",
-      onClick: (row) =>
-        navigate("/fondos/administracion/reglamento/form/" + row.id),
-    },
-    {
-      icon: "Detail",
-      onClick: (row) => {
-        setDetailData(row);
-        setShowDetailModal(true);
-      },
-      // navigate(
-      //   "/fondos/administracion/reglamento/form/" + row.id + "/onlyView"
-      // ),
-    },
-  ];
+  const tableActions: ITableAction<IRegulation>[] = getActions();
 
   const formValues = watch();
 

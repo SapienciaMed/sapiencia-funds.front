@@ -1,9 +1,10 @@
 import { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { AppContext } from "../contexts/app.context";
 
 const PrivateRoute = ({ element, allowedAction }) => {
   const { authorization, setMessage } = useContext(AppContext);
+  const navigate = useNavigate();
 
   if (!authorization?.allowedActions) {
     return <div>Loading...</div>;
@@ -19,9 +20,14 @@ const PrivateRoute = ({ element, allowedAction }) => {
       description: "Consulte con el admimistrador del sistema.",
       show: true,
       OkTitle: "Aceptar",
-      onOk: () => setMessage({}),
+      onOk: () => {
+        navigate("/core");
+        setMessage({});
+      },
+      cancelTitle: "Cancelar",
+      background: true,
     });
-    return <Navigate to={"/"} replace />;
+    return;
   }
 };
 

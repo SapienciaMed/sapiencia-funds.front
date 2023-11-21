@@ -5,110 +5,72 @@ import {
   InputComponent,
   SelectComponent,
 } from "../../../common/components/Form";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
-import BasicTableComponent from "../../../common/components/basic-table.component";
-import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 import {
-  ITableAction,
   ITableElement,
 } from "../../../common/interfaces/table.interfaces";
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useResumenPriorizacionSearch } from "../hooks/resumen-priorizacion-search.hooks";
 import { EDirection } from "../../../common/constants/input.enum";
-import { useNavigate } from "react-router-dom";
-import { AppContext } from "../../../common/contexts/app.context";
-import TableComponent from "../../../common/components/table.component";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+import TableComponent from "../../../common/components/table.component";;
 import { Controller } from "react-hook-form";
+import Svgs from "../../../public/images/icons/svgs";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import {useState} from 'react'
 
 const VotingResultsSearchPage = () => {
   const {
-    CancelFunction,
     onSubmitSearchVoting,
-    register,
     errors,
     sending,
     tableComponentRef,
     deparmetList,
-    setValCommuneNeighborhood,
     reset,
     control,
+    downloadXLSX
   } = useResumenPriorizacionSearch();
-
-  const navigate = useNavigate();
-
-  const { validateActionAccess, setMessage } = useContext(AppContext);
+  
+  const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
 
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
-    // {
-    //   fieldName: "aimStraight",
-    //   header: "Objetivo directo",
-    // },
-    // {
-    //   fieldName: "productCatalogueDnp",
-    //   header: "Producto catalogo dnp",
-    // },
-    // {
-    //   fieldName: "codProductgueDnp",
-    //   header: "Código catalogo dnp",
-    // },
     {
-      fieldName: "activiti.typesProgram.name",
+      fieldName: "program",
       header: "Programa",
     },
-    // {
-    //   fieldName: "activiti.name",
-    //   header: "Actividad",
-    // },
-    // {
-    //   fieldName: "activiti.totalValue",
-    //   header: "Valor Actividad",
-    // },
-    // {
-    //   fieldName: "amount",
-    //   header: "Cantidad",
-    // },
-    // {
-    //   fieldName: "costTotal",
-    //   header: "Costo Total",
-    // },
+
     {
-      fieldName: "percentage123",
+      fieldName: "pct123",
       header: "Porcentaje 123",
     },
     {
-      fieldName: "costTotal",
+      fieldName: "total123",
       header: "Valor porcentaje 123",
-      // renderCell: (row) => {
-      //   const suma =
-      //     row.budgetsMGA.year0.budget +
-      //     row.budgetsMGA.year1.budget +
-      //     row.budgetsMGA.year2.budget +
-      //     row.budgetsMGA.year3.budget +
-      //     row.budgetsMGA.year4.budget;
-      //   return <>{formaterNumberToCurrency(suma)}</>;
-      // },
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.total123)}</>;
+      },
     },
     {
-      fieldName: "percentage456",
+      fieldName: "pct456",
       header: "Porcentaje 456",
     },
     {
-      fieldName: "costTotal",
+      fieldName: "total456",
       header: "Valor porcentaje 456",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.total456)}</>;
+      },
     },
     {
-      fieldName: "valprc456",
+      fieldName: "quota",
       header: "Cupos",
     },
     {
-      fieldName: "Total",
+      fieldName: "total",
       header: "Total",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.total)}</>;
+      },
     },
   ];
-
-  // const tableActions: ITableAction<IVotingSearcheResult>[] = [
-  // ];
 
   return (
     <Fragment>
@@ -116,13 +78,12 @@ const VotingResultsSearchPage = () => {
         <div className="container-form padding-form">
           <p className="text-black huge mg-0">Resumen priorización</p>
           <div className="card-table-user">
-
             <FormComponent
               id="createVotingForm"
               className="form-signIn"
               action={onSubmitSearchVoting}
             >
-              <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+              <section className="funcionality-filters-container gap-15">
                 <Controller
                   control={control}
                   name={"numberProject"}
@@ -131,7 +92,7 @@ const VotingResultsSearchPage = () => {
                       <InputComponent
                         idInput={field.name}
                         errors={errors}
-                        typeInput={"text"}
+                        typeInput={"number"}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
@@ -151,12 +112,12 @@ const VotingResultsSearchPage = () => {
                   idInput="communeNeighborhood"
                   control={control}
                   className="select-basic medium"
-                  placeholder="Seleccionar"
                   label="Comuna y/o corregimiento "
                   data={deparmetList ? deparmetList : []}
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
+                  optionSeleccione={false}
                 />
 
                 <Controller
@@ -182,7 +143,7 @@ const VotingResultsSearchPage = () => {
                     );
                   }}
                 />
-              </div>
+              </section>
             </FormComponent>
           </div>
           <div className="button-save-container-display-users margin-right0">
@@ -206,14 +167,32 @@ const VotingResultsSearchPage = () => {
           </div>
           <TableComponent
             ref={tableComponentRef}
-            url={`${process.env.urlApiFunds}/api/v1/resumen-priorizacion/get-paginated`}
+            url={`${process.env.urlApiFunds}/api/v1/summary-priorizacion/get-paginated`}
             columns={tableColumns}
-            // actions={tableActions}
-            titleMessageModalNoResult="La votación no existe"
-            descriptionModalNoResult="La votación no existe en el sistema. 
-              Haga clic en el botón crear votación"
+            titleMessageModalNoResult="No se encontraron resultados"
+            descriptionModalNoResult=""
             isShowModal={true}
+            isMobil={true}
+            onResult={(rows) => {
+              setSendingReportXlsx(rows.length > 0);
+            }}
           />
+          {sendingReportXlsx ? (
+            <div className="button-save-container-display-users margin-right0">
+              <ButtonComponent
+                value={
+                  <>
+                    <div className="container-buttonText">
+                      <span>Descargar</span>
+                      <Svgs svg="excel" width={23.593} height={28.505} />
+                    </div>
+                  </>
+                }
+                className="button-download large "
+                action={downloadXLSX}
+              />
+            </div>
+       ) : ''}
         </div>
       </div>
     </Fragment>
@@ -221,3 +200,4 @@ const VotingResultsSearchPage = () => {
 };
 
 export default React.memo(VotingResultsSearchPage);
+

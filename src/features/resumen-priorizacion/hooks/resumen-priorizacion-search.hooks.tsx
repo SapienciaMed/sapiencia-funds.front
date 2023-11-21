@@ -4,24 +4,25 @@ import { AppContext } from "../../../common/contexts/app.context";
 import { useNavigate } from "react-router-dom";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { searchResumenPriorizacion } from "../../../common/schemas/resumen-priorizacion-schema";
-import { IVotingCreate } from "../../../common/interfaces/voting.interfaces";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { IResumenPriorizacion } from "../../../common/interfaces/resumenPriorizacion.interfaces";
-
+import useSumaryPrioricions from "../hooks/resumen-priorizacion-api.hooks"
 export const useResumenPriorizacionSearch = () => {
-  const { setMessage, authorization, setDataGrid, dataGrid } =
+  const { setMessage } =
     useContext(AppContext);
   const navigate = useNavigate();
   const resolver = useYupValidationResolver(searchResumenPriorizacion);
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
-  const [deparmetList, setDeparmentList] = useState([]);
+  const [deparmetList, setDeparmentList] = useState<
+    { name: string; value: string }[]
+  >([]);
   const { getListByGroupers } = useGenericListService();
   const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-
+  const { downloadFile } = useSumaryPrioricions();
   const onSubmitSearch = async () => {
     loadTableData({});
   };
@@ -29,18 +30,29 @@ export const useResumenPriorizacionSearch = () => {
     handleSubmit,
     register,
     control,
+    getValues,
     formState: { errors },
     reset,
-  } = useForm<IResumenPriorizacion>({ resolver });
+  } = useForm<IResumenPriorizacion>({
+    resolver,
+    defaultValues: {
+      communeNeighborhood: null,
+      numberProject: null,
+      validity: '',
+    }
+  }
+  );
 
   /*Functions*/
-  const onSubmitSearchVoting = handleSubmit((data: IResumenPriorizacion) => {
+  const onSubmitSearchVoting = handleSubmit(async (data: IResumenPriorizacion) => {
     loadTableData({
       communeNeighborhood: data?.communeNeighborhood,
       numberProject: data?.numberProject,
       validity: data?.validity,
     });
   });
+
+  
 
   function loadTableData(searchCriteria?: object): void {
     if (tableComponentRef.current) {
@@ -65,6 +77,28 @@ export const useResumenPriorizacionSearch = () => {
       },
       background: true,
     });
+  };
+
+  const downloadXLSX = async () => {
+    const dataForm = getValues();
+    await downloadFile(dataForm).then((resp : any) => {
+          const buffer = new Uint8Array(resp.data.data); // Convierte el Array del búfer en Uint8Array
+          const blob = new Blob([buffer]);
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `ResumenPriorizacion.xls`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          setMessage({
+            title: `Descargar excel`,
+            description: `El archivo fue descargado con éxito`,
+            show: true,
+            OkTitle: "Aceptar",
+            background: true,
+          });
+    })
   };
 
   useEffect(() => {
@@ -101,5 +135,6 @@ export const useResumenPriorizacionSearch = () => {
     setValCommuneNeighborhood,
     reset,
     control,
+    downloadXLSX
   };
 };

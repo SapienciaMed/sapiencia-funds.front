@@ -8,9 +8,9 @@ import Svgs from "../../../public/images/icons/svgs";
 const SearchBudgetPage = (): React.JSX.Element => {
 
     const { announcementList, budgetList, control, errors, clearFields, register, setValue, navigate,
-        tableComponentRef, showTable, tableColumns, setShowTable, onSubmit, reset, downloadCollection,
+        tableComponentRef, showTable, tableColumns, showDownloadButton, onSubmit, reset, downloadCollection,
+        tableActions
     } = useBudgetSearch();
-    const [tableView, setTableView] = useState<boolean>(false);
 
     return (
         <Fragment>
@@ -29,7 +29,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             action={onSubmit}
                         >
                             <div>
-                                <div className="grid-form-3-container mb-24px">
+                                <div className="grid-form-4-container mb-24px">
 
                                     <MultiSelects
                                         idInput={"id_comuna"}
@@ -39,8 +39,8 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                         label={<>Fondo Comuna <span>*</span></>}
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
                                         classNameLabel="text-black big medium label-regular"
-                                        filter={true}
                                         placeholder="Seleccionar."
+                                        filter={true}
 
                                     />
                                     <SelectComponent
@@ -56,6 +56,7 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     />
                                 </div>
                             </div>
+
                             <div className="button-save-container-display m-top-20">
                                 <ButtonComponent
                                     form="searchBudget"
@@ -63,9 +64,8 @@ const SearchBudgetPage = (): React.JSX.Element => {
                                     className="button-clean medium"
                                     type="button"
                                     action={() => {
-                                        reset();
+                                        clearFields();
                                         tableComponentRef.current.emptyData();
-                                        setTableView(false);
                                     }
                                     }
                                 />
@@ -77,36 +77,46 @@ const SearchBudgetPage = (): React.JSX.Element => {
                             </div>
                         </FormComponent>
                     </div>
+
                     {showTable && (
+                        <>
+                            <div>
 
-                        <TableComponent
-                            ref={tableComponentRef}
-                            url={`${process.env.urlApiFunds}/api/v1/sapiencia/getbudget-paginated/`}
-                            columns={tableColumns}
-                            isShowModal={false}
-                        />
 
-                    )}
-                </div>
+                                <TableComponent
+                                    ref={tableComponentRef}
+                                    url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
+                                    columns={tableColumns}
+                                    actions={tableActions}
+                                    titleMessageModalNoResult="Buscar"
+                                    princialTitle="Informe legalización"
+                                    isShowModal={true}
+                                    descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
+                                />
 
-                <div>
-                    <br />
-                    <hr className="barra-spacing" />
-                </div>
-                <div className="button-save-container-display mr-24px">
-                    {("CUENTA_COBRO_EXCEL") && (
-                        <ButtonComponent
-                            value={
-                                <>
-                                    <div className="container-buttonText">
-                                        <span>Descargar</span>
-                                        <Svgs svg="excel" width={23.593} height={28.505} />
-                                    </div>
-                                </>
-                            }
-                            className="button-download large "
-                            action={downloadCollection}
-                        />
+
+
+                                <div>
+                                    <br />
+                                    <hr className="barra-spacing" />
+                                </div>
+
+                                <div className="button-save-container-display mr-24px">
+                                        <ButtonComponent
+                                            value={
+                                                <>
+                                                    <div className="container-buttonText">
+                                                        <span>Descargar</span>
+                                                        <Svgs svg="excel" width={23.593} height={28.505} />
+                                                    </div>
+                                                </>
+                                            }
+                                            className="button-download large "
+                                            action={downloadCollection}
+                                        />
+                                </div>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

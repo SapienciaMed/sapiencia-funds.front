@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FormComponent,
   InputComponent,
@@ -23,9 +23,9 @@ const InitialSetup = ({
   loading,
   listPrograms,
   onlyView,
+  reset,
 }) => {
   if (loading) return <></>;
-
   return (
     <div className="container-form p-24">
       <div className="containerProgram mb-24px">
@@ -57,7 +57,11 @@ const InitialSetup = ({
             idInput={"initialPeriod"}
             errors={errors}
             setValue={(e) => setValue("initialPeriod", e)}
-            value={getValues().initialPeriod}
+            value={
+              updateData?.initialPeriod
+                ? updateData?.initialPeriod
+                : getValues().initialPeriod
+            }
             data={periods ? periods : []}
             disabled={onlyView ? true : false}
             label={
@@ -75,7 +79,12 @@ const InitialSetup = ({
             idInput={"isOpenPeriod"}
             errors={errors}
             control={control}
-            onChange={() => setValue("endPeriod", undefined)}
+            onChange={() => setValue("isOpenPeriod", undefined)}
+            defaultValue={
+              updateData?.isOpenPeriod
+                ? updateData?.isOpenPeriod
+                : getValues().isOpenPeriod
+            }
             size="normal"
             disabled={onlyView ? true : false}
             label={
@@ -94,7 +103,11 @@ const InitialSetup = ({
             errors={errors}
             disabled={onlyView ? true : watch().isOpenPeriod ? true : false}
             setValue={(e) => setValue("endPeriod", e)}
-            value={getValues().endPeriod}
+            value={
+              updateData?.endPeriod
+                ? updateData?.endPeriod
+                : getValues().endPeriod
+            }
             data={watch().isOpenPeriod ? [] : periods ? periods : []} //pendiente
             label={
               <>
@@ -112,6 +125,7 @@ const InitialSetup = ({
         <Controller
           control={control}
           name={"theoreticalPercentage"}
+          defaultValue={updateData?.theoreticalPercentage}
           render={({ field }) => {
             return (
               <InputComponent
@@ -126,8 +140,6 @@ const InitialSetup = ({
                 className="input-basic input-size"
                 classNameLabel="text-black biggest text-required font-500"
                 label="Porcentaje de pago teórico semestral"
-                min={0}
-                max={100}
               />
             );
           }}
@@ -147,8 +159,8 @@ const InitialSetup = ({
                 applySocialService: getValues().applySocialService,
               });
             }, 400);
-            setValue("socialServicePercentage", undefined);
-            setValue("socialServiceHours", undefined);
+            setValue("socialServicePercentage", null);
+            setValue("socialServiceHours", null);
           }}
           switchElement={
             <SwitchComponent
@@ -164,8 +176,8 @@ const InitialSetup = ({
                 });
               }}
               onChange={() => {
-                setValue("socialServicePercentage", undefined);
-                setValue("socialServiceHours", undefined);
+                setValue("socialServicePercentage", null);
+                setValue("socialServiceHours", null);
               }}
               size="small"
               className="select-basic select-disabled-list input-size"

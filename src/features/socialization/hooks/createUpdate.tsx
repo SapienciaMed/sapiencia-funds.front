@@ -94,7 +94,7 @@ export default function useSocializationCrud() {
 
     setMessage({
       show: true,
-      title: "Guardar información",
+      title: "Guardar",
       description: "¿Estás segur@ de guardar la información?",
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
@@ -119,8 +119,8 @@ export default function useSocializationCrud() {
 
   const handleModalSuccess = () => {
     setMessage({
-      title: "Cambios guardados",
-      description: `¡Cambios guardados exitosamente!`,
+      title: "Guardar",
+      description: `Guardado exitosamente`,
       show: true,
       OkTitle: "Aceptar",
       onOk: () => {

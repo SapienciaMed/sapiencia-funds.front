@@ -12,6 +12,10 @@ function ActaRoutes() {
     () => import("./pages/acta-create.page")
   );
 
+  const SearchResultPage = lazy(
+    () => import("./pages/search-result.page")
+  );
+
   return (
     <Routes>
       <Route
@@ -19,7 +23,7 @@ function ActaRoutes() {
         element={
           <PrivateRoute
             element={<ActaPage />}
-            allowedAction={"MAESTROS_CONSULTAR"}
+            allowedAction={"CONSULTAR_ACTAS"}
           />
         }
       />
@@ -28,7 +32,27 @@ function ActaRoutes() {
         element={
           <PrivateRoute
             element={<ActaCreatePage />}
-            allowedAction={"MAESTROS_CREAR"}
+            allowedAction={"CREAR_ACTAS"}
+          />
+        }
+      />
+
+      <Route
+        path={"/visualizar/:actaNro"}
+        element={
+          <PrivateRoute
+            element={<SearchResultPage />}
+            allowedAction={"CONSULTAR_ACTAS"}
+          />
+        }
+      />
+
+      <Route
+        path={"/consultar/modificar-acta/:actaNro"}
+        element={
+          <PrivateRoute
+            element={<SearchResultPage valueAction="edit" />}
+            allowedAction={"EDITAR_ACTAS"}
           />
         }
       />

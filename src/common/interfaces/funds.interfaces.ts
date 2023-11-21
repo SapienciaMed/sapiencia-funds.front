@@ -70,12 +70,42 @@ export interface IEmailDataGrid{
 }
 
 export interface ICallBudget {
-  id_comuna: number;
-  presupuesto_comuna: string;
-  legaliza_comuna: string;
-  restante_presupuesto: string;
-  usuarios_comuna: string;
-  periodo: number;
-  puntaje_corte: number;
+  id_comuna: number | number[] | string;
+  presupuesto_comuna: string; //presupuesto_comuna
+  acumulado_legali_comuna: string; //legaliza_comuna
+  restante_presupuesto_comuna: string; //restante_presupuesto
+  numero_usuarios_comuna: number; //usuarios_comuna
+  periodo: number; //periodo
+  puntaje_corte: number; //puntaje_corte
+  cierre: number;
+  total_proyectado: string;
+  Diferencia: string;
+
 }
  
+export interface ICallRenewal {
+  periodo?: string;
+  Fondo?:string;
+  No_Habilitados:string;
+  No_Renovados?:string;
+  Porcentaje?:string;
+  page?: number;
+  perPage?: number;
+}
+
+export interface ICallRenewalFilter {
+  periodo?: string;
+  page?: number;
+  perPage?: number;
+
+}
+
+export interface IRenewalDataGrid{
+  periodo?:string;
+  Fondo?:string;
+  No_Habilitados?:string;
+  No_Renovados?:string;
+  Porcentaje?:string;
+  page?: number;
+  perPage?: number;
+}

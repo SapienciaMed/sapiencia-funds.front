@@ -38,6 +38,7 @@ export const createRegulation = yup.object().shape({
   applySocialService: yup.boolean().optional().nullable(),
   socialServicePercentage: yup
     .number()
+    .nullable()
     .when("applySocialService", (applySocialService, schema) => {
       if (applySocialService[0])
         return schema
@@ -55,6 +56,7 @@ export const createRegulation = yup.object().shape({
     }),
   socialServiceHours: yup
     .number()
+    .nullable()
     .when("applySocialService", (applySocialService, schema) => {
       if (applySocialService[0])
         return schema
@@ -67,6 +69,7 @@ export const createRegulation = yup.object().shape({
   knowledgeTransferApply: yup.boolean().optional().nullable(),
   knowledgeTransferPercentage: yup
     .number()
+    .nullable()
     .when("knowledgeTransferApply", (knowledgeTransferApply, schema) => {
       if (knowledgeTransferApply[0])
         return schema
@@ -83,6 +86,7 @@ export const createRegulation = yup.object().shape({
     }),
   knowledgeTransferHours: yup
     .number()
+    .nullable()
     .when("knowledgeTransferApply", (knowledgeTransferApply, schema) => {
       if (knowledgeTransferApply[0])
         return schema
@@ -95,6 +99,7 @@ export const createRegulation = yup.object().shape({
   gracePeriodApply: yup.boolean().optional().nullable(),
   gracePeriodMonths: yup
     .number()
+    .nullable()
     .when("gracePeriodApply", (gracePeriodApply, schema) => {
       if (gracePeriodApply[0])
         return schema
@@ -106,6 +111,7 @@ export const createRegulation = yup.object().shape({
     }),
   gracePeriodApplication: yup
     .string()
+    .nullable()
     .when("gracePeriodApply", (gracePeriodApply, schema) => {
       if (gracePeriodApply[0])
         return schema
@@ -117,6 +123,7 @@ export const createRegulation = yup.object().shape({
   continuousSuspensionApplies: yup.boolean().optional().nullable(),
   continuosSuspencionQuantity: yup
     .number()
+    .nullable()
     .when(
       "continuousSuspensionApplies",
       (continuousSuspensionApplies, schema) => {
@@ -132,6 +139,7 @@ export const createRegulation = yup.object().shape({
   applyDiscontinuousSuspension: yup.boolean().optional().nullable(),
   discontinuousSuspensionQuantity: yup
     .number()
+    .nullable()
     .when(
       "applyDiscontinuousSuspension",
       (applyDiscontinuousSuspension, schema) => {
@@ -147,6 +155,7 @@ export const createRegulation = yup.object().shape({
   applySpecialSuspensions: yup.boolean().optional().nullable(),
   applySpecialSuspensionsQuantity: yup
     .number()
+    .nullable()
     .when("applySpecialSuspensions", (applySpecialSuspensions, schema) => {
       if (applySpecialSuspensions[0])
         return schema
@@ -159,6 +168,7 @@ export const createRegulation = yup.object().shape({
   extensionApply: yup.boolean().optional().nullable(),
   extensionApplyQuantity: yup
     .number()
+    .nullable()
     .when("extensionApply", (extensionApply, schema) => {
       if (extensionApply[0])
         return schema

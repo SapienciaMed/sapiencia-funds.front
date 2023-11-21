@@ -1,13 +1,13 @@
 export interface ICallDating {
     convocatoria: number;
     programa: number;
-    usuario: number;
+    id_usuario: number;
     taquilla: number;
     fecha: string;
     hora_inicio: number;
     estado: number;
     nombre: number;
-    identificacion: number;
+    cedula: number;
   }
   
   export interface ICallDatingFilters {

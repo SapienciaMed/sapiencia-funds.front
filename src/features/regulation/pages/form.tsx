@@ -12,7 +12,7 @@ import Requirements from "./modules/requeriments/Requirements";
 import StepButtons from "./modules/stepButtons";
 import Divider from "../../../common/components/Form/divider";
 
-const Form = () => {
+const Form = ({ auth }) => {
   const {
     control,
     errors,
@@ -31,7 +31,8 @@ const Form = () => {
     id,
     listPrograms,
     onlyView,
-  } = useRegulationHook();
+    reset,
+  } = useRegulationHook(auth);
   const [view, setView] = useState(0);
 
   if (loading) return <></>;
@@ -42,7 +43,7 @@ const Form = () => {
     <div>
       <div className="title-area">
         <p className="text-black text-29 ml-24px mt-20px mg-0">
-          {`${updateData?.id ? "Actualizar" : "Crear"} reglamento`}
+          {`${updateData?.id ? "Editar" : "Crear"} reglamento`}
         </p>
       </div>
       <Tabs view={view} />
@@ -52,7 +53,6 @@ const Form = () => {
         className="form-signIn"
         action={(e) => {
           e.preventDefault();
-          console.log(errors);
           onsubmitCreate();
         }}
       >
@@ -71,6 +71,7 @@ const Form = () => {
             loading={loading}
             listPrograms={listPrograms}
             onlyView={onlyView}
+            reset={reset}
           />
         )}
         {view === 1 && (
@@ -96,7 +97,7 @@ const Form = () => {
         <ButtonComponent
           value="Cancelar"
           type="button"
-          className="button-cancel-text hover-three disabled-black padding-button"
+          className="button-save disabled-black padding-button btn-back"
           action={() => goBack()}
         />
         <ButtonComponent

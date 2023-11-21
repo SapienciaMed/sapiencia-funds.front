@@ -6,20 +6,29 @@ import {
   IProgramTypesActivity,
 } from "../../../common/interfaces/funds.interfaces";
 import { IItemsUpdate, IVotinItemCreate } from "../../../common/interfaces/voting.interfaces";
+import { IProject } from "../../../common/interfaces/project.interface";
 
 export default function useVotingItemApi() {
   const baseURL: string = process.env.urlApiFunds || "";
+  const baseURLProjects: string = process.env.urlApiProjects || "";
+  
   const serviceUrl: string = "/api/v1/voting";
   const serviceItems: string = '/api/v1/items'
   const serviceUrlActivity: string = "/api/v1/activities";
+  const serviceUrlProjects: string = "/api/v1/project";  
 
   const { get, post, put } = useCrudService(baseURL);
+  const { get: getProjects } = useCrudService(baseURLProjects);
 
   async function getMasterVotingById(
     id: number
   ): Promise<ApiResponse<IMasterActivity[]>> {
     return await get(`${serviceUrl}/${id}`);
   }
+
+  async function getProjectsList(): Promise<ApiResponse<IProject[]>> {
+    return await getProjects(`${serviceUrlProjects}/get-all`);
+  } 
 
   async function createVotingResults(
     data: IVotinItemCreate
@@ -56,5 +65,6 @@ export default function useVotingItemApi() {
     getActivityProgram,
     getProgramTypes,
     updateItemsVotingResults,
+    getProjectsList,
   };
 }

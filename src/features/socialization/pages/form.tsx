@@ -31,7 +31,7 @@ const Form = () => {
       <div className="title-area">
         <p className="text-black text-29 ml-24px mt-20px mg-0">
           {`${
-            updateData?.id ? "Actualizar" : "Crear"
+            updateData?.id ? "Editar" : "Crear"
           } socialización informe de ejecución`}
         </p>
       </div>

@@ -3,6 +3,7 @@ export interface IRegulation {
   program: string;
   initialPeriod: string;
   openPeriod: boolean;
+  isOpenPeriod: boolean;
   endPeriod?: string;
   theoreticalPercentage: number;
   applySocialService: boolean;

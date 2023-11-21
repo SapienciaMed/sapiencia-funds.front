@@ -5,7 +5,6 @@ import { filterBudget } from "../../../common/schemas/budget-schema";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
 import { ITableElement } from "../../../common/interfaces/table.interfaces";
-import { ICallBudget } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import {jsDateToISODate,jsDateToSQLDate,} from "../../../common/utils/helpers";
 import { urlApiFunds } from "../../../common/utils/base-url";
@@ -13,11 +12,12 @@ import axios from 'axios';
 import { ApiResponse } from "../../../common/utils/api-response";
 import useDatingApi from "./dating-api.hook";
 import { ICallDating } from "../../../common/interfaces/dating.interface";
+import { filterDating } from "../../../common/schemas/dating-shema";
 
 
 export default function useDatingSearch() {
     const { setMessage } = useContext(AppContext);
-    const resolver = useYupValidationResolver(filterBudget);
+    const resolver = useYupValidationResolver(filterDating);
     const navigate = useNavigate();
     const [announcementList, setAnnouncementList] = useState([]);
     const [programList, setProgramList] = useState([]);
@@ -45,14 +45,8 @@ export default function useDatingSearch() {
         watch,
         control: control,
         formState: { errors },
-    } = useForm<ICallDating>({ resolver }
+    } = useForm<ICallDating>({resolver}
     );
-
-    const [contractCode, expeditionDate] = watch([,
-        "contractCode",
-        "expeditionDate",
-    ]);
-
 
     useEffect(() => {
         getProgramTypes()
@@ -86,54 +80,54 @@ export default function useDatingSearch() {
     }, []);
 
 
-    const tableColumns: ITableElement<ICallBudget>[] = [
+    const tableColumns: ITableElement<ICallDating>[] = [
         {
-            fieldName: "announcementList",
-            header: "Fondo comuna",
+            fieldName: "usuario",
+            header: "Usuario",
             renderCell: (row) => {
-                return <>{row.id_comuna}</>;
+                return <>{row.id_usuario}</>;
             },
         },
         {
-            fieldName: "name",
-            header: "Presupuesto fondo comuna",
+            fieldName: "taquilla",
+            header: "Taquilla",
             renderCell: (row) => {
-                return <>{row.presupuesto_comuna}</>;
+                return <>{row.taquilla}</>;
             },
         },       
         {
-            fieldName: "name",
-            header: "Recurso otorgado de legalizacion",
+            fieldName: "fecha",
+            header: "Fecha",
             renderCell: (row) => {
-                return <>{row.legaliza_comuna}</>;
+                return <>{row.fecha}</>;
             },
         },
         {
-            fieldName: "name",
-            header: "Restante",
+            fieldName: "hora_inicio",
+            header: "Hora inicio",
             renderCell: (row) => {
-                return <>{row.restante_presupuesto}</>;
+                return <>{row.hora_inicio}</>;
             },
         },
         {
-            fieldName: "name",
-            header: "Usuarios por comuna",
+            fieldName: "estado",
+            header: "Estado",
             renderCell: (row) => {
-                return <>{row.usuarios_comuna}</>;
+                return <>{row.estado}</>;
             },
         },
         {
-            fieldName: "name",
-            header: "Total proyectado",
+            fieldName: "nombre",
+            header: "Nombre",
             renderCell: (row) => {
-                return <>{}</>;
+                return <>{row.nombre}</>;
             },
         },   
         {
-            fieldName: "name",
-            header: "Diferencia por comprometer",
+            fieldName: "Identificacion",
+            header: "identificación",
             renderCell: (row) => {
-                return <>{}</>;
+                return <>{row.cedula}</>;
             },
         },              
     ];
@@ -164,7 +158,7 @@ export default function useDatingSearch() {
         setShowTable(false);
       };
 
-    const onSubmit = handleSubmit(async (data: ICallBudget) => {        
+    const onSubmit = handleSubmit(async (data: ICallDating) => {        
         setShowTable(true)
 
         if (tableComponentRef.current) {
@@ -179,7 +173,7 @@ export default function useDatingSearch() {
         const url = new URL(`${urlApiFunds}/api/v1/citas/generate-xlsx`);
         const params = new URLSearchParams();
         params.append("page", page + 1)
-        params.append("perPage", perPage + 10)
+        params.append("perPage", perPage + 10000)
 
         if (Array.isArray(programa) && programa.length > 0) {
             params.append("programa", programa.join(','));

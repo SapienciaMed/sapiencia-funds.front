@@ -1,5 +1,10 @@
 @import "./mixins.scss";
 @import "./button.scss";
+@import "./style_global.scss";
+@import "./texts.scss";
+@import "./tables.scss";
+@import "./input.scss";
+@import "./totals.scss";
 // :root {
 //   --color-black: #0b060e;
 //   --color-gray: #535353;
@@ -65,13 +70,13 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 100%;
 }
 
-.grid {
-  display: grid;
+// .grid {
+//   display: grid;
 
-  &.gap-25 {
-    gap: 25px;
-  }
-}
+//   &.gap-25 {
+//     gap: 25px;
+//   }
+// }
 
 .container-form {
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -259,11 +264,11 @@ div[id="single-spa-application:@sapiencia/funds"] {
   justify-content: end;
   flex-direction: row;
 
-  margin-bottom: 20px;
+  margin: 15px 0 ;
 
-  @media (max-width: 768px) {
+  @media (max-width: 700px) {
     flex-direction: column;
-    margin-left: 4px;
+    // margin-left: 4px;
 
     .button-cancel-text {
       order: 2;
@@ -336,35 +341,35 @@ div[id="single-spa-application:@sapiencia/funds"] {
   //cursor: not-allowed;
 }
 
-.input-basic {
-  font-weight: regular;
-  font-family: "Rubik" !important;
-  font-size: 14px;
-}
+// .input-basic {
+//   font-weight: regular;
+//   font-family: "Rubik" !important;
+//   font-size: 14px;
+// }
 
-.input-regular {
-  font-weight: regular;
-  font-family: "Rubik" !important;
-  font-size: 14px;
-}
+// .input-regular {
+//   font-weight: regular;
+//   font-family: "Rubik" !important;
+//   font-size: 14px;
+// }
 
-span.select-basic {
-  font-weight: regular !important;
-  font-family: "Rubik" !important;
-  font-size: 7px !important;
-}
+// span.select-basic {
+//   font-weight: regular !important;
+//   font-family: "Rubik" !important;
+//   font-size: 7px !important;
+// }
 
-.select-basic .p-dropdown-label {
-  font-weight: regular !important;
-  font-family: "Rubik" !important;
-  font-size: 14px !important;
-}
+// .select-basic .p-dropdown-label {
+//   font-weight: regular !important;
+//   font-family: "Rubik" !important;
+//   font-size: 14px !important;
+// }
 
-.p-datatable-tbody {
-  font-weight: regular !important;
-  font-family: "Rubik" !important;
-  font-size: 14px !important;
-}
+// .p-datatable-tbody {
+//   font-weight: regular !important;
+//   font-family: "Rubik" !important;
+//   font-size: 14px !important;
+// }
 
 .mg-0 {
   margin: 0;
@@ -614,6 +619,10 @@ span.select-basic {
   width: 9.5em;
   height: 2.5em;
   font-size: 16px;
+
+  @media (max-width: 550px) {
+    width: 100%;
+  }
 }
 
 .button-download {
@@ -636,6 +645,7 @@ span.select-basic {
   position: relative;
   display: inline-block;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .tooltip .tooltiptext {
@@ -656,4 +666,43 @@ span.select-basic {
 
 .tooltip:hover .tooltiptext {
   display: block; /* Muestra el tooltip cuando se coloca el cursor sobre el elemento */
+}
+
+.button-save-container-display-maestros-actas {
+  display: flex;
+  justify-content: end;
+  flex-direction: row;
+  margin-right: 24px;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    margin-top: 10px;
+
+    margin-left: 4px;
+    margin-bottom: 10px;
+
+    .button-cancel-text {
+      order: 2;
+      width: 100%;
+      margin-left: 9px;
+      margin-top: 24px;
+      margin-bottom: 60px;
+      margin-top: 5px;
+    }
+
+    .button-save {
+      order: 1;
+      width: 100%;
+      background-color: #533893;
+      display: flex;
+      padding: 12px 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      margin-top: 24px;
+    }
+  }
 }

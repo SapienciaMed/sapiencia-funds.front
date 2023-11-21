@@ -114,7 +114,7 @@ const ActaCreatePage = () => {
     const tableActions: ITableAction<IActaItems>[] = [
         {
             icon: "Edit",
-            onClick: (row) => {             
+            onClick: (row) => {
 
                 setMessage({
                     show: true,
@@ -253,27 +253,7 @@ const ActaCreatePage = () => {
                                     filter={true}
                                     placeholder="Seleccionar."
                                 />
-                                {/*  <Controller
-                                    control={control}
-                                    name={"periodVigency"}
-                                    render={({ field }) => {
-                                        return (
-                                            <InputComponent
-                                                idInput={"periodVigency"}
-                                                className="input-basic medium"
-                                                typeInput="number"
-                                                label="Periodos por vigencia"
-                                                register={register}
-                                                classNameLabel="text-black biggest text-required"
-                                                errors={errors}
-                                                placeholder={""}
-                                                disabled={checked}
-                                                {...field}
-                                            />
-                                        )
 
-                                    }}
-                                /> */}
                                 <SelectComponent
                                     idInput={"periodVigency"}
                                     control={control}
@@ -292,7 +272,7 @@ const ActaCreatePage = () => {
 
                             </div>
                             <div className='grid-form-3-container mt-20px'>
-                               <Controller
+                                <Controller
                                     control={control}
                                     name={"announcementInitial"}
                                     render={({ field }) => {
@@ -307,38 +287,23 @@ const ActaCreatePage = () => {
                                                 errors={errors}
                                                 placeholder={""}
                                                 disabled={checked}
+                                                maxLength={9}
                                                 {...field}
                                             />
                                         )
 
                                     }}
-                                /> 
-
-                              {/*   <SelectComponent
-                                    idInput={"announcementInitial"}
-                                    control={control}
-                                    errors={errors}
-                                    data={periods}
-                                    label={
-                                        <>
-                                            Convocatoria inicial <span>*</span>
-                                        </>
-                                    }
-                                    className="select-basic medium select-disabled-list"
-                                    classNameLabel="text-black biggest"
-                                    filter={true}
-                                    placeholder="Seleccionar."
-                                /> */}
+                                />
 
                                 <InputNumberComponent
                                     control={control}
                                     idInput={`salaryMin`}
-                                    label="valor"
+                                    label="Salario mínimo"
                                     className="inputNumber-basic medium"
                                     placeholder={'Seleccionar'}
                                     classNameLabel="text-black biggest text-required"
                                     errors={errors}
-                                    mode="currency"
+                                    //mode="currency"
                                     currency="COP"
                                     locale="es-CO"
                                     fieldArray={true}
@@ -363,17 +328,34 @@ const ActaCreatePage = () => {
                                     name={"costsExpenses"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
-                                                idInput={"costsExpenses"}
-                                                className="input-basic medium"
-                                                typeInput="number"
+                                            /*  <InputComponent
+                                                 idInput={"costsExpenses"}
+                                                 className="input-basic medium"
+                                                 typeInput="number"
+                                                 label="Costo y gastos de operación logística"
+                                                 register={register}
+                                                 classNameLabel="text-black biggest text-required"
+                                                 errors={errors}
+                                                 placeholder={""}
+                                                 disabled={checked}
+                                                 {...field}
+                                             /> */
+                                            <InputNumberComponent
+                                                idInput='costsExpenses'
+                                                className="inputNumber-basic medium"
                                                 label="Costo y gastos de operación logística"
-                                                register={register}
-                                                classNameLabel="text-black biggest text-required"
+                                                classNameLabel={`text-black biggest text-required`}
                                                 errors={errors}
                                                 placeholder={""}
-                                                disabled={checked}
-                                                {...field}
+                                                /*  direction={EDirection.column}
+                                                 disabled={valueAction != 'edit'} */
+                                                suffix="%"
+                                                mode="decimal"
+                                                minFractionDigits={1}
+                                                maxFractionDigits={1}
+                                                min={0}
+                                                max={100}
+                                                control={control}
                                             />
                                         )
 
@@ -385,7 +367,7 @@ const ActaCreatePage = () => {
                                     name={"OperatorCommission"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
+                                           /*  <InputComponent
                                                 idInput={"OperatorCommission"}
                                                 className="input-basic medium"
                                                 typeInput="number"
@@ -397,6 +379,24 @@ const ActaCreatePage = () => {
                                                 disabled={checked}
                                                 {...field}
                                             />
+ */
+                                            <InputNumberComponent
+                                                idInput='OperatorCommission'
+                                                className="inputNumber-basic medium"
+                                                label="Comisión operador financiero"
+                                                classNameLabel={`text-black biggest text-required`}
+                                                errors={errors}
+                                                placeholder={""}
+                                                /*  direction={EDirection.column}
+                                                 disabled={valueAction != 'edit'} */
+                                                suffix="%"
+                                                mode="decimal"
+                                                minFractionDigits={1}
+                                                maxFractionDigits={1}
+                                                min={0}
+                                                max={100}
+                                                control={control}
+                                            />
                                         )
 
                                     }}
@@ -407,7 +407,7 @@ const ActaCreatePage = () => {
                                     name={"financialOperation"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
+                                           /*  <InputComponent
                                                 idInput={"financialOperation"}
                                                 className="input-basic medium"
                                                 typeInput="number"
@@ -418,7 +418,25 @@ const ActaCreatePage = () => {
                                                 placeholder={""}
                                                 disabled={checked}
                                                 {...field}
-                                            />
+                                            /> */
+
+                                            <InputNumberComponent
+                                            idInput='financialOperation'
+                                            className="inputNumber-basic medium"
+                                            label="Operación finaciera MB"
+                                            classNameLabel={`text-black biggest text-required`}
+                                            errors={errors}
+                                            placeholder={""}
+                                            /*  direction={EDirection.column}
+                                             disabled={valueAction != 'edit'} */
+                                            suffix="%"
+                                            mode="decimal"
+                                            minFractionDigits={1}
+                                            maxFractionDigits={1}
+                                            min={0}
+                                            max={100}
+                                            control={control}
+                                        />
                                         )
 
                                     }}
@@ -441,9 +459,9 @@ const ActaCreatePage = () => {
             </div>
 
             <div
-             style={
-                 dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
-             } 
+                style={
+                    dataGridItems.length > 0 ? { display: "block" } : { display: "none" }
+                }
             >
                 <div className="container-form-grid mt-24px">
                     <div className="container-form padding-form">
@@ -477,19 +495,7 @@ const ActaCreatePage = () => {
                                 disabled
                                 value={String(totalQuantityPeriod1)}
                             />
-                            {/*      <InputComponent
-                                idInput={"tValue1"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Valor periodo 1"
-                                //register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(totalValuePeriod1)}
-                            /> */}
+
                             <InputNumberComponent
                                 control={control}
                                 idInput={`tValue1`}
@@ -519,19 +525,7 @@ const ActaCreatePage = () => {
                                 disabled
                                 value={String(totalQuantityPeriod2)}
                             />
-                            {/*  <InputComponent
-                                idInput={"tValue2"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Valor periodo 2"
-                                //={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(totalValuePeriod2)}
-                            /> */}
+
                             <InputNumberComponent
                                 control={control}
                                 idInput={`tValue2`}
@@ -550,19 +544,7 @@ const ActaCreatePage = () => {
                             />
                         </div>
                         <div className='grid-form-3-container mb-24px'>
-                            {/*  <InputComponent
-                                idInput={"tQuantity1"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Subtotal vigencia"
-                                //register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(subtotalVigency)}
-                            /> */}
+
                             <InputNumberComponent
                                 control={control}
                                 idInput={`subtotalVigency`}
@@ -579,19 +561,7 @@ const ActaCreatePage = () => {
                                 maxFractionDigits={0}
                                 disabled
                             />
-                            {/*  <InputComponent
-                                idInput={"totalCostBillsOperation"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Costo y gasto de operación"
-                                //register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(totalCostBillsOperation)}
-                            /> */}
+
                             <InputNumberComponent
                                 control={control}
                                 idInput={`totalCostBillsOperation`}
@@ -608,19 +578,7 @@ const ActaCreatePage = () => {
                                 maxFractionDigits={0}
                                 disabled
                             />
-                            {/*  <InputComponent
-                                idInput={"totalNet"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Neto"
-                                //register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(totalNet)}
-                            /> */}
+
 
                             <InputNumberComponent
                                 control={control}
@@ -659,21 +617,6 @@ const ActaCreatePage = () => {
                                 disabled
                             />
 
-                            {/*  <InputComponent
-                                idInput={"totalFinancialOperatorCommission"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Total comisión operador financiero"
-                                //register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(totalFinancialOperatorCommission)}
-                            /> */}
-
-
                             <InputNumberComponent
                                 control={control}
                                 idInput={`totalFinancialOperatorCommission`}
@@ -699,19 +642,7 @@ const ActaCreatePage = () => {
                 <div className="container-form padding-form">
                     <div>
                         <div className='grid-form-3-container mb-24px'>
-                            {/* <InputComponent
-                                idInput={"vigency1"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Verificador 1"
-                                //register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(vigency1)}
-                            /> */}
+
                             <InputNumberComponent
                                 control={control}
                                 idInput={`vigency1`}
@@ -728,19 +659,6 @@ const ActaCreatePage = () => {
                                 maxFractionDigits={0}
                                 disabled
                             />
-                            {/*  <InputComponent
-                                idInput={"vigency2"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Verificador 2"
-                                //register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(subtotalVigency)}
-                            /> */}
 
                             <InputNumberComponent
                                 control={control}
@@ -758,19 +676,7 @@ const ActaCreatePage = () => {
                                 maxFractionDigits={0}
                                 disabled
                             />
-                            {/*    <InputComponent
-                                idInput={"techo"}
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="techo"
-                                // register={register}
-                                classNameLabel="text-black biggest text-required"
-                                //direction={EDirection.column}
-                                errors={errors}
-                                placeholder={""}
-                                disabled
-                                value={String(projectMeta)}
-                            /> */}
+
                             <InputNumberComponent
                                 control={control}
                                 idInput={`techo`}
@@ -877,16 +783,7 @@ const ActaCreatePage = () => {
                         />
                     </div>
                 </div>
-
-
-
-
             </div>
-
-
-
-
-
 
             <hr />
             <br />
@@ -907,8 +804,6 @@ const ActaCreatePage = () => {
                 />
             </div>
             <br />
-
-
 
         </Fragment>
 

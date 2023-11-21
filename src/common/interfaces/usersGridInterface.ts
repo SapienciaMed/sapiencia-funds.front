@@ -4,7 +4,8 @@ export interface IUserDataGrid {
     user?:           string;
     status?:         number;
     idActa?:         number;
-    dateAprobation?: Date;
+    dateAprobation?: string;
     email?:          string;
     ident?: string;
+    idCitation?: number,
 }

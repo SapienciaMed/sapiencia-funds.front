@@ -3,14 +3,16 @@ import { ButtonComponent, FormComponent, SelectComponent, MultiSelects } from ".
 import useDatingSearch from "../hooks/dating-report";
 import TableComponent from "../../../common/components/table.component";
 import Svgs from "../../../public/images/icons/svgs";
+import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 
 const DatingReportRoutes = (): React.JSX.Element => {
 
-    const { announcementList, programList, control, errors, clearFields, register, setValue, navigate,
+    const { programList, control, errors, clearFields, register, setValue, navigate,
         tableComponentRef, showTable, tableColumns, setShowTable, onSubmit, reset, downloadCollection,
     } = useDatingSearch();
-    const [tableView, setTableView] = useState<boolean>(false);
+    
+    const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
 
     return (
         <Fragment>
@@ -24,52 +26,56 @@ const DatingReportRoutes = (): React.JSX.Element => {
 
                     <div className="container-sections-forms">
                         <FormComponent
-                            id="searchBudget"
+                            id="searchDating"
                             className="form-signIn"
                             action={onSubmit}
                         >
                             <div>
-                                <div className="grid-form-4-container mb-24px">
-                                    <SelectComponent
-                                        idInput={"convocatoria"}
-                                        control={control}
-                                        errors={errors}
-                                        data={announcementList}
-                                        label={<>Convocatoria <span>*</span></>}
-                                        className={"select-basic medium select-disabled-list input-basic input-regular"}
-                                        classNameLabel="text-black big medium label-regular"
-                                        filter={true}
-                                        placeholder="Seleccione."
-                                    />
-                                    <MultiSelects
+                                <div className="grid-form-3-container mb-24px">
+                                <InputNumberComponent
+                                    control={control}
+                                    idInput={`Convocatoria `}
+                                    label="Recursos para crédito"
+                                    className="inputNumber-basic medium"
+                                    placeholder={'2023-2'}
+                                    classNameLabel="text-black biggest  text-required"
+                                    errors={errors}
+                                    mode="currency"
+                                    currency="COP"
+                                    locale="es-CO"
+                                    fieldArray={true}
+                                    minFractionDigits={0}
+                                    maxFractionDigits={0}
+                                    disabled
+                                />
+                                <MultiSelects
                                         idInput={"programa"}
                                         control={control}
                                         errors={errors}
                                         data={programList}
-                                        label={<>Línea Programa <span>*</span></>}
+                                        label={<>Línea Programa</>}
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
-                                        classNameLabel="text-black big medium label-regular"
+                                        classNameLabel="text-black biggest  text-required"
                                         filter={true}
                                         placeholder="Seleccionar."
 
-                                    />
+                                />
                                 </div>
                             </div>
                             <div className="button-save-container-display m-top-20">
                                 <ButtonComponent
-                                    form="searchBudget"
+                                    form="searchDating"
                                     value={"Limpiar"}
                                     className="button-clean medium"
                                     type="button"
                                     action={() => {
                                         reset();
                                         tableComponentRef.current.emptyData();
-                                        setTableView(false);
                                     }
                                     }
                                 />
                                 <ButtonComponent
-                                    form="searchBudget"
+                                    form="searchDating"
                                     value={`Buscar`}
                                     className="button-save large hover-three disabled-black"
                                 />
@@ -80,9 +86,16 @@ const DatingReportRoutes = (): React.JSX.Element => {
 
                         <TableComponent
                             ref={tableComponentRef}
-                            url={`${process.env.urlApiFunds}/api/v1/sapiencia/getbudget-paginated/`}
+                            url={`${process.env.urlApiFunds}/api/v1/citas/getdating-paginated/`}
                             columns={tableColumns}
-                            isShowModal={false}
+                            isShowModal={true}
+                            titleMessageModalNoResult="Buscar"
+                            descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
+                            isMobil={true}
+                            onResult={(rows) => {
+                                setSendingReportXlsx(rows.length > 0);
+                              }}
+
                         />
 
                     )}
@@ -93,7 +106,7 @@ const DatingReportRoutes = (): React.JSX.Element => {
                     <hr className="barra-spacing" />
                 </div>
                 <div className="button-save-container-display mr-24px">
-                    {("CUENTA_COBRO_EXCEL") && (
+                    {sendingReportXlsx ? (
                         <ButtonComponent
                             value={
                                 <>
@@ -106,7 +119,7 @@ const DatingReportRoutes = (): React.JSX.Element => {
                             className="button-download large "
                             action={downloadCollection}
                         />
-                    )}
+                    ) : ''}
                 </div>
             </div>
         </Fragment>
