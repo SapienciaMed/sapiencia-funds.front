@@ -342,7 +342,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                 const dinamicData = response?.data;
 
                 const book = XLSX.utils.book_new()
-                const sheet = XLSX.utils.json_to_sheet( dataActasdf(dinamicData) )
+                const sheet = XLSX.utils.json_to_sheet( dataActasdf(dinamicData, programList, foundList, lineList, announcementList, conceptList) )
 
                 XLSX.utils.book_append_sheet(book, sheet, `Acta_${actaNro}`)
 
