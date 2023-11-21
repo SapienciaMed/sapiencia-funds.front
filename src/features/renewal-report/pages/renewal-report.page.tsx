@@ -7,7 +7,7 @@ import { ITableAction, ITableElement } from "../../../common/interfaces/table.in
 import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import BasicTableComponent from "../../../common/components/basic-table.component";
-
+import { UseFormGetValues } from 'react-hook-form';
 import ItemsEditePage from "./items-edit.page";
 
 const SearchRenewalReportPage = (): React.JSX.Element => {
@@ -17,14 +17,13 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
         control, errors, clearFields, register, setValue, navigate, tableComponentRef, showTable,
         setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal,downloadCollection
     } = useRenewaReportSearch();
-    const [tableView, setTableView] = useState<boolean>(false);
-
+   
 
     const tableColumnsRenewal: ITableElement<ICallRenewal>[] = [
         {
             fieldName: "fund",
             header: "Fondo",
-        },
+    },
         {
             fieldName: "enabled",
             header: "Nro habilitados"
@@ -44,10 +43,16 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
         {
             icon: "Edit",
             onClick: (row) => {
+                const dataEditTable: ICallRenewal ={
+                    fund: "",
+                    enabled: "",
+                    renewed: "",
+                    percentage: "90"
+                }
                 setMessage({
                     show: true,
                     title: "Editar ítem",
-                    //description: <ItemsEditePage acta={datosActa} actaItems={row} action={"edit"} />,
+                    description: <ItemsEditePage acta={dataEditTable} action={"edit"} />,
                     background: true,
                     size: "items",
                     items: true,
@@ -101,7 +106,6 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                                 action={() => {
                                     reset();
                                     tableComponentRef.current.emptyData();
-                                    setTableView(false);
                                 }
                                 }
                             />
@@ -242,7 +246,6 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                         action={() => {
                             reset();
                             tableComponentRef.current.emptyData();
-                            setTableView(false);
                         }
                         }
                     />

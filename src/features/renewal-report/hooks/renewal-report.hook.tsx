@@ -73,11 +73,12 @@ export default function useRenewaReportSearch() {
             });
 
         responservice.data.array.map((e) => {
+            const percentage = (e.renewed / e.enabled) * 100 || 0; // Evita dividir por cero
             const list = {
                 fund: e.fund,
                 enabled: e.enabled,
                 renewed: e.renewed,
-                percentage: "90"
+                percentage: percentage.toFixed(2), 
             }
             dataGridRenewal.push(list)
 
