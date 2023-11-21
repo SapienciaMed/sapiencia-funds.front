@@ -35,7 +35,7 @@ const DatingReportRoutes = (): React.JSX.Element => {
                                 <InputNumberComponent
                                     control={control}
                                     idInput={`Convocatoria `}
-                                    label="Recursos para crédito"
+                                    label="Convocatoria actual"
                                     className="inputNumber-basic medium"
                                     placeholder={'2023-2'}
                                     classNameLabel="text-black biggest  text-required"
