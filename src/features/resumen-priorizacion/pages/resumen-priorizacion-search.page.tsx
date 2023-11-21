@@ -172,7 +172,6 @@ const VotingResultsSearchPage = () => {
             titleMessageModalNoResult="No se encontraron resultados"
             descriptionModalNoResult=""
             isShowModal={true}
-            isMobil={true}
             onResult={(rows) => {
               setSendingReportXlsx(rows.length > 0);
             }}
