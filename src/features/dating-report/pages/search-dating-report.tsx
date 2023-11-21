@@ -91,7 +91,6 @@ const DatingReportRoutes = (): React.JSX.Element => {
                             isShowModal={true}
                             titleMessageModalNoResult="Buscar"
                             descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
-                            isMobil={true}
                             onResult={(rows) => {
                                 setSendingReportXlsx(rows.length > 0);
                               }}
