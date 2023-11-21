@@ -96,7 +96,7 @@ export function MultiSelects({
                 onChange={(e: MultiSelectChangeEvent) => field.onChange(e.value)}
                 options={data}
                 optionLabel="name"
-                placeholder={showDefaultOption ? placeholder || "Seleccionar" : ""}
+                placeholder={placeholder}
                 filter={filter}
                 disabled={disabled}
                 maxSelectedLabels={3}
