@@ -45,9 +45,9 @@ interface IProps<T> {
   isDisabled?: boolean;
   widthTable?: string;
   horizontalScroll?: boolean;
-  classSizeTable?: string;
-  isMobil?: boolean
   onResult?: (rows: T[]) => void;
+  isMobil?: boolean;
+  classSizeTable?: string;
 }
 
 interface IRef {
@@ -68,9 +68,9 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     classname = "",
     isDisabled,
     widthTable,
-    classSizeTable,
+    horizontalScroll = true,
     isMobil = true,
-    horizontalScroll = true
+    classSizeTable
   } = props;
 
   // States
@@ -207,7 +207,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
-      <div className="card-user ">
         <div className="spc-common-table">
           {title && <div className="spc-table-title">{title}</div>}
 
@@ -223,15 +222,15 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             leftContent={leftContent(princialTitle)}
           />
 
-          {width > 830 ? (
-            <div style={{ maxWidth: width - 400 }}>
+          {(width > 830 || !isMobil) ? (
+            <div>
               <DataTable
-                className="spc-table full-height"
+                className={`spc-table full-height ${classSizeTable}`}
                 value={resultData?.array || []}
                 loading={loading}
                 scrollable={true}
                 emptyMessage={emptyMessage}
-                style={{ maxWidth: widthTable }}
+                // style={{ maxWidth: widthTable }}
               >
                 {columns.map((col) => (
                   <Column
@@ -239,35 +238,35 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                     field={col.fieldName}
                     header={col.header}
                     body={col.renderCell}
-                    style={
-                      horizontalScroll
-                        ? {}
-                        : {
-                            maxWidth: `${widthColumns}px`,
-                            minHeight: `${widthColumns}px`,
-                            width: `${widthColumns}px`,
-                          }
-                    }
+                    // style={
+                    //   horizontalScroll
+                    //     ? {}
+                    //     : {
+                    //         maxWidth: `${widthColumns}px`,
+                    //         minHeight: `${widthColumns}px`,
+                    //         width: `${widthColumns}px`,
+                    //       }
+                    // }
                   />
                 ))}
 
                 {actions && actions.length && (
                   <Column
-                    style={
-                      horizontalScroll
-                        ? {}
-                        : {
-                            maxWidth: `${widthColumns}px`,
-                            minHeight: `${widthColumns}px`,
-                            width: `${widthColumns}px`,
-                          }
-                    }
+                    // style={
+                    //   horizontalScroll
+                    //     ? {}
+                    //     : {
+                    //         maxWidth: `${widthColumns}px`,
+                    //         minHeight: `${widthColumns}px`,
+                    //         width: `${widthColumns}px`,
+                    //       }
+                    // }
                     className="spc-table-actions"
                     header={
                       <div>
                         <div
                           className="spc-header-title"
-                          style={{ fontWeight: 400 }}
+                          // style={{ fontWeight: 400 }}
                         >
                           Acciones
                         </div>
@@ -302,7 +301,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             onPageChange={onPageChange}
           />
         </div>
-      </div>
     );
   }
 
