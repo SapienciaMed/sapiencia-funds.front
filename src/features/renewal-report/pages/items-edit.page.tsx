@@ -15,7 +15,7 @@ const ItemsEditePage = ({ action, acta, actaItems }: { action, acta?: IActa, act
     const { errors, register, onsubmitAddItem, showTable, tableComponentRef, datos, control, typeProgram, 
         foundList, lineList, conceptList, announcementList,periods, costBillsOperation,/* handleInputChange */ neto, 
         financialOperatorCommission, resourcesCredit, programList, CancelFunction 
-    } = useActaItems(action, acta, actaItems, modifiedIdcCountercredit);
+    } = useActaItems(action, acta, actaItems);
 
     return (
         <Fragment>
