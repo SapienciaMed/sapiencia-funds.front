@@ -37,7 +37,7 @@ export const useResumenPriorizacionSearch = () => {
     resolver,
     defaultValues: {
       communeNeighborhood: null,
-      numberProject: null,
+      numberProject: '',
       validity: '',
     }
   }

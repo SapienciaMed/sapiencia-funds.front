@@ -45,7 +45,6 @@ interface IProps<T> {
   isDisabled?: boolean;
   widthTable?: string;
   horizontalScroll?: boolean;
-  isMobil?: boolean;
   onResult?: (rows: T[]) => void;
 }
 
@@ -67,8 +66,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     classname = "",
     isDisabled,
     widthTable,
-    horizontalScroll = true,
-    isMobil = true
+    horizontalScroll = true
   } = props;
 
   // States
@@ -221,7 +219,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             leftContent={leftContent(princialTitle)}
           />
 
-          {width > 830 || !isMobil ? (
+          {width > 830 ? (
             <div style={{ maxWidth: width - 400 }}>
               <DataTable
                 className="spc-table full-height"
