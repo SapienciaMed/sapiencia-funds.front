@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { filterBudget } from "../../../common/schemas/budget-schema";
@@ -10,6 +10,7 @@ import { ICallRenewal, IRenewalDataGrid } from "../../../common/interfaces/funds
 import { AppContext } from "../../../common/contexts/app.context";
 import useRenewalReportApi from "./renewal-report-api.hook";
 import { data } from "../../socialization/service/api";
+import { urlApiFunds } from "../../../common/utils/base-url";
 
 
 export default function useRenewaReportSearch() {
@@ -19,94 +20,73 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport} = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
     const [renewalReport, setRenewalReport] = useState([]);
+    const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
 
     const {
         handleSubmit,
-        register,  
+        register,
         setValue,
         reset,
         control: control,
         formState: { errors },
         watch,
     } = useForm<ICallRenewal>(
-        {  }
+        {}
     );
 
-
-    getAnnouncement()
-    .then((response) => {
-        if (response && response?.operation?.code === EResponseCodes.OK) {
-            setAnnouncementList(
-                response.data.map((item) => {
-                    const list = {
-                        name: item.name,
-                        value: item.id,
-                    };
-                    return list;
-                })
-            );
-        }
-    })
-
-
-  // carga combos
-  useEffect(() => {
-    searchRenewal();
-    console.log("*****cargar ...", renewalReport)
-  }, []);
+    useEffect(() => {
+        getAnnouncement()
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setAnnouncementList(
+                        response.data.map((item) => {
+                            const list = {
+                                name: item.name,
+                                value: item.id,
+                            };
+                            return list;
+                        })
+                    );
+                }
+            })
+    }, []);
 
 
 
-    const searchRenewal = handleSubmit(async (data: ICallRenewal) => {        
+    const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
         // Cambio en el selector del periodo
-        const selectedperiodo = watch('periodo');
-        data.periodo = selectedperiodo;
+        const selectedperiodo = watch('period');
+        data.period = selectedperiodo;
         data.page = 1;
         data.perPage = 10;
-        
-        getRenewalReport(data)
-            .then((response) => {
-                console.log("******response", response);
-     
-                if (response && response?.operation?.code === EResponseCodes.OK) {
-                    let dataArray;
-     
-                    if (Array.isArray(response.data)) {
-                        dataArray = response.data;
-                    } else if (typeof response.data === 'object' && response.data !== null) {
-                        // Tratar la respuesta como un objeto individual
-                        dataArray = [response.data];
-                    } else {
-                        console.error('La propiedad "data" de la respuesta de la API no es un array:', response.data);
-                        return;
-                    }
-                      const renewal = dataArray.map((item) => ({
-                            Fondo: item.Fondo,
-                            No_Habilitados: item.No_Habilitados,
-                            No_Renovados: item.No_Renovados,
-                        }))
-                        setRenewalReport(renewal);
- 
-                }
+
+        const responservice: any = await getRenewalReport(data)
+            .then(async (response) => {
+
+                return response
+
             });
 
-            dataGridRenewal.push({
-                Fondo: "Beca Mejores Bachilleres Renueva",
-                No_Habilitados: "142",
-                No_Renovados:"385",
-                Porcentaje:"89%"
+        responservice.data.array.map((e) => {
+            const list = {
+                fund: e.fund,
+                enabled: e.enabled,
+                renewed: e.renewed,
+                percentage: "90"
+            }
+            dataGridRenewal.push(list)
 
-            })
 
+        })
     });
-    
 
-    const onSubmit = handleSubmit(async (data: ICallRenewal) => {        
+
+    const onSubmit = handleSubmit(async (data: ICallRenewal) => {
         setShowTable(true)
 
         if (tableComponentRef.current) {
@@ -119,7 +99,33 @@ export default function useRenewaReportSearch() {
         reset();
         tableComponentRef.current?.emptyData();
         setShowTable(false);
-      };
+    };
+
+    const downloadCollection = useCallback(() => {
+        const { page, perPage } = paginateData;
+        const periodo = watch('period');
+        const url = new URL(`${urlApiFunds}/api/v1/renovacion/generate-xlsx`);
+        const params = new URLSearchParams();
+        params.append("page", page + 1)
+        params.append("perPage", perPage + 10)
+
+        if (periodo) {
+            params.append("periodo", String(periodo));
+        }
+
+        url.search = params.toString();
+        window.open(url.toString(), "_blank");
+        setMessage({
+            title: "Descargar",
+            description: "Información descargada exitosamente",
+            show: true,
+            background: true,
+            OkTitle: "Cerrar"
+        });
+
+    }, [paginateData,]
+
+    );
 
     return {
 
@@ -127,7 +133,7 @@ export default function useRenewaReportSearch() {
         errors,
         register,
         setValue,
-        navigate,       
+        navigate,
         setShowTable,
         showTable,
         tableComponentRef,
@@ -138,5 +144,6 @@ export default function useRenewaReportSearch() {
         setdataGridRenewal,
         dataGridRenewal,
         searchRenewal,
-      }
+        downloadCollection,
+    }
 }

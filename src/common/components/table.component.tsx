@@ -47,6 +47,7 @@ interface IProps<T> {
   horizontalScroll?: boolean;
   classSizeTable?: string;
   isMobil?: boolean
+  onResult?: (rows: T[]) => void;
 }
 
 interface IRef {
@@ -68,8 +69,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     isDisabled,
     widthTable,
     classSizeTable,
-    horizontalScroll = true,
-    isMobil = true
+    isMobil = true,
+    horizontalScroll = true
   } = props;
 
   // States
@@ -99,6 +100,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     if (newSearchCriteria) {
       setSearchCriteria(newSearchCriteria);
     }
+
     const body = newSearchCriteria || searchCriteria || {};
     const res = await post<IPagingData<any>>(url, {
       ...body,
@@ -107,7 +109,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
-
+      if (props.onResult) props.onResult(res?.data?.array || []);
       if (res.data.array.length <= 0 && isShowModal) {
         setMessage({
           title: `${titleMessageModalNoResult || ""}`,
@@ -221,7 +223,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             leftContent={leftContent(princialTitle)}
           />
 
-          {width > 830 || !isMobil ? (
+          {width > 830 ? (
             <div style={{ maxWidth: width - 400 }}>
               <DataTable
                 className="spc-table full-height"
@@ -303,84 +305,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       </div>
     );
   }
-  
-  return (
-    <div className="card-user ">
-      <div className="spc-common-table">
-        {title && <div className="spc-table-title">{title}</div>}
 
-        {/* Verificar si resultData.array tiene elementos */}
-
-        <Paginator
-          className="between spc-table-paginator"
-          template={paginatorHeader}
-          first={first}
-          rows={perPage}
-          totalRecords={resultData?.meta?.total || 0}
-          onPageChange={onPageChange}
-          leftContent={leftContent(princialTitle)}
-        />
-
-        {width > 830 ? (
-          <div style={{ maxWidth: width - 400 }}>
-            <DataTable
-              className={`spc-table full-height ${classSizeTable}`}
-              value={resultData?.array || []}
-              loading={loading}
-              scrollable={true}
-              emptyMessage={emptyMessage}
-              style={{ maxWidth: widthTable }}
-            >
-              {columns.map((col) => (
-                <Column
-                  key={col.fieldName}
-                  field={col.fieldName}
-                  header={col.header}
-                  body={col.renderCell}
-                  style={horizontalScroll ? {} : { maxWidth: `${widthColumns}px`, minHeight: `${widthColumns}px`, width: `${widthColumns}px` }}
-                />
-              ))}
-
-              {actions && actions.length && (
-                <Column style={horizontalScroll ? {} : { maxWidth: `${widthColumns}px`, minHeight: `${widthColumns}px`, width: `${widthColumns}px` }}
-                  className="spc-table-actions"
-                  header={
-                    <div>
-                      <div
-                        className="spc-header-title"
-                        style={{ fontWeight: 400 }}
-                      >
-                        Acciones
-                      </div>
-                    </div>
-                  }
-                  body={(row) => (
-                    <ActionComponent row={row} actions={actions} isDisabled={isDisabled} />
-                  )}
-                />
-              )}
-            </DataTable>
-          </div>
-        ) : (
-          <DataView
-            value={resultData?.array || []}
-            itemTemplate={mobilTemplate}
-            rows={5}
-            emptyMessage={emptyMessage}
-          />
-        )}
-
-        <Paginator
-          className="spc-table-paginator"
-          template={paginatorFooter}
-          first={first}
-          rows={perPage}
-          totalRecords={resultData?.meta?.total || 0}
-          onPageChange={onPageChange}
-        />
-      </div>
-    </div>
-  );
 });
 
 function getIconElement(icon: string, element: "name" | "src", isDisabled: boolean) {

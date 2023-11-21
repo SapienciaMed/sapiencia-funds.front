@@ -12,6 +12,8 @@ const SearchBudgetPage = (): React.JSX.Element => {
         tableActions
     } = useBudgetSearch();
 
+    const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
+
     return (
         <Fragment>
             <div className="main-page">
@@ -81,40 +83,40 @@ const SearchBudgetPage = (): React.JSX.Element => {
                     {showTable && (
                         <>
                             <div>
-
-
                                 <TableComponent
                                     ref={tableComponentRef}
                                     url={`${process.env.urlApiFunds}/api/v1/presupuesto/getbudget-paginated/`}
                                     columns={tableColumns}
-                                    actions={tableActions}
+                                    //actions={tableActions}
                                     titleMessageModalNoResult="Buscar"
                                     princialTitle="Informe legalización"
                                     isShowModal={true}
                                     descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
+                                    onResult={(rows) => {
+                                        setSendingReportXlsx(rows.length > 0);
+                                    }}
                                 />
-
-
 
                                 <div>
                                     <br />
                                     <hr className="barra-spacing" />
                                 </div>
-
+                                {sendingReportXlsx ? (
                                 <div className="button-save-container-display mr-24px">
-                                        <ButtonComponent
-                                            value={
-                                                <>
-                                                    <div className="container-buttonText">
-                                                        <span>Descargar</span>
-                                                        <Svgs svg="excel" width={23.593} height={28.505} />
-                                                    </div>
-                                                </>
-                                            }
-                                            className="button-download large "
-                                            action={downloadCollection}
-                                        />
+                                    <ButtonComponent
+                                        value={
+                                            <>
+                                                <div className="container-buttonText">
+                                                    <span>Descargar</span>
+                                                    <Svgs svg="excel" width={23.593} height={28.505} />
+                                                </div>
+                                            </>
+                                        }
+                                        className="button-download large "
+                                        action={downloadCollection}
+                                    />
                                 </div>
+                                ) : ''}
                             </div>
                         </>
                     )}

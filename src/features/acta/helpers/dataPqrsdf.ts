@@ -4,25 +4,26 @@ export const dataActasdf = ( dinamicData: IActa[]) => {
 
     const data = dinamicData.map((item: IActa) => {
         const citationDate =  item?.citation.filter((value, index, self) =>
-                index === self.findIndex((v) => (
-                    v.user === value.user &&
-                    v.timeCitation === value.timeCitation &&
-                    v.status === value.status
-                ))
-            ).find(us => us)?.dateCitation
-        console.log("🚀 ~ file: dataPqrsdf.ts:13 ~ data ~ citationDate:", citationDate)
+            index === self.findIndex((v) => (
+                v.user === value.user &&
+                v.timeCitation === value.timeCitation &&
+                v.status === value.status
+            ))
+        ).find(us => us)?.dateCitation
 
+        const citationTime = item?.citation.filter((value, index, self) =>
+            index === self.findIndex((v) => (
+                v.user === value.user &&
+                v.timeCitation === value.timeCitation &&
+                v.status === value.status
+            ))
+        ).find(us => us)?.timeCitation
         
-            const date = new Date(citationDate);
-            const day = date.getUTCDate();
-            const month = date.getUTCMonth() + 1;
-            const year = date.getUTCFullYear();
-            const hours = date.getUTCHours();
-            const minutes = date.getUTCMinutes();
-            const seconds = date.getUTCSeconds();
-            
-            console.log(citationDate != undefined ? `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}-${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}` : '-');
-            
+        const date = new Date(citationDate);
+        const day = date.getUTCDate();
+        const month = date.getUTCMonth() + 1;
+        const year = date.getUTCFullYear();
+ 
         return {
             Estado: item.typeMasterList.name,
             Numero_proyecto: item.numberProject,
@@ -54,7 +55,7 @@ export const dataActasdf = ( dinamicData: IActa[]) => {
                     v.status === value.status
                 ))
             ).find(us => us)?.user || '',
-            Citacion_Fecha: citationDate != undefined ? `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}-${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}` : '',
+            Citacion_Fecha: citationDate != undefined ? `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}-${citationTime}` : '',
             Citacion_Estado: item?.citation.filter((value, index, self) =>
                 index === self.findIndex((v) => (
                     v.user === value.user &&

@@ -1,6 +1,6 @@
 export interface IResumenPriorizacion {
     id?: number;
     communeNeighborhood: number;
-    numberProject: number;
+    numberProject: string;
     validity: string;
 }

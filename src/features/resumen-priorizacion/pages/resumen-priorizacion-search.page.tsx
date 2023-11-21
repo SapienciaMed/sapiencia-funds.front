@@ -15,6 +15,7 @@ import TableComponent from "../../../common/components/table.component";;
 import { Controller } from "react-hook-form";
 import Svgs from "../../../public/images/icons/svgs";
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import {useState} from 'react'
 
 const VotingResultsSearchPage = () => {
   const {
@@ -25,9 +26,10 @@ const VotingResultsSearchPage = () => {
     deparmetList,
     reset,
     control,
-    downloadXLSX,
-    sendingReportXlsx,
+    downloadXLSX
   } = useResumenPriorizacionSearch();
+  
+  const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
 
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
     {
@@ -170,9 +172,11 @@ const VotingResultsSearchPage = () => {
             titleMessageModalNoResult="No se encontraron resultados"
             descriptionModalNoResult=""
             isShowModal={true}
-            isMobil={true}
+            onResult={(rows) => {
+              setSendingReportXlsx(rows.length > 0);
+            }}
           />
-          <div style={{ display: sendingReportXlsx ? "block" : "none" }}>
+          {sendingReportXlsx ? (
             <div className="button-save-container-display-users margin-right0">
               <ButtonComponent
                 value={
@@ -187,7 +191,7 @@ const VotingResultsSearchPage = () => {
                 action={downloadXLSX}
               />
             </div>
-          </div>
+       ) : ''}
         </div>
       </div>
     </Fragment>
@@ -195,3 +199,4 @@ const VotingResultsSearchPage = () => {
 };
 
 export default React.memo(VotingResultsSearchPage);
+
