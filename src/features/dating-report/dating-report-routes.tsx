@@ -15,7 +15,7 @@ function DatingReportRoutes() {
         element={
           <PrivateRoute
             element={<SearchDatingReportPages />}
-            allowedAction={"MAESTRO_ACTIVIDAD_CONSULTAR"}
+            allowedAction={"CONSULTAR_INFOME_CITAS"}
           />
         }
       />
