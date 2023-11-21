@@ -40,9 +40,6 @@ const DatingReportRoutes = (): React.JSX.Element => {
                                     placeholder={'2023-2'}
                                     classNameLabel="text-black biggest  text-required"
                                     errors={errors}
-                                    mode="currency"
-                                    currency="COP"
-                                    locale="es-CO"
                                     fieldArray={true}
                                     minFractionDigits={0}
                                     maxFractionDigits={0}
