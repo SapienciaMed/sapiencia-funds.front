@@ -57,7 +57,7 @@ const DatingReportRoutes = (): React.JSX.Element => {
                                         className={"select-basic medium select-disabled-list input-basic input-regular"}
                                         classNameLabel="text-black biggest  text-required"
                                         filter={true}
-                                        placeholder="Seleccionar."
+                                        placeholder="Seleccionar"
 
                                 />
                                 </div>

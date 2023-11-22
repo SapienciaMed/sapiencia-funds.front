@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EDirection } from "../../constants/input.enum";
 import { LabelComponent } from "./label.component";
 
@@ -55,7 +55,8 @@ export function MultiSelects({
     direction = EDirection.column,
     customClass,
   }: ISelectProps<any>): React.JSX.Element {
-    const [selectedCities, setSelectedCities] = useState<IMultiSelectProps | null>(null);
+    const [selectedItemCount, setSelectedItemCount] = useState<number>(0);
+    const [selectedItemsLabel, setSelectedItemsLabel] = useState<string>('');
     if (data) {
       const seleccione: IMultiSelectProps = { name: placeholder, value: "" };
       const dataSelect = data?.find(
@@ -81,46 +82,64 @@ export function MultiSelects({
       }
     };
   
+    useEffect(() => {
+      setSelectedItemsLabel(
+        `${selectedItemCount} ${
+          selectedItemCount === 1
+            ? "elemento seleccionado"
+            : "elementos seleccionados"
+        }`
+      );
+    }, [selectedItemCount]);
   
     return (
       <div
-      className={
-        messageError() ? `${direction} container-icon_error` : direction
-      }
+        className={
+          messageError() ? `${direction} container-icon_error` : direction
+        }
       >
-          <LabelElement
-            label={label}
-            idInput={idInput}
-            classNameLabel={classNameLabel}
-          />
-     
+        <LabelElement
+          label={label}
+          idInput={idInput}
+          classNameLabel={classNameLabel}
+        />
+  
         <div className={`select-element ${customClass}`}>
           <Controller
             name={idInput}
             control={control}
             render={({ field }) => (
-              <MultiSelect
-                id={field.name}
-                value={field.value}
-                onChange={(e: MultiSelectChangeEvent) => field.onChange(e.value)} 
-                options={data}
-                optionLabel="name"
-                placeholder={placeholder}
-                filter={filter}
-                disabled={disabled}
-                maxSelectedLabels={3}
-                className={`${className} ${messageError() ? "p-invalid" : ""}`}
-              />
+            <MultiSelect
+              id={field.name}
+              value={field.value}
+              onChange={(e: MultiSelectChangeEvent) => {
+                field.onChange(e.value);
+                setSelectedItemCount(e.value ? e.value.length : 0);
+              }}
+              options={data}
+              optionLabel="name"
+              placeholder={placeholder}
+              filter={filter}
+              disabled={disabled}
+              maxSelectedLabels={3}
+              className={`custom-multiselect ${className} ${
+                messageError() ? "p-invalid" : ""
+              }`}
+            />
             )}
           />
           {messageError() && <span className="icon-error"></span>}
         </div>
         {messageError() && (
-        <p className="error-message medium not-margin-padding">
-          {messageError()}
-        </p>
-      )}
+          <p className="error-message medium not-margin-padding">
+            {messageError()}
+          </p>
+        )}
+  
+        {/* Lógica para la etiqueta de elementos seleccionados 
+        <p>{selectedItemsLabel}</p>
+       */}
+       
       </div>
     );
   }
-  
