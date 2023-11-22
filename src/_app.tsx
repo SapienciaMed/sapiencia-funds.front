@@ -19,6 +19,7 @@ import BudgetConvocationRoutes from "./features/budget-convocation/budget-convoc
 import RenewalReportRoutes from "./features/renewal-report/renewal-report-routes";
 import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
 import ControlReportsRoutes from "./features/control-report/control-report-routes";
+import DatingReportRoutes from "./features/dating-report/dating-report-routes";
 import Cortes from "./features/cuts";
 import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
 
@@ -85,8 +86,14 @@ function App() {
               />
 
               <Route
+                path={"/fondos/informe-citas/*"}
+                element={<DatingReportRoutes />}
+              />
+              <Route
                 path={"/fondos/seguimiento-financiero/*"}
                 element={<ControlReportsRoutes />}
+              />
+              <Route
                 path={"/fondos/administracion/cortes/*"}
                 element={<Cortes />}
               />

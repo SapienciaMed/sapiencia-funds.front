@@ -23,7 +23,7 @@ function ActaRoutes() {
         element={
           <PrivateRoute
             element={<ActaPage />}
-            allowedAction={"MAESTROS_CONSULTAR"}
+            allowedAction={"CONSULTAR_ACTAS"}
           />
         }
       />
@@ -32,7 +32,7 @@ function ActaRoutes() {
         element={
           <PrivateRoute
             element={<ActaCreatePage />}
-            allowedAction={"MAESTROS_CREAR"}
+            allowedAction={"CREAR_ACTAS"}
           />
         }
       />
@@ -42,7 +42,7 @@ function ActaRoutes() {
         element={
           <PrivateRoute
             element={<SearchResultPage />}
-            allowedAction={"MAESTROS_CONSULTAR"}
+            allowedAction={"CONSULTAR_ACTAS"}
           />
         }
       />
@@ -52,7 +52,7 @@ function ActaRoutes() {
         element={
           <PrivateRoute
             element={<SearchResultPage valueAction="edit" />}
-            allowedAction={"MAESTRO_ACTIVIDAD_EDITAR"}
+            allowedAction={"EDITAR_ACTAS"}
           />
         }
       />

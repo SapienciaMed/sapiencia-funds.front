@@ -31,16 +31,8 @@ export default function useSumaryPrioricions() {
         );
       }
   }
-  
-    async function consultSummary(
-      data: Object
-    ): Promise<ApiResponse<any>> {
-      const endpoint: string = "/get-paginated";
-      return post(`${serviceUrl}${endpoint}`, data);
-    }
 
     return {
-      downloadFile,
-      consultSummary,
+      downloadFile
     };
 }

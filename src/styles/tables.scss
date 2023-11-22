@@ -79,6 +79,7 @@
     }
 }
 
+
 @media (min-width: 1024px) {
   .spc-common-table-citation {
     .grid-button {
@@ -95,18 +96,15 @@
     }
   }
 
-  .spc-common-table {
-    .size-table-wd-150{
-      table {
-        width: 150%;
-      }
-    }
+}
 
-    .size-table-wd-110{
+@media (max-width:480px) {
+  
+  .spc-common-table {
+    .size-table-wd-content{
       table {
-        width: 110%;
+        width: max-content;
       }
     }
   }
-
 }

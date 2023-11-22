@@ -4,7 +4,6 @@ import { AppContext } from "../../../common/contexts/app.context";
 import { useNavigate } from "react-router-dom";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { searchResumenPriorizacion } from "../../../common/schemas/resumen-priorizacion-schema";
-import { IVotingCreate } from "../../../common/interfaces/voting.interfaces";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
@@ -12,17 +11,18 @@ import { useGenericListService } from "../../../common/hooks/generic-list-servic
 import { IResumenPriorizacion } from "../../../common/interfaces/resumenPriorizacion.interfaces";
 import useSumaryPrioricions from "../hooks/resumen-priorizacion-api.hooks"
 export const useResumenPriorizacionSearch = () => {
-  const { setMessage, authorization, setDataGrid, dataGrid } =
+  const { setMessage } =
     useContext(AppContext);
   const navigate = useNavigate();
   const resolver = useYupValidationResolver(searchResumenPriorizacion);
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
-  const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
-  const [deparmetList, setDeparmentList] = useState([]);
+  const [deparmetList, setDeparmentList] = useState<
+    { name: string; value: string }[]
+  >([]);
   const { getListByGroupers } = useGenericListService();
   const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
-  const { downloadFile, consultSummary } = useSumaryPrioricions();
+  const { downloadFile } = useSumaryPrioricions();
   const onSubmitSearch = async () => {
     loadTableData({});
   };
@@ -37,7 +37,7 @@ export const useResumenPriorizacionSearch = () => {
     resolver,
     defaultValues: {
       communeNeighborhood: null,
-      numberProject: "",
+      numberProject: '',
       validity: '',
     }
   }
@@ -50,14 +50,6 @@ export const useResumenPriorizacionSearch = () => {
       numberProject: data?.numberProject,
       validity: data?.validity,
     });
-    if (data?.communeNeighborhood && data?.numberProject && data?.validity) {
-      const dataGrid: any = await consultSummary(data);
-      if (dataGrid.data.array.length > 0) {
-        setSendingReportXlsx(true);
-      } else {
-        setSendingReportXlsx(false);
-      }
-    }
   });
 
   
@@ -143,8 +135,6 @@ export const useResumenPriorizacionSearch = () => {
     setValCommuneNeighborhood,
     reset,
     control,
-    downloadXLSX,
-    setSendingReportXlsx,
-    sendingReportXlsx,
+    downloadXLSX
   };
 };
