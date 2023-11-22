@@ -1,7 +1,12 @@
-import { UseFormSetValue, FieldValues } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 import { IActaItems } from '../../../common/interfaces/actaItems.interface';
+import { IActa } from '../../../common/interfaces';
+import { Dispatch, SetStateAction } from 'react';
 
-export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseFormSetValue<FieldValues>) => {
+export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseFormSetValue<IActa>, 
+        setVigency1: Dispatch<SetStateAction<number>>, setSubtotalVigency: Dispatch<SetStateAction<number>>, 
+        setTotalQuantityPeriod2: Dispatch<SetStateAction<number>>, setTotalQuantityPeriod1: Dispatch<SetStateAction<number>>) => {
+
     let totalQuantityPeriod1 = 0;
     let totalValuePeriod1 = 0;
     let totalQuantityPeriod2 = 0;
@@ -12,7 +17,7 @@ export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseF
     let totalResourcesCredit = 0;
     let totalSubtotalVigency = 0;
 
-    items.forEach(item => {
+    items?.forEach(item => {
  
         const quantityPeriod1 = parseInt(item.periods?.quantityPeriod1 || '0', 10);
         const valuePeriod1 = parseInt(item.periods?.valuePeriod1 || '0', 10);
@@ -44,16 +49,9 @@ export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseF
 
     const vigency1 = totalValuePeriod1 + totalValuePeriod2 + totalCostBillsOperation + totalFinancialOperatorCommission;
 
-    // setTotalQuantityPeriod1(totalQuantityPeriod1);
-    // setTotalValuePeriod1(totalValuePeriod1);
-    // setTotalQuantityPeriod2(totalQuantityPeriod2);
-    // setTotalValuePeriod2(totalValuePeriod2);
-    // setTotalCostBillsOperation(totalCostBillsOperation);
-    // setTotalNet(totalNet);
-    // setTotalFinancialOperatorCommission(totalFinancialOperatorCommission);
-    // setTotalResourcesCredit(totalResourcesCredit);
-    // setSubtotalVigency(totalSubtotalVigency)
-    // setVigency1(vigency1);
+    setTotalQuantityPeriod2(totalQuantityPeriod2);
+    setTotalQuantityPeriod1(totalQuantityPeriod1);
+    setVigency1(vigency1);
 
     setValue("tQuantity1", totalQuantityPeriod1);
     setValue("tValue1", totalValuePeriod1);
@@ -66,7 +64,6 @@ export const calculateTotalsDataTableActa = (items: IActaItems[], setValue: UseF
     setValue("totalFinancialOperatorCommission", totalFinancialOperatorCommission);
     setValue("vigency1", vigency1);
     setValue("vigency2", totalSubtotalVigency);
-
     
     return {
         totalQuantityPeriod1,

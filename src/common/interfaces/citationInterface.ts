@@ -7,4 +7,5 @@ export interface ICitation {
     idActa?: number;
     dateAprobation?: string;
     email?: string;
+    idCitation?: number
   }

@@ -63,7 +63,7 @@ function TextAreaElement({
       defaultValue={defaultValue}
       disabled={disabled}
       onChange={(event) => {
-        onChange(event);
+        if (onChange) onChange(event);
         setCount(event.target.value.length);
       }}
       value={value}

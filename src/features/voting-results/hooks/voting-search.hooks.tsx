@@ -10,24 +10,25 @@ import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
+import useVotingItemApi from "./voting-items-api.hooks";
 
 export const useVotingResultsSearch = () => {
-  const { setMessage, authorization, setDataGrid, dataGrid } = useContext(AppContext);
+  const { setMessage, authorization, setDataGrid, dataGrid, message } = useContext(AppContext);
   const navigate = useNavigate();
   const resolver = useYupValidationResolver(searchVotings);
-  const { downloadFile,consultVoting } = useVotingService();
+  const { downloadFile, consultVoting, consultDataGrid } = useVotingService();
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
   const [deparmetList, setDeparmentList] = useState([]);
-  const { getListByParent, getListByGroupers } = useGenericListService();
+  const { getListByGroupers } = useGenericListService();
   const [valCommuneNeighborhood, setValCommuneNeighborhood] = useState();
   const [sendingXLSX, setSendingXLSX] = useState(false);
   const [dataTblTotal, setDataTblTotal] = useState([]);
+  const { getProjectsList } = useVotingItemApi();
+  const [projectList, setProjectsList] = useState([]);
 
 
-  const onSubmitSearch = async () => {
-    loadTableData({});
-  };
+
   const {
     handleSubmit,
     register,
@@ -35,8 +36,23 @@ export const useVotingResultsSearch = () => {
     getValues,
     formState: { errors },
     reset,
-    } = useForm<IVotingCreate>({ resolver });
+  } = useForm<IVotingCreate>({
+    resolver,
+    mode: 'all',
+    defaultValues: {
+      communeNeighborhood: null,
+      numberProject: null,
+      validity: '',
+      ideaProject: "",
+    },
+  });
 
+  const dataForm = getValues();
+
+    const onSubmitSearch = async () => {
+      loadTableData(dataForm);
+    };
+  
     /*Functions*/
   const onSubmitSearchVoting = handleSubmit(async (data: IVotingCreate) => {
         loadTableData({
@@ -46,9 +62,15 @@ export const useVotingResultsSearch = () => {
           ideaProject: data?.ideaProject,
         });
       if (data?.numberProject && data?.validity && data?.ideaProject && data?.communeNeighborhood) {
-        setSendingXLSX(true);
-        const dataConsult : any = await consultVoting(data);
-        setDataTblTotal(dataConsult.data)
+        const dataConsult: any = await consultVoting(data);
+        const dataGrid: any = await consultDataGrid(data)
+        if (dataGrid.data.array.length > 0) {
+            setSendingXLSX(true);
+            setDataTblTotal(dataConsult.data.data);
+        } else {
+          setSendingXLSX(false);
+          setDataTblTotal([])
+        }
       }
       
     });
@@ -96,12 +118,28 @@ export const useVotingResultsSearch = () => {
            );
          }
        }
-     );
+      );
+      
+      getProjectsList().then((response) => {
+        if (response && response?.operation?.code === EResponseCodes.OK) {
+          setProjectsList(
+            response.data.map((item) => {
+              const list = {
+                value: item.bpin,
+                name: item.bpin,
+                meta: item.goal,
+              };
+              return list;
+            })
+          );
+        }
+      });
+
     }, []);
   
   
   const downloadXLSX = async () => {
-    const dataForm = getValues();
+    
     await downloadFile(dataForm).then((resp: any) => {
       const buffer = new Uint8Array(resp.data.data); // Convierte el Array del búfer en Uint8Array
       const blob = new Blob([buffer]);
@@ -113,8 +151,8 @@ export const useVotingResultsSearch = () => {
       a.click();
       window.URL.revokeObjectURL(url);
       setMessage({
-        title: `Descargar excel`,
-        description: `El archivo fue descargado con éxito`,
+        title: `Resultados de votación`,
+        description: `Información descargada exitosamente`,
         show: true,
         OkTitle: "Aceptar",
         background: true,
@@ -142,6 +180,7 @@ export const useVotingResultsSearch = () => {
     setSendingXLSX,
     dataTblTotal,
     setDataTblTotal,
+    projectList,
   };
 }
 

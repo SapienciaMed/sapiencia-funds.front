@@ -21,6 +21,7 @@ import TableComponent from "../../../common/components/table.component";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { Controller } from "react-hook-form";
 import Svgs from "../../../public/images/icons/svgs";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 const VotingResultsSearchPage = () => {
   const {
@@ -43,7 +44,6 @@ const VotingResultsSearchPage = () => {
   const { validateActionAccess, setMessage } = useContext(AppContext);
 
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
-
     {
       fieldName: "program",
       header: "Programa",
@@ -56,7 +56,9 @@ const VotingResultsSearchPage = () => {
     {
       fieldName: "total123",
       header: "Valor porcentaje 123",
-
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.total123)}</>;
+      },
     },
     {
       fieldName: "pct456",
@@ -65,6 +67,9 @@ const VotingResultsSearchPage = () => {
     {
       fieldName: "total456",
       header: "Valor porcentaje 456",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.total456)}</>;
+      },
     },
     {
       fieldName: "quota",
@@ -73,6 +78,9 @@ const VotingResultsSearchPage = () => {
     {
       fieldName: "total",
       header: "Total",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.total)}</>;
+      },
     },
   ];
 
@@ -87,7 +95,7 @@ const VotingResultsSearchPage = () => {
               className="form-signIn"
               action={onSubmitSearchVoting}
             >
-              <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+              <section className="funcionality-filters-container gap-15">
                 <Controller
                   control={control}
                   name={"numberProject"}
@@ -147,7 +155,7 @@ const VotingResultsSearchPage = () => {
                     );
                   }}
                 />
-              </div>
+              </section>
             </FormComponent>
           </div>
           <div className="button-save-container-display-users margin-right0">
@@ -175,9 +183,10 @@ const VotingResultsSearchPage = () => {
             columns={tableColumns}
             // actions={tableActions}
             titleMessageModalNoResult="No se encontraron resultados"
+            descriptionModalNoResult=""
             isShowModal={true}
           />
-          <div style={{ display: sendingReportXlsx ? "block" : "none" }} >
+          <div style={{ display: sendingReportXlsx ? "block" : "none" }}>
             <div className="button-save-container-display-users margin-right0">
               <ButtonComponent
                 value={

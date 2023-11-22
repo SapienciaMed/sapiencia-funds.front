@@ -149,7 +149,6 @@ export function caculatePorcentual(valueOriginal: number, valueNew: number) {
   return porcentajeAumento;
 }
 
-
 export const jsDateToSQLDate = (jsDate: Date) => {
   return DateTime.fromJSDate(jsDate).toSQLDate();
 };
@@ -157,3 +156,5 @@ export const jsDateToSQLDate = (jsDate: Date) => {
 export const jsDateToISODate = (jsDate: Date) => {
   return DateTime.fromJSDate(jsDate).toISODate();
 };
+
+

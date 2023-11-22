@@ -43,6 +43,9 @@ interface IProps<T> {
   titleMessageModalNoResult?: string;
   descriptionModalNoResult?: string;
   classname?: string;
+  isDisabled?: boolean;
+  widthTable?: string;
+  horizontalScroll?: boolean;
 }
 
 interface IRef {
@@ -62,6 +65,9 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     princialTitle,
     classname = "",
     setPaginateData,
+    isDisabled,
+    widthTable,
+    horizontalScroll = false,
   } = props;
 
   // States
@@ -76,6 +82,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const { setMessage } = useContext(AppContext);
 
   // Declaraciones
+  const widthColumns = width / ((columns.length + 1) * 2);
   const { post } = useCrudService(url);
   useImperativeHandle(ref, () => ({
     loadData: loadData,
@@ -162,11 +169,20 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           })}
         </div>
         <div className="card-footer">
-          {actions.map((action) => (
-            <div key={action.icon} onClick={() => action.onClick(item)}>
-              {getIconElement(action.icon, "src")}
-            </div>
-          ))}
+          <section className="position-absolute top text-black bold text-center">
+            {" "}
+            Acciones{" "}
+          </section>
+          <section className="section-action">
+            {actions?.map((action) => (
+              <div
+                key={action.icon}
+                onClick={() => !isDisabled && action.onClick(item)}
+              >
+                {getIconElement(action.icon, "src", isDisabled)}
+              </div>
+            ))}
+          </section>
         </div>
       </div>
     );
@@ -190,80 +206,106 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           {title && <div className="spc-table-title">{title}</div>}
 
           {/* Verificar si resultData.array tiene elementos */}
-          <>
-            <Paginator
-              className="between spc-table-paginator"
-              template={paginatorHeader}
-              first={first}
-              rows={perPage}
-              totalRecords={resultData?.meta?.total || 0}
-              onPageChange={onPageChange}
-              leftContent={leftContent(princialTitle)}
-            />
 
-            {width > 830 ? (
-              <div style={{ maxWidth: width - 400 }}>
-                <DataTable
-                  className="spc-table full-height"
-                  value={resultData?.array || []}
-                  loading={loading}
-                  scrollable={true}
-                  emptyMessage={emptyMessage}
-                >
-                  {columns.map((col) => (
-                    <Column
-                      key={col.fieldName}
-                      field={col.fieldName}
-                      header={col.header}
-                      body={col.renderCell}
-                    />
-                  ))}
+          <Paginator
+            className="between spc-table-paginator"
+            template={paginatorHeader}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+            leftContent={leftContent(princialTitle)}
+          />
 
-                  {actions && actions.length && (
-                    <Column
-                      className="spc-table-actions"
-                      header={
-                        <div>
-                          <div
-                            className="spc-header-title"
-                            style={{ fontWeight: 400 }}
-                          >
-                            Acciones
-                          </div>
-                        </div>
-                      }
-                      body={(row) => (
-                        <ActionComponent row={row} actions={actions} />
-                      )}
-                    />
-                  )}
-                </DataTable>
-              </div>
-            ) : (
-              <DataView
+          {width > 830 ? (
+            <div style={{ maxWidth: width - 400 }}>
+              <DataTable
+                className="spc-table full-height"
                 value={resultData?.array || []}
-                itemTemplate={mobilTemplate}
-                rows={5}
+                loading={loading}
+                scrollable={true}
                 emptyMessage={emptyMessage}
-              />
-            )}
+                style={{ maxWidth: widthTable }}
+              >
+                {columns.map((col) => (
+                  <Column
+                    key={col.fieldName}
+                    field={col.fieldName}
+                    header={col.header}
+                    body={col.renderCell}
+                    style={
+                      horizontalScroll
+                        ? {}
+                        : {
+                            maxWidth: `${widthColumns}px`,
+                            minHeight: `${widthColumns}px`,
+                            width: `${widthColumns}px`,
+                          }
+                    }
+                  />
+                ))}
 
-            <Paginator
-              className="spc-table-paginator"
-              template={paginatorFooter}
-              first={first}
-              rows={perPage}
-              totalRecords={resultData?.meta?.total || 0}
-              onPageChange={onPageChange}
+                {actions && actions.length && (
+                  <Column
+                    style={
+                      horizontalScroll
+                        ? {}
+                        : {
+                            maxWidth: `${widthColumns}px`,
+                            minHeight: `${widthColumns}px`,
+                            width: `${widthColumns}px`,
+                          }
+                    }
+                    className="spc-table-actions"
+                    header={
+                      <div>
+                        <div
+                          className="spc-header-title"
+                          style={{ fontWeight: 400 }}
+                        >
+                          Acciones
+                        </div>
+                      </div>
+                    }
+                    body={(row) => (
+                      <ActionComponent
+                        row={row}
+                        actions={actions}
+                        isDisabled={isDisabled}
+                      />
+                    )}
+                  />
+                )}
+              </DataTable>
+            </div>
+          ) : (
+            <DataView
+              value={resultData?.array || []}
+              itemTemplate={mobilTemplate}
+              rows={5}
+              emptyMessage={emptyMessage}
             />
-          </>
+          )}
+
+          <Paginator
+            className="spc-table-paginator"
+            template={paginatorFooter}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+          />
         </div>
       </div>
     );
   }
 });
 
-function getIconElement(icon: string, element: "name" | "src") {
+function getIconElement(
+  icon: string,
+  element: "name" | "src",
+  isDisabled: boolean
+) {
   switch (icon) {
     case "Detail":
       return element == "name" ? (
@@ -424,6 +466,7 @@ const paginatorFooter: PaginatorTemplateOptions = {
 const ActionComponent = (props: {
   row: any;
   actions: ITableAction<any>[];
+  isDisabled: boolean;
 }): React.JSX.Element => {
   return (
     <div className="spc-table-action-button">
@@ -438,7 +481,7 @@ const ActionComponent = (props: {
               {action.customIcon()}
             </div>
           ) : (
-            getIconElement(action.icon, "src")
+            getIconElement(action.icon, "src", props.isDisabled)
           )}
         </div>
       ))}

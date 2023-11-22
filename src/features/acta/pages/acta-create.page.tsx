@@ -253,7 +253,7 @@ const ActaCreatePage = () => {
                                     filter={true}
                                     placeholder="Seleccionar."
                                 />
-                                
+
                                 <SelectComponent
                                     idInput={"periodVigency"}
                                     control={control}
@@ -287,6 +287,7 @@ const ActaCreatePage = () => {
                                                 errors={errors}
                                                 placeholder={""}
                                                 disabled={checked}
+                                                maxLength={9}
                                                 {...field}
                                             />
                                         )
@@ -297,12 +298,12 @@ const ActaCreatePage = () => {
                                 <InputNumberComponent
                                     control={control}
                                     idInput={`salaryMin`}
-                                    label="valor"
+                                    label="Salario mínimo"
                                     className="inputNumber-basic medium"
                                     placeholder={'Seleccionar'}
                                     classNameLabel="text-black biggest text-required"
                                     errors={errors}
-                                    mode="currency"
+                                    //mode="currency"
                                     currency="COP"
                                     locale="es-CO"
                                     fieldArray={true}
@@ -327,17 +328,34 @@ const ActaCreatePage = () => {
                                     name={"costsExpenses"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
-                                                idInput={"costsExpenses"}
-                                                className="input-basic medium"
-                                                typeInput="number"
+                                            /*  <InputComponent
+                                                 idInput={"costsExpenses"}
+                                                 className="input-basic medium"
+                                                 typeInput="number"
+                                                 label="Costo y gastos de operación logística"
+                                                 register={register}
+                                                 classNameLabel="text-black biggest text-required"
+                                                 errors={errors}
+                                                 placeholder={""}
+                                                 disabled={checked}
+                                                 {...field}
+                                             /> */
+                                            <InputNumberComponent
+                                                idInput='costsExpenses'
+                                                className="inputNumber-basic medium"
                                                 label="Costo y gastos de operación logística"
-                                                register={register}
-                                                classNameLabel="text-black biggest text-required"
+                                                classNameLabel={`text-black biggest text-required`}
                                                 errors={errors}
                                                 placeholder={""}
-                                                disabled={checked}
-                                                {...field}
+                                                /*  direction={EDirection.column}
+                                                 disabled={valueAction != 'edit'} */
+                                                suffix="%"
+                                                mode="decimal"
+                                                minFractionDigits={1}
+                                                maxFractionDigits={1}
+                                                min={0}
+                                                max={100}
+                                                control={control}
                                             />
                                         )
 
@@ -349,7 +367,7 @@ const ActaCreatePage = () => {
                                     name={"OperatorCommission"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
+                                           /*  <InputComponent
                                                 idInput={"OperatorCommission"}
                                                 className="input-basic medium"
                                                 typeInput="number"
@@ -361,6 +379,24 @@ const ActaCreatePage = () => {
                                                 disabled={checked}
                                                 {...field}
                                             />
+ */
+                                            <InputNumberComponent
+                                                idInput='OperatorCommission'
+                                                className="inputNumber-basic medium"
+                                                label="Comisión operador financiero"
+                                                classNameLabel={`text-black biggest text-required`}
+                                                errors={errors}
+                                                placeholder={""}
+                                                /*  direction={EDirection.column}
+                                                 disabled={valueAction != 'edit'} */
+                                                suffix="%"
+                                                mode="decimal"
+                                                minFractionDigits={1}
+                                                maxFractionDigits={1}
+                                                min={0}
+                                                max={100}
+                                                control={control}
+                                            />
                                         )
 
                                     }}
@@ -371,7 +407,7 @@ const ActaCreatePage = () => {
                                     name={"financialOperation"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
+                                           /*  <InputComponent
                                                 idInput={"financialOperation"}
                                                 className="input-basic medium"
                                                 typeInput="number"
@@ -382,7 +418,25 @@ const ActaCreatePage = () => {
                                                 placeholder={""}
                                                 disabled={checked}
                                                 {...field}
-                                            />
+                                            /> */
+
+                                            <InputNumberComponent
+                                            idInput='financialOperation'
+                                            className="inputNumber-basic medium"
+                                            label="Operación finaciera MB"
+                                            classNameLabel={`text-black biggest text-required`}
+                                            errors={errors}
+                                            placeholder={""}
+                                            /*  direction={EDirection.column}
+                                             disabled={valueAction != 'edit'} */
+                                            suffix="%"
+                                            mode="decimal"
+                                            minFractionDigits={1}
+                                            maxFractionDigits={1}
+                                            min={0}
+                                            max={100}
+                                            control={control}
+                                        />
                                         )
 
                                     }}

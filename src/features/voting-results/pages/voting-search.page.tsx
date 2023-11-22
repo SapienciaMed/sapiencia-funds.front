@@ -1,8 +1,5 @@
 import React, { Fragment, useContext } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
-import BasicTableComponent from "../../../common/components/basic-table.component";
-import { TextAreaComponent } from "../../../common/components/Form/input-text-area.component";
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useVotingResultsSearch } from "../hooks/voting-search.hooks";
@@ -14,6 +11,8 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import ItemResultsPage from "../pages/item.create.page";
 import { Controller } from "react-hook-form";
 import Svgs from "../../../../src/public/images/icons/svgs";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import { useWidth } from "../../../common/hooks/use-width";
 
 
 
@@ -32,15 +31,17 @@ const VotingResultsSearchPage = () => {
     downloadXLSX,
     sendingXLSX,
     dataTblTotal,
+    projectList,
+    setDataTblTotal,
+    setSendingXLSX,
+    onSubmitSearch,
   } = useVotingResultsSearch();
-
+const { width } = useWidth();
   const navigate = useNavigate();
   let aucumActivity = 0;
   let acumTotal = 0;
   let acumAmount = 0;
   const { validateActionAccess, setMessage } = useContext(AppContext);
-
-
   const tableColumns: ITableElement<IVotingSearcheResult>[] = [
     {
       fieldName: "aimStraight",
@@ -65,6 +66,9 @@ const VotingResultsSearchPage = () => {
     {
       fieldName: "activity.totalValue",
       header: "Valor Actividad",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.activity.totalValue)}</>;
+      },
     },
     {
       fieldName: "amount",
@@ -73,6 +77,9 @@ const VotingResultsSearchPage = () => {
     {
       fieldName: "costTotal",
       header: "Costo Total",
+      renderCell: (row) => {
+        return <>{formaterNumberToCurrency(row.costTotal)}</>;
+      },
     },
     {
       fieldName: "percentage123",
@@ -96,7 +103,11 @@ const VotingResultsSearchPage = () => {
             },
             background: true,
             description: (
-              <ItemResultsPage dataVoting={row} action={"editVoting"} />
+              <ItemResultsPage
+                dataVoting={row}
+                action={"editVoting"}
+                collback={onSubmitSearch}
+              />
             ),
             size: "items",
             style: "mdl-agregarItem-voting",
@@ -131,10 +142,10 @@ const VotingResultsSearchPage = () => {
 
             <FormComponent
               id="createVotingForm"
-              className="form-signIn"
+              className="main-page full-width"
               action={onSubmitSearchVoting}
             >
-              <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+              <section className="funcionality-filters-container gap-15">
                 <SelectComponent
                   idInput="communeNeighborhood"
                   control={control}
@@ -147,24 +158,16 @@ const VotingResultsSearchPage = () => {
                   errors={errors}
                 />
 
-                <Controller
+                <SelectComponent
+                  idInput="numberProject"
                   control={control}
-                  name={"numberProject"}
-                  render={({ field }) => {
-                    return (
-                      <InputComponent
-                        idInput={field.name}
-                        errors={errors}
-                        typeInput={"text"}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        value={field.value}
-                        className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={<>Número proyecto</>}
-                      />
-                    );
-                  }}
+                  className="select-basic medium"
+                  placeholder="Seleccionar"
+                  label="Número proyecto"
+                  data={projectList ? projectList : []}
+                  classNameLabel="text-black big text-required bold"
+                  direction={EDirection.column}
+                  errors={errors}
                 />
 
                 <Controller
@@ -175,13 +178,13 @@ const VotingResultsSearchPage = () => {
                       <InputComponent
                         idInput={field.name}
                         errors={errors}
-                        typeInput={"text"}
+                        typeInput={"number"}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={<>Vigencia</>}
+                        classNameLabel="text-black big bold text-required"
+                        label="Vigencia"
                       />
                     );
                   }}
@@ -200,13 +203,13 @@ const VotingResultsSearchPage = () => {
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
-                        classNameLabel="text-black big bold"
-                        label={<>Idea de proyecto</>}
+                        classNameLabel="text-black big bold text-required"
+                        label="Idea de proyecto"
                       />
                     );
                   }}
                 />
-              </div>
+              </section>
             </FormComponent>
           </div>
           <div className="button-save-container-display-users margin-right0">
@@ -218,6 +221,8 @@ const VotingResultsSearchPage = () => {
               action={() => {
                 reset();
                 tableComponentRef.current.emptyData();
+                setDataTblTotal([]);
+                setSendingXLSX(false);
               }}
             />
             <ButtonComponent
@@ -237,6 +242,7 @@ const VotingResultsSearchPage = () => {
             descriptionModalNoResult="La votación no existe en el sistema. 
               Haga clic en el botón crear votación"
             isShowModal={true}
+            horizontalScroll
           />
           <br />
           <br />
@@ -259,11 +265,12 @@ const VotingResultsSearchPage = () => {
                             aucumActivity = Number(e.activity.totalValue);
                             value = Number(e.activity.totalValue);
                           } else {
-                            value = Number(value) + Number(e.activity.totalValue);
+                            value =
+                              Number(value) + Number(e.activity.totalValue);
                             aucumActivity = value;
                           }
                           if (Number(dataTblTotal.length) == Number(i + 1)) {
-                            return value;
+                            return formaterNumberToCurrency(value);
                           }
                         })}
                       </p>
@@ -307,7 +314,7 @@ const VotingResultsSearchPage = () => {
                             acumTotal = value;
                           }
                           if (Number(dataTblTotal.length) == Number(i + 1)) {
-                            return value;
+                            return formaterNumberToCurrency(value);
                           }
                         })}
                       </p>
