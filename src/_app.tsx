@@ -57,9 +57,10 @@ function App() {
               <Route
                 path={"/fondos/maestros-actividad/*"}
                 element={<MasterActivityRoutes />}
-              <Route 
-                path={"/fondos/maestros-actividad/*"} 
-                element={<MasterActivityRoutes />} 
+              />
+              <Route
+                path={"/fondos/maestros-actividad/*"}
+                element={<MasterActivityRoutes />}
               />
               <Route path={"/fondos/acta/*"} element={<ActaRoutes />} />
               <Route
@@ -91,7 +92,7 @@ function App() {
               />
               <Route
                 path={"/fondos/informe-renovacion/*"}
-                element={<RenewalReportRoutes/>}
+                element={<RenewalReportRoutes />}
               />
             </Routes>
           </Suspense>
