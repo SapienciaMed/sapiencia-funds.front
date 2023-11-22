@@ -15,7 +15,7 @@ function PacRouter() {
                 element={
                 <PrivateRoute
                     element={<CosolidatedTray />}
-                    allowedAction={"MENU_CONSULTAS"}
+                    allowedAction={"BANDEJA_CONSOLIDACION"}
                 />
                 }
             />
