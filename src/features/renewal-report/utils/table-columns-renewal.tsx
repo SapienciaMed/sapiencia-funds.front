@@ -1,5 +1,5 @@
 import { Checkbox } from "primereact/checkbox";
-import { IAuthorization, ITableAction, ITableElement, IUserDataGrid } from "../../../common/interfaces";
+import { IActa, IActaItems, IAuthorization, ITableAction, ITableElement, IUserDataGrid } from "../../../common/interfaces";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IMessage } from "../../../common/interfaces/global.interface";
 //import ItemsCreatePage from "../pages/items-create.page";
@@ -71,7 +71,7 @@ export default function usetableColumnsActa({ authorization, valueAction, dataTa
                 setMessage({
                     show: true,
                     title: "Editar ítem",
-                    description: <ItemsEditePage acta={dataEditTable} action={row}  />,
+                    description: <ItemsEditePage renewal={dataEditTable} renewalitem={row}  />,
                     background: true,
                     size: "items",
                     items: true,
