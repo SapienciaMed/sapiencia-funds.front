@@ -2,7 +2,6 @@ import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AppContextProvider } from "./common/contexts/app.context";
 import "./styles/_app.scss";
-// import "./styles/styles.scss";
 import "./styles/_theme-prime.css";
 import "primereact/resources/primereact.min.css";
 import ModalMessageComponent from "./common/components/modal-message.component";
@@ -21,6 +20,7 @@ import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-p
 import DatingReportRoutes from "./features/dating-report/dating-report-routes";
 import Cortes from "./features/cuts";
 import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
+import PacRouter from "./features/pacc/pac-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -91,6 +91,10 @@ function App() {
               <Route
                 path={"/fondos/informe-renovacion/*"}
                 element={<RenewalReportRoutes/>}
+              />
+              <Route
+                path="/fondos/pacc/*"
+                element={<PacRouter/>}
               />
             </Routes>
           </Suspense>

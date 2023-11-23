@@ -3,6 +3,7 @@ export interface ITabsMenuTemplate {
     title: string;
     content?: React.JSX.Element | string;
     action?: () => void;
+    hide?: boolean
   }
   
   export interface FormStebs {

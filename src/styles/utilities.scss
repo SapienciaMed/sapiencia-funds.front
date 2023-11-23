@@ -1,0 +1,9 @@
+
+.overflow-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar,
+.p-datatable>.p-datatable-wrapper::-webkit-scrollbar {
+  width: 12.5px;
+  height: 12.5px;
+  border-radius: 3px;
+}
