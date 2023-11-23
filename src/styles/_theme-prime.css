@@ -4502,7 +4502,9 @@
 .p-sidebar .p-sidebar-content {
   padding: 1rem;
 }
-
+.p-tooltip{
+  z-index: 2 !important;
+}
 .p-tooltip .p-tooltip-text {
   background: #495057;
   color: #ffffff;

@@ -1,10 +1,8 @@
 import React from "react";
-import { SelectComponentUser } from "../../../common/components/Form/select.component.user";
 import { EDirection } from "../../../common/constants/input.enum";
 import TableComponent from "../../../common/components/table.component";
 import useTechnicianStepCashing from "../hook/techician-step.hook";
-import { FormComponent, SelectComponent } from "../../../common/components/Form";
-
+import { FormComponent,  SelectComponent } from "../../../common/components/Form";
 function TechnicianStepCashing() {
 
     const { tableComponentRef, tableColumns, tableActions, idCutData, control, listSearch,  handleFilterChange, handleChangeCut } = useTechnicianStepCashing()

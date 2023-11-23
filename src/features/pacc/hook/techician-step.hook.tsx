@@ -1,28 +1,30 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ITableAction, ITableElement } from "../../../common/interfaces";
-import { DropdownChangeEvent } from "primereact/dropdown";
 import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, IStepCashing } from "../interface/pacc";
 import { usePaccServices } from "./pacc-serviceshook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { useForm } from 'react-hook-form';
+import { AppContext } from "../../../common/contexts/app.context";
+import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 
 export default function useTechnicianStepCashing() {
     
     const tableComponentRef = useRef(null);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
-    const { GetCutsForConsolidationTray, GeConsolidationTrayTechnicianCollectionByCut } = usePaccServices()
+    const { setMessage } = useContext(AppContext);
+    const { GetCutsForConsolidationTray } = usePaccServices()
     const [idCutData, setIdCutData] = useState<IDropdownProps[]>([]);
     const [ listSearch, setListSearch ] = useState({
         data: {},
         status: false
     })
+    const [ currentCutOffdDate, setCurrentCutOffdDate ] = useState([''])
 
     const {
         control,
         setValue,
         getValues,
-        watch,
     } = useForm<IStepCashing>();
 
     const valueMap: { [key: number]: string } = {
@@ -31,10 +33,32 @@ export default function useTechnicianStepCashing() {
         23: 'Corte 2'
     };
 
+    const formatearFecha = (fechaISO: string) => {
+        const fecha = new Date(fechaISO);
+        const dia = fecha.getUTCDate();
+        const mes = fecha.getUTCMonth() + 1; 
+        const anio = fecha.getUTCFullYear();
+        const fechaFormateada = dia + '/' + (mes < 10 ? '0' : '') + mes + '/' + anio;
+        
+        return fechaFormateada;
+    }
+
     useEffect(() => {
         loadTableData()
         GetCutsForConsolidationTray().then(response => {
             if(response.operation.code === EResponseCodes.OK){
+
+                response.data.forEach((item, index) => {
+                    setCurrentCutOffdDate(
+                        (prevState) => {
+                            return [
+                                ...prevState,
+                                `${item.name} - desde ${formatearFecha(item.from)} hasta ${formatearFecha(item.until)}`
+                            ]
+                        }
+                    );
+                });
+                
                 const data = response.data?.map((item: any) => {
                     return {
                         name: item.name,
@@ -119,10 +143,20 @@ export default function useTechnicianStepCashing() {
         }
     ]
 
-    const tableActions: ITableAction<any>[] = [
+    const tableActions: ITableAction<IConsolidationTrayForTechnicianCollectionParams>[] = [
         {
             icon: "ChangeCut",
             onClick: (row) => {
+               const actualCut = currentCutOffdDate.find(item => item.includes(row.cut));
+               setMessage({
+                    show: true,
+                    title: "Mover beneficiario a otro corte",
+                    description: <ChangeCuttingBeneficiary actualCut={actualCut} idCutData={idCutData}/>,
+                    background: true,
+                    onOk() {
+                        setMessage({});
+                    },
+                });
                
             },
         },
@@ -144,9 +178,6 @@ export default function useTechnicianStepCashing() {
         timer &&  clearTimeout(timer);  
         const newTimer =  setTimeout(() => {
             if (value.target.value != undefined && value.target.value.length > 0) {
-                console.log("peticion", value.target.value);
-                console.log('corte:', getValues('idCut'));
-                
                 const searchCriteriaData = {
                     searchCriteria: value.target.value,
                     cutParamName: valueMap[getValues('idCut')] || '',
