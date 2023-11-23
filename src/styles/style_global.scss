@@ -28,9 +28,26 @@
     grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
     padding: 0 0 0.8rem 0;
     row-gap: 1rem;
-    
 }
 
+.grid-form-3-container-area {
+    display: grid;
+    grid-template-columns: 1fr 0.95fr 1fr;
+    grid-gap: 0.5rem 1rem;
+    align-items: stretch;
+  
+    &.grid-column-repet{ 
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 16px 16px;
+    }
+  
+    &.grid-column-repet-4{ 
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 16px 16px;
+    }
+    
+}
+  
 .no-margin{
     margin: 0px;
 }
