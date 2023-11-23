@@ -6,7 +6,7 @@ import { Dropdown } from 'primereact/dropdown';
 
 interface IDropdownProps {
   name: string,
-  value: string
+  value: string | number
 }
 
 interface ISelectProps<T> {

@@ -23,6 +23,8 @@ interface ISelectProps<T> {
   emptyMessage?: string;
   customClass?: string;  
   optionSeleccione?: boolean;
+  optionSelected?:Function;
+  onChange?: (selectedOption: T) => void;
 }
 
 function LabelElement({ label, idInput, classNameLabel }): React.JSX.Element {
@@ -53,6 +55,7 @@ export function SelectComponent({
   emptyMessage = "Sin resultados.",
   customClass,
   optionSeleccione = true,
+  optionSelected
 }: ISelectProps<any>): React.JSX.Element {
   if (data) {
     if (optionSeleccione) {
@@ -107,7 +110,7 @@ export function SelectComponent({
                   ? data.find((row) => row.value === field.value)?.value
                   : null
               }
-              onChange={(e) => field.onChange(e.value)}
+              onChange={(e) => {field.onChange(e.value); optionSelected && optionSelected(e.value)}}
               options={data}
               optionLabel="name"
               placeholder={placeholder}
