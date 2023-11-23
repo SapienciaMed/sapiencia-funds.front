@@ -24,8 +24,12 @@ export default function useRenewaReportSearch() {
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
-    const [renewalReport, setRenewalReport] = useState([]);
+    const [enabledTotal, setEnabledTotal] = useState(0);
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
+    
+    const [enabledBachLeg, setenabledBachLeg] = useState("0");
+    const [renewedBachLeg, setrenewedBachLeg] = useState("0");
+
 
     const {
         handleSubmit,
@@ -38,6 +42,8 @@ export default function useRenewaReportSearch() {
     } = useForm<ICallRenewal>(
         {}
     );
+
+
 
     useEffect(() => {
         getAnnouncement()
@@ -56,10 +62,47 @@ export default function useRenewaReportSearch() {
             })
     }, []);
 
+     // Calcular Total habilitado
+    const totalEnabled = dataGridRenewal.reduce((total, row) => {
+        const enabled = parseFloat(row.enabled);
+        return total + (isNaN(enabled) ? 0 : enabled);
+      }, 0);
 
+    // Calcular Total renovados
+    const totalrenewed = dataGridRenewal.reduce((total, row) => {
+        const renewed = parseFloat(row.renewed);
+        return total + (isNaN(renewed) ? 0 : renewed);
+      }, 0);
+    
+    // Calcular el porcentaje promedio
+    const averagePercentage = totalEnabled > 0 ? (totalrenewed / totalEnabled * 100).toFixed(2) + "%" : "0.00%";
+    
+
+    // Calcular Porcentaje
+    const calculatePercentage = (renewed: string, enabled: string | number) => {
+        const parsedRenewed = parseFloat(renewed);
+        const parsedEnabled = parseFloat(String(enabled || 0));
+    
+        return parsedEnabled !== 0 ? ((parsedRenewed / parsedEnabled) * 100).toFixed(2) + "%" : "0%";
+    };
+
+    // En useRenewaReportSearch
+    const updateDataGridRenewal = (updatedRenewal: ICallRenewal) => {
+        const updatedDataGrid = dataGridRenewal.map(row => {
+            if (row.fund === updatedRenewal.fund) {
+                return {
+                    ...row,
+                    enabled: updatedRenewal.enabled,
+                    percentage: calculatePercentage(row.renewed, updatedRenewal.enabled),
+                };
+            }
+            return row;
+        });
+        setdataGridRenewal(updatedDataGrid);
+    };
 
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
-        // Cambio en el selector del periodo
+        
         const selectedperiodo = watch('period');
         data.period = selectedperiodo;
         data.page = 1;
@@ -67,25 +110,39 @@ export default function useRenewaReportSearch() {
 
         const responservice: any = await getRenewalReport(data)
             .then(async (response) => {
-
                 return response
-
             });
+        // Quitar la última fila del array
+        const dataArrayWithoutLastRow = responservice.data.array.slice(0, -1);
 
-        responservice.data.array.map((e) => {
-            const percentage = (e.renewed / e.enabled) * 100 || 0; // Evita dividir por cero
+        dataArrayWithoutLastRow.map((e) => {
             const list = {
                 fund: e.fund,
                 enabled: e.enabled,
                 renewed: e.renewed,
-                percentage: percentage.toFixed(2), 
-            }
-            dataGridRenewal.push(list)
+                percentage: calculatePercentage(e.renewed, e.enabled),
+            };
+            dataGridRenewal.push(list);
+        });
 
+        // La última fila Beca mejores bachilleres legalizados 
+        const lastRow = responservice.data.array.slice(-1)[0];
 
-        })
+        setenabledBachLeg(lastRow.enabled)
+        setrenewedBachLeg(lastRow.renewed)
+       
+        //const percentage_BachLeg = 0 ? ((renewed_BachLeg / enabled_BachLeg) * 100).toFixed(2) + "%" : "0%";
+    
+  
+
     });
+    useEffect(() => {
+        setenabledBachLeg
+    }, [enabledBachLeg ]);
 
+    useEffect(() => {
+        setrenewedBachLeg
+    }, [renewedBachLeg ]);
 
     const onSubmit = handleSubmit(async (data: ICallRenewal) => {
         setShowTable(true)
@@ -146,5 +203,11 @@ export default function useRenewaReportSearch() {
         dataGridRenewal,
         searchRenewal,
         downloadCollection,
+        updateDataGridRenewal,
+        totalEnabled,
+        totalrenewed,
+        averagePercentage,
+        enabledBachLeg,
+        renewedBachLeg
     }
 }
