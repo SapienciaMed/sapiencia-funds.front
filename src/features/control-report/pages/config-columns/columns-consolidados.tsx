@@ -1,32 +1,44 @@
 import { ITableElement } from "../../../../common/interfaces/config-columns";
 
-export interface IFurniture {
-  plate: string;
-  description: string;
-  acquisitionDate: string;
-  equipmentStatus: number;
-  userIdentification: string;
-  fullName: string;
-  area: number;
-  model: string;
-  brand: string;
-  measure: string;
-  activeOwner: number;
-  observation: string;
-  clerk: number;
-}
-
-export const columnsConsolidados: ITableElement<IFurniture>[] = [
+export const columnsConsolidados: ITableElement<any>[] = [
   {
-    fieldName: "area consolidados",
-    header: "ÁreaConso",
+    fieldName: "resourcePrioritization.communeId",
+    header: "Comuna o corregimiento",
   },
-];
-
-export const dataAditional = [
   {
-    fieldName: "area consolidados",
-    header: "ÁreaConso",
-    cols: 3,
+    fieldName: "consolidatedPreselected",
+    header: "No.Preseleccionados",
+  },
+  {
+    fieldName: "resourcePrioritization.places",
+    header: "No.Cupos",
+  },
+  {
+    fieldName: "consolidatedResourceAvailable",
+    header: "Recurso Disponible",
+  },
+  {
+    fieldName: "consolidatedGranted",
+    header: "Otorgado",
+  },
+  {
+    fieldName: "consolidatedResourceAvailable - consolidatedGranted",
+    header: "Disponible",
+  },
+  {
+    fieldName: "",
+    header: "%Participacion",
+  },
+  {
+    fieldName: "consolidatedGranted",
+    header: "Otorgado",
+  },
+  {
+    fieldName: "consolidatedLegalized",
+    header: "Numero de legalizados",
+  },
+  {
+    fieldName: "consolidatedFinancialReturns",
+    header: "Rendimientos financieros",
   },
 ];

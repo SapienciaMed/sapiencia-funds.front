@@ -11,7 +11,7 @@ const SearchBudgetPage = () => {
     tableView,
     onSubmit,
     tableColumns,
-    tableActions,
+
     control,
     errors,
     isValid,
@@ -20,17 +20,17 @@ const SearchBudgetPage = () => {
     submitDisabled,
     register,
     handleChange,
-  } = useConsultControlReport({
-    columnsTable: true,
-    listConfigColumns: {
-      "1": columnsConsolidados,
-      "2": columns123,
-      "3": columns456,
-      "4": columns456,
-      "5": columns456,
-      "6": columns456,
-    },
-  });
+    updateOrSaveData,
+    tableActions,
+    totalNoPreseleccionados,
+    totalOtorgado,
+    totalNoCupos,
+    totalRecursoDisponible,
+    totalDisponible,
+    totalPorParticipacion,
+    totalNoLegalizados,
+    totalRendimientoFinancieros,
+  } = useConsultControlReport();
   return (
     <ManagePropertyForm
       register={register}
@@ -43,11 +43,20 @@ const SearchBudgetPage = () => {
       tableView={tableView}
       onSubmit={onSubmit}
       tableColumns={tableColumns}
-      tableActions={tableActions}
       control={control}
       errors={errors}
       isValid={isValid}
       handleClean={handleClean}
+      updateOrSaveData={updateOrSaveData}
+      tableActions={tableActions}
+      totalNoPreseleccionados={totalNoPreseleccionados}
+      totalOtorgado={totalOtorgado}
+      totalNoCupos={totalNoCupos}
+      totalRecursoDisponible={totalRecursoDisponible}
+      totalDisponible={totalDisponible}
+      totalPorParticipacion={totalPorParticipacion}
+      totalNoLegalizados={totalNoLegalizados}
+      totalRendimientoFinancieros={totalRendimientoFinancieros}
     />
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function useControlInfo() {
-  const [info, setInfo] = useState([
+  const [infoData, setInfo] = useState([
     {
       value: 1,
       name: "Consolidados",
@@ -27,5 +27,5 @@ export default function useControlInfo() {
       name: "Control",
     },
   ]);
-  return { info };
+  return { infoData };
 }
