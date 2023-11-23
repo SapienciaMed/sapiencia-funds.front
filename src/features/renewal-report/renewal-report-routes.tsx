@@ -14,7 +14,7 @@ function RenewalReportRoutes() {
             element={
               <PrivateRoute
                 element={<SearchRenewalReportPage />}
-                allowedAction={"MAESTRO_ACTIVIDAD_CONSULTAR"}
+                allowedAction={"INFORME_RENOVACION_CONSULTAR"}
               />
             }
             />
