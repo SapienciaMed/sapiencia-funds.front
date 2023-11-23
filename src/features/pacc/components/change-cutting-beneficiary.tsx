@@ -18,7 +18,6 @@ function ChangeCuttingBeneficiary({actualCut, idCutData}) {
     } = useForm<IStepCashing>({resolver})
 
     const onsubmitAddItem = handleSubmit((data: any) => {
-        console.log('peticion', data)
         setMessage({
             show: true,
             title: "Mover beneficiario a otro corte",
