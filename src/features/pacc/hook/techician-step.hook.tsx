@@ -7,9 +7,11 @@ import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { useForm } from 'react-hook-form';
 import { AppContext } from "../../../common/contexts/app.context";
 import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
+import { useNavigate } from "react-router-dom";
 
 export default function useTechnicianStepCashing() {
     
+    const navigate = useNavigate();
     const tableComponentRef = useRef(null);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
     const { setMessage } = useContext(AppContext);
@@ -163,7 +165,7 @@ export default function useTechnicianStepCashing() {
         {
             icon: "Manage",
             onClick: (row) => {
-               
+                navigate('./gestion')
             },
         },
        

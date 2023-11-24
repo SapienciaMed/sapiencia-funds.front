@@ -212,83 +212,83 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   }
 
   if (resultData && resultData.array && resultData.array.length > 0) {
-  }
-  return (
-      <div className="spc-common-table">
-        {  title && <div className="spc-table-title">{title}</div> }
-
-        {/* Verificar si resultData.array tiene elementos */}
-
-        <Paginator
-          className="between spc-table-paginator"
-          template={paginatorHeader}
-          first={first}
-          rows={perPage}
-          totalRecords={resultData?.meta?.total || 0}
-          onPageChange={onPageChange}
-          leftContent={leftContent(princialTitle, isInputSearch, onGlobalFilterChange)}
-        />
-
-        {(width > 830 || !isMobil) ? (
-          <div>
-            <DataTable
-              className={`spc-table full-height ${classSizeTable}`}
-              value={resultData?.array || []}
-              loading={loading}
-              scrollable={true}
-              emptyMessage={emptyMessage}
-            >
-              {columns.map((col) => (
-                <Column
-                  key={col.fieldName}
-                  field={col.fieldName}
-                  header={col.header}
-                  body={col.renderCell}
-                />
-              ))}
-
-              {actions && actions.length && (
-                <Column
-                  className="spc-table-actions"
-                  header={
-                    <div>
-                      <div
-                        className="spc-header-title"
-                      >
-                        Acciones
-                      </div>
-                    </div>
-                  }
-                  body={(row) => (
-                    <ActionComponent
-                      row={row}
-                      actions={actions}
-                      isDisabled={isDisabled}
-                    />
-                  )}
-                />
-              )}
-            </DataTable>
-          </div>
-        ) : (
-          <DataView
-            value={resultData?.array || []}
-            itemTemplate={mobilTemplate}
-            rows={5}
-            emptyMessage={emptyMessage}
+    return (
+        <div className="spc-common-table">
+          {  title && <div className="spc-table-title">{title}</div> }
+  
+          {/* Verificar si resultData.array tiene elementos */}
+  
+          <Paginator
+            className="between spc-table-paginator"
+            template={paginatorHeader}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+            leftContent={leftContent(princialTitle, isInputSearch, onGlobalFilterChange)}
           />
-        )}
-
-        <Paginator
-          className="spc-table-paginator"
-          template={paginatorFooter}
-          first={first}
-          rows={perPage}
-          totalRecords={resultData?.meta?.total || 0}
-          onPageChange={onPageChange}
-        />
-      </div>
-  );
+  
+          {(width > 830 || !isMobil) ? (
+            <div>
+              <DataTable
+                className={`spc-table full-height ${classSizeTable}`}
+                value={resultData?.array || []}
+                loading={loading}
+                scrollable={true}
+                emptyMessage={emptyMessage}
+              >
+                {columns.map((col) => (
+                  <Column
+                    key={col.fieldName}
+                    field={col.fieldName}
+                    header={col.header}
+                    body={col.renderCell}
+                  />
+                ))}
+  
+                {actions && actions.length && (
+                  <Column
+                    className="spc-table-actions"
+                    header={
+                      <div>
+                        <div
+                          className="spc-header-title"
+                        >
+                          Acciones
+                        </div>
+                      </div>
+                    }
+                    body={(row) => (
+                      <ActionComponent
+                        row={row}
+                        actions={actions}
+                        isDisabled={isDisabled}
+                      />
+                    )}
+                  />
+                )}
+              </DataTable>
+            </div>
+          ) : (
+            <DataView
+              value={resultData?.array || []}
+              itemTemplate={mobilTemplate}
+              rows={5}
+              emptyMessage={emptyMessage}
+            />
+          )}
+  
+          <Paginator
+            className="spc-table-paginator"
+            template={paginatorFooter}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+          />
+        </div>
+    );
+  }
 
 });
 
