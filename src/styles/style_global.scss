@@ -68,6 +68,9 @@
     }
 }
 
+.container-actions_formTabs {
+    @include generate-flex-container(row, null, space-around, null, null, 0.62em);
+}
   
 @media (min-width: 1024px) {
     .one-filter-container {
@@ -95,6 +98,17 @@
 
     .title-area-2{
         @include card-component-title-area()
+    }
+
+    .container-actions_formTabs {
+        @include generate-flex-container(
+          row,
+          null,
+          space-around,
+          null,
+          null,
+          0.62em
+        );
     }
 }
 

@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import TabListComponent from "../../../common/components/tab-list.component";
 import { ITabsMenuTemplate } from "../../../common/interfaces/tabs-menu.interface";
 import { useParams } from "react-router-dom";
 import SupportsPQRSDF from "./manageTechnical/supports-PQRSDF";
 import { AppContext } from "../../../common/contexts/app.context";
+import { ButtonComponent } from "../../../common/components/Form";
 
 function TabsManageTechnical() {
 
     const { option } = useParams();
     const { validateActionAccess } = useContext(AppContext);
+    
 
     const tabs = (): ITabsMenuTemplate[] => {
         const servicioSocial = {
@@ -52,10 +54,30 @@ function TabsManageTechnical() {
 
     const start = tabs().find((tab) => tab.id.toString().toLowerCase() == option?.toLowerCase());
 
+    const [currentTabIndex, setCurrentTabIndex] = useState<number>(
+        start ? tabs().findIndex((tab) => tab.id === start.id) : 0
+    );
+
     return(
-        <section className="mt-20px">
-            <TabListComponent tabs={tabs()} start={start}/>
-        </section>
+        <>
+            <section className="mt-20px">
+                <TabListComponent tabs={tabs()} start={start} currentIndex={currentTabIndex} setCurrentTabIndex={setCurrentTabIndex}/>
+            </section>
+
+            {
+                tabs().length > 1 && (
+                    <div className="container-actions_formTabs">
+                        <ButtonComponent
+                            value='Siguiente'
+                            className='button-save  invalid big'
+                            type='button'
+                            action={() => { setCurrentTabIndex((currentTabIndex + 1) % tabs().length) }}
+                        />
+                    </div>
+                )
+            }
+        
+        </>
     )
 }
 
