@@ -1,11 +1,30 @@
+@import "./mixins.scss";
 
 .input-basic {
-
     font-size: 0.875rem;
     font-weight: 400;
+    font-family: RubikRegular, sans-serif !important;
 
     &:disabled{
         background: #EEEEF1 !important;
     }
 
+}
+
+.select-basic {
+    span{
+        font-weight: 400;
+        font-family: RubikRegular, sans-serif !important;
+        color:#000
+    }
+    
+
+}
+
+.inputNumber-basic {
+    input{
+        font-weight: 400;
+        font-family: RubikRegular, sans-serif !important;
+        color: #000;
+    }
 }

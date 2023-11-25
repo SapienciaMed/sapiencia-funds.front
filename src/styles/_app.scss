@@ -3,8 +3,11 @@
 @import "./style_global.scss";
 @import "./texts.scss";
 @import "./tables.scss";
+
 @import "./input.scss";
 @import "./totals.scss";
+// @import "./utilities.scss";
+@import './font-family.scss';
 // :root {
 //   --color-black: #0b060e;
 //   --color-gray: #535353;
@@ -259,6 +262,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
     }
   }
 }
+
 .button-save-container-display-actas {
   display: flex;
   justify-content: end;
@@ -293,6 +297,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
     }
   }
 }
+
 .button-save-container-display-actas-users {
   display: flex;
   justify-content: end;
@@ -331,7 +336,8 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
 /* Estilo para el campo habilitado */
 .input-enabled {
-  background-color: #ffffff; /* Color de fondo blanco por defecto */
+  background-color: #ffffff;
+  /* Color de fondo blanco por defecto */
   /* Agrega otros estilos según tus preferencias */
 }
 
@@ -431,7 +437,8 @@ div[id="single-spa-application:@sapiencia/funds"] {
   font-size: 17px;
   font-style: normal;
   font-weight: 500;
-  line-height: 120%; /* 20.4px */
+  line-height: 120%;
+  /* 20.4px */
 }
 
 .modal-container .modal-header p {
@@ -456,18 +463,22 @@ div[id="single-spa-application:@sapiencia/funds"] {
 }
 
 .container-form-grid-actas {
-  flex: 1; /* Ocupa todo el espacio disponible, dividido equitativamente */
+  flex: 1;
+  /* Ocupa todo el espacio disponible, dividido equitativamente */
 }
 
 /* Punto de interrupción para pantallas pequeñas */
 @media (max-width: 768px) {
   .flex-container {
-    flex-direction: column; /* Alineación vertical en pantallas pequeñas */
+    flex-direction: column;
+    /* Alineación vertical en pantallas pequeñas */
   }
 
   .container-form-grid-actas {
-    width: 100%; /* Ocupa el 100% del ancho en pantallas pequeñas */
+    width: 100%;
+    /* Ocupa el 100% del ancho en pantallas pequeñas */
   }
+
   .mt-24px {
     margin-top: 58px !important;
   }
@@ -475,7 +486,8 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
 .label-container {
   display: flex;
-  align-items: center; /* Alinea los elementos verticalmente en el centro */
+  align-items: center;
+  /* Alinea los elementos verticalmente en el centro */
 }
 
 .exmaple-1 {
@@ -509,16 +521,19 @@ div[id="single-spa-application:@sapiencia/funds"] {
 }
 
 .title-button-users .ai {
-  margin-bottom: -5px; /* Ajusta este valor según sea necesario */
+  margin-bottom: -5px;
+  /* Ajusta este valor según sea necesario */
 }
 
 .spacing-element {
-  height: 20px; /* Ajusta el valor según la separación que desees */
+  height: 20px;
+  /* Ajusta el valor según la separación que desees */
   margin-top: 24px;
 }
 
 .button-container {
-  margin-bottom: 200px; /* Ajusta el valor según la separación que desees */
+  margin-bottom: 200px;
+  /* Ajusta el valor según la separación que desees */
 }
 
 .toggle-control {
@@ -538,14 +553,16 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 0;
   width: 0;
 }
-.toggle-control input:checked ~ .control {
+
+.toggle-control input:checked~.control {
   background-color: #533893;
 }
+
 // .toggle-control input:checked ~ .control:after {
 //   left: 30px;
 // }
 
-.toggle-control input:checked ~ .size-normal:after {
+.toggle-control input:checked~.size-normal:after {
   left: 30px;
 }
 
@@ -553,10 +570,12 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 32px;
   width: 60px;
 }
+
 .size-normal:checked {
   height: 32px;
   width: 60px;
 }
+
 .size-normal:after {
   width: 25px;
   height: 25px;
@@ -564,7 +583,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   top: 4px;
 }
 
-.toggle-control input:checked ~ .size-small:after {
+.toggle-control input:checked~.size-small:after {
   left: 15px;
 }
 
@@ -572,10 +591,12 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 16px;
   width: 30.67px;
 }
+
 .size-small:checked {
   height: 32px;
   width: 60px;
 }
+
 .size-small:after {
   width: 12.55px;
   height: 12.55px;
@@ -591,6 +612,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   background-color: darkgray;
   transition: background-color 0.15s ease-in;
 }
+
 .toggle-control .control:after {
   content: "";
   position: absolute;
@@ -665,7 +687,8 @@ div[id="single-spa-application:@sapiencia/funds"] {
 }
 
 .tooltip:hover .tooltiptext {
-  display: block; /* Muestra el tooltip cuando se coloca el cursor sobre el elemento */
+  display: block;
+  /* Muestra el tooltip cuando se coloca el cursor sobre el elemento */
 }
 
 .button-save-container-display-maestros-actas {
@@ -703,6 +726,14 @@ div[id="single-spa-application:@sapiencia/funds"] {
       gap: 10px;
       align-self: stretch;
       margin-top: 24px;
+    }
+  }
+}
+
+@for $inx from 1 through 100 {
+  @for $i from 1 through 4 {
+    .#{nth((mt, mb, mr, ml), $i)}-#{inx}px {
+      #{nth((margin-top, margin-bottom, margin-right, margin-left), $i)}: calc(1px * $inx);
     }
   }
 }

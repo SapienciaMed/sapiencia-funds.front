@@ -40,9 +40,6 @@ const DatingReportRoutes = (): React.JSX.Element => {
                                     placeholder={'2023-2'}
                                     classNameLabel="text-black biggest  text-required"
                                     errors={errors}
-                                    mode="currency"
-                                    currency="COP"
-                                    locale="es-CO"
                                     fieldArray={true}
                                     minFractionDigits={0}
                                     maxFractionDigits={0}
@@ -91,6 +88,7 @@ const DatingReportRoutes = (): React.JSX.Element => {
                             isShowModal={true}
                             titleMessageModalNoResult="Buscar"
                             descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
+                            isMobil={false}
                             onResult={(rows) => {
                                 setSendingReportXlsx(rows.length > 0);
                               }}

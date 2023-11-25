@@ -27,7 +27,7 @@ function SearchResulPage({ valueAction }: Readonly<ISearchResultProp>) {
 
             <FormComponent action={onSaveEdit}  id="acta-form">
                 <section className="card-user">
-                    <div className='grid-form-4-container gap-15'>
+                    <div className={`${valueAction == 'edit' ? 'grid-form-3-container' : 'grid-form-4-container'}  gap-15`}>
                         {
                             valueAction !== 'edit' && 
                             <InputComponent

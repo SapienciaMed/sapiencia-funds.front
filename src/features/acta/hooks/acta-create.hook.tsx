@@ -423,7 +423,7 @@ export default function useActaCreate() {
         setMessage({
           show: true,
           title: "Cancelar",
-          description: "¿Segur@ que desea cancelar la creación del acta?",
+          description: "¿Segur@ que deseas cancelar la creación del acta?",
           OkTitle: "Aceptar",
           cancelTitle: "Cancelar",
           onOk() {
