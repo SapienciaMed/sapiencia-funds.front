@@ -19,54 +19,31 @@ export default function useTechnicianStepCashing() {
         data: {},
         status: false
     })
-    const [ currentCutOffdDate, setCurrentCutOffdDate ] = useState([''])
+    const [valueFilterTable, setValueFilterTable ] = useState('')
 
     const {
         control,
         setValue,
         getValues,
     } = useForm<IStepCashing>();
-
-    const valueMap: { [key: number]: string } = {
-        24: 'Corte 3',
-        16: 'Corte 1',
-        23: 'Corte 2'
-    };
-
-    const formatearFecha = (fechaISO: string) => {
-        const fecha = new Date(fechaISO);
-        const dia = fecha.getUTCDate();
-        const mes = fecha.getUTCMonth() + 1; 
-        const anio = fecha.getUTCFullYear();
-        const fechaFormateada = dia + '/' + (mes < 10 ? '0' : '') + mes + '/' + anio;
-        
-        return fechaFormateada;
-    }
-
+    
     useEffect(() => {
         loadTableData()
         GetCutsForConsolidationTray().then(response => {
             if(response.operation.code === EResponseCodes.OK){
-
-                response.data.forEach((item, index) => {
-                    setCurrentCutOffdDate(
-                        (prevState) => {
-                            return [
-                                ...prevState,
-                                `${item.name} - desde ${formatearFecha(item.from)} hasta ${formatearFecha(item.until)}`
-                            ]
-                        }
-                    );
-                });
-                
                 const data = response.data?.map((item: any) => {
                     return {
                         name: item.name,
                         value: item.id
                     }
                 })
-                setValue('idCut', data[0].value)
-                setIdCutData(data)
+                const newData = [
+                    ...data,
+                    { name: 'Todos', value: 'TODOS' }
+                ];
+
+                setValue('idCut', newData[0].value)
+                setIdCutData(newData)
             }
         })
 
@@ -111,7 +88,19 @@ export default function useTechnicianStepCashing() {
         },
         {
             fieldName:'dateIncomeCut',
-            header: 'Fecha ingreso al corte'
+            header: 'Fecha ingreso al corte',
+            renderCell(row) {
+                const date = new Date(row.dateIncomeCut);
+                const day = date.getUTCDate();
+                const month = date.getUTCMonth() + 1;
+                const year = date.getUTCFullYear();
+
+                return(
+                    <div>
+                       {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
+                    </div>
+                )
+            },
         },
         {
             fieldName:'cut',
@@ -119,11 +108,35 @@ export default function useTechnicianStepCashing() {
         },
         {
             fieldName:'dateFinallyCut',
-            header: 'Fecha final corte'
+            header: 'Fecha final corte',
+            renderCell(row) {
+                const date = new Date(row.dateFinallyCut);
+                const day = date.getUTCDate();
+                const month = date.getUTCMonth() + 1;
+                const year = date.getUTCFullYear();
+
+                return(
+                    <div>
+                       {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
+                    </div>
+                )
+            },
         },
         {
             fieldName:'dateEndGracePeriod',
-            header: 'Fecha fin periodo de gracia'
+            header: 'Fecha fin periodo de gracia',
+            renderCell(row) {
+                const date = new Date(row.dateEndGracePeriod);
+                const day = date.getUTCDate();
+                const month = date.getUTCMonth() + 1;
+                const year = date.getUTCFullYear();
+
+                return(
+                    <div>
+                       {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
+                    </div>
+                )
+            },
         },
         {
             fieldName:'status',
@@ -147,11 +160,11 @@ export default function useTechnicianStepCashing() {
         {
             icon: "ChangeCut",
             onClick: (row) => {
-               const actualCut = currentCutOffdDate.find(item => item.includes(row.cut));
+                let newArray = idCutData.filter(item => item.value !== "TODOS");
                setMessage({
                     show: true,
                     title: "Mover beneficiario a otro corte",
-                    description: <ChangeCuttingBeneficiary actualCut={actualCut} idCutData={idCutData}/>,
+                    description: <ChangeCuttingBeneficiary idBenef={row.idBenef}  idCutData={newArray} />,
                     background: true,
                     onOk() {
                         setMessage({});
@@ -168,6 +181,7 @@ export default function useTechnicianStepCashing() {
         },
        
     ];
+    
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
@@ -175,38 +189,45 @@ export default function useTechnicianStepCashing() {
     }
 
     const handleFilterChange = (value: React.ChangeEvent<HTMLInputElement>) => {
+        setValueFilterTable(value.target.value)
         timer &&  clearTimeout(timer);  
         const newTimer =  setTimeout(() => {
-            if (value.target.value != undefined && value.target.value.length > 0) {
+            if (value.target.value != undefined && value.target.value.length > 0 && getValues('idCut') != null) {
                 const searchCriteriaData = {
-                    searchCriteria: value.target.value,
-                    cutParamName: valueMap[getValues('idCut')] || '',
+                    searchParam: value.target.value,
+                    [(getValues('idCut') == 'TODOS' ? 'cutParamName' : 'cutParamId' )]: getValues('idCut') ,
                     page: 1,
                     perPage: 10
                 }
-
                 setListSearch({
                     data: searchCriteriaData,
                     status: true
                 })
-            } 
+            }else{
+                setListSearch({
+                    data: {},
+                    status: false
+                })
+                loadTableData()
+            }
         }, 800);
 
         setTimer(newTimer);
     }
     const handleChangeCut = (value: any) => {
-
-        const data: IConsolidationTrayForTechnicianCollection = {
-            cutParamName: valueMap[value] || '',
-            page: 1,
-            perPage: 10
+        if (value != null) {
+            const data: IConsolidationTrayForTechnicianCollection = {
+                [(value === 'TODOS') ? 'cutParamName' : 'cutParamId']: value,
+                searchParam: valueFilterTable || '',
+                page: 1,
+                perPage: 10
+            }
+    
+            setListSearch({
+                data,
+                status: true
+            })
         }
-       
-        setListSearch({
-            data,
-            status: true
-        })
-        
     } 
 
     return{
