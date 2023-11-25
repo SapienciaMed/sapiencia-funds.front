@@ -15,15 +15,16 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
     const {
         control, errors, clearFields, register, setValue, navigate, tableComponentRef, showTable,
-        setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal,downloadCollection
+        setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
+        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg,renewedBachLeg
     } = useRenewaReportSearch();
-   
+
 
     const tableColumnsRenewal: ITableElement<ICallRenewal>[] = [
         {
             fieldName: "fund",
             header: "Fondo",
-    },
+        },
         {
             fieldName: "enabled",
             header: "Nro habilitados"
@@ -43,16 +44,16 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
         {
             icon: "Edit",
             onClick: (row) => {
-                const dataEditTable: ICallRenewal ={
-                    fund: "",
-                    enabled: "",
-                    renewed: "",
+                const dataEditTable: ICallRenewal = {
+                    fund: row.fund,
+                    enabled: row.enabled,
+                    renewed: row.renewed,
                     percentage: "90"
                 }
                 setMessage({
                     show: true,
                     title: "Editar ítem",
-                    description: <ItemsEditePage acta={dataEditTable} action={"edit"} />,
+                    description: <ItemsEditePage renewal={dataEditTable} renewalitem={row} />,
                     background: true,
                     size: "items",
                     items: true,
@@ -121,139 +122,149 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     </FormComponent>
                 </div>
 
+                <div
+                    style={
+                        dataGridRenewal.length > 0 ? { display: "block" } : { display: "none" }
+                    }
+                >
+                    <div className="container-sections-forms">
 
-                <div className="container-sections-forms">
-
-                    <BasicTableComponent
-                        ref={tableComponentRef}
-                        data={dataGridRenewal}
-                        columns={tableColumnsRenewal}
-                        actions={tableActionsRenewal}
-                        titleMessageModalNoResult="Registro no existente"
-                        isShowModal={true}
-                        secondaryTitle={"Resultados de búsqueda"}
-                    />
-
-                </div>
-
-
-                <div className="container-sections-forms">
-                    <div className="title-area">
-                        <label className="text-black large medium grid-span-4-columns">Totales</label>
-                    </div>
-                    <div className="grid-form-3-container mb-24px">
-                        <InputComponent
-                            register={control.register}
-                            idInput="142"
-                            className="input-basic medium"
-                            typeInput="text"
-                            label="Nro habilitados"
-                            classNameLabel="text-black big text-required"
-                            errors={errors}
-                            disabled={true}
-                            value ='142'
+                        <BasicTableComponent
+                            ref={tableComponentRef}
+                            data={dataGridRenewal}
+                            columns={tableColumnsRenewal}
+                            actions={tableActionsRenewal}
+                            titleMessageModalNoResult="Registro no existente"
+                            isShowModal={true}
+                            secondaryTitle={"Resultados de búsqueda"}
                         />
-                        <InputComponent
-                            register={control.register}
-                            idInput="385"
-                            className="input-basic medium"
-                            typeInput="text"
-                            label="Nro renovados"
-                            classNameLabel="text-black big text-required"
-                            errors={errors}
-                            disabled={true}
-                            value ='385'
-                        />
-                        <InputComponent
-                            register={control.register}
-                            idInput="89%"
-                            className="input-basic medium"
-                            typeInput="text"
-                            label="Porcentaje"
-                            classNameLabel="text-black big text-required"
-                            errors={errors}
-                            disabled={true}
-                            value ='89%'
-                        />
-                    </div>
-                </div>
 
-                <div className="container-sections-forms">
-                    <div className="title-area">
-                        <label className="text-black large medium grid-span-4-columns">
-                            Beca mejores bachilleres legalizados</label>
                     </div>
 
-                    <div className="grid-form-3-container mb-24px">
-                        <InputComponent
-                            register={control.register}
-                            idInput="name"
-                            className="input-basic medium"
-                            typeInput="text"
-                            label="Nro habilitados"
-                            classNameLabel="text-black big text-required"
-                            errors={errors}
 
+                    <div className="container-sections-forms">
+                        <div className="title-area">
+                            <label className="text-black large medium grid-span-4-columns">Totales</label>
+                        </div>
+                        <div className="grid-form-3-container mb-24px">
+                            <InputComponent
+                                register={control.register}
+                                idInput="enabled"
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Nro habilitados"
+                                classNameLabel="text-black big text-required"
+                                errors={errors}
+                                disabled={true}
+                                value={totalEnabled}
+                            />
+                            <InputComponent
+                                register={control.register}
+                                idInput="renewed"
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Nro renovados"
+                                classNameLabel="text-black big text-required"
+                                errors={errors}
+                                disabled={true}
+                                value={totalrenewed}
+                            />
+                            <InputComponent
+                                register={control.register}
+                                idInput="89%"
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Porcentaje"
+                                classNameLabel="text-black big text-required"
+                                errors={errors}
+                                disabled={true}
+                                value={averagePercentage}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="container-sections-forms">
+                        <div className="title-area">
+                            <label className="text-black large medium grid-span-4-columns">
+                                Beca mejores bachilleres legalizados</label>
+                        </div>
+
+                        <div className="grid-form-3-container mb-24px">
+                            <InputComponent
+                                register={control.register}
+                                idInput="name"
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Nro habilitados"
+                                classNameLabel="text-black big text-required"
+                                errors={errors}
+                                placeholder={enabledBachLeg ? enabledBachLeg : ""}
+
+                            />
+                            <InputComponent
+                                register={control.register}
+                                idInput="385"
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Nro renovados"
+                                classNameLabel="text-black big text-required"
+                                errors={errors}
+                                disabled={true}
+                                value={renewedBachLeg}
+                            />
+                            <InputComponent
+                                register={control.register}
+                                idInput="89%"
+                                className="input-basic medium"
+                                typeInput="text"
+                                label="Porcentaje"
+                                classNameLabel="text-black big text-required"
+                                errors={errors}
+                                disabled={true}
+                                value="89%"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <div className="button-save-container-display mr-24px">
+                        </div>
+
+                        <ButtonComponent
+                            value={
+                                <>
+                                    <div className="container-buttonText">
+                                        <span>Descargar</span>
+                                        <Svgs svg="excel" width={23.593} height={28.505} />
+                                    </div>
+                                </>
+                            }
+                            className="button-download large "
+                            action={downloadCollection}
                         />
-                        <InputComponent
-                            register={control.register}
-                            idInput="385"
-                            className="input-basic medium"
-                            typeInput="text"
-                            label="Nro renovados"
-                            classNameLabel="text-black big text-required"
-                            errors={errors}
-                            disabled={true}
-                            value="385"
+
+                    </div>
+                    <div className="button-save-container-display m-top-20">
+                        <ButtonComponent
+                            form="searchBudget"
+                            value={"Cancelar"}
+                            className="button-clean medium"
+                            type="button"
+                            action={() => {
+                                reset();
+                                tableComponentRef.current.emptyData();
+                            }
+                            }
                         />
-                        <InputComponent
-                            register={control.register}
-                            idInput="89%"
-                            className="input-basic medium"
-                            typeInput="text"
-                            label="Porcentaje"
-                            classNameLabel="text-black big text-required"
-                            errors={errors}
-                            disabled={true}
-                            value="89%"
+                        <ButtonComponent
+                            value={`Guardar`}
+                            className="button-save large hover-three disabled-black"
+                            action={() => {
+                                reset();
+                                tableComponentRef.current.emptyData();
+                            }
+                            }
                         />
                     </div>
-                </div>
-                <div>
-                    <div className="button-save-container-display mr-24px">
-                    </div>
-
-                    <ButtonComponent
-                        value={
-                            <>
-                                <div className="container-buttonText">
-                                    <span>Descargar</span>
-                                    <Svgs svg="excel" width={23.593} height={28.505} />
-                                </div>
-                            </>
-                        }
-                        className="button-download large "
-                    action={downloadCollection}
-                    />
-
-                </div>
-                <div className="button-save-container-display m-top-20">
-                    <ButtonComponent
-                        form="searchBudget"
-                        value={"Cancelar"}
-                        className="button-clean medium"
-                        type="button"
-                        action={() => {
-                            reset();
-                            tableComponentRef.current.emptyData();
-                        }
-                        }
-                    />
-                    <ButtonComponent
-                        form="searchBudget"
-                        value={`Guardar`}
-                        className="button-save large hover-three disabled-black"
-                    />
                 </div>
             </div>
 
