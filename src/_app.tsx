@@ -4,6 +4,7 @@ import { AppContextProvider } from "./common/contexts/app.context";
 import "./styles/_app.scss";
 import "./styles/_theme-prime.css";
 import "primereact/resources/primereact.min.css";
+import 'primeicons/primeicons.css';
 import ModalMessageComponent from "./common/components/modal-message.component";
 import ApplicationProvider from "./application-provider";
 import VotingResultsRoutes from "./features/voting-results/voting-results-routes";

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import SupportsPQRSDF from "./manageTechnical/supports-PQRSDF";
 import { AppContext } from "../../../common/contexts/app.context";
 import { ButtonComponent } from "../../../common/components/Form";
+import Requirements from "./manageTechnical/requirements";
 
 function TabsManageTechnical() {
 
@@ -25,14 +26,14 @@ function TabsManageTechnical() {
             title: "Soportes PQRSDF", 
             content: (<SupportsPQRSDF/>), 
             action: () => {},
-            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || true /*validateActionAccess('SOPORTE_PQRSDF')*/  
+            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || false /*validateActionAccess('SOPORTE_PQRSDF')*/  
         }
         const requisitos = {
             id: "requisitos", 
             title: "Requisitos", 
-            content: (<></>), 
+            content: (<Requirements/>), 
             action: () => {},
-            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || false /*poner el rol */ 
+            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || true /*poner el rol */ 
         }
         const liquidacion = {
             id: "liquidacion", 
