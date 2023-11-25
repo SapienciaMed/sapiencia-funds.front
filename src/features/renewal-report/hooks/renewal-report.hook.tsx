@@ -114,7 +114,8 @@ export default function useRenewaReportSearch() {
             });
         // Quitar la última fila del array
         const dataArrayWithoutLastRow = responservice.data.array.slice(0, -1);
-
+        
+        setdataGridRenewal([])
         dataArrayWithoutLastRow.map((e) => {
             const list = {
                 fund: e.fund,
@@ -123,6 +124,7 @@ export default function useRenewaReportSearch() {
                 percentage: calculatePercentage(e.renewed, e.enabled),
             };
             dataGridRenewal.push(list);
+            setdataGridRenewal(dataGridRenewal)
         });
 
         // La última fila Beca mejores bachilleres legalizados 
@@ -145,11 +147,8 @@ export default function useRenewaReportSearch() {
     }, [renewedBachLeg ]);
 
     const onSubmit = handleSubmit(async (data: ICallRenewal) => {
-        setShowTable(true)
-
-        if (tableComponentRef.current) {
-            tableComponentRef.current.loadData(data);
-        }
+        setShowTable(true)     
+        setdataGridRenewal
     });
 
 
