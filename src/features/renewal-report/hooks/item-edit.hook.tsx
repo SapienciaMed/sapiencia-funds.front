@@ -47,27 +47,6 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
         formState: { errors },
     } = useForm<ICallRenewal>({ resolver });
 
-    const handleSelectChange = (event) => {
-        const { value } = event.target;
-    };
-
-    //capturar el value de los select
-    const selectedFound = watch('fund');
-    const selectedLine = watch('enabled');
-    const selectedProgram = watch('renewed');
-    const selectedAnnouncement = watch('percentage');
-
-
-    const getSelectedLabel = (value, list) => {
-        const selectedOption = list.find(option => option.value === value);
-        return selectedOption ? selectedOption.name : null;
-    };
-
-    const selectedLabelFound = getSelectedLabel(selectedFound, foundList);
-    const selectedLabelLine = getSelectedLabel(selectedLine, lineList);
-    const selectedLabelProgram = getSelectedLabel(selectedProgram, programList);
-    const selectedLabelAnnouncement = getSelectedLabel(selectedAnnouncement, announcementList);
-  
 
 
 

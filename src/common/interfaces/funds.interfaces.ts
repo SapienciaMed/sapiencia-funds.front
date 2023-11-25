@@ -91,6 +91,7 @@ export interface ICallRenewal {
   percentage: string;
   page?: number;
   perPage?: number;
+  enabledBachLeg?: number;
 }
 
 export interface ICallRenewalFilter {

@@ -26,9 +26,13 @@ export default function useRenewaReportSearch() {
     const [announcementList, setAnnouncementList] = useState([]);
     const [enabledTotal, setEnabledTotal] = useState(0);
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
-    
+
     const [enabledBachLeg, setenabledBachLeg] = useState("0");
     const [renewedBachLeg, setrenewedBachLeg] = useState("0");
+    const [percentageBachLeg, setPercentageBachLeg] = useState("0.00%");
+    const [inputEnabledBachLeg, setInputEnabledBachLeg] = useState("0");
+  
+
 
 
     const {
@@ -62,27 +66,64 @@ export default function useRenewaReportSearch() {
             })
     }, []);
 
-     // Calcular Total habilitado
+
+useEffect(() => {
+    // Función para calcular el porcentaje
+    const calculatePercentageBachLeg = (renewed: string, enabled: string | number) => {
+        const parsedEnabled = parseFloat(String(enabled || 0));
+        const parsedRenewed = parseFloat(renewed);
+
+        return parsedEnabled !== 0 ? ((parsedRenewed / parsedEnabled) * 100).toFixed(2) + "%" : "0.00%";
+    };
+
+    // Calcular Porcentaje para enabledBachLeg y al cambiar inputEnabledBachLeg
+    const calculateAndSetPercentageBachLeg = () => {
+        const parsedEnabledBachLeg = parseFloat(enabledBachLeg || "0");
+        const parsedInputEnabledBachLeg = parseFloat(inputEnabledBachLeg || "0");
+        const parsedRenewedBachLeg = parseFloat(renewedBachLeg || "0");
+
+        // Calcular el porcentaje
+        const percentageBachLeg = calculatePercentageBachLeg(renewedBachLeg, parsedEnabledBachLeg);
+
+        // Actualizar el estado de percentageBachLeg
+        setPercentageBachLeg(percentageBachLeg);
+    };
+
+    // Calcular Porcentaje al montar el componente
+    calculateAndSetPercentageBachLeg();
+
+    // Efecto para actualizar percentageBachLeg cuando cambia inputEnabledBachLeg o renewedBachLeg
+    const updatePercentageBachLeg = () => {
+        calculateAndSetPercentageBachLeg();
+    };
+
+    // Llama a la función de cálculo cuando inputEnabledBachLeg o renewedBachLeg cambian
+    updatePercentageBachLeg();
+
+}, [enabledBachLeg, inputEnabledBachLeg, renewedBachLeg]);
+
+    
+    // Calcular Total habilitado
     const totalEnabled = dataGridRenewal.reduce((total, row) => {
         const enabled = parseFloat(row.enabled);
         return total + (isNaN(enabled) ? 0 : enabled);
-      }, 0);
+    }, 0);
 
     // Calcular Total renovados
     const totalrenewed = dataGridRenewal.reduce((total, row) => {
         const renewed = parseFloat(row.renewed);
         return total + (isNaN(renewed) ? 0 : renewed);
-      }, 0);
-    
+    }, 0);
+
     // Calcular el porcentaje promedio
     const averagePercentage = totalEnabled > 0 ? (totalrenewed / totalEnabled * 100).toFixed(2) + "%" : "0.00%";
-    
+
 
     // Calcular Porcentaje
     const calculatePercentage = (renewed: string, enabled: string | number) => {
         const parsedRenewed = parseFloat(renewed);
         const parsedEnabled = parseFloat(String(enabled || 0));
-    
+
         return parsedEnabled !== 0 ? ((parsedRenewed / parsedEnabled) * 100).toFixed(2) + "%" : "0%";
     };
 
@@ -100,9 +141,9 @@ export default function useRenewaReportSearch() {
         });
         setdataGridRenewal(updatedDataGrid);
     };
-
+    // searchRenewal
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
-        
+
         const selectedperiodo = watch('period');
         data.period = selectedperiodo;
         data.page = 1;
@@ -130,19 +171,17 @@ export default function useRenewaReportSearch() {
 
         setenabledBachLeg(lastRow.enabled)
         setrenewedBachLeg(lastRow.renewed)
-       
-        //const percentage_BachLeg = 0 ? ((renewed_BachLeg / enabled_BachLeg) * 100).toFixed(2) + "%" : "0%";
-    
-  
+
+        // Calcular Porcentaje para enabledBachLeg
+        const parsedEnabledBachLeg = parseFloat(lastRow.enabled);
+        const parsedRenewedBachLeg = parseFloat(lastRow.renewed);
+        const percentageBachLeg = parsedEnabledBachLeg !== 0
+            ? ((parsedRenewedBachLeg / parsedEnabledBachLeg) * 100).toFixed(2) + "%"
+            : "0.00%";
+
+        setPercentageBachLeg(percentageBachLeg);
 
     });
-    useEffect(() => {
-        setenabledBachLeg
-    }, [enabledBachLeg ]);
-
-    useEffect(() => {
-        setrenewedBachLeg
-    }, [renewedBachLeg ]);
 
     const onSubmit = handleSubmit(async (data: ICallRenewal) => {
         setShowTable(true)
@@ -151,7 +190,6 @@ export default function useRenewaReportSearch() {
             tableComponentRef.current.loadData(data);
         }
     });
-
 
     const clearFields = () => {
         reset();
@@ -186,7 +224,6 @@ export default function useRenewaReportSearch() {
     );
 
     return {
-
         control,
         errors,
         register,
@@ -197,6 +234,7 @@ export default function useRenewaReportSearch() {
         tableComponentRef,
         onSubmit,
         reset,
+        watch,
         clearFields,
         announcementList,
         setdataGridRenewal,
@@ -208,6 +246,9 @@ export default function useRenewaReportSearch() {
         totalrenewed,
         averagePercentage,
         enabledBachLeg,
-        renewedBachLeg
+        renewedBachLeg,
+        percentageBachLeg,
+        setInputEnabledBachLeg,
+        inputEnabledBachLeg,
     }
 }
