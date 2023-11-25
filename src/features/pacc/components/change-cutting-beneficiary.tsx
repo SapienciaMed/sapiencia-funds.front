@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { SetStateAction, useContext, useEffect, useState } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import { useForm } from 'react-hook-form';
 import { EDirection } from "../../../common/constants/input.enum";
@@ -6,15 +6,47 @@ import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { changeCuttingBeneficiary } from "../../../common/schemas/pacc-shema";
 import { IStepCashing } from "../interface/pacc";
+import { usePaccServices } from "../hook/pacc-serviceshook";
+import { EResponseCodes } from "../../../common/constants/api.enum";
+import { IDropdownProps } from "../../../common/interfaces/select.interface";
 
-function ChangeCuttingBeneficiary({actualCut, idCutData}) {
+interface IProp{
+    idBenef: number,
+    idCutData: IDropdownProps[],
+    setListSearch?:(value: SetStateAction<{ data: {}; status: boolean }>) => void,
+    loadTableData?: (searchCriteria?: object) => void
+}
+
+function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
 
     const { setMessage } = useContext(AppContext);
     const resolver = useYupValidationResolver(changeCuttingBeneficiary);
+    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices()
+    const [actualCut, setActualCut] = useState('')
+
+    const formatearFecha = (fechaISO: string) => {
+        const fecha = new Date(fechaISO);
+        const dia = fecha.getUTCDate();
+        const mes = fecha.getUTCMonth() + 1; 
+        const anio = fecha.getUTCFullYear();
+        const fechaFormateada = dia + '/' + (mes < 10 ? '0' : '') + mes + '/' + anio;   
+        return fechaFormateada;
+    }
+
+    useEffect(() => {
+        GeBeneficiaryById(String(idBenef)).then(response => {
+            if(response.operation.code === EResponseCodes.OK){
+                const item = response.data
+                setActualCut(`${item.cut} - desde ${formatearFecha(item.dateIncomeCut)} hasta ${formatearFecha(item.dateFinallyCut)}`)
+            }
+        })
+    },[])
+
     const {
         control,
         handleSubmit,
         formState: { errors },
+        getValues
     } = useForm<IStepCashing>({resolver})
 
     const onsubmitAddItem = handleSubmit((data: any) => {
@@ -25,7 +57,17 @@ function ChangeCuttingBeneficiary({actualCut, idCutData}) {
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
-                console.log('peticion', data)
+                const data = {
+                    id: idBenef,
+                    cut: getValues('idCut')
+                }
+                UpdateCutBeneficiary(data).then(response => {
+                    if(response.operation.code === EResponseCodes.OK){
+                        setMessage({});
+                        window.location.reload();
+                    }
+                
+                })
             },
             onCancel() {
                 setMessage({});
@@ -34,9 +76,7 @@ function ChangeCuttingBeneficiary({actualCut, idCutData}) {
         });
     })
 
-    const CancelFunction = () => {
-        setMessage((prev) => ({ ...prev, show: false }));
-    };
+    const CancelFunction = () => { setMessage((prev) => ({ ...prev, show: false })) };
     
     return (
         <>

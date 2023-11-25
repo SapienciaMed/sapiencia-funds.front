@@ -1,14 +1,17 @@
 export interface IConsolidationTrayForTechnicianCollectionParams {
-  creditId: string;
-  nroFiducy: string;
+  idBenef?: number;
+  idCut?: number;
+  idProgram?: number;
+  creditId: number;
+  nroFiducy: number;
   document: string;
   fullName: string;
   program: string;
   legalDate: string;
-  dateIncomeCut: string;
+  dateIncomeCut: string; 
   cut: string;
-  dateFinallyCut: string;
-  dateEndGracePeriod: string;
+  dateFinallyCut: string; 
+  dateEndGracePeriod: Date | null;
   status: string;
   reason: string;
   characterization: string;
