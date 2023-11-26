@@ -35,6 +35,7 @@ function TechnicianStepCashing() {
                     columns={tableColumns}
                     actions={tableActions}
                     titleMessageModalNoResult="Buscar"
+                    descriptionModalNoResult="No se encontraron resultados"
                     isShowModal={true}
                     classSizeTable='size-table-wd-150'
                     isInputSearch={true}

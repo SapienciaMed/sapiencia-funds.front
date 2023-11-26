@@ -41,7 +41,7 @@ interface IProps<T> {
   actions?: ITableAction<T>[];
   searchItems?: object;
   isShowModal: boolean;
-  setPaginateData?: ({}) => {};
+  setPaginateData?: ({}) => {} | any;
   titleMessageModalNoResult?: string;
   descriptionModalNoResult?: string;
   classname?: string;

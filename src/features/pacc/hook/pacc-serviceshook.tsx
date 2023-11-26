@@ -1,6 +1,6 @@
 import useCrudService from "../../../common/hooks/crud-service.hook";
 import { ApiResponse } from "../../../common/utils/api-response";
-import { IConsolidationTrayForTechnicianCollection, ICutInterface } from "../interface/pacc";
+import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, ICutInterface } from "../interface/pacc";
 
 export const usePaccServices = () => {
     const baseURL: string = process.env.urlApiFunds || "";
@@ -17,9 +17,21 @@ export const usePaccServices = () => {
         return post(`${roleUrl}${endpoint}`, data);
     }
 
+    async function GeBeneficiaryById(id: string): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams>> {
+        const endpoint: string = "/get-beneficiary-by-id"; 
+        return get(`${roleUrl}${endpoint}/${id}`); 
+    }
+
+    async function UpdateCutBeneficiary(data: Object):Promise<ApiResponse<any>> {
+        const endpoint: string = "/update-cut-beneficiary"; 
+        return post(`${roleUrl}${endpoint}`, data);
+    }
+
     return {
         GetCutsForConsolidationTray,
-        GeConsolidationTrayTechnicianCollectionByCut
+        GeConsolidationTrayTechnicianCollectionByCut,
+        GeBeneficiaryById,
+        UpdateCutBeneficiary
     }
 
 }

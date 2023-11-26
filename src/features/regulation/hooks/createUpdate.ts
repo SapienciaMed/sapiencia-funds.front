@@ -133,14 +133,15 @@ export default function useRegulationHook(auth) {
 
   const validRangesJsonTable = (data: string) => {
     let sum = 0;
+    const maxNumber = 5;
     const ranges = JSON.parse(data).dataTable;
     ranges.map((item) => {
       const initial = item.initialAverage;
       const end = item.endAverage;
-      sum = 0.1 + sum + (end - initial);
+      sum = Number((0.01 + sum + (end - initial)).toFixed(2));
     });
 
-    if (sum < 5) return true;
+    if ((sum - 0.01).toFixed(2) < maxNumber.toFixed(2)) return true;
 
     return false;
   };
@@ -173,6 +174,8 @@ export default function useRegulationHook(auth) {
     if (data.performancePeriod?.length) {
       validRangesPerformance = validRangesJsonTable(data.performancePeriod);
     }
+
+    return;
 
     if (validRangesAccumulated) {
       return handleModalError(
