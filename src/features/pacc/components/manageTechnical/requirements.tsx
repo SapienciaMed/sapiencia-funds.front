@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import useRequeriments from "./hook/requirements.hook";
 
@@ -24,6 +24,24 @@ function Requirements() {
     const [visible, setVisible] = useState<boolean>(false);
     const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
     const [uploadedFileName, setUploadedFileName] = useState("");
+    
+    useEffect(() =>{
+        console.log("filesUploadData",filesUploadData)
+        console.log("🚀 uploadedFileName:", uploadedFileName)
+        if (filesUploadData.length > 0) {
+            const primerArchivo = filesUploadData[0];
+
+            // Crear un objeto URL para el archivo
+            const archivoURL = URL.createObjectURL(primerArchivo);
+      
+            // Abrir el archivo en una nueva pestaña
+            window.open(archivoURL, '_blank');
+      
+            // Limpiar y liberar el objeto URL
+            URL.revokeObjectURL(archivoURL);
+        }
+        
+    },[filesUploadData, uploadedFileName])
 
     const handleFileNameChange = (fileName) => {
         setUploadedFileName(fileName);
@@ -59,22 +77,9 @@ function Requirements() {
         },
     ];
 
-    const showMenu = (event) => {
-        confirmPopup({
-            target: event.currentTarget,
-            message: 'Are you sure you want to proceed?',
-            children:(
-                <Menu model={items} popup id="popup_menu" />
-            ),
-
-        });
-    }
-
     return (
         <>
             <div className="card-header">
-                {/* <Toast ref={toast} />
-                <ConfirmPopup /> */}
                 <div className="card-options">
                     <button className="btn btn-secondary btn-sm" onClick={(e) => toast.current.toggle(e)} >
                         <FaEllipsisH  />
