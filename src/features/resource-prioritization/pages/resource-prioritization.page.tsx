@@ -32,21 +32,25 @@ import { useWidth } from "../../../common/hooks/use-width";
 
 const ResourcePrioritizationPage = (): JSX.Element => {
   // Servicios
-  const { setMessage, validateActionAccess } = useContext(AppContext);
+  const { setMessage } = useContext(AppContext);
   const { getPrograms } = useRegulationApi();
   const { getListByGroupers } = useGenericListService();
   const { getResourcePrioritizationPaginate, getResourcePrioritizationExcel } =
     useResourcePrioritizationApi();
+  const { width } = useWidth();
   const tableComponentRef = useRef(null);
   const resolver = useYupValidationResolver(ResourcePrioritizationSearch);
-  const form = useForm<IResourcePrioritizationSearch>({ resolver });
-  const { width } = useWidth();
+  const form = useForm<IResourcePrioritizationSearch>({
+    resolver,
+    mode: "all",
+  });
 
   // States
   const [programList, setProgramList] = useState([]);
   const [communeList, setCommuneList] = useState<IGenericList[]>([]);
   const [totals, setTotals] = useState<IResourcePrioritization>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [searching, setSearching] = useState<boolean>(false);
 
   // Effect que carga los listados
   useEffect(() => {
@@ -73,19 +77,10 @@ const ResourcePrioritizationPage = (): JSX.Element => {
   const onSubmitSearch = form.handleSubmit(
     (data: IResourcePrioritizationSearch) => {
       if (tableComponentRef.current) {
+        setTotals(undefined);
+        setSearching(true);
         tableComponentRef.current.loadData({
           ...data,
-        });
-        getResourcePrioritizationPaginate({
-          programId: data.programId,
-          projectNumber: data.projectNumber,
-          validity: data.validity,
-        }).then((res) => {
-          if (res.operation.code === EResponseCodes.OK) {
-            setTotals(res.data);
-          } else {
-            setTotals(undefined);
-          }
         });
       }
     }
@@ -93,6 +88,7 @@ const ResourcePrioritizationPage = (): JSX.Element => {
 
   // Metodo que ejecuta la descarga del excel
   async function downloadXLSX(): Promise<void> {
+    setLoading(true);
     const values = form.getValues();
     const res = await getResourcePrioritizationExcel(values);
 
@@ -107,7 +103,31 @@ const ResourcePrioritizationPage = (): JSX.Element => {
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
+      setLoading(false);
     }
+  }
+
+  // Metodo que obtiene los totales
+  function loadTotals(): void {
+    const data = form.getValues();
+    getResourcePrioritizationPaginate({
+      programId: data.programId,
+      projectNumber: data.projectNumber,
+      validity: data.validity,
+    }).then((res) => {
+      if (res.operation.code === EResponseCodes.OK) {
+        setTotals(res.data);
+      } else {
+        setTotals(undefined);
+      }
+    });
+  }
+
+  // Metodo que limpian el formulario
+  function cleanForm(): void {
+    setTotals(undefined);
+    tableComponentRef.current.emptyData();
+    form.reset();
   }
 
   // Definicion de la tabla
@@ -148,12 +168,16 @@ const ResourcePrioritizationPage = (): JSX.Element => {
     {
       fieldName: "generalRate",
       header: "Tasa general",
-      renderCell: (row) => <div className="text-right">{`${row.generalRate}  %`}</div>,
+      renderCell: (row) => (
+        <div className="text-right">{`${row.generalRate}  %`}</div>
+      ),
     },
     {
       fieldName: "operatingCostAndExpense",
       header: "Costo y gasto de operación",
-      renderCell: (row) => <>{formaterNumberToCurrency(row.operatingCostAndExpense)}</>,
+      renderCell: (row) => (
+        <>{formaterNumberToCurrency(row.operatingCostAndExpense)}</>
+      ),
     },
     {
       fieldName: "grossValue",
@@ -163,27 +187,37 @@ const ResourcePrioritizationPage = (): JSX.Element => {
     {
       fieldName: "financialPerformances",
       header: "Recurso del balance",
-      renderCell: (row) => <>{formaterNumberToCurrency(row.balanceResources)}</>,
+      renderCell: (row) => (
+        <>{formaterNumberToCurrency(row.balanceResources)}</>
+      ),
     },
     {
       fieldName: "balanceResources",
       header: "Rendimientos financieros",
-      renderCell: (row) => <>{formaterNumberToCurrency(row.financialPerformances)}</>,
+      renderCell: (row) => (
+        <>{formaterNumberToCurrency(row.financialPerformances)}</>
+      ),
     },
     {
       fieldName: "operatorCommission",
       header: "Comisión operador financiero",
-      renderCell: (row) => <>{formaterNumberToCurrency(row.operatorCommission)}</>,
+      renderCell: (row) => (
+        <>{formaterNumberToCurrency(row.operatorCommission)}</>
+      ),
     },
     {
       fieldName: "operatorCommissionBalance",
       header: "Comisión operador financiero balance",
-      renderCell: (row) => <>{formaterNumberToCurrency(row.operatorCommissionBalance)}</>,
+      renderCell: (row) => (
+        <>{formaterNumberToCurrency(row.operatorCommissionBalance)}</>
+      ),
     },
     {
       fieldName: "operatorCommissionAct",
       header: "Comisión operador financiero acta",
-      renderCell: (row) => <>{formaterNumberToCurrency(row.operatorCommissionAct)}</>,
+      renderCell: (row) => (
+        <>{formaterNumberToCurrency(row.operatorCommissionAct)}</>
+      ),
     },
     {
       fieldName: "resourceForCredit",
@@ -209,6 +243,7 @@ const ResourcePrioritizationPage = (): JSX.Element => {
               data={row}
               critetira={form.getValues()}
               communeList={communeList}
+              onClose={cleanForm}
             />
           ),
           size: "large",
@@ -218,7 +253,7 @@ const ResourcePrioritizationPage = (): JSX.Element => {
           },
         });
       },
-      hide: !validateActionAccess("USUARIOS_EDITAR"),
+      // hide: !validateActionAccess("USUARIOS_EDITAR"),
     },
   ];
 
@@ -238,22 +273,27 @@ const ResourcePrioritizationPage = (): JSX.Element => {
             className="form-signIn"
             action={onSubmitSearch}
           >
-            <div className="grid-form-4-container gap-25 container-sections-forms alto-auto">
+            <div
+              className="grid-form-4-container gap-25 container-sections-forms alto-auto"
+              style={{ justifyContent: "space-between" }}
+            >
               <Controller
                 control={form.control}
                 name={"projectNumber"}
                 render={({ field }) => {
                   return (
                     <InputComponent
-                      idInput={field.name}
+                      idInput="projectNumber"
                       errors={form.formState.errors}
                       typeInput={"number"}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
+                      register={form.register}
                       className="input-basic medium"
                       classNameLabel="text-black big bold text-required"
                       label={<>Número proyecto</>}
+                      {...field}
                     />
                   );
                 }}
@@ -272,6 +312,7 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                   errors={form.formState.errors}
                 />
               </div>
+
               <Controller
                 control={form.control}
                 name={"validity"}
@@ -284,13 +325,15 @@ const ResourcePrioritizationPage = (): JSX.Element => {
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       value={field.value}
+                      register={form.register}
                       className="input-basic medium"
                       classNameLabel="text-black big bold text-required"
-                      label={<>Vigencia</>}
+                      label="Vigencia"
                     />
                   );
                 }}
               />
+
               <InputNumberComponent
                 idInput="generalRate"
                 control={form.control}
@@ -355,19 +398,17 @@ const ResourcePrioritizationPage = (): JSX.Element => {
             value="Limpiar campos"
             type="button"
             className="button-clean-fields "
-            action={() => {
-              form.reset();
-              tableComponentRef.current.emptyData();
-            }}
+            action={cleanForm}
           />
           <ButtonComponent
+            loading={searching}
             form="useQueryForm"
             value="Buscar"
             type="submit"
             className="button-save large disabled-black"
           />
         </div>
-        <div style={{ width: width - 400 }}>
+        <div style={{ width: width - (width < 1024 ? 100 : 400) }}>
           <TableComponent
             ref={tableComponentRef}
             url={`${process.env.urlApiFunds}/api/v1/resource-prioritization/get-paginated/`}
@@ -376,6 +417,10 @@ const ResourcePrioritizationPage = (): JSX.Element => {
             titleMessageModalNoResult="Datos no localizados"
             descriptionModalNoResult="No se encontraron coincidencias con los datos ingresados."
             isShowModal={true}
+            onResult={(rows) => {
+              setSearching(false);
+              if (rows.length > 0) loadTotals();
+            }}
           />
         </div>
       </div>
@@ -469,11 +514,12 @@ const ResourcePrioritizationPage = (): JSX.Element => {
 
           <div className="button-save-container-display-users margin-right0">
             <ButtonComponent
+              loading={loading}
               value={
-                <div className="container-buttonText">
+                <>
                   <span>Descargar</span>
                   <Svgs svg="excel" width={23.593} height={28.505} />
-                </div>
+                </>
               }
               className="button-download large "
               action={downloadXLSX}

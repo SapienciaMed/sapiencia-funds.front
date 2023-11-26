@@ -20,6 +20,11 @@ interface IProps {
   data: IResourcePrioritization;
   critetira: IResourcePrioritizationSearch;
   communeList: IGenericList[];
+  onClose: () => void;
+}
+
+interface IForm extends IResourcePrioritization {
+  reload: boolean;
 }
 
 const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
@@ -27,9 +32,8 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
   const resolver = useYupValidationResolver(ResourcePrioritizationSchema);
   const { setResourcePrioritization } = useResourcePrioritizationApi();
   const { setMessage } = useContext(AppContext);
-  const form = useForm<IResourcePrioritization>({
+  const form = useForm<IForm>({
     resolver,
-
     defaultValues: {
       ...props.data,
       validity: props.data.validity || null,
@@ -44,6 +48,7 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
       averageCost: props.data.averageCost == 0 ? null : props.data.averageCost,
       balanceResources:
         props.data.balanceResources == 0 ? null : props.data.balanceResources,
+      reload: false,
     },
   });
 
@@ -60,7 +65,15 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
   ]);
 
   // Effect que detecta los cambio en el formulario y realiza los ajustes
-  useEffect(() => recalcule(), [watchFields]);
+  useEffect(() => {
+    if(form.getValues()["reload"]) {
+      form.setValue("reload", false)
+    }
+    else {
+      recalcule();
+    }
+
+  }, [watchFields]);
 
   // Metodo que ejecuta el guardado
   const onSubmit = form.handleSubmit(async (data: IResourcePrioritization) => {
@@ -74,9 +87,11 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
       show: true,
       OkTitle: "Aceptar",
       onOk: () => {
+        props.onClose();
         setMessage({});
       },
       onClose: () => {
+        props.onClose();
         setMessage({});
       },
       background: true,
@@ -121,6 +136,9 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
     form.setValue("operatorCommissionBalance", valueOperatorCommissionBalance);
     form.setValue("operatorCommissionAct", valueOperatorCommissionAct);
     form.setValue("resourceForCredit", resourceForCredit);
+
+    form.setValue("reload", true)
+    form.setValue("generalRate", data.generalRate)
   }
 
   return (
@@ -142,13 +160,13 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
           </div>
         </div>
         <div className="app2-totals-column-content">
-          <div className="column-head">Estratos 123</div>
+          <div className="column-head">Porcentaje 123</div>
           <div className="column-body">
             {formaterNumberToCurrency(formData?.total123)}
           </div>
         </div>
         <div className="app2-totals-column-content">
-          <div className="column-head">Estratos 456</div>
+          <div className="column-head">Porcentaje 456</div>
           <div className="column-body">
             {formaterNumberToCurrency(formData?.total456)}
           </div>
@@ -281,7 +299,7 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
             value="Guardar"
             type="submit"
             className="button-save large disabled-black"
-            disabled={loading}
+            loading={loading}
           />
         </div>
       </FormComponent>
