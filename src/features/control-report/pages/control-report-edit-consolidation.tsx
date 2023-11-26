@@ -45,6 +45,7 @@ export const controlEditConsolidation = yup.object({
 });
 
 const Controlreporteditconsolidation = (data) => {
+  console.log(data);
   const [comuna, setComuna] = useState(null);
   const [disponible, setDisponible] = useState(null);
   const [porParcipacion, setPorParticipacon] = useState(null);
@@ -85,7 +86,7 @@ const Controlreporteditconsolidation = (data) => {
     setValue("consolidatedGranted", info.consolidatedGranted);
     setValue("consolidatedLegalized", info.consolidatedLegalized);
     setValue("consolidatedFinancialReturns", info.consolidatedFinancialReturns);
-    setValue("places", info.resourcePrioritization.places);
+    setValue("places", info.places);
   }, []);
   const updateInfo = async (data) => {
     try {
@@ -177,7 +178,6 @@ const Controlreporteditconsolidation = (data) => {
   };
 
   const setInfo = async (data) => {
-    setComuna(data.resourcePrioritization.communeId);
     setDisponible(
       Number(data.consolidatedResourceAvailable) -
         Number(data.consolidatedGranted)
@@ -205,7 +205,7 @@ const Controlreporteditconsolidation = (data) => {
               className="input-basic medium"
               classNameLabel="text-black big bold"
               disabled
-              value={comuna}
+              value={info.commune}
             />
             <Controller
               control={control}
@@ -297,7 +297,7 @@ const Controlreporteditconsolidation = (data) => {
               className="input-basic medium"
               classNameLabel="text-black big bold"
               disabled
-              value={disponible}
+              value={info.Available}
             />
             <InputComponent
               idInput=""
@@ -306,7 +306,7 @@ const Controlreporteditconsolidation = (data) => {
               className="input-basic medium"
               classNameLabel="text-black big bold"
               disabled
-              value={String(porParcipacion) + "%"}
+              value={String(info.porcentParticipacion) + "%"}
             />
             <Controller
               control={control}

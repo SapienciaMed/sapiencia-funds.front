@@ -2,7 +2,7 @@ import { ITableElement } from "../../../../common/interfaces/config-columns";
 
 export const columnsConsolidados: ITableElement<any>[] = [
   {
-    fieldName: "resourcePrioritization.communeId",
+    fieldName: "commune",
     header: "Comuna o corregimiento",
   },
   {
@@ -10,7 +10,7 @@ export const columnsConsolidados: ITableElement<any>[] = [
     header: "No.Preseleccionados",
   },
   {
-    fieldName: "resourcePrioritization.places",
+    fieldName: "places",
     header: "No.Cupos",
   },
   {
@@ -22,16 +22,12 @@ export const columnsConsolidados: ITableElement<any>[] = [
     header: "Otorgado",
   },
   {
-    fieldName: "consolidatedResourceAvailable - consolidatedGranted",
+    fieldName: "Available",
     header: "Disponible",
   },
   {
-    fieldName: "",
+    fieldName: "porcentParticipacion",
     header: "%Participacion",
-  },
-  {
-    fieldName: "consolidatedGranted",
-    header: "Otorgado",
   },
   {
     fieldName: "consolidatedLegalized",

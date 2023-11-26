@@ -6,12 +6,15 @@ import {
 } from "../../../../common/components/Form";
 import { consolidateHook } from "../../hooks/conditionalHooks/consolidateHook";
 import { columnsConsolidados } from "../config-columns/columns-consolidados";
+import BasicTableComponent from "../../../../common/components/basic-table.component";
+
 const ConsolidateTab = (data) => {
   const {
     urlGet,
+    setGridConsolidate,
     tableComponentRef,
     tableColumns,
-    setPaginateData,
+    dataGridConsolidate,
     tableActions,
     totalNoPreseleccionados,
     totalOtorgado,
@@ -21,24 +24,25 @@ const ConsolidateTab = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
-  } = consolidateHook(data);
+  } = consolidateHook(data.data);
+
+  console.log(dataGridConsolidate);
   return (
     <>
       <div className="container-sections-forms ml-20px mr-20px">
-        <TableComponent
-          setPaginateData={setPaginateData}
+        <BasicTableComponent
           ref={tableComponentRef}
-          url={urlGet}
+          data={dataGridConsolidate}
           columns={tableColumns}
           actions={tableActions}
+          titleMessageModalNoResult="Registro no existente"
           isShowModal={true}
-          emptyMessage="Resultado en la búsqueda"
-          descriptionModalNoResult="No se generó resultado en la búsqueda"
-          titleMessageModalNoResult="Resultado de búsqueda"
+          secondaryTitle={"Acta control financiero"}
+          classSizeTable="size-table-wd-150"
+          isMobil={false}
         />
-      </div>{" "}
+      </div>
       <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
-        {" "}
         <div
           className="bold mt-24px ml-16px mr-16px p-0"
           style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}

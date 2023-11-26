@@ -5,12 +5,12 @@ import { urlApiFunds } from "../../../../common/utils/base-url";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { ApiResponse } from "../../../../common/utils/api-response";
 import { ITableAction } from "../../../../common/interfaces";
-
+import { columnsConsolidados } from "../../pages/config-columns/columns-consolidados";
+import Controlreporteditconsolidation from "../../pages/control-report-edit-consolidation";
 export const consolidateHook = (data) => {
   const navigate = useNavigate();
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
 
-  const urlGetConsult = `fondos/seguimiento-financiero`; // Endpoint del backend, (se colocan aquí)
   const [tableColumns, setTableColumns] = useState([]);
 
   const { post } = useCrudService(urlApiFunds);
@@ -25,7 +25,8 @@ export const consolidateHook = (data) => {
     useState(null);
   const tableComponentRef = useRef(null);
   const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfo`;
-  const { setMessage } = useContext(AppContext);
+  const { setMessage, dataGridConsolidate, setGridConsolidate } =
+    useContext(AppContext);
 
   const getInfoConsolidado = async (data) => {
     try {
@@ -62,6 +63,8 @@ export const consolidateHook = (data) => {
         dataColumns.porcentParticipacion = Math.round(
           (data.consolidatedGranted / data.consolidatedResourceAvailable) * 100
         );
+
+        dataGridConsolidate.push(dataColumns);
         return dataColumns;
       });
 
@@ -94,7 +97,6 @@ export const consolidateHook = (data) => {
       let totalDataRes = dataRes.length;
       totalData.totalPorParticipacion =
         totalData.totalPorParticipacion / totalDataRes;
-      console.log(totalData);
       setTotalNoPreseleccionados(totalData.totalNoPreseleccionados);
       setTotalOtorgado(totalData.totalOtorgado);
       setTotalNoCupos(totalData.totalNoCupos);
@@ -103,6 +105,8 @@ export const consolidateHook = (data) => {
       setTotalPorParticipacion(totalData.totalPorParticipacion);
       setTotalNoLegalizados(totalData.totalNoLegalizados);
       setTotalRendimientoFinancieros(totalData.totalRendimientoFinancieros);
+
+      setTableColumns(columnsConsolidados);
     } catch (err) {
       console.error(err);
     }
@@ -117,6 +121,7 @@ export const consolidateHook = (data) => {
     setTotalPorParticipacion;
     setTotalNoLegalizados;
     setTotalRendimientoFinancieros;
+    setGridConsolidate;
   }, [
     totalNoPreseleccionados,
     totalOtorgado,
@@ -126,6 +131,7 @@ export const consolidateHook = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
+    dataGridConsolidate,
   ]);
 
   const tableActions: ITableAction<any>[] = [
@@ -135,7 +141,7 @@ export const consolidateHook = (data) => {
         setMessage({
           show: true,
           background: true,
-
+          description: <Controlreporteditconsolidation data={row} />,
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -147,8 +153,13 @@ export const consolidateHook = (data) => {
     },
   ];
 
+  useEffect(() => {
+    getInfoConsolidado(data);
+  }, []);
+
   return {
-    setPaginateData,
+    dataGridConsolidate,
+    setGridConsolidate,
     tableComponentRef,
     urlGet,
     tableColumns,

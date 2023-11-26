@@ -10,7 +10,11 @@ import { IAuthorization } from "../interfaces/auth.interfaces";
 import { IMessage } from "../interfaces/global.interface";
 import { IVotingResultGrid } from "../interfaces/voting.interfaces";
 import { IActaItems } from "../interfaces/actaItems.interface";
-import { IEmailDataGrid, IRenewalDataGrid } from "../interfaces/funds.interfaces";
+import {
+  IConsolidateGrid,
+  IEmailDataGrid,
+  IRenewalDataGrid,
+} from "../interfaces/funds.interfaces";
 import { IUserDataGrid } from "../interfaces/usersGridInterface";
 
 interface IAppContext {
@@ -39,6 +43,8 @@ interface IAppContext {
   setDataGridUsers: Dispatch<SetStateAction<Array<IUserDataGrid>>>;
   dataGridRenewal: Array<IRenewalDataGrid>;
   setdataGridRenewal: Dispatch<SetStateAction<Array<IRenewalDataGrid>>>;
+  dataGridConsolidate: Array<IConsolidateGrid>;
+  setGridConsolidate: Dispatch<SetStateAction<Array<IConsolidateGrid>>>;
 }
 interface IProps {
   children: ReactElement | ReactElement[];
@@ -64,7 +70,8 @@ export const AppContext = createContext<IAppContext>({
   setDataGridUsers: () => {},
   dataGridRenewal: {} as Array<IRenewalDataGrid>,
   setdataGridRenewal: () => {},
-  
+  dataGridConsolidate: {} as Array<IConsolidateGrid>,
+  setGridConsolidate: () => {},
 });
 
 export function AppContextProvider({ children }: IProps) {
@@ -80,7 +87,12 @@ export function AppContextProvider({ children }: IProps) {
   const [dataGridItems, setDataGridItems] = useState(Array<IActaItems>);
   const [dataGridEmails, setDataGridEmails] = useState(Array<IEmailDataGrid>);
   const [dataGridUsers, setDataGridUsers] = useState(Array<IUserDataGrid>);
-  const [dataGridRenewal, setdataGridRenewal] = useState(Array<IRenewalDataGrid>);
+  const [dataGridRenewal, setdataGridRenewal] = useState(
+    Array<IRenewalDataGrid>
+  );
+  const [dataGridConsolidate, setGridConsolidate] = useState(
+    Array<IConsolidateGrid>
+  );
 
   // Metodo que verifica si el usuario posee permisos sobre un accion
   function validateActionAccess(indicator: string): boolean {
@@ -107,7 +119,9 @@ export function AppContextProvider({ children }: IProps) {
       setDataGridUsers,
       dataGridUsers,
       dataGridRenewal,
-      setdataGridRenewal
+      setdataGridRenewal,
+      dataGridConsolidate,
+      setGridConsolidate,
     };
   }, [
     message,

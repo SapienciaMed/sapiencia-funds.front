@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-export interface IMasterActivity{
+export interface IMasterActivity {
   id?: number;
   name: string;
   codProgramCode?: number,
@@ -15,31 +15,31 @@ export interface IMasterActivity{
 }
 
 export interface IMasterActivityFilter {
-    id?: number;
-    name: string;
+  id?: number;
+  name: string;
 }
 
 export interface IProgramTypes {
-    id?: number;
-    name?: string;
-    typeMasterList?: ITypeMaster;
-    description?: string
+  id?: number;
+  name?: string;
+  typeMasterList?: ITypeMaster;
+  description?: string
 }
 
 export interface IProgramTypesActivity {
-    id?: number;
-    name?: string;
-    typeMasterList?: ITypeMaster;
+  id?: number;
+  name?: string;
+  typeMasterList?: ITypeMaster;
   description?: string,
   totalValue: number
 }
 
 export interface ITypeMaster {
-    id?: number;
-    name?: string;    
+  id?: number;
+  name?: string;
 }
 
-export interface IUploadInformation{
+export interface IUploadInformation {
   id?: number;
   commune: string;
   validity: string;
@@ -47,8 +47,8 @@ export interface IUploadInformation{
   fileName?: string;
   dateUpload: string;
   User?: string;
-  dataToSend?:string; 
-  emails?:string[];
+  dataToSend?: string;
+  emails?: string[];
 }
 
 export interface IWorker {
@@ -61,9 +61,9 @@ export interface IWorker {
   secondSurname?: string;
 }
 
-export interface IEmailDataGrid{
+export interface IEmailDataGrid {
   id?: number;
-  user?:string;
+  user?: string;
   email?: string;
   lastNames?: string;
   ident?: string;
@@ -82,7 +82,7 @@ export interface ICallBudget {
   Diferencia: string;
 
 }
- 
+
 export interface ICallRenewal {
   period?: string;
   fund?: string;
@@ -100,7 +100,7 @@ export interface ICallRenewalFilter {
 
 }
 
-export interface IRenewalDataGrid{
+export interface IRenewalDataGrid {
   period?: string;
   fund?: string;
   enabled: string;
@@ -108,4 +108,19 @@ export interface IRenewalDataGrid{
   percentage: string;
   page?: number;
   perPage?: number;
+}
+
+export interface IConsolidateGrid {
+  commune: string;
+  consolidatedPreselected: string;
+  places: string
+  consolidatedResourceAvailable: string;
+  consolidatedGranted: string;
+  Available: string;
+  consolidatedLegalized: string
+  consolidatedFinancialReturns: string;
+  porcentParticipacion: string
+  page?: number;
+  perPage?: number;
+
 }
