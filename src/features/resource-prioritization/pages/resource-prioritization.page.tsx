@@ -28,21 +28,25 @@ import {
 } from "../../../common/interfaces/resource-prioritization.interface";
 import useResourcePrioritizationApi from "../hooks/resource-prioritization.hook";
 import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
+import { useWidth } from "../../../common/hooks/use-width";
 
 const ResourcePrioritizationPage = (): JSX.Element => {
   // Servicios
   const { setMessage, validateActionAccess } = useContext(AppContext);
   const { getPrograms } = useRegulationApi();
   const { getListByGroupers } = useGenericListService();
-  const { getResourcePrioritizationPaginate } = useResourcePrioritizationApi();
+  const { getResourcePrioritizationPaginate, getResourcePrioritizationExcel } =
+    useResourcePrioritizationApi();
   const tableComponentRef = useRef(null);
   const resolver = useYupValidationResolver(ResourcePrioritizationSearch);
   const form = useForm<IResourcePrioritizationSearch>({ resolver });
+  const { width } = useWidth();
 
   // States
   const [programList, setProgramList] = useState([]);
   const [communeList, setCommuneList] = useState<IGenericList[]>([]);
   const [totals, setTotals] = useState<IResourcePrioritization>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Effect que carga los listados
   useEffect(() => {
@@ -88,7 +92,23 @@ const ResourcePrioritizationPage = (): JSX.Element => {
   );
 
   // Metodo que ejecuta la descarga del excel
-  const downloadXLSX = () => {};
+  async function downloadXLSX(): Promise<void> {
+    const values = form.getValues();
+    const res = await getResourcePrioritizationExcel(values);
+
+    if (res.operation.code == EResponseCodes.OK) {
+      // Convertir la matriz de búfer a Uint8Array
+      const buffer = new Uint8Array(res.data.data);
+      const blob = new Blob([buffer]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Priorización de recursos.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
+  }
 
   // Definicion de la tabla
   const tableColumns: ITableElement<IResourcePrioritization>[] = [
@@ -120,27 +140,50 @@ const ResourcePrioritizationPage = (): JSX.Element => {
       renderCell: (row) => <>{formaterNumberToCurrency(row.value)}</>,
     },
     { fieldName: "places", header: "Cupos" },
-    { fieldName: "averageCost", header: " Costo promedio" },
-    { fieldName: "generalRate", header: "Tasa general" },
+    {
+      fieldName: "averageCost",
+      header: " Costo promedio",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.total456)}</>,
+    },
+    {
+      fieldName: "generalRate",
+      header: "Tasa general",
+      renderCell: (row) => <div className="text-right">{`${row.generalRate}  %`}</div>,
+    },
     {
       fieldName: "operatingCostAndExpense",
       header: "Costo y gasto de operación",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.operatingCostAndExpense)}</>,
     },
     {
       fieldName: "grossValue",
       header: "Valor bruto",
       renderCell: (row) => <>{formaterNumberToCurrency(row.grossValue)}</>,
     },
-    { fieldName: "financialPerformances", header: "Recurso del balance" },
-    { fieldName: "balanceResources", header: "Rendimientos financieros" },
-    { fieldName: "operatorCommission", header: "Comisión operador financiero" },
+    {
+      fieldName: "financialPerformances",
+      header: "Recurso del balance",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.balanceResources)}</>,
+    },
+    {
+      fieldName: "balanceResources",
+      header: "Rendimientos financieros",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.financialPerformances)}</>,
+    },
+    {
+      fieldName: "operatorCommission",
+      header: "Comisión operador financiero",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.operatorCommission)}</>,
+    },
     {
       fieldName: "operatorCommissionBalance",
       header: "Comisión operador financiero balance",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.operatorCommissionBalance)}</>,
     },
     {
       fieldName: "operatorCommissionAct",
       header: "Comisión operador financiero acta",
+      renderCell: (row) => <>{formaterNumberToCurrency(row.operatorCommissionAct)}</>,
     },
     {
       fieldName: "resourceForCredit",
@@ -324,16 +367,17 @@ const ResourcePrioritizationPage = (): JSX.Element => {
             className="button-save large disabled-black"
           />
         </div>
-        <TableComponent
-          ref={tableComponentRef}
-          url={`${process.env.urlApiFunds}/api/v1/resource-prioritization/get-paginated/`}
-          columns={tableColumns}
-          actions={tableActions}
-          titleMessageModalNoResult="Datos no localizados"
-          descriptionModalNoResult="No se encontraron coincidencias con los datos ingresados."
-          isShowModal={true}
-          horizontalScroll={true}
-        />
+        <div style={{ width: width - 400 }}>
+          <TableComponent
+            ref={tableComponentRef}
+            url={`${process.env.urlApiFunds}/api/v1/resource-prioritization/get-paginated/`}
+            columns={tableColumns}
+            actions={tableActions}
+            titleMessageModalNoResult="Datos no localizados"
+            descriptionModalNoResult="No se encontraron coincidencias con los datos ingresados."
+            isShowModal={true}
+          />
+        </div>
       </div>
       {totals && (
         <>

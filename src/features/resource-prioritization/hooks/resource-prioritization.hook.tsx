@@ -22,8 +22,15 @@ export default function useResourcePrioritizationApi() {
     return await post<IResourcePrioritization>(`/set/`, data);
   }
 
+  async function getResourcePrioritizationExcel(
+    data: ITotalsPrioritizationFilters
+  ): Promise<ApiResponse<any>> {
+    return await post<any>(`/generate-excel/`, data);
+  }
+
   return {
     getResourcePrioritizationPaginate,
     setResourcePrioritization,
+    getResourcePrioritizationExcel
   };
 }
