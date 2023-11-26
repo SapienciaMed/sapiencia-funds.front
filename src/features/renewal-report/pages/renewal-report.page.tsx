@@ -49,7 +49,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     fund: row.fund,
                     enabled: row.enabled,
                     renewed: row.renewed,
-                    percentage: ""
+                    percentage: row.percentage
                 }
                 setMessage({
                     show: true,
