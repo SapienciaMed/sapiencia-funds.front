@@ -4504,6 +4504,7 @@
 }
 .p-tooltip{
   z-index: 2 !important;
+  max-width: 50%;
 }
 .p-tooltip .p-tooltip-text {
   background: #495057;

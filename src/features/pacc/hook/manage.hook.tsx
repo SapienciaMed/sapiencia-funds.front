@@ -29,7 +29,11 @@ export const useManage = () => {
     useEffect(() => {
         GeBeneficiaryById(id).then(response => {
             if(response.operation.code === EResponseCodes.OK){
-                console.log(response.data)
+                const date = new Date(response.data.dateIncome);
+                const day = date.getUTCDate();
+                const month = date.getUTCMonth() + 1;
+                const year = date.getUTCFullYear();
+
                 setDataManager({
                     title: "Consolidación del crédito",
                     beneficiaryInformationValues: {
@@ -39,12 +43,12 @@ export const useManage = () => {
                         contactNumber: response.data.contactNumber,
                         email: response.data.email,
                         program: response.data.program,
-                        draftsProjected: '', // faltan del servicio
-                        draftsPerformed: '', // faltan del servicio
-                        dateInput: '', // faltan del servicio
-                        reasonCompletion: '' // faltan del servicio
+                        draftsProjected: String(response.data.countSpinProjected),
+                        draftsPerformed: String(response.data.countSpins), 
+                        dateInput: `${ day < 10 ? '0' + day :  day}/${ month < 10 ? '0'+ month :  month }/${year}`, 
+                        reasonCompletion: response.data.reason 
                     },
-                    component: <TabsManageTechnical/>
+                    component: <TabsManageTechnical document={response.data.document}/>
                 })
             }
         })
