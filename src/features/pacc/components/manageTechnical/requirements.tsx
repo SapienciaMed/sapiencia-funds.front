@@ -1,84 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
-import TableComponent from "../../../../common/components/table.component";
+import React from "react";
 import useRequeriments from "./hook/requirements.hook";
-
-import { FaEllipsisH } from "react-icons/fa"; // ELIMINAR
-import { Toast } from "primereact/toast";
+import { FaEllipsisH } from "react-icons/fa"; 
 import { Menu } from 'primereact/menu';
-import { ConfirmPopup, confirmPopup, } from 'primereact/confirmpopup';
 import { OverlayPanel } from 'primereact/overlaypanel';
-import { GrAttachment } from "react-icons/gr";
-import { MenuItem } from "primereact/menuitem";
 import { Dialog } from 'primereact/dialog';
-import { Controller, useForm } from "react-hook-form";
-import { ButtonComponent, FormComponent, UploadComponent } from "../../../../common/components/Form";
-import { Button } from "primereact/button";
+import { ButtonComponent, UploadComponent } from "../../../../common/components/Form";
+
 
 function Requirements() {
 
-    const {tableActions, tableColumns, tableComponentRef} = useRequeriments()
-
-    //TODO: ESTO VA EN EL ESTADO
-
-    const toast = useRef(null);
-    const [visible, setVisible] = useState<boolean>(false);
-    const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
-    const [uploadedFileName, setUploadedFileName] = useState("");
-    
-    useEffect(() =>{
-        console.log("filesUploadData",filesUploadData)
-        console.log("🚀 uploadedFileName:", uploadedFileName)
-        if (filesUploadData.length > 0) {
-            const primerArchivo = filesUploadData[0];
-
-            // Crear un objeto URL para el archivo
-            const archivoURL = URL.createObjectURL(primerArchivo);
-      
-            // Abrir el archivo en una nueva pestaña
-            window.open(archivoURL, '_blank');
-      
-            // Limpiar y liberar el objeto URL
-            URL.revokeObjectURL(archivoURL);
-        }
-        
-    },[filesUploadData, uploadedFileName])
-
-    const handleFileNameChange = (fileName) => {
-        setUploadedFileName(fileName);
-      };
-
-    const items: MenuItem[] = [
-        {
-            label: 'Adjuntar archivo',
-            items: [
-                {
-                    label: 'Adjuntar',
-                    icon: 'pi pi-paperclip',
-                    command: () =>{
-                        setVisible(true)
-                    },                 
-                },
-                {
-                    label: 'Ver adjunto',
-                    icon: 'pi pi-eye',
-                    command: () => {
-
-                    },
-                },
-                {
-                    label: 'Quitar adjunto',
-                    icon: 'pi pi-trash',
-                    command: () => {
-
-                    },
-                }
-                
-            ]
-        },
-    ];
+    const {
+        tableActions, tableColumns, tableComponentRef, toast, items, visible,
+        setVisible, setFilesUploadData, handleFileNameChange 
+    } = useRequeriments()
 
     return (
         <>
+            {/* Este boton no va aca, va en el tableActions  */}
             <div className="card-header">
                 <div className="card-options">
                     <button className="btn btn-secondary btn-sm" onClick={(e) => toast.current.toggle(e)} >
@@ -118,8 +56,6 @@ function Requirements() {
                     />
                 </div>
             </Dialog>
-
-
             {/* <section className=" card-table mt-20px">
                 <TableComponent
                     ref={tableComponentRef}
