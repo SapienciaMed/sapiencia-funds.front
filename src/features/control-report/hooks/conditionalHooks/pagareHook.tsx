@@ -7,7 +7,7 @@ import { AppContext } from "../../../../common/contexts/app.context";
 export const usePagareHook = (data) => {
   const { setMessage } = useContext(AppContext);
     const tableComponentRef = useRef(null);
-    const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfo`;
+    const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfopay`;
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
 
     

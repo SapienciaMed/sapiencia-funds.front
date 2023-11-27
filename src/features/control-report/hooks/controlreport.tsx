@@ -73,7 +73,7 @@ export const useConsultControlReport = () => {
       setconditionalPage(<LegalizacionTab />);
     }
     if (filters.idControlSelect == 5) {
-      setconditionalPage(<PagareTab />);
+      setconditionalPage(<PagareTab data={filters} />);
     }
     if (filters.idControlSelect == 6) {
       setconditionalPage(<ControlTab />);
