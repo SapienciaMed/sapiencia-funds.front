@@ -2,6 +2,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { ITableAction, ITableElement } from "../../../../../common/interfaces";
 import { MenuItem } from "primereact/menuitem";
 import { AppContext } from "../../../../../common/contexts/app.context";
+import { FaEllipsisH } from "react-icons/fa";
+import { OverlayPanel } from "primereact/overlaypanel";
+import { Menu } from "primereact/menu";
 
 export default function useRequeriments() {
       
@@ -46,7 +49,18 @@ export default function useRequeriments() {
         {
             icon: "More",
             onClick: (row) => {
-
+                return(
+                    <div className="card-header">
+                        <div className="card-options">
+                            <button className="btn btn-secondary btn-sm" onClick={(e) => toast.current.toggle(e)} >
+                                <FaEllipsisH  />
+                            </button>
+                            <OverlayPanel ref={toast}>
+                                <Menu model={items} />
+                            </OverlayPanel>
+                        </div>
+                    </div>
+                )
             },
         },
        

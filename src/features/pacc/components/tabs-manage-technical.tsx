@@ -26,7 +26,7 @@ function TabsManageTechnical({ document }) {
             title: "Soportes PQRSDF", 
             content: (<SupportsPQRSDF document={document}/>), 
             action: () => {},
-            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || false /*validateActionAccess('SOPORTE_PQRSDF')*/  
+            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || true /*validateActionAccess('SOPORTE_PQRSDF')*/  
         }
         const requisitos = {
             id: "requisitos", 

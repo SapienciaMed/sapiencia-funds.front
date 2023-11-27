@@ -5,6 +5,7 @@ import { Menu } from 'primereact/menu';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { Dialog } from 'primereact/dialog';
 import { ButtonComponent, UploadComponent } from "../../../../common/components/Form";
+import TableComponent from "../../../../common/components/table.component";
 
 
 function Requirements() {
@@ -44,15 +45,17 @@ function Requirements() {
                     maxSize={1048576}
                     dropboxMessage="Arrastra y suelta el archivo aquí"
                     multiple={false}
-                    onFileChange={handleFileNameChange}
-                    
+                    onFileChange={handleFileNameChange}                   
                 />
                 <div className="container-actions_formTabs">
                     <ButtonComponent
                         value='Cancelar'
                         className='button-save  invalid big'
                         type='button'
-                        action={() => { setVisible(false)}}
+                        action={() => { 
+                            setVisible(false)
+                            setFilesUploadData([])
+                        }}
                     />
                 </div>
             </Dialog>
