@@ -25,8 +25,10 @@ export const useManage = () => {
         },
         component: <></>
     })
+    const [ showSpinner,  setShowSpinner ] = useState(false)
 
     useEffect(() => {
+        setShowSpinner(true)
         GeBeneficiaryById(id).then(response => {
             if(response.operation.code === EResponseCodes.OK){
                 const date = new Date(response.data.dateIncome);
@@ -50,12 +52,15 @@ export const useManage = () => {
                     },
                     component: <TabsManageTechnical document={response.data.document}/>
                 })
+
+                setShowSpinner(false)
             }
         })
     },[])
 
     return {
         dataManager,
+        showSpinner
     }
 
 }

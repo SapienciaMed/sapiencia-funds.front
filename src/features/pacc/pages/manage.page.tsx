@@ -2,11 +2,12 @@ import React from "react";
 import { InputComponent } from "../../../common/components/Form";
 import { EDirection } from "../../../common/constants/input.enum";
 import { useManage } from "../hook/manage.hook";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 
 function ManagePage() {
 
-    const { dataManager } =  useManage()
+    const { dataManager, showSpinner } =  useManage()
     
     return(
         <div className="main-page">
@@ -14,6 +15,9 @@ function ManagePage() {
                 <section className="title-area-2">
                     <div className="text-black extra-large">{dataManager.title}</div>
                 </section>
+                    {
+                        showSpinner &&<ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
+                    }
                 <section className="card-table mt-14px">
                     <div className="title-area-2">
                         <div className="text-black biggest">Información Beneficiario</div>
