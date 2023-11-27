@@ -101,6 +101,7 @@ export function MultiSelects({
                 disabled={disabled}
                 maxSelectedLabels={3}
                 className={`${className} ${messageError() ? "p-invalid" : ""}`}
+                selectedItemsLabel={`${field?.value?.length} seleccionados`}
               />
             )}
           />
