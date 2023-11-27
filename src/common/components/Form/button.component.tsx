@@ -1,4 +1,5 @@
 import React, { SyntheticEvent } from "react";
+import { ImSpinner } from "react-icons/im";
 
 interface ILabelProps {
   value: string | React.JSX.Element;
@@ -8,6 +9,7 @@ interface ILabelProps {
   id?: string;
   form?: string;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 export function ButtonComponent({
@@ -18,6 +20,7 @@ export function ButtonComponent({
   id,
   form,
   disabled,
+  loading,
 }: ILabelProps): React.JSX.Element {
   const handleButtonClick = (event: SyntheticEvent) => {
     if (type !== "submit") event.preventDefault();
@@ -31,9 +34,17 @@ export function ButtonComponent({
       form={form}
       className={className}
       onClick={handleButtonClick}
-      disabled={disabled}
+      disabled={disabled || (loading || false)}
     >
-      {value}
+      <div className="container-buttonText">
+        {loading && (
+          <span>
+            <ImSpinner />{" "}
+          </span>
+        )}
+
+        {value}
+      </div>
     </button>
   );
 }

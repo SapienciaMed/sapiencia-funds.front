@@ -8,15 +8,28 @@ function PacRouter() {
         () => import("./pages/consolidated-tray.page")
     );
 
+    const ManagerPage = lazy(
+        () => import("./pages/manage.page")
+    );
+
     return (
         <Routes>
             <Route
                 path={"/bandeja-consolidacion"}
                 element={
-                <PrivateRoute
-                    element={<CosolidatedTray />}
-                    allowedAction={"BANDEJA_CONSOLIDACION"}
-                />
+                    <PrivateRoute
+                        element={<CosolidatedTray />}
+                        allowedAction={"BANDEJA_CONSOLIDACION"}
+                    />
+                }
+            />
+            <Route
+                path={"/bandeja-consolidacion/gestion/:id"}
+                element={
+                    <PrivateRoute
+                        element={<ManagerPage />}
+                        allowedAction={"BANDEJA_CONSOLIDACION"}
+                    />
                 }
             />
         </Routes>

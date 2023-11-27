@@ -16,7 +16,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
     const {
         control, errors, clearFields, register, setValue, navigate, tableComponentRef, showTable,
         setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
-        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg,renewedBachLeg
+        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal
     } = useRenewaReportSearch();
 
 
@@ -48,7 +48,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     fund: row.fund,
                     enabled: row.enabled,
                     renewed: row.renewed,
-                    percentage: "90"
+                    percentage: ""
                 }
                 setMessage({
                     show: true,
@@ -66,7 +66,6 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
     ];
 
-
     return (
         <Fragment>
             <div className="card-table">
@@ -78,7 +77,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
                 <div className="container-sections-forms">
                     <FormComponent
-                        id="searchBudget"
+                        id="searchRenewal"
                         className="form-signIn"
                         action={onSubmit}
                     >
@@ -111,9 +110,11 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                                 }
                             />
                             <ButtonComponent
-                                form="searchBudget"
+                                form="searchRenewal"
                                 value={`Buscar`}
                                 action={() => {
+                                    // Limpiar dataGridRenewal cuando cambie la convocatoria
+                                    setdataGridRenewal([]);
                                     searchRenewal();
                                 }}
                                 className="button-save large hover-three disabled-black"

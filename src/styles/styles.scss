@@ -5,6 +5,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 100%;
   width: 100vw;
 }
+
 .main-page {
   padding: 20px;
 }
@@ -28,7 +29,15 @@ div[id="single-spa-application:@sapiencia/funds"] {
   margin: 0.5em;
 }
 
+@for $inx from 1 through 100 {
+  .mr-#{$inx*1}px {
+    margin-right: $inx * 2px;
+  }
 
+  .mt-#{$inx*1}px {
+    margin-top: $inx * 2px;
+  }
+}
 
 .container-form {
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -45,6 +54,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   padding: 2em;
   margin: 1.5em 0em;
 }
+
 .container-table-result-responsive {
   border: 1px none #e0e0e0;
   border-radius: 15px;
@@ -192,13 +202,16 @@ div[id="single-spa-application:@sapiencia/funds"] {
   }
 
   &::-webkit-scrollbar {
-    width: 100%; /* Ancho de la barra de desplazamiento */
+    width: 100%;
+    /* Ancho de la barra de desplazamiento */
     height: 0px;
-    background-color: transparent; /* Color de fondo transparente */
+    background-color: transparent;
+    /* Color de fondo transparente */
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: transparent; /* Color transparente del pulgar */
+    background-color: transparent;
+    /* Color transparente del pulgar */
   }
 }
 
@@ -334,6 +347,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
     opacity: 1;
   }
 }
+
 .payroll-relatives-button-edit {
   @include generate-button(0, green, transparent, transparent solid 1px);
   font-size: 2em;
@@ -423,25 +437,26 @@ div[id="single-spa-application:@sapiencia/funds"] {
     }
 
     &::-webkit-scrollbar {
-      width: 100%; /* Ancho de la barra de desplazamiento */
+      width: 100%;
+      /* Ancho de la barra de desplazamiento */
       height: 0px;
-      background-color: transparent; /* Color de fondo transparente */
+      background-color: transparent;
+      /* Color de fondo transparente */
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: transparent; /* Color transparente del pulgar */
+      background-color: transparent;
+      /* Color transparente del pulgar */
     }
   }
 
   .container-actions_formTabs {
-    @include generate-flex-container(
-      row,
+    @include generate-flex-container(row,
       null,
       space-around,
       null,
       null,
-      0.62em
-    );
+      0.62em);
   }
 
   .form-steps {
@@ -453,6 +468,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
       border: 1px solid #e0e0e0;
     }
   }
+
   .fields-container {
     display: flex;
     flex-direction: row;
@@ -483,6 +499,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
     padding: 2em;
     margin: 0.5em;
   }
+
   .button-container-display {
     display: flex;
     align-items: center;
@@ -494,6 +511,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
     justify-content: flex-end;
     flex-direction: row;
   }
+
   .container-table-result-responsive {
     border: 1px solid #e0e0e0;
     border-radius: 15px;
@@ -537,6 +555,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
 .table-column {
   padding: 4px;
 }
+
 .title-table {
   background-color: #fff;
   height: auto;
@@ -565,6 +584,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
     display: flex;
     justify-content: center;
   }
+
   .table-row {
     flex-direction: column;
     width: 100%;
@@ -607,6 +627,6 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 100%;
 }
 
-.dl-agregarItem-voting{
-  height: 90vh ;
+.dl-agregarItem-voting {
+  height: 90vh;
 }
