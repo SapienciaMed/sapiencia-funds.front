@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { controlReportSchema } from "../../../common/schemas/controlReport-shema";
 import ConsolidateTab from "../pages/conditionalPages/consolidateTab";
-import Estratos123Tab from "../pages/conditionalPages/estratos123Tab";
+import Estratum123Tab from "../pages/conditionalPages/stratum123";
 import Estratos456Tab from "../pages/conditionalPages/estratos456Tab";
 import LegalizacionTab from "../pages/conditionalPages/legalizacionTab";
 import PagareTab from "../pages/conditionalPages/pagareTab";
@@ -64,7 +64,7 @@ export const useConsultControlReport = () => {
       setconditionalPage(<ConsolidateTab data={filters} />);
     }
     if (filters.idControlSelect == 2) {
-      setconditionalPage(<Estratos123Tab />);
+      setconditionalPage(<Estratum123Tab filters={filters} />);
     }
     if (filters.idControlSelect == 3) {
       setconditionalPage(<Estratos456Tab />);
