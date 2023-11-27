@@ -17,6 +17,7 @@ import Regulation from "./features/regulation";
 import BudgetConvocationRoutes from "./features/budget-convocation/budget-convocation-routes";
 import RenewalReportRoutes from "./features/renewal-report/renewal-report-routes";
 import ResumenPriorizacionRoutes from "./features/resumen-priorizacion/resumen-priorizacion-routes";
+import ControlReportsRoutes from "./features/control-report/control-report-routes";
 import DatingReportRoutes from "./features/dating-report/dating-report-routes";
 import Cortes from "./features/cuts";
 import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
@@ -54,9 +55,13 @@ function App() {
                 path={"/fondos/resumen-priorizacion/*"}
                 element={<ResumenPriorizacionRoutes />}
               />
-              <Route 
-                path={"/fondos/maestros-actividad/*"} 
-                element={<MasterActivityRoutes />} 
+              <Route
+                path={"/fondos/maestros-actividad/*"}
+                element={<MasterActivityRoutes />}
+              />
+              <Route
+                path={"/fondos/maestros-actividad/*"}
+                element={<MasterActivityRoutes />}
               />
               <Route path={"/fondos/acta/*"} element={<ActaRoutes />} />
               <Route
@@ -79,18 +84,22 @@ function App() {
                 path={"/fondos/administracion/reglamento/*"}
                 element={<Regulation />}
               />
-              
+
               <Route
                 path={"/fondos/informe-citas/*"}
                 element={<DatingReportRoutes />}
-                />
+              />
+              <Route
+                path={"/fondos/seguimiento-financiero/*"}
+                element={<ControlReportsRoutes />}
+              />
               <Route
                 path={"/fondos/administracion/cortes/*"}
                 element={<Cortes />}
               />
               <Route
                 path={"/fondos/informe-renovacion/*"}
-                element={<RenewalReportRoutes/>}
+                element={<RenewalReportRoutes />}
               />
               <Route
                 path="/fondos/pacc/*"

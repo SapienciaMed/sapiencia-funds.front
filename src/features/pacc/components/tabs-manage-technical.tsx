@@ -7,7 +7,7 @@ import { AppContext } from "../../../common/contexts/app.context";
 import { ButtonComponent } from "../../../common/components/Form";
 import Requirements from "./manageTechnical/requirements";
 
-function TabsManageTechnical() {
+function TabsManageTechnical({ document }) {
 
     const { option } = useParams();
     const { validateActionAccess } = useContext(AppContext);
@@ -24,7 +24,7 @@ function TabsManageTechnical() {
         const soportesPQRSDF = {
             id: "soportesPQRSDF", 
             title: "Soportes PQRSDF", 
-            content: (<SupportsPQRSDF/>), 
+            content: (<SupportsPQRSDF document={document}/>), 
             action: () => {},
             hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || false /*validateActionAccess('SOPORTE_PQRSDF')*/  
         }
