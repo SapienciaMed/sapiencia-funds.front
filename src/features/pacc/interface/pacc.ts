@@ -16,6 +16,11 @@ export interface IConsolidationTrayForTechnicianCollectionParams {
   reason: string;
   characterization: string;
   currentResponsible: string;
+  countSpinProjected?: number,
+  countSpins?: number,
+  contactNumber?: string,
+  email?: string,
+  dateIncome?: string
 }
 
 export interface ICutInterface {
@@ -39,4 +44,21 @@ export interface IConsolidationTrayForTechnicianCollection {
   cutParamId?: number; 
   page: number,
   perPage: number;
+}
+
+export interface IManagePage{
+  title: string
+  beneficiaryInformationValues: {
+      idCredit: string
+      document: string
+      name: string
+      contactNumber: string
+      email: string
+      program: string
+      draftsProjected: string
+      draftsPerformed: string
+      dateInput: string
+      reasonCompletion: string
+  },
+  component?: React.JSX.Element
 }

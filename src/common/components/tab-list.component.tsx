@@ -6,6 +6,8 @@ interface IAppProps {
   start?: ITabsMenuTemplate;
   index?: number;
   className?: string;
+  currentIndex?: number;
+  setCurrentTabIndex?: React.Dispatch<React.SetStateAction<number>>
 }
 
 function TabListComponent({
@@ -13,6 +15,8 @@ function TabListComponent({
   className,
   start,
   index,
+  currentIndex,
+  setCurrentTabIndex
 }: IAppProps): React.JSX.Element {
   const tabList = {};
   tabs.forEach(
@@ -27,9 +31,15 @@ function TabListComponent({
   );
 
   useEffect(() => {
+    if (currentIndex !== undefined) {
+      setSelectedTab(tabs[currentIndex]);
+    }
+  }, [currentIndex, tabs]);
+
+  useEffect(() => {
     if (!selectedTab)
       if (tabs.length !== 0) {
-        setSelectedTab(tabs[0]);
+        setSelectedTab(tabs[0]); 
       }
   }, [tabs]);
 
@@ -50,6 +60,9 @@ function TabListComponent({
               className={`tab-option ${active}`}
               key={tab.id}
               onClick={() => {
+                if (setCurrentTabIndex && selectedTab && selectedTab.id !== tab.id) {
+                  setCurrentTabIndex(tabs.findIndex((t) => t.id === tab.id));
+                }
                 setSelectedTab(tab);
                 if (tab.action) tab.action();
               }}

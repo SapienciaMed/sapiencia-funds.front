@@ -1,8 +1,11 @@
 import React from "react";
 
-const Tab = ({ children, checked }) => {
+const Tab = ({ children, checked, onClick = () => {} }) => {
   return (
-    <div className={`tab tab-normal tab-${checked && "checked"}`}>
+    <div
+      onClick={onClick}
+      className={`tab tab-normal tab-${checked && "checked"}`}
+    >
       <label>{children}</label>
     </div>
   );

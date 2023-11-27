@@ -25,6 +25,7 @@ import { EResponseCodes } from "../constants/api.enum";
 import { classNames } from "primereact/utils";
 import * as Icons from "react-icons/fa";
 import * as IconsBS from "react-icons/bs";
+import * as IconFI from "react-icons/fi"
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
 import { AppContext } from "../contexts/app.context";
@@ -53,6 +54,8 @@ interface IProps<T> {
   classSizeTable?: string;
   isInputSearch?: boolean;
   onGlobalFilterChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  bodyRequestParameters?: string,
+  keyBodyRequest?: string
 }
 
 interface IRef {
@@ -72,18 +75,19 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     princialTitle,
     classname = "",
     setPaginateData,
-    isDisabled,
-    widthTable,
-    horizontalScroll = false,
+    isDisabled,  
     isMobil = true,
     classSizeTable,
     isInputSearch = false,
-    onGlobalFilterChange, // Es necesario llamar una funcion para que haga la peticion para el filtrado.
+    onGlobalFilterChange, // Es necesario llamar una funcion para que haga la peticion para el filtrado interno.
+    bodyRequestParameters,
+    keyBodyRequest,
   } = props;
 
   // States
   const [charged, setCharged] = useState<boolean>(false);
-  const [resultData, setResultData] = useState<IPagingData<any>>();
+  const [resultData, setResultData] = useState<any>();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [perPage, setPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
@@ -114,11 +118,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       ...body,
       page: currentPage || 1,
       perPage: perPage,
+      [keyBodyRequest]: bodyRequestParameters
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
       if (props.onResult) props.onResult(res?.data?.array || []);
-      if (res.data.array.length <= 0 && isShowModal) {
+      if (res.data?.array?.length <= 0 && isShowModal) {
         setMessage({
           title: `${titleMessageModalNoResult || ""}`,
           show: true,
@@ -216,13 +221,15 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     setLoading(false);
   }
 
+  
+
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
       <div className="spc-common-table">
         {title && <div className="spc-table-title">{title}</div>}
-
+  
         {/* Verificar si resultData.array tiene elementos */}
-
+  
         <Paginator
           className="between spc-table-paginator"
           template={paginatorHeader}
@@ -236,12 +243,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             onGlobalFilterChange
           )}
         />
-
+  
         {width > 830 || !isMobil ? (
-          <div>
+          <div>         
             <DataTable
               className={`spc-table full-height ${classSizeTable}`}
-              value={resultData?.array || []}
+              value={resultData?.array  || []}
               loading={loading}
               scrollable={true}
               emptyMessage={emptyMessage}
@@ -254,7 +261,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                   body={col.renderCell}
                 />
               ))}
-
+  
               {actions && actions.length && (
                 <Column
                   className="spc-table-actions"
@@ -282,7 +289,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             emptyMessage={emptyMessage}
           />
         )}
-
+  
         <Paginator
           className="spc-table-paginator"
           template={paginatorFooter}
@@ -410,6 +417,21 @@ function getIconElement(
           </i>
         </>
       );
+    case "Paperclip":
+      return element == "name" ? (
+        "adjunto"
+      ) : (
+        <>
+          <Tooltip target=".adjunto" style={{ borderRadius: "1px" }} />
+          <i
+            className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center adjunto"
+            data-pr-tooltip="Ver adjunto"
+            data-pr-position="left"
+          >
+            <IconFI.FiPaperclip/>
+          </i>
+        </>
+      )
     default:
       return "";
   }
