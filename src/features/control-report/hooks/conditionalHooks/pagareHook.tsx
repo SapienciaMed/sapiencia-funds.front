@@ -7,7 +7,7 @@ import { AppContext } from "../../../../common/contexts/app.context";
 export const usePagareHook = (data) => {
   const { setMessage } = useContext(AppContext);
     const tableComponentRef = useRef(null);
-    const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfopay`;
+    const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfo`;
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
 
     
@@ -50,6 +50,8 @@ export const usePagareHook = (data) => {
         
       ];
 
+      //tableComponentRef.current.loadData(data);
+
     
     const downloadCollection = useCallback(() => {
         const { page, perPage } = paginateData;
@@ -77,6 +79,8 @@ export const usePagareHook = (data) => {
     }, [paginateData,]
 
     );
+
+
     
     return {
         tableColumns,

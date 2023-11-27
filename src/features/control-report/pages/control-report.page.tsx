@@ -4,6 +4,7 @@ import {
   InputComponent,
   SelectComponent,
 } from "../../../common/components/Form";
+import useRenewaReportSearch from "../../renewal-report/hooks/renewal-report.hook";
 import useControlInfo from "../hooks/control-info";
 import { useConsultControlReport } from "../hooks/controlreport";
 import { columns123 } from "./config-columns/columns-estrato-123";
@@ -22,6 +23,8 @@ const SearchBudgetPage = () => {
     handleChange,
     conditionalPage,
   } = useConsultControlReport();
+
+  const {announcementList} = useRenewaReportSearch()
 
   const { infoData } = useControlInfo();
   return (
@@ -70,7 +73,7 @@ const SearchBudgetPage = () => {
                 idInput="valueConvocatoria"
                 control={control}
                 errors={errors}
-                // data={info}
+                data={announcementList}
                 label={<> Convocatoria </>}
                 className="select-basic medium"
                 classNameLabel="text-black big bold"
