@@ -31,6 +31,8 @@ export const useConsultControlReport = () => {
   const [tableView, setTableView] = useState<boolean>(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const [conditionalPage, setconditionalPage] = useState(null);
+  //ref
+  const tableComponentRef = useRef(null);
   const resolver = useYupValidationResolver(controlReportSchema);
   const {
     control,
@@ -58,7 +60,13 @@ export const useConsultControlReport = () => {
     const { noProject, validity } = formWatch;
     filters.noProject = noProject;
     filters.validity = validity;
-    filters.valueConvocatoria = "2023-1";
+    filters.valueConvocatoria = "10";
+
+    
+    tableComponentRef.current?.loadData({
+      ...filters,
+      
+    });
 
     if (filters.idControlSelect == 1) {
       setconditionalPage(<ConsolidateTab data={filters} />);
@@ -73,7 +81,7 @@ export const useConsultControlReport = () => {
       setconditionalPage(<LegalizacionTab />);
     }
     if (filters.idControlSelect == 5) {
-      setconditionalPage(<PagareTab data={filters} />);
+      setconditionalPage(<PagareTab data={filters}  tablecomponente = {tableComponentRef} />);
     }
     if (filters.idControlSelect == 6) {
       setconditionalPage(<ControlTab />);

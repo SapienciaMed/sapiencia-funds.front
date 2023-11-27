@@ -4,7 +4,7 @@ import { ButtonComponent, InputComponent } from "../../../../common/components/F
 import { usePagareHook } from "../../hooks/conditionalHooks/pagareHook";
 import Svgs from "../../../../public/images/icons/svgs";
 
-const PagareTab = (data) => {
+const PagareTab = (data, tablecomponente) => {
   const {
     tableColumns,
     tableComponentRef,
@@ -13,22 +13,19 @@ const PagareTab = (data) => {
   } = usePagareHook(data);
 
   const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
-
+  console.log("table componente",data )
   return (
     <>
       <div className="container-sections-forms">
         <TableComponent
           //setPaginateData={setPaginateData}
-          ref={tableComponentRef}
+          ref={tablecomponente}
           url={urlGet}
           columns={tableColumns}
           isShowModal={true}
           emptyMessage="Resultado en la búsqueda"
           descriptionModalNoResult="No se generó resultado en la búsqueda"
           titleMessageModalNoResult="Resultado de búsqueda"
-          onResult={(rows) => {
-            setSendingReportXlsx(rows.length > 0);
-        }}
         />
 
         <div className="title-area">
