@@ -16,49 +16,49 @@ function ConsolidatedTrayPage() {
             title: "Técnico paso al cobro", 
             content: (<TechnicianStepCashingPages/>), 
             action: () => {},
-            hide: validateActionAccess('TECNICO_PASO_COBRO') || validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') 
+            hide: validateActionAccess('TECNICO_PASO_COBRO') || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
         const servicioSocial = {
             id: "servicioSocial", 
             title: "Servicio social", 
             content:( <></> ), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') 
+           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
         const certificacionValores = {
             id: "certificacionValores", 
             title: "Certificación de valores", 
             content: (<></>), 
             action: () => {},
-            hide: false /*poner el rol */ || validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') 
+            hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
         const tecnicoProfesional = {
             id: "tecnicoProfesional", 
             title: "Técnico profesional", 
             content: (<></>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') 
+           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
         const coordinador = {
             id: "coordinador", 
             title: "Coordinador", 
             content: (<></>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') 
+           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
         const juridica = {
             id: "juridica", 
             title: "Jurídica", 
             content: (<></>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') 
+           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
         const liderProyecto = {
             id: "liderProyecto", 
             title: "Lider de proyecto", 
             content: (<></>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') 
+           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
        const result = [
             servicioSocial,

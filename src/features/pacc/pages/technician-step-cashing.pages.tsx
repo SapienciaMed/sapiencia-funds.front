@@ -44,6 +44,7 @@ function TechnicianStepCashing() {
                     classSizeTable='size-table-wd-150'
                     isInputSearch={true}
                     onGlobalFilterChange={handleFilterChange}
+                    isMobil={false}
                 />
             </section>
 
