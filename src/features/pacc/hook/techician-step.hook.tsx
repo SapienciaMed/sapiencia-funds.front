@@ -22,6 +22,7 @@ export default function useTechnicianStepCashing() {
         status: false
     })
     const [valueFilterTable, setValueFilterTable ] = useState('')
+    const [ showSpinner,   setShowSpinner ] = useState(false)
 
     const {
         control,
@@ -30,8 +31,10 @@ export default function useTechnicianStepCashing() {
     } = useForm<IStepCashing>();
     
     useEffect(() => {
+        setShowSpinner(true)
         loadTableData()
         GetCutsForConsolidationTray().then(response => {
+            setShowSpinner(false)
             if(response.operation.code === EResponseCodes.OK){
                 const data = response.data?.map((item: any) => {
                     return {
@@ -239,6 +242,7 @@ export default function useTechnicianStepCashing() {
         idCutData,
         control,
         listSearch,
+        showSpinner,
         handleFilterChange,
         handleChangeCut
     }

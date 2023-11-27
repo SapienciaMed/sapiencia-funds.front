@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ITableAction, ITableElement } from "../../../../../common/interfaces";
 import { useParams } from "react-router-dom";
 import { PqrsdfResultSimple } from "../interface/manage-technical";
@@ -7,8 +7,10 @@ import { Tooltip } from "primereact/tooltip";
 export default function useSupportsPQRSDF() {
     
     const tableComponentRef = useRef(null);
+    const [ showSpinner,   setShowSpinner ] = useState(false)
 
     useEffect(() => {
+        setShowSpinner(true)
         loadTableData()
     },[])
 
@@ -48,7 +50,19 @@ export default function useSupportsPQRSDF() {
         },
         {
             fieldName: 'answerDate',
-            header: 'Fecha respuesta'
+            header: 'Fecha respuesta',
+            renderCell:(row) => {
+                const date = new Date(row.answerDate);
+                const day = date.getUTCDate();
+                const month = date.getUTCMonth() + 1;
+                const year = date.getUTCFullYear();
+
+                return(
+                    <div>
+                        {day < 10 ? '0' + day :  day}/{ month < 10 ? '0'+ month :  month }/{year}
+                    </div>
+                )
+            }
         },
         {
             fieldName: 'answer',
@@ -83,6 +97,7 @@ export default function useSupportsPQRSDF() {
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
+            setShowSpinner(false)
         }
     }
 
@@ -90,5 +105,6 @@ export default function useSupportsPQRSDF() {
         tableComponentRef,
         tableColumns,
         tableActions,
+        showSpinner
     }
 }

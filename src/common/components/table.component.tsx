@@ -425,7 +425,7 @@ function getIconElement(
           <Tooltip target=".adjunto" style={{ borderRadius: "1px" }} />
           <i
             className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center adjunto"
-            data-pr-tooltip="Editar corte"
+            data-pr-tooltip="Ver adjunto"
             data-pr-position="left"
           >
             <IconFI.FiPaperclip/>
