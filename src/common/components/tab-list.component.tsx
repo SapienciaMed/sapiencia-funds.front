@@ -73,7 +73,7 @@ function TabListComponent({
         })}
       </div>
       <div className="tabs-content">
-        {selectedTab ? tabList[`${selectedTab?.title}`].content : "no data"}
+        {selectedTab ? tabList[`${selectedTab?.title}`].content : ""}
       </div>
     </div>
   );

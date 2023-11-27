@@ -28,7 +28,7 @@ function PacRouter() {
                 element={
                     <PrivateRoute
                         element={<ManagerPage />}
-                        allowedAction={"BANDEJA_CONSOLIDACION"}
+                        allowedAction={"TECNICO_PASO_COBRO"}
                     />
                 }
             />
