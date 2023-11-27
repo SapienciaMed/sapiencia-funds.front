@@ -22,6 +22,7 @@ import DatingReportRoutes from "./features/dating-report/dating-report-routes";
 import Cortes from "./features/cuts";
 import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
 import PacRouter from "./features/pacc/pac-routes";
+import ConsolidationSocialService from "./features/consolidationSocialService";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -101,9 +102,10 @@ function App() {
                 path={"/fondos/informe-renovacion/*"}
                 element={<RenewalReportRoutes />}
               />
+              <Route path="/fondos/pacc/*" element={<PacRouter />} />
               <Route
-                path="/fondos/pacc/*"
-                element={<PacRouter/>}
+                path="/fondos/consolidation-social-service/*"
+                element={<ConsolidationSocialService />}
               />
             </Routes>
           </Suspense>
