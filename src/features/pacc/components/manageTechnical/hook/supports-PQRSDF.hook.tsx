@@ -1,5 +1,8 @@
 import { useEffect, useRef } from "react";
 import { ITableAction, ITableElement } from "../../../../../common/interfaces";
+import { useParams } from "react-router-dom";
+import { PqrsdfResultSimple } from "../interface/manage-technical";
+import { Tooltip } from "primereact/tooltip";
 
 export default function useSupportsPQRSDF() {
     
@@ -10,39 +13,65 @@ export default function useSupportsPQRSDF() {
     },[])
 
 
-    const tableColumns: ITableElement<any>[] = [
+    const tableColumns: ITableElement<PqrsdfResultSimple>[] = [
         {
-            fieldName:'noPQRSDF',
+            fieldName:'numberPqrsdf',
             header: 'No. PQRSDF'
         },
         {
-            fieldName: 'fechaRadicado',
-            header: 'Fecha radicado'
+            fieldName: 'dateFiled',
+            header: 'Fecha radicado',
+            renderCell:(row) => {
+                const date = new Date(row.dateFiled);
+                const day = date.getUTCDate();
+                const month = date.getUTCMonth() + 1;
+                const year = date.getUTCFullYear();
+
+                return(
+                    <div>
+                        {day < 10 ? '0' + day :  day}/{ month < 10 ? '0'+ month :  month }/{year}
+                    </div>
+                )
+            }
         },
         {
-            fieldName: 'programa',
+            fieldName: 'program',
             header: 'Programa'
         },
         {
-            fieldName: 'asunto',
+            fieldName: 'reason',
             header: 'Asunto'
         },
         {
-            fieldName: 'estado',
+            fieldName: 'state',
             header: 'Estado'
         },
         {
-            fieldName: 'fechaRespuesta',
+            fieldName: 'answerDate',
             header: 'Fecha respuesta'
         },
         {
-            fieldName: 'respuesta',
+            fieldName: 'answer',
             header: 'Respuesta',
+            renderCell:(row) => {
+                return(
+                    <>
+                        <Tooltip target=".respuesta" style={{ borderRadius: "1px" }} />
+                        <i
+                            className="style-tooltip respuesta"
+                            data-pr-tooltip={row.answer}
+                            data-pr-position="bottom"
+                        >
+                        {row.answer}
+                        </i>
+                    </>
+                )
+            }
         }
     ]
     const tableActions: ITableAction<any>[] = [
         {
-            icon: "download",
+            icon: "Paperclip",
             onClick: (row) => {
 
             },
@@ -60,6 +89,6 @@ export default function useSupportsPQRSDF() {
     return{
         tableComponentRef,
         tableColumns,
-        tableActions
+        tableActions,
     }
 }

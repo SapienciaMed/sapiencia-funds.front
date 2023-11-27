@@ -178,7 +178,7 @@ export default function useTechnicianStepCashing() {
         {
             icon: "Manage",
             onClick: (row) => {
-                navigate('./gestion')
+                navigate(`./gestion/${row.idBenef}`)
             },
         },
        
