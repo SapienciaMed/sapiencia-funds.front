@@ -68,6 +68,7 @@ const DatingReportRoutes = (): React.JSX.Element => {
                                     action={() => {
                                         reset();
                                         tableComponentRef.current.emptyData();
+                                        setSendingReportXlsx(false)
                                     }
                                     }
                                 />
