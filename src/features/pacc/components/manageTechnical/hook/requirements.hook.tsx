@@ -5,6 +5,18 @@ import { AppContext } from "../../../../../common/contexts/app.context";
 import { FaEllipsisH } from "react-icons/fa";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { Menu } from "primereact/menu";
+import { Tooltip } from "primereact/tooltip";
+import { Checkbox } from "primereact/checkbox";
+import { FiPaperclip } from "react-icons/fi";
+import { Button } from "primereact/button";
+
+interface IProp{
+    number: number,
+    description: string,
+    active: string,
+    percentage: string,
+    comply: true
+}
 
 export default function useRequeriments() {
       
@@ -14,6 +26,7 @@ export default function useRequeriments() {
     const [filesUploadData, setFilesUploadData] = useState<File[]>([]);
     const [uploadedFileName, setUploadedFileName] = useState("");
     const { setMessage } = useContext(AppContext);
+    const [selectedAmounts, setSelectedAmounts] = useState([]);
 
     //TODO: Lo que es el archivo(s) cargado(s) aca y el cambio de check si cumple, se debe enviar al componente TabsManageTechnical ya que este es el que se va a encargar del guardado de todas las pestañas y los cambios que se hagan en ella
 
@@ -28,7 +41,21 @@ export default function useRequeriments() {
         },
         {
             fieldName:'description',
-            header: 'Descripción'
+            header: 'Descripción',
+            renderCell:(row) => {
+                return(
+                    <>
+                        <Tooltip target=".respuesta" style={{ borderRadius: "1px" }} />
+                        <i
+                            className="style-tooltip respuesta"
+                            data-pr-tooltip={row.description}
+                            data-pr-position="bottom"
+                        >
+                            {row.description}
+                        </i>
+                    </>
+                )
+            }
         },
         {
             fieldName:'active',
@@ -36,31 +63,71 @@ export default function useRequeriments() {
         },
         {
             fieldName:'percentage',
-            header: 'Porcentaje'
+            header: 'Porcentaje',
+            renderCell:(row) => {
+                return(
+                    <>
+                        {
+                            row.percentage ? `${row.percentage}%` : 'N/A'
+                        } 
+                    </>
+                )
+            }
         },
         {
             fieldName:'comply',
-            header: 'Cumple'
+            header: 'Cumple',
+            renderCell:(row) => {
+                return(
+                    <div >
+                       <Checkbox 
+                            inputId={row?.number} 
+                            name="row" 
+                            value={row}  
+                            onChange={onAmountChange} 
+                            checked={selectedAmounts?.some((item) => item?.number == row?.number) }
+                        />
+                    </div>
+
+                )
+            },
         },
+        {
+            fieldName:'action',
+            header: 'Acciones',
+            renderCell:(row) => {
+
+                return(
+                    <div className="card-header">
+                        <div className="card-options">
+                            <Tooltip target=".adjunto" style={{ borderRadius: "1px" }} />
+                            <i
+                                className="style-tooltip adjunto"
+                                data-pr-tooltip="Adjunto"
+                                data-pr-position="left"
+                            >
+                                <Button className="button-table" icon={<FiPaperclip/>} onClick={(e) => toast.current.toggle(e)} />
+                                
+                                <OverlayPanel ref={toast}>
+                                    <Menu model={items} />
+                                </OverlayPanel>
+                                
+                            </i>
+                           
+                        </div>
+                    </div>
+                )
+            }
+        }
       
     ]
 
     const tableActions: ITableAction<any>[] = [
         {
-            icon: "More",
+            icon: "Paperclip",
             onClick: (row) => {
-                return(
-                    <div className="card-header">
-                        <div className="card-options">
-                            <button className="btn btn-secondary btn-sm" onClick={(e) => toast.current.toggle(e)} >
-                                <FaEllipsisH  />
-                            </button>
-                            <OverlayPanel ref={toast}>
-                                <Menu model={items} />
-                            </OverlayPanel>
-                        </div>
-                    </div>
-                )
+                // toast.current.toggle(e)
+                
             },
         },
        
@@ -134,6 +201,16 @@ export default function useRequeriments() {
             });
         }
     }
+
+    const onAmountChange = (e) => {
+        let _selectedAmounts = [...selectedAmounts];
+        if (e.checked) {
+            _selectedAmounts.push(e.value);
+        } else {
+            _selectedAmounts = _selectedAmounts.filter(r => r.number !== e.value.number) ;
+        }
+        setSelectedAmounts(_selectedAmounts)
+    };
 
     return{
         tableColumns,

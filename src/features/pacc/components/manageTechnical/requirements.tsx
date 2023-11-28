@@ -1,8 +1,5 @@
 import React from "react";
 import useRequeriments from "./hook/requirements.hook";
-import { FaEllipsisH } from "react-icons/fa"; 
-import { Menu } from 'primereact/menu';
-import { OverlayPanel } from 'primereact/overlaypanel';
 import { Dialog } from 'primereact/dialog';
 import { ButtonComponent, UploadComponent } from "../../../../common/components/Form";
 import TableComponent from "../../../../common/components/table.component";
@@ -17,18 +14,6 @@ function Requirements() {
 
     return (
         <>
-            {/* Este boton no va aca, va en el tableActions  */}
-            <div className="card-header">
-                <div className="card-options">
-                    <button className="btn btn-secondary btn-sm" onClick={(e) => toast.current.toggle(e)} >
-                        <FaEllipsisH  />
-                    </button>
-                    <OverlayPanel ref={toast}>
-                        <Menu model={items} />
-                    </OverlayPanel>
-                </div>
-            </div>
- 
             <Dialog
                 header="Si tienes más de un documento, se deben unir en un solo archivo para ser cargados"
                 className="text-center div-modal movil"
@@ -59,20 +44,16 @@ function Requirements() {
                     />
                 </div>
             </Dialog>
-            {/* <section className=" card-table mt-20px">
+            <section className=" card-table mt-20px">
                 <TableComponent
                     ref={tableComponentRef}
                     url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/requirements`}
                     columns={tableColumns}
-                    actions={tableActions}
                     titleMessageModalNoResult="Buscar"
                     isShowModal={true}
-                    classSizeTable='size-table-wd-150'
                     princialTitle="Soportes PQRSDF"
                 />
-            </section>      */}
-        
-        
+            </section>     
         </>
     )
     
