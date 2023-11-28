@@ -55,7 +55,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
         setMessage({
             show: true,
             title: "Mover beneficiario a otro corte",
-            description: "¿Está segur@ de mover al beneficiari@ a otro corte?",
+            description: "¿Estás segur@ de mover al beneficiari@ a otro corte?",
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
