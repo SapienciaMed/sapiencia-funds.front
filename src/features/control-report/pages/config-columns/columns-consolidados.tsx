@@ -2,7 +2,7 @@ import { ITableElement } from "../../../../common/interfaces/config-columns";
 
 export const columnsConsolidados: ITableElement<any>[] = [
   {
-    fieldName: "commune",
+    fieldName: "resourcePrioritization.communeId",
     header: "Comuna o corregimiento",
   },
   {

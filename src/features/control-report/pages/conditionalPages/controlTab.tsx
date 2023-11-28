@@ -4,28 +4,33 @@ import {
   InputComponent,
 } from "../../../../common/components/Form";
 import { ControlHook } from "../../hooks/conditionalHooks/ControlHook";
-import BasicTableComponent from "../../../../common/components/basic-table.component";
+import TableComponent from "../../../../common/components/table.component";
+import { columnsControl } from "../config-columns/columns-control";
 
 const ControlTab = (data) => {
-  const { tableComponentRef, tableColumns, tableActions, dataGridConsolidate } =
-    ControlHook(data.data);
+  const {
+    tableComponentRef,
+    urlControl,
+    setPaginateData,
+    totalRestantes,
+    totalInicial,
+  } = ControlHook(data.data);
   return (
     <>
       <div className="container-sections-forms ml-20px mr-20px">
-        <BasicTableComponent
+        <TableComponent
+          setPaginateData={setPaginateData}
           ref={tableComponentRef}
-          data={dataGridConsolidate}
-          columns={tableColumns}
-          actions={tableActions}
-          titleMessageModalNoResult="Registro no existente"
+          url={urlControl}
+          columns={columnsControl}
           isShowModal={true}
-          secondaryTitle={"Legalizacion tab"}
-          classSizeTable="size-table-wd-150"
-          isMobil={false}
+          emptyMessage="Resultado en la búsqueda"
+          descriptionModalNoResult="No se generó resultado en la búsqueda"
+          titleMessageModalNoResult="Resultado de búsqueda"
         />
       </div>
 
-      <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+      {/* <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
         <div
           className="bold mt-24px ml-16px mr-16px p-0"
           style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
@@ -72,7 +77,7 @@ const ControlTab = (data) => {
             // value={String(totalRecursoDisponible)}
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
         <div
@@ -86,26 +91,21 @@ const ControlTab = (data) => {
             idInput={"tQuantity1"}
             className="input-basic medium"
             typeInput="text"
-            label="No. Preseleccionados"
-            //register={register}
+            label="Inicial"
             classNameLabel="text-black biggest text-required"
-            //direction={EDirection.column}
-            //errors={errors}
-            // placeholder={`${totalNoPreseleccionados}`}
+            placeholder={""}
             disabled
+            value={String(totalInicial)}
           />
           <InputComponent
             idInput={"tQuantity1"}
             className="input-basic medium"
             typeInput="text"
-            label="No. Cupos"
-            //register={register}
+            label="Restantes"
             classNameLabel="text-black biggest text-required"
-            //direction={EDirection.column}
-            //errors={errors}
             placeholder={""}
             disabled
-            // value={String(totalNoCupos)}
+            value={String(totalRestantes)}
           />
         </div>
       </div>

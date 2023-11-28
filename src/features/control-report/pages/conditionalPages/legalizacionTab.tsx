@@ -5,16 +5,29 @@ import {
   ButtonComponent,
   InputComponent,
 } from "../../../../common/components/Form";
+import TableComponent from "../../../../common/components/table.component";
+import { columnsLegalization } from "../config-columns/columns-legalization";
 
 const LegalizacionTab = (data) => {
-  const { tableComponentRef, dataGridConsolidate, tableColumns, tableActions } =
-    LegalizationHook(data.data);
+  const {
+    tableComponentRef,
+    urlGetLegalization,
+    tableActions,
+    setPaginateData,
+    totalNoPreseleccionados,
+    totalOtorgado,
+    totalNoCupos,
+    totalRecursoDisponible,
+    totalDisponible,
+    totalPorParticipacion,
+    totalNoLegalizados,
+  } = LegalizationHook(data.data);
   return (
     <>
       <div className="container-sections-forms ml-20px mr-20px">
-        <BasicTableComponent
+        {/* <BasicTableComponent
           ref={tableComponentRef}
-          data={dataGridConsolidate}
+          data={dataGridLegalization}
           columns={tableColumns}
           actions={tableActions}
           titleMessageModalNoResult="Registro no existente"
@@ -22,6 +35,18 @@ const LegalizacionTab = (data) => {
           secondaryTitle={"Legalizacion tab"}
           classSizeTable="size-table-wd-150"
           isMobil={false}
+        /> */}
+
+        <TableComponent
+          setPaginateData={setPaginateData}
+          ref={tableComponentRef}
+          url={urlGetLegalization}
+          columns={columnsLegalization}
+          actions={tableActions}
+          isShowModal={true}
+          emptyMessage="Resultado en la búsqueda"
+          descriptionModalNoResult="No se generó resultado en la búsqueda"
+          titleMessageModalNoResult="Resultado de búsqueda"
         />
       </div>
       <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
@@ -41,7 +66,7 @@ const LegalizacionTab = (data) => {
             classNameLabel="text-black biggest text-required"
             //direction={EDirection.column}
             //errors={errors}
-            // placeholder={`${totalNoPreseleccionados}`}
+            placeholder={`${totalNoPreseleccionados}`}
             disabled
           />
           <InputComponent
@@ -55,7 +80,7 @@ const LegalizacionTab = (data) => {
             //errors={errors}
             placeholder={""}
             disabled
-            // value={String(totalNoCupos)}
+            value={String(totalNoCupos)}
           />
           <InputComponent
             idInput={"tQuantity1"}
@@ -68,7 +93,7 @@ const LegalizacionTab = (data) => {
             //errors={errors}
             placeholder={""}
             disabled
-            // value={String(totalRecursoDisponible)}
+            value={String(totalRecursoDisponible)}
           />
           <InputComponent
             idInput={"tQuantity1"}
@@ -81,7 +106,7 @@ const LegalizacionTab = (data) => {
             //errors={errors}
             placeholder={""}
             disabled
-            // value={String(totalOtorgado)}
+            value={String(totalOtorgado)}
           />
         </div>
         <div className="grid-form-3-container mb-24px">
@@ -96,7 +121,7 @@ const LegalizacionTab = (data) => {
             //errors={errors}
             placeholder={""}
             disabled
-            // value={String(totalDisponible)}
+            value={String(totalDisponible)}
           />
           <InputComponent
             idInput={"tQuantity1"}
@@ -109,7 +134,7 @@ const LegalizacionTab = (data) => {
             //errors={errors}
             placeholder={""}
             disabled
-            // value={String(totalPorParticipacion)}
+            value={String(totalPorParticipacion)}
           />
           <InputComponent
             idInput={"tQuantity1"}
@@ -122,7 +147,7 @@ const LegalizacionTab = (data) => {
             //errors={errors}
             placeholder={""}
             disabled
-            // value={String(totalNoLegalizados)}
+            value={String(totalNoLegalizados)}
           />
         </div>
       </div>

@@ -109,18 +109,3 @@ export interface IRenewalDataGrid {
   page?: number;
   perPage?: number;
 }
-
-export interface IConsolidateGrid {
-  commune: string;
-  consolidatedPreselected: string;
-  places: string
-  consolidatedResourceAvailable: string;
-  consolidatedGranted: string;
-  Available: string;
-  consolidatedLegalized: string
-  consolidatedFinancialReturns: string;
-  porcentParticipacion: string
-  page?: number;
-  perPage?: number;
-
-}

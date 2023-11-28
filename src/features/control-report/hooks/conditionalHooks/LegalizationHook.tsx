@@ -4,15 +4,21 @@ import { urlApiFunds } from "../../../../common/utils/base-url";
 import useCrudService from "../../../../common/hooks/crud-service.hook";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { ITableAction } from "../../../../common/interfaces";
-import { columnsLegalization } from "../../pages/config-columns/columns-legalization";
+import ControlreporteditLegalization from "../../pages/conditionalPagesEdits/ControlreporteditLegalization";
 
 export const LegalizationHook = (data) => {
   const tableComponentRef = useRef(null);
-  const { setMessage, dataGridConsolidate, setGridConsolidate } =
-    useContext(AppContext);
+  const { setMessage } = useContext(AppContext);
   const { post } = useCrudService(urlApiFunds);
-
-  const [tableColumns, setTableColumns] = useState([]);
+  const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
+  const [totalNoPreseleccionados, setTotalNoPreseleccionados] = useState(null);
+  const [totalOtorgado, setTotalOtorgado] = useState(null);
+  const [totalNoCupos, setTotalNoCupos] = useState(null);
+  const [totalRecursoDisponible, setTotalRecursoDisponible] = useState(null);
+  const [totalDisponible, setTotalDisponible] = useState(null);
+  const [totalPorParticipacion, setTotalPorParticipacion] = useState(null);
+  const [totalNoLegalizados, setTotalNoLegalizados] = useState(null);
+  const urlGetLegalization = `${urlApiFunds}/api/v1/controlSelect/getInfoLegalization`;
   const getInfoLegalization = async (data) => {
     try {
       const endpoint = "/api/v1/controlSelect/getInfoLegalization";
@@ -20,7 +26,7 @@ export const LegalizationHook = (data) => {
       const dataRes = res.data["array"].map((data) => {
         let dataColumns = {
           id: null,
-          idResourcePrioritization: null,
+          program: null,
           legalizationPreselected: null,
           places: null,
           legalizationResourceAvailable: null,
@@ -29,20 +35,23 @@ export const LegalizationHook = (data) => {
           porcentParticipacion: null,
           legalizationLegalized: null,
         };
-
+        dataColumns.program = data.program;
         dataColumns.id = data.id;
-        dataColumns.idResourcePrioritization = data.idResourcePrioritization;
-        dataColumns.legalizationPreselected = data.legalizationPreselected;
-        dataColumns.places = data.places;
-        dataColumns.legalizationResourceAvailable =
-          data.legalizationResourceAvailable;
-        dataColumns.legalizationGranted = data.legalizationGranted;
-        dataColumns.Available =
-          data.legalizationResourceAvailable - data.legalizationGranted;
-        dataColumns.porcentParticipacion = Math.round(
-          data.legalizationGranted / data.legalizationResourceAvailable
+        dataColumns.legalizationPreselected = Number(data.Preselected);
+        dataColumns.places = Number(data.places);
+        dataColumns.legalizationResourceAvailable = Number(
+          data.Availableresources
         );
-
+        dataColumns.legalizationGranted = Number(data.Granted);
+        dataColumns.Available =
+          Number(data.Availableresources) - Number(data.Granted);
+        dataColumns.porcentParticipacion = Math.round(
+          (Number(data.Granted) / Number(data.Availableresources)) * 100
+        );
+        dataColumns.legalizationLegalized = Number(data.Legalized);
+        if (dataColumns.porcentParticipacion == Infinity) {
+          dataColumns.porcentParticipacion = 0;
+        }
         return dataColumns;
       });
 
@@ -73,7 +82,13 @@ export const LegalizationHook = (data) => {
       totalData.totalPorParticipacion =
         totalData.totalPorParticipacion / totalDataRes;
 
-      setTableColumns(columnsLegalization);
+      setTotalNoPreseleccionados(totalData.totalNoPreseleccionados);
+      setTotalOtorgado(totalData.totalOtorgado);
+      setTotalNoCupos(totalData.totalNoCupos);
+      setTotalRecursoDisponible(totalData.totalRecursoDisponible);
+      setTotalDisponible(totalData.totalDisponible);
+      setTotalPorParticipacion(totalData.totalPorParticipacion);
+      setTotalNoLegalizados(totalData.totalNoLegalizados);
     } catch (error) {}
   };
 
@@ -84,7 +99,7 @@ export const LegalizationHook = (data) => {
         setMessage({
           show: true,
           background: true,
-          description: "",
+          description: <ControlreporteditLegalization data={row} />,
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -97,8 +112,23 @@ export const LegalizationHook = (data) => {
   ];
 
   useEffect(() => {
+    tableComponentRef.current?.loadData({
+      ...data,
+    });
     getInfoLegalization(data);
   }, []);
 
-  return { tableComponentRef, tableColumns, tableActions, dataGridConsolidate };
+  return {
+    tableComponentRef,
+    urlGetLegalization,
+    tableActions,
+    setPaginateData,
+    totalNoPreseleccionados,
+    totalOtorgado,
+    totalNoCupos,
+    totalRecursoDisponible,
+    totalDisponible,
+    totalPorParticipacion,
+    totalNoLegalizados,
+  };
 };

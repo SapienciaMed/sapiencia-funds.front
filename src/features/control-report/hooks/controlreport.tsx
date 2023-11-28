@@ -18,8 +18,9 @@ import ControlTab from "../pages/conditionalPages/controlTab";
 export interface IControlReportFilter {
   noProject: string;
   validity: string;
-  valueConvocatoria: string;
+  idConvocatoria: number;
   idControlSelect: number;
+  id_comuna: number | number[] | string;
 }
 
 export interface IConfig {
@@ -58,8 +59,6 @@ export const useConsultControlReport = () => {
     const { noProject, validity } = formWatch;
     filters.noProject = noProject;
     filters.validity = validity;
-    filters.valueConvocatoria = "2023-1";
-
     if (filters.idControlSelect == 1) {
       setconditionalPage(<ConsolidateTab data={filters} />);
     }
@@ -70,20 +69,17 @@ export const useConsultControlReport = () => {
       setconditionalPage(<Estratos456Tab />);
     }
     if (filters.idControlSelect == 4) {
-      setconditionalPage(<LegalizacionTab />);
+      setconditionalPage(<LegalizacionTab data={filters} />);
     }
     if (filters.idControlSelect == 5) {
       setconditionalPage(<PagareTab />);
     }
     if (filters.idControlSelect == 6) {
-      setconditionalPage(<ControlTab />);
+      setconditionalPage(<ControlTab data={filters} />);
     }
     setTableView(true);
   });
 
-  const updateOrSaveData = (data) => {
-    console.log(data);
-  };
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setFormWatch({
@@ -91,13 +87,6 @@ export const useConsultControlReport = () => {
       [name]: value,
     });
   };
-
-  useEffect(() => {
-    if (controlReport) {
-      return setSubmitDisabled(false);
-    }
-    setSubmitDisabled(true);
-  }, [controlReport]);
 
   return {
     tableView,
@@ -109,7 +98,6 @@ export const useConsultControlReport = () => {
     submitDisabled,
     handleChange,
     handleClean,
-    updateOrSaveData,
     conditionalPage,
   };
 };
