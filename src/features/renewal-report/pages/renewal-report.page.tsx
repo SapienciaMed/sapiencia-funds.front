@@ -17,7 +17,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
         control, errors, watch, clearFields, register, setValue, navigate, tableComponentRef, showTable,
         setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
         totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal,
-        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg
+        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate
     } = useRenewaReportSearch();
 
 
@@ -265,8 +265,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             value={`Guardar`}
                             className="button-save large hover-three disabled-black"
                             action={() => {
-                                reset();
-                                tableComponentRef.current.emptyData();
+                                onsubmitCreate();
                             }
                             }
                         />

@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
-import { filterBudget } from "../../../common/schemas/budget-schema";
+import { renewalSchma } from "../../../common/schemas/renewal-shema";
 import { RiFileExcel2Line } from "react-icons/ri";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ import * as XLSX from "xlsx"
 
 export default function useRenewaReportSearch() {
     const { setMessage, setdataGridRenewal, dataGridRenewal } = useContext(AppContext);
-    const resolver = useYupValidationResolver(filterBudget);
+    const resolver = useYupValidationResolver(renewalSchma);
     const navigate = useNavigate();
 
 
@@ -46,7 +46,7 @@ export default function useRenewaReportSearch() {
         formState: { errors },
         watch,
     } = useForm<ICallRenewal>(
-        {}
+        { resolver }
     );
 
 
@@ -227,6 +227,79 @@ export default function useRenewaReportSearch() {
 
     }
 
+    /*Functions*/
+    const onsubmitCreate = handleSubmit((data: ICallRenewal) => {
+        setMessage({
+            show: true,
+            title: "Guardar cambios",
+            description: "Estas segur@ de guardar la información",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            onOk() {
+                confirmRenewalCreation(data);
+            },
+            background: true,
+        });
+    });
+
+    const confirmRenewalCreation = async (data: ICallRenewal) => {
+        const renewalItems = dataGridRenewal.map((e) => ({
+            fund: e.fund,
+            enabled: e.enabled,
+            renewed: e.renewed,
+            percentage: e.percentage,
+        }));
+    
+        // Convertir filas en columnas
+        const transformedData = renewalItems.reduce((acc, item) => {
+            Object.keys(item).forEach((key) => {
+                acc[key] = acc[key] || [];
+                acc[key].push(item[key]);
+            });
+            return acc;
+        }, {});
+        
+        console.log("++++++++------transformedData", transformedData)
+        
+    };
+
+ `   const res = await createActa(renewalItems);
+
+        if (res && res?.operation?.code === EResponseCodes.OK) {
+            setMessage({
+                OkTitle: "Guardar",
+                description: "¡Guardado exitosamente!",
+                title: "Guardar",
+                show: true,
+                type: EResponseCodes.OK,
+                background: true,
+                onOk() {
+                    reset();
+                    setMessage({});
+                    navigate("/fondos/acta/consultar");
+                    setDataGridItems([])
+                    setDataGridUsers([])
+                },
+                onClose() {
+                    reset();
+                    setMessage({});
+                },
+            });
+
+        } else {
+            setMessage({
+                type: EResponseCodes.FAIL,
+                title: "Crear Acta",
+                description: "Ocurrió un error en el sistema",
+                show: true,
+                OkTitle: "Aceptar",
+                background: true,
+            });
+
+        }  `
+  
+
+
     return {
         control,
         errors,
@@ -254,5 +327,6 @@ export default function useRenewaReportSearch() {
         percentageBachLeg,
         setInputEnabledBachLeg,
         inputEnabledBachLeg,
+        onsubmitCreate,
     }
 }
