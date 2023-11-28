@@ -68,6 +68,29 @@
     }
 }
 
+.container-actions_formTabs {
+    @include generate-flex-container(row, null, space-around, null, null, 0.62em);
+}
+
+.style-tooltip{
+    display: inline-block;
+    max-width: 25vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    border: none;
+    border-width: 0 0 1px 0;
+    padding: 0.5rem 0.5rem;
+    font-weight: 400;
+    font-size: 0.875rem;
+    font-family: RubikRegular, sans-serif;
+    cursor: pointer;
+
+    &.not-padding{
+        padding: 0;
+    }
+}
   
 @media (min-width: 1024px) {
     .one-filter-container {
@@ -95,6 +118,17 @@
 
     .title-area-2{
         @include card-component-title-area()
+    }
+
+    .container-actions_formTabs {
+        @include generate-flex-container(
+          row,
+          null,
+          space-around,
+          null,
+          null,
+          0.62em
+        );
     }
 }
 

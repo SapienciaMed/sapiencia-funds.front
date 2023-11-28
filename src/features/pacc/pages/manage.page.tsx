@@ -1,44 +1,13 @@
 import React from "react";
-import { InputComponent } from "../../../common/components/Form";
+import { ButtonComponent, InputComponent } from "../../../common/components/Form";
 import { EDirection } from "../../../common/constants/input.enum";
-import TabsManageTechnical from "../components/tabs-manage-technical";
+import { useManage } from "../hook/manage.hook";
+import { ProgressSpinner } from "primereact/progressspinner";
 
-interface IManagePage{
-    title: string
-    beneficiaryInformationValues: {
-        idCredit: string
-        document: string
-        name: string
-        contactNumber: string
-        email: string
-        program: string
-        draftsProjected: string
-        draftsPerformed: string
-        dateInput: string
-        reasonCompletion: string
-    },
-    component?: React.JSX.Element
-}
 
 function ManagePage() {
 
-    //Esto vendra del redux, aca solo se simula
-    const dataManager: IManagePage = {
-        title: "Consolidación del crédito",
-        beneficiaryInformationValues: {
-            idCredit: "123456",
-            document: "123456789",
-            name: "Juan Perez",
-            contactNumber: "123456789",
-            email: "juanperez@correo.com",
-            program: "Programa de prueba",
-            draftsProjected: "2",
-            draftsPerformed: "1",
-            dateInput: "01/01/2021",
-            reasonCompletion: "Prueba"
-        },
-        component: <TabsManageTechnical/>
-    }
+    const { dataManager, showSpinner, onCancel  } =  useManage()
     
     return(
         <div className="main-page">
@@ -46,6 +15,9 @@ function ManagePage() {
                 <section className="title-area-2">
                     <div className="text-black extra-large">{dataManager.title}</div>
                 </section>
+                    {
+                        showSpinner &&<ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
+                    }
                 <section className="card-table mt-14px">
                     <div className="title-area-2">
                         <div className="text-black biggest">Información Beneficiario</div>
@@ -164,6 +136,20 @@ function ManagePage() {
                 {
                     dataManager.component ? dataManager.component : <></>
                 }
+            </div>
+            <div className="funcionality-buttons-container">
+                <ButtonComponent
+                    value="Cancelar"
+                    type="button"
+                    className="button-clean-fields bold"
+                    action={onCancel}
+                />
+                <ButtonComponent
+                    className="button-main huge hover-three"
+                    value="Guardar"
+                    type="submit"
+                    form="acta-form"
+                />
             </div>
         </div>
     )

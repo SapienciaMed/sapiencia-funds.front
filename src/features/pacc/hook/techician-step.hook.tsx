@@ -22,6 +22,7 @@ export default function useTechnicianStepCashing() {
         status: false
     })
     const [valueFilterTable, setValueFilterTable ] = useState('')
+    const [ showSpinner, setShowSpinner ] = useState(false)
 
     const {
         control,
@@ -30,8 +31,10 @@ export default function useTechnicianStepCashing() {
     } = useForm<IStepCashing>();
     
     useEffect(() => {
+        setShowSpinner(true)
         loadTableData()
         GetCutsForConsolidationTray().then(response => {
+            setShowSpinner(false)
             if(response.operation.code === EResponseCodes.OK){
                 const data = response.data?.map((item: any) => {
                     return {
@@ -178,13 +181,14 @@ export default function useTechnicianStepCashing() {
         {
             icon: "Manage",
             onClick: (row) => {
-                navigate('./gestion')
+                navigate(`./gestion/${row.idBenef}`)
             },
         },
        
     ];
     
     function loadTableData(searchCriteria?: object): void {
+        setShowSpinner(false)
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
@@ -194,6 +198,7 @@ export default function useTechnicianStepCashing() {
         setValueFilterTable(value.target.value)
         timer &&  clearTimeout(timer);  
         const newTimer =  setTimeout(() => {
+            setShowSpinner(true)
             if (value.target.value != undefined && value.target.value.length > 0 && getValues('idCut') != null) {
                 const searchCriteriaData = {
                     searchParam: value.target.value,
@@ -212,7 +217,8 @@ export default function useTechnicianStepCashing() {
                 })
                 loadTableData()
             }
-        }, 800);
+            setShowSpinner(false)
+        }, 700);
 
         setTimer(newTimer);
     }
@@ -239,6 +245,7 @@ export default function useTechnicianStepCashing() {
         idCutData,
         control,
         listSearch,
+        showSpinner,
         handleFilterChange,
         handleChangeCut
     }

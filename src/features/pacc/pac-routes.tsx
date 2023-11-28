@@ -24,11 +24,11 @@ function PacRouter() {
                 }
             />
             <Route
-                path={"/bandeja-consolidacion/gestion"}
+                path={"/bandeja-consolidacion/gestion/:id"}
                 element={
                     <PrivateRoute
                         element={<ManagerPage />}
-                        allowedAction={"BANDEJA_CONSOLIDACION"}
+                        allowedAction={"TECNICO_PASO_COBRO"}
                     />
                 }
             />
