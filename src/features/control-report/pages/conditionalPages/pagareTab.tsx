@@ -9,10 +9,22 @@ import Svgs from "../../../../public/images/icons/svgs";
 import { columnsPay } from "../config-columns/columns-pay";
 
 const PagareTab = (data) => {
-  const { tableComponentRef, urlGet, setPaginateData } = usePagareHook(
+  const {
+    tableComponentRef,
+    urlGet,
+    setPaginateData,
+    totalAprobado,
+    totalEntregado,
+    totalEntregar,
+    totalNoAplica,
+    downloadCollection,
+    dataForDownload,
+  } = usePagareHook(
     data.data
   );
-  console.log(tableComponentRef, "=====", urlGet);
+
+  const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
+
   return (
     <>
       <div className="container-sections-forms">
@@ -21,64 +33,75 @@ const PagareTab = (data) => {
           ref={tableComponentRef}
           url={urlGet}
           columns={columnsPay}
-          //actions={tableActions}
           isShowModal={true}
           emptyMessage="Resultado en la búsqueda"
           descriptionModalNoResult="No se generó resultado en la búsqueda"
           titleMessageModalNoResult="Resultado de búsqueda"
+          onResult={(rows) => {
+            setSendingReportXlsx(rows.length > 0);
+          }}
         />
 
-        <div className="title-area">
-          <label className="text-black large medium grid-span-4-columns">
-            Totales
-          </label>
-        </div>
-        <div className="grid-form-4-container mb-24px">
-          <InputComponent
-            idInput="approved"
-            label="Aprobado"
-            className="input-basic medium"
-            typeInput="text"
-            classNameLabel="text-black big text-required"
-            errors={""}
-            disabled={true}
-            value={""}
-          />
-          <InputComponent
-            idInput="delivered"
-            label="Pagaré entregado"
-            className="input-basic medium"
-            typeInput="text"
-            classNameLabel="text-black big text-required"
-            disabled={true}
-            value={""}
-          />
-          <InputComponent
-            idInput="undelivered"
-            label="Sin entregar"
-            className="input-basic medium"
-            typeInput="text"
-            classNameLabel="text-black big text-required"
-            disabled={true}
-            value={""}
-          />
-          <InputComponent
-            idInput="not_apply"
-            label="No aplica"
-            className="input-basic medium"
-            typeInput="text"
-            classNameLabel="text-black big text-required"
-            disabled={true}
-            value={""}
-          />
-        </div>
+        {sendingReportXlsx ? (
+          <>
+
+            <div className="title-area">
+              <label className="text-black large medium grid-span-4-columns">
+                Totales
+              </label>
+            </div>
+            <div className="grid-form-4-container mb-24px">
+              <InputComponent
+                idInput="approved"
+                label="Aprobado"
+                className="input-basic medium"
+                typeInput="text"
+                classNameLabel="text-black big text-required"
+                errors={""}
+                disabled={true}
+                placeholder={totalAprobado}
+              />
+              <InputComponent
+                idInput="delivered"
+                label="Pagaré entregado"
+                className="input-basic medium"
+                typeInput="text"
+                classNameLabel="text-black big text-required"
+                disabled={true}
+                placeholder={totalEntregado}
+              />
+              <InputComponent
+                idInput="undelivered"
+                label="Sin entregar"
+                className="input-basic medium"
+                typeInput="text"
+                classNameLabel="text-black big text-required"
+                disabled={true}
+                placeholder={totalEntregar}
+              />
+              <InputComponent
+                idInput="not_apply"
+                label="No aplica"
+                className="input-basic medium"
+                typeInput="text"
+                classNameLabel="text-black big text-required"
+                disabled={true}
+                placeholder={totalNoAplica}
+              />
+            </div>
+
+          </>
+        ) : (
+          ""
+        )}
       </div>
+
 
       <div>
         <br />
         <hr className="barra-spacing" />
       </div>
-      {/* {sendingReportXlsx ? (
+      {sendingReportXlsx ? (
         <div className="button-save-container-display mr-24px">
           <ButtonComponent
             value={
@@ -90,12 +113,12 @@ const PagareTab = (data) => {
               </>
             }
             className="button-download large "
-            //action={downloadCollection}
+            action={() => downloadCollection(dataForDownload)}
           />
         </div>
       ) : (
         ""
-      )} */}
+      )}
     </>
   );
 };
