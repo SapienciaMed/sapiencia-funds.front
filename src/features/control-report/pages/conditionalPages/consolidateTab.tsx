@@ -11,7 +11,6 @@ const ConsolidateTab = (data) => {
   const {
     tableComponentRef,
     urlGet,
-    tableColumns,
     setPaginateData,
     tableActions,
     totalNoPreseleccionados,
@@ -26,18 +25,6 @@ const ConsolidateTab = (data) => {
   return (
     <>
       <div className="container-sections-forms ml-20px mr-20px">
-        {/* <BasicTableComponent
-          ref={tableComponentRef}
-          data={dataGridConsolidate}
-          columns={tableColumns}
-          actions={tableActions}
-          titleMessageModalNoResult="Registro no existente"
-          isShowModal={true}
-          secondaryTitle={"Acta control financiero"}
-          classSizeTable="size-table-wd-150"
-          isMobil={false}
-        /> */}
-
         <TableComponent
           setPaginateData={setPaginateData}
           ref={tableComponentRef}
