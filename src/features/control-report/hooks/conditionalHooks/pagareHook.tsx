@@ -1,4 +1,4 @@
-import { useCallback, useContext, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ITableElement } from "../../../../common/interfaces";
 import { urlApiFunds } from "../../../../common/utils/base-url";
 import { IControlPay } from "../../../../common/interfaces/control.report.interface";
@@ -6,8 +6,10 @@ import { AppContext } from "../../../../common/contexts/app.context";
 
 export const usePagareHook = (data, ) => {
   const { setMessage } = useContext(AppContext);
-    
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
+  const tableComponentRef = useRef(null);
+  const urlGet = `${urlApiFunds}api/v1/controlSelect/getInfopay`;
+
 
     const tableColumns: ITableElement<IControlPay>[] = [
         {
@@ -75,10 +77,24 @@ export const usePagareHook = (data, ) => {
 
     );
 
+    const getInfoControl = async (data) => {
+
+    };
+
+    useEffect(() => {
+      tableComponentRef.current?.loadData({
+        ...data,
+      });
+  
+      getInfoControl(data);
+    }, []);
 
     
     return {
         tableColumns,
+        urlGet,
+        tableComponentRef,
+        setPaginateData,
         downloadCollection,
     };
 }
