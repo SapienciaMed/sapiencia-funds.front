@@ -10,7 +10,7 @@ import { useConsultControlReport } from "../hooks/controlreport";
 import { columns123 } from "./config-columns/columns-estrato-123";
 import { columns456 } from "./config-columns/columns-estrato-456";
 
-const SearchBudgetPage = () => {
+const SearchContrlPage = () => {
   const {
     tableView,
     onSubmit,
@@ -118,4 +118,4 @@ const SearchBudgetPage = () => {
   );
 };
 
-export default SearchBudgetPage;
+export default SearchContrlPage;

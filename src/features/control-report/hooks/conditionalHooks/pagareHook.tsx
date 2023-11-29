@@ -4,44 +4,42 @@ import { urlApiFunds } from "../../../../common/utils/base-url";
 import { IControlPay } from "../../../../common/interfaces/control.report.interface";
 import { AppContext } from "../../../../common/contexts/app.context";
 
-export const usePagareHook = (data) => {
+export const usePagareHook = (data, ) => {
   const { setMessage } = useContext(AppContext);
-    const tableComponentRef = useRef(null);
-    const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfopay`;
-    const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
-
     
+  const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
+
     const tableColumns: ITableElement<IControlPay>[] = [
         {
-          fieldName: "row.activity.name",
+          fieldName: "fondo",
           header: "Modalidad aspirante",
           renderCell: (row) => {
             return <>{row.programa}</>;
           },
         },
         {
-          fieldName: "row.activity.value",
+          fieldName: "PagareAprobado",
           header: "Aprobado",
           renderCell: (row) => {
             return <>{row.aprobado}</>;
           },
         },
         {
-          fieldName: "row.activity.programa",
+          fieldName: "PagareEntregado",
           header: "Pagaré entregado",
           renderCell: (row) => {
             return <>{row.entregado}</>;
           },
         },
         {
-          fieldName: "row.activity.descripcion",
+          fieldName: "SinEntregarPagare",
           header: "Sin entregar",
           renderCell: (row) => {
             return <>{row.sin_entregar}</>;
           },
         },
         {
-            fieldName: "row.activity.descripcion",
+            fieldName: "NoAplica",
             header: "No aplica",
             renderCell: (row) => {
               return <>{row.no_aplica}</>;
@@ -50,7 +48,6 @@ export const usePagareHook = (data) => {
         
       ];
 
-    
     const downloadCollection = useCallback(() => {
         const { page, perPage } = paginateData;
         //const periodo = watch('periodo');
@@ -82,8 +79,6 @@ export const usePagareHook = (data) => {
     
     return {
         tableColumns,
-        tableComponentRef,
-        urlGet,
         downloadCollection,
     };
 }

@@ -48,6 +48,7 @@ export const useConsultControlReport = () => {
   const [formWatch, setFormWatch] = useState({
     noProject: "",
     validity: "",
+    valueConvocatoria: "",
   });
 
   const handleClean = () => {
@@ -56,17 +57,20 @@ export const useConsultControlReport = () => {
     setTableView(false);
   };
 
+  
   const onSubmit = handleSubmit((filters: IControlReportFilter) => {
-    const { noProject, validity } = formWatch;
+    const valueConvocatoria = watch('valueConvocatoria');
+    const { noProject, validity } = formWatch;    
     filters.noProject = noProject;
     filters.validity = validity;
     filters.valueConvocatoria = "10";
 
-    
+
     tableComponentRef.current?.loadData({
       ...filters,
-      
-    });
+    },
+      console.log("pase por el tableComponentRef")    
+    );
 
     if (filters.idControlSelect == 1) {
       setconditionalPage(<ConsolidateTab data={filters} />);
@@ -81,7 +85,8 @@ export const useConsultControlReport = () => {
       setconditionalPage(<LegalizacionTab />);
     }
     if (filters.idControlSelect == 5) {
-      setconditionalPage(<PagareTab data={filters}  tablecomponente = {tableComponentRef} />);
+      setconditionalPage(<PagareTab data={filters}  tableComponent = {tableComponentRef} />);
+      setTableView(true);
     }
     if (filters.idControlSelect == 6) {
       setconditionalPage(<ControlTab />);

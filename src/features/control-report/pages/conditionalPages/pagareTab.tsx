@@ -4,29 +4,24 @@ import { ButtonComponent, InputComponent } from "../../../../common/components/F
 import { usePagareHook } from "../../hooks/conditionalHooks/pagareHook";
 import Svgs from "../../../../public/images/icons/svgs";
 
-const PagareTab = (data, tablecomponente) => {
+const PagareTab = (data, tableComponent) => {
   const {
     tableColumns,
-    tableComponentRef,
-    urlGet,
     downloadCollection,
-  } = usePagareHook(data);
+  } = usePagareHook(data, );
 
   const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
-  console.log("table componente",data )
+ 
   return (
     <>
       <div className="container-sections-forms">
-        <TableComponent
-          //setPaginateData={setPaginateData}
-          ref={tablecomponente}
-          url={urlGet}
-          columns={tableColumns}
-          isShowModal={true}
-          emptyMessage="Resultado en la búsqueda"
-          descriptionModalNoResult="No se generó resultado en la búsqueda"
-          titleMessageModalNoResult="Resultado de búsqueda"
-        />
+      <TableComponent
+              ref={tableComponent}
+              url={`${process.env.urlApiFunds}api/v1/controlSelect/getInfopay`}
+              columns={tableColumns}
+              //actions={tableActions}
+              isShowModal={false}
+            />
 
         <div className="title-area">
           <label className="text-black large medium grid-span-4-columns">Totales</label>
