@@ -31,6 +31,9 @@ export interface IConfig {
 export const useConsultControlReport = () => {
   const [tableView, setTableView] = useState<boolean>(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
+  const [bandProyect, setbandProyect] = useState(false);
+  const [bandValidiy, setbandValidiy] = useState(false);
+  const [bandComuna, setbandComuna] = useState(false);
   const [conditionalPage, setconditionalPage] = useState(null);
   //ref
   const tableComponentRef = useRef(null);
@@ -43,35 +46,35 @@ export const useConsultControlReport = () => {
     watch,
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
-  const [controlReport] = watch(["controlReport"]);
+  const [idConvocatoria, idControlSelect, id_comuna] = watch([
+    "idConvocatoria",
+    "idControlSelect",
+    "id_comuna",
+  ]);
 
   useState(null);
   const [formWatch, setFormWatch] = useState({
     noProject: "",
     validity: "",
-    valueConvocatoria: "",
   });
 
   const handleClean = () => {
     reset();
     setSubmitDisabled(true);
+    tableComponentRef.current?.emptyData();
     setTableView(false);
   };
 
-  
   const onSubmit = handleSubmit((filters: IControlReportFilter) => {
-    const idConvocatoria = watch('idConvocatoria');
-    const { noProject, validity } = formWatch;    
+    const idConvocatoria = watch("idConvocatoria");
+    const { noProject, validity } = formWatch;
     filters.noProject = noProject;
     filters.validity = validity;
     filters.idConvocatoria = idConvocatoria;
 
-
     tableComponentRef.current?.loadData({
       ...filters,
-    },
-      console.log("pase por el tableComponentRef")    
-    );
+    });
 
     if (filters.idControlSelect == 1) {
       setconditionalPage(<ConsolidateTab data={filters} />);
@@ -86,7 +89,9 @@ export const useConsultControlReport = () => {
       setconditionalPage(<LegalizacionTab data={filters} />);
     }
     if (filters.idControlSelect == 5) {
-      setconditionalPage(<PagareTab data={filters}  tableComponent = {tableComponentRef} />);
+      setconditionalPage(
+        <PagareTab data={filters} tableComponent={tableComponentRef} />
+      );
       setTableView(true);
     }
     if (filters.idControlSelect == 6) {
@@ -95,6 +100,46 @@ export const useConsultControlReport = () => {
     setTableView(true);
   });
 
+  useEffect(() => {
+    const { noProject, validity } = formWatch;
+
+    if (idControlSelect == 1 || idControlSelect == 2 || idControlSelect == 3) {
+      if (noProject && validity && idConvocatoria) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
+
+    if (idControlSelect == 4 || idControlSelect == 5) {
+      if (idConvocatoria) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
+
+    if (idControlSelect == 6) {
+      if (idConvocatoria && id_comuna) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
+    setSubmitDisabled(true);
+  }, [formWatch, idConvocatoria, idControlSelect, id_comuna]);
+
+  useEffect(() => {
+    if (idControlSelect == 1 || idControlSelect == 2 || idControlSelect == 3) {
+      return setbandProyect(true), setbandValidiy(true);
+    }
+    if (idControlSelect == 6) {
+      return setbandComuna(true);
+    }
+    setbandProyect(false);
+    setbandValidiy(false);
+    setbandComuna(false);
+  }, [idControlSelect]);
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setFormWatch({
@@ -114,5 +159,8 @@ export const useConsultControlReport = () => {
     handleChange,
     handleClean,
     conditionalPage,
+    bandProyect,
+    bandValidiy,
+    bandComuna,
   };
 };

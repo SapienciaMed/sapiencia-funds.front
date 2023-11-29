@@ -6,6 +6,7 @@ import {
 } from "../../../../common/components/Form";
 import { consolidateHook } from "../../hooks/conditionalHooks/consolidateHook";
 import { columnsConsolidados } from "../config-columns/columns-consolidados";
+import Svgs from "../../../../public/images/icons/svgs";
 
 const ConsolidateTab = (data) => {
   const {
@@ -21,6 +22,7 @@ const ConsolidateTab = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
+    downloadCollection,
   } = consolidateHook(data.data);
   return (
     <>
@@ -160,7 +162,18 @@ const ConsolidateTab = (data) => {
         }}
       ></div>
       <div className="button-save-container-display mr-24px">
-        <ButtonComponent value="Cerrar" className="button-save big" />
+        <ButtonComponent
+          value={
+            <>
+              <div className="container-buttonText">
+                <span>Descargar</span>
+                <Svgs svg="excel" width={23.593} height={28.505} />
+              </div>
+            </>
+          }
+          className="button-download large "
+          action={downloadCollection}
+        />
       </div>
     </>
   );

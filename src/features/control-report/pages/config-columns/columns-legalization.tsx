@@ -7,7 +7,28 @@ export const columnsLegalization: ITableElement<ILegalizationTable>[] = [
   { fieldName: "places", header: "No. Cupos" },
   { fieldName: "Availableresources", header: "Recurso disponible" },
   { fieldName: "Granted", header: "Otorgado" },
-  // { fieldName: "Available", header: "Disponible" },
-  // { fieldName: "porcentParticipacion", header: "%Paricipacion" },
+  {
+    fieldName: "Available",
+    header: "Disponible",
+    renderCell: (row) => {
+      return (
+        <>{Math.round(Number(row.Availableresources) - Number(row.Granted))}</>
+      );
+    },
+  },
+  {
+    fieldName: "porcentParticipacion",
+    header: "%Paricipacion",
+    renderCell: (row) => {
+      return (
+        <>
+          {Math.round(
+            (Number(row.Granted) / Number(row.Availableresources)) * 100
+          )}{" "}
+          %
+        </>
+      );
+    },
+  },
   { fieldName: "Legalized", header: "No.Legalizados" },
 ];
