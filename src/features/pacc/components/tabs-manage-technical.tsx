@@ -18,28 +18,28 @@ function TabsManageTechnical({ document }) {
             title: "Servicio social", 
             content:( <></> ), 
             action: () => {},
-            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || false /*poner el rol */ 
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */ 
         }
         const soportesPQRSDF = {
             id: "soportesPQRSDF", 
             title: "Soportes PQRSDF", 
             content: (<SupportsPQRSDF document={document}/>), 
             action: () => {},
-            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || true /*validateActionAccess('SOPORTE_PQRSDF')*/  
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || validateActionAccess('VER_SOPORTES_PQRSDF') 
         }
         const requisitos = {
             id: "requisitos", 
             title: "Requisitos", 
             content: (<></>), 
             action: () => {},
-            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || false /*poner el rol */ 
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */ 
         }
         const liquidacion = {
             id: "liquidacion", 
             title: "Liquidación", 
             content: (<></>), 
             action: () => {},
-            hide: validateActionAccess('BANDEJA_CONSOLIDACION_TODOS') || false /*poner el rol */ 
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */ 
         }
 
         const result = [

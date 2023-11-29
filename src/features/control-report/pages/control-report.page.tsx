@@ -2,9 +2,10 @@ import {
   ButtonComponent,
   FormComponent,
   InputComponent,
+  MultiSelects,
   SelectComponent,
 } from "../../../common/components/Form";
-import useRenewaReportSearch from "../../renewal-report/hooks/renewal-report.hook";
+import useBudgetSearch from "../../budget-convocation/hooks/search-budget.hook";
 import useControlInfo from "../hooks/control-info";
 import { useConsultControlReport } from "../hooks/controlreport";
 import { columns123 } from "./config-columns/columns-estrato-123";
@@ -24,7 +25,7 @@ const SearchContrlPage = () => {
     conditionalPage,
   } = useConsultControlReport();
 
-  const {announcementList} = useRenewaReportSearch()
+  const { announcementList, budgetList } = useBudgetSearch();
 
   const { infoData } = useControlInfo();
   return (
@@ -70,7 +71,7 @@ const SearchContrlPage = () => {
             </div>
             <div>
               <SelectComponent
-                idInput="valueConvocatoria"
+                idInput="idConvocatoria"
                 control={control}
                 errors={errors}
                 data={announcementList}
@@ -95,6 +96,27 @@ const SearchContrlPage = () => {
               />
             </div>
           </div>
+
+          <div className="grid-form-4-container gap-25 mt-24px">
+            <MultiSelects
+              idInput={"id_comuna"}
+              control={control}
+              errors={errors}
+              data={budgetList}
+              label={
+                <>
+                  Fondo Comuna <span>*</span>
+                </>
+              }
+              className={
+                "select-basic medium select-disabled-list input-basic input-regular"
+              }
+              classNameLabel="text-black big medium label-regular"
+              placeholder="Seleccionar"
+              filter={true}
+            />
+          </div>
+
           <div className="button-save-container-display mr-24px mt-24px button-save-bussiness">
             <ButtonComponent
               value="Limpiar campos"

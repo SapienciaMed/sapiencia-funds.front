@@ -53,7 +53,7 @@ interface IProps<T> {
   isMobil?: boolean;
   classSizeTable?: string;
   isInputSearch?: boolean;
-  onGlobalFilterChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  onGlobalFilterChange?: (value: any) => void;
   bodyRequestParameters?: string,
   keyBodyRequest?: string
 }
@@ -129,6 +129,13 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           show: true,
           description: `${descriptionModalNoResult}` || "",
           OkTitle: "Aceptar",
+          onOk:() => {
+            setMessage({});         
+            if (onGlobalFilterChange) {
+              const valor = { target:{value:""} as HTMLInputElement }
+              onGlobalFilterChange(valor)
+            }
+          },
           background: true,
         });
       }
@@ -367,7 +374,7 @@ function getIconElement(
         <>
           <Tooltip target=".Manage" style={{ borderRadius: "1px" }} />
           <i
-            className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center Manage"
+            className="style-tooltip not-padding Manage"
             data-pr-tooltip="Gestionar"
             data-pr-position="right"
             id="Manage"
@@ -394,7 +401,7 @@ function getIconElement(
         <>
           <Tooltip target=".ChangeCut" style={{ borderRadius: "1px" }} />
           <i
-            className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center ChangeCut"
+            className="style-tooltip not-padding ChangeCut"
             data-pr-tooltip="Cambiar corte"
             data-pr-position="left"
           >
@@ -424,8 +431,8 @@ function getIconElement(
         <>
           <Tooltip target=".adjunto" style={{ borderRadius: "1px" }} />
           <i
-            className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center adjunto"
-            data-pr-tooltip="Editar corte"
+            className="style-tooltip not-padding adjunto"
+            data-pr-tooltip="Ver adjunto"
             data-pr-position="left"
           >
             <IconFI.FiPaperclip/>
