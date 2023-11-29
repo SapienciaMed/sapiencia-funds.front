@@ -23,8 +23,9 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
     const resolver = useYupValidationResolver(changeCuttingBeneficiary);
     const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices()
     const [actualCut, setActualCut] = useState('')
+    const [ cut, setCut ] = useState<IDropdownProps[]>([])
 
-    const formatearFecha = (fechaISO: string) => {
+    const formatDate = (fechaISO: string) => {
         const fecha = new Date(fechaISO);
         const dia = fecha.getUTCDate();
         const mes = fecha.getUTCMonth() + 1; 
@@ -37,7 +38,8 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
         GeBeneficiaryById(String(idBenef)).then(response => {
             if(response.operation.code === EResponseCodes.OK){
                 const item = response.data
-                setActualCut(`${item.cut} - desde ${formatearFecha(item.dateIncomeCut)} hasta ${formatearFecha(item.dateFinallyCut)}`)
+                setActualCut(`${item.cut} - desde ${formatDate(item.dateIncomeCut)} hasta ${formatDate(item.dateFinallyCut)}`)
+                setCut(idCutData.filter(us => us.name != item.cut))
             }
         })
     },[])
@@ -53,7 +55,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
         setMessage({
             show: true,
             title: "Mover beneficiario a otro corte",
-            description: "¿Está segur@ de mover al beneficiari@ a otro corte?",
+            description: "¿Estás segur@ de mover al beneficiari@ a otro corte?",
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
@@ -98,7 +100,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
                         <SelectComponent
                             idInput={"idCut"}
                             control={control}
-                            data={idCutData}
+                            data={cut}
                             label="Corte"
                             className="select-basic big"
                             classNameLabel='text-black biggest text-with-colons text-required'

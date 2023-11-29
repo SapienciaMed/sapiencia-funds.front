@@ -1,19 +1,21 @@
 import React, { useContext } from "react";
-import BasicTableComponent from "../../../../common/components/basic-table.component";
-import { LegalizationHook } from "../../hooks/conditionalHooks/LegalizationHook";
 import {
   ButtonComponent,
   InputComponent,
 } from "../../../../common/components/Form";
-import TableComponent from "../../../../common/components/table.component";
-import { columnsLegalization } from "../config-columns/columns-legalization";
+import { stratum123Hook } from "../../hooks/conditionalHooks/stratum123.hook";
+import BasicTableComponent from "../../../../common/components/basic-table.component";
+import { ITableAction, ITableElement } from "../../../../common/interfaces";
+import { AppContext } from "../../../../common/contexts/app.context";
 
-const LegalizacionTab = (data) => {
+function Estratum123Tab({ filters }) {
+  console.log(filters);
+
   const {
+    urlGet,
+    // setGridConsolidate,
     tableComponentRef,
-    urlGetLegalization,
-    tableActions,
-    setPaginateData,
+    // dataGridConsolidate,
     totalNoPreseleccionados,
     totalOtorgado,
     totalNoCupos,
@@ -21,79 +23,96 @@ const LegalizacionTab = (data) => {
     totalDisponible,
     totalPorParticipacion,
     totalNoLegalizados,
-  } = LegalizationHook(data.data);
+    totalRendimientoFinancieros,
+  } = stratum123Hook(filters);
+
+  const { validateActionAccess, setMessage } = useContext(AppContext);
+
+  const tableColumns: ITableElement<any>[] = [
+    {
+      fieldName: "activity",
+      header: "Comuna o corregimiento",
+    },
+    {
+      fieldName: "activityValue",
+      header: "Recurso disponible",
+    },
+    {
+      fieldName: "amount",
+      header: "Otorgado",
+    },
+    {
+      fieldName: "totalCost",
+      header: "Disponible",
+    },
+    {
+      fieldName: "porcentaje123",
+      header: "%Participación",
+    },
+    {
+      fieldName: "porcentaje456",
+      header: "No. Legalizados",
+    },
+  ];
+
+  const tableActions: ITableAction<any>[] = [
+    {
+      icon: "Edit",
+      onClick: (row) => {
+        setMessage({
+          show: true,
+          title: "Editar item",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          // description: (
+          //   <ItemResultsPage
+          //     dataVoting={row}
+          //     action={"edit"}
+          //     collback={false}
+          //   />
+          // ),
+          description: "1",
+          size: "large",
+          style: "mdl-agregarItem-voting",
+        });
+      },
+      hide: !validateActionAccess("USUARIOS_EDITAR"),
+    },
+  ];
+
   return (
     <>
       <div className="container-sections-forms ml-20px mr-20px">
         {/* <BasicTableComponent
           ref={tableComponentRef}
-          data={dataGridLegalization}
+          data={dataGridConsolidate}
           columns={tableColumns}
           actions={tableActions}
           titleMessageModalNoResult="Registro no existente"
           isShowModal={true}
-          secondaryTitle={"Legalizacion tab"}
+          secondaryTitle={"Resultados de búsqueda"}
           classSizeTable="size-table-wd-150"
-          isMobil={false}
+          isMobil={true}
         /> */}
-
-        <TableComponent
-          setPaginateData={setPaginateData}
-          ref={tableComponentRef}
-          url={urlGetLegalization}
-          columns={columnsLegalization}
-          actions={tableActions}
-          isShowModal={true}
-          emptyMessage="Resultado en la búsqueda"
-          descriptionModalNoResult="No se generó resultado en la búsqueda"
-          titleMessageModalNoResult="Resultado de búsqueda"
-        />
       </div>
       <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
-        <div
-          className="bold mt-24px ml-16px mr-16px p-0"
-          style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
-        >
-          Totales
-        </div>
-        <div className="grid-form-4-container mb-24px">
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="No. Preseleccionados"
-            //register={register}
-            classNameLabel="text-black biggest text-required"
-            //direction={EDirection.column}
-            //errors={errors}
-            placeholder={`${totalNoPreseleccionados}`}
-            disabled
-          />
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="No. Cupos"
-            //register={register}
-            classNameLabel="text-black biggest text-required"
-            //direction={EDirection.column}
-            //errors={errors}
-            placeholder={""}
-            disabled
-            value={String(totalNoCupos)}
-          />
+        <p className="text-black huge ">Totales</p>
+
+        <section className="funcionality-filters-container gap-15">
           <InputComponent
             idInput={"tQuantity1"}
             className="input-basic medium"
             typeInput="text"
             label="Recurso disponible"
             //register={register}
-            classNameLabel="text-black biggest text-required"
+            classNameLabel="text-black biggest "
             //direction={EDirection.column}
             //errors={errors}
             placeholder={""}
             disabled
-            value={String(totalRecursoDisponible)}
+            // value={String(totalRecursoDisponible)}
           />
           <InputComponent
             idInput={"tQuantity1"}
@@ -101,40 +120,41 @@ const LegalizacionTab = (data) => {
             typeInput="text"
             label="Otorgado"
             //register={register}
-            classNameLabel="text-black biggest text-required"
+            classNameLabel="text-black biggest "
             //direction={EDirection.column}
             //errors={errors}
             placeholder={""}
             disabled
-            value={String(totalOtorgado)}
+            // value={String(totalOtorgado)}
           />
-        </div>
-        <div className="grid-form-3-container mb-24px">
+
           <InputComponent
             idInput={"tQuantity1"}
             className="input-basic medium"
             typeInput="text"
             label="Disponible"
             //register={register}
-            classNameLabel="text-black biggest text-required"
+            classNameLabel="text-black biggest"
             //direction={EDirection.column}
             //errors={errors}
             placeholder={""}
             disabled
-            value={String(totalDisponible)}
+            // value={String(totalDisponible)}
           />
+        </section>
+        <section className="funcionality-filters-container gap-15">
           <InputComponent
             idInput={"tQuantity1"}
             className="input-basic medium"
             typeInput="text"
             label="%Participacion"
             //register={register}
-            classNameLabel="text-black biggest text-required"
+            classNameLabel="text-black biggest "
             //direction={EDirection.column}
             //errors={errors}
             placeholder={""}
             disabled
-            value={String(totalPorParticipacion)}
+            // value={String(totalPorParticipacion)}
           />
           <InputComponent
             idInput={"tQuantity1"}
@@ -142,14 +162,14 @@ const LegalizacionTab = (data) => {
             typeInput="text"
             label="No.Legalizados"
             //register={register}
-            classNameLabel="text-black biggest text-required"
+            classNameLabel="text-black biggest "
             //direction={EDirection.column}
             //errors={errors}
             placeholder={""}
             disabled
-            value={String(totalNoLegalizados)}
+            // value={String(totalNoLegalizados)}
           />
-        </div>
+        </section>
       </div>
       <div
         style={{
@@ -163,6 +183,6 @@ const LegalizacionTab = (data) => {
       </div>
     </>
   );
-};
+}
 
-export default LegalizacionTab;
+export default Estratum123Tab;
