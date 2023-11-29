@@ -5,11 +5,10 @@ import { urlApiFunds } from "../../../../common/utils/base-url";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { ApiResponse } from "../../../../common/utils/api-response";
 import { ITableAction } from "../../../../common/interfaces";
-import Controlreporteditconsolidation from "../../pages/control-report-edit-consolidation";
+// import Controlreporteditconsolidation from "../../pages/control-report-edit-consolidation";
 
 export const stratum123Hook = (data) => {
   const navigate = useNavigate();
-
 
   const { post } = useCrudService(urlApiFunds);
   const [totalNoPreseleccionados, setTotalNoPreseleccionados] = useState(null);
@@ -23,8 +22,7 @@ export const stratum123Hook = (data) => {
     useState(null);
   const tableComponentRef = useRef(null);
   const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfo`;
-  const { setMessage, dataGridConsolidate, setGridConsolidate } =
-    useContext(AppContext);
+  const { setMessage } = useContext(AppContext);
 
   const getInfoConsolidado = async (data) => {
     try {
@@ -62,7 +60,7 @@ export const stratum123Hook = (data) => {
           (data.consolidatedGranted / data.consolidatedResourceAvailable) * 100
         );
 
-        dataGridConsolidate.push(dataColumns);
+        // dataGridConsolidate.push(dataColumns);
         return dataColumns;
       });
 
@@ -103,7 +101,6 @@ export const stratum123Hook = (data) => {
       setTotalPorParticipacion(totalData.totalPorParticipacion);
       setTotalNoLegalizados(totalData.totalNoLegalizados);
       setTotalRendimientoFinancieros(totalData.totalRendimientoFinancieros);
-
     } catch (err) {
       console.error(err);
     }
@@ -118,7 +115,7 @@ export const stratum123Hook = (data) => {
     setTotalPorParticipacion;
     setTotalNoLegalizados;
     setTotalRendimientoFinancieros;
-    setGridConsolidate;
+    // setGridConsolidate;
   }, [
     totalNoPreseleccionados,
     totalOtorgado,
@@ -128,7 +125,7 @@ export const stratum123Hook = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
-    dataGridConsolidate,
+    // dataGridConsolidate,
   ]);
 
   const tableActions: ITableAction<any>[] = [
@@ -138,7 +135,7 @@ export const stratum123Hook = (data) => {
         setMessage({
           show: true,
           background: true,
-          description: <Controlreporteditconsolidation data={row} />,
+          // description: <Controlreporteditconsolidation data={row} />,
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -155,8 +152,8 @@ export const stratum123Hook = (data) => {
   }, []);
 
   return {
-    dataGridConsolidate,
-    setGridConsolidate,
+    // dataGridConsolidate,
+    // setGridConsolidate,
     tableComponentRef,
     urlGet,
     tableActions,
