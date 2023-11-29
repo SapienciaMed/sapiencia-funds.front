@@ -81,13 +81,19 @@ export const usePagareHook = (data, ) => {
 
     };
 
+    
     useEffect(() => {
+      const body = {
+        idControlSelect: data.idControlSelect,
+        idConvocatoria: data.idConvocatoria
+      }
+      console.log("",body)
       tableComponentRef.current?.loadData({
-        ...data,
+        ...body,
       });
-  
-      getInfoControl(data);
     }, []);
+  
+
 
     
     return {

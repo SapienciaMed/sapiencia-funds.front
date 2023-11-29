@@ -6,15 +6,17 @@ import Svgs from "../../../../public/images/icons/svgs";
 
 const PagareTab = (data) => {
   const {
+    tableComponentRef,
     tableColumns,
     urlGet,
-    tableComponentRef,
     setPaginateData,
     //downloadCollection,
   } = usePagareHook(data.data);
 
   const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
- 
+  
+
+  console.log("++++",data )
   return (
     <>
       <div className="container-sections-forms">
