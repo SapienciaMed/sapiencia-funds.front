@@ -60,11 +60,11 @@ export const useConsultControlReport = () => {
 
   
   const onSubmit = handleSubmit((filters: IControlReportFilter) => {
-    const valueConvocatoria = watch('valueConvocatoria');
+    const idConvocatoria = watch('idConvocatoria');
     const { noProject, validity } = formWatch;    
     filters.noProject = noProject;
     filters.validity = validity;
-    filters.valueConvocatoria = "10";
+    filters.idConvocatoria = idConvocatoria;
 
 
     tableComponentRef.current?.loadData({
