@@ -1,30 +1,26 @@
 import React, { useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
-import { ButtonComponent, InputComponent } from "../../../../common/components/Form";
+import {
+  ButtonComponent,
+  InputComponent,
+} from "../../../../common/components/Form";
 import { usePagareHook } from "../../hooks/conditionalHooks/pagareHook";
 import Svgs from "../../../../public/images/icons/svgs";
+import { columnsPay } from "../config-columns/columns-pay";
 
 const PagareTab = (data) => {
-  const {
-    tableComponentRef,
-    tableColumns,
-    urlGet,
-    setPaginateData,
-    //downloadCollection,
-  } = usePagareHook(data.data);
-
-  const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
-  
-
-  console.log("++++",data )
+  const { tableComponentRef, urlGet, setPaginateData } = usePagareHook(
+    data.data
+  );
+  console.log(tableComponentRef, "=====", urlGet);
   return (
     <>
       <div className="container-sections-forms">
-      <TableComponent
+        <TableComponent
           setPaginateData={setPaginateData}
           ref={tableComponentRef}
           url={urlGet}
-          columns={tableColumns}
+          columns={columnsPay}
           //actions={tableActions}
           isShowModal={true}
           emptyMessage="Resultado en la búsqueda"
@@ -33,7 +29,9 @@ const PagareTab = (data) => {
         />
 
         <div className="title-area">
-          <label className="text-black large medium grid-span-4-columns">Totales</label>
+          <label className="text-black large medium grid-span-4-columns">
+            Totales
+          </label>
         </div>
         <div className="grid-form-4-container mb-24px">
           <InputComponent
@@ -80,7 +78,7 @@ const PagareTab = (data) => {
         <br />
         <hr className="barra-spacing" />
       </div>
-      {sendingReportXlsx ? (
+      {/* {sendingReportXlsx ? (
         <div className="button-save-container-display mr-24px">
           <ButtonComponent
             value={
@@ -95,9 +93,9 @@ const PagareTab = (data) => {
             //action={downloadCollection}
           />
         </div>
-      ) : ''}
-
-
+      ) : (
+        ""
+      )} */}
     </>
   );
 };

@@ -8,7 +8,6 @@ export const ControlHook = (data) => {
   const { post } = useCrudService(urlApiFunds);
   const tableComponentRef = useRef(null);
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
-  const [tableColumns, setTableColumns] = useState([]);
   const [totalRestantes, setTotalRestates] = useState([]);
   const [totalInicial, setTotalInicial] = useState([]);
 
@@ -44,7 +43,6 @@ export const ControlHook = (data) => {
 
   return {
     tableComponentRef,
-    tableColumns,
     urlControl,
     setPaginateData,
     totalRestantes,
