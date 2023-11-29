@@ -23,6 +23,9 @@ const SearchContrlPage = () => {
     register,
     handleChange,
     conditionalPage,
+    bandProyect,
+    bandValidiy,
+    bandComuna,
   } = useConsultControlReport();
 
   const { announcementList, budgetList } = useBudgetSearch();
@@ -45,30 +48,36 @@ const SearchContrlPage = () => {
             </span>
           </div>
           <div className="grid-form-4-container gap-25 mt-24px">
-            <div>
-              <InputComponent
-                idInput="noProject"
-                label={<>Número proyecto</>}
-                register={register}
-                typeInput="text"
-                errors={errors}
-                className="input-basic medium"
-                classNameLabel="text-black big bold"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <InputComponent
-                idInput="validity"
-                label={<>Vigencia</>}
-                register={register}
-                typeInput="text"
-                errors={errors}
-                className="input-basic medium"
-                classNameLabel="text-black big bold"
-                onChange={handleChange}
-              />
-            </div>
+            {bandProyect && (
+              <div>
+                <InputComponent
+                  idInput="noProject"
+                  label={<>Número proyecto</>}
+                  register={register}
+                  typeInput="text"
+                  errors={errors}
+                  className="input-basic medium"
+                  classNameLabel="text-black big bold"
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+
+            {bandValidiy && (
+              <div>
+                <InputComponent
+                  idInput="validity"
+                  label={<>Vigencia</>}
+                  register={register}
+                  typeInput="text"
+                  errors={errors}
+                  className="input-basic medium"
+                  classNameLabel="text-black big bold"
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+
             <div>
               <SelectComponent
                 idInput="idConvocatoria"
@@ -95,26 +104,23 @@ const SearchContrlPage = () => {
                 filter
               />
             </div>
-          </div>
-
-          <div className="grid-form-4-container gap-25 mt-24px">
-            <MultiSelects
-              idInput={"id_comuna"}
-              control={control}
-              errors={errors}
-              data={budgetList}
-              label={
-                <>
-                  Fondo Comuna <span>*</span>
-                </>
-              }
-              className={
-                "select-basic medium select-disabled-list input-basic input-regular"
-              }
-              classNameLabel="text-black big medium label-regular"
-              placeholder="Seleccionar"
-              filter={true}
-            />
+            {bandComuna && (
+              <div>
+                <MultiSelects
+                  idInput={"id_comuna"}
+                  control={control}
+                  errors={errors}
+                  data={budgetList}
+                  label={<>Fondo Comuna</>}
+                  className={
+                    "select-basic medium select-disabled-list input-basic input-regular"
+                  }
+                  classNameLabel="text-black big medium label-regular"
+                  placeholder="Seleccionar"
+                  filter={true}
+                />
+              </div>
+            )}
           </div>
 
           <div className="button-save-container-display mr-24px mt-24px button-save-bussiness">
@@ -130,7 +136,7 @@ const SearchContrlPage = () => {
                 !isValid || submitDisabled ? "disabled-black" : ""
               } big`}
               type="submit"
-              // disabled={!isValid || submitDisabled}
+              disabled={!isValid || submitDisabled}
             />
           </div>
         </div>
