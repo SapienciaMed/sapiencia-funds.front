@@ -1,6 +1,9 @@
 import React, { useContext } from "react";
-import { ButtonComponent, InputComponent } from "../../../../common/components/Form";
-import {stratum123Hook} from "../../hooks/conditionalHooks/stratum123.hook"
+import {
+  ButtonComponent,
+  InputComponent,
+} from "../../../../common/components/Form";
+import { stratum123Hook } from "../../hooks/conditionalHooks/stratum123.hook";
 import BasicTableComponent from "../../../../common/components/basic-table.component";
 import { ITableAction, ITableElement } from "../../../../common/interfaces";
 import { AppContext } from "../../../../common/contexts/app.context";
@@ -10,9 +13,9 @@ function Estratum123Tab({ filters }) {
 
   const {
     urlGet,
-    setGridConsolidate,
+    // setGridConsolidate,
     tableComponentRef,
-    dataGridConsolidate,
+    // dataGridConsolidate,
     totalNoPreseleccionados,
     totalOtorgado,
     totalNoCupos,
@@ -23,67 +26,66 @@ function Estratum123Tab({ filters }) {
     totalRendimientoFinancieros,
   } = stratum123Hook(filters);
 
-    const { validateActionAccess, setMessage } = useContext(AppContext);
+  const { validateActionAccess, setMessage } = useContext(AppContext);
 
-    const tableColumns: ITableElement<any>[] = [
-      {
-        fieldName: "activity",
-        header: "Comuna o corregimiento",
-      },
-      {
-        fieldName: "activityValue",
-        header: "Recurso disponible",
-      },
-      {
-        fieldName: "amount",
-        header: "Otorgado",
-      },
-      {
-        fieldName: "totalCost",
-        header: "Disponible",
-      },
-      {
-        fieldName: "porcentaje123",
-        header: "%Participación",
-      },
-      {
-        fieldName: "porcentaje456",
-        header: "No. Legalizados",
-      },
-    ];
-  
+  const tableColumns: ITableElement<any>[] = [
+    {
+      fieldName: "activity",
+      header: "Comuna o corregimiento",
+    },
+    {
+      fieldName: "activityValue",
+      header: "Recurso disponible",
+    },
+    {
+      fieldName: "amount",
+      header: "Otorgado",
+    },
+    {
+      fieldName: "totalCost",
+      header: "Disponible",
+    },
+    {
+      fieldName: "porcentaje123",
+      header: "%Participación",
+    },
+    {
+      fieldName: "porcentaje456",
+      header: "No. Legalizados",
+    },
+  ];
 
-    const tableActions: ITableAction<any>[] = [
-      {
-        icon: "Edit",
-        onClick: (row) => {
-          setMessage({
-            show: true,
-            title: "Editar item",
-            onOk() {
-              setMessage({});
-            },
-            background: true,
-            // description: (
-            //   <ItemResultsPage
-            //     dataVoting={row}
-            //     action={"edit"}
-            //     collback={false}
-            //   />
-            // ),
-            description: '1',
-            size: "large",
-            style: "mdl-agregarItem-voting",
-          });
-        },
-        hide: !validateActionAccess("USUARIOS_EDITAR"),
-      }
-    ];
+  const tableActions: ITableAction<any>[] = [
+    {
+      icon: "Edit",
+      onClick: (row) => {
+        setMessage({
+          show: true,
+          title: "Editar item",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          // description: (
+          //   <ItemResultsPage
+          //     dataVoting={row}
+          //     action={"edit"}
+          //     collback={false}
+          //   />
+          // ),
+          description: "1",
+          size: "large",
+          style: "mdl-agregarItem-voting",
+        });
+      },
+      hide: !validateActionAccess("USUARIOS_EDITAR"),
+    },
+  ];
 
   return (
     <>
       <div className="container-sections-forms ml-20px mr-20px">
-        <BasicTableComponent
+        {/* <BasicTableComponent
           ref={tableComponentRef}
           data={dataGridConsolidate}
           columns={tableColumns}
@@ -93,7 +95,7 @@ function Estratum123Tab({ filters }) {
           secondaryTitle={"Resultados de búsqueda"}
           classSizeTable="size-table-wd-150"
           isMobil={true}
-        />
+        /> */}
       </div>
       <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
         <p className="text-black huge ">Totales</p>
@@ -140,33 +142,33 @@ function Estratum123Tab({ filters }) {
             // value={String(totalDisponible)}
           />
         </section>
-                      <section className="funcionality-filters-container gap-15">
-        <InputComponent
-          idInput={"tQuantity1"}
-          className="input-basic medium"
-          typeInput="text"
-          label="%Participacion"
-          //register={register}
-          classNameLabel="text-black biggest "
-          //direction={EDirection.column}
-          //errors={errors}
-          placeholder={""}
-          disabled
-          // value={String(totalPorParticipacion)}
-        />
-        <InputComponent
-          idInput={"tQuantity1"}
-          className="input-basic medium"
-          typeInput="text"
-          label="No.Legalizados"
-          //register={register}
-          classNameLabel="text-black biggest "
-          //direction={EDirection.column}
-          //errors={errors}
-          placeholder={""}
-          disabled
-          // value={String(totalNoLegalizados)}
-        />
+        <section className="funcionality-filters-container gap-15">
+          <InputComponent
+            idInput={"tQuantity1"}
+            className="input-basic medium"
+            typeInput="text"
+            label="%Participacion"
+            //register={register}
+            classNameLabel="text-black biggest "
+            //direction={EDirection.column}
+            //errors={errors}
+            placeholder={""}
+            disabled
+            // value={String(totalPorParticipacion)}
+          />
+          <InputComponent
+            idInput={"tQuantity1"}
+            className="input-basic medium"
+            typeInput="text"
+            label="No.Legalizados"
+            //register={register}
+            classNameLabel="text-black biggest "
+            //direction={EDirection.column}
+            //errors={errors}
+            placeholder={""}
+            disabled
+            // value={String(totalNoLegalizados)}
+          />
         </section>
       </div>
       <div
