@@ -1,57 +1,21 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import {
   ButtonComponent,
   FormComponent,
   InputComponent,
-} from "../../../common/components/Form";
+} from "../../../../common/components/Form";
 import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
-import { AppContext } from "../../../common/contexts/app.context";
-import useCrudService from "../../../common/hooks/crud-service.hook";
-import { urlApiFunds } from "../../../common/utils/base-url";
-import { EResponseCodes } from "../../../common/constants/api.enum";
-
-export interface IcontrolReport {
-  consolidatedPreselected: number;
-  consolidatedResourceAvailable: number;
-  consolidatedGranted: number;
-  consolidatedLegalized: number;
-  consolidatedFinancialReturns: number;
-  Stratum123Granted: number;
-  Stratum123Legalized: number;
-  Stratum123ResourceAvailable: null;
-  Stratum456Granted: null;
-  Stratum456Legalized: null;
-  Stratum456ResourceAvailable: null;
-  announcement: string;
-  id: number;
-  idResourcePrioritization: number;
-  resourcePrioritization: resourcePrioritization;
-  places: number;
-}
-
-interface resourcePrioritization {
-  id: number;
-  places: number;
-}
-export const controlEditConsolidation = yup.object({
-  consolidatedPreselected: yup.number().optional(),
-  places: yup.number().optional(),
-  consolidatedResourceAvailable: yup.number().optional(),
-  consolidatedGranted: yup.number().optional(),
-  consolidatedLegalized: yup.number().optional(),
-  consolidatedFinancialReturns: yup.number().optional(),
-});
-
-const Controlreporteditconsolidation = (data) => {
-  const [comuna, setComuna] = useState(null);
-  const [disponible, setDisponible] = useState(null);
-  const [porParcipacion, setPorParticipacon] = useState(null);
+import useYupValidationResolver from "../../../../common/hooks/form-validator.hook";
+import { controlEditConsolidation } from "./control-report-edit-consolidation";
+import { AppContext } from "../../../../common/contexts/app.context";
+import { EResponseCodes } from "../../../../common/constants/api.enum";
+import { urlApiFunds } from "../../../../common/utils/base-url";
+import useCrudService from "../../../../common/hooks/crud-service.hook";
+const ControlreporteditLegalization = (data) => {
   const info = data.data;
+
+  console.log(info);
   const resolver = useYupValidationResolver(controlEditConsolidation);
-  const { setMessage } = useContext(AppContext);
-  const [submitDisabled, setSubmitDisabled] = useState(true);
   const { put } = useCrudService(urlApiFunds);
   const {
     handleSubmit,
@@ -66,30 +30,17 @@ const Controlreporteditconsolidation = (data) => {
     resolver,
     mode: "all",
     defaultValues: {
-      consolidatedPreselected: null,
-      consolidatedResourceAvailable: null,
-      consolidatedGranted: null,
-      consolidatedLegalized: null,
-      consolidatedFinancialReturns: null,
+      Preselected: null,
+      Granted: null,
+      Legalized: null,
       places: null,
+      Availableresources: null,
     },
   });
 
-  // const places = watch("resourcePrioritization.places");
-  useEffect(() => {
-    setValue("consolidatedPreselected", info.consolidatedPreselected);
-    setValue(
-      "consolidatedResourceAvailable",
-      info.consolidatedResourceAvailable
-    );
-    setValue("consolidatedGranted", info.consolidatedGranted);
-    setValue("consolidatedLegalized", info.consolidatedLegalized);
-    setValue("consolidatedFinancialReturns", info.consolidatedFinancialReturns);
-    setValue("places", info.resourcePrioritization.places);
-  }, []);
   const updateInfo = async (data) => {
     try {
-      const endpoint = `/api/v1/controlSelect/updateInfoConsolidado`;
+      const endpoint = `/api/v1/controlSelect/updateInfoLegalization`;
       const resp = await put(endpoint, data);
 
       if (resp.operation.code === EResponseCodes.FAIL) {
@@ -127,23 +78,17 @@ const Controlreporteditconsolidation = (data) => {
       });
     }
   };
-
-  const onSubmit = handleSubmit(async (dataEdit: IcontrolReport) => {
+  const { setMessage } = useContext(AppContext);
+  const onSubmit = handleSubmit(async (dataEdit: any) => {
+    console.log(dataEdit);
     const body = {
       id: info.id,
-      consolidatedPreselected: dataEdit.consolidatedPreselected,
-      consolidatedResourceAvailable: dataEdit.consolidatedResourceAvailable,
-      consolidatedGranted: dataEdit.consolidatedGranted,
-      consolidatedLegalized: dataEdit.consolidatedLegalized,
-      consolidatedFinancialReturns: 40048000,
-      ResourcePrioritization: [
-        {
-          id: info.idResourcePrioritization,
-          place: dataEdit.places,
-        },
-      ],
+      Preselected: dataEdit.Preselected,
+      Granted: dataEdit.Granted,
+      Legalized: dataEdit.Legalized,
+      places: dataEdit.places,
+      Availableresources: dataEdit.Availableresources,
     };
-
     setMessage({
       title: "Guardar",
       description: "¿Está segur@ de guardar la informacion?",
@@ -176,23 +121,23 @@ const Controlreporteditconsolidation = (data) => {
     });
   };
 
-  const setInfo = async (data) => {
-    setComuna(data.resourcePrioritization.communeId);
-    setDisponible(
-      Number(data.consolidatedResourceAvailable) -
-        Number(data.consolidatedGranted)
-    );
-    setPorParticipacon(
-      Math.round(
-        (data.consolidatedGranted / data.consolidatedResourceAvailable) * 100
-      )
-    );
-  };
-
   useEffect(() => {
-    setInfo(info);
-  }, []);
+    setValue("Preselected", info.Preselected);
+    setValue("places", info.places);
+    setValue("Legalized", info.Legalized);
+    setValue("Granted", info.Granted);
+    setValue("Availableresources", info.Availableresources);
 
+    let Avaible = Number(info.Availableresources) - Number(info.Granted);
+    setValue("Avaible", Avaible);
+
+    let porParticipacion =
+      Math.round(
+        (Number(info.Granted) / Number(info.Availableresources)) * 100
+      ) + "%";
+
+    setValue("porParticipacion", porParticipacion);
+  }, []);
   return (
     <Fragment>
       <FormComponent id="createItemsForm" action={onSubmit}>
@@ -200,20 +145,21 @@ const Controlreporteditconsolidation = (data) => {
           <div className="grid-form-4-container gap-25 mt-24px">
             <InputComponent
               idInput=""
-              label={<>Comuna o corregimiento</>}
+              label={<>Programa fondo linea</>}
               typeInput="string"
               className="input-basic medium"
               classNameLabel="text-black big bold"
               disabled
-              value={comuna}
+              value={info.program}
             />
+
             <Controller
               control={control}
-              name={"consolidatedPreselected"}
+              name={"Preselected"}
               render={({ field }) => {
                 return (
                   <InputComponent
-                    idInput={"consolidatedPreselected"}
+                    idInput={"Preselected"}
                     className="input-basic medium"
                     typeInput="number"
                     label="Nro de preseleccionados"
@@ -249,11 +195,11 @@ const Controlreporteditconsolidation = (data) => {
             />
             <Controller
               control={control}
-              name={"consolidatedResourceAvailable"}
+              name={"Availableresources"}
               render={({ field }) => {
                 return (
                   <InputComponent
-                    idInput={"consolidatedResourceAvailable"}
+                    idInput={"Availableresources"}
                     className="input-basic medium"
                     typeInput="text"
                     label="Recurso disponible"
@@ -273,11 +219,11 @@ const Controlreporteditconsolidation = (data) => {
           <div className="grid-form-4-container gap-25 mt-24px">
             <Controller
               control={control}
-              name={"consolidatedGranted"}
+              name={"Granted"}
               render={({ field }) => {
                 return (
                   <InputComponent
-                    idInput={"consolidatedGranted"}
+                    idInput={"Granted"}
                     className="input-basic medium"
                     typeInput="text"
                     label="Otorgado"
@@ -290,31 +236,57 @@ const Controlreporteditconsolidation = (data) => {
                 );
               }}
             />
-            <InputComponent
-              idInput=""
-              label={<>Disponible</>}
-              typeInput="text"
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-              disabled
-              value={disponible}
-            />
-            <InputComponent
-              idInput=""
-              label={<>%Participacion</>}
-              typeInput="text"
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-              disabled
-              value={String(porParcipacion) + "%"}
-            />
+
             <Controller
               control={control}
-              name={"consolidatedLegalized"}
+              name={"Avaible"}
               render={({ field }) => {
                 return (
                   <InputComponent
-                    idInput={"consolidatedLegalized"}
+                    idInput={"Avaible"}
+                    className="input-basic medium"
+                    typeInput="text"
+                    label="Disponibles"
+                    register={register}
+                    classNameLabel="text-black biggest text-required"
+                    errors={errors}
+                    placeholder={""}
+                    maxLength={9}
+                    {...field}
+                    disabled
+                  />
+                );
+              }}
+            />
+            <Controller
+              control={control}
+              name={"porParticipacion"}
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput={"porParticipacion"}
+                    className="input-basic medium"
+                    typeInput="text"
+                    label="%Participacion"
+                    register={register}
+                    classNameLabel="text-black biggest text-required"
+                    errors={errors}
+                    placeholder={""}
+                    maxLength={9}
+                    {...field}
+                    disabled
+                  />
+                );
+              }}
+            />
+
+            <Controller
+              control={control}
+              name={"Legalized"}
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput={"Legalized"}
                     className="input-basic medium"
                     typeInput="text"
                     label="No. Legalizados"
@@ -330,29 +302,7 @@ const Controlreporteditconsolidation = (data) => {
             />
           </div>
         </section>
-        <section>
-          <div className="grid-form-4-container gap-25 mt-24px">
-            <Controller
-              control={control}
-              name={"consolidatedFinancialReturns"}
-              render={({ field }) => {
-                return (
-                  <InputComponent
-                    idInput={"consolidatedFinancialReturns"}
-                    className="input-basic medium"
-                    typeInput="text"
-                    label="Rendimientos financieros"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
-                    errors={errors}
-                    placeholder={""}
-                    {...field}
-                  />
-                );
-              }}
-            />
-          </div>
-        </section>
+
         <div
           style={{
             height: "1px",
@@ -378,4 +328,4 @@ const Controlreporteditconsolidation = (data) => {
   );
 };
 
-export default React.memo(Controlreporteditconsolidation);
+export default ControlreporteditLegalization;

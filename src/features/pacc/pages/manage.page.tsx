@@ -7,7 +7,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 
 function ManagePage() {
 
-    const { dataManager, showSpinner, onCancel } =  useManage()
+    const { dataManager, showSpinner, onCancel  } =  useManage()
     
     return(
         <div className="main-page">

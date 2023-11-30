@@ -2,14 +2,16 @@ import {
   ButtonComponent,
   FormComponent,
   InputComponent,
+  MultiSelects,
   SelectComponent,
 } from "../../../common/components/Form";
+import useBudgetSearch from "../../budget-convocation/hooks/search-budget.hook";
 import useControlInfo from "../hooks/control-info";
 import { useConsultControlReport } from "../hooks/controlreport";
 import { columns123 } from "./config-columns/columns-estrato-123";
 import { columns456 } from "./config-columns/columns-estrato-456";
 
-const SearchBudgetPage = () => {
+const SearchContrlPage = () => {
   const {
     tableView,
     onSubmit,
@@ -21,7 +23,12 @@ const SearchBudgetPage = () => {
     register,
     handleChange,
     conditionalPage,
+    bandProyect,
+    bandValidiy,
+    bandComuna,
   } = useConsultControlReport();
+
+  const { announcementList, budgetList } = useBudgetSearch();
 
   const { infoData } = useControlInfo();
   return (
@@ -41,36 +48,42 @@ const SearchBudgetPage = () => {
             </span>
           </div>
           <div className="grid-form-4-container gap-25 mt-24px">
-            <div>
-              <InputComponent
-                idInput="noProject"
-                label={<>Número proyecto</>}
-                register={register}
-                typeInput="text"
-                errors={errors}
-                className="input-basic medium"
-                classNameLabel="text-black big bold"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <InputComponent
-                idInput="validity"
-                label={<>Vigencia</>}
-                register={register}
-                typeInput="text"
-                errors={errors}
-                className="input-basic medium"
-                classNameLabel="text-black big bold"
-                onChange={handleChange}
-              />
-            </div>
+            {bandProyect && (
+              <div>
+                <InputComponent
+                  idInput="noProject"
+                  label={<>Número proyecto</>}
+                  register={register}
+                  typeInput="text"
+                  errors={errors}
+                  className="input-basic medium"
+                  classNameLabel="text-black big bold"
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+
+            {bandValidiy && (
+              <div>
+                <InputComponent
+                  idInput="validity"
+                  label={<>Vigencia</>}
+                  register={register}
+                  typeInput="text"
+                  errors={errors}
+                  className="input-basic medium"
+                  classNameLabel="text-black big bold"
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+
             <div>
               <SelectComponent
-                idInput="valueConvocatoria"
+                idInput="idConvocatoria"
                 control={control}
                 errors={errors}
-                // data={info}
+                data={announcementList}
                 label={<> Convocatoria </>}
                 className="select-basic medium"
                 classNameLabel="text-black big bold"
@@ -91,7 +104,25 @@ const SearchBudgetPage = () => {
                 filter
               />
             </div>
+            {bandComuna && (
+              <div>
+                <MultiSelects
+                  idInput={"id_comuna"}
+                  control={control}
+                  errors={errors}
+                  data={budgetList}
+                  label={<>Fondo Comuna</>}
+                  className={
+                    "select-basic medium select-disabled-list input-basic input-regular"
+                  }
+                  classNameLabel="text-black big medium label-regular"
+                  placeholder="Seleccionar"
+                  filter={true}
+                />
+              </div>
+            )}
           </div>
+
           <div className="button-save-container-display mr-24px mt-24px button-save-bussiness">
             <ButtonComponent
               value="Limpiar campos"
@@ -105,7 +136,7 @@ const SearchBudgetPage = () => {
                 !isValid || submitDisabled ? "disabled-black" : ""
               } big`}
               type="submit"
-              // disabled={!isValid || submitDisabled}
+              disabled={!isValid || submitDisabled}
             />
           </div>
         </div>
@@ -115,4 +146,4 @@ const SearchBudgetPage = () => {
   );
 };
 
-export default SearchBudgetPage;
+export default SearchContrlPage;

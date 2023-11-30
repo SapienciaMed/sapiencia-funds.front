@@ -175,8 +175,6 @@ export default function useRegulationHook(auth) {
       validRangesPerformance = validRangesJsonTable(data.performancePeriod);
     }
 
-    return;
-
     if (validRangesAccumulated) {
       return handleModalError(
         "No se ha configurado completamente los rangos de promedios de la condonación por rendimiento académico por periodo, debe finalizarla para poder guardar",

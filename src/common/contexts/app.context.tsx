@@ -10,7 +10,10 @@ import { IAuthorization } from "../interfaces/auth.interfaces";
 import { IMessage } from "../interfaces/global.interface";
 import { IVotingResultGrid } from "../interfaces/voting.interfaces";
 import { IActaItems } from "../interfaces/actaItems.interface";
-import { IEmailDataGrid, IRenewalDataGrid } from "../interfaces/funds.interfaces";
+import {
+  IEmailDataGrid,
+  IRenewalDataGrid,
+} from "../interfaces/funds.interfaces";
 import { IUserDataGrid } from "../interfaces/usersGridInterface";
 
 interface IAppContext {
@@ -64,7 +67,6 @@ export const AppContext = createContext<IAppContext>({
   setDataGridUsers: () => {},
   dataGridRenewal: {} as Array<IRenewalDataGrid>,
   setdataGridRenewal: () => {},
-  
 });
 
 export function AppContextProvider({ children }: IProps) {
@@ -80,7 +82,9 @@ export function AppContextProvider({ children }: IProps) {
   const [dataGridItems, setDataGridItems] = useState(Array<IActaItems>);
   const [dataGridEmails, setDataGridEmails] = useState(Array<IEmailDataGrid>);
   const [dataGridUsers, setDataGridUsers] = useState(Array<IUserDataGrid>);
-  const [dataGridRenewal, setdataGridRenewal] = useState(Array<IRenewalDataGrid>);
+  const [dataGridRenewal, setdataGridRenewal] = useState(
+    Array<IRenewalDataGrid>
+  );
 
   // Metodo que verifica si el usuario posee permisos sobre un accion
   function validateActionAccess(indicator: string): boolean {
@@ -107,7 +111,7 @@ export function AppContextProvider({ children }: IProps) {
       setDataGridUsers,
       dataGridUsers,
       dataGridRenewal,
-      setdataGridRenewal
+      setdataGridRenewal,
     };
   }, [
     message,

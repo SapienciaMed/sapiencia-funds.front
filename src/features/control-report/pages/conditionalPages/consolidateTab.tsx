@@ -6,11 +6,12 @@ import {
 } from "../../../../common/components/Form";
 import { consolidateHook } from "../../hooks/conditionalHooks/consolidateHook";
 import { columnsConsolidados } from "../config-columns/columns-consolidados";
+import Svgs from "../../../../public/images/icons/svgs";
+
 const ConsolidateTab = (data) => {
   const {
-    urlGet,
     tableComponentRef,
-    tableColumns,
+    urlGet,
     setPaginateData,
     tableActions,
     totalNoPreseleccionados,
@@ -21,7 +22,8 @@ const ConsolidateTab = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
-  } = consolidateHook(data);
+    downloadCollection,
+  } = consolidateHook(data.data);
   return (
     <>
       <div className="container-sections-forms ml-20px mr-20px">
@@ -29,16 +31,15 @@ const ConsolidateTab = (data) => {
           setPaginateData={setPaginateData}
           ref={tableComponentRef}
           url={urlGet}
-          columns={tableColumns}
+          columns={columnsConsolidados}
           actions={tableActions}
           isShowModal={true}
           emptyMessage="Resultado en la búsqueda"
           descriptionModalNoResult="No se generó resultado en la búsqueda"
           titleMessageModalNoResult="Resultado de búsqueda"
         />
-      </div>{" "}
+      </div>
       <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
-        {" "}
         <div
           className="bold mt-24px ml-16px mr-16px p-0"
           style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
@@ -161,7 +162,18 @@ const ConsolidateTab = (data) => {
         }}
       ></div>
       <div className="button-save-container-display mr-24px">
-        <ButtonComponent value="Cerrar" className="button-save big" />
+        <ButtonComponent
+          value={
+            <>
+              <div className="container-buttonText">
+                <span>Descargar</span>
+                <Svgs svg="excel" width={23.593} height={28.505} />
+              </div>
+            </>
+          }
+          className="button-download large "
+          action={downloadCollection}
+        />
       </div>
     </>
   );

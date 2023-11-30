@@ -25,7 +25,7 @@ import { EResponseCodes } from "../constants/api.enum";
 import { classNames } from "primereact/utils";
 import * as Icons from "react-icons/fa";
 import * as IconsBS from "react-icons/bs";
-import * as IconFI from "react-icons/fi"
+import * as IconFI from "react-icons/fi";
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
 import { AppContext } from "../contexts/app.context";
@@ -53,9 +53,9 @@ interface IProps<T> {
   isMobil?: boolean;
   classSizeTable?: string;
   isInputSearch?: boolean;
-  onGlobalFilterChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
-  bodyRequestParameters?: string | number,
-  keyBodyRequest?: string,
+  onGlobalFilterChange?: (value: any) => void;
+  bodyRequestParameters?: string | number;
+  keyBodyRequest?: string;
   count?: boolean
 }
 
@@ -76,7 +76,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     princialTitle,
     classname = "",
     setPaginateData,
-    isDisabled,  
+    isDisabled,
     isMobil = true,
     classSizeTable,
     isInputSearch = false,
@@ -120,7 +120,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       ...body,
       page: currentPage || 1,
       perPage: perPage,
-      [keyBodyRequest]: bodyRequestParameters
+      [keyBodyRequest]: bodyRequestParameters,
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
@@ -131,6 +131,13 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           show: true,
           description: `${descriptionModalNoResult}` || "",
           OkTitle: "Aceptar",
+          onOk: () => {
+            setMessage({});
+            if (onGlobalFilterChange) {
+              const valor = { target: { value: "" } as HTMLInputElement };
+              onGlobalFilterChange(valor);
+            }
+          },
           background: true,
         });
       }
@@ -227,9 +234,9 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     return (
       <div className="spc-common-table">
         {title && <div className="spc-table-title">{title}</div>}
-  
+
         {/* Verificar si resultData.array tiene elementos */}
-  
+
         <Paginator
           className="between spc-table-paginator"
           template={paginatorHeader}
@@ -243,12 +250,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             onGlobalFilterChange
           )}
         />
-  
+
         {width > 830 || !isMobil ? (
-          <div>         
+          <div>
             <DataTable
               className={`spc-table full-height ${classSizeTable}`}
-              value={resultData?.array  || []}
+              value={resultData?.array || []}
               loading={loading}
               scrollable={true}
               emptyMessage={emptyMessage}
@@ -265,7 +272,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                   body={col.renderCell}
                 />
               ))}
-  
+
               {actions && actions.length && (
                 <Column
                   className="spc-table-actions"
@@ -293,7 +300,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             emptyMessage={emptyMessage}
           />
         )}
-  
+
         <Paginator
           className="spc-table-paginator"
           template={paginatorFooter}
@@ -371,7 +378,7 @@ function getIconElement(
         <>
           <Tooltip target=".Manage" style={{ borderRadius: "1px" }} />
           <i
-            className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center Manage"
+            className="style-tooltip not-padding Manage"
             data-pr-tooltip="Gestionar"
             data-pr-position="right"
             id="Manage"
@@ -398,7 +405,7 @@ function getIconElement(
         <>
           <Tooltip target=".ChangeCut" style={{ borderRadius: "1px" }} />
           <i
-            className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center ChangeCut"
+            className="style-tooltip not-padding ChangeCut"
             data-pr-tooltip="Cambiar corte"
             data-pr-position="left"
           >
@@ -428,14 +435,14 @@ function getIconElement(
         <>
           <Tooltip target=".adjunto" style={{ borderRadius: "1px" }} />
           <i
-            className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center adjunto"
+            className="style-tooltip not-padding adjunto"
             data-pr-tooltip="Ver adjunto"
             data-pr-position="left"
           >
-            <IconFI.FiPaperclip/>
+            <IconFI.FiPaperclip />
           </i>
         </>
-      )
+      );
     default:
       return "";
   }

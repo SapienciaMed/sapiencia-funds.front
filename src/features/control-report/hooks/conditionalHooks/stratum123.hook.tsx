@@ -5,13 +5,11 @@ import { urlApiFunds } from "../../../../common/utils/base-url";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { ApiResponse } from "../../../../common/utils/api-response";
 import { ITableAction } from "../../../../common/interfaces";
-import { columnsConsolidados } from "../../pages/config-columns/columns-consolidados";
-import Controlreporteditconsolidation from "../../pages/conditionalPagesEdits/control-report-edit-consolidation";
-import * as XLSX from "xlsx";
-export const consolidateHook = (data) => {
+// import Controlreporteditconsolidation from "../../pages/control-report-edit-consolidation";
+
+export const stratum123Hook = (data) => {
   const navigate = useNavigate();
-  const [tableColumns, setTableColumns] = useState([]);
-  const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
+
   const { post } = useCrudService(urlApiFunds);
   const [totalNoPreseleccionados, setTotalNoPreseleccionados] = useState(null);
   const [totalOtorgado, setTotalOtorgado] = useState(null);
@@ -23,12 +21,12 @@ export const consolidateHook = (data) => {
   const [totalRendimientoFinancieros, setTotalRendimientoFinancieros] =
     useState(null);
   const tableComponentRef = useRef(null);
-  const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfoConsolidate`;
+  const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfo`;
   const { setMessage } = useContext(AppContext);
 
   const getInfoConsolidado = async (data) => {
     try {
-      const endpoint = "/api/v1/controlSelect/getInfoConsolidate";
+      const endpoint = "/api/v1/controlSelect/getInfo";
       const res: ApiResponse<[]> = await post(endpoint, data);
 
       const dataRes = res.data["array"].map((data) => {
@@ -61,6 +59,8 @@ export const consolidateHook = (data) => {
         dataColumns.porcentParticipacion = Math.round(
           (data.consolidatedGranted / data.consolidatedResourceAvailable) * 100
         );
+
+        // dataGridConsolidate.push(dataColumns);
         return dataColumns;
       });
 
@@ -101,8 +101,6 @@ export const consolidateHook = (data) => {
       setTotalPorParticipacion(totalData.totalPorParticipacion);
       setTotalNoLegalizados(totalData.totalNoLegalizados);
       setTotalRendimientoFinancieros(totalData.totalRendimientoFinancieros);
-
-      setTableColumns(columnsConsolidados);
     } catch (err) {
       console.error(err);
     }
@@ -117,6 +115,7 @@ export const consolidateHook = (data) => {
     setTotalPorParticipacion;
     setTotalNoLegalizados;
     setTotalRendimientoFinancieros;
+    // setGridConsolidate;
   }, [
     totalNoPreseleccionados,
     totalOtorgado,
@@ -126,42 +125,8 @@ export const consolidateHook = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
+    // dataGridConsolidate,
   ]);
-
-  const downloadCollection = async () => {
-    const endpoint = "/api/v1/controlSelect/getInfoConsolidate";
-    const res: ApiResponse<[]> = await post(endpoint, data);
-    const dataRes = res.data["array"];
-    let dataDownload = dataRes.map((data) => {
-      return {
-        "Comuna o corregimiento": data.resourcePrioritization.communeId,
-        "No.Preseleccionados": data.consolidatedPreselected,
-        "No.Cupos": data.places,
-        "Recurso Disponible": data.consolidatedResourceAvailable,
-        Otorgado: data.consolidatedGranted,
-        Disponible: Math.round(
-          Number(data.consolidatedResourceAvailable) -
-            Number(data.consolidatedGranted)
-        ),
-        "%Participacion":
-          Math.round(
-            (Number(data.consolidatedGranted) /
-              Number(data.consolidatedResourceAvailable)) *
-              100
-          ) + "%",
-
-        "Numero de legalizados": data.consolidatedLegalized,
-        "Rendimientos financieros": data.consolidatedFinancialReturns,
-      };
-    });
-
-    const book = XLSX.utils.book_new();
-    const sheet = XLSX.utils.json_to_sheet(dataDownload);
-    XLSX.utils.book_append_sheet(book, sheet, "Consolidado");
-    setTimeout(() => {
-      XLSX.writeFile(book, "Exporte Informe Control - Consolidado.xlsx");
-    }, 1000);
-  };
 
   const tableActions: ITableAction<any>[] = [
     {
@@ -170,7 +135,7 @@ export const consolidateHook = (data) => {
         setMessage({
           show: true,
           background: true,
-          description: <Controlreporteditconsolidation data={row} />,
+          // description: <Controlreporteditconsolidation data={row} />,
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -183,17 +148,14 @@ export const consolidateHook = (data) => {
   ];
 
   useEffect(() => {
-    tableComponentRef.current?.loadData({
-      ...data,
-    });
     getInfoConsolidado(data);
   }, []);
 
   return {
+    // dataGridConsolidate,
+    // setGridConsolidate,
     tableComponentRef,
     urlGet,
-    setPaginateData,
-    tableColumns,
     tableActions,
     totalNoPreseleccionados,
     totalOtorgado,
@@ -203,6 +165,5 @@ export const consolidateHook = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
-    downloadCollection,
   };
 };

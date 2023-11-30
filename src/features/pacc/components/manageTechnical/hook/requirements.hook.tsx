@@ -34,7 +34,7 @@ export default function useRequeriments() {
     const [stateCheck, setStateCheck] = useState(initialStateCheck);
 
     useEffect(() => {
-        stateCheck && console.log('Enviar estado.');
+        stateCheck.checked && console.log('Enviar estado.');
     },[stateCheck])
 
     /* Lo que es el archivo(s) cargado(s) aca y el cambio de check si cumple, se debe enviar al componente 
