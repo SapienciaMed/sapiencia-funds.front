@@ -28,3 +28,31 @@
   align-items: center;
   gap: 0.2rem;
 }
+
+.button-table{
+  width: auto!important;
+  color: #533893 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+
+  &:hover{
+    cursor: pointer;
+    background: transparent;
+  }
+
+  &:focus{
+    box-shadow: 0 0 0 0.2rem transparent !important;
+  }
+}
+
+.button-menu-tooltip{
+  width: 100%;
+  background: transparent !important;
+  border: none !important;
+
+  &:hover{
+    background: #e9ecef !important;
+  }
+
+}

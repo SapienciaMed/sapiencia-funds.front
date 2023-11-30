@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import SupportsPQRSDF from "./manageTechnical/supports-PQRSDF";
 import { AppContext } from "../../../common/contexts/app.context";
 import { ButtonComponent } from "../../../common/components/Form";
+import Requirements from "./manageTechnical/requirements";
 
 function TabsManageTechnical({ document }) {
 
@@ -30,9 +31,9 @@ function TabsManageTechnical({ document }) {
         const requisitos = {
             id: "requisitos", 
             title: "Requisitos", 
-            content: (<></>), 
+            content: (<Requirements/>), 
             action: () => {},
-            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */ 
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || validateActionAccess('VER_REQUISITOS_REGLAMENTO') 
         }
         const liquidacion = {
             id: "liquidacion", 

@@ -11,6 +11,7 @@ export const useManage = () => {
     const { id } =  useParams()
     const navigate = useNavigate();
     const {GeBeneficiaryById} = usePaccServices()
+    const [uploadedFileName, setUploadedFileName] = useState("");
     const { setMessage } = useContext(AppContext);
     const [dataManager, setDataManager] = useState<IManagePage>({
         title: "",

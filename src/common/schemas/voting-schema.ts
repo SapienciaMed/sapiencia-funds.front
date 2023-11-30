@@ -56,9 +56,9 @@ export const searchVotings = yup.object({
 
 
 export const ResourcePrioritizationSearch = yup.object({
-  projectNumber: yup.number().max(999999999999999, 'valor invalido').required("Completar información"),
+  projectNumber: yup.number().typeError('Completar información').max(999999999999999, 'Valor invalido').required("Completar información"),
   programId: yup.number().required("Completar información"),
-  validity: yup.number().min(2000,'Año invalido').max(3000, 'Año invalido').required("Completar información"),
+  validity: yup.number().typeError('Completar información').min(2000,'Año invalido').max(3000, 'Año invalido').required("Completar información"),
   generalRate: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Completar información"),
   operatorCommissionAct: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Completar información"),
   operatorCommissionBalance: yup.number().min(0, 'El porcentaje debe ser superior a 0').max(100, 'El porcentaje debe ser inferior a 100').required("Completar información"),
