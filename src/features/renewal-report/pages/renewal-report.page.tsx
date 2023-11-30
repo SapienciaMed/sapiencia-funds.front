@@ -14,9 +14,10 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
     const { setMessage } = useContext(AppContext);
 
     const {
-        control, errors, clearFields, register, setValue, navigate, tableComponentRef, showTable,
+        control, errors, watch, clearFields, register, setValue, navigate, tableComponentRef, showTable,
         setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
-        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal
+        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal,
+        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate
     } = useRenewaReportSearch();
 
 
@@ -48,7 +49,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     fund: row.fund,
                     enabled: row.enabled,
                     renewed: row.renewed,
-                    percentage: ""
+                    percentage: row.percentage
                 }
                 setMessage({
                     show: true,
@@ -139,7 +140,6 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             isShowModal={true}
                             secondaryTitle={"Resultados de búsqueda"}
                         />
-
                     </div>
 
 
@@ -150,7 +150,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                         <div className="grid-form-3-container mb-24px">
                             <InputComponent
                                 register={control.register}
-                                idInput="enabled"
+                                idInput="totalEnabled"
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Nro habilitados"
@@ -161,7 +161,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             />
                             <InputComponent
                                 register={control.register}
-                                idInput="renewed"
+                                idInput="totalrenewed"
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Nro renovados"
@@ -172,7 +172,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             />
                             <InputComponent
                                 register={control.register}
-                                idInput="89%"
+                                idInput="totalpercentage"
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Porcentaje"
@@ -191,20 +191,25 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                         </div>
 
                         <div className="grid-form-3-container mb-24px">
-                            <InputComponent
+                        <InputComponent
+                            register={control.register}
+                            idInput="enabledBachLeg"
+                            className="input-basic medium"
+                            typeInput="number"
+                            label="Nro habilitados"
+                            classNameLabel="text-black big text-required"
+                            errors={errors}
+                            placeholder={enabledBachLeg ? enabledBachLeg : ""}
+                            onChange={(e) => {
+                                const newEnabledBachLeg = e.target.value;
+                                // Actualizar el valor de inputEnabledBachLeg
+                                setInputEnabledBachLeg(newEnabledBachLeg);
+                                console.log("*****++++", newEnabledBachLeg)
+                            }}
+                        />
+                        <InputComponent
                                 register={control.register}
-                                idInput="name"
-                                className="input-basic medium"
-                                typeInput="text"
-                                label="Nro habilitados"
-                                classNameLabel="text-black big text-required"
-                                errors={errors}
-                                placeholder={enabledBachLeg ? enabledBachLeg : ""}
-
-                            />
-                            <InputComponent
-                                register={control.register}
-                                idInput="385"
+                                idInput="renewedBachLeg"
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Nro renovados"
@@ -215,14 +220,14 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             />
                             <InputComponent
                                 register={control.register}
-                                idInput="89%"
+                                idInput="PercentageBachLeg"
                                 className="input-basic medium"
                                 typeInput="text"
                                 label="Porcentaje"
                                 classNameLabel="text-black big text-required"
                                 errors={errors}
                                 disabled={true}
-                                value="89%"
+                                value={percentageBachLeg}
                             />
                         </div>
                     </div>
@@ -260,8 +265,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             value={`Guardar`}
                             className="button-save large hover-three disabled-black"
                             action={() => {
-                                reset();
-                                tableComponentRef.current.emptyData();
+                                onsubmitCreate();
                             }
                             }
                         />
