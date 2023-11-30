@@ -11,10 +11,10 @@ import useYupValidationResolver from "../../../common/hooks/form-validator.hook"
 import { controlReportSchema } from "../../../common/schemas/controlReport-shema";
 import ConsolidateTab from "../pages/conditionalPages/consolidateTab";
 import Estratum123Tab from "../pages/conditionalPages/stratum123";
-import Estratos456Tab from "../pages/conditionalPages/estratos456Tab";
 import LegalizacionTab from "../pages/conditionalPages/legalizacionTab";
 import PagareTab from "../pages/conditionalPages/pagareTab";
 import ControlTab from "../pages/conditionalPages/controlTab";
+import Stratum456Tab from "../pages/conditionalPages/stratum456Tab";
 export interface IControlReportFilter {
   noProject: string;
   validity: string;
@@ -83,7 +83,7 @@ export const useConsultControlReport = () => {
       setconditionalPage(<Estratum123Tab filters={filters} />);
     }
     if (filters.idControlSelect == 3) {
-      setconditionalPage(<Estratos456Tab />);
+      setconditionalPage(<Stratum456Tab data={filters} />);
     }
     if (filters.idControlSelect == 4) {
       setconditionalPage(<LegalizacionTab data={filters} />);
