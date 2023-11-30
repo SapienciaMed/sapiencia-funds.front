@@ -98,7 +98,6 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                                                 placeholder={renewal ? renewal.percentage : ""}
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
-    
                                                 disabled={true}
                                                 {...field}
                                             />
