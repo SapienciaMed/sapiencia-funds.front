@@ -6,12 +6,12 @@ import {
 } from "../../../../common/components/Form";
 import { consolidateHook } from "../../hooks/conditionalHooks/consolidateHook";
 import { columnsConsolidados } from "../config-columns/columns-consolidados";
+import Svgs from "../../../../public/images/icons/svgs";
 
 const ConsolidateTab = (data) => {
   const {
     tableComponentRef,
     urlGet,
-    tableColumns,
     setPaginateData,
     tableActions,
     totalNoPreseleccionados,
@@ -22,22 +22,11 @@ const ConsolidateTab = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
+    downloadCollection,
   } = consolidateHook(data.data);
   return (
     <>
       <div className="container-sections-forms ml-20px mr-20px">
-        {/* <BasicTableComponent
-          ref={tableComponentRef}
-          data={dataGridConsolidate}
-          columns={tableColumns}
-          actions={tableActions}
-          titleMessageModalNoResult="Registro no existente"
-          isShowModal={true}
-          secondaryTitle={"Acta control financiero"}
-          classSizeTable="size-table-wd-150"
-          isMobil={false}
-        /> */}
-
         <TableComponent
           setPaginateData={setPaginateData}
           ref={tableComponentRef}
@@ -173,7 +162,18 @@ const ConsolidateTab = (data) => {
         }}
       ></div>
       <div className="button-save-container-display mr-24px">
-        <ButtonComponent value="Cerrar" className="button-save big" />
+        <ButtonComponent
+          value={
+            <>
+              <div className="container-buttonText">
+                <span>Descargar</span>
+                <Svgs svg="excel" width={23.593} height={28.505} />
+              </div>
+            </>
+          }
+          className="button-download large "
+          action={downloadCollection}
+        />
       </div>
     </>
   );

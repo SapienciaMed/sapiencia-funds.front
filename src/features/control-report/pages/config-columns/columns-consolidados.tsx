@@ -24,10 +24,32 @@ export const columnsConsolidados: ITableElement<any>[] = [
   {
     fieldName: "Available",
     header: "Disponible",
+    renderCell: (row) => {
+      return (
+        <>
+          {Math.round(
+            Number(row.consolidatedResourceAvailable) -
+              Number(row.consolidatedGranted)
+          )}
+        </>
+      );
+    },
   },
   {
     fieldName: "porcentParticipacion",
     header: "%Participacion",
+    renderCell: (row) => {
+      return (
+        <>
+          {Math.round(
+            (Number(row.consolidatedGranted) /
+              Number(row.consolidatedResourceAvailable)) *
+              100
+          )}{" "}
+          %
+        </>
+      );
+    },
   },
   {
     fieldName: "consolidatedLegalized",
