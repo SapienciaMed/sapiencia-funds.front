@@ -45,3 +45,14 @@
     box-shadow: 0 0 0 0.2rem transparent !important;
   }
 }
+
+.button-menu-tooltip{
+  width: 100%;
+  background: transparent !important;
+  border: none !important;
+
+  &:hover{
+    background: #e9ecef !important;
+  }
+
+}

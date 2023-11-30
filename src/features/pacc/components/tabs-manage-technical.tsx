@@ -33,7 +33,7 @@ function TabsManageTechnical({ document }) {
             title: "Requisitos", 
             content: (<Requirements/>), 
             action: () => {},
-            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */ 
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || validateActionAccess('VER_REQUISITOS_REGLAMENTO') 
         }
         const liquidacion = {
             id: "liquidacion", 

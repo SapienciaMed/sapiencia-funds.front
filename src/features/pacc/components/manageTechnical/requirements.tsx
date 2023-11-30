@@ -1,15 +1,14 @@
 import React from "react";
 import useRequeriments from "./hook/requirements.hook";
 import { Dialog } from 'primereact/dialog';
-import { ButtonComponent, UploadComponent } from "../../../../common/components/Form";
+import { ButtonComponent } from "../../../../common/components/Form";
 import TableComponent from "../../../../common/components/table.component";
-
+import UploadNewComponent from "../../../../common/components/Form/UploadNewComponent";
 
 function Requirements() {
 
     const {
-        tableActions, tableColumns, tableComponentRef, toast, items, visible,
-        setVisible, setFilesUploadData, handleFileNameChange 
+        tableColumns, tableComponentRef, visible, id, showTable, setVisible, setFilesUploadData
     } = useRequeriments()
 
     return (
@@ -23,37 +22,50 @@ function Requirements() {
                   root: { style: { width: "35em" } },
                 }}
             >
-                <UploadComponent
-                    id="fileList"
-                    setFilesData={setFilesUploadData}
+                <UploadNewComponent
+                    id='cargarArchivo'
+                    dataArchivo={(files: File) => {
+                        if (files && files.name) { 
+                            setFilesUploadData(files)
+                            setVisible(false)
+                        }
+                    }}
+                    showModal={(e: boolean) => { setVisible(e) }}
+                    titleFilesAccept="Solo es permitido el formato PDF"
                     filesAccept="application/pdf"
-                    maxSize={1048576}
-                    dropboxMessage="Arrastra y suelta el archivo aquí"
-                    multiple={false}
-                    onFileChange={handleFileNameChange}                   
                 />
-                <div className="container-actions_formTabs">
+                <div className="modal-footer" style={{margin: '1rem'}}>
                     <ButtonComponent
                         value='Cancelar'
-                        className='button-save  invalid big'
+                        className='button-ok small'
                         type='button'
                         action={() => { 
                             setVisible(false)
-                            setFilesUploadData([])
+                            setFilesUploadData(null)
                         }}
                     />
                 </div>
             </Dialog>
-            <section className=" card-table mt-20px">
-                <TableComponent
-                    ref={tableComponentRef}
-                    url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/requirements`}
-                    columns={tableColumns}
-                    titleMessageModalNoResult="Buscar"
-                    isShowModal={true}
-                    princialTitle="Soportes PQRSDF"
-                />
-            </section>     
+
+                
+                <section className=" card-table mt-20px">
+                    {
+                        showTable &&
+                            <TableComponent
+                                ref={tableComponentRef}
+                                url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/get-requirements-by-beneficiary-list`}
+                                columns={tableColumns}
+                                titleMessageModalNoResult="Buscar"
+                                isShowModal={true}
+                                princialTitle="Soportes PQRSDF"
+                                keyBodyRequest="idBeneficiary"
+                                bodyRequestParameters={parseInt(id)}
+                                isMobil={false}
+                                count={true}
+                            />
+                    }
+                </section>     
+            
         </>
     )
     

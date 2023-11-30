@@ -4451,12 +4451,14 @@
 .p-overlaypanel:after {
   border: solid transparent;
   border-color: rgba(255, 255, 255, 0);
-  border-bottom-color: #ffffff;
+  border-bottom-color: #ffff;
+  left: calc(var(--overlayArrowLeft, 0) + 0.25rem) !important;
 }
 .p-overlaypanel:before {
   border: solid transparent;
   border-color: rgba(255, 255, 255, 0);
-  border-bottom-color: #f2f2f2;
+  border-bottom-color: #ffff;
+  left: calc(var(--overlayArrowLeft, 0) + 0.25rem) !important;
 }
 .p-overlaypanel.p-overlaypanel-flipped:after {
   border-top-color: #ffffff;
@@ -4567,6 +4569,7 @@
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
   border-radius: 3px;
 }
+
 .p-breadcrumb .p-breadcrumb-list li .p-menuitem-link:focus {
   outline: 0 none;
   outline-offset: 0;

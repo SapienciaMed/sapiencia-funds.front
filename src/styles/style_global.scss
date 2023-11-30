@@ -1,5 +1,6 @@
 @import "./mixins.scss";
 @import "./variables.scss";
+@import "./font-family.scss";
 
 .one-filter-container {
     display: grid;
@@ -72,6 +73,12 @@
     @include generate-flex-container(row, null, space-around, null, null, 0.62em);
 }
 
+.content-tooltip{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .style-tooltip{
     display: inline-block;
     max-width: 25vw;
@@ -84,7 +91,25 @@
     padding: 0.5rem 0.5rem;
     font-weight: 400;
     font-size: 0.875rem;
-    font-family: RubikRegular, sans-serif;
+    font-family: "RubikRegular", sans-serif !important;
+    font-style: normal;
+    color: #000;
+    cursor: default;
+}
+
+.disabled-component{
+    cursor: not-allowed !important; 
+    opacity: .4 
+}
+
+.checkbox-customer{
+    border-color: #533893 !important;
+    color: #533893 !important;
+}
+
+.icon-size{
+    width: 1.2rem;
+    height: 1.2rem;
 }
   
 @media (min-width: 1024px) {
