@@ -6,10 +6,20 @@ export interface IStratum123 {
 }
 
 export interface IItemCreateForm {
+    id?: number;
     comuna: string;
     availableResource: number;
     granted: number;
     available: number;
     stake: number;
+    legalized: number;
+}
+
+export interface IItemUpdateStratum123 {
+    comuna?: string;
+    availableResource: number;
+    granted: number;
+    available?: number;
+    stake?: number;
     legalized: number;
 }

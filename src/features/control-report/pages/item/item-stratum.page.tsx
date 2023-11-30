@@ -4,14 +4,14 @@ import { ButtonComponent, FormComponent, InputComponent } from "../../../../comm
 import { itemStratum123Hook } from "../../hooks/conditionalHooks/ItemStratum123Hook";
 
 
-const Item = ({ dataVoting, action, collback }) => {
+const Item = ({ data, action, collback }) => {
     const {
       CancelFunction,
       onSubmitCreateItem,
       register,
       errors,
       control,
-    } = itemStratum123Hook(action, dataVoting, collback);
+    } = itemStratum123Hook(action, data, collback);
 
   return (
     <Fragment>
@@ -146,7 +146,7 @@ const Item = ({ dataVoting, action, collback }) => {
                   onBlur={field.onBlur}
                   value={field.value}
                   className="input-basic medium"
-                  classNameLabel="text-black big bold"
+                  classNameLabel="text-black big bold text-required"
                   label={<>No. Legalizados</>}
                 />
               );
@@ -160,14 +160,12 @@ const Item = ({ dataVoting, action, collback }) => {
             type="button"
             className="button-cancel-text large hover-three disabled-black"
             action={() => CancelFunction()}
-            // disabled={sending}
           />
           <ButtonComponent
             form="createItemForm"
             value="Guardar"
             type="submit"
             className="button-save large disabled-black"
-            // disabled={sending}
           />
         </div>
       </FormComponent>

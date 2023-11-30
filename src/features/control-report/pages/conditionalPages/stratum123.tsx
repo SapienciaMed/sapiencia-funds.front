@@ -31,10 +31,12 @@ function Estratum123Tab({ filters }) {
     setDataGridStratum
   };
 
-  const { tableComponentRef, comunaList } = stratum123Hook(
-    filters,
-    objSet
-  );
+  const {
+    tableComponentRef,
+    comunaList,
+    onsearchSubmintControl,
+    downloadXLSX,
+  } = stratum123Hook(filters, objSet);
 
 
   const tableColumns: ITableElement<any>[] = [
@@ -112,9 +114,9 @@ function Estratum123Tab({ filters }) {
           background: true,
           description: (
             <Item
-              dataVoting={row}
+              data={row}
               action={"edit"}
-              collback={false}
+              collback={onsearchSubmintControl}
             />
           ),
           size: "large",
@@ -192,7 +194,7 @@ function Estratum123Tab({ filters }) {
             className="input-basic medium"
             typeInput="text"
             label="No.Legalizados"
-            classNameLabel="text-black biggest "
+            classNameLabel="text-black biggest"
             placeholder={""}
             disabled
             value={String(totalNoLegalizados)}
@@ -212,7 +214,7 @@ function Estratum123Tab({ filters }) {
                   </>
                 }
                 className="button-download large "
-                // action={downloadXLSX}
+                action={downloadXLSX}
               />
             </div>
         )
