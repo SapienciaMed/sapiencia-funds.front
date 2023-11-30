@@ -54,8 +54,9 @@ interface IProps<T> {
   classSizeTable?: string;
   isInputSearch?: boolean;
   onGlobalFilterChange?: (value: any) => void;
-  bodyRequestParameters?: string;
+  bodyRequestParameters?: string | number;
   keyBodyRequest?: string;
+  count?: boolean
 }
 
 interface IRef {
@@ -82,6 +83,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     onGlobalFilterChange, // Es necesario llamar una funcion para que haga la peticion para el filtrado interno.
     bodyRequestParameters,
     keyBodyRequest,
+    count
   } = props;
 
   // States
@@ -97,7 +99,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const { setMessage } = useContext(AppContext);
 
   // Declaraciones
-  const widthColumns = width / ((columns.length + 1) * 2);
+
   const { post } = useCrudService(url);
   useImperativeHandle(ref, () => ({
     loadData: loadData,
@@ -120,7 +122,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       perPage: perPage,
       [keyBodyRequest]: bodyRequestParameters,
     });
-    console.log(res);
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
       if (props.onResult) props.onResult(res?.data?.array || []);
@@ -259,6 +260,10 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               scrollable={true}
               emptyMessage={emptyMessage}
             >
+              {
+                count && <Column header="Número"  body={(data, options) => options.rowIndex + 1}/>
+              }
+              
               {columns.map((col) => (
                 <Column
                   key={col.fieldName}
