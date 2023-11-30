@@ -134,7 +134,7 @@ export default function useRenewaReportSearch() {
         const parsedRenewed = parseFloat(renewed);
         const parsedEnabled = parseFloat(String(enabled || 0));
 
-        return parsedEnabled !== 0 ? ((parsedRenewed / parsedEnabled) ).toFixed(3) + "%" : "0%";
+        return parsedEnabled !== 0 ? ((parsedRenewed / parsedEnabled)).toFixed(3) + "%" : "0%";
     };
 
     // En useRenewaReportSearch
@@ -188,7 +188,7 @@ export default function useRenewaReportSearch() {
         const parsedEnabledBachLeg = parseFloat(lastRow.enabled);
         const parsedRenewedBachLeg = parseFloat(lastRow.renewed);
         const percentageBachLeg = parsedEnabledBachLeg !== 0
-            ? ((parsedRenewedBachLeg / parsedEnabledBachLeg) ).toFixed(3) + "%"
+            ? ((parsedRenewedBachLeg / parsedEnabledBachLeg)).toFixed(3) + "%"
             : "0.00%";
 
         setPercentageBachLeg(percentageBachLeg);
@@ -210,9 +210,7 @@ export default function useRenewaReportSearch() {
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
-                reset();
                 confirmRenewalCreation(data)
-                setMessage({});
             },
             onClose() {
                 reset();
@@ -229,7 +227,7 @@ export default function useRenewaReportSearch() {
             renewed: e.renewed,
             percentage: e.percentage,
         }));
-    
+
         // Convertir filas en columnas
         const transformedData = renewalItems.reduce((acc, item) => {
             Object.keys(item).forEach((key) => {
@@ -238,12 +236,14 @@ export default function useRenewaReportSearch() {
             });
             return acc;
         }, {});
-        
+
+
         console.log("++++++++------transformedData", transformedData)
-        
+        handleModalSuccess();
+
     };
 
- `   const res = await createActa(renewalItems);
+    `   const res = await createActa(renewalItems);
 
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
@@ -278,35 +278,82 @@ export default function useRenewaReportSearch() {
 
         }  `
 
-        function downloadCollection() {
 
-            const book = XLSX.utils.book_new()
-            const sheet = XLSX.utils.json_to_sheet(dataGridRenewal)
-    
-            XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`)
-    
-            setTimeout(() => {
-                XLSX.writeFile(book, `Informe Renovación.xlsx`)
-                setMessage({
-                    title: "Descargar",
-                    description: "Información descargada exitosamente ",
-                    OkTitle: "Cerrar",
-                    show: true,
-                    type: EResponseCodes.OK,
-                    background: true,
-                    onOk() {
-                        setMessage({});
-                        //navigate(-1);
-                    },
-                    onClose() {
-                        setMessage({});
-                        //navigate(-1);
-                    },
+    const handleModalError = (
+        msg = `¡Ha ocurrido un error!`,
+        navigateBoolean = true
+    ) => {
+        setMessage({
+            title: "Error",
+            description: msg,
+            show: true,
+            OkTitle: "cerrar",
+            onOk: () => {
+                if (navigateBoolean) {
+                    navigate("../consultar");
+                }
+                setMessage((prev) => {
+                    return { ...prev, show: false };
                 });
-            },)
-    
-        }
+            },
+            onClose: () => {
+                if (navigateBoolean) {
+                    navigate("../consultar");
+                }
+                setMessage({});
+            },
+            background: true,
+        });
+    };
 
+    const handleModalSuccess = () => {
+        setMessage({
+            title: "Cambios guardados",
+            description: `¡Cambios guardados exitosamente!`,
+            show: true,
+            OkTitle: "Aceptar",
+            onOk: () => {
+                navigate("../consultar");
+                setMessage((prev) => {
+                    return { ...prev, show: false };
+                });
+            },
+            onClose: () => {
+                navigate("../consultar");
+                setMessage({});
+            },
+            background: true,
+        });
+    };
+
+    function downloadCollection() {
+
+        const book = XLSX.utils.book_new()
+        const sheet = XLSX.utils.json_to_sheet(dataGridRenewal)
+
+        XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`)
+
+        setTimeout(() => {
+            XLSX.writeFile(book, `Informe Renovación.xlsx`)
+            setMessage({
+                title: "Descargar",
+                description: "Información descargada exitosamente ",
+                OkTitle: "Cerrar",
+                show: true,
+                type: EResponseCodes.OK,
+                background: true,
+                onOk() {
+                    setMessage({});
+                    //navigate(-1);
+                },
+                onClose() {
+                    setMessage({});
+                    //navigate(-1);
+                },
+            });
+        },)
+
+    }
 
     return {
         control,
