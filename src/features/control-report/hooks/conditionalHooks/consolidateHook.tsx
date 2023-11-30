@@ -7,6 +7,7 @@ import { ApiResponse } from "../../../../common/utils/api-response";
 import { ITableAction } from "../../../../common/interfaces";
 import { columnsConsolidados } from "../../pages/config-columns/columns-consolidados";
 import Controlreporteditconsolidation from "../../pages/conditionalPagesEdits/control-report-edit-consolidation";
+import * as XLSX from "xlsx";
 export const consolidateHook = (data) => {
   const navigate = useNavigate();
   const [tableColumns, setTableColumns] = useState([]);
@@ -127,6 +128,41 @@ export const consolidateHook = (data) => {
     totalRendimientoFinancieros,
   ]);
 
+  const downloadCollection = async () => {
+    const endpoint = "/api/v1/controlSelect/getInfoConsolidate";
+    const res: ApiResponse<[]> = await post(endpoint, data);
+    const dataRes = res.data["array"];
+    let dataDownload = dataRes.map((data) => {
+      return {
+        "Comuna o corregimiento": data.resourcePrioritization.communeId,
+        "No.Preseleccionados": data.consolidatedPreselected,
+        "No.Cupos": data.places,
+        "Recurso Disponible": data.consolidatedResourceAvailable,
+        Otorgado: data.consolidatedGranted,
+        Disponible: Math.round(
+          Number(data.consolidatedResourceAvailable) -
+            Number(data.consolidatedGranted)
+        ),
+        "%Participacion":
+          Math.round(
+            (Number(data.consolidatedGranted) /
+              Number(data.consolidatedResourceAvailable)) *
+              100
+          ) + "%",
+
+        "Numero de legalizados": data.consolidatedLegalized,
+        "Rendimientos financieros": data.consolidatedFinancialReturns,
+      };
+    });
+
+    const book = XLSX.utils.book_new();
+    const sheet = XLSX.utils.json_to_sheet(dataDownload);
+    XLSX.utils.book_append_sheet(book, sheet, "Consolidado");
+    setTimeout(() => {
+      XLSX.writeFile(book, "Exporte Informe Control - Consolidado.xlsx");
+    }, 1000);
+  };
+
   const tableActions: ITableAction<any>[] = [
     {
       icon: "Edit",
@@ -167,5 +203,6 @@ export const consolidateHook = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
+    downloadCollection,
   };
 };

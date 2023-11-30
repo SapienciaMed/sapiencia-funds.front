@@ -5,7 +5,7 @@ import useCrudService from "../../../../common/hooks/crud-service.hook";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { ITableAction } from "../../../../common/interfaces";
 import ControlreporteditLegalization from "../../pages/conditionalPagesEdits/ControlreporteditLegalization";
-
+import * as XLSX from "xlsx";
 export const LegalizationHook = (data) => {
   const tableComponentRef = useRef(null);
   const { setMessage } = useContext(AppContext);
@@ -111,6 +111,36 @@ export const LegalizationHook = (data) => {
     },
   ];
 
+  const downloadCollection = async () => {
+    const endpoint = "/api/v1/controlSelect/getInfoLegalization";
+    const res: ApiResponse<[]> = await post(endpoint, data);
+    const dataRes = res.data["array"];
+    let dataDownload = dataRes.map((data) => {
+      return {
+        "Programa fondo linea": data.program,
+        "No. Preseleccionados": data.Preselected,
+        "No. Cupos": data.places,
+        "Recurso disponible": data.Availableresources,
+        Otorgado: data.Granted,
+        Disponible: Math.round(
+          Number(data.Availableresources) - Number(data.Granted)
+        ),
+        "%Paricipacion":
+          Math.round(
+            (Number(data.Granted) / Number(data.Availableresources)) * 100
+          ) + "%",
+        "No.Legalizados": data.Legalized,
+      };
+    });
+
+    const book = XLSX.utils.book_new();
+    const sheet = XLSX.utils.json_to_sheet(dataDownload);
+    XLSX.utils.book_append_sheet(book, sheet, "Legalización");
+    setTimeout(() => {
+      XLSX.writeFile(book, "Exporte Informe Control - Legalización.xlsx");
+    }, 1000);
+  };
+
   useEffect(() => {
     tableComponentRef.current?.loadData({
       ...data,
@@ -130,5 +160,6 @@ export const LegalizationHook = (data) => {
     totalDisponible,
     totalPorParticipacion,
     totalNoLegalizados,
+    downloadCollection,
   };
 };

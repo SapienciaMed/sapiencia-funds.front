@@ -6,6 +6,7 @@ import {
 import { ControlHook } from "../../hooks/conditionalHooks/ControlHook";
 import TableComponent from "../../../../common/components/table.component";
 import { columnsControl } from "../config-columns/columns-control";
+import Svgs from "../../../../public/images/icons/svgs";
 
 const ControlTab = (data) => {
   const {
@@ -14,6 +15,7 @@ const ControlTab = (data) => {
     setPaginateData,
     totalRestantes,
     totalInicial,
+    downloadCollection,
   } = ControlHook(data.data);
   return (
     <>
@@ -117,7 +119,18 @@ const ControlTab = (data) => {
         }}
       ></div>
       <div className="button-save-container-display mr-24px">
-        <ButtonComponent value="Cerrar" className="button-save big" />
+        <ButtonComponent
+          value={
+            <>
+              <div className="container-buttonText">
+                <span>Descargar</span>
+                <Svgs svg="excel" width={23.593} height={28.505} />
+              </div>
+            </>
+          }
+          className="button-download large "
+          action={downloadCollection}
+        />
       </div>
     </>
   );

@@ -7,6 +7,7 @@ import {
 } from "../../../../common/components/Form";
 import TableComponent from "../../../../common/components/table.component";
 import { columnsLegalization } from "../config-columns/columns-legalization";
+import Svgs from "../../../../public/images/icons/svgs";
 
 const LegalizacionTab = (data) => {
   const {
@@ -21,6 +22,7 @@ const LegalizacionTab = (data) => {
     totalDisponible,
     totalPorParticipacion,
     totalNoLegalizados,
+    downloadCollection,
   } = LegalizationHook(data.data);
   return (
     <>
@@ -159,7 +161,18 @@ const LegalizacionTab = (data) => {
         }}
       ></div>
       <div className="button-save-container-display mr-24px">
-        <ButtonComponent value="Cerrar" className="button-save big" />
+        <ButtonComponent
+          value={
+            <>
+              <div className="container-buttonText">
+                <span>Descargar</span>
+                <Svgs svg="excel" width={23.593} height={28.505} />
+              </div>
+            </>
+          }
+          className="button-download large "
+          action={downloadCollection}
+        />
       </div>
     </>
   );
