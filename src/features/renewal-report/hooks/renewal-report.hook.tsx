@@ -22,7 +22,7 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport } = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport, createRenewal } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
@@ -195,6 +195,44 @@ export default function useRenewaReportSearch() {
 
     });
 
+    function downloadCollection() {
+
+        // Crear un nuevo array con nombres de columnas personalizados
+        const excelData = dataGridRenewal.map((row) => ({
+            "Fondo": row.fund,
+            "Nro. habilitados": row.enabled,
+            "Nro. Renovados": row.renewed,
+            "Porcentaje": row.percentage,
+        }));
+
+        const book = XLSX.utils.book_new()
+        const sheet = XLSX.utils.json_to_sheet(excelData)
+
+        XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`)
+
+        setTimeout(() => {
+            XLSX.writeFile(book, `Informe Renovación.xlsx`)
+            setMessage({
+                title: "Descargar",
+                description: "Información descargada exitosamente ",
+                OkTitle: "Cerrar",
+                show: true,
+                type: EResponseCodes.OK,
+                background: true,
+                onOk() {
+                    setMessage({});
+                    //navigate(-1);
+                },
+                onClose() {
+                    setMessage({});
+                    //navigate(-1);
+                },
+            });
+        },)
+
+    }
+
+
     //Consultar
     const onSubmit = handleSubmit(async (data: ICallRenewal) => {
         setShowTable(true)
@@ -220,7 +258,7 @@ export default function useRenewaReportSearch() {
         });
     });
 
-    const confirmRenewalCreation = async (data: ICallRenewal) => {
+     const confirmRenewalCreation = async (data: ICallRenewal) => {
         const renewalItems = dataGridRenewal.map((e) => ({
             fund: e.fund,
             enabled: e.enabled,
@@ -237,14 +275,15 @@ export default function useRenewaReportSearch() {
             return acc;
         }, {});
 
-
-        console.log("++++++++------transformedData", transformedData)
-        handleModalSuccess();
-
-    };
-
-    `   const res = await createActa(renewalItems);
-
+        const renewalData = {
+            fund: data.fund,
+            enabled: data.enabled,
+            renewed: data.renewed,
+            percentage:data.percentage
+        }
+        
+        
+        const res = await createRenewal(renewalData);
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
                 OkTitle: "Guardar",
@@ -256,9 +295,8 @@ export default function useRenewaReportSearch() {
                 onOk() {
                     reset();
                     setMessage({});
-                    navigate("/fondos/acta/consultar");
-                    setDataGridItems([])
-                    setDataGridUsers([])
+                    //setDataGridItems([])
+                    //setDataGridUsers([])
                 },
                 onClose() {
                     reset();
@@ -269,91 +307,17 @@ export default function useRenewaReportSearch() {
         } else {
             setMessage({
                 type: EResponseCodes.FAIL,
-                title: "Crear Acta",
+                title: "Crear informe renovación",
                 description: "Ocurrió un error en el sistema",
                 show: true,
                 OkTitle: "Aceptar",
                 background: true,
             });
 
-        }  `
+        }  
 
-
-    const handleModalError = (
-        msg = `¡Ha ocurrido un error!`,
-        navigateBoolean = true
-    ) => {
-        setMessage({
-            title: "Error",
-            description: msg,
-            show: true,
-            OkTitle: "cerrar",
-            onOk: () => {
-                if (navigateBoolean) {
-                    navigate("../consultar");
-                }
-                setMessage((prev) => {
-                    return { ...prev, show: false };
-                });
-            },
-            onClose: () => {
-                if (navigateBoolean) {
-                    navigate("../consultar");
-                }
-                setMessage({});
-            },
-            background: true,
-        });
     };
-
-    const handleModalSuccess = () => {
-        setMessage({
-            title: "Cambios guardados",
-            description: `¡Cambios guardados exitosamente!`,
-            show: true,
-            OkTitle: "Aceptar",
-            onOk: () => {
-                navigate("../consultar");
-                setMessage((prev) => {
-                    return { ...prev, show: false };
-                });
-            },
-            onClose: () => {
-                navigate("../consultar");
-                setMessage({});
-            },
-            background: true,
-        });
-    };
-
-    function downloadCollection() {
-
-        const book = XLSX.utils.book_new()
-        const sheet = XLSX.utils.json_to_sheet(dataGridRenewal)
-
-        XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`)
-
-        setTimeout(() => {
-            XLSX.writeFile(book, `Informe Renovación.xlsx`)
-            setMessage({
-                title: "Descargar",
-                description: "Información descargada exitosamente ",
-                OkTitle: "Cerrar",
-                show: true,
-                type: EResponseCodes.OK,
-                background: true,
-                onOk() {
-                    setMessage({});
-                    //navigate(-1);
-                },
-                onClose() {
-                    setMessage({});
-                    //navigate(-1);
-                },
-            });
-        },)
-
-    }
+ 
 
     return {
         control,

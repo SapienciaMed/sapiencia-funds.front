@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { array } from "yup";
 
 export interface IMasterActivity{
   id?: number;
@@ -85,13 +86,14 @@ export interface ICallBudget {
  
 export interface ICallRenewal {
   period?: string;
-  fund?: string;
+  fund?: string; 
   enabled: string;
   renewed: string;
   percentage: string;
   page?: number;
   perPage?: number;
   enabledBachLeg?: number;
+  
 }
 
 export interface ICallRenewalFilter {
