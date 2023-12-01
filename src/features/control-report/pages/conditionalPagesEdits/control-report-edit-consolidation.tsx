@@ -97,6 +97,7 @@ const Controlreporteditconsolidation = (data) => {
         OkTitle: "Cerrar",
         onOk: () => {
           setMessage({ show: false });
+          window.location.reload();
         },
 
         background: true,
@@ -142,7 +143,7 @@ const Controlreporteditconsolidation = (data) => {
   const handleCancel = () => {
     setMessage({
       title: "Cancelar edición activo",
-      description: "¿Esta segur@ de cancelar la edición del activo?",
+      description: "¿Esta segur@ de cancelar la edición?",
       show: true,
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
