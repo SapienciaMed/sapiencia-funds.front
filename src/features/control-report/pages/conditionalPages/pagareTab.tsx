@@ -7,6 +7,7 @@ import {
 import { usePagareHook } from "../../hooks/conditionalHooks/pagareHook";
 import Svgs from "../../../../public/images/icons/svgs";
 import { columnsPay } from "../config-columns/columns-pay";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const PagareTab = (data) => {
   const {
@@ -19,9 +20,8 @@ const PagareTab = (data) => {
     totalNoAplica,
     downloadCollection,
     dataForDownload,
-  } = usePagareHook(
-    data.data
-  );
+    loading,
+  } = usePagareHook(data.data);
 
   const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
 
@@ -41,10 +41,15 @@ const PagareTab = (data) => {
             setSendingReportXlsx(rows.length > 0);
           }}
         />
-
-        {sendingReportXlsx ? (
+        {loading ? (
+          <ProgressSpinner
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          />
+        ) : (
           <>
-
             <div className="title-area">
               <label className="text-black large medium grid-span-4-columns">
                 Totales
@@ -89,14 +94,11 @@ const PagareTab = (data) => {
                 placeholder={totalNoAplica}
               />
             </div>
-
           </>
-        ) : (
-          ""
         )}
       </div>
 
-
+      <></>
       <div>
         <br />
         <hr className="barra-spacing" />
