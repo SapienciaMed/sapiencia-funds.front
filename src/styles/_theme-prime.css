@@ -6232,13 +6232,21 @@
 .p-tag {
   background: #533893;
   color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.875rem;
+  font-weight: 500;
   padding: 0.25rem 0.4rem;
   border-radius: 3px;
+  width: 90%;
+
+}
+@media screen and (max-width: 1024px) {
+  .p-tag {
+    font-size: 0.68rem;
+    width: 100%;
+  }
 }
 .p-tag.p-tag-success {
-  background-color: #4CAF50;
+  background-color: #0CA529;
   color: #ffffff;
 }
 .p-tag.p-tag-info {
@@ -6250,7 +6258,7 @@
   color: #495057;
 }
 .p-tag.p-tag-danger {
-  background-color: #f44336;
+  background-color: #FF0000;
   color: #ffffff;
 }
 

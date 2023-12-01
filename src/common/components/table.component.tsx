@@ -615,3 +615,29 @@ const ActionComponent = (props: {
 };
 
 export default React.memo(TableComponent);
+
+
+const mockData ={
+  array: [
+    {
+      committedHours: '80',
+      hoursPerformed: '70',
+      pendingHours: '10',
+      state: 'Rechazado',
+      observation: 'Un texto es una composición de signos codificados en un sistema de escritura que forma una unidad de sentido. También es una composición de caracteres imprimibles generados por un algoritmo de cifrado que, aunque no tienen sentido para cualquier persona, sí puede ser descifrado por su destinatario original.',
+    },
+    {
+      committedHours: '50',
+      hoursPerformed: '30',
+      pendingHours: '20',
+      state: 'Aprobado',
+      observation: 'Un texto es una composición de signos codificados en un sistema de escritura que forma una unidad de sentido. También es una composición de caracteres imprimibles generados por un algoritmo de cifrado que, aunque no tienen sentido para cualquier persona, sí puede ser descifrado por su destinatario original.',
+    },
+  ],
+  meta: {
+    total: 2,
+    per_page: 10,
+    current_page: 1,
+    last_page: 1
+  }
+}

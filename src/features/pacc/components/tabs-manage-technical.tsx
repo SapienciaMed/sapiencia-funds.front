@@ -6,6 +6,7 @@ import SupportsPQRSDF from "./manageTechnical/supports-PQRSDF";
 import { AppContext } from "../../../common/contexts/app.context";
 import { ButtonComponent } from "../../../common/components/Form";
 import Requirements from "./manageTechnical/requirements";
+import KnowledgeTransfer from "./manageTechnical/knowledge-transfer";
 
 function TabsManageTechnical({ document }) {
 
@@ -42,8 +43,16 @@ function TabsManageTechnical({ document }) {
             action: () => {},
             hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */ 
         }
+        const transferenciaConocimiento = {
+            id: "transferenciaConocimiento", 
+            title: "Transferencia de conocimiento", 
+            content: (<KnowledgeTransfer/>), 
+            action: () => {},
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */
+        }
 
         const result = [
+            transferenciaConocimiento,
             servicioSocial,
             soportesPQRSDF,
             requisitos,
