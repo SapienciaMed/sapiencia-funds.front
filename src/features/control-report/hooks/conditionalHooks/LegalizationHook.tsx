@@ -19,6 +19,7 @@ export const LegalizationHook = (data) => {
   const [totalPorParticipacion, setTotalPorParticipacion] = useState(null);
   const [totalNoLegalizados, setTotalNoLegalizados] = useState(null);
   const urlGetLegalization = `${urlApiFunds}/api/v1/controlSelect/getInfoLegalization`;
+  const [TotalView, setTotalView] = useState(null);
   const getInfoLegalization = async (data) => {
     try {
       const endpoint = "/api/v1/controlSelect/getInfoLegalization";
@@ -54,41 +55,46 @@ export const LegalizationHook = (data) => {
         }
         return dataColumns;
       });
-
-      let totalData = {
-        totalNoPreseleccionados: null,
-        totalNoCupos: null,
-        totalRecursoDisponible: null,
-        totalOtorgado: null,
-        totalDisponible: null,
-        totalPorParticipacion: null,
-        totalNoLegalizados: null,
-      };
-
-      dataRes.forEach((e) => {
-        totalData.totalNoPreseleccionados += Number(e.legalizationPreselected);
-        totalData.totalNoCupos += Number(e.places);
-        totalData.totalRecursoDisponible += Number(
-          e.legalizationResourceAvailable
-        );
-        totalData.totalOtorgado += Number(e.legalizationGranted);
-        totalData.totalDisponible += Number(
-          e.legalizationResourceAvailable - e.legalizationGranted
-        );
-        totalData.totalNoLegalizados += Number(e.legalizationPreselected);
-        totalData.totalPorParticipacion += Number(e.porcentParticipacion);
-      });
       let totalDataRes = dataRes.length;
-      totalData.totalPorParticipacion =
-        totalData.totalPorParticipacion / totalDataRes;
+      if (totalDataRes > 0) {
+        setTotalView(true);
+        let totalData = {
+          totalNoPreseleccionados: null,
+          totalNoCupos: null,
+          totalRecursoDisponible: null,
+          totalOtorgado: null,
+          totalDisponible: null,
+          totalPorParticipacion: null,
+          totalNoLegalizados: null,
+        };
 
-      setTotalNoPreseleccionados(totalData.totalNoPreseleccionados);
-      setTotalOtorgado(totalData.totalOtorgado);
-      setTotalNoCupos(totalData.totalNoCupos);
-      setTotalRecursoDisponible(totalData.totalRecursoDisponible);
-      setTotalDisponible(totalData.totalDisponible);
-      setTotalPorParticipacion(totalData.totalPorParticipacion);
-      setTotalNoLegalizados(totalData.totalNoLegalizados);
+        dataRes.forEach((e) => {
+          totalData.totalNoPreseleccionados += Number(
+            e.legalizationPreselected
+          );
+          totalData.totalNoCupos += Number(e.places);
+          totalData.totalRecursoDisponible += Number(
+            e.legalizationResourceAvailable
+          );
+          totalData.totalOtorgado += Number(e.legalizationGranted);
+          totalData.totalDisponible += Number(
+            e.legalizationResourceAvailable - e.legalizationGranted
+          );
+          totalData.totalNoLegalizados += Number(e.legalizationPreselected);
+          totalData.totalPorParticipacion += Number(e.porcentParticipacion);
+        });
+
+        totalData.totalPorParticipacion =
+          Math.round(totalData.totalPorParticipacion / totalDataRes) + "%";
+
+        setTotalNoPreseleccionados(totalData.totalNoPreseleccionados);
+        setTotalOtorgado(totalData.totalOtorgado);
+        setTotalNoCupos(totalData.totalNoCupos);
+        setTotalRecursoDisponible(totalData.totalRecursoDisponible);
+        setTotalDisponible(totalData.totalDisponible);
+        setTotalPorParticipacion(totalData.totalPorParticipacion);
+        setTotalNoLegalizados(totalData.totalNoLegalizados);
+      }
     } catch (error) {}
   };
 
@@ -161,5 +167,6 @@ export const LegalizationHook = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     downloadCollection,
+    TotalView,
   };
 };

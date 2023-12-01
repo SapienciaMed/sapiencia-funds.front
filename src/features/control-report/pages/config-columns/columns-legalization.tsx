@@ -1,18 +1,37 @@
 import { ITableElement } from "../../../../common/interfaces";
 import { ILegalizationTable } from "../../../../common/interfaces/controlSelect.interface";
+import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 export const columnsLegalization: ITableElement<ILegalizationTable>[] = [
   { fieldName: "program", header: "Programa fondo linea" },
   { fieldName: "Preselected", header: "No. Preseleccionados" },
   { fieldName: "places", header: "No. Cupos" },
-  { fieldName: "Availableresources", header: "Recurso disponible" },
-  { fieldName: "Granted", header: "Otorgado" },
+  {
+    fieldName: "Availableresources",
+    header: "Recurso disponible",
+    renderCell: (row) => {
+      return (
+        <>{formaterNumberToCurrency(row.Availableresources).replace("$", "")}</>
+      );
+    },
+  },
+  {
+    fieldName: "Granted",
+    header: "Otorgado",
+    renderCell: (row) => {
+      return <>{formaterNumberToCurrency(row.Granted).replace("$", "")}</>;
+    },
+  },
   {
     fieldName: "Available",
     header: "Disponible",
     renderCell: (row) => {
       return (
-        <>{Math.round(Number(row.Availableresources) - Number(row.Granted))}</>
+        <>
+          {formaterNumberToCurrency(
+            Math.round(Number(row.Availableresources) - Number(row.Granted))
+          ).replace("$", "")}
+        </>
       );
     },
   },
@@ -20,14 +39,31 @@ export const columnsLegalization: ITableElement<ILegalizationTable>[] = [
     fieldName: "porcentParticipacion",
     header: "%Paricipacion",
     renderCell: (row) => {
-      return (
-        <>
-          {Math.round(
-            (Number(row.Granted) / Number(row.Availableresources)) * 100
-          )}{" "}
-          %
-        </>
+      const porcent = Math.round(
+        (Number(row.Granted) / Number(row.Availableresources)) * 100
       );
+
+      if (porcent == Infinity || porcent == undefined) {
+        return <>0%</>;
+      } else {
+        if (porcent >= 90 && porcent < 98) {
+          return (
+            <>
+              {" "}
+              <div style={{ color: "yellow" }}>{porcent}%</div>
+            </>
+          );
+        } else if (porcent >= 98 && porcent <= 100) {
+          return (
+            <>
+              {" "}
+              <div style={{ color: "red" }}> {porcent}%</div>
+            </>
+          );
+        } else {
+          return <>{porcent}%</>;
+        }
+      }
     },
   },
   { fieldName: "Legalized", header: "No.Legalizados" },
