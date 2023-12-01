@@ -8,9 +8,6 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import useYupValidationResolver from "../../../../common/hooks/form-validator.hook";
-import { useGenericListService } from "../../../../common/hooks/generic-list-service.hook";
-import { ApiResponse } from "../../../../common/utils/api-response";
-import { IGenericList } from "../../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../../common/constants/api.enum";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { urlApiFunds } from "../../../../common/utils/base-url";
@@ -31,10 +28,7 @@ const ControlreporteditStratum456 = (data) => {
   const { put } = useCrudService(urlApiFunds);
   const {
     handleSubmit,
-    watch,
     register,
-    reset,
-    getValues,
     setValue,
     control,
     formState: { errors, isValid },
@@ -53,7 +47,7 @@ const ControlreporteditStratum456 = (data) => {
   const handleCancel = () => {
     setMessage({
       title: "Cancelar edición activo",
-      description: "¿Esta segur@ de cancelar la edición",
+      description: "¿Estás segur@ de cancelar la edición",
       show: true,
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
@@ -133,7 +127,7 @@ const ControlreporteditStratum456 = (data) => {
     };
     setMessage({
       title: "Guardar",
-      description: "¿Está segur@ de guardar la informacion?",
+      description: "¿Estás segur@ de guardar la información?",
       show: true,
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",

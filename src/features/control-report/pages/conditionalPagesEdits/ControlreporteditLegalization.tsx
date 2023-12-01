@@ -19,13 +19,10 @@ const ControlreporteditLegalization = (data) => {
   const { put } = useCrudService(urlApiFunds);
   const {
     handleSubmit,
-    watch,
     register,
-    reset,
-    getValues,
     setValue,
     control,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     resolver,
     mode: "all",
@@ -92,7 +89,7 @@ const ControlreporteditLegalization = (data) => {
     };
     setMessage({
       title: "Guardar",
-      description: "¿Está segur@ de guardar la informacion?",
+      description: "¿Estás segur@ de guardar la información?",
       show: true,
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
@@ -107,7 +104,7 @@ const ControlreporteditLegalization = (data) => {
   const handleCancel = () => {
     setMessage({
       title: "Cancelar edición activo",
-      description: "¿Esta segur@ de cancelar la edición del activo?",
+      description: "¿Estas segur@ de cancelar la edición?",
       show: true,
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",

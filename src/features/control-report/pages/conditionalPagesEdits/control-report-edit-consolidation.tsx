@@ -48,7 +48,6 @@ const Controlreporteditconsolidation = (data) => {
     },
   });
 
-  // const places = watch("resourcePrioritization.places");
   useEffect(() => {
     setValue("consolidatedPreselected", info.consolidatedPreselected);
     setValue(
@@ -128,7 +127,7 @@ const Controlreporteditconsolidation = (data) => {
     };
     setMessage({
       title: "Guardar",
-      description: "¿Está segur@ de guardar la informacion?",
+      description: "¿Estás segur@ de guardar la información?",
       show: true,
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
@@ -143,7 +142,7 @@ const Controlreporteditconsolidation = (data) => {
   const handleCancel = () => {
     setMessage({
       title: "Cancelar edición activo",
-      description: "¿Esta segur@ de cancelar la edición?",
+      description: "¿Estas segur@ de cancelar la edición?",
       show: true,
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
