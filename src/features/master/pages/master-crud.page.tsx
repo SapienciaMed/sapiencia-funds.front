@@ -13,7 +13,7 @@ interface IPropsMasterCrud {
 
 const MasterCrudPage = ({ action }) => {
 
-    const { typeMasterList, control, errors, register, onsubmitCreate,CancelFunction } = useMasterCrud();
+    const { typeMasterList, control, errors, register, onsubmitCreate, CancelFunction } = useMasterCrud();
 
     return (
         <Fragment>
@@ -40,20 +40,29 @@ const MasterCrudPage = ({ action }) => {
                                     className="select-basic medium select-disabled-list"
                                     classNameLabel="text-black biggest"
                                     filter={true}
-                                    placeholder="Seleccione."                                    
+                                    placeholder="Seleccione."
                                 />
 
-                                <InputComponent
-                                    idInput={"name"}
-                                    className="input-basic medium"
-                                    typeInput="text"
-                                    label="Nuevo maestro"
-                                    register={register}
-                                    classNameLabel="text-black biggest text-required"
-                                    //direction={EDirection.column}
-                                    errors={errors}
-                                    placeholder={""}
-                                />
+                                <Controller
+                                    control={control}
+                                    name={"name"}
+                                    render={({ field }) => {
+                                        return (
+                                            <InputComponent
+                                                idInput={"name"}
+                                                className="input-basic medium"
+                                                typeInput="text"
+                                                label="Nuevo maestro"
+                                                register={register}
+                                                classNameLabel="text-black biggest text-required"
+                                                errors={errors}
+                                                placeholder={""} 
+                                                {...field}
+                                            />
+                                        )
+
+                                    }}
+                                />                              
                             </div>
                             <div className='mt-24px'>
                                 <Controller
@@ -90,15 +99,15 @@ const MasterCrudPage = ({ action }) => {
                         value="Cancelar"
                         type="button"
                         className="button-cancel-text large hover-three disabled-black"
-                        action={() => CancelFunction()}                    
+                        action={() => CancelFunction()}
                     />
                     <ButtonComponent
                         form="createMasterForm"
                         value="Guardar"
                         type="submit"
-                        className="button-save large disabled-black"                    
+                        className="button-save large disabled-black"
                     />
-                </div>                
+                </div>
             </div>
         </Fragment>
     )
