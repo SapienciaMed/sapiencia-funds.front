@@ -154,6 +154,7 @@ export default function useRenewaReportSearch() {
     };
     // searchRenewal
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
+
         const selectedperiodo = watch('period');
         data.period = selectedperiodo;
         data.page = 1;
@@ -328,8 +329,18 @@ export default function useRenewaReportSearch() {
 
     function downloadCollection() {
 
+        let data = dataGridRenewal.map((d) => {
+            return {
+                "Fondo": d.fund,
+                "Habilitados": d.enabled,
+                "Renovados": d.renewed,
+                "Porcentaje": d.percentage,
+            }
+        
+        })
+
         const book = XLSX.utils.book_new()
-        const sheet = XLSX.utils.json_to_sheet(dataGridRenewal)
+        const sheet = XLSX.utils.json_to_sheet(data)
 
         XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`)
 
@@ -354,6 +365,7 @@ export default function useRenewaReportSearch() {
         },)
 
     }
+
 
     return {
         control,
