@@ -113,17 +113,17 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                     </div>
                 </div>
 
-                <div className="button-save-container-display m-top-20">
-                        <ButtonComponent
-                            form="searchBudget"
-                            value={"Cancelar"}
-                            className="button-clean medium"
-                            type="button"
-                            action={() => {
-                                CancelFunction()
-                            }
-                            }
-                        />
+                <div className="button-save-container-display-items margin-right0 mr-24px">
+                    <ButtonComponent
+                        form="searchBudget"
+                        value={"Cancelar"}
+                        className="button-clean medium"
+                        type="button"
+                        action={() => {
+                            CancelFunction()
+                        }
+                        }
+                    />
                         <ButtonComponent
                             form="EditRenewal"
                             value={`Guardar`}
