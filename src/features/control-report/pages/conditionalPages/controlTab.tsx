@@ -7,6 +7,7 @@ import { ControlHook } from "../../hooks/conditionalHooks/ControlHook";
 import TableComponent from "../../../../common/components/table.component";
 import { columnsControl } from "../config-columns/columns-control";
 import Svgs from "../../../../public/images/icons/svgs";
+import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 const ControlTab = (data) => {
   const {
@@ -16,6 +17,7 @@ const ControlTab = (data) => {
     totalRestantes,
     totalInicial,
     downloadCollection,
+    TotalView,
   } = ControlHook(data.data);
   return (
     <>
@@ -31,8 +33,9 @@ const ControlTab = (data) => {
           titleMessageModalNoResult="Resultado de búsqueda"
         />
       </div>
-
-      {/* <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+      {TotalView && (
+        <>
+          {/* <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
         <div
           className="bold mt-24px ml-16px mr-16px p-0"
           style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
@@ -81,57 +84,63 @@ const ControlTab = (data) => {
         </div>
       </div> */}
 
-      <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
-        <div
-          className="bold mt-24px ml-16px mr-16px p-0"
-          style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
-        >
-          Totales
-        </div>
-        <div className="grid-form-2-container mb-24px">
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="Inicial"
-            classNameLabel="text-black biggest text-required"
-            placeholder={""}
-            disabled
-            value={String(totalInicial)}
-          />
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="Restantes"
-            classNameLabel="text-black biggest text-required"
-            placeholder={""}
-            disabled
-            value={String(totalRestantes)}
-          />
-        </div>
-      </div>
-      <div
-        style={{
-          height: "1px",
-          margin: "0 20px",
-          backgroundColor: "#e0e0e0",
-        }}
-      ></div>
-      <div className="button-save-container-display mr-24px">
-        <ButtonComponent
-          value={
-            <>
-              <div className="container-buttonText">
-                <span>Descargar</span>
-                <Svgs svg="excel" width={23.593} height={28.505} />
-              </div>
-            </>
-          }
-          className="button-download large "
-          action={downloadCollection}
-        />
-      </div>
+          <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+            <div
+              className="bold mt-24px ml-16px mr-16px p-0"
+              style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
+            >
+              Totales
+            </div>
+            <div className="grid-form-2-container mb-24px">
+              <InputComponent
+                idInput={"tQuantity1"}
+                className="input-basic medium"
+                typeInput="text"
+                label="Inicial"
+                classNameLabel="text-black biggest text-required"
+                placeholder={""}
+                disabled
+                value={String(
+                  formaterNumberToCurrency(totalInicial).replace("$", "")
+                )}
+              />
+              <InputComponent
+                idInput={"tQuantity1"}
+                className="input-basic medium"
+                typeInput="text"
+                label="Restantes"
+                classNameLabel="text-black biggest text-required"
+                placeholder={""}
+                disabled
+                value={String(
+                  formaterNumberToCurrency(totalRestantes).replace("$", "")
+                )}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              height: "1px",
+              margin: "0 20px",
+              backgroundColor: "#e0e0e0",
+            }}
+          ></div>
+          <div className="button-save-container-display mr-24px">
+            <ButtonComponent
+              value={
+                <>
+                  <div className="container-buttonText">
+                    <span>Descargar</span>
+                    <Svgs svg="excel" width={23.593} height={28.505} />
+                  </div>
+                </>
+              }
+              className="button-download large "
+              action={downloadCollection}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };

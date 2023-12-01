@@ -10,6 +10,7 @@ export const ControlHook = (data) => {
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
   const [totalRestantes, setTotalRestates] = useState([]);
   const [totalInicial, setTotalInicial] = useState([]);
+  const [TotalView, setTotalView] = useState(null);
 
   const urlControl = `${urlApiFunds}/api/v1/controlSelect/getInfoControl`;
   const getInfoControl = async (data) => {
@@ -27,10 +28,11 @@ export const ControlHook = (data) => {
 
         return dataTotal;
       });
-
-      console.log(dataTotal);
-      setTotalInicial(dataTotal.inicial);
-      setTotalRestates(dataTotal.restantes);
+      if (res.data["array"].length > 0) {
+        setTotalView(true);
+        setTotalInicial(dataTotal.inicial);
+        setTotalRestates(dataTotal.restantes);
+      }
     } catch (error) {}
   };
   const { setMessage } = useContext(AppContext);
@@ -70,5 +72,6 @@ export const ControlHook = (data) => {
     totalRestantes,
     totalInicial,
     downloadCollection,
+    TotalView,
   };
 };

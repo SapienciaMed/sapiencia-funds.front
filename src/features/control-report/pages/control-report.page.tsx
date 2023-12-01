@@ -8,8 +8,6 @@ import {
 import useBudgetSearch from "../../budget-convocation/hooks/search-budget.hook";
 import useControlInfo from "../hooks/control-info";
 import { useConsultControlReport } from "../hooks/controlreport";
-import { columns123 } from "./config-columns/columns-estrato-123";
-import { columns456 } from "./config-columns/columns-estrato-456";
 
 const SearchContrlPage = () => {
   const {
