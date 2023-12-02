@@ -69,7 +69,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
     return (
         <Fragment>
-            <div className="card-table">
+            <div className="main-page">
                 <div className="title-area">
                     <label className="text-black extra-large medium">
                         Visualizar informe renovación
@@ -92,9 +92,9 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                                     data={announcementList}
                                     label={<>Convocatoria <span>*</span></>}
                                     className={"select-basic medium select-disabled-list input-basic input-regular"}
-                                    classNameLabel="text-black big medium label-regular"
+                                    classNameLabel="text-black biggest medium label-regular"
                                     filter={true}
-                                    placeholder="Seleccione."
+                                    placeholder="Seleccionar"
                                 />
                             </div>
                         </div>
