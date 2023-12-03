@@ -78,7 +78,7 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
     setMessage({
       show: true,
       title: "Guardar",
-      description: "¿Esta segur@ de guardar la información?",
+      description: "¿Estás segur@ de guardar la información?",
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       async onOk() {
