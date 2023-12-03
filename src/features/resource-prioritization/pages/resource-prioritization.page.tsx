@@ -163,7 +163,7 @@ const ResourcePrioritizationPage = (): JSX.Element => {
     {
       fieldName: "averageCost",
       header: " Costo promedio",
-      renderCell: (row) => <>{formaterNumberToCurrency(row.total456)}</>,
+      renderCell: (row) => <>{formaterNumberToCurrency(row.averageCost)}</>,
     },
     {
       fieldName: "generalRate",
