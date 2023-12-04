@@ -10,7 +10,7 @@ import Requirements from "./manageTechnical/requirements";
 function TabsManageTechnical({ document }) {
 
     const { option } = useParams();
-    const { validateActionAccess } = useContext(AppContext);
+    const { validateActionAccess, setMessage, disabledFields } = useContext(AppContext);
     
 
     const tabs = (): ITabsMenuTemplate[] => {
@@ -55,29 +55,24 @@ function TabsManageTechnical({ document }) {
 
     const start = tabs().find((tab) => tab.id.toString().toLowerCase() == option?.toLowerCase());
 
-    const [currentTabIndex, setCurrentTabIndex] = useState<number>(
-        start ? tabs().findIndex((tab) => tab.id === start.id) : 0
-    );
+   const showMessage  = () => {
+    setMessage({
+        show: true,
+        title: "!Atencion¡",
+        description: 'No se han guardado cambios',
+        background: true,
+        OkTitle: 'Aceptar',
+        onOk() {
+            setMessage({});
+        },
+    });
+   }
 
     return(
         <>
             <section className="mt-20px">
-                <TabListComponent tabs={tabs()} start={start} currentIndex={currentTabIndex} setCurrentTabIndex={setCurrentTabIndex}/>
+                <TabListComponent tabs={tabs()} start={start} isLock={disabledFields} showMessage={showMessage}/>
             </section>
-
-            {
-                tabs().length > 1 && (
-                    <div className="container-actions_formTabs">
-                        <ButtonComponent
-                            value='Siguiente'
-                            className='button-save  invalid big'
-                            type='button'
-                            action={() => { setCurrentTabIndex((currentTabIndex + 1) % tabs().length) }}
-                        />
-                    </div>
-                )
-            }
-        
         </>
     )
 }

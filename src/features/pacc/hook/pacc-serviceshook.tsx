@@ -31,13 +31,31 @@ export const usePaccServices = () => {
         const endpoint: string = "/get-requirements-by-beneficiary"; 
         return post(`${roleUrl}${endpoint}`, data);
     }
+    
+    async function GetRequirementFile(id: string): Promise<ApiResponse<any>> {
+        const endpoint: string = "/get-requirement-file"; 
+        return get(`${roleUrl}${endpoint}/${id}`);
+    }
+
+    async function ComplianceAssignmentBeneficiary(data: Object): Promise<ApiResponse<any>> {
+        const endpoint: string = "/compliance-assignment-beneficiary"; 
+        return post(`${roleUrl}${endpoint}`, data);
+    }
+
+    async function DeleteUploadFiles(id: string, idbeneficiary): Promise<ApiResponse<any>> {
+        const endpoint: string = "/delete-requirement-file"; 
+        return post(`${roleUrl}${endpoint}/${id}/${idbeneficiary}`);
+    }
 
     return {
         GetCutsForConsolidationTray,
         GeConsolidationTrayTechnicianCollectionByCut,
         GeBeneficiaryById,
         UpdateCutBeneficiary,
-        GetRequirementsByBeneficiary
+        GetRequirementsByBeneficiary,
+        GetRequirementFile,
+        ComplianceAssignmentBeneficiary,
+        DeleteUploadFiles
     }
 
 }

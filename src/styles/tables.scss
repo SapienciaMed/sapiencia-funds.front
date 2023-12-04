@@ -79,6 +79,14 @@
     }
 }
 
+.spc-common-table-without-border{
+  .p-datatable{
+    border-radius: 0;
+    border: none;
+  
+  }
+}
+
 .card-table {
   $width: null;
   $height: null;
