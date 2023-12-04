@@ -58,6 +58,7 @@ interface IProps<T> {
   keyBodyRequest?: string;
   count?: boolean,
   viePaginator?: boolean
+  isNotBorderClasse?: boolean
 }
 
 interface IRef {
@@ -85,7 +86,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     bodyRequestParameters,
     keyBodyRequest,
     count,
-    viePaginator = true
+    viePaginator = true,
+    isNotBorderClasse
   } = props;
 
   // States
@@ -234,7 +236,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
-      <div className="spc-common-table">
+      <div className={`spc-common-table ${isNotBorderClasse && 'spc-common-table-without-border'}`}>
         {title && <div className="spc-table-title">{title}</div>}
 
         {

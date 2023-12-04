@@ -71,4 +71,8 @@
     background: #e9ecef !important;
   }
 
+  &:focus{
+    box-shadow: none !important;
+  }
+
 }

@@ -64,18 +64,7 @@ export default function useMasterConsult() {
     ];
 
     const tableActions: ITableAction<IMaster>[] = [
-        {
-            icon: "Detail",
-            onClick: (row) => {},
-        },
-        {
-            icon: "Edit",
-            onClick: (row) => {                
-                navigate(`./edit/${row.id}`);
-            },
-            //hide: !validateActionAccess('MAESTROS_CREAR')
-            
-        },
+        
     ];
    
 

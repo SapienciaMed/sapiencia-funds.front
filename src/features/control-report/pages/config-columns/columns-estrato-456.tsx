@@ -1,24 +1,43 @@
 import { ITableElement } from "../../../../common/interfaces/config-columns";
 
-export interface IFurniture {
-  plate: string;
-  description: string;
-  acquisitionDate: string;
-  equipmentStatus: number;
-  userIdentification: string;
-  fullName: string;
-  area: number;
-  model: string;
-  brand: string;
-  measure: string;
-  activeOwner: number;
-  observation: string;
-  clerk: number;
-}
-
-export const columns456: ITableElement<IFurniture>[] = [
+export const columnsStratum456: ITableElement<any>[] = [
   {
-    fieldName: "area 456",
-    header: "Área 456",
+    fieldName: "resourcePrioritization.communeId",
+    header: "Comuna o corregimiento",
+  },
+  {
+    fieldName: "resourceAvailable",
+    header: "Recurso Disponible",
+  },
+  {
+    fieldName: "granted",
+    header: "Otorgado",
+  },
+  {
+    fieldName: "Available",
+    header: "Disponible",
+    renderCell: (row) => {
+      return (
+        <>{Math.round(Number(row.resourceAvailable) - Number(row.granted))}</>
+      );
+    },
+  },
+  {
+    fieldName: "porcentParticipacion",
+    header: "%Participacion",
+    renderCell: (row) => {
+      return (
+        <>
+          {Math.round(
+            (Number(row.granted) / Number(row.resourceAvailable)) * 100
+          )}{" "}
+          %
+        </>
+      );
+    },
+  },
+  {
+    fieldName: "legalized",
+    header: "No.Legalizados",
   },
 ];
