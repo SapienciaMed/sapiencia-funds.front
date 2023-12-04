@@ -28,11 +28,12 @@ export default function useRenewaReportSearch() {
     const [announcementList, setAnnouncementList] = useState([]);
     const [enabledTotal, setEnabledTotal] = useState(0);
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
-
+    
     const [enabledBachLeg, setenabledBachLeg] = useState("0");
     const [renewedBachLeg, setrenewedBachLeg] = useState("0");
     const [percentageBachLeg, setPercentageBachLeg] = useState("0.00%");
     const [inputEnabledBachLeg, setInputEnabledBachLeg] = useState("0");
+    const [datos, setDatos] = useState([]);
 
 
 
@@ -160,6 +161,9 @@ export default function useRenewaReportSearch() {
         data.page = 1;
         data.perPage = 10;
 
+
+
+
         const responservice: any = await getRenewalReport(data)
             .then(async (response) => {
                 return response
@@ -167,18 +171,20 @@ export default function useRenewaReportSearch() {
         // Quitar la última fila del array
         const dataArrayWithoutLastRow = responservice.data.array.slice(0, -1);
 
-        setdataGridRenewal([])
-        dataArrayWithoutLastRow.map((e) => {
-            const list = {
-                fund: e.fund,
-                enabled: e.enabled,
-                renewed: e.renewed,
-                percentage: calculatePercentage(e.renewed, e.enabled),
-            };
-            dataGridRenewal.push(list);
-            setdataGridRenewal(dataGridRenewal)
-        });
+        // Crear un nuevo array con los datos actualizados
+        const newDataArray = dataArrayWithoutLastRow.map(e => ({
+            fund: e.fund,
+            enabled: e.enabled,
+            renewed: e.renewed,
+            percentage: calculatePercentage(e.renewed, e.enabled),
+        }));
 
+        // Actualizar el estado con el nuevo array
+        setdataGridRenewal(newDataArray);
+
+        setDatos(newDataArray)
+
+        console.log('item', newDataArray)
         // La última fila Beca mejores bachilleres legalizados 
         const lastRow = responservice.data.array.slice(-1)[0];
 
@@ -195,6 +201,12 @@ export default function useRenewaReportSearch() {
         setPercentageBachLeg(percentageBachLeg);
 
     });
+    
+    useEffect(()=>{
+        setdataGridRenewal(datos);
+    },datos)
+
+    console.log('datos grid',dataGridRenewal)
 
     //Consultar
     const onSubmit = handleSubmit(async (data: ICallRenewal) => {
@@ -394,5 +406,7 @@ export default function useRenewaReportSearch() {
         setInputEnabledBachLeg,
         inputEnabledBachLeg,
         onsubmitCreate,
+        datos
+       
     }
 }

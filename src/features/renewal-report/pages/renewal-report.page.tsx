@@ -16,10 +16,11 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
     const {
         control, errors, watch, register, setValue, navigate, tableComponentRef, showTable,
         setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
-        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal,
-        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate
+        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, 
+        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate,datos
     } = useRenewaReportSearch();
 
+    console.log('asi llega a la vista',dataGridRenewal)
 
     const tableColumnsRenewal: ITableElement<ICallRenewal>[] = [
         {
@@ -105,8 +106,9 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                                 className="button-clean medium"
                                 type="button"
                                 action={() => {
-                                    reset();
-                                    tableComponentRef.current.emptyData();
+                                    //reset();
+                                    
+                                   // tableComponentRef.current.emptyData();
                                 }
                                 }
                             />
@@ -115,7 +117,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                                 value={`Buscar`}
                                 action={() => {
                                     // Limpiar dataGridRenewal cuando cambie la convocatoria
-                                    setdataGridRenewal([]);
+                                    //setDataGridRenewal([]);
                                     searchRenewal();
                                 }}
                                 className="button-save large hover-three disabled-black"
@@ -126,14 +128,14 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
                 <div
                     style={
-                        dataGridRenewal.length > 0 ? { display: "block" } : { display: "none" }
+                        datos.length > 0 ? { display: "block" } : { display: "none" }
                     }
                 >
                     <div className="container-sections-forms">
 
                         <BasicTableComponent
                             ref={tableComponentRef}
-                            data={dataGridRenewal}
+                            data={datos}
                             columns={tableColumnsRenewal}
                             actions={tableActionsRenewal}
                             titleMessageModalNoResult="Registro no existente"
