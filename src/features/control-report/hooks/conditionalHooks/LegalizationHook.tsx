@@ -55,6 +55,7 @@ export const LegalizationHook = (data) => {
         }
         return dataColumns;
       });
+
       let totalDataRes = dataRes.length;
       if (totalDataRes > 0) {
         setTotalView(true);
@@ -80,7 +81,7 @@ export const LegalizationHook = (data) => {
           totalData.totalDisponible += Number(
             e.legalizationResourceAvailable - e.legalizationGranted
           );
-          totalData.totalNoLegalizados += Number(e.legalizationPreselected);
+          totalData.totalNoLegalizados += Number(e.legalizationLegalized);
           totalData.totalPorParticipacion += Number(e.porcentParticipacion);
         });
 
