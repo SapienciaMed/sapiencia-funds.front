@@ -101,11 +101,11 @@ export default function useRequeriments() {
             },
         },
         {
-            fieldName:'percentage',
-            header: 'Porcentaje',
+            fieldName:'mandatoryFor',
+            header: 'Obligatorio para',
             renderCell:(row) => {
                 return(
-                    <> { row.percentRequirement ? `${row.percentRequirement}%` : 'N/A' } </>
+                    <> { row.mandatoryFor ? `${row.mandatoryFor}` : '-' } </>
                 )
             }
         },
@@ -248,49 +248,67 @@ export default function useRequeriments() {
 
     const deleteFile = () => {
         toast.current.hide();
-        setMessage({
-            show: true,
-            title: "Eliminar",
-            description: 'Esta seguro que deseea eliminar el archivo',
-            background: true,
-            OkTitle: 'Aceptar',
-            onOk() {
-                DeleteUploadFiles(idCode, idBeneficiary).then(response => {
-                    if(response){
-                        setMessage({
-                            show: true,
-                            title: "Eliminar",
-                            description: 'Archivo eliminado correctamente',
-                            background: true,
-                            OkTitle: 'Aceptar',
-                            onOk() {
-                                setMessage({});
-                                loadTableData()
-                            },
-                            onClose() {
-                                setMessage({});
-                                loadTableData()
-                            },
-
-                        });
-                    }else {
-                        setMessage({
-                            show: true,
-                            title: "Eliminar",
-                            description: response.operation.message,
-                            background: true,
-                            OkTitle: 'Aceptar',
-                            onOk() {
-                                setMessage({});
-                                
-                            },
-                        });
-                    }
-                
-                })
-                setMessage({});
-            },
-        });
+        idCode && GetRequirementFile(idCode).then(response => {
+            if(response.operation.code === EResponseCodes.OK){
+                if (response.data.length == 0) {
+                    setMessage({
+                        show: true,
+                        title: "Eliminar",
+                        description: 'No hay adjunto para eliminar',
+                        background: true,
+                        OkTitle: 'Aceptar',
+                        onOk() {
+                            setMessage({});
+                        },
+                    });
+                }else {
+                    setMessage({
+                        show: true,
+                        title: "Eliminar",
+                        description: 'Esta seguro que deseea eliminar el archivo',
+                        background: true,
+                        OkTitle: 'Aceptar',
+                        onOk() {
+                            DeleteUploadFiles(idCode, idBeneficiary).then(response => {
+                                if(response){
+                                    setMessage({
+                                        show: true,
+                                        title: "Eliminar",
+                                        description: 'Archivo eliminado correctamente',
+                                        background: true,
+                                        OkTitle: 'Aceptar',
+                                        onOk() {
+                                            setMessage({});
+                                            loadTableData()
+                                        },
+                                        onClose() {
+                                            setMessage({});
+                                            loadTableData()
+                                        },
+            
+                                    });
+                                }else {
+                                    setMessage({
+                                        show: true,
+                                        title: "Eliminar",
+                                        description: response.operation.message,
+                                        background: true,
+                                        OkTitle: 'Aceptar',
+                                        onOk() {
+                                            setMessage({});
+                                            
+                                        },
+                                    });
+                                }
+                            
+                            })
+                            setMessage({});
+                        },
+                    });
+                }
+            } 
+        })
+      
     }
 
     const onAmountChange = (value: IRequerimentsResultSimple, event: ChangeEvent<HTMLInputElement>) => {
