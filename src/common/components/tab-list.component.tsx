@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { ITabsMenuTemplate } from "../interfaces/tabs-menu.interface";
+import { IMessage } from "../interfaces/global.interface";
 
 interface IAppProps {
   tabs: ITabsMenuTemplate[];
   start?: ITabsMenuTemplate;
   index?: number;
   className?: string;
-  currentIndex?: number;
-  setCurrentTabIndex?: React.Dispatch<React.SetStateAction<number>>
+  isLock?: boolean;
+  showMessage?: () => void
 }
 
 function TabListComponent({
@@ -15,8 +16,8 @@ function TabListComponent({
   className,
   start,
   index,
-  currentIndex,
-  setCurrentTabIndex
+  isLock,
+  showMessage
 }: IAppProps): React.JSX.Element {
   const tabList = {};
   tabs.forEach(
@@ -30,11 +31,6 @@ function TabListComponent({
     start ? start : null
   );
 
-  useEffect(() => {
-    if (currentIndex !== undefined) {
-      setSelectedTab(tabs[currentIndex]);
-    }
-  }, [currentIndex, tabs]);
 
   useEffect(() => {
     if (!selectedTab)
@@ -60,11 +56,12 @@ function TabListComponent({
               className={`tab-option ${active}`}
               key={tab.id}
               onClick={() => {
-                if (setCurrentTabIndex && selectedTab && selectedTab.id !== tab.id) {
-                  setCurrentTabIndex(tabs.findIndex((t) => t.id === tab.id));
+                if (isLock) {
+                  showMessage()
+                }else{
+                  setSelectedTab(tab);
+                  if (tab.action) tab.action();
                 }
-                setSelectedTab(tab);
-                if (tab.action) tab.action();
               }}
             >
               {tab.title}
