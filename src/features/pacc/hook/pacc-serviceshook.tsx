@@ -27,11 +27,17 @@ export const usePaccServices = () => {
         return post(`${roleUrl}${endpoint}`, data);
     }
 
+    async function GetRequirementsByBeneficiary(data: Object): Promise<ApiResponse<any>> {
+        const endpoint: string = "/get-requirements-by-beneficiary"; 
+        return post(`${roleUrl}${endpoint}`, data);
+    }
+
     return {
         GetCutsForConsolidationTray,
         GeConsolidationTrayTechnicianCollectionByCut,
         GeBeneficiaryById,
-        UpdateCutBeneficiary
+        UpdateCutBeneficiary,
+        GetRequirementsByBeneficiary
     }
 
 }

@@ -14,6 +14,7 @@ export default function useActaData() {
     const resolver = useYupValidationResolver(searchActas);
     const [ isBtnDisable, setIsBtnDisable ] = useState<boolean>(false)
     const { getLastId } = useActaApi();
+    const [ showSpinner, setShowSpinner ] = useState(false)
 
     const {
         handleSubmit,
@@ -29,11 +30,16 @@ export default function useActaData() {
     })
 
     useEffect(() => {
+        setShowSpinner(true)
         getLastId().then(response => {
+            setShowSpinner(false)
             if (response.operation.code == EResponseCodes.OK) {
                 const dinamicData = response?.data;
                 setValue('actaNro', Object.values(dinamicData).find(us => us))
             }
+        }).catch(error => {
+            setShowSpinner(false)
+            console.log(error);
         })
     },[])
 
@@ -62,5 +68,7 @@ export default function useActaData() {
         errors,
         isBtnDisable,
         control,
+        showSpinner
+
     }
 }

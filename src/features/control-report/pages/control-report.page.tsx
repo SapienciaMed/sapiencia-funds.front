@@ -8,8 +8,6 @@ import {
 import useBudgetSearch from "../../budget-convocation/hooks/search-budget.hook";
 import useControlInfo from "../hooks/control-info";
 import { useConsultControlReport } from "../hooks/controlreport";
-import { columns123 } from "./config-columns/columns-estrato-123";
-import { columns456 } from "./config-columns/columns-estrato-456";
 
 const SearchContrlPage = () => {
   const {
@@ -40,7 +38,7 @@ const SearchContrlPage = () => {
       >
         <div className="container-sections-forms ml-20px mr-20px">
           <div className="grid-form-3-container gap-25">
-            <div className="text-black large bold grid-span-2-columns pb-14px">
+            <div className="text-black large grid-span-2-columns pb-14px">
               Control financiero
             </div>
             <span className="text-black biggest bold grid-span-3-columns">
@@ -57,7 +55,7 @@ const SearchContrlPage = () => {
                   typeInput="text"
                   errors={errors}
                   className="input-basic medium"
-                  classNameLabel="text-black big bold"
+                  classNameLabel="text-black big"
                   onChange={handleChange}
                 />
               </div>
@@ -72,7 +70,7 @@ const SearchContrlPage = () => {
                   typeInput="text"
                   errors={errors}
                   className="input-basic medium"
-                  classNameLabel="text-black big bold"
+                  classNameLabel="text-black big"
                   onChange={handleChange}
                 />
               </div>
@@ -86,7 +84,7 @@ const SearchContrlPage = () => {
                 data={announcementList}
                 label={<> Convocatoria </>}
                 className="select-basic medium"
-                classNameLabel="text-black big bold"
+                classNameLabel="text-black big"
                 placeholder="Seleccionar"
                 filter
               />
@@ -99,7 +97,7 @@ const SearchContrlPage = () => {
                 data={infoData}
                 label={<> Informe control </>}
                 className="select-basic medium"
-                classNameLabel="text-black big bold"
+                classNameLabel="text-black big"
                 placeholder="Seleccionar"
                 filter
               />
@@ -126,7 +124,7 @@ const SearchContrlPage = () => {
           <div className="button-save-container-display mr-24px mt-24px button-save-bussiness">
             <ButtonComponent
               value="Limpiar campos"
-              className="button-clean bold"
+              className="button-clean"
               type="button"
               action={handleClean}
             />

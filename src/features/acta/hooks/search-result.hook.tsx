@@ -257,8 +257,8 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                             v.idCitation === value.idCitation &&
                             v.dateAprobation === value.dateAprobation
                         ))
-                    ).map(({ user, dateAprobation: timeCitation, status, dateCitation, email, idCitation, dateAprobation }) => ({ user, timeCitation, status, dateCitation, email, idCitation, dateAprobation }));
-    
+                    ).map(({ user, timeCitation, status, dateCitation, email, idCitation, dateAprobation }) => ({ user, timeCitation, status, dateCitation, email, idCitation, dateAprobation }));
+
                     setDataGridUsersServices(valueCitation)
     
                     dinamicData.forEach(dataSearch => {
@@ -522,13 +522,14 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
             const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
             return {
                 user: e.user,
-                dateCitation: formattedDate,
-                timeCitation: e.timeCitation,
+                dateCitation: formattedDate || '',
+                timeCitation: e.timeCitation || '',
                 status: e.status,
                 email: e.email,
                 idCitation: e.idCitation
             }
         });
+        console.log("🚀 ~ file: search-result.hook.tsx:532 ~ citation ~ dataGridUsersServices:", dataGridUsersServices)
 
         const state = getValues('idStatus');
 
@@ -545,7 +546,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
             items: actaItems,
             citation: citation
         };
- 
+
        if (state == 'Aprobado' || state == 'Aprobado - Modificado') {
             createActa(actaData).then(response => {
                 if (response.operation.code == EResponseCodes.OK) {

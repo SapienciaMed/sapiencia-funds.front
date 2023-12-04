@@ -66,33 +66,42 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
 
   // Effect que detecta los cambio en el formulario y realiza los ajustes
   useEffect(() => {
-    if(form.getValues()["reload"]) {
-      form.setValue("reload", false)
-    }
-    else {
+    if (form.getValues()["reload"]) {
+      form.setValue("reload", false);
+    } else {
       recalcule();
     }
-
   }, [watchFields]);
 
   // Metodo que ejecuta el guardado
   const onSubmit = form.handleSubmit(async (data: IResourcePrioritization) => {
-    setLoading(true);
-
-    const res = await setResourcePrioritization(data);
-
     setMessage({
-      title: "Priorización de recursos",
-      description: res.operation.message || `¡Cambios guardados exitosamente!`,
       show: true,
+      title: "Guardar",
+      description: "¿Estás segur@ de guardar la información?",
       OkTitle: "Aceptar",
-      onOk: () => {
-        props.onClose();
-        setMessage({});
-      },
-      onClose: () => {
-        props.onClose();
-        setMessage({});
+      cancelTitle: "Cancelar",
+      async onOk() {
+        setLoading(true);
+
+        const res = await setResourcePrioritization(data);
+
+        setMessage({
+          title: "Priorización de recursos",
+          description:
+            res.operation.message || `¡Cambios guardados exitosamente!`,
+          show: true,
+          OkTitle: "Aceptar",
+          onOk: () => {
+            props.onClose();
+            setMessage({});
+          },
+          onClose: () => {
+            props.onClose();
+            setMessage({});
+          },
+          background: true,
+        });
       },
       background: true,
     });
@@ -137,8 +146,8 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
     form.setValue("operatorCommissionAct", valueOperatorCommissionAct);
     form.setValue("resourceForCredit", resourceForCredit);
 
-    form.setValue("reload", true)
-    form.setValue("generalRate", data.generalRate)
+    form.setValue("reload", true);
+    form.setValue("generalRate", data.generalRate);
   }
 
   return (
@@ -291,7 +300,20 @@ const ResourcePrioritizationForm = (props: IProps): JSX.Element => {
             value="Cancelar"
             type="button"
             className="button-cancel-text large hover-three disabled-black"
-            action={() => setMessage({})}
+            action={() =>
+              setMessage({
+                show: true,
+                title: "Cancelar",
+                description:
+                  "¿Segur@ que deseas cancelar?",
+                OkTitle: "Aceptar",
+                cancelTitle: "Cancelar",
+                onOk() {
+                  setMessage({});
+                },
+                background: true,
+              })
+            }
             disabled={loading}
           />
           <ButtonComponent
