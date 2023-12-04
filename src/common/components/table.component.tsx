@@ -56,7 +56,8 @@ interface IProps<T> {
   onGlobalFilterChange?: (value: any) => void;
   bodyRequestParameters?: string | number;
   keyBodyRequest?: string;
-  count?: boolean
+  count?: boolean,
+  viePaginator?: boolean
 }
 
 interface IRef {
@@ -83,7 +84,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     onGlobalFilterChange, // Es necesario llamar una funcion para que haga la peticion para el filtrado interno.
     bodyRequestParameters,
     keyBodyRequest,
-    count
+    count,
+    viePaginator = true
   } = props;
 
   // States
@@ -235,21 +237,23 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       <div className="spc-common-table">
         {title && <div className="spc-table-title">{title}</div>}
 
-        {/* Verificar si resultData.array tiene elementos */}
+        {
+          viePaginator && 
+          <Paginator
+            className="between spc-table-paginator"
+            template={paginatorHeader}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+            leftContent={leftContent(
+              princialTitle,
+              isInputSearch,
+              onGlobalFilterChange
+            )}
+          />
+        }
 
-        <Paginator
-          className="between spc-table-paginator"
-          template={paginatorHeader}
-          first={first}
-          rows={perPage}
-          totalRecords={resultData?.meta?.total || 0}
-          onPageChange={onPageChange}
-          leftContent={leftContent(
-            princialTitle,
-            isInputSearch,
-            onGlobalFilterChange
-          )}
-        />
 
         {width > 830 || !isMobil ? (
           <div>
@@ -301,14 +305,18 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           />
         )}
 
-        <Paginator
-          className="spc-table-paginator"
-          template={paginatorFooter}
-          first={first}
-          rows={perPage}
-          totalRecords={resultData?.meta?.total || 0}
-          onPageChange={onPageChange}
-        />
+        {
+          viePaginator && 
+          <Paginator
+            className="spc-table-paginator"
+            template={paginatorFooter}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+          />
+        }
+
       </div>
     );
   }
@@ -624,13 +632,6 @@ const mockData ={
       hoursPerformed: '70',
       pendingHours: '10',
       state: 'Rechazado',
-      observation: 'Un texto es una composición de signos codificados en un sistema de escritura que forma una unidad de sentido. También es una composición de caracteres imprimibles generados por un algoritmo de cifrado que, aunque no tienen sentido para cualquier persona, sí puede ser descifrado por su destinatario original.',
-    },
-    {
-      committedHours: '50',
-      hoursPerformed: '30',
-      pendingHours: '20',
-      state: 'Aprobado',
       observation: 'Un texto es una composición de signos codificados en un sistema de escritura que forma una unidad de sentido. También es una composición de caracteres imprimibles generados por un algoritmo de cifrado que, aunque no tienen sentido para cualquier persona, sí puede ser descifrado por su destinatario original.',
     },
   ],

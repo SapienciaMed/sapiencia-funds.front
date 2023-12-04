@@ -21,6 +21,7 @@ function KnowledgeTransfer() {
                     classSizeTable='size-table-wd-110'
                     princialTitle="Horas Transferencia de conocimiento"
                     isMobil={false}
+                    viePaginator={false}
                 />
         </section>
     )
