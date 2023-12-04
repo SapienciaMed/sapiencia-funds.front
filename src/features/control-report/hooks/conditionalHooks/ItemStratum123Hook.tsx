@@ -9,7 +9,7 @@ import { IGenericList } from "../../../../common/interfaces/global.interface";
 import { ApiResponse } from "../../../../common/utils/api-response";
 import { createStratum123Items } from "../../../../common/schemas/item-stratus123-schema";
 import useStratum123Api from "./stratum123-api.hooks";
-
+import Item from "../../pages/item/item-stratum.page"
 
 export const itemStratum123Hook = (action, data, collback) => {
   const { setMessage,} = useContext(AppContext);
@@ -36,11 +36,26 @@ export const itemStratum123Hook = (action, data, collback) => {
     setMessage({
       show: true,
       title: "Cancelar",
-      description: "¿Estas segur@ de cancelar?",
+      description: "¿Estás segur@ de cancelar?",
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
         setMessage((prev) => ({ ...prev, show: false }));
+      },
+      onCancel() {
+          setMessage({
+            show: true,
+            title: "Editar item",
+            onOk() {
+              setMessage({});
+            },
+            background: true,
+            description: (
+               <Item data={data} action={"edit"} collback={collback} />
+            ),
+            size: "large",
+            style: "mdl-agregarItem-voting",
+          });
       },
       background: true,
     });
@@ -62,7 +77,7 @@ export const itemStratum123Hook = (action, data, collback) => {
       setMessage({
         show: true,
         title: "Guardar",
-        description: "¿Esta segur@ de guardar la información?",
+        description: "¿Estás segur@ de guardar la información?",
         OkTitle: "Aceptar",
         cancelTitle: "Cancelar",
         async onOk() {

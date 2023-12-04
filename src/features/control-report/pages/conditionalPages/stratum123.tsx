@@ -81,7 +81,10 @@ function Estratum123Tab({ filters }) {
       fieldName: "totalCost",
       header: "Disponible",
       renderCell: (row) => {
-        return <>{Number(row.resourceAvailable) - Number(row.granted)}</>;
+         const numeroConPuntos = formaterNumberToCurrency(
+           Number(row.resourceAvailable) - Number(row.granted)
+         ).replace("$", "");
+        return <>{numeroConPuntos}</>;
       },
     },
     {
