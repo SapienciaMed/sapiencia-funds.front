@@ -4,6 +4,7 @@ import useCrudService from "../../../../common/hooks/crud-service.hook";
 import { ApiResponse } from "../../../../common/utils/api-response";
 import { urlApiFunds } from "../../../../common/utils/base-url";
 import * as XLSX from "xlsx";
+import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 export const ControlHook = (data) => {
   const { post } = useCrudService(urlApiFunds);
   const tableComponentRef = useRef(null);
@@ -11,8 +12,10 @@ export const ControlHook = (data) => {
   const [totalRestantes, setTotalRestates] = useState([]);
   const [totalInicial, setTotalInicial] = useState([]);
   const [TotalView, setTotalView] = useState(null);
+  const [infoControlSubTotal, setInfoControlSubTotal] = useState(null);
 
   const urlControl = `${urlApiFunds}/api/v1/controlSelect/getInfoControl`;
+  const urlControlSubtotal = `${urlApiFunds}/api/v1/controlSelect/getInfoControlSubtotales`;
   const getInfoControl = async (data) => {
     try {
       const endpoint = "/api/v1/controlSelect/getInfoControl";
@@ -25,7 +28,6 @@ export const ControlHook = (data) => {
       res.data["array"].forEach((data) => {
         dataTotal.inicial += Number(data.recursoInicial);
         dataTotal.restantes += Number(data.restante);
-
         return dataTotal;
       });
       if (res.data["array"].length > 0) {
@@ -35,6 +37,22 @@ export const ControlHook = (data) => {
       }
     } catch (error) {}
   };
+
+  const getInfoControlSubTotal = async (data) => {
+    const endpoint = "/api/v1/controlSelect/getInfoControlSubtotales";
+    const res: ApiResponse<[]> = await post(endpoint, data);
+
+    res.data["array"].forEach((data) => {
+      data.recursoInicial = formaterNumberToCurrency(
+        data.recursoInicial
+      ).replace("$", "");
+      data.restante = formaterNumberToCurrency(data.restante).replace("$", "");
+    });
+    if (res.data["array"].length > 0) {
+      setTotalView(true);
+      setInfoControlSubTotal(res.data["array"]);
+    }
+  };
   const { setMessage } = useContext(AppContext);
   useEffect(() => {
     tableComponentRef.current?.loadData({
@@ -42,6 +60,7 @@ export const ControlHook = (data) => {
     });
 
     getInfoControl(data);
+    getInfoControlSubTotal(data);
   }, []);
 
   const downloadCollection = async () => {
@@ -73,5 +92,7 @@ export const ControlHook = (data) => {
     totalInicial,
     downloadCollection,
     TotalView,
+    urlControlSubtotal,
+    infoControlSubTotal,
   };
 };

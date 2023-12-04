@@ -736,3 +736,34 @@ div[id="single-spa-application:@sapiencia/funds"] {
     }
   }
 }
+
+
+.button-save-container-display-items {
+  display: flex;
+  justify-content: end;
+  flex-direction: row;
+  margin-right: 24px;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin-top: 10px;
+    margin-left: 4px;
+    margin-bottom: 10px;
+
+    .button-save { /* Asegúrate de que esta clase corresponde al botón Guardar */
+      order: 1; /* Esto coloca el botón Guardar primero */
+      width: 100%;
+      padding: 12px 16px;
+      margin-top: 24px;
+    }
+
+    .button-clean { /* Asegúrate de que esta clase corresponde al botón Cancelar */
+      order: 2; /* Esto coloca el botón Cancelar después del botón Guardar */
+      width: 100%;
+      margin-left: 9px;
+      margin-top: 5px;
+      margin-bottom: 60px;
+    }
+  }
+}

@@ -5,9 +5,14 @@ import {
 } from "../../../../common/components/Form";
 import { ControlHook } from "../../hooks/conditionalHooks/ControlHook";
 import TableComponent from "../../../../common/components/table.component";
-import { columnsControl } from "../config-columns/columns-control";
+import {
+  columnsControl,
+  columnsControlSubtotal,
+} from "../config-columns/columns-control";
 import Svgs from "../../../../public/images/icons/svgs";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
 
 const ControlTab = (data) => {
   const {
@@ -18,6 +23,7 @@ const ControlTab = (data) => {
     totalInicial,
     downloadCollection,
     TotalView,
+    infoControlSubTotal,
   } = ControlHook(data.data);
   return (
     <>
@@ -35,55 +41,53 @@ const ControlTab = (data) => {
       </div>
       {TotalView && (
         <>
-          {/* <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
-        <div
-          className="bold mt-24px ml-16px mr-16px p-0"
-          style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
-        >
-          subtotales
-        </div>
-        <div className="grid-form-3-container mb-24px">
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="No. Preseleccionados"
-            //register={register}
-            classNameLabel="text-black biggest text-required"
-            //direction={EDirection.column}
-            //errors={errors}
-            // placeholder={`${totalNoPreseleccionados}`}
-            disabled
-          />
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="No. Cupos"
-            //register={register}
-            classNameLabel="text-black biggest text-required"
-            //direction={EDirection.column}
-            //errors={errors}
-            placeholder={""}
-            disabled
-            // value={String(totalNoCupos)}
-          />
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="Recurso disponible"
-            //register={register}
-            classNameLabel="text-black biggest text-required"
-            //direction={EDirection.column}
-            //errors={errors}
-            placeholder={""}
-            disabled
-            // value={String(totalRecursoDisponible)}
-          />
-        </div>
-      </div> */}
-
+          {TotalView && (
+            <>
+              <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+                <div
+                  className="bold mt-24px ml-16px mr-16px p-0"
+                  style={{
+                    fontWeight: 500,
+                    fontSize: "29px",
+                    color: "#000000",
+                  }}
+                >
+                  subtotales
+                </div>
+                <div className="spc-common-table">
+                  <DataTable
+                    value={infoControlSubTotal}
+                    showGridlines
+                    tableStyle={{
+                      fontSize: "14px",
+                      minWidth: "50rem",
+                      fontWeight: "500",
+                      marginTop: "24px",
+                      marginLeft: "16px",
+                      marginRight: "16px",
+                    }}
+                    emptyMessage={"No se generó resultado en la búsqueda"}
+                  >
+                    <Column
+                      field="comuna"
+                      header="ID comuna"
+                      style={{ fontSize: "14px", fontWeight: "400" }}
+                    ></Column>
+                    <Column
+                      field="recursoInicial"
+                      header="Recurso inicial"
+                      style={{ fontSize: "14px", fontWeight: "400" }}
+                    ></Column>
+                    <Column
+                      field="restante"
+                      header="Restante"
+                      style={{ fontSize: "14px", fontWeight: "400" }}
+                    ></Column>
+                  </DataTable>
+                </div>
+              </div>
+            </>
+          )}
           <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
             <div
               className="bold mt-24px ml-16px mr-16px p-0"
