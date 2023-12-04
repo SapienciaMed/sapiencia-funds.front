@@ -26,11 +26,11 @@ export default function useRequeriments() {
     const [visible, setVisible] = useState<boolean>(false);
     const { GetRequirementsByBeneficiary, GetRequirementFile, ComplianceAssignmentBeneficiary, DeleteUploadFiles } = usePaccServices()
     const [filesUploadData, setFilesUploadData] = useState<File>(null);
-    const { setMessage, setDisabledFields,authorization } = useContext(AppContext);
+    const { setMessage, setDisabledFields, authorization } = useContext(AppContext);
     const [ idBeneficiary, setIdBeneficiary] = useState('')
-    const [ idRequirement, setIdRequirement ] = useState('')
     const [showTable, setShowTable] = useState(false);
     const [ showSpinner, setShowSpinner ] = useState(false)
+    const [ idCode, setIdCode ] = useState('')
    
 
     const initialStateCheck = {
@@ -52,7 +52,7 @@ export default function useRequeriments() {
     useEffect(() => {
         if (filesUploadData != null) {
             //Guarda el archivo
-            uploadFiles(idRequirement, filesUploadData, setMessage, loadTableData)
+            uploadFiles(idCode, [filesUploadData], setMessage, loadTableData, authorization)
         }
     },[filesUploadData])
 
@@ -144,7 +144,7 @@ export default function useRequeriments() {
                                     onClick={(e) => {
                                         toast.current.toggle(e);
                                         setIdBeneficiary(String(row.idBeneficiary))
-                                        setIdRequirement(String(row.idRequirement))  
+                                        setIdCode(String(row.id))  
                                     }} 
                                 />
                                 
@@ -191,7 +191,7 @@ export default function useRequeriments() {
                             <button className="p-menuitem-link button-menu-tooltip" 
                                 onClick={() => {
                                     setShowSpinner(true)
-                                    idRequirement && GetRequirementFile(idRequirement).then(response => {
+                                    idCode && GetRequirementFile(idCode).then(response => {
                                         if(response.operation.code === EResponseCodes.OK){
                                            if (response.data.length == 0) {
                                                setMessage({
@@ -246,35 +246,6 @@ export default function useRequeriments() {
         },
     ];
 
-    // const showFile = () => {
-    //     if (filesUploadData) {
-    //         const primerArchivo = filesUploadData;
-    //         const archivoURL = URL.createObjectURL(primerArchivo);
-
-    //         const ventanaNueva = window.open('', '_blank');
-
-    //         if (ventanaNueva) {
-    //             ventanaNueva.location.href = archivoURL;
-    //         } else {
-    //             console.error('No se pudo abrir la nueva pestaña.');
-    //         }
-
-    //         URL.revokeObjectURL(archivoURL);
-    //     }else {
-    //         toast.current.hide();
-    //         setMessage({
-    //             show: true,
-    //             title: "Ver adjunto",
-    //             description: 'No hay archivo para visualizar',
-    //             background: true,
-    //             OkTitle: 'Aceptar',
-    //             onOk() {
-    //                 setMessage({});
-    //             },
-    //         });
-    //     }
-    // }
-
     const deleteFile = () => {
         toast.current.hide();
         setMessage({
@@ -284,8 +255,8 @@ export default function useRequeriments() {
             background: true,
             OkTitle: 'Aceptar',
             onOk() {
-                DeleteUploadFiles(idRequirement, idBeneficiary).then(response => {
-                    if(response.operation.code === EResponseCodes.OK){
+                DeleteUploadFiles(idCode, idBeneficiary).then(response => {
+                    if(response){
                         setMessage({
                             show: true,
                             title: "Eliminar",
