@@ -7,7 +7,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 
 function ManagePage() {
 
-    const { dataManager, showSpinner, onCancel  } =  useManage()
+    const { dataManager, showSpinner  } =  useManage()
     
     return(
         <div className="main-page">
@@ -136,20 +136,6 @@ function ManagePage() {
                 {
                     dataManager.component ? dataManager.component : <></>
                 }
-            </div>
-            <div className="funcionality-buttons-container">
-                <ButtonComponent
-                    value="Cancelar"
-                    type="button"
-                    className="button-clean-fields bold"
-                    action={onCancel}
-                />
-                <ButtonComponent
-                    className="button-main huge hover-three"
-                    value="Guardar"
-                    type="submit"
-                    form="acta-form"
-                />
             </div>
         </div>
     )
