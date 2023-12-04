@@ -10,16 +10,14 @@ export const columnsLegalization: ITableElement<ILegalizationTable>[] = [
     fieldName: "Availableresources",
     header: "Recurso disponible",
     renderCell: (row) => {
-      return (
-        <>{formaterNumberToCurrency(row.Availableresources).replace("$", "")}</>
-      );
+      return <>{formaterNumberToCurrency(row.Availableresources)}</>;
     },
   },
   {
     fieldName: "Granted",
     header: "Otorgado",
     renderCell: (row) => {
-      return <>{formaterNumberToCurrency(row.Granted).replace("$", "")}</>;
+      return <>{formaterNumberToCurrency(row.Granted)}</>;
     },
   },
   {
@@ -30,7 +28,7 @@ export const columnsLegalization: ITableElement<ILegalizationTable>[] = [
         <>
           {formaterNumberToCurrency(
             Math.round(Number(row.Availableresources) - Number(row.Granted))
-          ).replace("$", "")}
+          )}
         </>
       );
     },

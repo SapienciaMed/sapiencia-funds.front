@@ -72,7 +72,7 @@ export const stratum456Hook = (data) => {
 
   const getInfoStatum456 = async (data) => {
     try {
-      const endpoint = "/api/v1/controlSelect/getInfoEstratos456";
+      const endpoint = "/api/v1/controlSelect/getInfoEstratos456Totals";
       const res: ApiResponse<[]> = await post(endpoint, data);
       let dataTotal = {
         resourceAvailable: null,
@@ -139,7 +139,9 @@ export const stratum456Hook = (data) => {
   };
 
   useEffect(() => {
-    getInfoStatum456(data);
+    setTimeout(() => {
+      getInfoStatum456(data);
+    }, 1000);
   }, []);
   return {
     setPaginateData,

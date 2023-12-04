@@ -22,7 +22,7 @@ export const LegalizationHook = (data) => {
   const [TotalView, setTotalView] = useState(null);
   const getInfoLegalization = async (data) => {
     try {
-      const endpoint = "/api/v1/controlSelect/getInfoLegalization";
+      const endpoint = "/api/v1/controlSelect/getInfoLegalizationTotals";
       const res: ApiResponse<[]> = await post(endpoint, data);
       const dataRes = res.data["array"].map((data) => {
         let dataColumns = {
@@ -151,7 +151,10 @@ export const LegalizationHook = (data) => {
     tableComponentRef.current?.loadData({
       ...data,
     });
-    getInfoLegalization(data);
+
+    setTimeout(() => {
+      getInfoLegalization(data);
+    }, 1000);
   }, []);
 
   return {

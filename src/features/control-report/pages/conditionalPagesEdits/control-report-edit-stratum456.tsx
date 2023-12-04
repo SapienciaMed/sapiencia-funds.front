@@ -12,6 +12,8 @@ import { EResponseCodes } from "../../../../common/constants/api.enum";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { urlApiFunds } from "../../../../common/utils/base-url";
 import useCrudService from "../../../../common/hooks/crud-service.hook";
+import { InputNumberComponent } from "../../../../common/components/Form/input-number.component";
+import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 export const controlEditStratum456 = yup.object({
   consolidatedPreselected: yup.number().optional(),
@@ -72,7 +74,10 @@ const ControlreporteditStratum456 = (data) => {
       "porPorcent",
       Math.round((info.granted / info.resourceAvailable) * 100) + "%"
     );
-    setValue("Avaible", info.resourceAvailable - info.granted);
+    setValue(
+      "Avaible",
+      formaterNumberToCurrency(info.resourceAvailable - info.granted)
+    );
   }, []);
 
   const updateInfo = async (data) => {
@@ -158,15 +163,15 @@ const ControlreporteditStratum456 = (data) => {
               name={"resourceAvailable"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"resourceAvailable"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
+                    control={control}
                     label="Recurso disponible"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black big text-with-colons"
                     errors={errors}
                     placeholder={""}
+                    prefix="$"
                     {...field}
                   />
                 );

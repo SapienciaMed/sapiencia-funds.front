@@ -104,9 +104,7 @@ const ControlTab = (data) => {
                 classNameLabel="text-black biggest text-required"
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalInicial).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalInicial))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
@@ -116,9 +114,7 @@ const ControlTab = (data) => {
                 classNameLabel="text-black biggest text-required"
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalRestantes).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalRestantes))}
               />
             </div>
           </div>
