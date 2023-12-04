@@ -18,4 +18,5 @@ export interface IRequerimentsResultSimple {
   activeRequirement: boolean
   percentRequirement: number | null;
   accomplished?: number;
+  mandatoryFor: string
 }
