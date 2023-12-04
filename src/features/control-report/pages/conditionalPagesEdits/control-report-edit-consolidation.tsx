@@ -11,6 +11,8 @@ import { AppContext } from "../../../../common/contexts/app.context";
 import useCrudService from "../../../../common/hooks/crud-service.hook";
 import { urlApiFunds } from "../../../../common/utils/base-url";
 import { EResponseCodes } from "../../../../common/constants/api.enum";
+import { InputNumberComponent } from "../../../../common/components/Form/input-number.component";
+import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 export const controlEditConsolidation = yup.object({
   consolidatedPreselected: yup.number().optional(),
@@ -61,7 +63,7 @@ const Controlreporteditconsolidation = (data) => {
     let Available =
       info.consolidatedResourceAvailable - info.consolidatedGranted;
 
-    setValue("Avaible", Available);
+    setValue("Avaible", formaterNumberToCurrency(Available));
 
     let porParticipacion =
       Math.round(
@@ -216,15 +218,15 @@ const Controlreporteditconsolidation = (data) => {
               name={"consolidatedResourceAvailable"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"consolidatedResourceAvailable"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
                     label="Recurso disponible"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
                     errors={errors}
+                    classNameLabel="text-black big text-with-colons"
                     placeholder={""}
+                    control={control}
+                    prefix="$"
                     {...field}
                   />
                 );
@@ -240,15 +242,15 @@ const Controlreporteditconsolidation = (data) => {
               name={"consolidatedGranted"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"consolidatedGranted"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
                     label="Otorgado"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black big text-with-colons"
                     errors={errors}
                     placeholder={""}
+                    control={control}
+                    prefix="$"
                     {...field}
                   />
                 );
@@ -326,15 +328,15 @@ const Controlreporteditconsolidation = (data) => {
               name={"consolidatedFinancialReturns"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"consolidatedFinancialReturns"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
                     label="Rendimientos financieros"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black big text-with-colons"
                     errors={errors}
                     placeholder={""}
+                    control={control}
+                    prefix="$"
                     {...field}
                   />
                 );

@@ -45,9 +45,7 @@ const Stratum456Tab = (data) => {
       fieldName: "resourceAvailable",
       header: "Recurso Disponible",
       renderCell: (row) => {
-        const numeroConPuntos = formaterNumberToCurrency(
-          row.resourceAvailable
-        ).replace("$", "");
+        const numeroConPuntos = formaterNumberToCurrency(row.resourceAvailable);
         return <>{numeroConPuntos}</>;
       },
     },
@@ -68,7 +66,7 @@ const Stratum456Tab = (data) => {
       renderCell: (row) => {
         const numeroConPuntos = formaterNumberToCurrency(
           Math.round(Number(row.resourceAvailable) - Number(row.granted))
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -165,9 +163,7 @@ const Stratum456Tab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalOtorgado).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalOtorgado))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
@@ -180,9 +176,7 @@ const Stratum456Tab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalDisponible).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalDisponible))}
               />
             </div>
             <div className="grid-form-2-container mb-24px">

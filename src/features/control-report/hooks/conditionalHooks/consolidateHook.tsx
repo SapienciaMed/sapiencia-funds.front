@@ -33,7 +33,7 @@ export const consolidateHook = (data) => {
   const [TotalView, setTotalView] = useState(null);
   const getInfoConsolidado = async (data) => {
     try {
-      const endpoint = "/api/v1/controlSelect/getInfoConsolidate";
+      const endpoint = "/api/v1/controlSelect/getInfoConsolidateTotals";
       const res: ApiResponse<[]> = await post(endpoint, data);
 
       const dataRes = res.data["array"].map((data) => {
@@ -199,7 +199,10 @@ export const consolidateHook = (data) => {
     tableComponentRef.current?.loadData({
       ...data,
     });
-    getInfoConsolidado(data);
+
+    setTimeout(() => {
+      getInfoConsolidado(data);
+    }, 1000);
   }, []);
 
   return {

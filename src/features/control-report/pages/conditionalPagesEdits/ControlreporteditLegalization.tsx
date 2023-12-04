@@ -11,6 +11,8 @@ import { AppContext } from "../../../../common/contexts/app.context";
 import { EResponseCodes } from "../../../../common/constants/api.enum";
 import { urlApiFunds } from "../../../../common/utils/base-url";
 import useCrudService from "../../../../common/hooks/crud-service.hook";
+import { InputNumberComponent } from "../../../../common/components/Form/input-number.component";
+import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 const ControlreporteditLegalization = (data) => {
   const info = data.data;
 
@@ -127,14 +129,17 @@ const ControlreporteditLegalization = (data) => {
     setValue("Availableresources", info.Availableresources);
 
     let Avaible = Number(info.Availableresources) - Number(info.Granted);
-    setValue("Avaible", Avaible);
+    setValue("Avaible", formaterNumberToCurrency(Avaible));
 
-    let porParticipacion =
-      Math.round(
-        (Number(info.Granted) / Number(info.Availableresources)) * 100
-      ) + "%";
+    let porParticipacion = Math.round(
+      (Number(info.Granted) / Number(info.Availableresources)) * 100
+    );
 
-    setValue("porParticipacion", porParticipacion);
+    if (porParticipacion == Infinity) {
+      porParticipacion = 0;
+    }
+
+    setValue("porParticipacion", porParticipacion + "%");
   }, []);
   return (
     <Fragment>
@@ -196,15 +201,15 @@ const ControlreporteditLegalization = (data) => {
               name={"Availableresources"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"Availableresources"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
                     label="Recurso disponible"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black big text-with-colons"
                     errors={errors}
                     placeholder={""}
+                    control={control}
+                    prefix="$"
                     {...field}
                   />
                 );
@@ -220,14 +225,14 @@ const ControlreporteditLegalization = (data) => {
               name={"Granted"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"Granted"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
                     label="Otorgado"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black big text-with-colons"
                     errors={errors}
+                    control={control}
+                    prefix="$"
                     placeholder={""}
                     {...field}
                   />

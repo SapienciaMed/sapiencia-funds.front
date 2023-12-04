@@ -88,12 +88,7 @@ const LegalizacionTab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalRecursoDisponible).replace(
-                    "$",
-                    ""
-                  )
-                )}
+                value={String(formaterNumberToCurrency(totalRecursoDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
@@ -106,9 +101,7 @@ const LegalizacionTab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalOtorgado).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalOtorgado))}
               />
             </div>
             <div className="grid-form-3-container mb-24px">
@@ -123,9 +116,7 @@ const LegalizacionTab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalDisponible).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}

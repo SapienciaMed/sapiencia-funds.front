@@ -59,7 +59,7 @@ const ConsolidateTab = (data) => {
       renderCell: (row) => {
         const numeroConPuntos = formaterNumberToCurrency(
           row.consolidatedResourceAvailable
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -69,7 +69,7 @@ const ConsolidateTab = (data) => {
       renderCell: (row) => {
         const numeroConPuntos = formaterNumberToCurrency(
           row.consolidatedGranted
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -82,7 +82,7 @@ const ConsolidateTab = (data) => {
             Number(row.consolidatedResourceAvailable) -
               Number(row.consolidatedGranted)
           )
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -129,7 +129,7 @@ const ConsolidateTab = (data) => {
       renderCell: (row) => {
         const numeroConPuntos = formaterNumberToCurrency(
           row.consolidatedFinancialReturns
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -170,9 +170,7 @@ const ConsolidateTab = (data) => {
                 classNameLabel="text-black biggest text-required"
                 //direction={EDirection.column}
                 //errors={errors}
-                placeholder={`${formaterNumberToCurrency(
-                  totalNoPreseleccionados
-                ).replace("$", "")}`}
+                placeholder={`${totalNoPreseleccionados}`}
                 disabled
               />
               <InputComponent
@@ -199,12 +197,7 @@ const ConsolidateTab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalRecursoDisponible).replace(
-                    "$",
-                    ""
-                  )
-                )}
+                value={String(formaterNumberToCurrency(totalRecursoDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
@@ -217,9 +210,7 @@ const ConsolidateTab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalOtorgado).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalOtorgado))}
               />
             </div>
             <div className="grid-form-4-container mb-24px">
@@ -234,9 +225,7 @@ const ConsolidateTab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalDisponible).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
@@ -276,10 +265,7 @@ const ConsolidateTab = (data) => {
                 placeholder={""}
                 disabled
                 value={String(
-                  formaterNumberToCurrency(totalRendimientoFinancieros).replace(
-                    "$",
-                    ""
-                  )
+                  formaterNumberToCurrency(totalRendimientoFinancieros)
                 )}
               />
             </div>
