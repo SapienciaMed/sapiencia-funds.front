@@ -20,7 +20,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
         percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate,datos
     } = useRenewaReportSearch();
 
-    console.log('asi llega a la vista',dataGridRenewal)
+    //console.log('asi llega a la vista',datos)
 
     const tableColumnsRenewal: ITableElement<ICallRenewal>[] = [
         {

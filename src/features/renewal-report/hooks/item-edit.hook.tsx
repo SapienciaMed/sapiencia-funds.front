@@ -7,6 +7,8 @@ import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 
 
 export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTableServices?: any[]) {
+
+    console.log('edit',renewal)
     //contex
     const { setMessage, setdataGridRenewal, dataGridRenewal } = useContext(AppContext);
     const [selectedRenewal, setSelectedRenewal] = useState<ICallRenewal | null>(null);
@@ -22,19 +24,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
     //states
     const [showTable, setShowTable] = useState(false);
     const [datos, setDatos] = useState<ICallRenewal[]>([]);
-    const [typeProgram, setTypeProgram] = useState([]);
-    const [masterList, setMasterList] = useState([]);
-    const [programList, setProgramList] = useState([]);
-    const [foundList, setFoundList] = useState([]);
-    const [lineList, setLineList] = useState([]);
-    const [announcementList, setAnnouncementList] = useState([]);
-    const [conceptList, setConceptList] = useState([]);
-    const [costBillsOperation, setCostBillsOperationt] = useState("0");
-    const [neto, setNet] = useState("0");
-    const [financialOperatorCommission, setFinancialOperatorCommission] = useState("0");
-    //const [dataActa, setDataActa] = useState<IActa>(acta);
-    const [resourcesCredit, setResourcesCredit] = useState("0");
-    const [periods, setPeriods] = useState("");
+  
     
     //form
     const {
@@ -88,8 +78,10 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
                 }
                 return row;
             });
+
+            console.log('actualizado',updatedDataGrid)
     
-            setdataGridRenewal(updatedDataGrid);
+            setDatos(updatedDataGrid);
             setSelectedRenewal(null); 
             CancelFunction();
         }
@@ -103,20 +95,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
         return () => {
             reset();
             setShowTable(false);
-            setDatos([]);
-            setTypeProgram([]);
-            setMasterList([]);
-            setProgramList([]);
-            setFoundList([]);
-            setLineList([]);
-            setAnnouncementList([]);
-            setConceptList([]);
-            setCostBillsOperationt("0");
-            setNet("0");
-            setFinancialOperatorCommission("0");
-            setResourcesCredit("0");
-            //setDataActa(acta);
-            setPeriods("");
+            setDatos([]);           
         };
     }, []);
 

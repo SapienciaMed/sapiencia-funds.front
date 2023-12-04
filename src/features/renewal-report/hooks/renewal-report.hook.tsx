@@ -140,7 +140,7 @@ export default function useRenewaReportSearch() {
 
     // En useRenewaReportSearch
     const updateDataGridRenewal = (updatedRenewal: ICallRenewal) => {
-        const updatedDataGrid = dataGridRenewal.map(row => {
+        const updatedDataGrid = datos.map(row => {
             if (row.fund === updatedRenewal.fund) {
                 return {
                     ...row,
@@ -151,7 +151,8 @@ export default function useRenewaReportSearch() {
             return row;
         });
 
-        setdataGridRenewal(updatedDataGrid);
+        setDatos(updatedDataGrid);
+        console.log('actulizado',updatedDataGrid)
     };
     // searchRenewal
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
@@ -184,7 +185,7 @@ export default function useRenewaReportSearch() {
 
         setDatos(newDataArray)
 
-        console.log('item', newDataArray)
+       
         // La última fila Beca mejores bachilleres legalizados 
         const lastRow = responservice.data.array.slice(-1)[0];
 
@@ -206,7 +207,7 @@ export default function useRenewaReportSearch() {
         setdataGridRenewal(datos);
     },datos)
 
-    console.log('datos grid',dataGridRenewal)
+    //console.log('datos grid',dataGridRenewal)
 
     //Consultar
     const onSubmit = handleSubmit(async (data: ICallRenewal) => {
