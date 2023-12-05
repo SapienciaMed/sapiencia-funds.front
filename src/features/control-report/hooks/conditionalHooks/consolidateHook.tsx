@@ -31,6 +31,7 @@ export const consolidateHook = (data) => {
   const { getListByGroupers } = useGenericListService();
   const [comunaList, setComunaList] = useState([]);
   const [TotalView, setTotalView] = useState(null);
+  const [color, setColor] = useState(null);
   const getInfoConsolidado = async (data) => {
     try {
       const endpoint = "/api/v1/controlSelect/getInfoConsolidateTotals";
@@ -102,16 +103,28 @@ export const consolidateHook = (data) => {
         });
 
         totalData.totalPorParticipacion =
-          Math.round(totalData.totalPorParticipacion / totalDataRes) + "%";
+          (totalData.totalOtorgado / totalData.totalRecursoDisponible) * 100;
+
+        if (
+          totalData.totalPorParticipacion >= 90 &&
+          totalData.totalPorParticipacion <= 98
+        ) {
+          setColor("text-yellow");
+        } else if (
+          totalData.totalPorParticipacion > 98 &&
+          totalData.totalPorParticipacion <= 100
+        ) {
+          setColor("text-red");
+        }
+
         setTotalNoPreseleccionados(totalData.totalNoPreseleccionados);
         setTotalOtorgado(totalData.totalOtorgado);
         setTotalNoCupos(totalData.totalNoCupos);
         setTotalRecursoDisponible(totalData.totalRecursoDisponible);
         setTotalDisponible(totalData.totalDisponible);
-        setTotalPorParticipacion(totalData.totalPorParticipacion);
+        setTotalPorParticipacion(totalData.totalPorParticipacion.toFixed(2));
         setTotalNoLegalizados(totalData.totalNoLegalizados);
         setTotalRendimientoFinancieros(totalData.totalRendimientoFinancieros);
-
         setTableColumns(columnsConsolidados);
       }
     } catch (err) {
@@ -183,7 +196,19 @@ export const consolidateHook = (data) => {
         setMessage({
           show: true,
           background: true,
-          description: <Controlreporteditconsolidation data={row} />,
+          description: (
+            <Controlreporteditconsolidation
+              onEdit={() => {
+                tableComponentRef.current?.loadData({
+                  ...data, /// Filtro de busqueda
+                });
+              }}
+              data={row}
+              onUpdateTotals={() => {
+                getInfoConsolidado(data);
+              }}
+            />
+          ),
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -199,7 +224,6 @@ export const consolidateHook = (data) => {
     tableComponentRef.current?.loadData({
       ...data,
     });
-
     setTimeout(() => {
       getInfoConsolidado(data);
     }, 1000);
@@ -222,5 +246,6 @@ export const consolidateHook = (data) => {
     downloadCollection,
     comunaList,
     TotalView,
+    color,
   };
 };

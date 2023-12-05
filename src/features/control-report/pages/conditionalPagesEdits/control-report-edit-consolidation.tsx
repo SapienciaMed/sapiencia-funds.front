@@ -15,25 +15,35 @@ import { InputNumberComponent } from "../../../../common/components/Form/input-n
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 export const controlEditConsolidation = yup.object({
-  consolidatedPreselected: yup.number().optional(),
-  places: yup.number().optional(),
+  consolidatedPreselected: yup
+  .number().optional().typeError("Completar información"),
+  places: yup.number().optional().typeError("Completar información"),
   consolidatedResourceAvailable: yup.number().optional(),
   consolidatedGranted: yup.number().optional(),
   consolidatedLegalized: yup.number().optional(),
   consolidatedFinancialReturns: yup.number().optional(),
 });
+interface IProps {
+  onEdit: () => void;
+  data: any; // Usar el tipado
+  onUpdateTotals: () => void;
+}
 
-const Controlreporteditconsolidation = (data) => {
-  const info = data.data;
+const Controlreporteditconsolidation = ({
+  onEdit,
+  data,
+  onUpdateTotals,
+}: IProps): JSX.Element => {
+  const info = data;
   const resolver = useYupValidationResolver(controlEditConsolidation);
   const { setMessage } = useContext(AppContext);
   const { put } = useCrudService(urlApiFunds);
+  const [color, setColor] = useState(null);
   const {
     handleSubmit,
     watch,
     register,
-    reset,
-    getValues,
+    reset,    
     setValue,
     control,
     formState: { errors, isValid },
@@ -65,14 +75,26 @@ const Controlreporteditconsolidation = (data) => {
 
     setValue("Avaible", formaterNumberToCurrency(Available));
 
-    let porParticipacion =
-      Math.round(
-        (Number(info.consolidatedGranted) /
-          Number(info.consolidatedResourceAvailable)) *
-          100
-      ) + "%";
+    let porParticipacion = Math.round(
+      (Number(info.consolidatedGranted) /
+        Number(info.consolidatedResourceAvailable)) *
+        100
+    );
 
-    setValue("porPorcent", porParticipacion);
+    if (
+      isNaN(porParticipacion) ||
+      porParticipacion == Infinity ||
+      porParticipacion == undefined
+    ) {
+      porParticipacion = 0;
+    }
+    if (porParticipacion >= 90 && porParticipacion <= 98) {
+      setColor("text-yellow");
+    } else if (porParticipacion > 98 && porParticipacion <= 100) {
+      setColor("text-red");
+    }
+
+    setValue("porPorcent", porParticipacion + "%");
   }, []);
   const updateInfo = async (data) => {
     try {
@@ -97,8 +119,9 @@ const Controlreporteditconsolidation = (data) => {
         show: true,
         OkTitle: "Cerrar",
         onOk: () => {
-          setMessage({ show: false });
-          window.location.reload();
+          setMessage((prev) => ({ ...prev, show: false }));
+          onEdit();
+          onUpdateTotals();
         },
 
         background: true,
@@ -150,12 +173,28 @@ const Controlreporteditconsolidation = (data) => {
       cancelTitle: "Cancelar",
       background: true,
       onOk: () => {
-        setMessage({ show: false });
+        setMessage((prev) => ({ ...prev, show: false }));
       },
       onCancel: () => {
-        setMessage({ show: false });
+        setMessage({
+          show: true,
+          title: "Editar ítem",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: (
+            <Controlreporteditconsolidation
+              onEdit={onEdit}
+              data={data}
+              onUpdateTotals={onUpdateTotals}
+            />
+          ),
+          size: "items",
+          items: true,
+        });
       },
-      onClose: () => setMessage({ show: false }),
+      onClose: () => setMessage({}),
     });
   };
 
@@ -268,7 +307,7 @@ const Controlreporteditconsolidation = (data) => {
                     typeInput="text"
                     label="Disponibles"
                     register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black biggest"
                     errors={errors}
                     placeholder={""}
                     maxLength={9}
@@ -285,11 +324,11 @@ const Controlreporteditconsolidation = (data) => {
                 return (
                   <InputComponent
                     idInput={"porPorcent"}
-                    className="input-basic medium"
+                    className={`input-basic medium ${color}`}
                     typeInput="text"
                     label="%Participacion"
                     register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black biggest"
                     errors={errors}
                     placeholder={""}
                     maxLength={9}
@@ -351,10 +390,10 @@ const Controlreporteditconsolidation = (data) => {
             backgroundColor: "#e0e0e0",
           }}
         ></div>
-        <div className="button-save-container-display mr-24px">
+        <div className="button-save-container-display-items margin-right0 mr-24px">
           <ButtonComponent
             value="Cancelar"
-            className="button-clean bold"
+            className="button-clean"
             type="button"
             action={handleCancel}
           />
