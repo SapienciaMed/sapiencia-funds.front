@@ -351,10 +351,10 @@ const Controlreporteditconsolidation = (data) => {
             backgroundColor: "#e0e0e0",
           }}
         ></div>
-        <div className="button-save-container-display mr-24px">
+        <div className="button-save-container-display-items margin-right0 mr-24px">
           <ButtonComponent
             value="Cancelar"
-            className="button-clean bold"
+            className="button-clean"
             type="button"
             action={handleCancel}
           />
