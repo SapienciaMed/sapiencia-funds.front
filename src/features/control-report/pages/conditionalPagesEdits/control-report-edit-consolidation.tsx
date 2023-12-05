@@ -15,8 +15,9 @@ import { InputNumberComponent } from "../../../../common/components/Form/input-n
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 export const controlEditConsolidation = yup.object({
-  consolidatedPreselected: yup.number().optional(),
-  places: yup.number().optional(),
+  consolidatedPreselected: yup
+  .number().optional().typeError("Completar información"),
+  places: yup.number().optional().typeError("Completar información"),
   consolidatedResourceAvailable: yup.number().optional(),
   consolidatedGranted: yup.number().optional(),
   consolidatedLegalized: yup.number().optional(),
@@ -42,8 +43,7 @@ const Controlreporteditconsolidation = ({
     handleSubmit,
     watch,
     register,
-    reset,
-    getValues,
+    reset,    
     setValue,
     control,
     formState: { errors, isValid },
@@ -307,7 +307,7 @@ const Controlreporteditconsolidation = ({
                     typeInput="text"
                     label="Disponibles"
                     register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black biggest"
                     errors={errors}
                     placeholder={""}
                     maxLength={9}
@@ -328,7 +328,7 @@ const Controlreporteditconsolidation = ({
                     typeInput="text"
                     label="%Participacion"
                     register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black biggest"
                     errors={errors}
                     placeholder={""}
                     maxLength={9}
@@ -390,10 +390,10 @@ const Controlreporteditconsolidation = ({
             backgroundColor: "#e0e0e0",
           }}
         ></div>
-        <div className="button-save-container-display mr-24px">
+        <div className="button-save-container-display-items margin-right0 mr-24px">
           <ButtonComponent
             value="Cancelar"
-            className="button-clean bold"
+            className="button-clean"
             type="button"
             action={handleCancel}
           />

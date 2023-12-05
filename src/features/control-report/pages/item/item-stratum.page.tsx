@@ -154,20 +154,21 @@ const Item = ({ data, action, collback }) => {
           />
         </section>
 
-        <div className="button-save-container-display-users margin-right0">
+        <div className="button-save-container-display-items margin-right0 mr-24px">
           <ButtonComponent
             value="Cancelar"
             type="button"
-            className="button-cancel-text large hover-three disabled-black"
+            className="button-clean"
             action={() => CancelFunction()}
           />
           <ButtonComponent
             form="createItemForm"
             value="Guardar"
             type="submit"
-            className="button-save large disabled-black"
+            className={`button-save big`}
           />
         </div>
+     
       </FormComponent>
     </Fragment>
   );
