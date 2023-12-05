@@ -66,6 +66,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
 
     const updateDataGridRenewal = () => {
         const selectedFound = watch('enabled');
+        console.log('f',renewal)
         if (selectedRenewal) {
             
             const updatedDataGrid = dataGridRenewal.map(row => {
@@ -78,6 +79,8 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
                 }
                 return row;
             });
+
+            setdataGridRenewal([])
 
             console.log('actualizado',updatedDataGrid)
     

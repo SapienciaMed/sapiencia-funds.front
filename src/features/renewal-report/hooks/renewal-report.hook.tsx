@@ -26,6 +26,7 @@ export default function useRenewaReportSearch() {
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
+    
     const [enabledTotal, setEnabledTotal] = useState(0);
     const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
     
@@ -34,7 +35,8 @@ export default function useRenewaReportSearch() {
     const [percentageBachLeg, setPercentageBachLeg] = useState("0.00%");
     const [inputEnabledBachLeg, setInputEnabledBachLeg] = useState("0");
     const [datos, setDatos] = useState([]);
-
+    
+    const [datoss, setDatoss] = useState([]);
 
 
 
@@ -156,51 +158,37 @@ export default function useRenewaReportSearch() {
     };
     // searchRenewal
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
-
         const selectedperiodo = watch('period');
         data.period = selectedperiodo;
         data.page = 1;
         data.perPage = 10;
-
-
-
-
+    
         const responservice: any = await getRenewalReport(data)
             .then(async (response) => {
                 return response
             });
-        // Quitar la última fila del array
-        const dataArrayWithoutLastRow = responservice.data.array.slice(0, -1);
-
-        // Crear un nuevo array con los datos actualizados
-        const newDataArray = dataArrayWithoutLastRow.map(e => ({
+    
+        // Crear un nuevo array con los datos procesados
+        const newData = responservice.data.array.slice(0, -1).map(e => ({
             fund: e.fund,
             enabled: e.enabled,
             renewed: e.renewed,
             percentage: calculatePercentage(e.renewed, e.enabled),
         }));
 
-        // Actualizar el estado con el nuevo array
-        setdataGridRenewal(newDataArray);
-
-        setDatos(newDataArray)
-
+        // Establecer el nuevo array como el estado actual
+        
+        setDatoss(newData);
        
-        // La última fila Beca mejores bachilleres legalizados 
+        
+        // Manejar la última fila (Beca mejores bachilleres legalizados)
         const lastRow = responservice.data.array.slice(-1)[0];
-
-        setenabledBachLeg(lastRow.enabled)
-        setrenewedBachLeg(lastRow.renewed)
-
-        // Calcular Porcentaje para enabledBachLeg
-        const parsedEnabledBachLeg = parseFloat(lastRow.enabled);
-        const parsedRenewedBachLeg = parseFloat(lastRow.renewed);
-        const percentageBachLeg = parsedEnabledBachLeg !== 0
-            ? ((parsedRenewedBachLeg / parsedEnabledBachLeg)).toFixed(3) + "%"
+        setenabledBachLeg(lastRow.enabled);
+        setrenewedBachLeg(lastRow.renewed);
+        const percentageBachLeg = parseFloat(lastRow.enabled) !== 0
+            ? ((parseFloat(lastRow.renewed) / parseFloat(lastRow.enabled)).toFixed(3) + "%")
             : "0.00%";
-
         setPercentageBachLeg(percentageBachLeg);
-
     });
     
     useEffect(()=>{
@@ -208,6 +196,13 @@ export default function useRenewaReportSearch() {
     },datos)
 
     //console.log('datos grid',dataGridRenewal)
+
+    useEffect(()=>{
+        console.log(datoss)
+        //setdataGridE([1,2,3,4])
+    },[datoss])
+    
+    //console.log(dataGridE)
 
     //Consultar
     const onSubmit = handleSubmit(async (data: ICallRenewal) => {
@@ -407,7 +402,8 @@ export default function useRenewaReportSearch() {
         setInputEnabledBachLeg,
         inputEnabledBachLeg,
         onsubmitCreate,
-        datos
+        datos,
+        datoss
        
     }
 }

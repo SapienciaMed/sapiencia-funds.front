@@ -16,11 +16,11 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
     const {
         control, errors, watch, register, setValue, navigate, tableComponentRef, showTable,
         setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
-        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, 
-        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate,datos
+        totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal,
+        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate,datoss
     } = useRenewaReportSearch();
 
-    //console.log('asi llega a la vista',datos)
+    console.log('asi llega a la vista',datoss)
 
     const tableColumnsRenewal: ITableElement<ICallRenewal>[] = [
         {
@@ -106,9 +106,8 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                                 className="button-clean medium"
                                 type="button"
                                 action={() => {
-                                    //reset();
-                                    
-                                   // tableComponentRef.current.emptyData();
+                                    reset();
+                                    tableComponentRef.current.emptyData();
                                 }
                                 }
                             />
@@ -117,7 +116,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                                 value={`Buscar`}
                                 action={() => {
                                     // Limpiar dataGridRenewal cuando cambie la convocatoria
-                                    //setDataGridRenewal([]);
+                                    setdataGridRenewal([]);
                                     searchRenewal();
                                 }}
                                 className="button-save large hover-three disabled-black"
@@ -128,14 +127,14 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
                 <div
                     style={
-                        datos.length > 0 ? { display: "block" } : { display: "none" }
+                        datoss.length > 0 ? { display: "block" } : { display: "none" }
                     }
                 >
                     <div className="container-sections-forms">
 
                         <BasicTableComponent
                             ref={tableComponentRef}
-                            data={datos}
+                            data={datoss}
                             columns={tableColumnsRenewal}
                             actions={tableActionsRenewal}
                             titleMessageModalNoResult="Registro no existente"
