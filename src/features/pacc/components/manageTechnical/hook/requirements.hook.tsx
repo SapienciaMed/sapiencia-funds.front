@@ -68,6 +68,7 @@ export default function useRequeriments() {
 
         return () => {
             setDisabledFields(false)
+            setStateCheck(initialStateCheck)
         }
     },[])
 
@@ -264,10 +265,11 @@ export default function useRequeriments() {
                 }else {
                     setMessage({
                         show: true,
-                        title: "Eliminar",
-                        description: 'Esta seguro que deseea eliminar el archivo',
+                        title: "Quitar adjunto",
+                        description: '¿Estás segur@ de quitar el adjunto?, no se podrá recuperar.',
                         background: true,
                         OkTitle: 'Aceptar',
+                        cancelTitle: 'Cancelar',
                         onOk() {
                             DeleteUploadFiles(idCode, idBeneficiary).then(response => {
                                 if(response){
@@ -302,6 +304,9 @@ export default function useRequeriments() {
                                 }
                             
                             })
+                            setMessage({});
+                        },
+                        onClose() {
                             setMessage({});
                         },
                     });
@@ -353,30 +358,42 @@ export default function useRequeriments() {
 
     const saveFile = () => {
         const arrayAssigmentBeneficiary = [...stateCheck.checked, ...stateCheck.unchecked];
-        ComplianceAssignmentBeneficiary(arrayAssigmentBeneficiary).then(response => {
-            if(response.operation.code === EResponseCodes.OK){
-                setDisabledFields(false)
-                setMessage({
-                    OkTitle: "Guardar",
-                    description: "¡Guardado exitosamente!",
-                    title: "Guardar",
-                    show: true,
-                    type: EResponseCodes.OK,
-                    background: true,
-                    onOk() { 
-                        setMessage({});
-                        loadTableData()
-                    },
-                    onClose() {
-                        setMessage({});
-                        loadTableData()
-                    },
-                });
-            }
-        }).catch(error => {
-            console.log(error)
-            setDisabledFields(false)
-        })
+
+        setMessage({
+            show: true,
+            title: "Requisitos",
+            description: "¿Estás segur@ de guardar la información de requisitos?",
+            cancelTitle: "Cancelar",
+            OkTitle: "Aceptar",
+            onOk() {
+                ComplianceAssignmentBeneficiary(arrayAssigmentBeneficiary).then(response => {
+                    setMessage({})
+                    if(response.operation.code === EResponseCodes.OK){
+                        setDisabledFields(false)
+                        setMessage({
+                            OkTitle: "Aceptar",
+                            description: "¡Cambios guardados exitosamente!",
+                            title: "Guardar",
+                            show: true,
+                            type: EResponseCodes.OK,
+                            background: true,
+                            onOk() { 
+                                setMessage({});
+                                loadTableData()
+                            },
+                            onClose() {
+                                setMessage({});
+                                loadTableData()
+                            },
+                        });
+                    }
+                }).catch(error => {
+                    console.log(error)
+                    setDisabledFields(false)
+                })
+            },
+            background: true,
+        });
     }
 
     return{
