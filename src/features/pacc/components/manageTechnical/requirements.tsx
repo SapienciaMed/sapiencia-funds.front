@@ -63,6 +63,7 @@ function Requirements() {
                                 isMobil={false}
                                 count={true}
                                 isNotBorderClasse={true}
+                                descriptionModalNoResult="No se encontraron Requisitos"
                             />
                     }
                     <div className="funcionality-buttons-container">
