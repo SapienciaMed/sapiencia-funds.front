@@ -10,9 +10,8 @@ import Requirements from "./manageTechnical/requirements";
 function TabsManageTechnical({ document }) {
 
     const { option } = useParams();
-    const { validateActionAccess, setMessage, disabledFields } = useContext(AppContext);
+    const { validateActionAccess } = useContext(AppContext);
     
-
     const tabs = (): ITabsMenuTemplate[] => {
         const servicioSocial = {
             id: "servicioSocial", 
@@ -55,23 +54,10 @@ function TabsManageTechnical({ document }) {
 
     const start = tabs().find((tab) => tab.id.toString().toLowerCase() == option?.toLowerCase());
 
-   const showMessage  = () => {
-    setMessage({
-        show: true,
-        title: "!Atencion¡",
-        description: 'No se han guardado cambios',
-        background: true,
-        OkTitle: 'Aceptar',
-        onOk() {
-            setMessage({});
-        },
-    });
-   }
-
     return(
         <>
             <section className="mt-20px">
-                <TabListComponent tabs={tabs()} start={start} isLock={disabledFields} showMessage={showMessage}/>
+                <TabListComponent tabs={tabs()} start={start} titleMessage="Cambios sin guardar" description="¿Estas segur@ de salir sin guardar los cambios?" />
             </section>
         </>
     )
