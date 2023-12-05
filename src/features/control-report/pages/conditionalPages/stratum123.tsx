@@ -136,7 +136,7 @@ function Estratum123Tab({ filters }) {
 
   return (
     <>
-      <div className="container-sections-forms ml-20px mr-20px">
+      <div className="container-sections-forms mr-20px">
         <BasicTableComponent
           ref={tableComponentRef}
           data={dataGridStratum}
@@ -149,7 +149,7 @@ function Estratum123Tab({ filters }) {
           isMobil={true}
         />
       </div>
-      <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+      <div className="container-sections-forms mt-24px p-0">
         <p className="text-black huge ">Totales</p>
 
         <section className="funcionality-filters-container gap-15">

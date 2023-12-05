@@ -140,7 +140,7 @@ const ConsolidateTab = (data) => {
   ];
   return (
     <>
-      <div className="container-sections-forms ml-20px mr-20px">
+      <div className="container-sections-forms  mr-20px">
         <TableComponent
           setPaginateData={setPaginateData}
           ref={tableComponentRef}
@@ -157,7 +157,7 @@ const ConsolidateTab = (data) => {
       {TotalView && (
         <>
           {" "}
-          <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+          <div className="container-sections-forms mt-24px p-0">
             <div
               className="bold mt-24px ml-16px mr-16px p-0"
               style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
