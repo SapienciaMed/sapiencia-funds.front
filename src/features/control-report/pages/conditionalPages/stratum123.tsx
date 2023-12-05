@@ -44,17 +44,21 @@ function Estratum123Tab({ filters }) {
       fieldName: "activity",
       header: "Comuna o corregimiento",
       renderCell: (row) => {
-        return (
-          <>
-            {
-              comunaList?.find(
-                (obj) => obj.value == row.resourcePrioritization.communeId
-              ).name
-            }
-          </>
+        // Intenta encontrar el objeto
+        const foundObj = comunaList?.find(
+          (obj) => obj.value == row.resourcePrioritization.communeId
         );
+    
+        // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
+        if (foundObj) {
+          return <>{foundObj.name}</>;
+        }
+    
+        // Puedes retornar algo por defecto si el objeto no se encuentra
+        return <>No encontrado</>;
       },
     },
+    
     {
       fieldName: "resourceAvailable",
       header: "Recurso disponible",
