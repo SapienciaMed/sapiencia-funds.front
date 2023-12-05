@@ -149,7 +149,7 @@ function Estratum123Tab({ filters }) {
           isMobil={true}
         />
       </div>
-      <div className="container-sections-forms mt-24px p-0">
+      <div className="container-sections-forms mt-24px mb-24px p-0">
         <p className="text-black huge ">Totales</p>
 
         <section className="funcionality-filters-container gap-15">
