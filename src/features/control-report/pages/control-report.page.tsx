@@ -36,7 +36,7 @@ const SearchContrlPage = () => {
         className="form-signIn"
         action={onSubmit}
       >
-        <div className="container-sections-forms ml-20px mr-20px">
+        <div className="container-sections-forms mr-20px">
           <div className="grid-form-3-container gap-25">
             <div className="text-black large grid-span-2-columns pb-14px">
               Control financiero
