@@ -68,6 +68,7 @@ export default function useRequeriments() {
 
         return () => {
             setDisabledFields(false)
+            setStateCheck(initialStateCheck)
         }
     },[])
 
@@ -101,11 +102,11 @@ export default function useRequeriments() {
             },
         },
         {
-            fieldName:'percentage',
-            header: 'Porcentaje',
+            fieldName:'mandatoryFor',
+            header: 'Obligatorio para',
             renderCell:(row) => {
                 return(
-                    <> { row.percentRequirement ? `${row.percentRequirement}%` : 'N/A' } </>
+                    <> { row.mandatoryFor ? `${row.mandatoryFor}` : '-' } </>
                 )
             }
         },
@@ -248,49 +249,71 @@ export default function useRequeriments() {
 
     const deleteFile = () => {
         toast.current.hide();
-        setMessage({
-            show: true,
-            title: "Eliminar",
-            description: 'Esta seguro que deseea eliminar el archivo',
-            background: true,
-            OkTitle: 'Aceptar',
-            onOk() {
-                DeleteUploadFiles(idCode, idBeneficiary).then(response => {
-                    if(response){
-                        setMessage({
-                            show: true,
-                            title: "Eliminar",
-                            description: 'Archivo eliminado correctamente',
-                            background: true,
-                            OkTitle: 'Aceptar',
-                            onOk() {
-                                setMessage({});
-                                loadTableData()
-                            },
-                            onClose() {
-                                setMessage({});
-                                loadTableData()
-                            },
-
-                        });
-                    }else {
-                        setMessage({
-                            show: true,
-                            title: "Eliminar",
-                            description: response.operation.message,
-                            background: true,
-                            OkTitle: 'Aceptar',
-                            onOk() {
-                                setMessage({});
-                                
-                            },
-                        });
-                    }
-                
-                })
-                setMessage({});
-            },
-        });
+        idCode && GetRequirementFile(idCode).then(response => {
+            if(response.operation.code === EResponseCodes.OK){
+                if (response.data.length == 0) {
+                    setMessage({
+                        show: true,
+                        title: "Eliminar",
+                        description: 'No hay adjunto para eliminar',
+                        background: true,
+                        OkTitle: 'Aceptar',
+                        onOk() {
+                            setMessage({});
+                        },
+                    });
+                }else {
+                    setMessage({
+                        show: true,
+                        title: "Quitar adjunto",
+                        description: '¿Estás segur@ de quitar el adjunto?, no se podrá recuperar.',
+                        background: true,
+                        OkTitle: 'Aceptar',
+                        cancelTitle: 'Cancelar',
+                        onOk() {
+                            DeleteUploadFiles(idCode, idBeneficiary).then(response => {
+                                if(response){
+                                    setMessage({
+                                        show: true,
+                                        title: "Eliminar",
+                                        description: 'Archivo eliminado correctamente',
+                                        background: true,
+                                        OkTitle: 'Aceptar',
+                                        onOk() {
+                                            setMessage({});
+                                            loadTableData()
+                                        },
+                                        onClose() {
+                                            setMessage({});
+                                            loadTableData()
+                                        },
+            
+                                    });
+                                }else {
+                                    setMessage({
+                                        show: true,
+                                        title: "Eliminar",
+                                        description: response.operation.message,
+                                        background: true,
+                                        OkTitle: 'Aceptar',
+                                        onOk() {
+                                            setMessage({});
+                                            
+                                        },
+                                    });
+                                }
+                            
+                            })
+                            setMessage({});
+                        },
+                        onClose() {
+                            setMessage({});
+                        },
+                    });
+                }
+            } 
+        })
+      
     }
 
     const onAmountChange = (value: IRequerimentsResultSimple, event: ChangeEvent<HTMLInputElement>) => {
@@ -335,30 +358,42 @@ export default function useRequeriments() {
 
     const saveFile = () => {
         const arrayAssigmentBeneficiary = [...stateCheck.checked, ...stateCheck.unchecked];
-        ComplianceAssignmentBeneficiary(arrayAssigmentBeneficiary).then(response => {
-            if(response.operation.code === EResponseCodes.OK){
-                setDisabledFields(false)
-                setMessage({
-                    OkTitle: "Guardar",
-                    description: "¡Guardado exitosamente!",
-                    title: "Guardar",
-                    show: true,
-                    type: EResponseCodes.OK,
-                    background: true,
-                    onOk() { 
-                        setMessage({});
-                        loadTableData()
-                    },
-                    onClose() {
-                        setMessage({});
-                        loadTableData()
-                    },
-                });
-            }
-        }).catch(error => {
-            console.log(error)
-            setDisabledFields(false)
-        })
+
+        setMessage({
+            show: true,
+            title: "Requisitos",
+            description: "¿Estás segur@ de guardar la información de requisitos?",
+            cancelTitle: "Cancelar",
+            OkTitle: "Aceptar",
+            onOk() {
+                ComplianceAssignmentBeneficiary(arrayAssigmentBeneficiary).then(response => {
+                    setMessage({})
+                    if(response.operation.code === EResponseCodes.OK){
+                        setDisabledFields(false)
+                        setMessage({
+                            OkTitle: "Aceptar",
+                            description: "¡Cambios guardados exitosamente!",
+                            title: "Guardar",
+                            show: true,
+                            type: EResponseCodes.OK,
+                            background: true,
+                            onOk() { 
+                                setMessage({});
+                                loadTableData()
+                            },
+                            onClose() {
+                                setMessage({});
+                                loadTableData()
+                            },
+                        });
+                    }
+                }).catch(error => {
+                    console.log(error)
+                    setDisabledFields(false)
+                })
+            },
+            background: true,
+        });
     }
 
     return{
