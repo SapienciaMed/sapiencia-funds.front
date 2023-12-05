@@ -87,9 +87,7 @@ export const LegalizationHook = (data) => {
         });
 
         totalData.totalPorParticipacion =
-          Math.round(
-            totalData.totalOtorgado / totalData.totalRecursoDisponible
-          ) * 100;
+          (totalData.totalOtorgado / totalData.totalRecursoDisponible) * 100;
 
         if (
           isNaN(totalData.totalPorParticipacion) ||
@@ -116,7 +114,7 @@ export const LegalizationHook = (data) => {
         setTotalNoCupos(totalData.totalNoCupos);
         setTotalRecursoDisponible(totalData.totalRecursoDisponible);
         setTotalDisponible(totalData.totalDisponible);
-        setTotalPorParticipacion(totalData.totalPorParticipacion);
+        setTotalPorParticipacion(totalData.totalPorParticipacion.toFixed(2));
         setTotalNoLegalizados(totalData.totalNoLegalizados);
       }
     } catch (error) {}

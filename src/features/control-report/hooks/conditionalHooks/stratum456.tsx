@@ -105,13 +105,10 @@ export const stratum456Hook = (data) => {
           dataTotal.Available +=
             Number(data.resourceAvailable) - Number(data.granted);
           dataTotal.legalized += Number(data.legalized);
-          dataTotal.porParticipacion +=
-            Math.round(Number(data.granted) / Number(data.resourceAvailable)) *
-            100;
         });
 
         dataTotal.porParticipacion =
-          Math.round(dataTotal.granted / dataTotal.resourceAvailable) * 100;
+          (dataTotal.granted / dataTotal.resourceAvailable) * 100;
 
         if (
           isNaN(dataTotal.porParticipacion) ||
@@ -136,7 +133,7 @@ export const stratum456Hook = (data) => {
         setTotalRecursoDisponible(dataTotal.resourceAvailable);
         setTotalDisponible(dataTotal.Available);
         setTotalNoLegalizados(dataTotal.legalized);
-        setTotalPorParticipacion(dataTotal.porParticipacion);
+        setTotalPorParticipacion(dataTotal.porParticipacion.toFixed(2));
       }
     } catch (error) {}
   };

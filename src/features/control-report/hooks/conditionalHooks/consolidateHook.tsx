@@ -103,9 +103,7 @@ export const consolidateHook = (data) => {
         });
 
         totalData.totalPorParticipacion =
-          Math.round(
-            totalData.totalOtorgado / totalData.totalRecursoDisponible
-          ) * 100;
+          (totalData.totalOtorgado / totalData.totalRecursoDisponible) * 100;
 
         if (
           totalData.totalPorParticipacion >= 90 &&
@@ -124,7 +122,7 @@ export const consolidateHook = (data) => {
         setTotalNoCupos(totalData.totalNoCupos);
         setTotalRecursoDisponible(totalData.totalRecursoDisponible);
         setTotalDisponible(totalData.totalDisponible);
-        setTotalPorParticipacion(totalData.totalPorParticipacion);
+        setTotalPorParticipacion(totalData.totalPorParticipacion.toFixed(2));
         setTotalNoLegalizados(totalData.totalNoLegalizados);
         setTotalRendimientoFinancieros(totalData.totalRendimientoFinancieros);
         setTableColumns(columnsConsolidados);
