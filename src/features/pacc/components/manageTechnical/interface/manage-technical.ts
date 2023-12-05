@@ -19,3 +19,18 @@ export interface IRequerimentsResultSimple {
   percentRequirement: number | null;
   accomplished?: number;
 }
+
+export interface IApplyKnowledgeTransfer {
+  id?: number;
+  idBeneficiary: number;
+  idReglament: number;
+  committedHours: number;
+  workedHours: number;
+  pendingHours: number;
+  percentTransfer: number;
+  status: number;
+  idStatusProcessPacc: number;
+  observations: string;
+  userCreate: string;
+  dateCreate: Date;
+}

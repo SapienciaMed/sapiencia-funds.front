@@ -48,7 +48,7 @@ function TabsManageTechnical({ document }) {
             title: "Transferencia de conocimiento", 
             content: (<KnowledgeTransfer/>), 
             action: () => {},
-            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION')  || validateActionAccess('VER_TRANSFERENCIA_CONOCIMIENTO')
         }
 
         const result = [

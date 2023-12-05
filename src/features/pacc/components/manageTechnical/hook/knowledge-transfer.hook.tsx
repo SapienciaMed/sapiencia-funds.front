@@ -1,8 +1,7 @@
-import { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef, useContext, useState } from "react";
 import { ITableElement } from "../../../../../common/interfaces";
 import { Tooltip } from "primereact/tooltip";
 import { Tag } from "primereact/tag";
-import { FaEye } from "react-icons/fa";
 import { FiPaperclip } from "react-icons/fi";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { Menu } from "primereact/menu";
@@ -10,24 +9,41 @@ import { Button } from "primereact/button";
 import { MenuItem } from "primereact/menuitem";
 import { AppContext } from "../../../../../common/contexts/app.context";
 import ManageTransfer from "../manage-transfer";
+import { useNavigate, useParams } from "react-router";
+import { IApplyKnowledgeTransfer } from "../interface/manage-technical";
+
 
 export default function useKnowledgeTransfer() {
-    
+
+    const { id } =  useParams()
+    const navigate = useNavigate()
     const tableComponentRef = useRef(null);
     const toast = useRef(null);
-    const { setMessage } = useContext(AppContext);
+    const { setMessage, authorization } = useContext(AppContext);
+    const [visible, setVisible] = useState<boolean>(false);
+    const [filesUploadData, setFilesUploadData] = useState<File>(null);
 
     useEffect(() => {
-        loadTableData()
+        loadTableData({
+            idBeneficiary: parseInt(id),
+            user: authorization.user.numberDocument
+        })
     },[])
 
-    const tableColumns: ITableElement<any>[] = [
+    useEffect(() => {
+        if(filesUploadData != null){
+           console.log("filesUploadData", filesUploadData);
+           
+        }
+    },[filesUploadData])
+
+    const tableColumns: ITableElement<IApplyKnowledgeTransfer>[] = [
        {
             fieldName:'committedHours',
             header: 'Horas Comprometidas',
        },
        {
-            fieldName:'hoursPerformed',
+            fieldName:'workedHours',
             header: 'Horas realizadas'
        },
         {
@@ -35,14 +51,14 @@ export default function useKnowledgeTransfer() {
             header: 'Horas pendientes'
         },
         {
-            fieldName:'state',
+            fieldName:'status',
             header: 'Estado',
             renderCell:(row) => {
-                return( <Tag severity={row.state == 'Rechazado' ? 'danger' : 'success'} value={row.state} rounded/> )
+                return( <Tag severity={row.status == 0 ? 'danger' : 'success'} value={row.status == 1 ? 'Aprobado': 'Rechazado'} rounded/> )
             }
         },
         {
-            fieldName:'observation',
+            fieldName:'observations',
             header: 'Observación',
             renderCell:(row) => {
                 return(
@@ -50,10 +66,10 @@ export default function useKnowledgeTransfer() {
                         <Tooltip target=".observation" style={{ borderRadius: "1px" }} />
                         <i
                             className="style-tooltip observation"
-                            data-pr-tooltip={row.observation}
+                            data-pr-tooltip={row.observations}
                             data-pr-position="bottom"
                         >
-                           { row.observation }
+                           { row.observations }
                         </i>
                     </>
                 )
@@ -86,7 +102,7 @@ export default function useKnowledgeTransfer() {
                                         setMessage({
                                             show: true,
                                             title: "Gestionar",
-                                            description: <ManageTransfer/>,
+                                            description: <ManageTransfer idSelect={row.id} />,
                                             background: true,
                                         });
                                     }} 
@@ -130,8 +146,25 @@ export default function useKnowledgeTransfer() {
 
     ]
 
+    const onCancel = () => {
+        setMessage({
+            show: true,
+            title: "Cancelar",
+            description: "¿Segur@ que deseas cancelar",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            onOk() {
+                setMessage((prev) => ({ ...prev, show: false }));
+                navigate('/fondos/pacc/bandeja-consolidacion')  
+            },
+            background: true,
+          });
+        
+    }
+
     return {
         tableComponentRef,
-        tableColumns
+        tableColumns,
+        onCancel
     }
 }
