@@ -25,6 +25,7 @@ const LegalizacionTab = (data) => {
     totalNoLegalizados,
     downloadCollection,
     TotalView,
+    color,
   } = LegalizationHook(data.data);
   return (
     <>
@@ -57,10 +58,7 @@ const LegalizacionTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="No. Preseleccionados"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={`${totalNoPreseleccionados}`}
                 disabled
               />
@@ -69,10 +67,7 @@ const LegalizacionTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="No. Cupos"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={""}
                 disabled
                 value={String(totalNoCupos)}
@@ -82,10 +77,7 @@ const LegalizacionTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="Recurso disponible"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={""}
                 disabled
                 value={String(formaterNumberToCurrency(totalRecursoDisponible))}
@@ -95,10 +87,7 @@ const LegalizacionTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="Otorgado"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={""}
                 disabled
                 value={String(formaterNumberToCurrency(totalOtorgado))}
@@ -110,36 +99,27 @@ const LegalizacionTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="Disponible"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={""}
                 disabled
                 value={String(formaterNumberToCurrency(totalDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
-                className="input-basic medium"
+                className={`input-basic medium ${color}`}
                 typeInput="text"
                 label="%Participacion"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(totalPorParticipacion)}
+                value={String(totalPorParticipacion) + "%"}
               />
               <InputComponent
                 idInput={"tQuantity1"}
                 className="input-basic medium"
                 typeInput="text"
                 label="No.Legalizados"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={""}
                 disabled
                 value={String(totalNoLegalizados)}
