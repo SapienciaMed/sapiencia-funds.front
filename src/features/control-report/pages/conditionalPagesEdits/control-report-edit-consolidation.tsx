@@ -15,8 +15,9 @@ import { InputNumberComponent } from "../../../../common/components/Form/input-n
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 export const controlEditConsolidation = yup.object({
-  consolidatedPreselected: yup.number().optional(),
-  places: yup.number().optional(),
+  consolidatedPreselected: yup
+  .number().optional().typeError("Completar información"),
+  places: yup.number().optional().typeError("Completar información"),
   consolidatedResourceAvailable: yup.number().optional(),
   consolidatedGranted: yup.number().optional(),
   consolidatedLegalized: yup.number().optional(),
@@ -291,7 +292,7 @@ const Controlreporteditconsolidation = ({
                     typeInput="text"
                     label="Disponibles"
                     register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black biggest"
                     errors={errors}
                     placeholder={""}
                     maxLength={9}
@@ -312,7 +313,7 @@ const Controlreporteditconsolidation = ({
                     typeInput="text"
                     label="%Participacion"
                     register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black biggest"
                     errors={errors}
                     placeholder={""}
                     maxLength={9}
