@@ -11,21 +11,27 @@ import * as IconFI from "react-icons/fi"
 import { IRequerimentsResultSimple } from "../interface/manage-technical";
 import { usePaccServices } from "../../../hook/pacc-serviceshook";
 import { EResponseCodes } from "../../../../../common/constants/api.enum";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CheckboxMui from "@mui/material/Checkbox";
+import { downloadFile } from "../helper/dowloadFile";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { uploadFiles } from "../helper/uploadFile";
 
 export default function useRequeriments() {
       
     const { id } =  useParams()
+    const navigate = useNavigate();
     const tableComponentRef = useRef(null);
     const toast = useRef(null);
     const [visible, setVisible] = useState<boolean>(false);
-    const {GetRequirementsByBeneficiary} = usePaccServices()
+    const { GetRequirementsByBeneficiary, GetRequirementFile, ComplianceAssignmentBeneficiary, DeleteUploadFiles } = usePaccServices()
     const [filesUploadData, setFilesUploadData] = useState<File>(null);
-    const { setMessage } = useContext(AppContext);
-    const [filesUploadDataWithId, setFilesUploadDataWithId] = useState<any[]>([]);
-    const [idSelect, setIdSelect] = useState('')
+    const { setMessage, setDisabledFields, authorization } = useContext(AppContext);
+    const [ idBeneficiary, setIdBeneficiary] = useState('')
     const [showTable, setShowTable] = useState(false);
+    const [ showSpinner, setShowSpinner ] = useState(false)
+    const [ idCode, setIdCode ] = useState('')
+   
 
     const initialStateCheck = {
         checked: [],
@@ -33,41 +39,20 @@ export default function useRequeriments() {
     };    
     const [stateCheck, setStateCheck] = useState(initialStateCheck);
 
-    useEffect(() => {
-        stateCheck.checked && console.log('Enviar estado.');
-    },[stateCheck])
+    function loadTableData(searchCriteria?: object): void {
+        if (tableComponentRef.current) {
+            tableComponentRef.current.loadData(searchCriteria);
+        }
+    }
 
-    /* Lo que es el archivo(s) cargado(s) aca y el cambio de check si cumple, se debe enviar al componente 
-        TabsManageTechnical con un redux, ya que este es el que se va a encargar del guardado de todas las pestañas y los cambios que se hagan en ella, 
-        *** En el momento no se esta haciendo la carga de archivo  ***
-    */
+    useEffect(() => {
+        stateCheck != initialStateCheck && setDisabledFields(true)
+    },[stateCheck])
 
     useEffect(() => {
         if (filesUploadData != null) {
-            // Inicializar filesUploadDataWithId como un array vacío si es null
-            const currentFilesUploadDataWithId = filesUploadDataWithId || [];
-    
-            // Verificar si el id ya existe en filesUploadDataWithId
-            const index = currentFilesUploadDataWithId?.findIndex(item => item.id === idSelect);
-    
-            if (index !== -1) {
-                // Si el id ya existe, actualizar el elemento existente
-                const updatedFilesUploadDataWithId = [...currentFilesUploadDataWithId];
-                updatedFilesUploadDataWithId[index] = {
-                    file: filesUploadData,
-                    id: idSelect
-                };
-                setFilesUploadDataWithId(updatedFilesUploadDataWithId);
-            } else {
-                // Si el id no existe, agregar un nuevo elemento
-                setFilesUploadDataWithId(prevState => [
-                    ...prevState,
-                    {
-                        file: filesUploadData,
-                        id: idSelect
-                    }
-                ]);
-            }
+            //Guarda el archivo
+            uploadFiles(idCode, [filesUploadData], setMessage, loadTableData, authorization)
         }
     },[filesUploadData])
 
@@ -80,6 +65,11 @@ export default function useRequeriments() {
                 setShowTable(false)
             }
         })
+
+        return () => {
+            setDisabledFields(false)
+            setStateCheck(initialStateCheck)
+        }
     },[])
 
     const tableColumns: ITableElement<IRequerimentsResultSimple>[] = [
@@ -107,24 +97,16 @@ export default function useRequeriments() {
             header: 'Activo',
             renderCell:(row) => {
                 return (
-                    <div>
-                        {
-                            row.activeRequirement ? 'SI' : 'NO'
-                        }
-                    </div>
+                    <div> { row.activeRequirement ? 'SI' : 'NO' } </div>
                 );
             },
         },
         {
-            fieldName:'percentage',
-            header: 'Porcentaje',
+            fieldName:'mandatoryFor',
+            header: 'Obligatorio para',
             renderCell:(row) => {
                 return(
-                    <>
-                        {
-                            row.percentRequirement ? `${row.percentRequirement}%` : 'N/A'
-                        } 
-                    </>
+                    <> { row.mandatoryFor ? `${row.mandatoryFor}` : '-' } </>
                 )
             }
         },
@@ -162,12 +144,13 @@ export default function useRequeriments() {
                                 <Button className="button-table" icon={<FiPaperclip className="icon-size"/>} 
                                     onClick={(e) => {
                                         toast.current.toggle(e);
-                                        setIdSelect(String(row.idBeneficiary))  
+                                        setIdBeneficiary(String(row.idBeneficiary))
+                                        setIdCode(String(row.id))  
                                     }} 
                                 />
                                 
                                 <OverlayPanel ref={toast}>
-                                    <Menu model={items(row.idBeneficiary)}/>
+                                    <Menu model={items()}/>
                                 </OverlayPanel>
                                 
                             </i>
@@ -180,13 +163,7 @@ export default function useRequeriments() {
       
     ]
 
-    function loadTableData(searchCriteria?: object): void {
-        if (tableComponentRef.current) {
-            tableComponentRef.current.loadData(searchCriteria);
-        }
-    }
-
-    const items = (row): MenuItem[] => [
+    const items = (): MenuItem[] => [
         {
             label: 'Adjuntar archivo',
             items: [
@@ -195,12 +172,11 @@ export default function useRequeriments() {
                     icon: 'pi pi-paperclip',
                     template:() => {
                         return(
-                            <button className='p-menuitem-link button-menu-tooltip disabled-component'
+                            <button className='p-menuitem-link button-menu-tooltip'
                                 onClick={() => {
                                     setVisible(true);
                                     toast.current.hide();
                                 }}
-                                disabled //Se dejara bloqueado, mientras se termina de implementar la subida de archivo
                             >
                                 <IconFI.FiPaperclip/>
                                 <span className="p-menuitem-text ml-5px"> Adjuntar</span>
@@ -213,12 +189,41 @@ export default function useRequeriments() {
                     icon: 'pi pi-eye',
                     template:() => {
                         return(
-                            <button className="p-menuitem-link button-menu-tooltip disabled-component" 
-                                onClick={() => showFile() }
-                                disabled //Se dejara bloqueado, mientras se termina de implementar la subida de archivo
+                            <button className="p-menuitem-link button-menu-tooltip" 
+                                onClick={() => {
+                                    setShowSpinner(true)
+                                    idCode && GetRequirementFile(idCode).then(response => {
+                                        if(response.operation.code === EResponseCodes.OK){
+                                           if (response.data.length == 0) {
+                                               setMessage({
+                                                    show: true,
+                                                    title: "Ver adjunto",
+                                                    description: 'No hay adjunto para visualizar',
+                                                    background: true,
+                                                    OkTitle: 'Aceptar',
+                                                    onOk() {
+                                                        setMessage({});
+                                                    },
+                                                });
+                                           }else {
+                                            downloadFile(response.data, authorization, setMessage )
+                                           }
+                                            setShowSpinner(false)
+                                            toast.current.hide();
+                                        }else{
+                                            setShowSpinner(false)
+                                        }
+                                    }).catch(error => {
+                                        setShowSpinner(false)
+                                        console.log(error)
+                                    })
+                                }}
                             >
                                 <IconFI.FiEye/>
                                 <span className="p-menuitem-text ml-5px"> Ver adjunto</span>
+                                {
+                                   showSpinner &&  <ProgressSpinner style={{width: '15px', height: '15px'}}  animationDuration=".5s" />
+                                }
                             </button>
                         )
                     }   
@@ -228,9 +233,8 @@ export default function useRequeriments() {
                     icon: 'pi pi-trash',
                     template:() => {
                         return(
-                            <button className="p-menuitem-link button-menu-tooltip disabled-component" 
+                            <button className="p-menuitem-link button-menu-tooltip" 
                                 onClick={() => { deleteFile()}}
-                                disabled //Se dejara bloqueado, mientras se termina de implementar la subida de archivo
                             >
                                 <IconFI.FiTrash2/>
                                 <span className="p-menuitem-text ml-5px"> Quitar adjunto</span>
@@ -243,79 +247,154 @@ export default function useRequeriments() {
         },
     ];
 
-    const showFile = () => {
-        if (filesUploadData) {
-            const primerArchivo = filesUploadData;
-            const archivoURL = URL.createObjectURL(primerArchivo);
-
-            const ventanaNueva = window.open('', '_blank');
-
-            if (ventanaNueva) {
-                ventanaNueva.location.href = archivoURL;
-            } else {
-                console.error('No se pudo abrir la nueva pestaña.');
-            }
-
-            URL.revokeObjectURL(archivoURL);
-        }else {
-            toast.current.hide();
-            setMessage({
-                show: true,
-                title: "Ver adjunto",
-                description: 'No hay archivo para visualizar',
-                background: true,
-                onOk() {
-                    setMessage({});
-                },
-            });
-        }
-    }
-
     const deleteFile = () => {
-        const updatedFilesUploadDataWithId = filesUploadDataWithId.filter(item => item.id !== idSelect);
-        setFilesUploadDataWithId(updatedFilesUploadDataWithId);
-
         toast.current.hide();
-        setMessage({
-            show: true,
-            title: "Eliminar",
-            description: 'Archivo eliminado',
-            background: true,
-            onOk() {
-                setMessage({});
-            },
-        });
+        idCode && GetRequirementFile(idCode).then(response => {
+            if(response.operation.code === EResponseCodes.OK){
+                if (response.data.length == 0) {
+                    setMessage({
+                        show: true,
+                        title: "Eliminar",
+                        description: 'No hay adjunto para eliminar',
+                        background: true,
+                        OkTitle: 'Aceptar',
+                        onOk() {
+                            setMessage({});
+                        },
+                    });
+                }else {
+                    setMessage({
+                        show: true,
+                        title: "Quitar adjunto",
+                        description: '¿Estás segur@ de quitar el adjunto?, no se podrá recuperar.',
+                        background: true,
+                        OkTitle: 'Aceptar',
+                        cancelTitle: 'Cancelar',
+                        onOk() {
+                            DeleteUploadFiles(idCode, idBeneficiary).then(response => {
+                                if(response){
+                                    setMessage({
+                                        show: true,
+                                        title: "Eliminar",
+                                        description: 'Archivo eliminado correctamente',
+                                        background: true,
+                                        OkTitle: 'Aceptar',
+                                        onOk() {
+                                            setMessage({});
+                                            loadTableData()
+                                        },
+                                        onClose() {
+                                            setMessage({});
+                                            loadTableData()
+                                        },
+            
+                                    });
+                                }else {
+                                    setMessage({
+                                        show: true,
+                                        title: "Eliminar",
+                                        description: response.operation.message,
+                                        background: true,
+                                        OkTitle: 'Aceptar',
+                                        onOk() {
+                                            setMessage({});
+                                            
+                                        },
+                                    });
+                                }
+                            
+                            })
+                            setMessage({});
+                        },
+                        onClose() {
+                            setMessage({});
+                        },
+                    });
+                }
+            } 
+        })
+      
     }
 
     const onAmountChange = (value: IRequerimentsResultSimple, event: ChangeEvent<HTMLInputElement>) => {
         const { checked, unchecked } = stateCheck;
         const serviceCompliance = value.accomplished === 1;
         const isUnchecked = event.target.checked;
-        const index = unchecked.findIndex(({ idRequirement }) => idRequirement === value.idRequirement);
+        const index = unchecked.findIndex(({ idRequirement }) => idRequirement === value.id);
       
-        const updatedChecked = checked.filter(({ idRequirement }) => idRequirement !== value.idRequirement);
-        const updatedUnchecked = unchecked.filter(({ idRequirement }) => idRequirement !== value.idRequirement);
+        const updatedChecked = checked.filter(({ idRequirement }) => idRequirement !== value.id);
+        const updatedUnchecked = unchecked.filter(({ idRequirement }) => idRequirement !== value.id);
       
         if (event.target.checked && !serviceCompliance) {
           updatedChecked.push({
-            idRequirement: value.idRequirement,
-            idBeneficiary: value.idBeneficiary,
-            accomplished: 1,
+            idRequirementConsolidate: value.id,
+            newStatus: true,
           });
         } else if (serviceCompliance && !isUnchecked && index === -1) {
           updatedUnchecked.push({
-            idRequirement: value.idRequirement,
-            idBeneficiary: value.idBeneficiary,
-            accomplished: 0,
+            idRequirementConsolidate: value.id,
+            newStatus: false,
           });
         }
       
         setStateCheck({ checked: updatedChecked, unchecked: updatedUnchecked });
     };
 
-    // const saveFile = () => {
+    const onCancel = () => {
+        setMessage({
+            show: true,
+            title: "Cancelar",
+            description: "¿Segur@ que deseas cancelar",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            onOk() {
+                setMessage((prev) => ({ ...prev, show: false }));
+                navigate('/fondos/pacc/bandeja-consolidacion')  
+            },
+            background: true,
+          });
+        
+    }
 
-    // }
+    const saveFile = () => {
+        const arrayAssigmentBeneficiary = [...stateCheck.checked, ...stateCheck.unchecked];
+
+        setMessage({
+            show: true,
+            title: "Requisitos",
+            description: "¿Estás segur@ de guardar la información de requisitos?",
+            cancelTitle: "Cancelar",
+            OkTitle: "Aceptar",
+            onOk() {
+                ComplianceAssignmentBeneficiary(arrayAssigmentBeneficiary).then(response => {
+                    setMessage({})
+                    if(response.operation.code === EResponseCodes.OK){
+                        setDisabledFields(false)
+                        setMessage({
+                            OkTitle: "Aceptar",
+                            description: "¡Cambios guardados exitosamente!",
+                            title: "Guardar",
+                            show: true,
+                            type: EResponseCodes.OK,
+                            background: true,
+                            onOk() { 
+                                setMessage({});
+                                loadTableData()
+                            },
+                            onClose() {
+                                setMessage({});
+                                loadTableData()
+                            },
+                        });
+                    }
+                }).catch(error => {
+                    console.log(error)
+                    setDisabledFields(false)
+                })
+            },
+            background: true,
+        });
+    }
 
     return{
         tableColumns,
@@ -325,6 +404,8 @@ export default function useRequeriments() {
         showTable,
         setVisible,
         setFilesUploadData,
+        onCancel,
+        saveFile
     }
 
 }

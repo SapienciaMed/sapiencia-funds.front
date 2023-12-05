@@ -27,6 +27,7 @@ const ConsolidateTab = (data) => {
     downloadCollection,
     comunaList,
     TotalView,
+    color,
   } = consolidateHook(data.data);
 
   const columnsConsolidados: ITableElement<any>[] = [
@@ -34,15 +35,18 @@ const ConsolidateTab = (data) => {
       fieldName: "resourcePrioritization.communeId",
       header: "Comuna o corregimiento",
       renderCell: (row) => {
-        return (
-          <>
-            {
-              comunaList?.find(
-                (obj) => obj.value == row.resourcePrioritization.communeId
-              ).name
-            }
-          </>
+        // Intenta encontrar el objeto
+        const foundObj = comunaList?.find(
+          (obj) => obj.value == row.resourcePrioritization.communeId
         );
+  
+        // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
+        if (foundObj) {
+          return <>{foundObj.name}</>;
+        }
+  
+        // Puedes retornar algo por defecto si el objeto no se encuentra
+        return <>No encontrado</>;
       },
     },
     {
@@ -59,7 +63,7 @@ const ConsolidateTab = (data) => {
       renderCell: (row) => {
         const numeroConPuntos = formaterNumberToCurrency(
           row.consolidatedResourceAvailable
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -69,7 +73,7 @@ const ConsolidateTab = (data) => {
       renderCell: (row) => {
         const numeroConPuntos = formaterNumberToCurrency(
           row.consolidatedGranted
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -82,7 +86,7 @@ const ConsolidateTab = (data) => {
             Number(row.consolidatedResourceAvailable) -
               Number(row.consolidatedGranted)
           )
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -96,7 +100,7 @@ const ConsolidateTab = (data) => {
             100
         );
 
-        if (porcent == Infinity || porcent == undefined) {
+        if (porcent == Infinity || porcent == undefined || isNaN(porcent)) {
           return <>0%</>;
         } else {
           if (porcent >= 90 && porcent < 98) {
@@ -129,14 +133,14 @@ const ConsolidateTab = (data) => {
       renderCell: (row) => {
         const numeroConPuntos = formaterNumberToCurrency(
           row.consolidatedFinancialReturns
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
   ];
   return (
     <>
-      <div className="container-sections-forms ml-20px mr-20px">
+      <div className="container-sections-forms  mr-20px">
         <TableComponent
           setPaginateData={setPaginateData}
           ref={tableComponentRef}
@@ -153,9 +157,9 @@ const ConsolidateTab = (data) => {
       {TotalView && (
         <>
           {" "}
-          <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+          <div className="container-sections-forms mt-24px p-0">
             <div
-              className="bold mt-24px ml-16px mr-16px p-0"
+              className="bold mt-24px mr-16px mb-24px p-0"
               style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
             >
               Totales
@@ -167,12 +171,10 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="No. Preseleccionados"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
-                placeholder={`${formaterNumberToCurrency(
-                  totalNoPreseleccionados
-                ).replace("$", "")}`}
+                placeholder={`${totalNoPreseleccionados}`}
                 disabled
               />
               <InputComponent
@@ -181,7 +183,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="No. Cupos"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -194,17 +196,12 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Recurso disponible"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalRecursoDisponible).replace(
-                    "$",
-                    ""
-                  )
-                )}
+                value={String(formaterNumberToCurrency(totalRecursoDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
@@ -212,54 +209,44 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Otorgado"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalOtorgado).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalOtorgado))}
               />
             </div>
+
             <div className="grid-form-4-container mb-24px">
               <InputComponent
                 idInput={"tQuantity1"}
                 className="input-basic medium"
                 typeInput="text"
                 label="Disponible"
-                //register={register}
-                classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalDisponible).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalDisponible))}
               />
+
               <InputComponent
-                idInput={"tQuantity1"}
-                className="input-basic medium"
+                idInput={"porcentPart"}
+                className={`input-basic medium ${color}`}
                 typeInput="text"
                 label="%Participacion"
-                //register={register}
-                classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
-                value={String(Math.round(totalPorParticipacion)) + "%"}
+                value={String(totalPorParticipacion) + "%"}
               />
+
               <InputComponent
                 idInput={"tQuantity1"}
                 className="input-basic medium"
                 typeInput="text"
                 label="No.Legalizados"
-                //register={register}
-                classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
                 value={String(totalNoLegalizados)}
@@ -270,16 +257,13 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Rendimiento financieros"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
                 disabled
                 value={String(
-                  formaterNumberToCurrency(totalRendimientoFinancieros).replace(
-                    "$",
-                    ""
-                  )
+                  formaterNumberToCurrency(totalRendimientoFinancieros)
                 )}
               />
             </div>

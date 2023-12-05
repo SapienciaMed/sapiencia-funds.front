@@ -500,7 +500,13 @@ div[id="single-spa-application:@sapiencia/funds"] {
   border-radius: var(--spacing-spacing-0, 0px);
   border: 1px solid var(--border-table, #f2f2f2);
 }
+.text-red{
+  color: red
+}
 
+.text-yellow {
+  color: yellow;
+}
 .text-black.huge,
 .huge.text-black-2 {
   font-size: 29px;

@@ -44,17 +44,21 @@ function Estratum123Tab({ filters }) {
       fieldName: "activity",
       header: "Comuna o corregimiento",
       renderCell: (row) => {
-        return (
-          <>
-            {
-              comunaList?.find(
-                (obj) => obj.value == row.resourcePrioritization.communeId
-              ).name
-            }
-          </>
+        // Intenta encontrar el objeto
+        const foundObj = comunaList?.find(
+          (obj) => obj.value == row.resourcePrioritization.communeId
         );
+    
+        // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
+        if (foundObj) {
+          return <>{foundObj.name}</>;
+        }
+    
+        // Puedes retornar algo por defecto si el objeto no se encuentra
+        return <>No encontrado</>;
       },
     },
+    
     {
       fieldName: "resourceAvailable",
       header: "Recurso disponible",
@@ -81,7 +85,10 @@ function Estratum123Tab({ filters }) {
       fieldName: "totalCost",
       header: "Disponible",
       renderCell: (row) => {
-        return <>{Number(row.resourceAvailable) - Number(row.granted)}</>;
+         const numeroConPuntos = formaterNumberToCurrency(
+           Number(row.resourceAvailable) - Number(row.granted)
+         ).replace("$", "");
+        return <>{numeroConPuntos}</>;
       },
     },
     {
@@ -129,7 +136,7 @@ function Estratum123Tab({ filters }) {
 
   return (
     <>
-      <div className="container-sections-forms ml-20px mr-20px">
+      <div className="container-sections-forms mr-20px">
         <BasicTableComponent
           ref={tableComponentRef}
           data={dataGridStratum}
@@ -142,7 +149,7 @@ function Estratum123Tab({ filters }) {
           isMobil={true}
         />
       </div>
-      <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+      <div className="container-sections-forms mt-24px mb-24px p-0">
         <p className="text-black huge ">Totales</p>
 
         <section className="funcionality-filters-container gap-15">

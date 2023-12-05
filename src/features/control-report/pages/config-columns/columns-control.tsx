@@ -11,16 +11,14 @@ export const columnsControl: ITableElement<any>[] = [
     fieldName: "recursoInicial",
     header: "Recurso inicial",
     renderCell: (row) => {
-      return (
-        <>{formaterNumberToCurrency(row.recursoInicial).replace("$", "")}</>
-      );
+      return <>{formaterNumberToCurrency(row.recursoInicial)}</>;
     },
   },
   {
     fieldName: "restante",
     header: "Restante",
     renderCell: (row) => {
-      return <>{formaterNumberToCurrency(row.restante).replace("$", "")}</>;
+      return <>{formaterNumberToCurrency(row.restante)}</>;
     },
   },
 ];
@@ -31,16 +29,14 @@ export const columnsControlSubtotal: ITableElement<any>[] = [
     fieldName: "recursoInicial",
     header: "Recurso inicial",
     renderCell: (row) => {
-      return (
-        <>{formaterNumberToCurrency(row.recursoInicial).replace("$", "")}</>
-      );
+      return <>{formaterNumberToCurrency(row.recursoInicial)}</>;
     },
   },
   {
     fieldName: "restante",
     header: "Restante",
     renderCell: (row) => {
-      return <>{formaterNumberToCurrency(row.restante).replace("$", "")}</>;
+      return <>{formaterNumberToCurrency(row.restante)}</>;
     },
   },
 ];

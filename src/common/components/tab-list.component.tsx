@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ITabsMenuTemplate } from "../interfaces/tabs-menu.interface";
+import { AppContext } from "../contexts/app.context";
 
 interface IAppProps {
   tabs: ITabsMenuTemplate[];
   start?: ITabsMenuTemplate;
   index?: number;
   className?: string;
-  currentIndex?: number;
-  setCurrentTabIndex?: React.Dispatch<React.SetStateAction<number>>
+  titleMessage?: string;
+  description?:string
 }
 
 function TabListComponent({
@@ -15,8 +16,8 @@ function TabListComponent({
   className,
   start,
   index,
-  currentIndex,
-  setCurrentTabIndex
+  titleMessage,
+  description
 }: IAppProps): React.JSX.Element {
   const tabList = {};
   tabs.forEach(
@@ -29,12 +30,7 @@ function TabListComponent({
   const [selectedTab, setSelectedTab] = useState<ITabsMenuTemplate>(
     start ? start : null
   );
-
-  useEffect(() => {
-    if (currentIndex !== undefined) {
-      setSelectedTab(tabs[currentIndex]);
-    }
-  }, [currentIndex, tabs]);
+  const { setMessage, disabledFields, setDisabledFields } = useContext(AppContext);
 
   useEffect(() => {
     if (!selectedTab)
@@ -49,6 +45,28 @@ function TabListComponent({
     }
   }, [index]);
 
+
+  const showMessage  = (tab: ITabsMenuTemplate) => {
+    setMessage({
+        show: true,
+        title: titleMessage || '',
+        description: description || '',
+        background: true,
+        OkTitle: 'Aceptar',
+        cancelTitle: 'Cancelar',
+        onOk() {
+            setDisabledFields(false);
+            setMessage({});
+            setSelectedTab(tab);
+        },
+        onCancel() {
+            setMessage({});
+        },
+    });
+  }
+
+  
+
   return (
     <div className={`tabs-component ${className ? className : ""}`}>
       <div className="tabs-selection">
@@ -60,11 +78,12 @@ function TabListComponent({
               className={`tab-option ${active}`}
               key={tab.id}
               onClick={() => {
-                if (setCurrentTabIndex && selectedTab && selectedTab.id !== tab.id) {
-                  setCurrentTabIndex(tabs.findIndex((t) => t.id === tab.id));
+                if (disabledFields && titleMessage != '') {
+                  showMessage(tab)
+                }else{
+                  setSelectedTab(tab);
+                  if (tab.action) tab.action();
                 }
-                setSelectedTab(tab);
-                if (tab.action) tab.action();
               }}
             >
               {tab.title}

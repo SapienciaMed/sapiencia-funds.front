@@ -23,6 +23,7 @@ export const stratum456Hook = (data) => {
   const { getListByGroupers } = useGenericListService();
   const [comunaList, setComunaList] = useState([]);
   const [TotalView, setTotalView] = useState(null);
+  const [color, setColor] = useState(null);
   const tableActions: ITableAction<any>[] = [
     {
       icon: "Edit",
@@ -30,7 +31,19 @@ export const stratum456Hook = (data) => {
         setMessage({
           show: true,
           background: true,
-          description: <ControlreporteditStratum456 data={row} />,
+          description: (
+            <ControlreporteditStratum456
+              onEdit={() => {
+                tableComponentRef.current?.loadData({
+                  ...data, /// Filtro de busqueda
+                });
+              }}
+              onUpdateTotals={() => {
+                getInfoStatum456(data);
+              }}
+              data={row}
+            />
+          ),
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -72,7 +85,7 @@ export const stratum456Hook = (data) => {
 
   const getInfoStatum456 = async (data) => {
     try {
-      const endpoint = "/api/v1/controlSelect/getInfoEstratos456";
+      const endpoint = "/api/v1/controlSelect/getInfoEstratos456Totals";
       const res: ApiResponse<[]> = await post(endpoint, data);
       let dataTotal = {
         resourceAvailable: null,
@@ -92,19 +105,35 @@ export const stratum456Hook = (data) => {
           dataTotal.Available +=
             Number(data.resourceAvailable) - Number(data.granted);
           dataTotal.legalized += Number(data.legalized);
-          dataTotal.porParticipacion +=
-            Math.round(Number(data.granted) / Number(data.resourceAvailable)) *
-            100;
         });
 
         dataTotal.porParticipacion =
-          Math.round(dataTotal.porParticipacion / totaDataRes) + "%";
+          (dataTotal.granted / dataTotal.resourceAvailable) * 100;
 
+        if (
+          isNaN(dataTotal.porParticipacion) ||
+          dataTotal.porParticipacion == Infinity ||
+          dataTotal.porParticipacion == undefined
+        ) {
+          dataTotal.porParticipacion = 0;
+        }
+
+        if (
+          dataTotal.porParticipacion >= 90 &&
+          dataTotal.porParticipacion <= 98
+        ) {
+          setColor("text-yellow");
+        } else if (
+          dataTotal.porParticipacion > 98 &&
+          dataTotal.porParticipacion <= 100
+        ) {
+          setColor("text-red");
+        }
         setTotalOtorgado(dataTotal.granted);
         setTotalRecursoDisponible(dataTotal.resourceAvailable);
         setTotalDisponible(dataTotal.Available);
         setTotalNoLegalizados(dataTotal.legalized);
-        setTotalPorParticipacion(dataTotal.porParticipacion);
+        setTotalPorParticipacion(dataTotal.porParticipacion.toFixed(2));
       }
     } catch (error) {}
   };
@@ -139,7 +168,9 @@ export const stratum456Hook = (data) => {
   };
 
   useEffect(() => {
-    getInfoStatum456(data);
+    setTimeout(() => {
+      getInfoStatum456(data);
+    }, 1000);
   }, []);
   return {
     setPaginateData,
@@ -154,5 +185,6 @@ export const stratum456Hook = (data) => {
     comunaList,
     TotalView,
     downloadCollection,
+    color,
   };
 };

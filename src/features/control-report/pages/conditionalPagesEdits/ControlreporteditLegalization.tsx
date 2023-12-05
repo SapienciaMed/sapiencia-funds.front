@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import {
   ButtonComponent,
   FormComponent,
@@ -11,12 +11,23 @@ import { AppContext } from "../../../../common/contexts/app.context";
 import { EResponseCodes } from "../../../../common/constants/api.enum";
 import { urlApiFunds } from "../../../../common/utils/base-url";
 import useCrudService from "../../../../common/hooks/crud-service.hook";
-const ControlreporteditLegalization = (data) => {
-  const info = data.data;
+import { InputNumberComponent } from "../../../../common/components/Form/input-number.component";
+import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
-  console.log(info);
+interface IProps {
+  onEdit: () => void;
+  data: any; // Usar el tipado
+  onUpdateTotals: () => void;
+}
+const ControlreporteditLegalization = ({
+  onEdit,
+  data,
+  onUpdateTotals,
+}: IProps): JSX.Element => {
+  const info = data;
   const resolver = useYupValidationResolver(controlEditConsolidation);
   const { put } = useCrudService(urlApiFunds);
+  const [color, setColor] = useState(null);
   const {
     handleSubmit,
     register,
@@ -59,7 +70,8 @@ const ControlreporteditLegalization = (data) => {
         OkTitle: "Cerrar",
         onOk: () => {
           setMessage({ show: false });
-          window.location.reload();
+          onEdit();
+          onUpdateTotals();
         },
 
         background: true,
@@ -110,12 +122,28 @@ const ControlreporteditLegalization = (data) => {
       cancelTitle: "Cancelar",
       background: true,
       onOk: () => {
-        setMessage({ show: false });
+        setMessage((prev) => ({ ...prev, show: false }));
       },
       onCancel: () => {
-        setMessage({ show: false });
+        setMessage({
+          show: true,
+          title: "Editar ítem",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: (
+            <ControlreporteditLegalization
+              onEdit={onEdit}
+              data={data}
+              onUpdateTotals={onUpdateTotals}
+            />
+          ),
+          size: "items",
+          items: true,
+        });
       },
-      onClose: () => setMessage({ show: false }),
+      onClose: () => setMessage({}),
     });
   };
 
@@ -127,14 +155,27 @@ const ControlreporteditLegalization = (data) => {
     setValue("Availableresources", info.Availableresources);
 
     let Avaible = Number(info.Availableresources) - Number(info.Granted);
-    setValue("Avaible", Avaible);
+    setValue("Avaible", formaterNumberToCurrency(Avaible));
 
-    let porParticipacion =
-      Math.round(
-        (Number(info.Granted) / Number(info.Availableresources)) * 100
-      ) + "%";
+    let porParticipacion = Math.round(
+      (Number(info.Granted) / Number(info.Availableresources)) * 100
+    );
 
-    setValue("porParticipacion", porParticipacion);
+    if (
+      isNaN(porParticipacion) ||
+      porParticipacion == Infinity ||
+      porParticipacion == undefined
+    ) {
+      porParticipacion = 0;
+    }
+
+    if (porParticipacion >= 90 && porParticipacion <= 98) {
+      setColor("text-yellow");
+    } else if (porParticipacion > 98 && porParticipacion <= 100) {
+      setColor("text-red");
+    }
+
+    setValue("porParticipacion", porParticipacion + "%");
   }, []);
   return (
     <Fragment>
@@ -196,15 +237,15 @@ const ControlreporteditLegalization = (data) => {
               name={"Availableresources"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"Availableresources"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
                     label="Recurso disponible"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black big text-with-colons"
                     errors={errors}
                     placeholder={""}
+                    control={control}
+                    prefix="$"
                     {...field}
                   />
                 );
@@ -220,14 +261,14 @@ const ControlreporteditLegalization = (data) => {
               name={"Granted"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"Granted"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
                     label="Otorgado"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black big text-with-colons"
                     errors={errors}
+                    control={control}
+                    prefix="$"
                     placeholder={""}
                     {...field}
                   />
@@ -263,7 +304,7 @@ const ControlreporteditLegalization = (data) => {
                 return (
                   <InputComponent
                     idInput={"porParticipacion"}
-                    className="input-basic medium"
+                    className={`input-basic medium ${color}`}
                     typeInput="text"
                     label="%Participacion"
                     register={register}
@@ -308,10 +349,10 @@ const ControlreporteditLegalization = (data) => {
             backgroundColor: "#e0e0e0",
           }}
         ></div>
-        <div className="button-save-container-display mr-24px">
+        <div className="button-save-container-display-items margin-right0 mr-24px">
           <ButtonComponent
             value="Cancelar"
-            className="button-clean bold"
+            className="button-clean"
             type="button"
             action={handleCancel}
           />

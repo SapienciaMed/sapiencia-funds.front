@@ -12,7 +12,6 @@ function TabsManageTechnical({ document }) {
     const { option } = useParams();
     const { validateActionAccess } = useContext(AppContext);
     
-
     const tabs = (): ITabsMenuTemplate[] => {
         const servicioSocial = {
             id: "servicioSocial", 
@@ -55,29 +54,11 @@ function TabsManageTechnical({ document }) {
 
     const start = tabs().find((tab) => tab.id.toString().toLowerCase() == option?.toLowerCase());
 
-    const [currentTabIndex, setCurrentTabIndex] = useState<number>(
-        start ? tabs().findIndex((tab) => tab.id === start.id) : 0
-    );
-
     return(
         <>
             <section className="mt-20px">
-                <TabListComponent tabs={tabs()} start={start} currentIndex={currentTabIndex} setCurrentTabIndex={setCurrentTabIndex}/>
+                <TabListComponent tabs={tabs()} start={start} titleMessage="Cambios sin guardar" description="¿Estas segur@ de salir sin guardar los cambios?" />
             </section>
-
-            {
-                tabs().length > 1 && (
-                    <div className="container-actions_formTabs">
-                        <ButtonComponent
-                            value='Siguiente'
-                            className='button-save  invalid big'
-                            type='button'
-                            action={() => { setCurrentTabIndex((currentTabIndex + 1) % tabs().length) }}
-                        />
-                    </div>
-                )
-            }
-        
         </>
     )
 }

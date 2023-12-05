@@ -258,141 +258,136 @@ const ResourcePrioritizationPage = (): JSX.Element => {
   ];
 
   return (
-    <div className=" container-form-grid">
-      <div className="container-form padding-form">
-        <p className="text-black huge mg-0">Control Financiero</p>
-        <div className="card-table-user">
-          <div className="title-area">
-            <label className="text-black large medium mg-0">
-              Priorización de recurso PP
-            </label>
-          </div>
-
-          <FormComponent
-            id="useQueryForm"
-            className="form-signIn"
-            action={onSubmitSearch}
-          >
-            <div
-              className="grid-form-4-container gap-25 container-sections-forms alto-auto"
-              style={{ justifyContent: "space-between" }}
-            >
-              <Controller
-                control={form.control}
-                name={"projectNumber"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput="projectNumber"
-                      errors={form.formState.errors}
-                      typeInput={"number"}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field.value}
-                      register={form.register}
-                      className="input-basic medium"
-                      classNameLabel="text-black big bold text-required"
-                      label={<>Número proyecto</>}
-                      {...field}
-                    />
-                  );
-                }}
-              />
-
-              <div className="grid-span-2-columns">
-                <SelectComponent
-                  idInput="programId"
-                  control={form.control}
-                  className="select-basic medium "
-                  placeholder="Seleccionar"
-                  label="Programa"
-                  data={programList}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
-                  errors={form.formState.errors}
-                />
-              </div>
-
-              <Controller
-                control={form.control}
-                name={"validity"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput={field.name}
-                      errors={form.formState.errors}
-                      typeInput={"number"}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field.value}
-                      register={form.register}
-                      className="input-basic medium"
-                      classNameLabel="text-black big bold text-required"
-                      label="Vigencia"
-                    />
-                  );
-                }}
-              />
-
-              <InputNumberComponent
-                idInput="generalRate"
-                control={form.control}
-                label={<>Tasa general costos y gastos</>}
-                errors={form.formState.errors}
-                classNameLabel="text-black big bold text-required"
-                className="inputNumber-basic medium "
-                mode="decimal"
-                prefix="% "
-                maxFractionDigits={2}
-                max={100}
-                min={0}
-              />
-
-              <InputNumberComponent
-                idInput="operatorCommission"
-                control={form.control}
-                label={<>Comisión operador financiero</>}
-                errors={form.formState.errors}
-                classNameLabel="text-black big bold text-required"
-                className="inputNumber-basic medium "
-                mode="decimal"
-                prefix="% "
-                maxFractionDigits={2}
-                max={100}
-                min={0}
-              />
-
-              <InputNumberComponent
-                idInput="operatorCommissionBalance"
-                control={form.control}
-                label={<>Comisión operador financiero balance</>}
-                errors={form.formState.errors}
-                classNameLabel="text-black big bold text-required"
-                className="inputNumber-basic medium "
-                mode="decimal"
-                prefix="% "
-                maxFractionDigits={2}
-                max={100}
-                min={0}
-              />
-
-              <InputNumberComponent
-                idInput="operatorCommissionAct"
-                control={form.control}
-                label={<>Comisión operador financiero acta</>}
-                errors={form.formState.errors}
-                classNameLabel="text-black big bold text-required"
-                className="inputNumber-basic medium "
-                mode="decimal"
-                prefix="% "
-                maxFractionDigits={2}
-                max={100}
-                min={0}
-              />
+    <div className="main-page">
+      <section>
+          <p className="text-black huge ">Control Financiero</p>
+          <div className="card-table-user">
+            <div className="title-area">
+              <label className="text-black large medium">
+                Priorización de recurso PP
+              </label>
             </div>
-          </FormComponent>
+          </div>
+      </section>
+
+      <FormComponent
+        id="useQueryForm"
+        action={onSubmitSearch}
+        className="card-table gap-0 mt-14px"
+      >
+        <div className="grid-form-4-container gap-15">
+          <Controller
+            control={form.control}
+            name={"projectNumber"}
+            render={({ field }) => {
+              return (
+                <InputComponent
+                  idInput="projectNumber"
+                  errors={form.formState.errors}
+                  typeInput={"number"}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  value={field.value}
+                  register={form.register}
+                  className="input-basic medium"
+                  classNameLabel="text-black big bold text-required"
+                  label={<>Número proyecto</>}
+                  {...field}
+                />
+              );
+            }}
+          />
+            <SelectComponent
+              idInput="programId"
+              control={form.control}
+              className="select-basic medium select-disabled-list"
+              placeholder="Seleccionar"
+              label="Programa"
+              data={programList}
+              classNameLabel="text-black big bold text-with-colons text-required"
+              direction={EDirection.column}
+              errors={form.formState.errors}
+            />
+          <Controller
+            control={form.control}
+            name={"validity"}
+            render={({ field }) => {
+              return (
+                <InputComponent
+                  idInput={field.name}
+                  errors={form.formState.errors}
+                  typeInput={"number"}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  value={field.value}
+                  register={form.register}
+                  className="input-basic medium"
+                  classNameLabel="text-black big bold text-required"
+                  label="Vigencia"
+                />
+              );
+            }}
+          />
+          <InputNumberComponent
+            idInput="generalRate"
+            control={form.control}
+            label={<>Tasa general costos y gastos</>}
+            errors={form.formState.errors}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="decimal"
+            prefix="% "
+            maxFractionDigits={2}
+            max={100}
+            min={0}
+          />
+
         </div>
-        <div className="button-save-container-display-users margin-right0">
+
+        <div className="grid-form-3-container gap-15 mt-14px">
+          
+          <InputNumberComponent
+            idInput="operatorCommission"
+            control={form.control}
+            label={<>Comisión operador financiero</>}
+            errors={form.formState.errors}
+            classNameLabel="text-black big bold text-required "
+            className="inputNumber-basic medium "
+            mode="decimal"
+            prefix="% "
+            maxFractionDigits={2}
+            max={100}
+            min={0}
+          />
+          <InputNumberComponent
+            idInput="operatorCommissionBalance"
+            control={form.control}
+            label={<>Comisión operador financiero balance</>}
+            errors={form.formState.errors}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="decimal"
+            prefix="% "
+            maxFractionDigits={2}
+            max={100}
+            min={0}
+          />
+          <InputNumberComponent
+            idInput="operatorCommissionAct"
+            control={form.control}
+            label={<>Comisión operador financiero acta</>}
+            errors={form.formState.errors}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="decimal"
+            prefix="% "
+            maxFractionDigits={2}
+            max={100}
+            min={0}
+          />
+        </div>
+
+        <div className="funcionality-buttons-container">
           <ButtonComponent
             form="useQueryForm"
             value="Limpiar campos"
@@ -408,25 +403,27 @@ const ResourcePrioritizationPage = (): JSX.Element => {
             className="button-save large disabled-black"
           />
         </div>
-        <div style={{ width: width - (width < 1024 ? 100 : 400) }}>
-          <TableComponent
-            ref={tableComponentRef}
-            url={`${process.env.urlApiFunds}/api/v1/resource-prioritization/get-paginated/`}
-            columns={tableColumns}
-            actions={tableActions}
-            titleMessageModalNoResult="Datos no localizados"
-            descriptionModalNoResult="No se encontraron coincidencias con los datos ingresados."
-            isShowModal={true}
-            onResult={(rows) => {
-              setSearching(false);
-              if (rows.length > 0) loadTotals();
-            }}
-          />
-        </div>
+      </FormComponent>
+
+      <div className="mt-14px">
+        <TableComponent
+          ref={tableComponentRef}
+          url={`${process.env.urlApiFunds}/api/v1/resource-prioritization/get-paginated/`}
+          columns={tableColumns}
+          actions={tableActions}
+          titleMessageModalNoResult="Datos no localizados"
+          descriptionModalNoResult="No se encontraron coincidencias con los datos ingresados."
+          isShowModal={true}
+          onResult={(rows) => {
+            setSearching(false);
+            if (rows.length > 0) loadTotals();
+          }}
+        />
       </div>
+
       {totals && (
-        <>
-          <p className="text-black huge mg-0">Totales</p>
+        <div>
+          <p className="text-black huge ">Totales</p>
 
           <div
             className="grid-form-6-container"
@@ -525,8 +522,9 @@ const ResourcePrioritizationPage = (): JSX.Element => {
               action={downloadXLSX}
             />
           </div>
-        </>
+        </div>
       )}
+
     </div>
   );
 };

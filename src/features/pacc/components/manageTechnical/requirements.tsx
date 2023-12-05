@@ -8,7 +8,7 @@ import UploadNewComponent from "../../../../common/components/Form/UploadNewComp
 function Requirements() {
 
     const {
-        tableColumns, tableComponentRef, visible, id, showTable, setVisible, setFilesUploadData
+        tableColumns, tableComponentRef, visible, id, showTable, setVisible, setFilesUploadData, onCancel, saveFile
     } = useRequeriments()
 
     return (
@@ -57,14 +57,30 @@ function Requirements() {
                                 columns={tableColumns}
                                 titleMessageModalNoResult="Buscar"
                                 isShowModal={true}
-                                princialTitle="Soportes PQRSDF"
+                                princialTitle="Requisitos"
                                 keyBodyRequest="idBeneficiary"
                                 bodyRequestParameters={parseInt(id)}
                                 isMobil={false}
                                 count={true}
+                                isNotBorderClasse={true}
+                                descriptionModalNoResult="No se encontraron Requisitos"
                             />
                     }
-                </section>     
+                    <div className="funcionality-buttons-container">
+                        <ButtonComponent
+                            value="Cancelar"
+                            type="button"
+                            className="button-clean-fields bold"
+                            action={onCancel}
+                        />
+                        <ButtonComponent
+                            className="button-main huge hover-three"
+                            value="Guardar"
+                            type="submit"
+                            action={saveFile}
+                        />
+                    </div>   
+                </section>  
             
         </>
     )

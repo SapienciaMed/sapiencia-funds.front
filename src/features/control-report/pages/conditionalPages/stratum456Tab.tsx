@@ -23,31 +23,33 @@ const Stratum456Tab = (data) => {
     comunaList,
     TotalView,
     downloadCollection,
+    color,
   } = stratum456Hook(data.data);
-
+  console.log(totalPorParticipacion);
   const columnsStratum456: ITableElement<any>[] = [
     {
       fieldName: "resourcePrioritization.communeId",
       header: "Comuna o corregimiento",
       renderCell: (row) => {
-        return (
-          <>
-            {
-              comunaList?.find(
-                (obj) => obj.value == row.resourcePrioritization.communeId
-              ).name
-            }
-          </>
+        // Intenta encontrar el objeto
+        const foundObj = comunaList?.find(
+          (obj) => obj.value == row.resourcePrioritization.communeId
         );
+    
+        // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
+        if (foundObj) {
+          return <>{foundObj.name}</>;
+        }
+    
+        // Puedes retornar algo por defecto si el objeto no se encuentra
+        return <>No encontrado</>;
       },
-    },
+    },    
     {
       fieldName: "resourceAvailable",
       header: "Recurso Disponible",
       renderCell: (row) => {
-        const numeroConPuntos = formaterNumberToCurrency(
-          row.resourceAvailable
-        ).replace("$", "");
+        const numeroConPuntos = formaterNumberToCurrency(row.resourceAvailable);
         return <>{numeroConPuntos}</>;
       },
     },
@@ -68,7 +70,7 @@ const Stratum456Tab = (data) => {
       renderCell: (row) => {
         const numeroConPuntos = formaterNumberToCurrency(
           Math.round(Number(row.resourceAvailable) - Number(row.granted))
-        ).replace("$", "");
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -112,7 +114,7 @@ const Stratum456Tab = (data) => {
   console.log(urlGet);
   return (
     <>
-      <div className="container-sections-forms ml-20px mr-20px">
+      <div className="container-sections-forms  mr-20px">
         <TableComponent
           setPaginateData={setPaginateData}
           ref={tableComponentRef}
@@ -128,9 +130,9 @@ const Stratum456Tab = (data) => {
 
       {TotalView && (
         <>
-          <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+          <div className="container-sections-forms mt-24px  p-0">
             <div
-              className="bold mt-24px ml-16px mr-16px p-0"
+              className="bold mt-24px mr-16px mb-24px p-0"
               style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
             >
               Totales
@@ -142,7 +144,7 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="Recurso disponible"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -160,14 +162,12 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="Otorgado"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalOtorgado).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalOtorgado))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
@@ -175,29 +175,27 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="Disponible"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalDisponible).replace("$", "")
-                )}
+                value={String(formaterNumberToCurrency(totalDisponible))}
               />
             </div>
             <div className="grid-form-2-container mb-24px">
               <InputComponent
                 idInput={"tQuantity1"}
-                className="input-basic medium"
+                className={`input-basic medium ${color}`}
                 typeInput="text"
                 label="%Participacion"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(totalPorParticipacion)}
+                value={String(totalPorParticipacion) + "%"}
               />
               <InputComponent
                 idInput={"tQuantity1"}
@@ -205,7 +203,7 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="No.Legalizados"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}

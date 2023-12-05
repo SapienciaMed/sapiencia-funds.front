@@ -43,10 +43,8 @@ export const ControlHook = (data) => {
     const res: ApiResponse<[]> = await post(endpoint, data);
 
     res.data["array"].forEach((data) => {
-      data.recursoInicial = formaterNumberToCurrency(
-        data.recursoInicial
-      ).replace("$", "");
-      data.restante = formaterNumberToCurrency(data.restante).replace("$", "");
+      data.recursoInicial = formaterNumberToCurrency(data.recursoInicial);
+      data.restante = formaterNumberToCurrency(data.restante);
     });
     if (res.data["array"].length > 0) {
       setTotalView(true);
