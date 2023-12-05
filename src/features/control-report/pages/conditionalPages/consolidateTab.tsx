@@ -159,7 +159,7 @@ const ConsolidateTab = (data) => {
           {" "}
           <div className="container-sections-forms mt-24px p-0">
             <div
-              className="bold mt-24px ml-16px mr-16px p-0"
+              className="bold mt-24px mr-16px p-0"
               style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
             >
               Totales
@@ -171,7 +171,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="No. Preseleccionados"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={`${totalNoPreseleccionados}`}
@@ -183,7 +183,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="No. Cupos"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -196,7 +196,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Recurso disponible"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -209,7 +209,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Otorgado"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -224,7 +224,7 @@ const ConsolidateTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="Disponible"
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
                 value={String(formaterNumberToCurrency(totalDisponible))}
@@ -235,7 +235,7 @@ const ConsolidateTab = (data) => {
                 className={`input-basic medium ${color}`}
                 typeInput="text"
                 label="%Participacion"
-                classNameLabel="text-black biggest text-required "
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
                 value={String(totalPorParticipacion) + "%"}
@@ -246,7 +246,7 @@ const ConsolidateTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="No.Legalizados"
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
                 value={String(totalNoLegalizados)}
@@ -257,7 +257,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Rendimiento financieros"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
