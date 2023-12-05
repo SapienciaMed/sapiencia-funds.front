@@ -119,7 +119,7 @@ const Controlreporteditconsolidation = ({
         show: true,
         OkTitle: "Cerrar",
         onOk: () => {
-          setMessage({ show: false });
+          setMessage((prev) => ({ ...prev, show: false }));
           onEdit();
           onUpdateTotals();
         },
@@ -173,12 +173,28 @@ const Controlreporteditconsolidation = ({
       cancelTitle: "Cancelar",
       background: true,
       onOk: () => {
-        setMessage({ show: false });
+        setMessage((prev) => ({ ...prev, show: false }));
       },
       onCancel: () => {
-        setMessage({ show: false });
+        setMessage({
+          show: true,
+          title: "Editar ítem",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: (
+            <Controlreporteditconsolidation
+              onEdit={onEdit}
+              data={data}
+              onUpdateTotals={onUpdateTotals}
+            />
+          ),
+          size: "items",
+          items: true,
+        });
       },
-      onClose: () => setMessage({ show: false }),
+      onClose: () => setMessage({}),
     });
   };
 

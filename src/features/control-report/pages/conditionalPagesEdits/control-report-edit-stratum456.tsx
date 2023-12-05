@@ -59,21 +59,36 @@ const ControlreporteditStratum456 = ({
   const handleCancel = () => {
     setMessage({
       title: "Cancelar edición activo",
-      description: "¿Estás segur@ de cancelar la edición",
+      description: "¿Estas segur@ de cancelar la edición?",
       show: true,
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       background: true,
       onOk: () => {
-        setMessage({ show: false });
+        setMessage((prev) => ({ ...prev, show: false }));
       },
       onCancel: () => {
-        setMessage({ show: false });
+        setMessage({
+          show: true,
+          title: "Editar ítem",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: (
+            <ControlreporteditStratum456
+              onEdit={onEdit}
+              data={data}
+              onUpdateTotals={onUpdateTotals}
+            />
+          ),
+          size: "items",
+          items: true,
+        });
       },
-      onClose: () => setMessage({ show: false }),
+      onClose: () => setMessage({}),
     });
   };
-
   const info = data;
 
   useEffect(() => {
