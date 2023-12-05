@@ -132,7 +132,7 @@ const Stratum456Tab = (data) => {
         <>
           <div className="container-sections-forms mt-24px  p-0">
             <div
-              className="bold mt-24px ml-16px mr-16px p-0"
+              className="bold mt-24px mr-16px p-0"
               style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
             >
               Totales
@@ -144,7 +144,7 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="Recurso disponible"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -162,7 +162,7 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="Otorgado"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -175,7 +175,7 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="Disponible"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -190,7 +190,7 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="%Participacion"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -203,7 +203,7 @@ const Stratum456Tab = (data) => {
                 typeInput="text"
                 label="No.Legalizados"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
