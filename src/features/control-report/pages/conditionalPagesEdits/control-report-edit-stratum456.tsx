@@ -23,11 +23,21 @@ export const controlEditStratum456 = yup.object({
   consolidatedLegalized: yup.number().optional(),
   consolidatedFinancialReturns: yup.number().optional(),
 });
-const ControlreporteditStratum456 = (data) => {
-  console.log(data);
+
+interface IProps {
+  onEdit: () => void;
+  data: any; // Usar el tipado
+  onUpdateTotals: () => void;
+}
+const ControlreporteditStratum456 = ({
+  onEdit,
+  data,
+  onUpdateTotals,
+}: IProps): JSX.Element => {
   const resolver = useYupValidationResolver(controlEditStratum456);
   const { setMessage } = useContext(AppContext);
   const { put } = useCrudService(urlApiFunds);
+  const [color, setColor] = useState(null);
   const {
     handleSubmit,
     register,
@@ -64,16 +74,28 @@ const ControlreporteditStratum456 = (data) => {
     });
   };
 
-  const info = data.data;
+  const info = data;
 
   useEffect(() => {
     setValue("legalized", info.legalized);
     setValue("resourceAvailable", info.resourceAvailable);
     setValue("granted", info.granted);
-    setValue(
-      "porPorcent",
-      Math.round((info.granted / info.resourceAvailable) * 100) + "%"
+    let porParticipacion = Math.round(
+      (Number(info.granted) / Number(info.resourceAvailable)) * 100
     );
+    if (
+      isNaN(porParticipacion) ||
+      porParticipacion == Infinity ||
+      porParticipacion == undefined
+    ) {
+      porParticipacion = 0;
+    }
+    if (porParticipacion >= 90 && porParticipacion <= 98) {
+      setColor("text-yellow");
+    } else if (porParticipacion > 98 && porParticipacion <= 100) {
+      setColor("text-red");
+    }
+    setValue("porPorcent", porParticipacion + "%");
     setValue(
       "Avaible",
       formaterNumberToCurrency(info.resourceAvailable - info.granted)
@@ -104,7 +126,8 @@ const ControlreporteditStratum456 = (data) => {
         OkTitle: "Cerrar",
         onOk: () => {
           setMessage({ show: false });
-          window.location.reload();
+          onEdit();
+          onUpdateTotals();
         },
 
         background: true,
@@ -123,7 +146,6 @@ const ControlreporteditStratum456 = (data) => {
   };
 
   const onSubmit = handleSubmit(async (dataEdit: any) => {
-    console.log(dataEdit);
     const body = {
       id: info.id,
       resourceAvailable: dataEdit.resourceAvailable,
@@ -182,15 +204,15 @@ const ControlreporteditStratum456 = (data) => {
               name={"granted"}
               render={({ field }) => {
                 return (
-                  <InputComponent
+                  <InputNumberComponent
                     idInput={"granted"}
-                    className="input-basic medium"
-                    typeInput="text"
+                    className="inputNumber-basic medium"
+                    control={control}
                     label="Otorgado"
-                    register={register}
-                    classNameLabel="text-black biggest text-required"
+                    classNameLabel="text-black big text-with-colons"
                     errors={errors}
                     placeholder={""}
+                    prefix="$"
                     {...field}
                   />
                 );
@@ -228,7 +250,7 @@ const ControlreporteditStratum456 = (data) => {
                 return (
                   <InputComponent
                     idInput={"porPorcent"}
-                    className="input-basic medium"
+                    className={`input-basic medium ${color}`}
                     typeInput="text"
                     label="%Participacion"
                     register={register}

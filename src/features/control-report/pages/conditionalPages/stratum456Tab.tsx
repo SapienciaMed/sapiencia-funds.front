@@ -23,8 +23,9 @@ const Stratum456Tab = (data) => {
     comunaList,
     TotalView,
     downloadCollection,
+    color,
   } = stratum456Hook(data.data);
-
+  console.log(totalPorParticipacion);
   const columnsStratum456: ITableElement<any>[] = [
     {
       fieldName: "resourcePrioritization.communeId",
@@ -182,7 +183,7 @@ const Stratum456Tab = (data) => {
             <div className="grid-form-2-container mb-24px">
               <InputComponent
                 idInput={"tQuantity1"}
-                className="input-basic medium"
+                className={`input-basic medium ${color}`}
                 typeInput="text"
                 label="%Participacion"
                 //register={register}
@@ -191,7 +192,7 @@ const Stratum456Tab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(totalPorParticipacion)}
+                value={String(totalPorParticipacion) + "%"}
               />
               <InputComponent
                 idInput={"tQuantity1"}

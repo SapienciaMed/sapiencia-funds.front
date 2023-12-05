@@ -27,6 +27,7 @@ const ConsolidateTab = (data) => {
     downloadCollection,
     comunaList,
     TotalView,
+    color,
   } = consolidateHook(data.data);
 
   const columnsConsolidados: ITableElement<any>[] = [
@@ -96,7 +97,7 @@ const ConsolidateTab = (data) => {
             100
         );
 
-        if (porcent == Infinity || porcent == undefined) {
+        if (porcent == Infinity || porcent == undefined || isNaN(porcent)) {
           return <>0%</>;
         } else {
           if (porcent >= 90 && porcent < 98) {
@@ -213,42 +214,36 @@ const ConsolidateTab = (data) => {
                 value={String(formaterNumberToCurrency(totalOtorgado))}
               />
             </div>
+
             <div className="grid-form-4-container mb-24px">
               <InputComponent
                 idInput={"tQuantity1"}
                 className="input-basic medium"
                 typeInput="text"
                 label="Disponible"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={""}
                 disabled
                 value={String(formaterNumberToCurrency(totalDisponible))}
               />
+
               <InputComponent
-                idInput={"tQuantity1"}
-                className="input-basic medium"
+                idInput={"porcentPart"}
+                className={`input-basic medium ${color}`}
                 typeInput="text"
                 label="%Participacion"
-                //register={register}
-                classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
+                classNameLabel="text-black biggest text-required "
                 placeholder={""}
                 disabled
-                value={String(Math.round(totalPorParticipacion)) + "%"}
+                value={String(totalPorParticipacion) + "%"}
               />
+
               <InputComponent
                 idInput={"tQuantity1"}
                 className="input-basic medium"
                 typeInput="text"
                 label="No.Legalizados"
-                //register={register}
                 classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
                 placeholder={""}
                 disabled
                 value={String(totalNoLegalizados)}

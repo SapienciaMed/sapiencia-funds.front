@@ -23,6 +23,7 @@ export const stratum456Hook = (data) => {
   const { getListByGroupers } = useGenericListService();
   const [comunaList, setComunaList] = useState([]);
   const [TotalView, setTotalView] = useState(null);
+  const [color, setColor] = useState(null);
   const tableActions: ITableAction<any>[] = [
     {
       icon: "Edit",
@@ -30,7 +31,19 @@ export const stratum456Hook = (data) => {
         setMessage({
           show: true,
           background: true,
-          description: <ControlreporteditStratum456 data={row} />,
+          description: (
+            <ControlreporteditStratum456
+              onEdit={() => {
+                tableComponentRef.current?.loadData({
+                  ...data, /// Filtro de busqueda
+                });
+              }}
+              onUpdateTotals={() => {
+                getInfoStatum456(data);
+              }}
+              data={row}
+            />
+          ),
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -98,8 +111,27 @@ export const stratum456Hook = (data) => {
         });
 
         dataTotal.porParticipacion =
-          Math.round(dataTotal.porParticipacion / totaDataRes) + "%";
+          Math.round(dataTotal.granted / dataTotal.resourceAvailable) * 100;
 
+        if (
+          isNaN(dataTotal.porParticipacion) ||
+          dataTotal.porParticipacion == Infinity ||
+          dataTotal.porParticipacion == undefined
+        ) {
+          dataTotal.porParticipacion = 0;
+        }
+
+        if (
+          dataTotal.porParticipacion >= 90 &&
+          dataTotal.porParticipacion <= 98
+        ) {
+          setColor("text-yellow");
+        } else if (
+          dataTotal.porParticipacion > 98 &&
+          dataTotal.porParticipacion <= 100
+        ) {
+          setColor("text-red");
+        }
         setTotalOtorgado(dataTotal.granted);
         setTotalRecursoDisponible(dataTotal.resourceAvailable);
         setTotalDisponible(dataTotal.Available);
@@ -156,5 +188,6 @@ export const stratum456Hook = (data) => {
     comunaList,
     TotalView,
     downloadCollection,
+    color,
   };
 };

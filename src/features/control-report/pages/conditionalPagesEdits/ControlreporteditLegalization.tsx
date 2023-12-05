@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import {
   ButtonComponent,
   FormComponent,
@@ -13,12 +13,21 @@ import { urlApiFunds } from "../../../../common/utils/base-url";
 import useCrudService from "../../../../common/hooks/crud-service.hook";
 import { InputNumberComponent } from "../../../../common/components/Form/input-number.component";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
-const ControlreporteditLegalization = (data) => {
-  const info = data.data;
 
-  console.log(info);
+interface IProps {
+  onEdit: () => void;
+  data: any; // Usar el tipado
+  onUpdateTotals: () => void;
+}
+const ControlreporteditLegalization = ({
+  onEdit,
+  data,
+  onUpdateTotals,
+}: IProps): JSX.Element => {
+  const info = data;
   const resolver = useYupValidationResolver(controlEditConsolidation);
   const { put } = useCrudService(urlApiFunds);
+  const [color, setColor] = useState(null);
   const {
     handleSubmit,
     register,
@@ -61,7 +70,8 @@ const ControlreporteditLegalization = (data) => {
         OkTitle: "Cerrar",
         onOk: () => {
           setMessage({ show: false });
-          window.location.reload();
+          onEdit();
+          onUpdateTotals();
         },
 
         background: true,
@@ -135,8 +145,18 @@ const ControlreporteditLegalization = (data) => {
       (Number(info.Granted) / Number(info.Availableresources)) * 100
     );
 
-    if (porParticipacion == Infinity) {
+    if (
+      isNaN(porParticipacion) ||
+      porParticipacion == Infinity ||
+      porParticipacion == undefined
+    ) {
       porParticipacion = 0;
+    }
+
+    if (porParticipacion >= 90 && porParticipacion <= 98) {
+      setColor("text-yellow");
+    } else if (porParticipacion > 98 && porParticipacion <= 100) {
+      setColor("text-red");
     }
 
     setValue("porParticipacion", porParticipacion + "%");
@@ -268,7 +288,7 @@ const ControlreporteditLegalization = (data) => {
                 return (
                   <InputComponent
                     idInput={"porParticipacion"}
-                    className="input-basic medium"
+                    className={`input-basic medium ${color}`}
                     typeInput="text"
                     label="%Participacion"
                     register={register}
