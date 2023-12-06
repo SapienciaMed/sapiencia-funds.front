@@ -20,7 +20,7 @@ interface IPropTableColumnsActa{
 export default function usetableColumnsActa({ dataGridUsersServices, authorization, valueAction, dataTableServices, getValues, setMessage }: IPropTableColumnsActa) {
 
     const [ idCitation, setIdCitation ] = useState({ id: '' })
-    const { approveCitation } = useActaApi();
+    const { approveCitation, deleteCitation } = useActaApi();
     const [ checked, setChecked ] = useState(false);
     const navigate = useNavigate();
 
@@ -260,13 +260,31 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
                     OkTitle: "Aceptar",
                     cancelTitle: "Cancelar",
                     onOk() {
-                        if (dataGridUsersServices.find((obj) => obj.ident == row.ident)) {
-                            const position = dataGridUsersServices.findIndex(
-                                (obj) => obj.ident === row.ident
-                            );
-                            dataGridUsersServices.splice(position, 1);
-                            setMessage({})
-                        }
+                        deleteCitation( String(row.idCitation) ).then(response => {
+                            if(response.operation.code == EResponseCodes.OK) {
+                                if (dataGridUsersServices.find((obj) => obj.ident == row.ident)) {
+                                    const position = dataGridUsersServices.findIndex(
+                                        (obj) => obj.ident === row.ident
+                                    );
+                                    dataGridUsersServices.splice(position, 1);
+                                    setMessage({})
+                                }
+                            }else{
+                                setMessage({
+                                    show: true,
+                                    title: "Error",
+                                    description: "No se pudo eliminar el registro",
+                                    OkTitle: "Cerrar",
+                                    background: true,
+                                    onOk() {
+                                        setMessage({});
+                                    },
+                                    onClose(){
+                                        setMessage({});
+                                    }
+                                });
+                            }
+                        })
                     },
                     background: true,
                 });
