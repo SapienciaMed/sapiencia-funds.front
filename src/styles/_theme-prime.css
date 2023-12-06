@@ -5097,8 +5097,7 @@
   .p-accordion-tab:last-child
   .p-accordion-header:not(.p-highlight)
   .p-accordion-header-link {
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
+    border-radius: var(--6, 6px);
 }
 .p-accordion
   .p-accordion-tab:last-child
@@ -5554,7 +5553,7 @@
   padding: 1rem;
 }
 .p-tooltip {
-  z-index: 2 !important;
+  z-index: 900 !important;
   max-width: 50%;
 }
 .p-tooltip .p-tooltip-text {
@@ -6154,6 +6153,7 @@
   border: 1px solid #dee2e6;
   border-radius: 3px;
   width: 12.5rem;
+  border-radius: var(--6, 6px);
 }
 .p-menu .p-menuitem-link {
   padding: 0.75rem 1rem;

@@ -44,3 +44,10 @@ export interface IChageStatusKnowledgeTransfer {
   user: string;
   workedHours: number;
 }
+
+export interface IPropManageTransfer {
+  idSelect: number,
+  loadTableData: () => void
+  idBeneficiary: number,
+  getUploadKnow: () => void
+}

@@ -9,17 +9,15 @@ import { Button } from "primereact/button";
 import { MenuItem } from "primereact/menuitem";
 import { AppContext } from "../../../../../common/contexts/app.context";
 import ManageTransfer from "../manage-transfer";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { IApplyKnowledgeTransfer } from "../interface/manage-technical";
 import { usePaccServices } from "../../../hook/pacc-serviceshook";
 import { EResponseCodes } from "../../../../../common/constants/api.enum";
 import { downloadFile } from "../helper/dowloadFile";
 
-
 export default function useKnowledgeTransfer() {
 
     const { id } =  useParams()
-    const navigate = useNavigate()
     const tableComponentRef = useRef(null);
     const toast = useRef(null);
     const { setMessage, authorization } = useContext(AppContext);
@@ -31,17 +29,21 @@ export default function useKnowledgeTransfer() {
             idBeneficiary: parseInt(id),
             user: authorization.user.numberDocument
         })
-        GetUploadKnowledgeTransferFiles(id).then(response => {
-            if(response.operation.code === EResponseCodes.OK){
-                setFilesService(response.data)
-            }
-        })
+        getUploadKnow()
     },[])
 
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
+    }
+
+    function getUploadKnow(): void {
+        GetUploadKnowledgeTransferFiles(id).then(response => {
+            if(response.operation.code === EResponseCodes.OK){
+                setFilesService(response.data)
+            }
+        })
     }
 
     const tableColumns: ITableElement<IApplyKnowledgeTransfer>[] = [
@@ -109,7 +111,7 @@ export default function useKnowledgeTransfer() {
                                         setMessage({
                                             show: true,
                                             title: "Gestionar",
-                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary}/>,
+                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary} getUploadKnow={getUploadKnow}/>,
                                             background: true,
                                         });
                                     }} 
@@ -142,8 +144,6 @@ export default function useKnowledgeTransfer() {
             }
         }
     ]
-
-    
 
     const items = (row): MenuItem[] => [
         {
