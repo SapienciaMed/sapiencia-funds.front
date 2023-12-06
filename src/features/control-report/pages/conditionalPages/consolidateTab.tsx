@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import {
   ButtonComponent,
@@ -11,7 +11,7 @@ import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import { useNavigate } from "react-router-dom";
 
-const ConsolidateTab = ({ onRef, data }) => {
+const ConsolidateTab = ({  data, reload }) => {
   const {
     urlGet,
     setPaginateData,
@@ -27,13 +27,14 @@ const ConsolidateTab = ({ onRef, data }) => {
     downloadCollection,
     comunaList,
     TotalView,
-    color,
-  } = consolidateHook(data);
+    color, 
+    tableComponentRef
+  } = consolidateHook(data, reload);
 
-  const tableComponentRef = useRef(null);
-  tableComponentRef.current?.loadData({
-    ...data,
-  });
+  console.log("RENDERIZA CONSOLIDATE TAB");
+
+
+
   const navigate = useNavigate();
   const columnsConsolidados: ITableElement<any>[] = [
     {

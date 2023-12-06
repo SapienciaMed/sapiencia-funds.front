@@ -65,6 +65,8 @@ export const useConsultControlReport = () => {
     setTableView(false);
   };
 
+  const [reload, setReload] = useState(new Date())
+
   const onSubmit = handleSubmit((filters: IControlReportFilter) => {
     tableComponentRef.current?.emptyData();
     setTableView(true);
@@ -77,16 +79,10 @@ export const useConsultControlReport = () => {
     });
     switch (filters.idControlSelect) {
       case 1: {
-        setconditionalPage(
-          <ConsolidateTab
-            onRef={() => {
-              tableComponentRef.current?.loadData({
-                ...filters,
-              });
-            }}
-            data={filters}
-          />
-        );
+        setReload(new Date())
+          setconditionalPage(
+            <ConsolidateTab data={filters} reload={reload} />
+          );
         break;
       }
       case 2: {

@@ -11,7 +11,7 @@ import * as XLSX from "xlsx";
 import { IGenericList } from "../../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../../common/constants/api.enum";
 import { useGenericListService } from "../../../../common/hooks/generic-list-service.hook";
-export const consolidateHook = (data) => {
+export const consolidateHook = (data, reload) => {
   const navigate = useNavigate();
   const [tableColumns, setTableColumns] = useState([]);
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
@@ -221,13 +221,14 @@ export const consolidateHook = (data) => {
   ];
 
   useEffect(() => {
+    console.log("RENDERIZA CONSOLIDATE");
     tableComponentRef.current?.loadData({
       ...data,
     });
     setTimeout(() => {
       getInfoConsolidado(data);
     }, 1000);
-  }, []);
+  }, [reload]);
 
   return {
     tableComponentRef,
