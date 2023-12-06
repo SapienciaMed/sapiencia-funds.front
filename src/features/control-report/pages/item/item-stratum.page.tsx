@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { ButtonComponent, FormComponent, InputComponent } from "../../../../common/components/Form";
 import { itemStratum123Hook } from "../../hooks/conditionalHooks/ItemStratum123Hook";
+import { InputNumberComponent } from "../../../../common/components/Form/input-number.component";
 
 
 const Item = ({ data, action, collback }) => {
@@ -47,7 +48,7 @@ const Item = ({ data, action, collback }) => {
             name={"availableResource"}
             render={({ field }) => {
               return (
-                <InputComponent
+             /*    <InputComponent
                   idInput={field.name}
                   errors={errors}
                   typeInput={"number"}
@@ -61,6 +62,23 @@ const Item = ({ data, action, collback }) => {
                       Recurso disponible <span>*</span>
                     </>
                   }
+                /> */
+
+                <InputNumberComponent
+                  control={control}
+                  idInput={field.name}
+                  label="Recurso disponible"
+                  className="inputNumber-basic medium"
+                  placeholder={'0'}
+                  classNameLabel="text-black big text-required"
+                  errors={errors}
+                  mode="currency"
+                  currency="COP"
+                  locale="es-CO"
+                  fieldArray={true}
+                  minFractionDigits={0}
+                  maxFractionDigits={0}
+                  disabled
                 />
               );
             }}
@@ -71,7 +89,7 @@ const Item = ({ data, action, collback }) => {
             name={"granted"}
             render={({ field }) => {
               return (
-                <InputComponent
+               /*  <InputComponent
                   idInput={field.name}
                   errors={errors}
                   typeInput={"number"}
@@ -85,7 +103,24 @@ const Item = ({ data, action, collback }) => {
                       Otorgado <span>*</span>
                     </>
                   }
-                />
+                /> */
+
+                <InputNumberComponent
+                control={control}
+                idInput={field.name}
+                label="Otorgado"
+                className="inputNumber-basic medium"
+                placeholder={'0'}
+                classNameLabel="text-black big text-required"
+                errors={errors}
+                mode="currency"
+                currency="COP"
+                locale="es-CO"
+                fieldArray={true}
+                minFractionDigits={0}
+                maxFractionDigits={0}
+                disabled
+              />
               );
             }}
           />
@@ -96,7 +131,7 @@ const Item = ({ data, action, collback }) => {
             name={"available"}
             render={({ field }) => {
               return (
-                <InputComponent
+               /*  <InputComponent
                   idInput={field.name}
                   errors={errors}
                   typeInput={"text"}
@@ -107,7 +142,24 @@ const Item = ({ data, action, collback }) => {
                   classNameLabel="text-black big bold"
                   label={<>Disponible</>}
                   disabled={true}
-                />
+                /> */
+
+                <InputNumberComponent
+                control={control}
+                idInput={field.name}
+                label="Disponible"
+                className="inputNumber-basic medium"
+                placeholder={'0'}
+                classNameLabel="text-black big text-required"
+                errors={errors}
+                mode="currency"
+                currency="COP"
+                locale="es-CO"
+                fieldArray={true}
+                minFractionDigits={0}
+                maxFractionDigits={0}
+                disabled
+              />
               );
             }}
           />
