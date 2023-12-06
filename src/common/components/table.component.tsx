@@ -4,6 +4,8 @@ import React, {
   useImperativeHandle,
   useEffect,
   useContext,
+  Dispatch,
+  SetStateAction,
 } from "react";
 import { ITableAction, ITableElement } from "../interfaces/table.interfaces";
 import { DataTable } from "primereact/datatable";
@@ -57,7 +59,9 @@ interface IProps<T> {
   bodyRequestParameters?: string | number;
   keyBodyRequest?: string;
   count?: boolean,
-  isNotBorderClasse?: boolean
+  viePaginator?: boolean
+  isNotBorderClasse?: boolean,
+  setShowSpinner?: Dispatch<SetStateAction<boolean>>
 }
 
 interface IRef {
@@ -85,7 +89,9 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     bodyRequestParameters,
     keyBodyRequest,
     count,
-    isNotBorderClasse
+    viePaginator = true,
+    isNotBorderClasse,
+    setShowSpinner
   } = props;
 
   // States
@@ -126,6 +132,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
+      setShowSpinner && setShowSpinner(false)
       if (props.onResult) props.onResult(res?.data?.array || []);
       if (res.data?.array?.length <= 0 && isShowModal) {
         setMessage({
@@ -237,21 +244,23 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       <div className={`spc-common-table ${isNotBorderClasse && 'spc-common-table-without-border'}`}>
         {title && <div className="spc-table-title">{title}</div>}
 
-        {/* Verificar si resultData.array tiene elementos */}
+        {
+          viePaginator && 
+          <Paginator
+            className="between spc-table-paginator"
+            template={paginatorHeader}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+            leftContent={leftContent(
+              princialTitle,
+              isInputSearch,
+              onGlobalFilterChange
+            )}
+          />
+        }
 
-        <Paginator
-          className="between spc-table-paginator"
-          template={paginatorHeader}
-          first={first}
-          rows={perPage}
-          totalRecords={resultData?.meta?.total || 0}
-          onPageChange={onPageChange}
-          leftContent={leftContent(
-            princialTitle,
-            isInputSearch,
-            onGlobalFilterChange
-          )}
-        />
 
         {width > 830 || !isMobil ? (
           <div>
@@ -303,14 +312,18 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           />
         )}
 
-        <Paginator
-          className="spc-table-paginator"
-          template={paginatorFooter}
-          first={first}
-          rows={perPage}
-          totalRecords={resultData?.meta?.total || 0}
-          onPageChange={onPageChange}
-        />
+        {
+          viePaginator && 
+          <Paginator
+            className="spc-table-paginator"
+            template={paginatorFooter}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+          />
+        }
+
       </div>
     );
   }

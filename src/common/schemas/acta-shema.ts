@@ -71,6 +71,15 @@ export const editActas = yup.object({
     .required("Completar información"),
 });
 
+export const manageTransfer = yup.object({
+  state: yup
+    .string()
+    .required("Completar información"),
+  workedHours: yup
+    .string()
+    .required("Completar información"),
+})
+
 
 
 

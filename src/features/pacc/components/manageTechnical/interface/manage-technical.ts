@@ -20,3 +20,35 @@ export interface IRequerimentsResultSimple {
   accomplished?: number;
   mandatoryFor: string
 }
+
+export interface IApplyKnowledgeTransfer {
+  id?: number;
+  idBeneficiary: number;
+  idReglament: number;
+  committedHours: number;
+  workedHours: number;
+  pendingHours: number;
+  percentTransfer: number;
+  status: number;
+  idStatusProcessPacc: number;
+  observations: string;
+  userCreate: string;
+  dateCreate: Date;
+}
+
+
+export interface IChageStatusKnowledgeTransfer {
+  id: number;
+  idBeneficiary: number;
+  status: boolean;
+  observations: string;
+  user: string;
+  workedHours: number;
+}
+
+export interface IPropManageTransfer {
+  idSelect: number,
+  loadTableData: () => void
+  idBeneficiary: number,
+  getUploadKnow: () => void
+}

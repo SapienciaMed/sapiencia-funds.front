@@ -7,10 +7,8 @@ import { Tooltip } from "primereact/tooltip";
 export default function useSupportsPQRSDF() {
     
     const tableComponentRef = useRef(null);
-    const [ showSpinner,   setShowSpinner ] = useState(false)
 
     useEffect(() => {
-        setShowSpinner(true)
         loadTableData()
     },[])
 
@@ -97,7 +95,6 @@ export default function useSupportsPQRSDF() {
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
-            setShowSpinner(false)
         }
     }
 
@@ -105,6 +102,5 @@ export default function useSupportsPQRSDF() {
         tableComponentRef,
         tableColumns,
         tableActions,
-        showSpinner
     }
 }
