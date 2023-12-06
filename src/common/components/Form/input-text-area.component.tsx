@@ -52,6 +52,7 @@ function TextAreaElement({
   cols,
   optionsRegister = {},
   setCount,
+  maxCaracter
 }): React.JSX.Element {
   return (
     <textarea
@@ -69,6 +70,7 @@ function TextAreaElement({
       value={value}
       rows={rows}
       cols={cols}
+      maxLength={maxCaracter}
     />
   );
 }
@@ -138,6 +140,7 @@ export function TextAreaComponent({
           cols={cols}
           optionsRegister={optionsRegister}
           setCount={setCount}
+          maxCaracter={characters}
         />
         {messageError() && (
           <MdOutlineError

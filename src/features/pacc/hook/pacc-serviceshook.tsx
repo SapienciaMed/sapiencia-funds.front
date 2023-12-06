@@ -1,5 +1,6 @@
 import useCrudService from "../../../common/hooks/crud-service.hook";
 import { ApiResponse } from "../../../common/utils/api-response";
+import { IRequerimentsResultSimple } from "../components/manageTechnical/interface/manage-technical";
 import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, ICutInterface } from "../interface/pacc";
 
 export const usePaccServices = () => {
@@ -47,6 +48,22 @@ export const usePaccServices = () => {
         return post(`${roleUrl}${endpoint}/${id}/${idbeneficiary}`);
     }
 
+    async function ChangeApproveOrRejectKnowledgeTransfer(data: Object): Promise<ApiResponse<any>> {
+        const endpoint: string = "/change-approve-or-reject-knowledge-transfer"; 
+        return post(`${roleUrl}${endpoint}`, data);
+    }
+
+    async function GetUploadKnowledgeTransferFiles(id: string): Promise<ApiResponse<any>> {
+        const endpoint: string = "/get-knowledge-transfer-file"; 
+        return get(`${roleUrl}${endpoint}/${id}`);
+    }
+
+    async function GetRequirementsKnowledgeTransfer(idBeneficiary: number ): Promise<ApiResponse<IRequerimentsResultSimple[]>> {
+        const endpoint: string = "/get-requirements-knowledge-transfer"; 
+        const params = { idBeneficiary }
+        return post(`${roleUrl}${endpoint}`, params);
+    }
+
     return {
         GetCutsForConsolidationTray,
         GeConsolidationTrayTechnicianCollectionByCut,
@@ -55,7 +72,10 @@ export const usePaccServices = () => {
         GetRequirementsByBeneficiary,
         GetRequirementFile,
         ComplianceAssignmentBeneficiary,
-        DeleteUploadFiles
+        DeleteUploadFiles,
+        ChangeApproveOrRejectKnowledgeTransfer,
+        GetUploadKnowledgeTransferFiles,
+        GetRequirementsKnowledgeTransfer
     }
 
 }
