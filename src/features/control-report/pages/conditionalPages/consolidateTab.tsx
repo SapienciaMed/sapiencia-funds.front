@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import {
   ButtonComponent,
@@ -9,10 +9,10 @@ import { columnsConsolidados } from "../config-columns/columns-consolidados";
 import Svgs from "../../../../public/images/icons/svgs";
 import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
+import { useNavigate } from "react-router-dom";
 
-const ConsolidateTab = (data) => {
+const ConsolidateTab = ({ onRef, data }) => {
   const {
-    tableComponentRef,
     urlGet,
     setPaginateData,
     tableActions,
@@ -28,8 +28,13 @@ const ConsolidateTab = (data) => {
     comunaList,
     TotalView,
     color,
-  } = consolidateHook(data.data);
+  } = consolidateHook(data);
 
+  const tableComponentRef = useRef(null);
+  tableComponentRef.current?.loadData({
+    ...data,
+  });
+  const navigate = useNavigate();
   const columnsConsolidados: ITableElement<any>[] = [
     {
       fieldName: "resourcePrioritization.communeId",
@@ -39,12 +44,12 @@ const ConsolidateTab = (data) => {
         const foundObj = comunaList?.find(
           (obj) => obj.value == row.resourcePrioritization.communeId
         );
-  
+
         // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
         if (foundObj) {
           return <>{foundObj.name}</>;
         }
-  
+
         // Puedes retornar algo por defecto si el objeto no se encuentra
         return <>No encontrado</>;
       },
@@ -151,6 +156,7 @@ const ConsolidateTab = (data) => {
           emptyMessage="Resultado en la búsqueda"
           descriptionModalNoResult="No se generó resultado en la búsqueda"
           titleMessageModalNoResult="Resultado de búsqueda"
+          onResult={(rows) => {}}
         />
       </div>
 
@@ -295,4 +301,4 @@ const ConsolidateTab = (data) => {
   );
 };
 
-export default memo(ConsolidateTab);
+export default ConsolidateTab;

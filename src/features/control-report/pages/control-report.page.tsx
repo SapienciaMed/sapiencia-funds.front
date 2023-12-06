@@ -79,6 +79,7 @@ const SearchContrlPage = () => {
             <div>
               <SelectComponent
                 idInput="idConvocatoria"
+                onChange={handleChange}
                 control={control}
                 errors={errors}
                 data={announcementList}
@@ -130,11 +131,9 @@ const SearchContrlPage = () => {
             />
             <ButtonComponent
               value="Buscar"
-              className={`button-save ${
-                !isValid || submitDisabled ? "disabled-black" : ""
-              } big`}
+              className={`button-save  big`}
               type="submit"
-              disabled={!isValid || submitDisabled}
+              // disabled={!isValid || submitDisabled}
             />
           </div>
         </div>
