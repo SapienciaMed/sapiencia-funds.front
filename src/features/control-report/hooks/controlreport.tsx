@@ -65,6 +65,7 @@ export const useConsultControlReport = () => {
     setTableView(false);
   };
 
+  const [reload, setReload] = useState(new Date());
   const onSubmit = handleSubmit((filters: IControlReportFilter) => {
     tableComponentRef.current?.emptyData();
     setTableView(true);
@@ -72,41 +73,31 @@ export const useConsultControlReport = () => {
     const { noProject, validity } = formWatch;
     filters.noProject = noProject;
     filters.validity = validity;
-    tableComponentRef.current?.loadData({
-      ...filters,
-    });
+
+    setReload(new Date());
     switch (filters.idControlSelect) {
       case 1: {
-        setconditionalPage(
-          <ConsolidateTab
-            onRef={() => {
-              tableComponentRef.current?.loadData({
-                ...filters,
-              });
-            }}
-            data={filters}
-          />
-        );
+        setconditionalPage(<ConsolidateTab data={filters} reload={reload} />);
         break;
       }
       case 2: {
-        setconditionalPage(<Estratum123Tab filters={filters} />);
+        setconditionalPage(<Estratum123Tab data={filters} reload={reload} />);
         break;
       }
       case 3: {
-        setconditionalPage(<Stratum456Tab data={filters} />);
+        setconditionalPage(<Stratum456Tab data={filters} reload={reload} />);
         break;
       }
       case 4: {
-        setconditionalPage(<LegalizacionTab data={filters} />);
+        setconditionalPage(<LegalizacionTab data={filters} reload={reload} />);
         break;
       }
       case 5: {
-        setconditionalPage(<PagareTab data={filters} />);
+        setconditionalPage(<PagareTab data={filters} reload={reload} />);
         break;
       }
       case 6: {
-        setconditionalPage(<ControlTab data={filters} />);
+        setconditionalPage(<ControlTab data={filters} reload={reload} />);
         break;
       }
       default: {

@@ -11,9 +11,10 @@ import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import { useNavigate } from "react-router-dom";
 
-const ConsolidateTab = ({ onRef, data }) => {
+const ConsolidateTab = ({ data, reload }) => {
   const {
     urlGet,
+    tableComponentRef,
     setPaginateData,
     tableActions,
     totalNoPreseleccionados,
@@ -28,13 +29,8 @@ const ConsolidateTab = ({ onRef, data }) => {
     comunaList,
     TotalView,
     color,
-  } = consolidateHook(data);
+  } = consolidateHook(data, reload);
 
-  const tableComponentRef = useRef(null);
-  tableComponentRef.current?.loadData({
-    ...data,
-  });
-  const navigate = useNavigate();
   const columnsConsolidados: ITableElement<any>[] = [
     {
       fieldName: "resourcePrioritization.communeId",
@@ -99,12 +95,10 @@ const ConsolidateTab = ({ onRef, data }) => {
       fieldName: "porcentParticipacion",
       header: "%Participacion",
       renderCell: (row) => {
-        const porcent = Math.round(
+        const porcent =
           (Number(row.consolidatedGranted) /
             Number(row.consolidatedResourceAvailable)) *
-            100
-        );
-
+          100;
         if (porcent == Infinity || porcent == undefined || isNaN(porcent)) {
           return <>0%</>;
         } else {
@@ -112,18 +106,18 @@ const ConsolidateTab = ({ onRef, data }) => {
             return (
               <>
                 {" "}
-                <div style={{ color: "yellow" }}>{porcent}%</div>
+                <div style={{ color: "yellow" }}>{porcent.toFixed(2)}%</div>
               </>
             );
           } else if (porcent >= 98 && porcent <= 100) {
             return (
               <>
                 {" "}
-                <div style={{ color: "red" }}> {porcent}%</div>
+                <div style={{ color: "red" }}> {porcent.toFixed(2)}%</div>
               </>
             );
           } else {
-            return <>{porcent}%</>;
+            return <>{porcent.toFixed(2)}%</>;
           }
         }
       },

@@ -12,7 +12,7 @@ function ControlReportsRoutes() {
         element={
           <PrivateRoute
             element={<ControlReportPage />}
-            allowedAction={"MAESTRO_ACTIVIDAD_CONSULTAR"}
+            allowedAction={"INFORME_CONTROL"}
           />
         }
       />

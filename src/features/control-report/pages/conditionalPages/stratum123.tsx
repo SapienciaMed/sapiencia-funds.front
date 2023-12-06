@@ -1,72 +1,54 @@
-import React, { useContext, useState } from "react";
 import {
   ButtonComponent,
   InputComponent,
 } from "../../../../common/components/Form";
-import { stratum123Hook } from "../../hooks/conditionalHooks/stratum123.hook";
-import BasicTableComponent from "../../../../common/components/basic-table.component";
-import { ITableAction, ITableElement } from "../../../../common/interfaces";
-import { AppContext } from "../../../../common/contexts/app.context";
+import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import Svgs from "../../../../public/images/icons/svgs";
-import Item from "../item/item-stratum.page"
 
-function Estratum123Tab({ filters }) {
-
-  const { validateActionAccess, setMessage } = useContext(AppContext);
-  const [dataGridStratum, setDataGridStratum] = useState([]);
-  const [totalOtorgado, setTotalOtorgado] = useState(null);
-  const [totalRecursoDisponible, setTotalRecursoDisponible] = useState(null);
-  const [totalDisponible, setTotalDisponible] = useState(null);
-  const [totalPorParticipacion, setTotalPorParticipacion] = useState(null);
-  const [totalNoLegalizados, setTotalNoLegalizados] = useState(null);
-
-  const objSet = {
-    setTotalNoLegalizados,
-    setTotalPorParticipacion,
-    setTotalDisponible,
-    setTotalRecursoDisponible,
-    setTotalOtorgado,
-    dataGridStratum,
-    setDataGridStratum
-  };
-
+import TableComponent from "../../../../common/components/table.component";
+import { stratum123Hook } from "../../hooks/conditionalHooks/stratum123";
+function Estratum123Tab({ data, reload }) {
   const {
+    setPaginateData,
     tableComponentRef,
+    urlGet,
+    tableActions,
+    totalDisponible,
+    totalPorParticipacion,
+    totalNoLegalizados,
+    totalRecursoDisponible,
+    totalOtorgado,
     comunaList,
-    onsearchSubmintControl,
-    downloadXLSX,
-  } = stratum123Hook(filters, objSet);
-
-
-  const tableColumns: ITableElement<any>[] = [
+    TotalView,
+    downloadCollection,
+    color,
+  } = stratum123Hook(data, reload);
+  console.log(totalPorParticipacion);
+  const columnsStratum456: ITableElement<any>[] = [
     {
-      fieldName: "activity",
+      fieldName: "resourcePrioritization.communeId",
       header: "Comuna o corregimiento",
       renderCell: (row) => {
         // Intenta encontrar el objeto
         const foundObj = comunaList?.find(
           (obj) => obj.value == row.resourcePrioritization.communeId
         );
-    
+
         // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
         if (foundObj) {
           return <>{foundObj.name}</>;
         }
-    
+
         // Puedes retornar algo por defecto si el objeto no se encuentra
         return <>No encontrado</>;
       },
     },
-    
     {
       fieldName: "resourceAvailable",
-      header: "Recurso disponible",
+      header: "Recurso Disponible",
       renderCell: (row) => {
-        const numero = 1000;
-        const numeroConPuntos = formaterNumberToCurrency(
-          row.resourceAvailable
-        )
+        const numeroConPuntos = formaterNumberToCurrency(row.resourceAvailable);
         return <>{numeroConPuntos}</>;
       },
     },
@@ -74,159 +56,182 @@ function Estratum123Tab({ filters }) {
       fieldName: "granted",
       header: "Otorgado",
       renderCell: (row) => {
-        const numero = 1000;
-        const numeroConPuntos = formaterNumberToCurrency(
-          row.granted
-        )
+        const numeroConPuntos = formaterNumberToCurrency(row.granted).replace(
+          "$",
+          ""
+        );
         return <>{numeroConPuntos}</>;
       },
     },
     {
-      fieldName: "totalCost",
+      fieldName: "Available",
       header: "Disponible",
       renderCell: (row) => {
-         const numeroConPuntos = formaterNumberToCurrency(
-           Number(row.resourceAvailable) - Number(row.granted)
-         )
+        const numeroConPuntos = formaterNumberToCurrency(
+          Math.round(Number(row.resourceAvailable) - Number(row.granted))
+        );
         return <>{numeroConPuntos}</>;
       },
     },
     {
-      fieldName: "porcentaje123",
-      header: "%Participación",
+      fieldName: "porcentParticipacion",
+      header: "%Participacion",
       renderCell: (row) => {
-        return (
-          <>
-            {((Number(row.granted) / Number(row.resourceAvailable))* 100).toFixed(2)  + "%"}
-          </>
-        );
+        const porcent =
+          (Number(row.granted) / Number(row.resourceAvailable)) * 100;
+        if (porcent == Infinity || porcent == undefined) {
+          return <>0%</>;
+        } else {
+          if (porcent >= 90 && porcent < 98) {
+            return (
+              <>
+                {" "}
+                <div style={{ color: "yellow" }}>{porcent.toFixed(2)}%</div>
+              </>
+            );
+          } else if (porcent >= 98 && porcent <= 100) {
+            return (
+              <>
+                {" "}
+                <div style={{ color: "red" }}> {porcent.toFixed(2)}%</div>
+              </>
+            );
+          } else {
+            return <>{porcent.toFixed(2)}%</>;
+          }
+        }
       },
     },
     {
       fieldName: "legalized",
-      header: "No. Legalizados",
-    },
-  ];
-
-  const tableActions: ITableAction<any>[] = [
-    {
-      icon: "Edit",
-      onClick: (row) => {
-        setMessage({
-          show: true,
-          title: "Editar item",
-          onOk() {
-            setMessage({});
-          },
-          background: true,
-          description: (
-            <Item
-              data={row}
-              action={"edit"}
-              collback={onsearchSubmintControl}
-            />
-          ),
-          size: "large",
-          style: "mdl-agregarItem-voting",
-        });
-      },
-      hide: !validateActionAccess("USUARIOS_EDITAR"),
+      header: "No.Legalizados",
     },
   ];
 
   return (
     <>
-      <div className="container-sections-forms mr-20px">
-        <BasicTableComponent
+      <div className="container-sections-forms  mr-20px">
+        <TableComponent
+          setPaginateData={setPaginateData}
           ref={tableComponentRef}
-          data={dataGridStratum}
-          columns={tableColumns}
+          url={urlGet}
+          columns={columnsStratum456}
           actions={tableActions}
-          titleMessageModalNoResult="Registro no existente"
           isShowModal={true}
-          secondaryTitle={"Resultados de búsqueda"}
-          classSizeTable="size-table-wd-150"
-          isMobil={true}
+          emptyMessage="Resultado en la búsqueda"
+          descriptionModalNoResult="No se generó resultado en la búsqueda"
+          titleMessageModalNoResult="Resultado de búsqueda"
         />
       </div>
-      <div className="container-sections-forms mt-24px mb-24px p-0">
-        <p className="text-black huge ">Totales</p>
 
-        <section className="funcionality-filters-container gap-15">
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="Recurso disponible"
-            classNameLabel="text-black biggest "
-            placeholder={""}
-            disabled
-            value={String(formaterNumberToCurrency( totalRecursoDisponible))}
-          />
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="Otorgado"
-            classNameLabel="text-black biggest "
-            placeholder={""}
-            disabled
-            value={String(formaterNumberToCurrency(totalOtorgado))}
-          />
-
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="Disponible"
-            classNameLabel="text-black biggest"
-            placeholder={""}
-            disabled
-            value={String(formaterNumberToCurrency(totalDisponible))}
-          />
-        </section>
-        <section className="funcionality-filters-container gap-15">
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="%Participacion"
-            classNameLabel="text-black biggest "
-            placeholder={""}
-            disabled
-            value={String(totalPorParticipacion) + "%"}
-          />
-          <InputComponent
-            idInput={"tQuantity1"}
-            className="input-basic medium"
-            typeInput="text"
-            label="No.Legalizados"
-            classNameLabel="text-black biggest"
-            placeholder={""}
-            disabled
-            value={String(totalNoLegalizados)}
-          />
-        </section>
-      </div>
-      {
-        dataGridStratum.length > 0 ? (
-           <div className="button-save-container-display-users margin-right0">
-              <ButtonComponent
-                value={
-                  <>
-                    <div className="container-buttonText">
-                      <span>Descargar</span>
-                      <Svgs svg="excel" width={23.593} height={28.505} />
-                    </div>
-                  </>
-                }
-                className="button-download large "
-                action={downloadXLSX}
+      {TotalView && (
+        <>
+          <div className="container-sections-forms mt-24px  p-0">
+            <div
+              className="bold mt-24px mr-16px mb-24px p-0"
+              style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
+            >
+              Totales
+            </div>
+            <div className="grid-form-3-container mb-24px">
+              <InputComponent
+                idInput={"tQuantity1"}
+                className="input-basic medium"
+                typeInput="text"
+                label="Recurso disponible"
+                //register={register}
+                classNameLabel="text-black biggest"
+                //direction={EDirection.column}
+                //errors={errors}
+                placeholder={""}
+                disabled
+                value={String(
+                  formaterNumberToCurrency(totalRecursoDisponible).replace(
+                    "$",
+                    ""
+                  )
+                )}
+              />
+              <InputComponent
+                idInput={"tQuantity1"}
+                className="input-basic medium"
+                typeInput="text"
+                label="Otorgado"
+                //register={register}
+                classNameLabel="text-black biggest"
+                //direction={EDirection.column}
+                //errors={errors}
+                placeholder={""}
+                disabled
+                value={String(formaterNumberToCurrency(totalOtorgado))}
+              />
+              <InputComponent
+                idInput={"tQuantity1"}
+                className="input-basic medium"
+                typeInput="text"
+                label="Disponible"
+                //register={register}
+                classNameLabel="text-black biggest"
+                //direction={EDirection.column}
+                //errors={errors}
+                placeholder={""}
+                disabled
+                value={String(formaterNumberToCurrency(totalDisponible))}
               />
             </div>
-        )
-          : ''
-      }
+            <div className="grid-form-2-container mb-24px">
+              <InputComponent
+                idInput={"tQuantity1"}
+                className={`input-basic medium ${color}`}
+                typeInput="text"
+                label="%Participacion"
+                //register={register}
+                classNameLabel="text-black biggest"
+                //direction={EDirection.column}
+                //errors={errors}
+                placeholder={""}
+                disabled
+                value={String(totalPorParticipacion) + "%"}
+              />
+              <InputComponent
+                idInput={"tQuantity1"}
+                className="input-basic medium"
+                typeInput="text"
+                label="No.Legalizados"
+                //register={register}
+                classNameLabel="text-black biggest"
+                //direction={EDirection.column}
+                //errors={errors}
+                placeholder={""}
+                disabled
+                value={String(totalNoLegalizados)}
+              />
+            </div>
+          </div>
+
+          <div
+            style={{
+              height: "1px",
+              margin: "0 20px",
+              backgroundColor: "#e0e0e0",
+            }}
+          ></div>
+          <div className="button-save-container-display mr-24px">
+            <ButtonComponent
+              value={
+                <>
+                  <div className="container-buttonText">
+                    <span>Descargar</span>
+                    <Svgs svg="excel" width={23.593} height={28.505} />
+                  </div>
+                </>
+              }
+              className="button-download large "
+              action={downloadCollection}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 }
