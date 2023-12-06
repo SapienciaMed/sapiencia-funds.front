@@ -6,7 +6,7 @@ import { AppContext } from "../../../../common/contexts/app.context";
 import { ITableAction } from "../../../../common/interfaces";
 import ControlreporteditLegalization from "../../pages/conditionalPagesEdits/ControlreporteditLegalization";
 import * as XLSX from "xlsx";
-export const LegalizationHook = (data) => {
+export const LegalizationHook = (data, reload) => {
   const tableComponentRef = useRef(null);
   const { setMessage } = useContext(AppContext);
   const { post } = useCrudService(urlApiFunds);
@@ -20,6 +20,7 @@ export const LegalizationHook = (data) => {
   const [totalNoLegalizados, setTotalNoLegalizados] = useState(null);
   const urlGetLegalization = `${urlApiFunds}/api/v1/controlSelect/getInfoLegalization`;
   const [TotalView, setTotalView] = useState(null);
+  const [color, setColor] = useState(null);
   const getInfoLegalization = async (data) => {
     try {
       const endpoint = "/api/v1/controlSelect/getInfoLegalizationTotals";
@@ -86,15 +87,37 @@ export const LegalizationHook = (data) => {
         });
 
         totalData.totalPorParticipacion =
-          Math.round(totalData.totalPorParticipacion / totalDataRes) + "%";
+          (totalData.totalOtorgado / totalData.totalRecursoDisponible) * 100;
+
+        if (
+          isNaN(totalData.totalPorParticipacion) ||
+          totalData.totalPorParticipacion == Infinity ||
+          totalData.totalPorParticipacion == undefined
+        ) {
+          totalData.totalPorParticipacion = 0;
+        }
+
+        if (
+          totalData.totalPorParticipacion >= 90 &&
+          totalData.totalPorParticipacion <= 98
+        ) {
+          setColor("text-orange");
+        } else if (
+          totalData.totalPorParticipacion > 98 &&
+          totalData.totalPorParticipacion <= 100
+        ) {
+          setColor("text-red");
+        }
 
         setTotalNoPreseleccionados(totalData.totalNoPreseleccionados);
         setTotalOtorgado(totalData.totalOtorgado);
         setTotalNoCupos(totalData.totalNoCupos);
         setTotalRecursoDisponible(totalData.totalRecursoDisponible);
         setTotalDisponible(totalData.totalDisponible);
-        setTotalPorParticipacion(totalData.totalPorParticipacion);
+        setTotalPorParticipacion(totalData.totalPorParticipacion.toFixed(2));
         setTotalNoLegalizados(totalData.totalNoLegalizados);
+      } else {
+        setTotalView(false);
       }
     } catch (error) {}
   };
@@ -106,7 +129,19 @@ export const LegalizationHook = (data) => {
         setMessage({
           show: true,
           background: true,
-          description: <ControlreporteditLegalization data={row} />,
+          description: (
+            <ControlreporteditLegalization
+              onEdit={() => {
+                tableComponentRef.current?.loadData({
+                  ...data, /// Filtro de busqueda
+                });
+              }}
+              onUpdateTotals={() => {
+                getInfoLegalization(data);
+              }}
+              data={row}
+            />
+          ),
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -156,7 +191,7 @@ export const LegalizationHook = (data) => {
     setTimeout(() => {
       getInfoLegalization(data);
     }, 1000);
-  }, []);
+  }, [reload]);
 
   return {
     tableComponentRef,
@@ -172,5 +207,6 @@ export const LegalizationHook = (data) => {
     totalNoLegalizados,
     downloadCollection,
     TotalView,
+    color,
   };
 };

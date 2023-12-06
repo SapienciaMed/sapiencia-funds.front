@@ -5,7 +5,7 @@ import { ApiResponse } from "../../../../common/utils/api-response";
 import { urlApiFunds } from "../../../../common/utils/base-url";
 import * as XLSX from "xlsx";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
-export const ControlHook = (data) => {
+export const ControlHook = (data, reload) => {
   const { post } = useCrudService(urlApiFunds);
   const tableComponentRef = useRef(null);
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
@@ -49,6 +49,8 @@ export const ControlHook = (data) => {
     if (res.data["array"].length > 0) {
       setTotalView(true);
       setInfoControlSubTotal(res.data["array"]);
+    } else {
+      setTotalView(false);
     }
   };
   const { setMessage } = useContext(AppContext);
@@ -59,7 +61,7 @@ export const ControlHook = (data) => {
 
     getInfoControl(data);
     getInfoControlSubTotal(data);
-  }, []);
+  }, [reload]);
 
   const downloadCollection = async () => {
     const endpoint = "/api/v1/controlSelect/getInfoControl";

@@ -9,7 +9,7 @@ import Svgs from "../../../../public/images/icons/svgs";
 import { columnsPay } from "../config-columns/columns-pay";
 import { ProgressSpinner } from "primereact/progressspinner";
 
-const PagareTab = (data) => {
+const PagareTab = ({ data, reload }) => {
   const {
     tableComponentRef,
     urlGet,
@@ -21,7 +21,7 @@ const PagareTab = (data) => {
     downloadCollection,
     dataForDownload,
     loading,
-  } = usePagareHook(data.data);
+  } = usePagareHook(data, reload);
 
   const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
 
@@ -61,7 +61,7 @@ const PagareTab = (data) => {
                 label="Aprobado"
                 className="input-basic medium"
                 typeInput="text"
-                classNameLabel="text-black big text-required"
+                classNameLabel="text-black big"
                 errors={""}
                 disabled={true}
                 placeholder={totalAprobado}
@@ -71,7 +71,7 @@ const PagareTab = (data) => {
                 label="Pagaré entregado"
                 className="input-basic medium"
                 typeInput="text"
-                classNameLabel="text-black big text-required"
+                classNameLabel="text-black big"
                 disabled={true}
                 placeholder={totalEntregado}
               />
@@ -80,7 +80,7 @@ const PagareTab = (data) => {
                 label="Sin entregar"
                 className="input-basic medium"
                 typeInput="text"
-                classNameLabel="text-black big text-required"
+                classNameLabel="text-black big"
                 disabled={true}
                 placeholder={totalEntregar}
               />
@@ -89,7 +89,7 @@ const PagareTab = (data) => {
                 label="No aplica"
                 className="input-basic medium"
                 typeInput="text"
-                classNameLabel="text-black big text-required"
+                classNameLabel="text-black big"
                 disabled={true}
                 placeholder={totalNoAplica}
               />

@@ -529,8 +529,7 @@ export default function useSearcResult({ valueAction }: Readonly<ISearchResultPr
                 idCitation: e.idCitation
             }
         });
-        console.log("🚀 ~ file: search-result.hook.tsx:532 ~ citation ~ dataGridUsersServices:", dataGridUsersServices)
-
+        
         const state = getValues('idStatus');
 
         const actaData = {      
