@@ -30,5 +30,6 @@ export interface IActaItems {
     idProgram?: string;
     idAnnouncement?: string;
     idConcept?: string;
+    idCitation?: number
 }
 
