@@ -81,9 +81,7 @@ export const useConsultControlReport = () => {
         break;
       }
       case 2: {
-        setconditionalPage(
-          <Estratum123Tab filters={filters} reload={reload} />
-        );
+        setconditionalPage(<Estratum123Tab data={filters} reload={reload} />);
         break;
       }
       case 3: {

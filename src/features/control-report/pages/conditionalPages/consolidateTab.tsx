@@ -31,7 +31,6 @@ const ConsolidateTab = ({ data, reload }) => {
     color,
   } = consolidateHook(data, reload);
 
-  const navigate = useNavigate();
   const columnsConsolidados: ITableElement<any>[] = [
     {
       fieldName: "resourcePrioritization.communeId",
