@@ -45,7 +45,7 @@ const ControlTab = (data) => {
             <>
               <div className="container-sections-forms mt-24px  p-0">
                 <div
-                  className="bold mt-24px mr-16px p-0"
+                  className="bold mt-24px mb-24px mr-16px p-0"
                   style={{
                     fontWeight: 500,
                     fontSize: "29px",
