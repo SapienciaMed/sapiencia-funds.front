@@ -177,6 +177,25 @@ const ControlreporteditStratum456 = ({
         setMessage({ show: false });
         updateInfo(body);
       },
+      onCancel: () => {
+        setMessage({
+          show: true,
+          title: "Editar ítem",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: (
+            <ControlreporteditStratum456
+              onEdit={onEdit}
+              data={data}
+              onUpdateTotals={onUpdateTotals}
+            />
+          ),
+          size: "items",
+          items: true,
+        });
+      },
       onClose: () => setMessage({ show: false }),
       background: true,
     });

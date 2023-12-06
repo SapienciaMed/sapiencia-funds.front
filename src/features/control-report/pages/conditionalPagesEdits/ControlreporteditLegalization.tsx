@@ -110,6 +110,25 @@ const ControlreporteditLegalization = ({
         updateInfo(body);
       },
       onClose: () => setMessage({ show: false }),
+      onCancel: () => {
+        setMessage({
+          show: true,
+          title: "Editar ítem",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: (
+            <ControlreporteditLegalization
+              onEdit={onEdit}
+              data={data}
+              onUpdateTotals={onUpdateTotals}
+            />
+          ),
+          size: "items",
+          items: true,
+        });
+      },
       background: true,
     });
   });

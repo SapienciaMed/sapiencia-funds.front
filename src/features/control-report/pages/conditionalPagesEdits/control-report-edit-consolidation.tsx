@@ -16,7 +16,9 @@ import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 export const controlEditConsolidation = yup.object({
   consolidatedPreselected: yup
-  .number().optional().typeError("Completar información"),
+    .number()
+    .optional()
+    .typeError("Completar información"),
   places: yup.number().optional().typeError("Completar información"),
   consolidatedResourceAvailable: yup.number().optional(),
   consolidatedGranted: yup.number().optional(),
@@ -43,7 +45,7 @@ const Controlreporteditconsolidation = ({
     handleSubmit,
     watch,
     register,
-    reset,    
+    reset,
     setValue,
     control,
     formState: { errors, isValid },
@@ -161,6 +163,26 @@ const Controlreporteditconsolidation = ({
         updateInfo(body);
       },
       onClose: () => setMessage({ show: false }),
+      onCancel: () => {
+        setMessage({
+          show: true,
+          title: "Editar ítem",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: (
+            <Controlreporteditconsolidation
+              onEdit={onEdit}
+              data={data}
+              onUpdateTotals={onUpdateTotals}
+            />
+          ),
+          size: "items",
+          items: true,
+        });
+      },
+
       background: true,
     });
   });
