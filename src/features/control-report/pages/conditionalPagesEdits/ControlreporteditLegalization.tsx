@@ -189,7 +189,7 @@ const ControlreporteditLegalization = ({
     }
 
     if (porParticipacion >= 90 && porParticipacion <= 98) {
-      setColor("text-yellow");
+      setColor("text-orange");
     } else if (porParticipacion > 98 && porParticipacion <= 100) {
       setColor("text-red");
     }

@@ -46,7 +46,7 @@ export const columnsLegalization: ITableElement<ILegalizationTable>[] = [
           return (
             <>
               {" "}
-              <div style={{ color: "yellow" }}>{porcent.toFixed(2)}%</div>
+              <div style={{ color: "orange" }}>{porcent.toFixed(2)}%</div>
             </>
           );
         } else if (porcent >= 98 && porcent <= 100) {
