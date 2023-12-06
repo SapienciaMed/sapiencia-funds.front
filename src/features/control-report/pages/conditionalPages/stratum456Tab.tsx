@@ -57,10 +57,7 @@ const Stratum456Tab = ({ data, reload }) => {
       fieldName: "granted",
       header: "Otorgado",
       renderCell: (row) => {
-        const numeroConPuntos = formaterNumberToCurrency(row.granted).replace(
-          "$",
-          ""
-        );
+        const numeroConPuntos = formaterNumberToCurrency(row.granted);
         return <>{numeroConPuntos}</>;
       },
     },
@@ -87,7 +84,7 @@ const Stratum456Tab = ({ data, reload }) => {
             return (
               <>
                 {" "}
-                <div style={{ color: "yellow" }}>{porcent.toFixed(2)}%</div>
+                <div style={{ color: "orange" }}>{porcent.toFixed(2)}%</div>
               </>
             );
           } else if (porcent >= 98 && porcent <= 100) {
@@ -147,12 +144,7 @@ const Stratum456Tab = ({ data, reload }) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalRecursoDisponible).replace(
-                    "$",
-                    ""
-                  )
-                )}
+                value={String(formaterNumberToCurrency(totalRecursoDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}

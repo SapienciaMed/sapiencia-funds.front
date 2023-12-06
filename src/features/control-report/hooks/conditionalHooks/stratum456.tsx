@@ -116,7 +116,7 @@ export const stratum456Hook = (data, reload) => {
           dataTotal.porParticipacion >= 90 &&
           dataTotal.porParticipacion <= 98
         ) {
-          setColor("text-yellow");
+          setColor("text-orange");
         } else if (
           dataTotal.porParticipacion > 98 &&
           dataTotal.porParticipacion <= 100

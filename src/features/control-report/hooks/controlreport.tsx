@@ -106,34 +106,34 @@ export const useConsultControlReport = () => {
     }
   });
 
-  // useEffect(() => {
-  //   const { noProject, validity } = formWatch;
+  useEffect(() => {
+    const { noProject, validity } = formWatch;
 
-  //   if (idControlSelect == 1 || idControlSelect == 2 || idControlSelect == 3) {
-  //     if (noProject && validity && idConvocatoria) {
-  //       return setSubmitDisabled(false);
-  //     } else {
-  //       return setSubmitDisabled(true);
-  //     }
-  //   }
+    if (idControlSelect == 1 || idControlSelect == 2 || idControlSelect == 3) {
+      if (noProject && validity && idConvocatoria) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
 
-  //   if (idControlSelect == 4 || idControlSelect == 5) {
-  //     if (idConvocatoria) {
-  //       return setSubmitDisabled(false);
-  //     } else {
-  //       return setSubmitDisabled(true);
-  //     }
-  //   }
+    if (idControlSelect == 4 || idControlSelect == 5) {
+      if (idConvocatoria) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
 
-  //   if (idControlSelect == 6) {
-  //     if (idConvocatoria && id_comuna) {
-  //       return setSubmitDisabled(false);
-  //     } else {
-  //       return setSubmitDisabled(true);
-  //     }
-  //   }
-  //   setSubmitDisabled(true);
-  // }, [formWatch, idConvocatoria, idControlSelect, id_comuna]);
+    if (idControlSelect == 6) {
+      if (idConvocatoria && id_comuna) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
+    setSubmitDisabled(true);
+  }, [formWatch, idConvocatoria, idControlSelect, id_comuna]);
 
   useEffect(() => {
     if (idControlSelect == 1 || idControlSelect == 2 || idControlSelect == 3) {
