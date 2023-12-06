@@ -86,14 +86,14 @@ function Estratum123Tab({ data, reload }) {
             return (
               <>
                 {" "}
-                <div style={{ color: "yellow" }}>{porcent}%</div>
+                <div style={{ color: "yellow" }}>{porcent.toFixed(2)}%</div>
               </>
             );
           } else if (porcent >= 98 && porcent <= 100) {
             return (
               <>
                 {" "}
-                <div style={{ color: "red" }}> {porcent}%</div>
+                <div style={{ color: "red" }}> {porcent.toFixed(2)}%</div>
               </>
             );
           } else {
@@ -108,7 +108,6 @@ function Estratum123Tab({ data, reload }) {
     },
   ];
 
-  console.log(urlGet);
   return (
     <>
       <div className="container-sections-forms  mr-20px">
