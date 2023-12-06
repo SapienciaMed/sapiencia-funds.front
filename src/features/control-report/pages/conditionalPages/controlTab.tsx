@@ -45,14 +45,14 @@ const ControlTab = (data) => {
             <>
               <div className="container-sections-forms mt-24px  p-0">
                 <div
-                  className="bold mt-24px ml-16px mr-16px p-0"
+                  className="bold mt-24px mb-24px mr-16px p-0"
                   style={{
                     fontWeight: 500,
                     fontSize: "29px",
                     color: "#000000",
                   }}
                 >
-                  subtotales
+                  Subtotales
                 </div>
                 <div className="spc-common-table">
                   <DataTable
@@ -88,9 +88,9 @@ const ControlTab = (data) => {
               </div>
             </>
           )}
-          <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+          <div className="container-sections-forms mt-24px p-0">
             <div
-              className="bold mt-24px ml-16px mr-16px p-0"
+              className="bold mt-24px mr-16px mb-24px p-0"
               style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
             >
               Totales
@@ -101,7 +101,7 @@ const ControlTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="Inicial"
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
                 value={String(formaterNumberToCurrency(totalInicial))}
@@ -111,7 +111,7 @@ const ControlTab = (data) => {
                 className="input-basic medium"
                 typeInput="text"
                 label="Restantes"
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
                 value={String(formaterNumberToCurrency(totalRestantes))}

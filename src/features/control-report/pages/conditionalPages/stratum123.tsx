@@ -66,7 +66,7 @@ function Estratum123Tab({ filters }) {
         const numero = 1000;
         const numeroConPuntos = formaterNumberToCurrency(
           row.resourceAvailable
-        ).replace("$", "");
+        )
         return <>{numeroConPuntos}</>;
       },
     },
@@ -77,7 +77,7 @@ function Estratum123Tab({ filters }) {
         const numero = 1000;
         const numeroConPuntos = formaterNumberToCurrency(
           row.granted
-        ).replace("$", "");
+        )
         return <>{numeroConPuntos}</>;
       },
     },
@@ -87,7 +87,7 @@ function Estratum123Tab({ filters }) {
       renderCell: (row) => {
          const numeroConPuntos = formaterNumberToCurrency(
            Number(row.resourceAvailable) - Number(row.granted)
-         ).replace("$", "");
+         )
         return <>{numeroConPuntos}</>;
       },
     },
@@ -149,7 +149,7 @@ function Estratum123Tab({ filters }) {
           isMobil={true}
         />
       </div>
-      <div className="container-sections-forms mt-24px p-0">
+      <div className="container-sections-forms mt-24px mb-24px p-0">
         <p className="text-black huge ">Totales</p>
 
         <section className="funcionality-filters-container gap-15">
@@ -161,7 +161,7 @@ function Estratum123Tab({ filters }) {
             classNameLabel="text-black biggest "
             placeholder={""}
             disabled
-            value={String(formaterNumberToCurrency( totalRecursoDisponible).replace("$", ""))}
+            value={String(formaterNumberToCurrency( totalRecursoDisponible))}
           />
           <InputComponent
             idInput={"tQuantity1"}
@@ -171,7 +171,7 @@ function Estratum123Tab({ filters }) {
             classNameLabel="text-black biggest "
             placeholder={""}
             disabled
-            value={String(formaterNumberToCurrency(totalOtorgado).replace("$", ""))}
+            value={String(formaterNumberToCurrency(totalOtorgado))}
           />
 
           <InputComponent
@@ -182,7 +182,7 @@ function Estratum123Tab({ filters }) {
             classNameLabel="text-black biggest"
             placeholder={""}
             disabled
-            value={String(totalDisponible)}
+            value={String(formaterNumberToCurrency(totalDisponible))}
           />
         </section>
         <section className="funcionality-filters-container gap-15">
