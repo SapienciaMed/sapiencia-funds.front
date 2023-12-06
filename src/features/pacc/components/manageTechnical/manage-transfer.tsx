@@ -1,5 +1,4 @@
-
-import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../../common/components/Form";
 import { useForm, Controller } from 'react-hook-form';
 import { EDirection } from "../../../../common/constants/input.enum";
@@ -11,17 +10,21 @@ import { Dialog } from "primereact/dialog";
 import UploadNewComponent from "../../../../common/components/Form/UploadNewComponent";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { usePaccServices } from "../../hook/pacc-serviceshook";
-import { useParams } from "react-router";
 import useYupValidationResolver from "../../../../common/hooks/form-validator.hook";
 import { manageTransfer } from "../../../../common/schemas/acta-shema";
+import { uploadFileManageTranfer } from "./helper/uploadFileManageTransfer";
+import { EResponseCodes } from "../../../../common/constants/api.enum";
+import { IChageStatusKnowledgeTransfer } from "./interface/manage-technical";
+import { Accordion, AccordionTab } from 'primereact/accordion';
 
 interface IPropManageTransfer {
-    idSelect: number
+    idSelect: number,
+    loadTableData: () => void
+    idBeneficiary: number
 }
 
-function ManageTransfer({ idSelect }: IPropManageTransfer ){
+function ManageTransfer({ idSelect, loadTableData, idBeneficiary }: IPropManageTransfer ){
 
-    const { id } =  useParams()
     const [seeObservation, setSeeObservation ] = useState(false)
     const [visible, setVisible] = useState<boolean>(false);
     const [filesUploadData, setFilesUploadData] = useState<File>(null);
@@ -59,8 +62,7 @@ function ManageTransfer({ idSelect }: IPropManageTransfer ){
         }
     },[])
 
-    const onSubmit = handleSubmit((data: any) => {
-        
+    const onSubmit = handleSubmit((data: any) => {    
         if(data.observation == '' || data.observationFile == ''){
             setMessageError({
                 ...(data.observation ? {} : {
@@ -79,18 +81,58 @@ function ManageTransfer({ idSelect }: IPropManageTransfer ){
             })
         }else{
             setMessageError({})
-            console.log("🚀 ~ file: manage-transfer.tsx:59 ~ onSubmit ~ data:", data)
-            const dataChange = {
-                idBeneficiary: idSelect,
-                status: watchState || '',
-                observation: data.observation || 'Ninguna',
+            const dataChange: IChageStatusKnowledgeTransfer = {
+                id: idSelect,
+                idBeneficiary: idBeneficiary,
+                status: watchState == 'true' ? true : false,
+                observations: data.observation || 'Ninguna',
                 user: authorization.user.numberDocument,
-                workedHours: data.workedHours
+                workedHours: parseInt(data.workedHours)
             }
-            console.log("🚀 ~ file: manage-transfer.tsx:85 ~ onSubmit ~ dataChange:", dataChange)
-            
+            const showMessage = false
+            const url = `/consolidation-tray/upload-knowledge-transfer-file/${idSelect}/${String(idBeneficiary)}`
+
+            ChangeApproveOrRejectKnowledgeTransfer(dataChange).then(response => {
+                if(response.operation.code === EResponseCodes.OK){
+                    filesUploadData && uploadFileManageTranfer([filesUploadData], setMessage, authorization, url, showMessage,) // para  subir archivo
+                    setMessage({
+                        title: "Guardar",
+                        description: `¡Cambios guardados exitosamente!`,
+                        show: true,
+                        OkTitle: "Aceptar",
+                        onOk: () => {
+                            setMessage((prev) => {
+                                return { ...prev, show: false };
+                            });
+                            loadTableData()
+                        },
+                        onClose: () => {
+                            setMessage({});
+                            loadTableData()
+                        },
+                        background: true,
+                      });
+                    
+                }
+            })
+
         }
     })
+
+    const al = [
+        {
+            name: 'Realizar la totalidad de las horas'
+        },
+        {
+            name: 'Realizar solicitud de condonación'
+        },
+        {
+            name: 'Demostrar obtención del título dentro de los plazos estipulados en el decreto'
+        },
+        {
+            name: 'Todos tienen derecho a la condonación semestral. No hay condonación parcial por servicio social.'
+        }
+    ]
 
     return(
         <>
@@ -127,8 +169,24 @@ function ManageTransfer({ idSelect }: IPropManageTransfer ){
                 />
             </div>
         </Dialog>
+
+        <Accordion activeIndex={0} style={{width: '100%', marginBottom: '1rem'}}>
+            <AccordionTab header="Requisitos" style={{ fontSize: '1.22em'}}>
+               {
+                al.map((us, index) => {
+                    return(
+                        <div key={index} className="content-accordion-tab medium mt-14px" style={{fontWeight: '400', paddingLeft: '1.5rem'}} >
+                            {index + 1}. {us.name}
+                        </div>
+                    )
+                })
+               }
+            </AccordionTab>
+        </Accordion>
+
         <div className="card-table gap-0 full-width">
             <FormComponent id="formManageTransfer" action={onSubmit}>
+            
                 <div className="grid-form-2-container ">
                     <SelectComponent
                         idInput={"state"}

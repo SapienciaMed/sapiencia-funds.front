@@ -6,7 +6,7 @@ import { ButtonComponent } from "../../../../common/components/Form";
 
 function KnowledgeTransfer() {
 
-    const {tableColumns, tableComponentRef, onCancel } = useKnowledgeTransfer()
+    const {tableColumns, tableComponentRef } = useKnowledgeTransfer()
 
     return (
         <section className=" card-table mt-20px">
@@ -25,20 +25,6 @@ function KnowledgeTransfer() {
                 viePaginator={false}
                 isNotBorderClasse={true}
             />
-
-            <div className="funcionality-buttons-container border-top">
-                <ButtonComponent
-                    value="Cancelar"
-                    type="button"
-                    className="button-clean-fields bold"
-                    action={onCancel}
-                />
-                <ButtonComponent
-                    className="button-main huge hover-three"
-                    value="Guardar"
-                    type="submit"
-                />
-            </div>   
         </section>
     )
 

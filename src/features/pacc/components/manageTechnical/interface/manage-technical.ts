@@ -34,3 +34,13 @@ export interface IApplyKnowledgeTransfer {
   userCreate: string;
   dateCreate: Date;
 }
+
+
+export interface IChageStatusKnowledgeTransfer {
+  id: number;
+  idBeneficiary: number;
+  status: boolean;
+  observations: string;
+  user: string;
+  workedHours: number;
+}

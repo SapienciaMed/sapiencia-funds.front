@@ -131,6 +131,55 @@
         padding: 0;
     }
 }
+
+.menu-style{
+    max-height: 23vh;
+    overflow: auto;
+    width: 15.5rem !important;
+
+    span{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.content-accordion-tab{
+    color: #000;
+    font-family: RubikRegular, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; 
+    text-align: left;
+
+    &.tiny {
+        font-size: 0.6em;
+      }
+    
+      &.small {
+        font-size: 0.7em;
+      }
+    
+      &.medium {
+        font-size: 0.8em;
+      }
+    
+      &.big {
+        font-size: 1em;
+      }
+    
+      &.biggest {
+        font-size: 1.22em;
+      }
+    
+      &.large {
+        font-size: 1.4em;
+      }
+    
+      &.extra-large {
+        font-size: 1.8em;
+      }
+}
   
 @media (min-width: 1024px) {
     .one-filter-container {
@@ -220,5 +269,9 @@
 @media (max-width: 390px) {
     .funcionality-filters-container {
       grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    }
+
+    .menu-style{
+        width: 100% !important;
     }
 }

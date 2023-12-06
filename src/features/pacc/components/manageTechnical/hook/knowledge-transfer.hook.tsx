@@ -11,6 +11,9 @@ import { AppContext } from "../../../../../common/contexts/app.context";
 import ManageTransfer from "../manage-transfer";
 import { useNavigate, useParams } from "react-router";
 import { IApplyKnowledgeTransfer } from "../interface/manage-technical";
+import { usePaccServices } from "../../../hook/pacc-serviceshook";
+import { EResponseCodes } from "../../../../../common/constants/api.enum";
+import { downloadFile } from "../helper/dowloadFile";
 
 
 export default function useKnowledgeTransfer() {
@@ -20,22 +23,26 @@ export default function useKnowledgeTransfer() {
     const tableComponentRef = useRef(null);
     const toast = useRef(null);
     const { setMessage, authorization } = useContext(AppContext);
-    const [visible, setVisible] = useState<boolean>(false);
-    const [filesUploadData, setFilesUploadData] = useState<File>(null);
+    const { GetUploadKnowledgeTransferFiles } = usePaccServices()
+    const [ filesService, setFilesService ] = useState([])
 
     useEffect(() => {
         loadTableData({
             idBeneficiary: parseInt(id),
             user: authorization.user.numberDocument
         })
+        GetUploadKnowledgeTransferFiles(id).then(response => {
+            if(response.operation.code === EResponseCodes.OK){
+                setFilesService(response.data)
+            }
+        })
     },[])
 
-    useEffect(() => {
-        if(filesUploadData != null){
-           console.log("filesUploadData", filesUploadData);
-           
+    function loadTableData(searchCriteria?: object): void {
+        if (tableComponentRef.current) {
+            tableComponentRef.current.loadData(searchCriteria);
         }
-    },[filesUploadData])
+    }
 
     const tableColumns: ITableElement<IApplyKnowledgeTransfer>[] = [
        {
@@ -102,7 +109,7 @@ export default function useKnowledgeTransfer() {
                                         setMessage({
                                             show: true,
                                             title: "Gestionar",
-                                            description: <ManageTransfer idSelect={row.id} />,
+                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary}/>,
                                             background: true,
                                         });
                                     }} 
@@ -124,7 +131,7 @@ export default function useKnowledgeTransfer() {
                                 />
                                 
                                 <OverlayPanel ref={toast}>
-                                    <Menu model={items(row.idBeneficiary)}/>
+                                    <Menu model={items(row.idBeneficiary)} className="menu-style"/>
                                 </OverlayPanel>
                                 
                             </i>
@@ -136,35 +143,34 @@ export default function useKnowledgeTransfer() {
         }
     ]
 
-    function loadTableData(searchCriteria?: object): void {
-        if (tableComponentRef.current) {
-            tableComponentRef.current.loadData(searchCriteria);
-        }
-    }
+    
 
     const items = (row): MenuItem[] => [
-
+        {
+            label: "Ver documentos",
+            items: filesService.map((file) => {
+                return {
+                  label: file.name,
+                  icon: '', // Puedes asignar un icono si es necesario
+                  template: () => {
+                    return (
+                      <button 
+                        className="p-menuitem-link button-menu-tooltip"
+                        onClick={()=>{
+                            downloadFile(file, authorization, setMessage )
+                        }}
+                      >
+                        <span className="p-menuitem-text ml-5px">{file.name}</span>
+                      </button>
+                    );
+                  },
+                };
+              }),
+        },
     ]
-
-    const onCancel = () => {
-        setMessage({
-            show: true,
-            title: "Cancelar",
-            description: "¿Segur@ que deseas cancelar",
-            OkTitle: "Aceptar",
-            cancelTitle: "Cancelar",
-            onOk() {
-                setMessage((prev) => ({ ...prev, show: false }));
-                navigate('/fondos/pacc/bandeja-consolidacion')  
-            },
-            background: true,
-          });
-        
-    }
 
     return {
         tableComponentRef,
         tableColumns,
-        onCancel
     }
 }

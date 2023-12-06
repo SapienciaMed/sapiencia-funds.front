@@ -5009,7 +5009,7 @@
   border: 1px solid #dee2e6;
   color: #495057;
   background: #f8f9fa;
-  font-weight: 600;
+  font-weight: 500;
   border-radius: 3px;
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
@@ -5024,7 +5024,7 @@
   .p-accordion-header-link:focus {
   outline: 0 none;
   outline-offset: 0;
-  box-shadow: 0 0 0 0.2rem #bfd1f6;
+  box-shadow: 0 0 0 0.2rem transparent;
 }
 .p-accordion
   .p-accordion-header:not(.p-highlight):not(.p-disabled):hover
@@ -5038,7 +5038,7 @@
   .p-accordion-header-link {
   background: #f8f9fa;
   border-color: #dee2e6;
-  color: #495057;
+  color: #000;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }

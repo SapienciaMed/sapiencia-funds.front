@@ -52,6 +52,11 @@ export const usePaccServices = () => {
         return post(`${roleUrl}${endpoint}`, data);
     }
 
+    async function GetUploadKnowledgeTransferFiles(id: string): Promise<ApiResponse<any>> {
+        const endpoint: string = "/get-knowledge-transfer-file"; 
+        return get(`${roleUrl}${endpoint}/${id}`);
+    }
+
     return {
         GetCutsForConsolidationTray,
         GeConsolidationTrayTechnicianCollectionByCut,
@@ -61,7 +66,8 @@ export const usePaccServices = () => {
         GetRequirementFile,
         ComplianceAssignmentBeneficiary,
         DeleteUploadFiles,
-        ChangeApproveOrRejectKnowledgeTransfer
+        ChangeApproveOrRejectKnowledgeTransfer,
+        GetUploadKnowledgeTransferFiles
     }
 
 }

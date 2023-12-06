@@ -205,7 +205,7 @@ export default function useRequeriments() {
                                                     },
                                                 });
                                            }else {
-                                            downloadFile(response.data, authorization, setMessage )
+                                            downloadFile(response.data[0], authorization, setMessage )
                                            }
                                             setShowSpinner(false)
                                             toast.current.hide();
