@@ -35,9 +35,9 @@ export const useConsultControlReport = () => {
   const [bandValidiy, setbandValidiy] = useState(false);
   const [bandComuna, setbandComuna] = useState(false);
   const [conditionalPage, setconditionalPage] = useState(null);
-  //ref
   const tableComponentRef = useRef(null);
   const resolver = useYupValidationResolver(controlReportSchema);
+  const [currentIdControlSelect, setCurrentIdControlSelect] = useState(null);
   const {
     control,
     handleSubmit,
@@ -65,39 +65,45 @@ export const useConsultControlReport = () => {
     setTableView(false);
   };
 
+  const [reload, setReload] = useState(new Date());
   const onSubmit = handleSubmit((filters: IControlReportFilter) => {
-    const idConvocatoria = watch("idConvocatoria");
+    tableComponentRef.current?.emptyData();
+    setTableView(true);
+    // const idConvocatoria = watch("idConvocatoria");
     const { noProject, validity } = formWatch;
     filters.noProject = noProject;
     filters.validity = validity;
-    filters.idConvocatoria = idConvocatoria;
 
-    tableComponentRef.current?.loadData({
-      ...filters,
-    });
-
-    if (filters.idControlSelect == 1) {
-      setconditionalPage(<ConsolidateTab data={filters} />);
+    setReload(new Date());
+    switch (filters.idControlSelect) {
+      case 1: {
+        setconditionalPage(<ConsolidateTab data={filters} reload={reload} />);
+        break;
+      }
+      case 2: {
+        setconditionalPage(<Estratum123Tab data={filters} reload={reload} />);
+        break;
+      }
+      case 3: {
+        setconditionalPage(<Stratum456Tab data={filters} reload={reload} />);
+        break;
+      }
+      case 4: {
+        setconditionalPage(<LegalizacionTab data={filters} reload={reload} />);
+        break;
+      }
+      case 5: {
+        setconditionalPage(<PagareTab data={filters} reload={reload} />);
+        break;
+      }
+      case 6: {
+        setconditionalPage(<ControlTab data={filters} reload={reload} />);
+        break;
+      }
+      default: {
+        break;
+      }
     }
-    if (filters.idControlSelect == 2) {
-      setconditionalPage(<Estratum123Tab filters={filters} />);
-    }
-    if (filters.idControlSelect == 3) {
-      setconditionalPage(<Stratum456Tab data={filters} />);
-    }
-    if (filters.idControlSelect == 4) {
-      setconditionalPage(<LegalizacionTab data={filters} />);
-    }
-    if (filters.idControlSelect == 5) {
-      setconditionalPage(
-        <PagareTab data={filters} tableComponent={tableComponentRef} />
-      );
-      setTableView(true);
-    }
-    if (filters.idControlSelect == 6) {
-      setconditionalPage(<ControlTab data={filters} />);
-    }
-    setTableView(true);
   });
 
   useEffect(() => {

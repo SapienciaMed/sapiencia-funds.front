@@ -18,6 +18,7 @@ export interface IRequerimentsResultSimple {
   activeRequirement: boolean
   percentRequirement: number | null;
   accomplished?: number;
+  mandatoryFor: string
 }
 
 export interface IApplyKnowledgeTransfer {

@@ -1,5 +1,5 @@
 import { ProgressSpinner } from "primereact/progressspinner";
-import React from "react";
+import React, { useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import useKnowledgeTransfer from "./hook/knowledge-transfer.hook";
 import { ButtonComponent } from "../../../../common/components/Form";
@@ -7,10 +7,13 @@ import { ButtonComponent } from "../../../../common/components/Form";
 function KnowledgeTransfer() {
 
     const {tableColumns, tableComponentRef } = useKnowledgeTransfer()
+    const [ showSpinner, setShowSpinner ] = useState(true)
 
     return (
         <section className=" card-table mt-20px">
-            {/* <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" /> */}
+            {
+                showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
+            }
 
             <TableComponent
                 ref={tableComponentRef}
@@ -24,6 +27,7 @@ function KnowledgeTransfer() {
                 isMobil={false}
                 viePaginator={false}
                 isNotBorderClasse={true}
+                setShowSpinner={setShowSpinner}
             />
         </section>
     )

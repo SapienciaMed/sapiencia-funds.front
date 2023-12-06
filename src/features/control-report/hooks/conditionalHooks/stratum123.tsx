@@ -3,13 +3,13 @@ import useCrudService from "../../../../common/hooks/crud-service.hook";
 import { urlApiFunds } from "../../../../common/utils/base-url";
 import { ITableAction } from "../../../../common/interfaces";
 import { AppContext } from "../../../../common/contexts/app.context";
-import ControlreporteditStratum456 from "../../pages/conditionalPagesEdits/control-report-edit-stratum456";
 import { useGenericListService } from "../../../../common/hooks/generic-list-service.hook";
 import { ApiResponse } from "../../../../common/utils/api-response";
 import * as XLSX from "xlsx";
 import { IGenericList } from "../../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../../common/constants/api.enum";
-export const stratum456Hook = (data, reload) => {
+import ControlReportEditStratum123 from "../../pages/conditionalPagesEdits/control-report-edit-stratum123";
+export const stratum123Hook = (data, reload) => {
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
   const { post } = useCrudService(urlApiFunds);
   const [totalOtorgado, setTotalOtorgado] = useState(null);
@@ -18,7 +18,7 @@ export const stratum456Hook = (data, reload) => {
   const [totalNoLegalizados, setTotalNoLegalizados] = useState(null);
   const [totalDisponible, setTotalDisponible] = useState(null);
   const tableComponentRef = useRef(null);
-  const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfoEstratos456`;
+  const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfoEstratos123`;
   const { setMessage } = useContext(AppContext);
   const { getListByGroupers } = useGenericListService();
   const [comunaList, setComunaList] = useState([]);
@@ -32,14 +32,14 @@ export const stratum456Hook = (data, reload) => {
           show: true,
           background: true,
           description: (
-            <ControlreporteditStratum456
+            <ControlReportEditStratum123
               onEdit={() => {
                 tableComponentRef.current?.loadData({
                   ...data, /// Filtro de busqueda
                 });
               }}
               onUpdateTotals={() => {
-                getInfoStatum456(data);
+                getInfoStatum123(data);
               }}
               data={row}
             />
@@ -77,9 +77,9 @@ export const stratum456Hook = (data, reload) => {
     aux();
   }, []);
 
-  const getInfoStatum456 = async (data) => {
+  const getInfoStatum123 = async (data) => {
     try {
-      const endpoint = "/api/v1/controlSelect/getInfoEstratos456Totals";
+      const endpoint = "/api/v1/controlSelect/getInfoEstratos123Totals";
       const res: ApiResponse<[]> = await post(endpoint, data);
       let dataTotal = {
         resourceAvailable: null,
@@ -135,7 +135,7 @@ export const stratum456Hook = (data, reload) => {
   };
 
   const downloadCollection = async () => {
-    const endpoint = "/api/v1/controlSelect/getInfoEstratos456";
+    const endpoint = "/api/v1/controlSelect/getInfoEstratos123Totals";
     const res: ApiResponse<[]> = await post(endpoint, data);
     const dataRes = res.data["array"];
     let dataDownload = dataRes.map((data) => {
@@ -157,9 +157,9 @@ export const stratum456Hook = (data, reload) => {
 
     const book = XLSX.utils.book_new();
     const sheet = XLSX.utils.json_to_sheet(dataDownload);
-    XLSX.utils.book_append_sheet(book, sheet, "Estrato 456");
+    XLSX.utils.book_append_sheet(book, sheet, "Estrato 123");
     setTimeout(() => {
-      XLSX.writeFile(book, "Exporte Informe Control - Estrato 456.xlsx");
+      XLSX.writeFile(book, "Exporte Informe Control - Estrato 123.xlsx");
     }, 1000);
   };
 
@@ -168,7 +168,7 @@ export const stratum456Hook = (data, reload) => {
       ...data,
     });
     setTimeout(() => {
-      getInfoStatum456(data);
+      getInfoStatum123(data);
     }, 1000);
   }, [reload]);
   return {

@@ -7,7 +7,7 @@ import useCrudService from "../../../../common/hooks/crud-service.hook";
 import * as XLSX from "xlsx";
 import { EResponseCodes } from "../../../../common/constants/api.enum";
 
-export const usePagareHook = (data) => {
+export const usePagareHook = (data, reload) => {
   const navigate = useNavigate();
   const { post } = useCrudService(urlApiFunds);
   const { setMessage } = useContext(AppContext);
@@ -69,7 +69,7 @@ export const usePagareHook = (data) => {
     });
     setLoading(true);
     getInfoControl(data);
-  }, []);
+  }, [reload]);
 
   function downloadCollection(data) {
     const book = XLSX.utils.book_new();

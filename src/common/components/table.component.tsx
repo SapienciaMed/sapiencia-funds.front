@@ -4,6 +4,8 @@ import React, {
   useImperativeHandle,
   useEffect,
   useContext,
+  Dispatch,
+  SetStateAction,
 } from "react";
 import { ITableAction, ITableElement } from "../interfaces/table.interfaces";
 import { DataTable } from "primereact/datatable";
@@ -58,7 +60,8 @@ interface IProps<T> {
   keyBodyRequest?: string;
   count?: boolean,
   viePaginator?: boolean
-  isNotBorderClasse?: boolean
+  isNotBorderClasse?: boolean,
+  setShowSpinner?: Dispatch<SetStateAction<boolean>>
 }
 
 interface IRef {
@@ -87,7 +90,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     keyBodyRequest,
     count,
     viePaginator = true,
-    isNotBorderClasse
+    isNotBorderClasse,
+    setShowSpinner
   } = props;
 
   // States
@@ -128,6 +132,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
+      setShowSpinner && setShowSpinner(false)
       if (props.onResult) props.onResult(res?.data?.array || []);
       if (res.data?.array?.length <= 0 && isShowModal) {
         setMessage({

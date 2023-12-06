@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ITabsMenuTemplate } from "../interfaces/tabs-menu.interface";
-import { IMessage } from "../interfaces/global.interface";
+import { AppContext } from "../contexts/app.context";
 
 interface IAppProps {
   tabs: ITabsMenuTemplate[];
   start?: ITabsMenuTemplate;
   index?: number;
   className?: string;
-  isLock?: boolean;
-  showMessage?: () => void
+  titleMessage?: string;
+  description?:string
 }
 
 function TabListComponent({
@@ -16,8 +16,8 @@ function TabListComponent({
   className,
   start,
   index,
-  isLock,
-  showMessage
+  titleMessage,
+  description
 }: IAppProps): React.JSX.Element {
   const tabList = {};
   tabs.forEach(
@@ -30,7 +30,7 @@ function TabListComponent({
   const [selectedTab, setSelectedTab] = useState<ITabsMenuTemplate>(
     start ? start : null
   );
-
+  const { setMessage, disabledFields, setDisabledFields } = useContext(AppContext);
 
   useEffect(() => {
     if (!selectedTab)
@@ -45,6 +45,28 @@ function TabListComponent({
     }
   }, [index]);
 
+
+  const showMessage  = (tab: ITabsMenuTemplate) => {
+    setMessage({
+        show: true,
+        title: titleMessage || '',
+        description: description || '',
+        background: true,
+        OkTitle: 'Aceptar',
+        cancelTitle: 'Cancelar',
+        onOk() {
+            setDisabledFields(false);
+            setMessage({});
+            setSelectedTab(tab);
+        },
+        onCancel() {
+            setMessage({});
+        },
+    });
+  }
+
+  
+
   return (
     <div className={`tabs-component ${className ? className : ""}`}>
       <div className="tabs-selection">
@@ -56,8 +78,8 @@ function TabListComponent({
               className={`tab-option ${active}`}
               key={tab.id}
               onClick={() => {
-                if (isLock) {
-                  showMessage()
+                if (disabledFields && titleMessage != '') {
+                  showMessage(tab)
                 }else{
                   setSelectedTab(tab);
                   if (tab.action) tab.action();

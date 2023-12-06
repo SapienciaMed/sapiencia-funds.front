@@ -36,12 +36,12 @@ const SearchContrlPage = () => {
         className="form-signIn"
         action={onSubmit}
       >
-        <div className="container-sections-forms ml-20px mr-20px">
+        <div className="container-sections-forms mr-20px">
           <div className="grid-form-3-container gap-25">
             <div className="text-black large grid-span-2-columns pb-14px">
               Control financiero
             </div>
-            <span className="text-black biggest bold grid-span-3-columns">
+            <span className="text-black biggest grid-span-3-columns">
               Consultar Informe Control
             </span>
           </div>
@@ -79,6 +79,7 @@ const SearchContrlPage = () => {
             <div>
               <SelectComponent
                 idInput="idConvocatoria"
+                onChange={handleChange}
                 control={control}
                 errors={errors}
                 data={announcementList}
@@ -121,7 +122,7 @@ const SearchContrlPage = () => {
             )}
           </div>
 
-          <div className="button-save-container-display mr-24px mt-24px button-save-bussiness">
+          <div className="button-save-container-display  mt-24px button-save-bussiness">
             <ButtonComponent
               value="Limpiar campos"
               className="button-clean"

@@ -21,7 +21,7 @@ export default function useActaApi() {
     const serviceUrlUsers: string = "/api/v1/user";  
 
 
-    const { get, post, put } = useCrudService(baseURL);
+    const { get, post, put, deleted } = useCrudService(baseURL);
     const { get: getProjects } = useCrudService(baseURLProjects);
     const { get: getUser } = useCrudService(baseURLUsers);
 
@@ -132,6 +132,27 @@ export default function useActaApi() {
     const endpoint: string = "/updateActa"
     return put(`${serviceUrlActa}${endpoint}`, data);
   }
+
+  async function deleteCitation(id: string): Promise<ApiResponse<any>>{
+    const endpoint: string = `/deleteCitation/${id}`
+    return deleted(`${serviceUrlActa}${endpoint}`);
+  }
+
+  return {
+    getProgramTypes,
+    getMaster,
+    getAnnouncement,
+    getStatusList,
+    getProjectsList,
+    createActa,
+    getUserList,
+    getHours,
+    getActa,
+    approveCitation,
+    getLastId,
+    updateActa,
+    deleteCitation
+  };
 
   return {
     getProgramTypes,

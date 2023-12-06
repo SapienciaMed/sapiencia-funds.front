@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import {
   ButtonComponent,
@@ -9,11 +9,12 @@ import { columnsConsolidados } from "../config-columns/columns-consolidados";
 import Svgs from "../../../../public/images/icons/svgs";
 import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
+import { useNavigate } from "react-router-dom";
 
-const ConsolidateTab = (data) => {
+const ConsolidateTab = ({ data, reload }) => {
   const {
-    tableComponentRef,
     urlGet,
+    tableComponentRef,
     setPaginateData,
     tableActions,
     totalNoPreseleccionados,
@@ -27,22 +28,26 @@ const ConsolidateTab = (data) => {
     downloadCollection,
     comunaList,
     TotalView,
-  } = consolidateHook(data.data);
+    color,
+  } = consolidateHook(data, reload);
 
   const columnsConsolidados: ITableElement<any>[] = [
     {
       fieldName: "resourcePrioritization.communeId",
       header: "Comuna o corregimiento",
       renderCell: (row) => {
-        return (
-          <>
-            {
-              comunaList?.find(
-                (obj) => obj.value == row.resourcePrioritization.communeId
-              ).name
-            }
-          </>
+        // Intenta encontrar el objeto
+        const foundObj = comunaList?.find(
+          (obj) => obj.value == row.resourcePrioritization.communeId
         );
+
+        // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
+        if (foundObj) {
+          return <>{foundObj.name}</>;
+        }
+
+        // Puedes retornar algo por defecto si el objeto no se encuentra
+        return <>No encontrado</>;
       },
     },
     {
@@ -90,31 +95,29 @@ const ConsolidateTab = (data) => {
       fieldName: "porcentParticipacion",
       header: "%Participacion",
       renderCell: (row) => {
-        const porcent = Math.round(
+        const porcent =
           (Number(row.consolidatedGranted) /
             Number(row.consolidatedResourceAvailable)) *
-            100
-        );
-
-        if (porcent == Infinity || porcent == undefined) {
+          100;
+        if (porcent == Infinity || porcent == undefined || isNaN(porcent)) {
           return <>0%</>;
         } else {
           if (porcent >= 90 && porcent < 98) {
             return (
               <>
                 {" "}
-                <div style={{ color: "yellow" }}>{porcent}%</div>
+                <div style={{ color: "orange" }}>{porcent.toFixed(2)}%</div>
               </>
             );
           } else if (porcent >= 98 && porcent <= 100) {
             return (
               <>
                 {" "}
-                <div style={{ color: "red" }}> {porcent}%</div>
+                <div style={{ color: "red" }}> {porcent.toFixed(2)}%</div>
               </>
             );
           } else {
-            return <>{porcent}%</>;
+            return <>{porcent.toFixed(2)}%</>;
           }
         }
       },
@@ -136,7 +139,7 @@ const ConsolidateTab = (data) => {
   ];
   return (
     <>
-      <div className="container-sections-forms ml-20px mr-20px">
+      <div className="container-sections-forms  mr-20px">
         <TableComponent
           setPaginateData={setPaginateData}
           ref={tableComponentRef}
@@ -147,15 +150,16 @@ const ConsolidateTab = (data) => {
           emptyMessage="Resultado en la búsqueda"
           descriptionModalNoResult="No se generó resultado en la búsqueda"
           titleMessageModalNoResult="Resultado de búsqueda"
+          onResult={(rows) => {}}
         />
       </div>
 
       {TotalView && (
         <>
           {" "}
-          <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
+          <div className="container-sections-forms mt-24px p-0">
             <div
-              className="bold mt-24px ml-16px mr-16px p-0"
+              className="bold mt-24px mr-16px mb-24px p-0"
               style={{ fontWeight: 500, fontSize: "29px", color: "#000000" }}
             >
               Totales
@@ -167,7 +171,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="No. Preseleccionados"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={`${totalNoPreseleccionados}`}
@@ -179,7 +183,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="No. Cupos"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -192,7 +196,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Recurso disponible"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -205,7 +209,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Otorgado"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -213,42 +217,36 @@ const ConsolidateTab = (data) => {
                 value={String(formaterNumberToCurrency(totalOtorgado))}
               />
             </div>
+
             <div className="grid-form-4-container mb-24px">
               <InputComponent
                 idInput={"tQuantity1"}
                 className="input-basic medium"
                 typeInput="text"
                 label="Disponible"
-                //register={register}
-                classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
                 value={String(formaterNumberToCurrency(totalDisponible))}
               />
+
               <InputComponent
-                idInput={"tQuantity1"}
-                className="input-basic medium"
+                idInput={"porcentPart"}
+                className={`input-basic medium ${color}`}
                 typeInput="text"
                 label="%Participacion"
-                //register={register}
-                classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
-                value={String(Math.round(totalPorParticipacion)) + "%"}
+                value={String(totalPorParticipacion) + "%"}
               />
+
               <InputComponent
                 idInput={"tQuantity1"}
                 className="input-basic medium"
                 typeInput="text"
                 label="No.Legalizados"
-                //register={register}
-                classNameLabel="text-black biggest text-required"
-                //direction={EDirection.column}
-                //errors={errors}
+                classNameLabel="text-black biggest"
                 placeholder={""}
                 disabled
                 value={String(totalNoLegalizados)}
@@ -259,7 +257,7 @@ const ConsolidateTab = (data) => {
                 typeInput="text"
                 label="Rendimiento financieros"
                 //register={register}
-                classNameLabel="text-black biggest text-required"
+                classNameLabel="text-black biggest"
                 //direction={EDirection.column}
                 //errors={errors}
                 placeholder={""}
@@ -297,4 +295,4 @@ const ConsolidateTab = (data) => {
   );
 };
 
-export default memo(ConsolidateTab);
+export default ConsolidateTab;

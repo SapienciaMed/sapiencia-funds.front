@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import { ITableElement } from "../../../../common/interfaces";
 import useSupportsPQRSDF from "./hook/supports-PQRSDF.hook";
@@ -6,7 +6,8 @@ import { ProgressSpinner } from "primereact/progressspinner";
 
 function SupportsPQRSDF({ document }) {
 
-    const {tableColumns, tableComponentRef, tableActions, showSpinner } = useSupportsPQRSDF()
+    const {tableColumns, tableComponentRef, tableActions } = useSupportsPQRSDF()
+    const [ showSpinner, setShowSpinner ] = useState(true)
 
     return(
         <section className=" card-table mt-20px">
@@ -26,6 +27,7 @@ function SupportsPQRSDF({ document }) {
                 bodyRequestParameters={document}
                 keyBodyRequest={'identification'}
                 isMobil={false}
+                setShowSpinner={setShowSpinner}
             />
      </section>
     )
