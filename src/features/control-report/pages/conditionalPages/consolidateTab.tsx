@@ -11,9 +11,10 @@ import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import { useNavigate } from "react-router-dom";
 
-const ConsolidateTab = ({ onRef, data }) => {
+const ConsolidateTab = ({ data, reload }) => {
   const {
     urlGet,
+    tableComponentRef,
     setPaginateData,
     tableActions,
     totalNoPreseleccionados,
@@ -28,12 +29,8 @@ const ConsolidateTab = ({ onRef, data }) => {
     comunaList,
     TotalView,
     color,
-  } = consolidateHook(data);
+  } = consolidateHook(data, reload);
 
-  const tableComponentRef = useRef(null);
-  tableComponentRef.current?.loadData({
-    ...data,
-  });
   const navigate = useNavigate();
   const columnsConsolidados: ITableElement<any>[] = [
     {

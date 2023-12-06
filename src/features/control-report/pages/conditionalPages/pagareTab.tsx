@@ -9,7 +9,7 @@ import Svgs from "../../../../public/images/icons/svgs";
 import { columnsPay } from "../config-columns/columns-pay";
 import { ProgressSpinner } from "primereact/progressspinner";
 
-const PagareTab = (data) => {
+const PagareTab = ({ data, reload }) => {
   const {
     tableComponentRef,
     urlGet,
@@ -21,7 +21,7 @@ const PagareTab = (data) => {
     downloadCollection,
     dataForDownload,
     loading,
-  } = usePagareHook(data.data);
+  } = usePagareHook(data, reload);
 
   const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
 

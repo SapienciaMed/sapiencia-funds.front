@@ -14,7 +14,7 @@ import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 
-const ControlTab = (data) => {
+const ControlTab = ({ data, reload }) => {
   const {
     tableComponentRef,
     urlControl,
@@ -24,7 +24,7 @@ const ControlTab = (data) => {
     downloadCollection,
     TotalView,
     infoControlSubTotal,
-  } = ControlHook(data.data);
+  } = ControlHook(data, reload);
   return (
     <>
       <div className="container-sections-forms mr-20px">

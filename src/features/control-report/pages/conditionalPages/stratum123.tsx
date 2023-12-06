@@ -9,10 +9,9 @@ import { ITableAction, ITableElement } from "../../../../common/interfaces";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import Svgs from "../../../../public/images/icons/svgs";
-import Item from "../item/item-stratum.page"
+import Item from "../item/item-stratum.page";
 
-function Estratum123Tab({ filters }) {
-
+function Estratum123Tab({ filters, reload }) {
   const { validateActionAccess, setMessage } = useContext(AppContext);
   const [dataGridStratum, setDataGridStratum] = useState([]);
   const [totalOtorgado, setTotalOtorgado] = useState(null);
@@ -28,7 +27,7 @@ function Estratum123Tab({ filters }) {
     setTotalRecursoDisponible,
     setTotalOtorgado,
     dataGridStratum,
-    setDataGridStratum
+    setDataGridStratum,
   };
 
   const {
@@ -36,8 +35,7 @@ function Estratum123Tab({ filters }) {
     comunaList,
     onsearchSubmintControl,
     downloadXLSX,
-  } = stratum123Hook(filters, objSet);
-
+  } = stratum123Hook(filters, objSet, reload);
 
   const tableColumns: ITableElement<any>[] = [
     {
@@ -48,25 +46,23 @@ function Estratum123Tab({ filters }) {
         const foundObj = comunaList?.find(
           (obj) => obj.value == row.resourcePrioritization.communeId
         );
-    
+
         // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
         if (foundObj) {
           return <>{foundObj.name}</>;
         }
-    
+
         // Puedes retornar algo por defecto si el objeto no se encuentra
         return <>No encontrado</>;
       },
     },
-    
+
     {
       fieldName: "resourceAvailable",
       header: "Recurso disponible",
       renderCell: (row) => {
         const numero = 1000;
-        const numeroConPuntos = formaterNumberToCurrency(
-          row.resourceAvailable
-        )
+        const numeroConPuntos = formaterNumberToCurrency(row.resourceAvailable);
         return <>{numeroConPuntos}</>;
       },
     },
@@ -75,9 +71,7 @@ function Estratum123Tab({ filters }) {
       header: "Otorgado",
       renderCell: (row) => {
         const numero = 1000;
-        const numeroConPuntos = formaterNumberToCurrency(
-          row.granted
-        )
+        const numeroConPuntos = formaterNumberToCurrency(row.granted);
         return <>{numeroConPuntos}</>;
       },
     },
@@ -85,9 +79,9 @@ function Estratum123Tab({ filters }) {
       fieldName: "totalCost",
       header: "Disponible",
       renderCell: (row) => {
-         const numeroConPuntos = formaterNumberToCurrency(
-           Number(row.resourceAvailable) - Number(row.granted)
-         )
+        const numeroConPuntos = formaterNumberToCurrency(
+          Number(row.resourceAvailable) - Number(row.granted)
+        );
         return <>{numeroConPuntos}</>;
       },
     },
@@ -97,7 +91,10 @@ function Estratum123Tab({ filters }) {
       renderCell: (row) => {
         return (
           <>
-            {((Number(row.granted) / Number(row.resourceAvailable))* 100).toFixed(2)  + "%"}
+            {(
+              (Number(row.granted) / Number(row.resourceAvailable)) *
+              100
+            ).toFixed(2) + "%"}
           </>
         );
       },
@@ -161,7 +158,7 @@ function Estratum123Tab({ filters }) {
             classNameLabel="text-black biggest "
             placeholder={""}
             disabled
-            value={String(formaterNumberToCurrency( totalRecursoDisponible))}
+            value={String(formaterNumberToCurrency(totalRecursoDisponible))}
           />
           <InputComponent
             idInput={"tQuantity1"}
@@ -208,25 +205,24 @@ function Estratum123Tab({ filters }) {
           />
         </section>
       </div>
-      {
-        dataGridStratum.length > 0 ? (
-           <div className="button-save-container-display-users margin-right0">
-              <ButtonComponent
-                value={
-                  <>
-                    <div className="container-buttonText">
-                      <span>Descargar</span>
-                      <Svgs svg="excel" width={23.593} height={28.505} />
-                    </div>
-                  </>
-                }
-                className="button-download large "
-                action={downloadXLSX}
-              />
-            </div>
-        )
-          : ''
-      }
+      {dataGridStratum.length > 0 ? (
+        <div className="button-save-container-display-users margin-right0">
+          <ButtonComponent
+            value={
+              <>
+                <div className="container-buttonText">
+                  <span>Descargar</span>
+                  <Svgs svg="excel" width={23.593} height={28.505} />
+                </div>
+              </>
+            }
+            className="button-download large "
+            action={downloadXLSX}
+          />
+        </div>
+      ) : (
+        ""
+      )}
     </>
   );
 }

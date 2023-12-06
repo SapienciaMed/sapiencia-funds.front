@@ -9,7 +9,7 @@ import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import Svgs from "../../../../public/images/icons/svgs";
 
-const Stratum456Tab = (data) => {
+const Stratum456Tab = ({ data, reload }) => {
   const {
     setPaginateData,
     tableComponentRef,
@@ -24,7 +24,7 @@ const Stratum456Tab = (data) => {
     TotalView,
     downloadCollection,
     color,
-  } = stratum456Hook(data.data);
+  } = stratum456Hook(data, reload);
   console.log(totalPorParticipacion);
   const columnsStratum456: ITableElement<any>[] = [
     {
@@ -35,16 +35,16 @@ const Stratum456Tab = (data) => {
         const foundObj = comunaList?.find(
           (obj) => obj.value == row.resourcePrioritization.communeId
         );
-    
+
         // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
         if (foundObj) {
           return <>{foundObj.name}</>;
         }
-    
+
         // Puedes retornar algo por defecto si el objeto no se encuentra
         return <>No encontrado</>;
       },
-    },    
+    },
     {
       fieldName: "resourceAvailable",
       header: "Recurso Disponible",
