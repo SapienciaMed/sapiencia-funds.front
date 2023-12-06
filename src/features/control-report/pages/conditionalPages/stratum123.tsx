@@ -5,8 +5,9 @@ import {
 import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import Svgs from "../../../../public/images/icons/svgs";
-import { stratum123Hook } from "../../hooks/conditionalHooks/stratum123";
+
 import TableComponent from "../../../../common/components/table.component";
+import { stratum123Hook } from "../../hooks/conditionalHooks/stratum123";
 function Estratum123Tab({ data, reload }) {
   const {
     setPaginateData,
@@ -76,10 +77,8 @@ function Estratum123Tab({ data, reload }) {
       fieldName: "porcentParticipacion",
       header: "%Participacion",
       renderCell: (row) => {
-        const porcent = Math.round(
-          (Number(row.granted) / Number(row.resourceAvailable)) * 100
-        );
-
+        const porcent =
+          (Number(row.granted) / Number(row.resourceAvailable)) * 100;
         if (porcent == Infinity || porcent == undefined) {
           return <>0%</>;
         } else {
@@ -98,7 +97,7 @@ function Estratum123Tab({ data, reload }) {
               </>
             );
           } else {
-            return <>{porcent}%</>;
+            return <>{porcent.toFixed(2)}%</>;
           }
         }
       },

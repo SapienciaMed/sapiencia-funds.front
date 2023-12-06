@@ -95,12 +95,10 @@ const ConsolidateTab = ({ data, reload }) => {
       fieldName: "porcentParticipacion",
       header: "%Participacion",
       renderCell: (row) => {
-        const porcent = Math.round(
+        const porcent =
           (Number(row.consolidatedGranted) /
             Number(row.consolidatedResourceAvailable)) *
-            100
-        );
-
+          100;
         if (porcent == Infinity || porcent == undefined || isNaN(porcent)) {
           return <>0%</>;
         } else {
@@ -119,7 +117,7 @@ const ConsolidateTab = ({ data, reload }) => {
               </>
             );
           } else {
-            return <>{porcent}%</>;
+            return <>{porcent.toFixed(2)}%</>;
           }
         }
       },

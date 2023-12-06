@@ -78,10 +78,8 @@ const Stratum456Tab = ({ data, reload }) => {
       fieldName: "porcentParticipacion",
       header: "%Participacion",
       renderCell: (row) => {
-        const porcent = Math.round(
-          (Number(row.granted) / Number(row.resourceAvailable)) * 100
-        );
-
+        const porcent =
+          (Number(row.granted) / Number(row.resourceAvailable)) * 100;
         if (porcent == Infinity || porcent == undefined) {
           return <>0%</>;
         } else {
@@ -100,7 +98,7 @@ const Stratum456Tab = ({ data, reload }) => {
               </>
             );
           } else {
-            return <>{porcent}%</>;
+            return <>{porcent.toFixed(2)}%</>;
           }
         }
       },

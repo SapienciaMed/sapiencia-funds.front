@@ -37,10 +37,8 @@ export const columnsLegalization: ITableElement<ILegalizationTable>[] = [
     fieldName: "porcentParticipacion",
     header: "%Paricipacion",
     renderCell: (row) => {
-      const porcent = Math.round(
-        (Number(row.Granted) / Number(row.Availableresources)) * 100
-      );
-
+      const porcent =
+        (Number(row.Granted) / Number(row.Availableresources)) * 100;
       if (porcent == Infinity || porcent == undefined) {
         return <>0%</>;
       } else {
@@ -59,7 +57,7 @@ export const columnsLegalization: ITableElement<ILegalizationTable>[] = [
             </>
           );
         } else {
-          return <>{porcent}%</>;
+          return <>{porcent.toFixed(2)}%</>;
         }
       }
     },
