@@ -57,10 +57,7 @@ const Stratum456Tab = ({ data, reload }) => {
       fieldName: "granted",
       header: "Otorgado",
       renderCell: (row) => {
-        const numeroConPuntos = formaterNumberToCurrency(row.granted).replace(
-          "$",
-          ""
-        );
+        const numeroConPuntos = formaterNumberToCurrency(row.granted);
         return <>{numeroConPuntos}</>;
       },
     },
@@ -147,12 +144,7 @@ const Stratum456Tab = ({ data, reload }) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalRecursoDisponible).replace(
-                    "$",
-                    ""
-                  )
-                )}
+                value={String(formaterNumberToCurrency(totalRecursoDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}
