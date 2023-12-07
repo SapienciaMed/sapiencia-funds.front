@@ -2,7 +2,6 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import React, { useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import useKnowledgeTransfer from "./hook/knowledge-transfer.hook";
-import { ButtonComponent } from "../../../../common/components/Form";
 
 function KnowledgeTransfer() {
 

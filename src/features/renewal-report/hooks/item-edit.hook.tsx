@@ -45,6 +45,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
         reset,
         watch,
         formState: { errors },
+        
     } = useForm<ICallRenewal>({ resolver });
 
 
@@ -74,9 +75,10 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
         // Resto del código...
     }, []);
 
-    const updateDataGridRenewal = () => {
+    const onEdit = handleSubmit ((data) => {
         const selectedFound = watch('enabled');
-        if (selectedRenewal) {
+        console.log('llega hasta aca',data)
+       if (selectedRenewal) {
             
             const updatedDataGrid = dataGridRenewal.map(row => {
                 if (row.fund === selectedRenewal.fund) {
@@ -92,10 +94,20 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
             setdataGridRenewal(updatedDataGrid);
             setSelectedRenewal(null); 
             CancelFunction();
-        }
-    };
+        } 
+    });
 
 
+    console.log('renewal',renewal)
+
+  
+
+  useEffect(() =>{
+      setValue("fund",renewal.fund)
+      setValue("percentage",renewal.percentage)
+      setValue("renewed",renewal.renewed)
+
+  },[renewal])
    
 
     //Al momento de que el componente se desmonte reinicie todo
@@ -133,8 +145,9 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, dataTab
         showTable,
         tableComponentRef,
         datos,
-        updateDataGridRenewal,
+        onEdit,
         CancelFunction,
+        
         
     }
 }

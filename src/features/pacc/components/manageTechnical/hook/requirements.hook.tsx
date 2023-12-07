@@ -106,7 +106,7 @@ export default function useRequeriments() {
             header: 'Obligatorio para',
             renderCell:(row) => {
                 return(
-                    <> { row.mandatoryFor ? `${row.mandatoryFor}` : '-' } </>
+                    <> { row.mandatoryFor ? `${row.mandatoryFor}` : 'N/A' } </>
                 )
             }
         },

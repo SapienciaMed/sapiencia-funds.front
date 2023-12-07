@@ -148,7 +148,7 @@ export default function useKnowledgeTransfer() {
     const items = (row): MenuItem[] => [
         {
             label: "Ver documentos",
-            items: filesService.map((file) => {
+            items: filesService.length > 0 ? filesService.map((file) => {
                 return {
                   label: file.name,
                   icon: '', // Puedes asignar un icono si es necesario
@@ -165,7 +165,11 @@ export default function useKnowledgeTransfer() {
                     );
                   },
                 };
-              }),
+              }) : [{
+                label: "No hay adjunto",
+                icon: '',        
+              }],
+              
         },
     ]
 
