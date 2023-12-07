@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import { ITabsMenuTemplate } from "../../../common/interfaces/tabs-menu.interface";
 import { useParams } from "react-router-dom";
 import TabListComponent from "../../../common/components/tab-list.component";
-import TechnicianStepCashingPages from "./technician-step-cashing.pages";
 import { AppContext } from "../../../common/contexts/app.context";
+import { EStatePac } from "../../../common/constants/api.enum";
+import BeneficiaryTrayPage from "./beneficiary-tray.pages";
 
 function ConsolidatedTrayPage() {
     
@@ -14,7 +15,7 @@ function ConsolidatedTrayPage() {
         const tecnicoPasoCobro = {
             id: "tecnicoPasoCobro", 
             title: "Técnico paso al cobro", 
-            content: (<TechnicianStepCashingPages/>), 
+            content: (<BeneficiaryTrayPage typeState={EStatePac.TecnhicianStepCashing}/>), 
             action: () => {},
             hide: validateActionAccess('TECNICO_PASO_COBRO') || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
@@ -62,8 +63,8 @@ function ConsolidatedTrayPage() {
         }
        const result = [
             servicioSocial,
-            tecnicoPasoCobro,
             certificacionValores,
+            tecnicoPasoCobro,
             tecnicoProfesional,
             coordinador,
             juridica,

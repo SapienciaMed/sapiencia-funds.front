@@ -60,7 +60,7 @@ export default function useRequeriments() {
         GetRequirementsByBeneficiary({ idBeneficiary: id }).then(response => {
             if(response.operation.code === EResponseCodes.OK){
                 setShowTable(true)
-                loadTableData()
+                loadTableData({idBeneficiary: parseInt(id)})
             }else {
                 setShowTable(false)
             }
@@ -400,7 +400,6 @@ export default function useRequeriments() {
         tableColumns,
         tableComponentRef,
         visible,
-        id,
         showTable,
         setVisible,
         setFilesUploadData,

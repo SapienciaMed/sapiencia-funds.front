@@ -1,12 +1,15 @@
 import React from "react";
 import { EDirection } from "../../../common/constants/input.enum";
 import TableComponent from "../../../common/components/table.component";
-import useTechnicianStepCashing from "../hook/techician-step.hook";
+import useBeneficiaryTray from "../hook/beneficiary-tray.hook";
 import { FormComponent,  SelectComponent } from "../../../common/components/Form";
 import { ProgressSpinner } from 'primereact/progressspinner';
-function TechnicianStepCashing() {
+import { EStatePac } from "../../../common/constants/api.enum";
 
-    const { tableComponentRef, tableColumns, tableActions, idCutData, control, listSearch, showSpinner, handleFilterChange, handleChangeCut } = useTechnicianStepCashing()
+function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) {
+
+    const { tableComponentRef, tableColumns, tableActions, idCutData, control, listSearch, showSpinner, valueFilterTable,
+        handleFilterChange, handleChangeCut } = useBeneficiaryTray({typeState})
 
     return(
         <div className="card-table gap-0 mt-14px">
@@ -44,6 +47,7 @@ function TechnicianStepCashing() {
                     classSizeTable='size-table-wd-150'
                     isInputSearch={true}
                     onGlobalFilterChange={handleFilterChange}
+                    valueFilterTable={valueFilterTable}
                     isMobil={false}
                 />
             </section>
@@ -52,4 +56,4 @@ function TechnicianStepCashing() {
     )
 }
 
-export default React.memo(TechnicianStepCashing)
+export default React.memo(BeneficiaryTrayPage)
