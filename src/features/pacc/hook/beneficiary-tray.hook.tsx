@@ -1,15 +1,15 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { ITableAction, ITableElement } from "../../../common/interfaces";
 import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, IStepCashing } from "../interface/pacc";
 import { usePaccServices } from "./pacc-serviceshook";
-import { EResponseCodes } from "../../../common/constants/api.enum";
+import { EResponseCodes, EStatePac } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { useForm } from 'react-hook-form';
 import { AppContext } from "../../../common/contexts/app.context";
 import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 import { useNavigate } from "react-router-dom";
 
-export default function useTechnicianStepCashing() {
+export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac }) {
     
     const navigate = useNavigate();
     const tableComponentRef = useRef(null);
@@ -30,9 +30,9 @@ export default function useTechnicianStepCashing() {
         getValues,
     } = useForm<IStepCashing>();
     
-    useEffect(() => {
+    useEffect(() => { 
         setShowSpinner(true)
-        loadTableData()
+        loadTableData({statusPaccSearch: typeState})
         GetCutsForConsolidationTray().then(response => {
             setShowSpinner(false)
             if(response.operation.code === EResponseCodes.OK){
@@ -51,7 +51,6 @@ export default function useTechnicianStepCashing() {
                 setIdCutData(newData)
             }
         })
-
         return () => {
             setListSearch({
                 data: {},
@@ -65,6 +64,7 @@ export default function useTechnicianStepCashing() {
             loadTableData(listSearch.data)
         }
     },[listSearch])
+
 
     const tableColumns: ITableElement<IConsolidationTrayForTechnicianCollectionParams>[] = [
         {
@@ -181,7 +181,7 @@ export default function useTechnicianStepCashing() {
         {
             icon: "Manage",
             onClick: (row) => {
-                navigate(`./gestion/${row.idBenef}`)
+                typeState == 4 && navigate(`./gestion/${row.idBenef}`)
             },
         },
        
@@ -204,7 +204,8 @@ export default function useTechnicianStepCashing() {
                     searchParam: value.target.value,
                     [(getValues('idCut') == 'TODOS' ? 'cutParamName' : 'cutParamId' )]: getValues('idCut') ,
                     page: 1,
-                    perPage: 10
+                    perPage: 10,
+                    statusPaccSearch: typeState
                 }
                 setListSearch({
                     data: searchCriteriaData,
@@ -215,20 +216,22 @@ export default function useTechnicianStepCashing() {
                     data: {},
                     status: false
                 })
-                loadTableData()
+                loadTableData({statusPaccSearch: typeState})
             }
             setShowSpinner(false)
         }, 700);
 
         setTimer(newTimer);
     }
+    
     const handleChangeCut = (value: any) => {
         if (value != null) {
             const data: IConsolidationTrayForTechnicianCollection = {
                 [(value === 'TODOS') ? 'cutParamName' : 'cutParamId']: value,
                 searchParam: valueFilterTable || '',
                 page: 1,
-                perPage: 10
+                perPage: 10,
+                statusPaccSearch: typeState
             }
     
             setListSearch({
@@ -246,6 +249,7 @@ export default function useTechnicianStepCashing() {
         control,
         listSearch,
         showSpinner,
+        valueFilterTable,
         handleFilterChange,
         handleChangeCut
     }

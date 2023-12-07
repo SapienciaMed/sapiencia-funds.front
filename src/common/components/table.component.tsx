@@ -49,15 +49,12 @@ interface IProps<T> {
   descriptionModalNoResult?: string;
   classname?: string;
   isDisabled?: boolean;
-  widthTable?: string;
-  horizontalScroll?: boolean;
   onResult?: (rows: T[]) => void;
   isMobil?: boolean;
   classSizeTable?: string;
   isInputSearch?: boolean;
-  onGlobalFilterChange?: (value: any) => void;
-  bodyRequestParameters?: string | number;
-  keyBodyRequest?: string;
+  onGlobalFilterChange?: (value: any) => void; // Es necesario llamar una funcion para que haga la peticion para el filtrado interno.
+  valueFilterTable?: string // Es necesario llamar el value para el filtro.
   count?: boolean,
   viePaginator?: boolean
   isNotBorderClasse?: boolean,
@@ -85,9 +82,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     isMobil = true,
     classSizeTable,
     isInputSearch = false,
-    onGlobalFilterChange, // Es necesario llamar una funcion para que haga la peticion para el filtrado interno.
-    bodyRequestParameters,
-    keyBodyRequest,
+    onGlobalFilterChange,
+    valueFilterTable,
     count,
     viePaginator = true,
     isNotBorderClasse,
@@ -128,7 +124,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       ...body,
       page: currentPage || 1,
       perPage: perPage,
-      [keyBodyRequest]: bodyRequestParameters,
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
@@ -256,7 +251,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             leftContent={leftContent(
               princialTitle,
               isInputSearch,
-              onGlobalFilterChange
+              onGlobalFilterChange,
+              valueFilterTable
             )}
           />
         }
@@ -466,13 +462,14 @@ function getIconElement(
 const leftContent = (
   title: string,
   isInputSearch: boolean,
-  onGlobalFilterChange?: (value: React.ChangeEvent<HTMLInputElement>) => void
+  onGlobalFilterChange?: (value: React.ChangeEvent<HTMLInputElement>) => void,
+  valueFilterTable?: string
 ) => {
-  //TODO: Para utilizar el filtro es necesario las prop isInputSearch y onGlobalFilterChange
+  //TODO: Para utilizar el filtro es necesario las prop isInputSearch, onGlobalFilterChange y valueFilterTable
 
   return (
     <>
-      {isInputSearch && onGlobalFilterChange ? (
+      {(isInputSearch && onGlobalFilterChange && valueFilterTable != null) ? (
         <div className="col-1 col-100 seeker">
           <span className="p-input-icon-left">
             <i className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center">
@@ -497,6 +494,7 @@ const leftContent = (
               className="h-10"
               placeholder="Buscar"
               onChange={(value) => onGlobalFilterChange(value)}
+              value={valueFilterTable}
             />
           </span>
         </div>

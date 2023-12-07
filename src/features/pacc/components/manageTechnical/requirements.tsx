@@ -8,7 +8,7 @@ import UploadNewComponent from "../../../../common/components/Form/UploadNewComp
 function Requirements() {
 
     const {
-        tableColumns, tableComponentRef, visible, id, showTable, setVisible, setFilesUploadData, onCancel, saveFile
+        tableColumns, tableComponentRef, visible, showTable, setVisible, setFilesUploadData, onCancel, saveFile
     } = useRequeriments()
 
     return (
@@ -58,8 +58,6 @@ function Requirements() {
                                 titleMessageModalNoResult="Buscar"
                                 isShowModal={true}
                                 princialTitle="Requisitos"
-                                keyBodyRequest="idBeneficiary"
-                                bodyRequestParameters={parseInt(id)}
                                 isMobil={false}
                                 count={true}
                                 isNotBorderClasse={true}
