@@ -1,15 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ITableAction, ITableElement } from "../../../../../common/interfaces";
-import { useParams } from "react-router-dom";
 import { PqrsdfResultSimple } from "../interface/manage-technical";
 import { Tooltip } from "primereact/tooltip";
 
-export default function useSupportsPQRSDF() {
+export default function useSupportsPQRSDF({ document }) {
     
     const tableComponentRef = useRef(null);
 
     useEffect(() => {
-        loadTableData()
+        loadTableData({ identification: document })
     },[])
 
 
