@@ -129,6 +129,7 @@ export default function useRenewaReportSearch() {
 
   // En useRenewaReportSearch
   const updateDataGridRenewal = (updatedRenewal: ICallRenewal) => {
+    console.log(updatedRenewal)
     const updatedDataGrid = dataGridRenewal.map((row) => {
       if (row.fund === updatedRenewal.fund) {
         return {
@@ -351,6 +352,8 @@ export default function useRenewaReportSearch() {
       });
     });
   }
+
+  
 
   return {
     control,

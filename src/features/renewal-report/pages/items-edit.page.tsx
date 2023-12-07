@@ -2,6 +2,7 @@ import React from "react";
 import {
   ButtonComponent,
   FormComponent,
+  InputComponent,
 } from "../../../common/components/Form";
 import useActaItems from "../../renewal-report/hooks/item-edit.hook";
 import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
@@ -16,11 +17,13 @@ const ItemsEditePage = ({
   renewal?: ICallRenewal;
   onEdit;
 }) => {
-  const { errors, control, updateDataGridRenewal, CancelFunction } =
+  const { errors, control, onEdit, CancelFunction,register } =
     useActaItems(renewalitem, renewal);
 
+    console.log('llego',renewalitem)
+
   return (
-    <FormComponent id="createItemsForm" className="form">
+    <FormComponent id="createItemsForm" className="form" action={onEdit}>
       <div className="container-form-grid-actas">
         <div className="container-form padding-form">
           <div>
@@ -30,20 +33,23 @@ const ItemsEditePage = ({
                 name={"fund"}
                 render={({ field }) => {
                   return (
-                    <InputNumberComponent
-                      control={control}
-                      idInput={`fund`}
+                    <InputComponent
+                      id={field.name}                      
+                      idInput={field.name}
                       label="Fondo"
                       className="inputNumber-basic medium"
-                      placeholder={renewal ? renewal.fund : ""}
+                      typeInput="text"
+                      //placeholder={renewal ? renewal.fund : ""}
                       classNameLabel="text-black biggest text-required"
                       errors={errors}
+                      register={register}
                       disabled={true}
                       {...field}
                     />
                   );
                 }}
               />
+             
               <Controller
                 control={control}
                 name={"enabled"}
@@ -74,10 +80,7 @@ const ItemsEditePage = ({
                       className="inputNumber-basic medium"
                       placeholder={renewal ? renewal.renewed : ""}
                       classNameLabel="text-black biggest text-required"
-                      errors={errors}
-                      mode="currency"
-                      currency="COP"
-                      locale="es-CO"
+                      errors={errors}                    
                       fieldArray={true}
                       minFractionDigits={0}
                       maxFractionDigits={0}
@@ -86,20 +89,23 @@ const ItemsEditePage = ({
                     />
                   );
                 }}
-              />
+              />      
+
               <Controller
                 control={control}
                 name={"percentage"}
                 render={({ field }) => {
                   return (
-                    <InputNumberComponent
-                      control={control}
-                      idInput={`percentage`}
+                    <InputComponent
+                      id={field.name}
+                      idInput={field.name}
                       label="Porcentaje"
                       className="inputNumber-basic medium"
-                      placeholder={renewal ? renewal.percentage : ""}
+                      typeInput="text"
+                      //placeholder={renewal ? renewal.fund : ""}
                       classNameLabel="text-black biggest text-required"
                       errors={errors}
+                      register={register}
                       disabled={true}
                       {...field}
                     />
@@ -126,9 +132,7 @@ const ItemsEditePage = ({
           value={`Guardar`}
           className="button-save large hover-three disabled-black"
           action={() => {
-
-            // onEdit(enviar datos)
-            updateDataGridRenewal();
+            onEdit(renewalitem)            
           }}
         />
       </div>

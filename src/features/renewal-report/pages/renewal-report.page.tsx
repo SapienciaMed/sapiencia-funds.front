@@ -75,11 +75,11 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
           description: (
             <ItemsEditePage
               renewal={dataEditTable}
-              renewalitem={row}
-              onEdit={(data) => {
+              renewalitem={row}              
+              onEdit={(row) => {
 
                 // hacer set state
-                console.log(data);
+                console.log('data',row);
               }}
             />
           ),
