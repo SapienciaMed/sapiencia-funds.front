@@ -7,16 +7,18 @@ import { manageTransfer } from "../../../../../common/schemas/acta-shema";
 import { useForm } from "react-hook-form";
 import { EResponseCodes } from "../../../../../common/constants/api.enum";
 import { uploadFileManageTranfer } from "../helper/uploadFileManageTransfer";
+import { useParams } from "react-router-dom";
 
-export default function useManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow }: IPropManageTransfer) {
-    
+export default function useManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow, typeState }: IPropManageTransfer) {
+ 
+    console.log("🚀 ~ file: manage-transfer.hook.tsx:15 ~ useManageTransfer ~ typeState:", typeState)
     const [seeObservation, setSeeObservation ] = useState(false)
     const [visible, setVisible] = useState<boolean>(false);
     const [filesUploadData, setFilesUploadData] = useState<File>(null);
     const { setMessage, authorization } = useContext(AppContext);
     const [messageError, setMessageError] = useState({})
     const [ requirements, setRequirements ] = useState<IRequerimentsResultSimple[]>([])
-    const { ChangeApproveOrRejectKnowledgeTransfer, GetRequirementsKnowledgeTransfer } = usePaccServices()
+    const { ChangeApproveOrRejectKnowledgeTransfer, GetRequirementsKnowledgeTransfer } = usePaccServices(parseInt(typeState))
     const resolver = useYupValidationResolver(manageTransfer);
     const {
         handleSubmit,
@@ -146,6 +148,7 @@ export default function useManageTransfer({ idSelect, loadTableData, idBeneficia
         messageError,
         seeObservation,
         control,
+        typeState,
         setMessage,
         unregister
     }

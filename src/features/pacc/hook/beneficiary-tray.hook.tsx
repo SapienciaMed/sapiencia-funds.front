@@ -9,13 +9,13 @@ import { AppContext } from "../../../common/contexts/app.context";
 import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 import { useNavigate } from "react-router-dom";
 
-export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac }) {
+export default function useBeneficiaryTray(typeState: number) {
     
     const navigate = useNavigate();
     const tableComponentRef = useRef(null);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
     const { setMessage } = useContext(AppContext);
-    const { GetCutsForConsolidationTray } = usePaccServices()
+    const { GetCutsForConsolidationTray } = usePaccServices(typeState)
     const [idCutData, setIdCutData] = useState<IDropdownProps[]>([]);
     const [ listSearch, setListSearch ] = useState({
         data: {},
@@ -186,7 +186,7 @@ export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac
                setMessage({
                     show: true,
                     title: "Mover beneficiario a otro corte",
-                    description: <ChangeCuttingBeneficiary idBenef={row.idBenef} idCutData={newArray} />,
+                    description: <ChangeCuttingBeneficiary idBenef={row.idBenef} idCutData={newArray} typeState={typeState}/>,
                     background: true,
                     onOk() {
                         setMessage({});
@@ -198,7 +198,7 @@ export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac
         {
             icon: "Manage",
             onClick: (row) => {
-                typeState == 4 && navigate(`./gestion/${row.idBenef}`) // condicion para Tab "Técnico paso al cobro"
+                typeState == 4 && navigate(`./gestion/${row.idBenef}/${typeState}`) // condicion para Tab "Técnico paso al cobro"
             },
         },
        

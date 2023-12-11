@@ -9,17 +9,19 @@ import { IStepCashing } from "../interface/pacc";
 import { usePaccServices } from "../hook/pacc-serviceshook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
+import { useParams } from "react-router-dom";
 
 interface IProp{
     idBenef: number,
     idCutData: IDropdownProps[],
+    typeState: number
 }
 
-function ChangeCuttingBeneficiary({idBenef, idCutData }:Readonly<IProp>) {
+function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp>) {
 
     const { setMessage } = useContext(AppContext);
     const resolver = useYupValidationResolver(changeCuttingBeneficiary);
-    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices()
+    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices(typeState)
     const [actualCut, setActualCut] = useState('')
     const [ cut, setCut ] = useState<IDropdownProps[]>([])
 

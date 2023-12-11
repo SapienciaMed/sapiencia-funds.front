@@ -50,5 +50,6 @@ export interface IPropManageTransfer {
   idSelect: number,
   loadTableData: () => void
   idBeneficiary: number,
-  getUploadKnow: () => void
+  getUploadKnow: () => void,
+  typeState: string
 }

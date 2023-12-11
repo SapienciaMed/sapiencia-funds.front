@@ -24,7 +24,7 @@ function PacRouter() {
                 }
             />
             <Route
-                path={"/bandeja-consolidacion/gestion/:id"}
+                path={"/bandeja-consolidacion/gestion/:id/:typeState"}
                 element={
                     <PrivateRoute
                         element={<ManagerPage />}

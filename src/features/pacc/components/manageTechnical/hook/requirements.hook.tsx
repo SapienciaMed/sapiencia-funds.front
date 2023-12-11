@@ -19,12 +19,12 @@ import { uploadFiles } from "../helper/uploadFile";
 
 export default function useRequeriments() {
       
-    const { id } =  useParams()
+    const { id, typeState } =  useParams()
     const navigate = useNavigate();
     const tableComponentRef = useRef(null);
     const toast = useRef(null);
     const [visible, setVisible] = useState<boolean>(false);
-    const { GetRequirementsByBeneficiary, GetRequirementFile, ComplianceAssignmentBeneficiary, DeleteUploadFiles } = usePaccServices()
+    const { GetRequirementsByBeneficiary, GetRequirementFile, ComplianceAssignmentBeneficiary, DeleteUploadFiles } = usePaccServices(parseInt(typeState))
     const [filesUploadData, setFilesUploadData] = useState<File>(null);
     const { setMessage, setDisabledFields, authorization } = useContext(AppContext);
     const [ idBeneficiary, setIdBeneficiary] = useState('')
@@ -206,7 +206,7 @@ export default function useRequeriments() {
                                                     },
                                                 });
                                            }else {
-                                            downloadFile(response.data[0], authorization, setMessage )
+                                            downloadFile(response.data[0], authorization, setMessage, '/uploadInformation/files/get-file' )
                                            }
                                             setShowSpinner(false)
                                             toast.current.hide();
@@ -401,6 +401,7 @@ export default function useRequeriments() {
         tableComponentRef,
         visible,
         showTable,
+        typeState,
         setVisible,
         setFilesUploadData,
         onCancel,
