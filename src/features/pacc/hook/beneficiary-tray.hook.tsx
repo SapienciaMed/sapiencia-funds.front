@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import {  useContext, useEffect, useRef, useState } from "react";
 import { ITableAction, ITableElement } from "../../../common/interfaces";
 import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, IStepCashing } from "../interface/pacc";
 import { usePaccServices } from "./pacc-serviceshook";
@@ -9,19 +9,19 @@ import { AppContext } from "../../../common/contexts/app.context";
 import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 import { useNavigate } from "react-router-dom";
 
-export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac }) {
+export default function useBeneficiaryTray(typeState: number) {
     
     const navigate = useNavigate();
     const tableComponentRef = useRef(null);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
     const { setMessage } = useContext(AppContext);
-    const { GetCutsForConsolidationTray } = usePaccServices()
+    const { GetCutsForConsolidationTray } = usePaccServices(typeState)
     const [idCutData, setIdCutData] = useState<IDropdownProps[]>([]);
     const [ listSearch, setListSearch ] = useState({
         data: {},
         status: false
     })
-    const [valueFilterTable, setValueFilterTable ] = useState('')
+    const [ valueFilterTable, setValueFilterTable ] = useState('')
     const [ showSpinner, setShowSpinner ] = useState(false)
 
     const {
@@ -29,10 +29,9 @@ export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac
         setValue,
         getValues,
     } = useForm<IStepCashing>();
-    
+
     useEffect(() => { 
         setShowSpinner(true)
-        loadTableData({statusPaccSearch: typeState})
         GetCutsForConsolidationTray().then(response => {
             setShowSpinner(false)
             if(response.operation.code === EResponseCodes.OK){
@@ -51,13 +50,31 @@ export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac
                 setIdCutData(newData)
             }
         })
+
+        if (typeState) {
+ 
+            setValueFilterTable('')
+            setListSearch({
+                data: {},
+                status: false
+            })
+
+            setTimeout( () => {
+                setShowSpinner(false)
+                loadTableData({statusPaccSearch: typeState})
+            },600)
+
+        }
+
         return () => {
             setListSearch({
                 data: {},
                 status: false
             })
         }
-    }, [])
+
+    }, [typeState])
+
 
     useEffect(() => {
         if (listSearch.status) {
@@ -169,7 +186,7 @@ export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac
                setMessage({
                     show: true,
                     title: "Mover beneficiario a otro corte",
-                    description: <ChangeCuttingBeneficiary idBenef={row.idBenef}  idCutData={newArray} />,
+                    description: <ChangeCuttingBeneficiary idBenef={row.idBenef} idCutData={newArray} typeState={typeState}/>,
                     background: true,
                     onOk() {
                         setMessage({});
@@ -181,7 +198,7 @@ export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac
         {
             icon: "Manage",
             onClick: (row) => {
-                typeState == 4 && navigate(`./gestion/${row.idBenef}`)
+                typeState == 4 && navigate(`./gestion/${row.idBenef}/${typeState}`) // condicion para Tab "Técnico paso al cobro"
             },
         },
        
@@ -223,7 +240,7 @@ export default function useBeneficiaryTray({ typeState }: { typeState: EStatePac
 
         setTimer(newTimer);
     }
-    
+
     const handleChangeCut = (value: any) => {
         if (value != null) {
             const data: IConsolidationTrayForTechnicianCollection = {

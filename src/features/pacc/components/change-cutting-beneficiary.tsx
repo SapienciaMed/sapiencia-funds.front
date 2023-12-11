@@ -1,4 +1,4 @@
-import React, { SetStateAction, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import { useForm } from 'react-hook-form';
 import { EDirection } from "../../../common/constants/input.enum";
@@ -9,19 +9,19 @@ import { IStepCashing } from "../interface/pacc";
 import { usePaccServices } from "../hook/pacc-serviceshook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
+import { useParams } from "react-router-dom";
 
 interface IProp{
     idBenef: number,
     idCutData: IDropdownProps[],
-    setListSearch?:(value: SetStateAction<{ data: {}; status: boolean }>) => void,
-    loadTableData?: (searchCriteria?: object) => void
+    typeState: number
 }
 
-function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
+function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp>) {
 
     const { setMessage } = useContext(AppContext);
     const resolver = useYupValidationResolver(changeCuttingBeneficiary);
-    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices()
+    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices(typeState)
     const [actualCut, setActualCut] = useState('')
     const [ cut, setCut ] = useState<IDropdownProps[]>([])
 
@@ -66,7 +66,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
                 UpdateCutBeneficiary(data).then(response => {
                     if(response.operation.code === EResponseCodes.OK){
                         setMessage({});
-                        window.location.reload();
+                        window.location.reload();     
                     }
                 
                 })

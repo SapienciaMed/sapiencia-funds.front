@@ -4,11 +4,13 @@ import { Dialog } from 'primereact/dialog';
 import { ButtonComponent } from "../../../../common/components/Form";
 import TableComponent from "../../../../common/components/table.component";
 import UploadNewComponent from "../../../../common/components/Form/UploadNewComponent";
+import { useParams } from "react-router-dom";
+import { typePrefixeTabs } from "../../helpers/TypePrefixeTab";
 
 function Requirements() {
 
     const {
-        tableColumns, tableComponentRef, visible, showTable, setVisible, setFilesUploadData, onCancel, saveFile
+        tableColumns, tableComponentRef, visible, showTable, typeState, setVisible, setFilesUploadData, onCancel, saveFile
     } = useRequeriments()
 
     return (
@@ -53,7 +55,7 @@ function Requirements() {
                         showTable &&
                             <TableComponent
                                 ref={tableComponentRef}
-                                url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/get-requirements-by-beneficiary-list`}
+                                url={`${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(parseInt(typeState))}/get-requirements-by-beneficiary-list`}
                                 columns={tableColumns}
                                 titleMessageModalNoResult="Buscar"
                                 isShowModal={true}

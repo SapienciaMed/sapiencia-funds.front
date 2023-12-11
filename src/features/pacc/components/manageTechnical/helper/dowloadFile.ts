@@ -3,10 +3,10 @@ import { IAuthorization } from "../../../../../common/interfaces";
 import { IFiles } from "../../../../../common/interfaces/storage.interfaces";
 import { IMessage } from "../../../../../common/interfaces/global.interface";
 
-export const downloadFile = ( data: IFiles, authorization: IAuthorization, setMessage: (value: SetStateAction<IMessage>) => void ) => {
+export const downloadFile = ( data: IFiles, authorization: IAuthorization, setMessage: (value: SetStateAction<IMessage>) => void, url: string ) => {
   const authToken = localStorage.getItem("token");
   let res 
-  fetch(`${process.env.urlApiFunds}/api/v1/uploadInformation/files/get-file`, {
+  fetch(`${process.env.urlApiFunds}/api/v1${url}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

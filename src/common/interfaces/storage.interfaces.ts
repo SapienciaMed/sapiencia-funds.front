@@ -1,6 +1,6 @@
 export interface IFiles {
     name: string;
     path: string;
-    size: number;
-    date: Date;
+    size?: number;
+    date?: Date;
 }
