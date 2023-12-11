@@ -5,6 +5,9 @@ import useBeneficiaryTray from "../hook/beneficiary-tray.hook";
 import { FormComponent,  SelectComponent } from "../../../common/components/Form";
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { EStatePac } from "../../../common/constants/api.enum";
+import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
+
+/* ---- Este componente se reutilizara en varias Tabs --- */
 
 function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) {
 
@@ -13,10 +16,6 @@ function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) 
 
     return(
         <div className="card-table gap-0 mt-14px">
-            {
-                showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
-            }
-            
             <section className='grid-form-3-container'>  
                 <FormComponent action={() => {}}>
                     <SelectComponent
@@ -36,9 +35,12 @@ function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) 
                 </FormComponent>                 
             </section>
             <section className=" card-table mt-20px">
+                {
+                    showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
+                }
                 <TableComponent
                     ref={tableComponentRef}
-                    url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/${ listSearch.status ? 'get-consolidation-tray-technician-collection-by-cut' :'get-consolidation-tray-technician-collection'}`}
+                    url={`${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(typeState)}/${ listSearch.status ? 'get-consolidation-tray-by-cut' :'get-consolidation-tray'}`}
                     columns={tableColumns}
                     actions={tableActions}
                     titleMessageModalNoResult="Buscar"
