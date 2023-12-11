@@ -17,11 +17,11 @@ import { downloadFile } from "../helper/dowloadFile";
 
 export default function useKnowledgeTransfer() {
 
-    const { id } =  useParams()
+    const { id, typeState } =  useParams()
     const tableComponentRef = useRef(null);
     const toast = useRef(null);
     const { setMessage, authorization } = useContext(AppContext);
-    const { GetUploadKnowledgeTransferFiles } = usePaccServices()
+    const { GetUploadKnowledgeTransferFiles } = usePaccServices(parseInt(typeState))
     const [ filesService, setFilesService ] = useState([])
 
     useEffect(() => {
@@ -111,7 +111,7 @@ export default function useKnowledgeTransfer() {
                                         setMessage({
                                             show: true,
                                             title: "Gestionar",
-                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary} getUploadKnow={getUploadKnow}/>,
+                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary} getUploadKnow={getUploadKnow} typeState={typeState}/>,
                                             background: true,
                                         });
                                     }} 
@@ -157,7 +157,7 @@ export default function useKnowledgeTransfer() {
                       <button 
                         className="p-menuitem-link button-menu-tooltip"
                         onClick={()=>{
-                            downloadFile(file, authorization, setMessage )
+                            downloadFile(file, authorization, setMessage, '/uploadInformation/files/get-file')
                         }}
                       >
                         <span className="p-menuitem-text ml-5px">{file.name}</span>
@@ -176,5 +176,6 @@ export default function useKnowledgeTransfer() {
     return {
         tableComponentRef,
         tableColumns,
+        typeState
     }
 }

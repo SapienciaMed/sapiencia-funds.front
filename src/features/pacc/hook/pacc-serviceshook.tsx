@@ -1,11 +1,13 @@
 import useCrudService from "../../../common/hooks/crud-service.hook";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { IRequerimentsResultSimple } from "../components/manageTechnical/interface/manage-technical";
+import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, ICutInterface } from "../interface/pacc";
 
-export const usePaccServices = () => {
+export const usePaccServices = (typeState: number) => {
+    console.log("🚀 ~ file: pacc-serviceshook.tsx:9 ~ usePaccServices ~ typeState:", typeState)
     const baseURL: string = process.env.urlApiFunds || "";
-    const roleUrl: string = "/api/v1/consolidation-tray"; 
+    const roleUrl: string = `/api/v1/${typePrefixeTabs(typeState)}`; 
     const { get, post } = useCrudService( baseURL);
 
     async function GetCutsForConsolidationTray(): Promise<ApiResponse<ICutInterface[]>> {
@@ -14,7 +16,7 @@ export const usePaccServices = () => {
     }
 
     async function GeConsolidationTrayTechnicianCollectionByCut(data: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<any>> {
-        const endpoint: string = "/get-consolidation-tray-technician-collection-by-cut"; 
+        const endpoint: string = "/get-consolidation-tray-by-cut"; 
         return post(`${roleUrl}${endpoint}`, data);
     }
 

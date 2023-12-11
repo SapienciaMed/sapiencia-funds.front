@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import useSupportsPQRSDF from "./hook/supports-PQRSDF.hook";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { useParams } from "react-router-dom";
+import { typePrefixeTabs } from "../../helpers/TypePrefixeTab";
 
 function SupportsPQRSDF({ document }) {
 
     const {tableColumns, tableComponentRef, tableActions } = useSupportsPQRSDF({document})
     const [ showSpinner, setShowSpinner ] = useState(true)
+    const { typeState } =  useParams()
 
     return(
         <section className=" card-table mt-20px">
@@ -15,7 +18,7 @@ function SupportsPQRSDF({ document }) {
             }
             <TableComponent
                 ref={tableComponentRef}
-                url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/get-pqrsdf-external`}
+                url={`${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(parseInt(typeState))}/get-pqrsdf-external`}
                 columns={tableColumns}
                 actions={tableActions}
                 titleMessageModalNoResult="Buscar"

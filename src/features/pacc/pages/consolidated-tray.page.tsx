@@ -36,9 +36,9 @@ function ConsolidatedTrayPage() {
         const tecnicoProfesional = {
             id: "tecnicoProfesional", 
             title: "Técnico profesional", 
-            content: (<></>), 
+            content: (<BeneficiaryTrayPage typeState={EStatePac.ProfessionalTechnician}/>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
+            hide: validateActionAccess('TECNICO_PROFESIONAL') || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
         }
         const coordinador = {
             id: "coordinador", 

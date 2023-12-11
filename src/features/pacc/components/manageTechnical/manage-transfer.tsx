@@ -13,13 +13,13 @@ import { Accordion, AccordionTab } from 'primereact/accordion';
 import useManageTransfer from "./hook/manage-transfer.hook";
 
 
-function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow }: IPropManageTransfer ){
+function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow, typeState }: IPropManageTransfer ){
 
     const {width} = useWidth()
 
     const {visible, requirements, control, errors,  seeObservation, messageError, filesUploadData, 
         register, onSubmit, setVisible, setFilesUploadData, setMessage, unregister
-    } = useManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow })
+    } = useManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow, typeState})
 
     return(
         <>
