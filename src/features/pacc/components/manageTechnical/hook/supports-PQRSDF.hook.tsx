@@ -92,7 +92,7 @@ export default function useSupportsPQRSDF({ document }) {
                     name: 'test5.pdf',
                     path: ' sapiencia-citizen-attention/proyectos-digitales/test5.pdf',
                 }
-                downloadFile(file, authorization, setMessage, '/consolidation-tray/get-pqrsdf-external')
+                // downloadFile(file, authorization, setMessage, '/consolidation-tray/get-pqrsdf-external')
             },
         },
        
