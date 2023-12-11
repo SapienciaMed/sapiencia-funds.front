@@ -17,7 +17,8 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
         control, errors, watch, register, setValue, navigate, tableComponentRef, showTable,
         setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
         totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal,
-        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate
+        percentageBachLeg,setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate,selectedperiodo,
+        loadTableData
     } = useRenewaReportSearch();
 
 
@@ -54,7 +55,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                 setMessage({
                     show: true,
                     title: "Editar ítem",
-                    description: <ItemsEditePage renewal={dataEditTable} renewalitem={row} />,
+                    description: <ItemsEditePage renewal={dataEditTable} renewalitem={row}  selectedperiodo={selectedperiodo} loadTableData={loadTableData} />,
                     background: true,
                     size: "items",
                     items: true,
@@ -125,13 +126,13 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                 </div>
 
                 <div
-                    style={
+                   /*  style={
                         dataGridRenewal.length > 0 ? { display: "block" } : { display: "none" }
-                    }
+                    } */
                 >
                     <div className="container-sections-forms">
 
-                        <BasicTableComponent
+                     {/*    <BasicTableComponent
                             ref={tableComponentRef}
                             data={dataGridRenewal}
                             columns={tableColumnsRenewal}
@@ -139,8 +140,23 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             titleMessageModalNoResult="Registro no existente"
                             isShowModal={true}
                             secondaryTitle={"Resultados de búsqueda"}
-                        />
-                    </div>
+                        /> 
+ */}
+              <TableComponent
+                ref={tableComponentRef}
+                url={`${process.env.urlApiFunds}/api/v1/renovacion/getrenewal-paginated/`}
+                columns={tableColumnsRenewal}
+                actions={tableActionsRenewal}
+                titleMessageModalNoResult="Buscar"
+                princialTitle="Informe legalización"
+                isShowModal={true}
+                descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
+
+              />
+
+
+
+            </div>
 
 
                     <div className="container-sections-forms">

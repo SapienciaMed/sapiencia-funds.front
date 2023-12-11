@@ -153,49 +153,44 @@ export default function useRenewaReportSearch() {
         setdataGridRenewal(updatedDataGrid);
     };
     // searchRenewal
+    const selectedperiodo = watch('period');
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
-        const selectedperiodo = watch('period');
         data.period = selectedperiodo;
         data.page = 1;
         data.perPage = 10;
 
-        const responservice: any = await getRenewalReport(data)
-            .then(async (response) => {
-                return response
+       
+          loadTableData({
+            period: selectedperiodo,        
+          })
+
+      });
+
+
+     /*  async function fetchRenewalReport() {
+        try {
+            const response = await getRenewalReport({
+             period : selectedperiodo,
+             page : 1,
+            perPage : 10,
+      
+            
             });
-        // Quitar la última fila del array
-        const dataArrayWithoutLastRow = responservice.data.array.slice(0, -1);
-
-        setdataGridRenewal([])
-        dataArrayWithoutLastRow.map((e) => {
-            const list = {
-                fund: e.fund,
-                enabled: e.enabled,
-                renewed: e.renewed,
-                percentage: calculatePercentage(e.renewed, e.enabled),
-            };
-            dataGridRenewal.push(list);
-            setdataGridRenewal(dataGridRenewal)
-        });
-
-        // La última fila Beca mejores bachilleres legalizados 
-        const lastRow = responservice.data.array.slice(-1)[0];
-
-        setenabledBachLeg(lastRow.enabled)
-        setrenewedBachLeg(lastRow.renewed)
-
-        // Calcular Porcentaje para enabledBachLeg
-        const parsedEnabledBachLeg = parseFloat(lastRow.enabled);
-        const parsedRenewedBachLeg = parseFloat(lastRow.renewed);
-        const percentageBachLeg = parsedEnabledBachLeg !== 0
-            ? ((parsedRenewedBachLeg / parsedEnabledBachLeg)).toFixed(3) + "%"
-            : "0.00%";
-
-        setPercentageBachLeg(percentageBachLeg);
-
-    });
+            return response;
+        } catch (error) {
+            // Manejar el error aquí
+            console.error(error);
+        }
+    }   
+    */
+    
+    
+    
+             
 
     function downloadCollection() {
+
+      
 
         // Crear un nuevo array con nombres de columnas personalizados
         const excelData = dataGridRenewal.map((row) => ({
@@ -317,9 +312,28 @@ export default function useRenewaReportSearch() {
         }  
 
     };
+
+    useEffect(() => {
+     /*  if (selectedperiodo != null) {
+        loadTableData({
+          period: selectedperiodo,        
+        })
+      } */
+    },[selectedperiodo]) 
+
+    function loadTableData(searchCriteria?: object): void {
+      //setShowSpinner(false)
+      if (tableComponentRef.current) {
+          tableComponentRef.current.loadData(searchCriteria);
+      }
+
+
+  }
  
 
     return {
+      selectedperiodo,
+      loadTableData,
         control,
         errors,
         register,

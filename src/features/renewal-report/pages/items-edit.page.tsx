@@ -8,11 +8,11 @@ import { Controller } from "react-hook-form";
 import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 
-const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICallRenewal,  }) => {
+const ItemsEditePage = ({ renewalitem, renewal, selectedperiodo, loadTableData }: { renewalitem, renewal?: ICallRenewal, selectedperiodo, loadTableData }) => {
 
-   
-    const { errors,control,updateDataGridRenewal,CancelFunction
-    } = useActaItems(renewalitem, renewal, );
+
+    const { errors, control, updateDataGridRenewal, CancelFunction, register
+    } = useActaItems(renewalitem, renewal, selectedperiodo, loadTableData);
 
     return (
         <Fragment>
@@ -21,23 +21,25 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                     <div className="container-form padding-form">
                         <div>
                             <div className='grid-form-4-container mb-24px'>
-                            <Controller
+                                <Controller
                                     control={control}
                                     name={"fund"}
                                     render={({ field }) => {
                                         return (
-                                            <InputNumberComponent
-                                                control={control}
-                                                idInput={`fund`}
+                                            <InputComponent
+                                                id={field.name}
+                                                idInput={field.name}
                                                 label="Fondo"
                                                 className="inputNumber-basic medium"
-                                                placeholder={renewal ? renewal.fund : ""}
+                                                typeInput="text"
+                                                //placeholder={renewal ? renewal.fund : ""}
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
+                                                register={register}
                                                 disabled={true}
                                                 {...field}
                                             />
-                                        )
+                                        );
                                     }}
                                 />
                                 <Controller
@@ -55,8 +57,7 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                                                 errors={errors}
                                                 {...field}
                                             />
-                                        )
-
+                                        );
                                     }}
                                 />
                                 <Controller
@@ -72,37 +73,35 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                                                 placeholder={renewal ? renewal.renewed : ""}
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
-                                                mode="currency"
-                                                currency="COP"
-                                                locale="es-CO"
                                                 fieldArray={true}
                                                 minFractionDigits={0}
                                                 maxFractionDigits={0}
                                                 disabled={true}
                                                 {...field}
                                             />
-                                        )
-
+                                        );
                                     }}
                                 />
+
                                 <Controller
                                     control={control}
                                     name={"percentage"}
                                     render={({ field }) => {
                                         return (
-                                            <InputNumberComponent
-                                                control={control}
-                                                idInput={`percentage`}
+                                            <InputComponent
+                                                id={field.name}
+                                                idInput={field.name}
                                                 label="Porcentaje"
                                                 className="inputNumber-basic medium"
-                                                placeholder={renewal ? renewal.percentage : ""}
+                                                typeInput="text"
+                                                //placeholder={renewal ? renewal.fund : ""}
                                                 classNameLabel="text-black biggest text-required"
                                                 errors={errors}
+                                                register={register}
                                                 disabled={true}
                                                 {...field}
-                                            />
-                                        )
-
+                                            />                                           
+                                        );
                                     }}
                                 />
 
@@ -114,25 +113,25 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                 </div>
 
                 <div className="button-save-container-display m-top-20">
-                        <ButtonComponent
-                            form="searchBudget"
-                            value={"Cancelar"}
-                            className="button-clean medium"
-                            type="button"
-                            action={() => {
-                                CancelFunction()
-                            }
-                            }
-                        />
-                        <ButtonComponent
-                            form="EditRenewal"
-                            value={`Guardar`}
-                            className="button-save large hover-three disabled-black"
-                            action={() => {
-                                updateDataGridRenewal()
-                            }}
-                        />
-                    </div>
+                    <ButtonComponent
+                        form="searchBudget"
+                        value={"Cancelar"}
+                        className="button-clean medium"
+                        type="button"
+                        action={() => {
+                            CancelFunction()
+                        }
+                        }
+                    />
+                    <ButtonComponent
+                        form="EditRenewal"
+                        value={`Guardar`}
+                        className="button-save large hover-three disabled-black"
+                        action={() => {
+                            updateDataGridRenewal()
+                        }}
+                    />
+                </div>
 
             </FormComponent>
 
