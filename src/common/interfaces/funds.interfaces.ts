@@ -87,9 +87,9 @@ export interface ICallBudget {
 export interface ICallRenewal {
   period?: string;
   fund?: string; 
-  enabled: string;
-  renewed: string;
-  percentage: string;
+  enabled?: string;
+  renewed?: string;
+  percentage?: string;
   page?: number;
   perPage?: number;
   enabledBachLeg?: number;

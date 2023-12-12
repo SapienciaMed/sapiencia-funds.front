@@ -22,7 +22,7 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport, createRenewal } = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport, createRenewal, report } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
@@ -33,6 +33,7 @@ export default function useRenewaReportSearch() {
     const [renewedBachLeg, setrenewedBachLeg] = useState("0");
     const [percentageBachLeg, setPercentageBachLeg] = useState("0.00%");
     const [inputEnabledBachLeg, setInputEnabledBachLeg] = useState("0");
+    const [dataReports, setDataReports] = useState([]);
 
 
 
@@ -122,6 +123,7 @@ export default function useRenewaReportSearch() {
     // Calcular Total renovados
     const totalrenewed = dataGridRenewal.reduce((total, row) => {
         const renewed = parseFloat(row.renewed);
+        console.log('enable', renewed)
         return total + (isNaN(renewed) ? 0 : renewed);
     }, 0);
 
@@ -155,19 +157,32 @@ export default function useRenewaReportSearch() {
     // searchRenewal
     const selectedperiodo = watch('period');
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
-        data.period = selectedperiodo;
-        data.page = 1;
-        data.perPage = 10;
+        loadTableData({
+            period: selectedperiodo,
+        })
 
-       
-          loadTableData({
-            period: selectedperiodo,        
-          })
+        dataReport({
+            period: selectedperiodo,
+            page: 1,
+            perPage: 10
+        })
+    });
 
-      });
+    const dataReport = async (data: ICallRenewal) => {       
 
-
-     /*  async function fetchRenewalReport() {
+        try {
+            const response = await getRenewalReport(data);          
+                setDataReports(response.data);
+            
+            //return response;
+        } catch (error) {
+            // Handle the error here
+            console.error(error);
+        }
+    };
+              
+    
+    /*  async function fetchRenewalReport() {
         try {
             const response = await getRenewalReport({
              period : selectedperiodo,
@@ -181,8 +196,8 @@ export default function useRenewaReportSearch() {
             // Manejar el error aquí
             console.error(error);
         }
-    }   
-    */
+    }    */
+    
     
     
     
@@ -190,10 +205,12 @@ export default function useRenewaReportSearch() {
 
     function downloadCollection() {
 
+        console.log('dataGridRenewal',dataReports)
       
+        
 
         // Crear un nuevo array con nombres de columnas personalizados
-        const excelData = dataGridRenewal.map((row) => ({
+        const excelData = dataReports.map((row) => ({
             "Fondo": row.fund,
             "Nro. habilitados": row.enabled,
             "Nro. Renovados": row.renewed,
@@ -253,7 +270,7 @@ export default function useRenewaReportSearch() {
         });
     });
 
-     const confirmRenewalCreation = async (data: ICallRenewal) => {
+    const confirmRenewalCreation = async (data: ICallRenewal) => {
         const renewalItems = dataGridRenewal.map((e) => ({
             fund: e.fund,
             enabled: e.enabled,
@@ -274,10 +291,10 @@ export default function useRenewaReportSearch() {
             fund: data.fund,
             enabled: data.enabled,
             renewed: data.renewed,
-            percentage:data.percentage
+            percentage: data.percentage
         }
-        
-        
+
+
         const res = await createRenewal(renewalData);
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
@@ -309,31 +326,31 @@ export default function useRenewaReportSearch() {
                 background: true,
             });
 
-        }  
+        }
 
     };
 
     useEffect(() => {
-     /*  if (selectedperiodo != null) {
-        loadTableData({
-          period: selectedperiodo,        
-        })
-      } */
-    },[selectedperiodo]) 
+        /*  if (selectedperiodo != null) {
+           loadTableData({
+             period: selectedperiodo,        
+           })
+         } */
+    }, [selectedperiodo])
 
     function loadTableData(searchCriteria?: object): void {
-      //setShowSpinner(false)
-      if (tableComponentRef.current) {
-          tableComponentRef.current.loadData(searchCriteria);
-      }
+        //setShowSpinner(false)
+        if (tableComponentRef.current) {
+            tableComponentRef.current.loadData(searchCriteria);
+        }
 
 
-  }
- 
+    }
+
 
     return {
-      selectedperiodo,
-      loadTableData,
+        selectedperiodo,
+        loadTableData,
         control,
         errors,
         register,

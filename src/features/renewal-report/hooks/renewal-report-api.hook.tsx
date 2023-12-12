@@ -28,6 +28,12 @@ export default function useRenewalReportApi() {
         return await post(`${serviceUrl}/getrenewal-paginated/`, data);
       }
 
+    async function report(
+        data: ICallRenewal
+      ): Promise<ApiResponse<any[]>> {
+        return await post(`${serviceUrl}/getrenewal-paginated/`, data);
+      }
+
 
       async function createRenewal(
         data: ICallRenewal
@@ -39,5 +45,6 @@ export default function useRenewalReportApi() {
         getAnnouncement,
         getRenewalReport,
         createRenewal,
+        report
     }
 }
