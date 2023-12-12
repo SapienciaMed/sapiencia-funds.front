@@ -18,7 +18,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
     setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
     totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal,
     percentageBachLeg, setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate, selectedperiodo,
-    loadTableData
+    loadTableData, totalRenewed, porcentageProm
   } = useRenewaReportSearch();
 
 
@@ -67,6 +67,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
     },
 
   ];
+
 
   return (
     <Fragment>
@@ -128,144 +129,145 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
         <div>
 
-        {
-                showTable &&
+          {
+            showTable &&
 
-                <div>
-          
-          <div className="container-sections-forms">           
-            <TableComponent
-              ref={tableComponentRef}
-              url={`${process.env.urlApiFunds}/api/v1/renovacion/getrenewal-paginated/`}
-              columns={tableColumnsRenewal}
-              actions={tableActionsRenewal}
-              titleMessageModalNoResult="Buscar"
-              princialTitle="Informe legalización"
-              isShowModal={true}
-              descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
-            />
-          </div>
+            <div>
+
+              <div className="container-sections-forms">
+                <TableComponent
+                  ref={tableComponentRef}
+                  url={`${process.env.urlApiFunds}/api/v1/renovacion/getrenewal-paginated/`}
+                  columns={tableColumnsRenewal}
+                  actions={tableActionsRenewal}
+                  titleMessageModalNoResult="Buscar"
+                  princialTitle="Informe legalización"
+                  isShowModal={true}
+                  descriptionModalNoResult="No se encontraron resultados que coincidan con tu búsqueda. Por favor, intenta con otros criterios."
+                />
+              </div>
 
 
-          <div className="container-sections-forms">
-            <div className="title-area">
-              <label className="text-black large medium grid-span-4-columns">Totales</label>
+              <div className="container-sections-forms">
+                <div className="title-area">
+                  <label className="text-black large medium grid-span-4-columns">Totales</label>
+                </div>
+                <div className="grid-form-3-container mb-24px">
+                  <InputComponent
+                    register={control.register}
+                    idInput="totalEnabled"
+                    className="input-basic medium"
+                    typeInput="text"
+                    label="Nro habilitados"
+                    classNameLabel="text-black"
+                    errors={errors}
+                    disabled={true}
+                    value={totalEnabled}
+                  />
+                  <InputComponent
+                    register={control.register}
+                    idInput="totalrenewed"
+                    className="input-basic medium"
+                    typeInput="text"
+                    label="Nro renovados"
+                    classNameLabel="text-black"
+                    errors={errors}
+                    disabled={true}
+                    value={totalRenewed}
+                  />
+                  <InputComponent
+                    register={control.register}
+                    idInput="totalpercentage"
+                    className="input-basic medium"
+                    typeInput="text"
+                    label="Porcentaje"
+                    classNameLabel="text-black"
+                    errors={errors}
+                    disabled={true}
+                    value={porcentageProm}
+                  />
+                </div>
+              </div>
+
+              <div className="container-sections-forms">
+                <div className="title-area">
+                  <label className="text-black large medium grid-span-4-columns">
+                    Beca mejores bachilleres legalizados</label>
+                </div>
+
+                <div className="grid-form-3-container mb-24px">
+                  <InputComponent
+                    register={control.register}
+                    idInput="enabledBachLeg"
+                    className="input-basic medium"
+                    typeInput="number"
+                    label="Nro habilitados"
+                    classNameLabel="text-black big text-required"
+                    errors={errors}
+                    placeholder={enabledBachLeg ? enabledBachLeg : ""}
+                    onChange={(e) => {
+                      const newEnabledBachLeg = e.target.value;
+                      // Actualizar el valor de inputEnabledBachLeg
+                      setInputEnabledBachLeg(newEnabledBachLeg);
+                    }}
+                  />
+                  <InputComponent
+                    register={control.register}
+                    idInput="renewedBachLeg"
+                    className="input-basic medium"
+                    typeInput="text"
+                    label="Nro renovados"
+                    classNameLabel="text-black"
+                    errors={errors}
+                    disabled={true}
+                    value={renewedBachLeg}
+                  />
+                  <InputComponent
+                    register={control.register}
+                    idInput="PercentageBachLeg"
+                    className="input-basic medium"
+                    typeInput="text"
+                    label="Porcentaje"
+                    classNameLabel="text-black"
+                    errors={errors}
+                    disabled={true}
+                    value={percentageBachLeg}
+                  />
+                </div>
+              </div>
+
+
+              <div>
+                <div className="button-save-container-display mr-24px">
+                </div>
+
+                <ButtonComponent
+                  value={
+                    <>
+                      <div className="container-buttonText">
+                        <span>Descargar</span>
+                        <Svgs svg="excel" width={23.593} height={28.505} />
+                      </div>
+                    </>
+                  }
+                  className="button-download large "
+                  action={downloadCollection}
+                />
+
+              </div>
+
+              <div className="button-save-container-display m-top-20">
+                <ButtonComponent
+                  value={`Guardar`}
+                  className="button-save large hover-three disabled-black"
+                  action={() => {
+                    onsubmitCreate();
+                  }
+                  }
+                />
+              </div>
             </div>
-            <div className="grid-form-3-container mb-24px">
-              <InputComponent
-                register={control.register}
-                idInput="totalEnabled"
-                className="input-basic medium"
-                typeInput="text"
-                label="Nro habilitados"
-                classNameLabel="text-black"
-                errors={errors}
-                disabled={true}
-                value={totalEnabled}
-              />
-              <InputComponent
-                register={control.register}
-                idInput="totalrenewed"
-                className="input-basic medium"
-                typeInput="text"
-                label="Nro renovados"
-                classNameLabel="text-black"
-                errors={errors}
-                disabled={true}
-                value={totalrenewed}
-              />
-              <InputComponent
-                register={control.register}
-                idInput="totalpercentage"
-                className="input-basic medium"
-                typeInput="text"
-                label="Porcentaje"
-                classNameLabel="text-black"
-                errors={errors}
-                disabled={true}
-                value={averagePercentage}
-              />
-            </div>
-          </div>
-
-          <div className="container-sections-forms">
-            <div className="title-area">
-              <label className="text-black large medium grid-span-4-columns">
-                Beca mejores bachilleres legalizados</label>
-            </div>
-
-            <div className="grid-form-3-container mb-24px">
-              <InputComponent
-                register={control.register}
-                idInput="enabledBachLeg"
-                className="input-basic medium"
-                typeInput="number"
-                label="Nro habilitados"
-                classNameLabel="text-black big text-required"
-                errors={errors}
-                placeholder={enabledBachLeg ? enabledBachLeg : ""}
-                onChange={(e) => {
-                  const newEnabledBachLeg = e.target.value;
-                  // Actualizar el valor de inputEnabledBachLeg
-                  setInputEnabledBachLeg(newEnabledBachLeg);
-                  console.log("*****++++", newEnabledBachLeg)
-                }}
-              />
-              <InputComponent
-                register={control.register}
-                idInput="renewedBachLeg"
-                className="input-basic medium"
-                typeInput="text"
-                label="Nro renovados"
-                classNameLabel="text-black"
-                errors={errors}
-                disabled={true}
-                value={renewedBachLeg}
-              />
-              <InputComponent
-                register={control.register}
-                idInput="PercentageBachLeg"
-                className="input-basic medium"
-                typeInput="text"
-                label="Porcentaje"
-                classNameLabel="text-black"
-                errors={errors}
-                disabled={true}
-                value={percentageBachLeg}
-              />
-            </div>
-          </div>
-          </div>
-              }
-
-          <div>
-            <div className="button-save-container-display mr-24px">
-            </div>
-
-            <ButtonComponent
-              value={
-                <>
-                  <div className="container-buttonText">
-                    <span>Descargar</span>
-                    <Svgs svg="excel" width={23.593} height={28.505} />
-                  </div>
-                </>
-              }
-              className="button-download large "
-              action={downloadCollection}
-            />
-
-          </div>
-          <div className="button-save-container-display m-top-20">
-            <ButtonComponent
-              value={`Guardar`}
-              className="button-save large hover-three disabled-black"
-              action={() => {
-                onsubmitCreate();
-              }
-              }
-            />
-          </div>
+          }
         </div>
       </div>
 
