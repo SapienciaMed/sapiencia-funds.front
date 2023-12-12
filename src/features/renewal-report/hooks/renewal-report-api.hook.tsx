@@ -1,9 +1,23 @@
 import { Data } from "ws";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import useCrudService from "../../../common/hooks/crud-service.hook";
-import { ICallRenewal, IProgramTypes, IRenewalDataGrid, PruebaDataItem } from "../../../common/interfaces/funds.interfaces";
+import { ICallRenewal, IProgramTypes} from "../../../common/interfaces/funds.interfaces";
 import { ApiResponse } from "../../../common/utils/api-response";
 
+interface ApiRes {
+  array: ICallRenewal[];
+  meta: {
+    total: number;
+    per_page: number;
+    current_page: number | null;
+    last_page: number;
+    first_page: number;
+    first_page_url: string;
+    last_page_url: string;
+    next_page_url: string | null;
+    previous_page_url: string | null;
+  };
+}
 
 export default function useRenewalReportApi() {
     const baseURL: string = process.env.urlApiFunds || "";
@@ -31,21 +45,25 @@ export default function useRenewalReportApi() {
 
     async function report(
         data: ICallRenewal
-      ): Promise<ApiResponse<PruebaDataItem[]>> {
+      ): Promise<ApiResponse<any[]>> {
         return await post(`${serviceUrl}/getrenewal-paginated/`, data);
       }
-
-
+      
+      
       async function createRenewal(
         data: ICallRenewal
-      ): Promise<ApiResponse<ICallRenewal>> {
-        return await post(`${serviceUrl}/create/`, data);
-      }
+        ): Promise<ApiResponse<ICallRenewal>> {
+          return await post(`${serviceUrl}/create/`, data);
+        }
+        async function calculate(period:string): Promise<ApiResponse<any>> {
+            return await get(`${serviceUrl}/calculate/${period}`);
+          }
     
     return {
         getAnnouncement,
         getRenewalReport,
         createRenewal,
-        report
+        report,
+        calculate
     }
 }
