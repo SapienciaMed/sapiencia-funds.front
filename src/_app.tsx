@@ -26,6 +26,8 @@ import ConsolidationSocialService from "./features/consolidationSocialService";
 
 function App() {
   const { publish } = useAppCominicator();
+  const HomePage = lazy(() => import("./common/components/home.page"));
+
 
   // Effect que comunica la aplicacion actual
   useEffect(() => {
@@ -43,6 +45,7 @@ function App() {
         <Router>
           <Suspense fallback={<p>Loading...</p>}>
             <Routes>
+            <Route path={"/fondos/"} element={<HomePage />} />;
               <Route
                 path={"/fondos/priorizacion-recurso/*"}
                 element={<ResourcePrioritizationRoutes />}

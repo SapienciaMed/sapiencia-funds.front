@@ -1,17 +1,14 @@
-import { useNavigate, useParams } from "react-router-dom"
+import {  useParams } from "react-router-dom"
 import { IManagePage } from "../interface/pacc"
 import TabsManageTechnical from "../components/tabs-manage-technical"
 import { usePaccServices } from "./pacc-serviceshook"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { EResponseCodes } from "../../../common/constants/api.enum"
-import { AppContext } from "../../../common/contexts/app.context"
 
 export const useManage = () => {
 
-    const { id } =  useParams()
-    const navigate = useNavigate();
-    const {GeBeneficiaryById} = usePaccServices()
-    const { setMessage } = useContext(AppContext);
+    const { id, typeState } =  useParams()
+    const {GeBeneficiaryById} = usePaccServices(parseInt(typeState))
     const [dataManager, setDataManager] = useState<IManagePage>({
         title: "",
         beneficiaryInformationValues: {
@@ -82,26 +79,9 @@ export const useManage = () => {
         }
     },[])
 
-    const onCancel = () => {
-        setMessage({
-            show: true,
-            title: "Cancelar",
-            description: "¿Segur@ que deseas cancelar",
-            OkTitle: "Aceptar",
-            cancelTitle: "Cancelar",
-            onOk() {
-                setMessage((prev) => ({ ...prev, show: false }));
-                navigate('/fondos/pacc/bandeja-consolidacion')  
-            },
-            background: true,
-          });
-        
-    }
-
     return {
         dataManager,
         showSpinner,
-        onCancel
     }
 
 }

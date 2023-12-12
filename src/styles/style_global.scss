@@ -1,5 +1,6 @@
 @import "./mixins.scss";
 @import "./variables.scss";
+@import "./font-family.scss";
 
 .one-filter-container {
     display: grid;
@@ -20,6 +21,17 @@
     margin: 1.5rem 0rem 1.5rem 1rem;
     flex-direction: column-reverse;
     gap: 1rem;
+
+    &.border-top{
+        border-top: 1px solid rgba(112, 112, 112, 0.1019607843);
+        padding-top: 1rem;
+    }
+}
+
+.funcionality-buttons-container2{
+    @extend .funcionality-buttons-container;
+    margin: 1.5rem 0rem 0rem;
+    width: 100%;
 }
 
 .funcionality-filters-container {
@@ -53,7 +65,10 @@
 }
 
 .title-area-2{
-    @include card-component-title-area(flex, space-between, column-reverse, 1.5rem, null, 1rem null)
+    @include card-component-title-area(flex, space-between, column-reverse, 1.5rem, null, 1rem, null, null)
+}
+.title-area-3{
+    @include card-component-title-area(flex, space-between, column-reverse, 0.8rem, null, 1rem, null, center)
 }
 
 .width-style{
@@ -72,6 +87,12 @@
     @include generate-flex-container(row, null, space-around, null, null, 0.62em);
 }
 
+.content-tooltip{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .style-tooltip{
     display: inline-block;
     max-width: 25vw;
@@ -84,12 +105,80 @@
     padding: 0.5rem 0.5rem;
     font-weight: 400;
     font-size: 0.875rem;
+    font-family: "RubikRegular", sans-serif !important;
+    font-style: normal;
+    color: #000;
+    cursor: default;
+}
+
+.disabled-component{
+    cursor: not-allowed !important; 
+    opacity: .4 
+}
+
+.checkbox-customer{
+    border-color: #533893 !important;
+    color: #533893 !important;
+}
+
+.icon-size{
+    width: 1.2rem;
+    height: 1.2rem;
     font-family: RubikRegular, sans-serif;
     cursor: pointer;
 
     &.not-padding{
         padding: 0;
     }
+}
+
+.menu-style{
+    max-height: 23vh;
+    overflow: auto;
+    width: 15.5rem !important;
+
+    span{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.content-accordion-tab{
+    color: #000;
+    font-family: RubikRegular, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%; 
+    text-align: left;
+
+    &.tiny {
+        font-size: 0.6em;
+      }
+    
+      &.small {
+        font-size: 0.7em;
+      }
+    
+      &.medium {
+        font-size: 0.8em;
+      }
+    
+      &.big {
+        font-size: 1em;
+      }
+    
+      &.biggest {
+        font-size: 1.22em;
+      }
+    
+      &.large {
+        font-size: 1.4em;
+      }
+    
+      &.extra-large {
+        font-size: 1.8em;
+      }
 }
   
 @media (min-width: 1024px) {
@@ -102,11 +191,20 @@
 
     .funcionality-buttons-container {
         display: grid;
-        grid-template-columns: 6rem 8rem;
+        grid-template-columns: 8rem 8rem;
         justify-content: end;
         column-gap: 1rem;
         align-items: center;
         justify-items: end;
+    }
+
+    .funcionality-buttons-container2{
+        display: grid;
+        grid-template-columns: 8rem 8rem;
+        justify-content: center;
+        column-gap: 1rem;
+        align-items: center;
+        justify-items: center;
     }
 
     .funcionality-filters-container {
@@ -118,6 +216,10 @@
 
     .title-area-2{
         @include card-component-title-area()
+    }
+
+    .title-area-3{
+        @include card-component-title-area(flex, space-between, column-reverse, 0.8rem, null, 1rem, null, flex-start)
     }
 
     .container-actions_formTabs {
@@ -167,5 +269,9 @@
 @media (max-width: 390px) {
     .funcionality-filters-container {
       grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    }
+
+    .menu-style{
+        width: 100% !important;
     }
 }

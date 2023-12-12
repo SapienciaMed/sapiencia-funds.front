@@ -5,14 +5,16 @@ import { urlApiFunds } from "../../../../common/utils/base-url";
 import { AppContext } from "../../../../common/contexts/app.context";
 import { ApiResponse } from "../../../../common/utils/api-response";
 import { ITableAction } from "../../../../common/interfaces";
-
-export const consolidateHook = (data) => {
+import { columnsConsolidados } from "../../pages/config-columns/columns-consolidados";
+import Controlreporteditconsolidation from "../../pages/conditionalPagesEdits/control-report-edit-consolidation";
+import * as XLSX from "xlsx";
+import { IGenericList } from "../../../../common/interfaces/global.interface";
+import { EResponseCodes } from "../../../../common/constants/api.enum";
+import { useGenericListService } from "../../../../common/hooks/generic-list-service.hook";
+export const consolidateHook = (data, reload) => {
   const navigate = useNavigate();
-  const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
-
-  const urlGetConsult = `fondos/seguimiento-financiero`; // Endpoint del backend, (se colocan aquí)
   const [tableColumns, setTableColumns] = useState([]);
-
+  const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
   const { post } = useCrudService(urlApiFunds);
   const [totalNoPreseleccionados, setTotalNoPreseleccionados] = useState(null);
   const [totalOtorgado, setTotalOtorgado] = useState(null);
@@ -24,12 +26,15 @@ export const consolidateHook = (data) => {
   const [totalRendimientoFinancieros, setTotalRendimientoFinancieros] =
     useState(null);
   const tableComponentRef = useRef(null);
-  const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfo`;
+  const urlGet = `${urlApiFunds}/api/v1/controlSelect/getInfoConsolidate`;
   const { setMessage } = useContext(AppContext);
-
+  const { getListByGroupers } = useGenericListService();
+  const [comunaList, setComunaList] = useState([]);
+  const [TotalView, setTotalView] = useState(null);
+  const [color, setColor] = useState(null);
   const getInfoConsolidado = async (data) => {
     try {
-      const endpoint = "/api/v1/controlSelect/getInfo";
+      const endpoint = "/api/v1/controlSelect/getInfoConsolidateTotals";
       const res: ApiResponse<[]> = await post(endpoint, data);
 
       const dataRes = res.data["array"].map((data) => {
@@ -64,69 +69,127 @@ export const consolidateHook = (data) => {
         );
         return dataColumns;
       });
-
-      let totalData = {
-        totalNoPreseleccionados: null,
-        totalNoCupos: null,
-        totalRecursoDisponible: null,
-        totalOtorgado: null,
-        totalDisponible: null,
-        totalPorParticipacion: null,
-        totalNoLegalizados: null,
-        totalRendimientoFinancieros: null,
-      };
-
-      dataRes.forEach((e) => {
-        totalData.totalNoPreseleccionados += Number(e.consolidatedPreselected);
-        totalData.totalNoCupos += Number(e.places);
-        totalData.totalRecursoDisponible += Number(
-          e.consolidatedResourceAvailable
-        );
-        totalData.totalOtorgado += Number(e.consolidatedGranted);
-        totalData.totalDisponible += Number(e.Available);
-        totalData.totalPorParticipacion += Number(e.porcentParticipacion);
-        totalData.totalNoLegalizados += Number(e.consolidatedLegalized);
-        totalData.totalRendimientoFinancieros += Number(
-          e.consolidatedFinancialReturns
-        );
-      });
-
       let totalDataRes = dataRes.length;
-      totalData.totalPorParticipacion =
-        totalData.totalPorParticipacion / totalDataRes;
-      console.log(totalData);
-      setTotalNoPreseleccionados(totalData.totalNoPreseleccionados);
-      setTotalOtorgado(totalData.totalOtorgado);
-      setTotalNoCupos(totalData.totalNoCupos);
-      setTotalRecursoDisponible(totalData.totalRecursoDisponible);
-      setTotalDisponible(totalData.totalDisponible);
-      setTotalPorParticipacion(totalData.totalPorParticipacion);
-      setTotalNoLegalizados(totalData.totalNoLegalizados);
-      setTotalRendimientoFinancieros(totalData.totalRendimientoFinancieros);
+
+      if (totalDataRes > 0) {
+        setTotalView(true);
+
+        let totalData = {
+          totalNoPreseleccionados: null,
+          totalNoCupos: null,
+          totalRecursoDisponible: null,
+          totalOtorgado: null,
+          totalDisponible: null,
+          totalPorParticipacion: null,
+          totalNoLegalizados: null,
+          totalRendimientoFinancieros: null,
+        };
+
+        dataRes.forEach((e) => {
+          totalData.totalNoPreseleccionados += Number(
+            e.consolidatedPreselected
+          );
+          totalData.totalNoCupos += Number(e.places);
+          totalData.totalRecursoDisponible += Number(
+            e.consolidatedResourceAvailable
+          );
+          totalData.totalOtorgado += Number(e.consolidatedGranted);
+          totalData.totalDisponible += Number(e.Available);
+          totalData.totalPorParticipacion += Number(e.porcentParticipacion);
+          totalData.totalNoLegalizados += Number(e.consolidatedLegalized);
+          totalData.totalRendimientoFinancieros += Number(
+            e.consolidatedFinancialReturns
+          );
+        });
+
+        totalData.totalPorParticipacion =
+          (totalData.totalOtorgado / totalData.totalRecursoDisponible) * 100;
+
+        if (
+          totalData.totalPorParticipacion >= 90 &&
+          totalData.totalPorParticipacion <= 98
+        ) {
+          setColor("text-orange");
+        } else if (
+          totalData.totalPorParticipacion > 98 &&
+          totalData.totalPorParticipacion <= 100
+        ) {
+          setColor("text-red");
+        }
+
+        setTotalNoPreseleccionados(totalData.totalNoPreseleccionados);
+        setTotalOtorgado(totalData.totalOtorgado);
+        setTotalNoCupos(totalData.totalNoCupos);
+        setTotalRecursoDisponible(totalData.totalRecursoDisponible);
+        setTotalDisponible(totalData.totalDisponible);
+        setTotalPorParticipacion(totalData.totalPorParticipacion.toFixed(2));
+        setTotalNoLegalizados(totalData.totalNoLegalizados);
+        setTotalRendimientoFinancieros(totalData.totalRendimientoFinancieros);
+        setTableColumns(columnsConsolidados);
+      } else {
+        setTotalView(false);
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
   useEffect(() => {
-    setTotalNoPreseleccionados;
-    setTotalOtorgado;
-    setTotalNoCupos;
-    setTotalRecursoDisponible;
-    setTotalDisponible;
-    setTotalPorParticipacion;
-    setTotalNoLegalizados;
-    setTotalRendimientoFinancieros;
-  }, [
-    totalNoPreseleccionados,
-    totalOtorgado,
-    totalNoCupos,
-    totalRecursoDisponible,
-    totalDisponible,
-    totalPorParticipacion,
-    totalNoLegalizados,
-    totalRendimientoFinancieros,
-  ]);
+    const aux = () => {
+      const groupers = ["COMUNA_CORREGIMIENTO"];
+      getListByGroupers(groupers).then(
+        (response: ApiResponse<IGenericList[]>) => {
+          if (response && response?.operation?.code === EResponseCodes.OK) {
+            setComunaList(
+              response.data.map((item) => {
+                const list = {
+                  name: item.itemDescription,
+                  value: item.itemCode,
+                };
+                return list;
+              })
+            );
+          }
+        }
+      );
+    };
+    aux();
+  }, []);
+
+  const downloadCollection = async () => {
+    const endpoint = "/api/v1/controlSelect/getInfoConsolidate";
+    const res: ApiResponse<[]> = await post(endpoint, data);
+    const dataRes = res.data["array"];
+    let dataDownload = dataRes.map((data) => {
+      return {
+        "Comuna o corregimiento": data.resourcePrioritization.communeId,
+        "No.Preseleccionados": data.consolidatedPreselected,
+        "No.Cupos": data.places,
+        "Recurso Disponible": data.consolidatedResourceAvailable,
+        Otorgado: data.consolidatedGranted,
+        Disponible: Math.round(
+          Number(data.consolidatedResourceAvailable) -
+            Number(data.consolidatedGranted)
+        ),
+        "%Participacion":
+          Math.round(
+            (Number(data.consolidatedGranted) /
+              Number(data.consolidatedResourceAvailable)) *
+              100
+          ) + "%",
+
+        "Numero de legalizados": data.consolidatedLegalized,
+        "Rendimientos financieros": data.consolidatedFinancialReturns,
+      };
+    });
+
+    const book = XLSX.utils.book_new();
+    const sheet = XLSX.utils.json_to_sheet(dataDownload);
+    XLSX.utils.book_append_sheet(book, sheet, "Consolidado");
+    setTimeout(() => {
+      XLSX.writeFile(book, "Exporte Informe Control - Consolidado.xlsx");
+    }, 1000);
+  };
 
   const tableActions: ITableAction<any>[] = [
     {
@@ -135,7 +198,19 @@ export const consolidateHook = (data) => {
         setMessage({
           show: true,
           background: true,
-
+          description: (
+            <Controlreporteditconsolidation
+              onEdit={() => {
+                tableComponentRef.current?.loadData({
+                  ...data, /// Filtro de busqueda
+                });
+              }}
+              data={row}
+              onUpdateTotals={() => {
+                getInfoConsolidado(data);
+              }}
+            />
+          ),
           title: "Editar ítem",
           size: "items",
           items: true,
@@ -147,10 +222,19 @@ export const consolidateHook = (data) => {
     },
   ];
 
+  useEffect(() => {
+    tableComponentRef.current?.loadData({
+      ...data,
+    });
+    setTimeout(() => {
+      getInfoConsolidado(data);
+    }, 1000);
+  }, [reload]);
+
   return {
-    setPaginateData,
     tableComponentRef,
     urlGet,
+    setPaginateData,
     tableColumns,
     tableActions,
     totalNoPreseleccionados,
@@ -161,5 +245,9 @@ export const consolidateHook = (data) => {
     totalPorParticipacion,
     totalNoLegalizados,
     totalRendimientoFinancieros,
+    downloadCollection,
+    comunaList,
+    TotalView,
+    color,
   };
 };

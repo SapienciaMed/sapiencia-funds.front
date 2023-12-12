@@ -242,7 +242,6 @@ const { width } = useWidth();
             descriptionModalNoResult="La votación no existe en el sistema. 
               Haga clic en el botón crear votación"
             isShowModal={true}
-            horizontalScroll
           />
           <br />
           <br />

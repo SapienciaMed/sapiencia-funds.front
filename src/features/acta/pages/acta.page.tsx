@@ -7,12 +7,13 @@ import { EDirection } from "../../../common/constants/input.enum";
 import useActaData from "../hooks/acta.hook";
 import { Controller } from 'react-hook-form';
 import { AppContext } from "../../../common/contexts/app.context";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 
 function ActaPage(){
     const {width} = useWidth()
     const { validateActionAccess } = useContext(AppContext);
-    const { errors, isBtnDisable, control, navigate, register, 
+    const { errors, isBtnDisable, control, showSpinner, navigate, register, 
         onSubmitSearch, reset, handleModifyActa } = useActaData()
 
 
@@ -49,7 +50,9 @@ function ActaPage(){
                     </div>
 
                 </section>
-
+                {
+                    showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
+                }
                 <FormComponent id="searchActaForm" action={onSubmitSearch}>
                     <div className="one-filter-container">
                         <Controller

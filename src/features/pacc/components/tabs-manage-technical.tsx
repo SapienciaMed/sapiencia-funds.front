@@ -5,13 +5,14 @@ import { useParams } from "react-router-dom";
 import SupportsPQRSDF from "./manageTechnical/supports-PQRSDF";
 import { AppContext } from "../../../common/contexts/app.context";
 import { ButtonComponent } from "../../../common/components/Form";
+import Requirements from "./manageTechnical/requirements";
+import KnowledgeTransfer from "./manageTechnical/knowledge-transfer";
 
 function TabsManageTechnical({ document }) {
 
     const { option } = useParams();
     const { validateActionAccess } = useContext(AppContext);
     
-
     const tabs = (): ITabsMenuTemplate[] => {
         const servicioSocial = {
             id: "servicioSocial", 
@@ -30,9 +31,9 @@ function TabsManageTechnical({ document }) {
         const requisitos = {
             id: "requisitos", 
             title: "Requisitos", 
-            content: (<></>), 
+            content: (<Requirements/>), 
             action: () => {},
-            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */ 
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || validateActionAccess('VER_REQUISITOS_REGLAMENTO') 
         }
         const liquidacion = {
             id: "liquidacion", 
@@ -41,8 +42,16 @@ function TabsManageTechnical({ document }) {
             action: () => {},
             hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') || false /*poner el rol */ 
         }
+        const transferenciaConocimiento = {
+            id: "transferenciaConocimiento", 
+            title: "Transferencia de conocimiento", 
+            content: (<KnowledgeTransfer/>), 
+            action: () => {},
+            hide: validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION')  || validateActionAccess('VER_TRANSFERENCIA_CONOCIMIENTO')
+        }
 
         const result = [
+            transferenciaConocimiento,
             servicioSocial,
             soportesPQRSDF,
             requisitos,
@@ -54,29 +63,11 @@ function TabsManageTechnical({ document }) {
 
     const start = tabs().find((tab) => tab.id.toString().toLowerCase() == option?.toLowerCase());
 
-    const [currentTabIndex, setCurrentTabIndex] = useState<number>(
-        start ? tabs().findIndex((tab) => tab.id === start.id) : 0
-    );
-
     return(
         <>
             <section className="mt-20px">
-                <TabListComponent tabs={tabs()} start={start} currentIndex={currentTabIndex} setCurrentTabIndex={setCurrentTabIndex}/>
+                <TabListComponent tabs={tabs()} start={start} titleMessage="Cambios sin guardar" description="¿Estas segur@ de salir sin guardar los cambios?" />
             </section>
-
-            {
-                tabs().length > 1 && (
-                    <div className="container-actions_formTabs">
-                        <ButtonComponent
-                            value='Siguiente'
-                            className='button-save  invalid big'
-                            type='button'
-                            action={() => { setCurrentTabIndex((currentTabIndex + 1) % tabs().length) }}
-                        />
-                    </div>
-                )
-            }
-        
         </>
     )
 }

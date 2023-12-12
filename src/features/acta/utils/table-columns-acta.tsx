@@ -18,9 +18,8 @@ interface IPropTableColumnsActa{
 }
 
 export default function usetableColumnsActa({ dataGridUsersServices, authorization, valueAction, dataTableServices, getValues, setMessage }: IPropTableColumnsActa) {
-
     const [ idCitation, setIdCitation ] = useState({ id: '' })
-    const { approveCitation } = useActaApi();
+    const { approveCitation, deleteCitation } = useActaApi();
     const [ checked, setChecked ] = useState(false);
     const navigate = useNavigate();
 
@@ -260,9 +259,16 @@ export default function usetableColumnsActa({ dataGridUsersServices, authorizati
                     OkTitle: "Aceptar",
                     cancelTitle: "Cancelar",
                     onOk() {
-                        if (dataGridUsersServices.find((obj) => obj.ident == row.ident)) {
+                        deleteCitation( String(row.idCitation)).then(response => {
+                            if(response.operation.code == EResponseCodes.OK) {
+                                console.log(response.operation.message); 
+                            }else{
+                                console.log(response.operation.message);
+                            }
+                        })
+                        if (dataGridUsersServices.find((obj) => obj.idCitation == row.idCitation)) {
                             const position = dataGridUsersServices.findIndex(
-                                (obj) => obj.ident === row.ident
+                                (obj) => obj.idCitation === row.idCitation
                             );
                             dataGridUsersServices.splice(position, 1);
                             setMessage({})
