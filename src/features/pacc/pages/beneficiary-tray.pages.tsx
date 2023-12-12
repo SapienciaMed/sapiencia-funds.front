@@ -12,7 +12,7 @@ import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) {
 
     const { tableComponentRef, tableColumns, tableActions, idCutData, control, listSearch, showSpinner, valueFilterTable,
-        handleFilterChange, handleChangeCut } = useBeneficiaryTray(typeState)
+        handleFilterChange, handleChangeCut, getCuts } = useBeneficiaryTray(typeState)
 
     return(
         <div className="card-table gap-0 mt-14px">
@@ -51,6 +51,7 @@ function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) 
                     onGlobalFilterChange={handleFilterChange}
                     valueFilterTable={valueFilterTable}
                     isMobil={false}
+                    resetValue={getCuts}
                 />
             </section>
 

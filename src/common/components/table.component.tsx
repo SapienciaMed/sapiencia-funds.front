@@ -58,7 +58,8 @@ interface IProps<T> {
   count?: boolean,
   viePaginator?: boolean
   isNotBorderClasse?: boolean,
-  setShowSpinner?: Dispatch<SetStateAction<boolean>>
+  setShowSpinner?: Dispatch<SetStateAction<boolean>>,
+  resetValue?: () => void
 }
 
 interface IRef {
@@ -87,13 +88,13 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     count,
     viePaginator = true,
     isNotBorderClasse,
-    setShowSpinner
+    setShowSpinner, 
+    resetValue
   } = props;
 
   // States
   const [charged, setCharged] = useState<boolean>(false);
   const [resultData, setResultData] = useState<any>();
-
   const [loading, setLoading] = useState<boolean>(false);
   const [perPage, setPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
@@ -103,7 +104,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const { setMessage } = useContext(AppContext);
 
   // Declaraciones
-
   const { post } = useCrudService(url);
   useImperativeHandle(ref, () => ({
     loadData: loadData,
@@ -144,6 +144,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           },
           background: true,
         });
+        resetValue && resetValue()
       }
     } else {
       setMessage({
@@ -156,8 +157,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           setMessage({});
         },
       });
+      resetValue && resetValue()
     }
-
     setLoading(false);
   }
 
@@ -466,7 +467,6 @@ const leftContent = (
   valueFilterTable?: string
 ) => {
   //TODO: Para utilizar el filtro es necesario las prop isInputSearch, onGlobalFilterChange y valueFilterTable
-
   return (
     <>
       {(isInputSearch && onGlobalFilterChange && valueFilterTable != null) ? (
@@ -507,7 +507,6 @@ const leftContent = (
   );
 };
 // Metodo que retorna el icono o nombre de la accion
-
 const paginatorHeader: PaginatorTemplateOptions = {
   layout: "CurrentPageReport RowsPerPageDropdown",
   CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
