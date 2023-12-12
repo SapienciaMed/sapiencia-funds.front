@@ -70,7 +70,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
     return (
         <Fragment>
-            <div className="card-table">
+            <div className="main-page">
                 <div className="title-area">
                     <label className="text-black extra-large medium">
                         Visualizar informe renovación
