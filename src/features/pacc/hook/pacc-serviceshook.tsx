@@ -5,7 +5,7 @@ import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, ICutInterface } from "../interface/pacc";
 
 export const usePaccServices = (typeState: number) => {
-    console.log("🚀 ~ file: pacc-serviceshook.tsx:9 ~ usePaccServices ~ typeState:", typeState)
+
     const baseURL: string = process.env.urlApiFunds || "";
     const roleUrl: string = `/api/v1/${typePrefixeTabs(typeState)}`; 
     const { get, post } = useCrudService( baseURL);

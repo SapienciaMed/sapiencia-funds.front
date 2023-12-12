@@ -23,6 +23,7 @@ export default function useKnowledgeTransfer() {
     const { setMessage, authorization } = useContext(AppContext);
     const { GetUploadKnowledgeTransferFiles } = usePaccServices(parseInt(typeState))
     const [ filesService, setFilesService ] = useState([])
+    const [ hourCommitted, setHourCommitted ] = useState(0)
 
     useEffect(() => {
         loadTableData({
@@ -50,6 +51,12 @@ export default function useKnowledgeTransfer() {
        {
             fieldName:'committedHours',
             header: 'Horas Comprometidas',
+            renderCell(row) {
+                setHourCommitted(row.committedHours)
+                return(
+                    <span className="span-horas">{row.committedHours}</span>
+                )
+            },
        },
        {
             fieldName:'workedHours',
@@ -111,7 +118,7 @@ export default function useKnowledgeTransfer() {
                                         setMessage({
                                             show: true,
                                             title: "Gestionar",
-                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary} getUploadKnow={getUploadKnow} typeState={typeState}/>,
+                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary} getUploadKnow={getUploadKnow} typeState={typeState} hourCommitted={hourCommitted}/>,
                                             background: true,
                                         });
                                     }} 
