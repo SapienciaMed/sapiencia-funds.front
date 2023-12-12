@@ -113,4 +113,18 @@ export interface IRenewalDataGrid{
   perPage?: number;
 }
 
+export interface ICallRenewalResponse {
+  array: ICallRenewal[];
+  meta: {
+      total: number;
+      per_page: number;
+      current_page: number | null;
+      last_page: number;
+      first_page: number;
+      first_page_url: string;
+      last_page_url: string;
+      next_page_url: string | null;
+      previous_page_url: string | null;
+  };
+}
 
