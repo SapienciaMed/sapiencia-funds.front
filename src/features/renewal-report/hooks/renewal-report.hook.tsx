@@ -18,7 +18,7 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport, createRenewal, report } = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport, createRenewal, report,calculate } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
@@ -30,6 +30,9 @@ export default function useRenewaReportSearch() {
     const [percentageBachLeg, setPercentageBachLeg] = useState("0.00%");
     const [inputEnabledBachLeg, setInputEnabledBachLeg] = useState("0");
     const [dataReports, setDataReports] = useState([]);
+    const [totalEnabled, setTotalEnabled] = useState(0);
+    const [totalRenewed, setTotalRenewed] = useState(0);
+    const [porcentageProm, setPorcentageProm] = useState("0.00%");
 
 
 
@@ -111,15 +114,11 @@ export default function useRenewaReportSearch() {
 
 
     // Calcular Total habilitado
-    const totalEnabled = dataGridRenewal.reduce((total, row) => {
-        const enabled = parseFloat(row.enabled);
-        return total + (isNaN(enabled) ? 0 : enabled);
-    }, 0);
+    
 
     // Calcular Total renovados
     const totalrenewed = dataGridRenewal.reduce((total, row) => {
         const renewed = parseFloat(row.renewed);
-        console.log('enable', renewed)
         return total + (isNaN(renewed) ? 0 : renewed);
     }, 0);
 
@@ -164,42 +163,34 @@ export default function useRenewaReportSearch() {
 
 
     });
-
-
-    useEffect(() => {
-        if (Array.isArray(dataReports)) {
-            const totalEnabled = dataReports.reduce((sum, item) => sum + item.renewed, 0);
-            console.log('totalEnabled', totalEnabled);
-        } else {
-            console.log('dataReports no es un array', dataReports);
-        }
-    }, [dataReports]);
+  
     
 
     const dataReport = async (data: ICallRenewal) => {
         try {
-            const response = await report(data);
+            const response = await calculate(String(selectedperiodo));
 
-            console.log(response.data[0])
+            console.log('response',response.data.sumEnabled)
             
-            // Transformar los datos a una estructura más amigable
-            const transformedData = response.data.map(item => ({
-                //id: item.id,
-                fund: item.fund,
-                enabled: item.enabled,
-                renewed: item.renewed,
-                percentage: item.percentage,
-                // Puedes agregar aquí más campos según necesites
-            }));
             
-            console.log('report',transformedData);
-            setDataReports(transformedData);
+            setTotalEnabled(response.data.sumEnabled)
+            setTotalRenewed(response.data.sumRenewed)
+
+            
+
+            
+
+            
     
         } catch (error) {
             console.error(error);
         }
-    };
+     };
     
+
+    useEffect(()=>{
+        setPorcentageProm(totalEnabled > 0 ? (totalRenewed / totalEnabled).toFixed(3) + "%" : "0.00%")
+    },[totalRenewed,totalEnabled])
 
    
 
@@ -364,7 +355,9 @@ export default function useRenewaReportSearch() {
             tableComponentRef.current.loadData(searchCriteria);
         }
 
-
+        dataReport({
+            period: selectedperiodo
+        })
     }
 
 
@@ -397,5 +390,7 @@ export default function useRenewaReportSearch() {
         setInputEnabledBachLeg,
         inputEnabledBachLeg,
         onsubmitCreate,
+        totalRenewed,
+        porcentageProm
     }
 }
