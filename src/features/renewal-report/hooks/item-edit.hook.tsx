@@ -51,7 +51,6 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
         reset,
         watch,
         formState: { errors },
-        
     } = useForm<ICallRenewal>({ resolver });
 
     useEffect(() =>{
@@ -180,7 +179,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
         showTable,
         tableComponentRef,
         datos,
-        onEdit,
+        updateDataGridRenewal,
         CancelFunction,
         
         
