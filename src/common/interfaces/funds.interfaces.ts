@@ -112,3 +112,43 @@ export interface IRenewalDataGrid{
   page?: number;
   perPage?: number;
 }
+
+
+export interface PruebaDataItem {
+  userCreate: string | null;
+  id: number;
+  period: string;
+  fund: string;
+  enabled: number;
+  renewed: number;
+  percentage: string;
+  userModified: string | null;
+  dateModified: string | null;
+  dateCreate: string | null;
+}
+
+export interface MetaData {
+  total: number;
+  per_page: number;
+  current_page: number | null;
+  last_page: number;
+  first_page: number;
+  first_page_url: string;
+  last_page_url: string;
+  next_page_url: string | null;
+  previous_page_url: string | null;
+}
+
+export interface Data {
+  array: PruebaDataItem[];
+  meta: MetaData;
+}
+
+export interface Operation {
+  code: string;
+}
+
+export interface ApiResponse {
+  data: Data;
+  operation: Operation;
+}

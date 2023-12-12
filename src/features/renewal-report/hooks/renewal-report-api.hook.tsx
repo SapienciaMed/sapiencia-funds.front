@@ -1,6 +1,7 @@
+import { Data } from "ws";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import useCrudService from "../../../common/hooks/crud-service.hook";
-import { ICallRenewal, IProgramTypes, IRenewalDataGrid } from "../../../common/interfaces/funds.interfaces";
+import { ICallRenewal, IProgramTypes, IRenewalDataGrid, PruebaDataItem } from "../../../common/interfaces/funds.interfaces";
 import { ApiResponse } from "../../../common/utils/api-response";
 
 
@@ -30,7 +31,7 @@ export default function useRenewalReportApi() {
 
     async function report(
         data: ICallRenewal
-      ): Promise<ApiResponse<any[]>> {
+      ): Promise<ApiResponse<PruebaDataItem[]>> {
         return await post(`${serviceUrl}/getrenewal-paginated/`, data);
       }
 
