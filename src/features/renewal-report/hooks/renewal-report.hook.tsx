@@ -1,16 +1,12 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { renewalSchma } from "../../../common/schemas/renewal-shema";
-import { RiFileExcel2Line } from "react-icons/ri";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import { ICallRenewal, IRenewalDataGrid } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import useRenewalReportApi from "./renewal-report-api.hook";
-import { data } from "../../socialization/service/api";
-import { urlApiFunds } from "../../../common/utils/base-url";
 
 import * as XLSX from "xlsx"
 
@@ -156,32 +152,58 @@ export default function useRenewaReportSearch() {
     };
     // searchRenewal
     const selectedperiodo = watch('period');
+
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
+        setShowTable(true)
         loadTableData({
             period: selectedperiodo,
         })
-
         dataReport({
-            period: selectedperiodo,
-            page: 1,
-            perPage: 10
+            period: selectedperiodo
         })
+
+
     });
 
-    const dataReport = async (data: ICallRenewal) => {       
 
+    useEffect(() => {
+        if (Array.isArray(dataReports)) {
+            const totalEnabled = dataReports.reduce((sum, item) => sum + item.renewed, 0);
+            console.log('totalEnabled', totalEnabled);
+        } else {
+            console.log('dataReports no es un array', dataReports);
+        }
+    }, [dataReports]);
+    
+
+    const dataReport = async (data: ICallRenewal) => {
         try {
-            const response = await getRenewalReport(data);          
-                setDataReports(response.data);
+            const response = await report(data);
+
+            console.log(response.data[0])
             
-            //return response;
+            // Transformar los datos a una estructura más amigable
+            const transformedData = response.data.map(item => ({
+                //id: item.id,
+                fund: item.fund,
+                enabled: item.enabled,
+                renewed: item.renewed,
+                percentage: item.percentage,
+                // Puedes agregar aquí más campos según necesites
+            }));
+            
+            console.log('report',transformedData);
+            setDataReports(transformedData);
+    
         } catch (error) {
-            // Handle the error here
             console.error(error);
         }
     };
-              
     
+
+   
+
+
     /*  async function fetchRenewalReport() {
         try {
             const response = await getRenewalReport({
@@ -197,17 +219,17 @@ export default function useRenewaReportSearch() {
             console.error(error);
         }
     }    */
-    
-    
-    
-    
-             
+
+
+
+
+
 
     function downloadCollection() {
 
-        console.log('dataGridRenewal',dataReports)
-      
-        
+        console.log('dataGridRenewal', dataReports)
+
+
 
         // Crear un nuevo array con nombres de columnas personalizados
         const excelData = dataReports.map((row) => ({
@@ -307,8 +329,6 @@ export default function useRenewaReportSearch() {
                 onOk() {
                     reset();
                     setMessage({});
-                    //setDataGridItems([])
-                    //setDataGridUsers([])
                 },
                 onClose() {
                     reset();
