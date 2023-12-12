@@ -102,7 +102,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
             <div className="button-save-container-display m-top-20">
               <ButtonComponent
                 form="searchBudget"
-                value={"Limpiar"}
+                value={"Limpiar campos"}
                 className="button-clean medium"
                 type="button"
                 action={() => {
