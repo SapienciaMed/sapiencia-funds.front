@@ -71,15 +71,16 @@ export const editActas = yup.object({
     .required("Completar información"),
 });
 
-export const manageTransfer = yup.object({
-  state: yup
-    .string()
-    .required("Completar información"),
-  workedHours: yup
-    .string()
-    .required("Completar información"),
-})
-
+export const manageTransfer = (hourCommitted) =>
+  yup.object({
+    state: yup.string().required("Completar información"),
+    workedHours: yup
+      .number()
+      .typeError('Completar información')
+      .required("Completar información")
+      .max(hourCommitted, 'Horas realizadas debe ser igual o menor a las horas comprometidas')
+      .min(1, 'Horas realizadas debe ser mayor a 0'),
+  });
 
 
 
