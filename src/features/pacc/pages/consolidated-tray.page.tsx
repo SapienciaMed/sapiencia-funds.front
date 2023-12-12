@@ -43,9 +43,9 @@ function ConsolidatedTrayPage() {
         const coordinador = {
             id: "coordinador", 
             title: "Coordinador", 
-            content: (<></>), 
+            content: (<BeneficiaryTrayPage typeState={EStatePac.Coordinator}/>), 
             action: () => {},
-            hide: false /*poner el rol */ 
+            hide: validateActionAccess('COORDINADOR') 
         }
         const juridica = {
             id: "juridica", 

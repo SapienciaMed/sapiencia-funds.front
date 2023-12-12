@@ -32,24 +32,7 @@ export default function useBeneficiaryTray(typeState: number) {
 
     useEffect(() => { 
         setShowSpinner(true)
-        GetCutsForConsolidationTray().then(response => {
-            setShowSpinner(false)
-            if(response.operation.code === EResponseCodes.OK){
-                const data = response.data?.map((item: any) => {
-                    return {
-                        name: item.name,
-                        value: item.id
-                    }
-                })
-                const newData = [
-                    ...data,
-                    { name: 'Todos', value: 'TODOS' }
-                ];
-
-                setValue('idCut', newData[0].value)
-                setIdCutData(newData)
-            }
-        })
+        getCuts()
 
         if (typeState) {
  
@@ -258,6 +241,28 @@ export default function useBeneficiaryTray(typeState: number) {
         }
     } 
 
+    const getCuts = () => {
+        GetCutsForConsolidationTray().then(response => {
+            setShowSpinner(false)
+            if(response.operation.code === EResponseCodes.OK){
+                const data = response.data?.map((item: any) => {
+                    return {
+                        name: item.name,
+                        value: item.id
+                    }
+                })
+                const newData = [
+                    ...data,
+                    { name: 'Todos', value: 'TODOS' }
+                ];
+
+                setValue('idCut', newData[0].value)
+                setIdCutData(newData)
+            }
+        })
+    }
+
+    
     return{
         tableComponentRef,
         tableColumns,
@@ -268,6 +273,7 @@ export default function useBeneficiaryTray(typeState: number) {
         showSpinner,
         valueFilterTable,
         handleFilterChange,
-        handleChangeCut
+        handleChangeCut,
+        getCuts
     }
 }
