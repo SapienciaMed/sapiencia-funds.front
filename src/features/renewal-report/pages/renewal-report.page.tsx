@@ -7,8 +7,9 @@ import { ITableAction, ITableElement } from "../../../common/interfaces/table.in
 import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import BasicTableComponent from "../../../common/components/basic-table.component";
-import { UseFormGetValues } from 'react-hook-form';
+import { Controller, UseFormGetValues } from 'react-hook-form';
 import ItemsEditePage from "./items-edit.page";
+import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 const SearchRenewalReportPage = (): React.JSX.Element => {
   const { setMessage } = useContext(AppContext);
@@ -18,7 +19,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
     setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
     totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal,
     percentageBachLeg, setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate, selectedperiodo,
-    loadTableData, totalRenewed, porcentageProm
+    loadTableData, totalRenewed, porcentageProm, porcentageLegal, totalRenewedBeca
   } = useRenewaReportSearch();
 
 
@@ -195,51 +196,60 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     Beca mejores bachilleres legalizados</label>
                 </div>
 
-                <div className="grid-form-3-container mb-24px">
-                  <InputComponent
-                    register={control.register}
-                    idInput="enabledBachLeg"
-                    className="input-basic medium"
-                    typeInput="number"
-                    label="Nro habilitados"
-                    classNameLabel="text-black big text-required"
-                    errors={errors}
-                    placeholder={enabledBachLeg ? enabledBachLeg : ""}
-                    onChange={(e) => {
-                      const newEnabledBachLeg = e.target.value;
-                      // Actualizar el valor de inputEnabledBachLeg
-                      setInputEnabledBachLeg(newEnabledBachLeg);
-                    }}
-                  />
-                  <InputComponent
-                    register={control.register}
-                    idInput="renewedBachLeg"
-                    className="input-basic medium"
-                    typeInput="text"
-                    label="Nro renovados"
-                    classNameLabel="text-black"
-                    errors={errors}
-                    disabled={true}
-                    value={renewedBachLeg}
-                  />
-                  <InputComponent
-                    register={control.register}
-                    idInput="PercentageBachLeg"
-                    className="input-basic medium"
-                    typeInput="text"
-                    label="Porcentaje"
-                    classNameLabel="text-black"
-                    errors={errors}
-                    disabled={true}
-                    value={percentageBachLeg}
-                  />
-                </div>
+               <FormComponent id="save" className="form-signIn" action={onsubmitCreate}>
+                  <div className="grid-form-3-container mb-24px">
+
+                    <Controller
+                      control={control}
+                      name={"enabledBachLeg"}
+                      render={({ field }) => {
+                        return (
+                          <InputNumberComponent
+                            control={control}
+                            idInput={`enabledBachLeg`}
+                            label="Nro habilitados"
+                            className="inputNumber-basic medium"
+                            classNameLabel="text-black big text-required"
+                            errors={errors}
+                            {...field}
+                          />
+                        );
+                      }}
+                    />
+
+                    <InputComponent
+                      register={control.register}
+                      idInput="renewedBachLeg"
+                      className="input-basic medium"
+                      typeInput="text"
+                      label="Nro renovados"
+                      classNameLabel="text-black"
+                      errors={errors}
+                      disabled={true}
+                      value={totalRenewedBeca}
+                    />
+                    <InputComponent
+                      register={control.register}
+                      idInput="PercentageBachLeg"
+                      className="input-basic medium"
+                      typeInput="text"
+                      label="Porcentaje"
+                      classNameLabel="text-black"
+                      errors={errors}
+                      disabled={true}
+                      value={porcentageLegal}
+                    />
+                  </div>
+                </FormComponent>
+
+
               </div>
 
 
               <div>
                 <div className="button-save-container-display mr-24px">
                 </div>
+
 
                 <ButtonComponent
                   value={
@@ -267,6 +277,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                 />
               </div>
             </div>
+
           }
         </div>
       </div>
