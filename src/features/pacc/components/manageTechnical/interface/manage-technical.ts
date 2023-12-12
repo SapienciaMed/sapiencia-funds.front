@@ -51,5 +51,6 @@ export interface IPropManageTransfer {
   loadTableData: () => void
   idBeneficiary: number,
   getUploadKnow: () => void,
-  typeState: string
+  typeState: string,
+  hourCommitted: number
 }
