@@ -58,9 +58,12 @@ export default function useRenewalReportApi() {
   async function calculate(period: string): Promise<ApiResponse<any>> {
     return await get(`${serviceUrl}/calculate/${period}`);
   }
-
+  
   async function getBeca(period: string): Promise<ApiResponse<any>> {
     return await get(`${serviceUrl}/get-beca/${period}`);
+  }
+  async function createReportRenewal(period:number,data: ICallRenewal): Promise<ApiResponse<ICallRenewal>> {
+    return await post(`${serviceUrl}/createReportRenewal/${period}`, data);
   }
 
   return {
@@ -69,6 +72,7 @@ export default function useRenewalReportApi() {
     createRenewal,
     report,
     calculate,
-    getBeca
+    getBeca,
+    createReportRenewal
   }
 }

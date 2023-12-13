@@ -18,7 +18,7 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport, createRenewal, report, calculate,getBeca } = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport, createRenewal, report, calculate,getBeca,createReportRenewal } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
@@ -194,7 +194,7 @@ export default function useRenewaReportSearch() {
         try {
             const response = await getBeca(String(selectedperiodo));           
 
-            setTotalRenewedBeca(response.data[0].enabled)        
+            setTotalRenewedBeca(response.data[0].renewed)        
 
         } catch (error) {
             console.log(error)
@@ -220,8 +220,7 @@ export default function useRenewaReportSearch() {
         setPorcentageProm(totalEnabled > 0 ? (totalRenewed*100/totalEnabled).toFixed(2) + "%" : "0.00%")
     }, [totalRenewed, totalEnabled])
 
-    useEffect(() => {
-       // setValue("enabledBachLeg",1)
+    useEffect(() => {       
         setPorcentageLegal(habilitados > 0 ? (totalRenewedBeca*100/habilitados).toFixed(2) + "%" : "0.00%")
     }, [totalRenewedBeca, habilitados])
 
@@ -275,7 +274,13 @@ export default function useRenewaReportSearch() {
 
     /*Functions*/
     const onsubmitCreate = handleSubmit((data: ICallRenewal) => {
-        console.log(data)
+        console.log('datos ',data)
+
+        const datos = {            
+            enabled: String(data.enabledBachLeg)           
+        };
+        
+        const period = Number(selectedperiodo);
 
         setMessage({
             show: true,
@@ -284,7 +289,7 @@ export default function useRenewaReportSearch() {
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
-                confirmRenewalCreation(data)
+                confirmRenewalCreation(period,datos)
             },
             onClose() {
                 reset();
@@ -294,32 +299,17 @@ export default function useRenewaReportSearch() {
         });
     });
 
-    const confirmRenewalCreation = async (data: ICallRenewal) => {
-        const renewalItems = dataGridRenewal.map((e) => ({
-            fund: e.fund,
-            enabled: e.enabled,
-            renewed: e.renewed,
-            percentage: e.percentage,
-        }));
+    const confirmRenewalCreation = async (period:number,data: ICallRenewal) => {
+       
 
-        // Convertir filas en columnas
-        const transformedData = renewalItems.reduce((acc, item) => {
-            Object.keys(item).forEach((key) => {
-                acc[key] = acc[key] || [];
-                acc[key].push(item[key]);
-            });
-            return acc;
-        }, {});
+        
 
-        const renewalData = {
-            fund: data.fund,
-            enabled: data.enabled,
-            renewed: data.renewed,
-            percentage: data.percentage
-        }
+        console.log('datos 2',data)
+
+      
 
 
-        const res = await createRenewal(renewalData);
+        const res = await createReportRenewal(period,data);
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
                 OkTitle: "Guardar",
@@ -331,6 +321,8 @@ export default function useRenewaReportSearch() {
                 onOk() {
                     reset();
                     setMessage({});
+                    tableComponentRef.current.emptyData();
+                    setShowTable(false)
                 },
                 onClose() {
                     reset();
@@ -348,7 +340,7 @@ export default function useRenewaReportSearch() {
                 background: true,
             });
 
-        }
+        } 
 
     };
 
