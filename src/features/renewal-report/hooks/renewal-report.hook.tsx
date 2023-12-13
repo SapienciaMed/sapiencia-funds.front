@@ -217,12 +217,12 @@ export default function useRenewaReportSearch() {
 
 
     useEffect(() => {
-        setPorcentageProm(totalEnabled > 0 ? (totalRenewed / totalEnabled).toFixed(3) + "%" : "0.00%")
+        setPorcentageProm(totalEnabled > 0 ? (totalRenewed*100/totalEnabled).toFixed(2) + "%" : "0.00%")
     }, [totalRenewed, totalEnabled])
 
     useEffect(() => {
        // setValue("enabledBachLeg",1)
-        setPorcentageLegal(habilitados > 0 ? (totalRenewedBeca/habilitados).toFixed(2) + "%" : "0.00%")
+        setPorcentageLegal(habilitados > 0 ? (totalRenewedBeca*100/habilitados).toFixed(2) + "%" : "0.00%")
     }, [totalRenewedBeca, habilitados])
 
 
