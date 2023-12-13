@@ -5,6 +5,7 @@ import { AppContext } from "../../../common/contexts/app.context";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 import useRenewalReportApi from "./renewal-report-api.hook";
+import { renewalCreateSchema } from "../../../common/schemas/renewal-shema";
 
 
 export default function useActaItems(renewalitem, renewal: ICallRenewal,selectedperiodo: string, loadTableData: (value?:object)=> void, dataTableServices?: any[]) {
@@ -17,7 +18,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
 
     //Validaciones  
 
-    let resolver: any;
+    const resolver = useYupValidationResolver(renewalCreateSchema);
 
     //peticiones api
     const { getAnnouncement, getRenewalReport, createRenewal } = useRenewalReportApi();
@@ -41,6 +42,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
     //const [dataActa, setDataActa] = useState<IActa>(acta);
     const [resourcesCredit, setResourcesCredit] = useState("0");
     const [periods, setPeriods] = useState("");
+    const [percentage, setPercentage] = useState(0);
     
     //form
     const {
@@ -53,35 +55,26 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
         formState: { errors },
     } = useForm<ICallRenewal>({ resolver });
 
+    const enabled = watch('enabled')
+
     useEffect(() =>{
         setValue("fund",renewal.fund)
-        setValue("percentage",renewal.percentage)
+        //setValue("percentage",renewal.percentage)
         setValue("renewed",renewal.renewed)
   
     },[renewal])
-    
 
 
-
-
-    const calculateValues = (subtotalVigency, costsExpenses, selectedLabel, financialOperation, OperatorCommission) => {
-        const multiplicacion = parseInt(subtotalVigency) * costsExpenses / 100;
-        const resta = parseInt(subtotalVigency) - multiplicacion;
-
-        let financialOperatorCommission = "0";
-        let resourcesCredit = "0";
-
-
-    };
-
-    const calculatePercentage = (renewed, enabled) => {
-        if (enabled === 0) {
-            return 0;
+    useEffect(() => {
+        if (Number(enabled) > 0 && Number(renewal.renewed) > 0) {
+          const porcentaje = (Number(enabled) * 100 / Number(renewal.renewed)).toFixed(2);
+          setValue("percentage", porcentaje);
         } else {
-            return (renewed / enabled) * 100;
+          setValue("percentage", "0");
         }
-    };
-
+      }, [enabled, renewal]);
+   
+   
     useEffect(() => {
         setSelectedRenewal(renewal);
         // Resto del código...

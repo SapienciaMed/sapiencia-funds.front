@@ -22,8 +22,6 @@ export default function useRenewaReportSearch() {
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
-    const [enabledTotal, setEnabledTotal] = useState(0);
-    const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
 
     const [enabledBachLeg, setenabledBachLeg] = useState("0");
     const [renewedBachLeg, setrenewedBachLeg] = useState("0");
@@ -180,8 +178,6 @@ export default function useRenewaReportSearch() {
         try {
             const response = await calculate(String(selectedperiodo));
 
-            console.log('response', response.data.sumEnabled)
-
             setTotalEnabled(response.data.sumEnabled)
             setTotalRenewed(response.data.sumRenewed)
 
@@ -209,7 +205,6 @@ export default function useRenewaReportSearch() {
         getRenewalReport(data)
             .then((response) => {                
                 if (response && response?.operation?.code === EResponseCodes.OK) {
-                    console.log('respuesta',response.data.array)
                    setDataReports(response.data.array)
                 }
             })
@@ -226,9 +221,6 @@ export default function useRenewaReportSearch() {
 
 
     function downloadCollection() {
-
-        console.log('dataGridRenewal', dataReports)
-
         // Suponiendo que response es la respuesta de getRenewalReport
         const excelData = dataReports.map((row) => ({
             "Fondo": row.fund,
@@ -247,7 +239,7 @@ export default function useRenewaReportSearch() {
             XLSX.writeFile(book, `Informe Renovación.xlsx`)
             setMessage({
                 title: "Descargar",
-                description: "Información descargada exitosamente ",
+                description: "Información descargada exitosamente",
                 OkTitle: "Cerrar",
                 show: true,
                 type: EResponseCodes.OK,
@@ -274,8 +266,6 @@ export default function useRenewaReportSearch() {
 
     /*Functions*/
     const onsubmitCreate = handleSubmit((data: ICallRenewal) => {
-        console.log('datos ',data)
-
         const datos = {            
             enabled: String(data.enabledBachLeg)           
         };
@@ -285,7 +275,7 @@ export default function useRenewaReportSearch() {
         setMessage({
             show: true,
             title: "Guardar cambios",
-            description: "Estás segur@ de guardar la información",
+            description: "¿Estás segur@ de guardar la información?",
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
@@ -300,21 +290,13 @@ export default function useRenewaReportSearch() {
     });
 
     const confirmRenewalCreation = async (period:number,data: ICallRenewal) => {
-       
-
-        
-
-        console.log('datos 2',data)
-
-      
-
 
         const res = await createReportRenewal(period,data);
         if (res && res?.operation?.code === EResponseCodes.OK) {
             setMessage({
-                OkTitle: "Guardar",
+                OkTitle: "Aceptar",
                 description: "¡Guardado exitosamente!",
-                title: "Guardar",
+                title: "Guardar cambios",
                 show: true,
                 type: EResponseCodes.OK,
                 background: true,
