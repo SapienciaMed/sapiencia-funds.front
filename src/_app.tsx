@@ -23,11 +23,11 @@ import Cortes from "./features/cuts";
 import ResourcePrioritizationRoutes from "./features/resource-prioritization/resource-prioritization-routes";
 import PacRouter from "./features/pacc/pac-routes";
 import ConsolidationSocialService from "./features/consolidationSocialService";
+import AbsorptionPercentageRoutes from "./features/absorption-percentage/AbsorptionPercentageRoute";
 
 function App() {
   const { publish } = useAppCominicator();
   const HomePage = lazy(() => import("./common/components/home.page"));
-
 
   // Effect que comunica la aplicacion actual
   useEffect(() => {
@@ -45,12 +45,11 @@ function App() {
         <Router>
           <Suspense fallback={<p>Loading...</p>}>
             <Routes>
-            <Route path={"/fondos/"} element={<HomePage />} />;
+              <Route path={"/fondos/"} element={<HomePage />} />;
               <Route
                 path={"/fondos/priorizacion-recurso/*"}
                 element={<ResourcePrioritizationRoutes />}
               />
-
               <Route
                 path={"/fondos/resultados-votacion/*"}
                 element={<VotingResultsRoutes />}
@@ -73,22 +72,18 @@ function App() {
                 element={<UploadInformationRoutes />}
               />
               <Route path={"/fondos/maestros/*"} element={<MasterRoutes />} />
-
               <Route
                 path={"/fondos/presupuesto-convocatoria/*"}
                 element={<BudgetConvocationRoutes />}
               />
-
               <Route
                 path={"/fondos/socializacion/*"}
                 element={<Socialization />}
               />
-
               <Route
                 path={"/fondos/administracion/reglamento/*"}
                 element={<Regulation />}
               />
-
               <Route
                 path={"/fondos/informe-citas/*"}
                 element={<DatingReportRoutes />}
@@ -109,6 +104,10 @@ function App() {
               <Route
                 path="/fondos/consolidation-social-service/*"
                 element={<ConsolidationSocialService />}
+              />
+              <Route
+                path="/fondos/porcentaje-absorcion/*"
+                element={<AbsorptionPercentageRoutes />}
               />
             </Routes>
           </Suspense>
