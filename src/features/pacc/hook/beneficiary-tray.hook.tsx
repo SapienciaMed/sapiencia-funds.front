@@ -2,7 +2,7 @@ import {  useContext, useEffect, useRef, useState } from "react";
 import { ITableAction, ITableElement } from "../../../common/interfaces";
 import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, IStepCashing } from "../interface/pacc";
 import { usePaccServices } from "./pacc-serviceshook";
-import { EResponseCodes, EStatePac } from "../../../common/constants/api.enum";
+import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { useForm } from 'react-hook-form';
 import { AppContext } from "../../../common/contexts/app.context";
@@ -212,11 +212,16 @@ export default function useBeneficiaryTray(typeState: number) {
                     status: true
                 })
             }else{
+                const searchCriteriaData = {
+                    [(getValues('idCut') == 'TODOS' ? 'cutParamName' : 'cutParamId' )]: getValues('idCut') ,
+                    statusPaccSearch: typeState
+                }
+
                 setListSearch({
                     data: {},
                     status: false
                 })
-                loadTableData({statusPaccSearch: typeState})
+                loadTableData(searchCriteriaData)
             }
             setShowSpinner(false)
         }, 700);
