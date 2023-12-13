@@ -39,6 +39,9 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
     {
       fieldName: "percentage",
       header: "Porcentaje",
+      renderCell: (row) => {
+        return <>{row.percentage}%</>;
+      }
     },
 
   ];
@@ -196,7 +199,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     Beca mejores bachilleres legalizados</label>
                 </div>
 
-               <FormComponent id="save" className="form-signIn" action={onsubmitCreate}>
+                <FormComponent id="save" className="form-signIn" action={onsubmitCreate}>
                   <div className="grid-form-3-container mb-24px">
 
                     <Controller
