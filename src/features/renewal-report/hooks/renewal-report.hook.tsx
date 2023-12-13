@@ -192,6 +192,10 @@ export default function useRenewaReportSearch() {
 
             setTotalRenewedBeca(response.data[0].renewed)
 
+            setValue("enabledBachLeg",response.data[0].enabled)
+
+            setPorcentageLegal(response.data[0].enabled > 0 ? (response.data[0].renewed * 100 / response.data[0].enabled).toFixed(2) + "%" : "0.00%")
+
         } catch (error) {
             console.log(error)
         }

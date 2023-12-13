@@ -91,11 +91,11 @@ const ItemsEditePage = ({ renewalitem, renewal, selectedperiodo, loadTableData }
                                             <InputNumberComponent
                                                 idInput={field.name}
                                                 className="inputNumber-basic medium"
-                                                label="Porcentage"
-                                                classNameLabel={`text-black biggest text-required`}
+                                                label="Porcentaje"
+                                                classNameLabel={`text-black biggest`}
                                                 errors={errors}
                                                 placeholder={""}
-                                               
+                                               disabled
                                                 suffix="%"
                                                 mode="decimal"
                                                 minFractionDigits={1}
