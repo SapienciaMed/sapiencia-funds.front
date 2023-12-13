@@ -49,20 +49,20 @@ interface IProps<T> {
   descriptionModalNoResult?: string;
   classname?: string;
   isDisabled?: boolean;
-  widthTable?: string;
-  horizontalScroll?: boolean;
   onResult?: (rows: T[]) => void;
   isMobil?: boolean;
   classSizeTable?: string;
   isInputSearch?: boolean;
-  onGlobalFilterChange?: (value: any) => void;
   bodyRequestParameters?: string | number;
   keyBodyRequest?: string;
+  setShowFooterActions?: ({}) => {};
+  onGlobalFilterChange?: (value: any) => void; // Es necesario llamar una funcion para que haga la peticion para el filtrado interno.
+  valueFilterTable?: string; // Es necesario llamar el value para el filtro.
   count?: boolean;
   viePaginator?: boolean;
   isNotBorderClasse?: boolean;
-  setShowFooterActions?: ({}) => {};
   setShowSpinner?: Dispatch<SetStateAction<boolean>>;
+  resetValue?: () => void;
 }
 
 interface IRef {
@@ -86,20 +86,19 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     isMobil = true,
     classSizeTable,
     isInputSearch = false,
-    onGlobalFilterChange, // Es necesario llamar una funcion para que haga la peticion para el filtrado interno.
-    bodyRequestParameters,
-    keyBodyRequest,
+    onGlobalFilterChange,
+    valueFilterTable,
     count,
     viePaginator = true,
     isNotBorderClasse,
     setShowFooterActions,
     setShowSpinner,
+    resetValue,
   } = props;
 
   // States
   const [charged, setCharged] = useState<boolean>(false);
   const [resultData, setResultData] = useState<any>();
-
   const [loading, setLoading] = useState<boolean>(false);
   const [perPage, setPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
@@ -115,7 +114,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   }, [resultData]);
 
   // Declaraciones
-
   const { post } = useCrudService(url);
   useImperativeHandle(ref, () => ({
     loadData: loadData,
@@ -136,7 +134,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       ...body,
       page: currentPage || 1,
       perPage: perPage,
-      [keyBodyRequest]: bodyRequestParameters,
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
@@ -157,6 +154,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           },
           background: true,
         });
+        resetValue && resetValue();
       }
     } else {
       setMessage({
@@ -169,8 +167,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           setMessage({});
         },
       });
+      resetValue && resetValue();
     }
-
     setLoading(false);
   }
 
@@ -267,7 +265,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             leftContent={leftContent(
               princialTitle,
               isInputSearch,
-              onGlobalFilterChange
+              onGlobalFilterChange,
+              valueFilterTable
             )}
           />
         )}
@@ -477,13 +476,13 @@ function getIconElement(
 const leftContent = (
   title: string,
   isInputSearch: boolean,
-  onGlobalFilterChange?: (value: React.ChangeEvent<HTMLInputElement>) => void
+  onGlobalFilterChange?: (value: React.ChangeEvent<HTMLInputElement>) => void,
+  valueFilterTable?: string
 ) => {
-  //TODO: Para utilizar el filtro es necesario las prop isInputSearch y onGlobalFilterChange
-
+  //TODO: Para utilizar el filtro es necesario las prop isInputSearch, onGlobalFilterChange y valueFilterTable
   return (
     <>
-      {isInputSearch && onGlobalFilterChange ? (
+      {isInputSearch && onGlobalFilterChange && valueFilterTable != null ? (
         <div className="col-1 col-100 seeker">
           <span className="p-input-icon-left">
             <i className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center">
@@ -508,6 +507,7 @@ const leftContent = (
               className="h-10"
               placeholder="Buscar"
               onChange={(value) => onGlobalFilterChange(value)}
+              value={valueFilterTable}
             />
           </span>
         </div>
@@ -520,7 +520,6 @@ const leftContent = (
   );
 };
 // Metodo que retorna el icono o nombre de la accion
-
 const paginatorHeader: PaginatorTemplateOptions = {
   layout: "CurrentPageReport RowsPerPageDropdown",
   CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {

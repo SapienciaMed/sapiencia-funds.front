@@ -1,19 +1,21 @@
 import React from "react";
 import { EDirection } from "../../../common/constants/input.enum";
 import TableComponent from "../../../common/components/table.component";
-import useTechnicianStepCashing from "../hook/techician-step.hook";
+import useBeneficiaryTray from "../hook/beneficiary-tray.hook";
 import { FormComponent,  SelectComponent } from "../../../common/components/Form";
 import { ProgressSpinner } from 'primereact/progressspinner';
-function TechnicianStepCashing() {
+import { EStatePac } from "../../../common/constants/api.enum";
+import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
-    const { tableComponentRef, tableColumns, tableActions, idCutData, control, listSearch, showSpinner, handleFilterChange, handleChangeCut } = useTechnicianStepCashing()
+/* ---- Este componente se reutilizara en varias Tabs --- */
+
+function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) {
+
+    const { tableComponentRef, tableColumns, tableActions, idCutData, control, listSearch, showSpinner, valueFilterTable,
+        handleFilterChange, handleChangeCut, getCuts } = useBeneficiaryTray(typeState)
 
     return(
         <div className="card-table gap-0 mt-14px">
-            {
-                showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
-            }
-            
             <section className='grid-form-3-container'>  
                 <FormComponent action={() => {}}>
                     <SelectComponent
@@ -24,7 +26,7 @@ function TechnicianStepCashing() {
                         className="select-basic big select-disabled-list"
                         classNameLabel='text-black biggest text-with-colons'
                         filter={true}
-                        placeholder="Seleccionar."
+                        placeholder="Seleccionar"
                         direction={EDirection.column}
                         fieldArray={true}
                         optionSelected={(value) => handleChangeCut(value)}
@@ -33,9 +35,12 @@ function TechnicianStepCashing() {
                 </FormComponent>                 
             </section>
             <section className=" card-table mt-20px">
+                {
+                    showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
+                }
                 <TableComponent
                     ref={tableComponentRef}
-                    url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/${ listSearch.status ? 'get-consolidation-tray-technician-collection-by-cut' :'get-consolidation-tray-technician-collection'}`}
+                    url={`${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(typeState)}/${ listSearch.status ? 'get-consolidation-tray-by-cut' :'get-consolidation-tray'}`}
                     columns={tableColumns}
                     actions={tableActions}
                     titleMessageModalNoResult="Buscar"
@@ -44,7 +49,9 @@ function TechnicianStepCashing() {
                     classSizeTable='size-table-wd-150'
                     isInputSearch={true}
                     onGlobalFilterChange={handleFilterChange}
+                    valueFilterTable={valueFilterTable}
                     isMobil={false}
+                    resetValue={getCuts}
                 />
             </section>
 
@@ -52,4 +59,4 @@ function TechnicianStepCashing() {
     )
 }
 
-export default React.memo(TechnicianStepCashing)
+export default React.memo(BeneficiaryTrayPage)

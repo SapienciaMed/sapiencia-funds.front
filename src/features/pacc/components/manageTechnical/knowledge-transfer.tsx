@@ -2,11 +2,11 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import React, { useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import useKnowledgeTransfer from "./hook/knowledge-transfer.hook";
-import { ButtonComponent } from "../../../../common/components/Form";
+import { typePrefixeTabs } from "../../helpers/TypePrefixeTab";
 
 function KnowledgeTransfer() {
 
-    const {tableColumns, tableComponentRef } = useKnowledgeTransfer()
+    const {tableColumns, tableComponentRef, typeState } = useKnowledgeTransfer()
     const [ showSpinner, setShowSpinner ] = useState(true)
 
     return (
@@ -17,7 +17,7 @@ function KnowledgeTransfer() {
 
             <TableComponent
                 ref={tableComponentRef}
-                url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/get-knowledge-transfer-by-beneficiary`}
+                url={`${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(parseInt(typeState))}/get-knowledge-transfer-by-beneficiary`}
                 columns={tableColumns}
                 titleMessageModalNoResult="Buscar"
                 descriptionModalNoResult="No se encontraron Transferencia de conocimiento"

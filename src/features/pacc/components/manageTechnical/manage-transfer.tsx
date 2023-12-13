@@ -13,13 +13,13 @@ import { Accordion, AccordionTab } from 'primereact/accordion';
 import useManageTransfer from "./hook/manage-transfer.hook";
 
 
-function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow }: IPropManageTransfer ){
+function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow, typeState, hourCommitted }: IPropManageTransfer ){
 
     const {width} = useWidth()
 
-    const {visible, requirements, control, errors,  seeObservation, messageError, filesUploadData, 
-        register, onSubmit, setVisible, setFilesUploadData, setMessage, unregister
-    } = useManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow })
+    const {visible, requirements, control, errors,  seeObservation, filesUploadData, 
+        register, onSubmit, setVisible, setFilesUploadData, setMessage,
+    } = useManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow, typeState, hourCommitted})
 
     return(
         <>
@@ -90,57 +90,29 @@ function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow 
                             placeholder="Seleccionar."
                         />
                         <Controller
-                                control={control}
-                                name={"workedHours"}
-                                defaultValue='' 
-                                render={({ field }) => {
-                                    return(
-                                        <InputComponent
-                                            id={field.name}
-                                            idInput={field.name}
-                                            className="input-basic medium"
-                                            typeInput="number"
-                                            register={register}
-                                            label="Horas realizadas"
-                                            classNameLabel="text-black biggest"
-                                            direction={EDirection.column}
-                                            onChange={(value) => { field.onChange(value) }}
-                                            errors={errors}
-                                            max={200}
-                                        />
-                                    )
-                                }}
-                            />
+                            control={control}
+                            name={"workedHours"}
+                            defaultValue='' 
+                            render={({ field }) => {
+                                return(
+                                    <InputComponent
+                                        id={field.name}
+                                        idInput={field.name}
+                                        className="input-basic medium"
+                                        typeInput="number"
+                                        register={register}
+                                        label="Horas realizadas"
+                                        classNameLabel="text-black biggest"
+                                        direction={EDirection.column}
+                                        onChange={(value) => { field.onChange(value) }}
+                                        errors={errors}
+                                        
+                                    />
+                                )
+                            }}
+                        />
                     </div>
-                    {
-                        seeObservation && 
-                            <div className='mt-24px'>
-                                <Controller
-                                    control={control}
-                                    name={"observation"}
-                                    defaultValue=""
-                                    render={({ field }) => {
-                                        return (
-                                            <TextAreaComponent
-                                                id={field.name}
-                                                idInput={field.name}
-                                                value={`${field.value}`}
-                                                label="Observación"
-                                                className="text-area-basic"
-                                                classNameLabel="text-black biggest text-required"
-                                                rows={2}
-                                                placeholder="Escribe aquí"
-                                                register={register}
-                                                onChange={field.onChange}
-                                                errors={messageError}
-                                                characters={150}
-                                            />
-                                        );
-                                    }}
-                                />
-                            </div>
-                        
-                    }
+                    
                     {
                         !filesUploadData ? 
                             <div className='title-area-3 mt-14px'>
@@ -157,7 +129,6 @@ function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow 
                                 <div  className={`title-button color-red ${width < 300 ? 'font-medium' :'font-big' } no-margin spc-common-table`} style={{justifyContent: 'center'}}
                                     onClick={() => {
                                         setFilesUploadData(null)
-                                        unregister('observationFile')
                                     }}
                                 >
                                     {filesUploadData.name} <BsTrash className="button grid-button button-delete"/>
@@ -165,10 +136,15 @@ function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow 
 
 
                             </div>
-                                <div className=''>
+                        </>
+
+                    }
+                    {
+                        seeObservation && 
+                            <div className='mt-24px'>
                                 <Controller
                                     control={control}
-                                    name={"observationFile"}
+                                    name={"observation"}
                                     defaultValue=""
                                     render={({ field }) => {
                                         return (
@@ -178,12 +154,11 @@ function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow 
                                                 value={`${field.value}`}
                                                 label="Observación"
                                                 className="text-area-basic"
-                                                classNameLabel="text-black biggest text-required"
+                                                classNameLabel="text-black biggest"
                                                 rows={2}
                                                 placeholder="Escribe aquí"
                                                 register={register}
                                                 onChange={field.onChange}
-                                                errors={messageError}
                                                 characters={150}
                                             />
                                         );
@@ -191,8 +166,6 @@ function ManageTransfer({ idSelect, loadTableData, idBeneficiary, getUploadKnow 
                                 />
                             </div>
                         
-                        </>
-
                     }
 
 

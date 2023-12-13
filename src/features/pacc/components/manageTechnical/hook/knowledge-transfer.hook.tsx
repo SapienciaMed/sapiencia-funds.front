@@ -17,12 +17,13 @@ import { downloadFile } from "../helper/dowloadFile";
 
 export default function useKnowledgeTransfer() {
 
-    const { id } =  useParams()
+    const { id, typeState } =  useParams()
     const tableComponentRef = useRef(null);
     const toast = useRef(null);
     const { setMessage, authorization } = useContext(AppContext);
-    const { GetUploadKnowledgeTransferFiles } = usePaccServices()
+    const { GetUploadKnowledgeTransferFiles } = usePaccServices(parseInt(typeState))
     const [ filesService, setFilesService ] = useState([])
+    const [ hourCommitted, setHourCommitted ] = useState(0)
 
     useEffect(() => {
         loadTableData({
@@ -50,6 +51,12 @@ export default function useKnowledgeTransfer() {
        {
             fieldName:'committedHours',
             header: 'Horas Comprometidas',
+            renderCell(row) {
+                setHourCommitted(row.committedHours)
+                return(
+                    <span className="span-horas">{row.committedHours}</span>
+                )
+            },
        },
        {
             fieldName:'workedHours',
@@ -111,7 +118,7 @@ export default function useKnowledgeTransfer() {
                                         setMessage({
                                             show: true,
                                             title: "Gestionar",
-                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary} getUploadKnow={getUploadKnow}/>,
+                                            description: <ManageTransfer idSelect={row.id} loadTableData={loadTableData} idBeneficiary={row.idBeneficiary} getUploadKnow={getUploadKnow} typeState={typeState} hourCommitted={hourCommitted}/>,
                                             background: true,
                                         });
                                     }} 
@@ -148,7 +155,7 @@ export default function useKnowledgeTransfer() {
     const items = (row): MenuItem[] => [
         {
             label: "Ver documentos",
-            items: filesService.map((file) => {
+            items: filesService.length > 0 ? filesService.map((file) => {
                 return {
                   label: file.name,
                   icon: '', // Puedes asignar un icono si es necesario
@@ -157,7 +164,7 @@ export default function useKnowledgeTransfer() {
                       <button 
                         className="p-menuitem-link button-menu-tooltip"
                         onClick={()=>{
-                            downloadFile(file, authorization, setMessage )
+                            downloadFile(file, authorization, setMessage, '/uploadInformation/files/get-file')
                         }}
                       >
                         <span className="p-menuitem-text ml-5px">{file.name}</span>
@@ -165,12 +172,17 @@ export default function useKnowledgeTransfer() {
                     );
                   },
                 };
-              }),
+              }) : [{
+                label: "No hay adjunto",
+                icon: '',        
+              }],
+              
         },
     ]
 
     return {
         tableComponentRef,
         tableColumns,
+        typeState
     }
 }

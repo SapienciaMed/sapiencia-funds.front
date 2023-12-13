@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import { ITabsMenuTemplate } from "../../../common/interfaces/tabs-menu.interface";
 import { useParams } from "react-router-dom";
 import TabListComponent from "../../../common/components/tab-list.component";
-import TechnicianStepCashingPages from "./technician-step-cashing.pages";
 import { AppContext } from "../../../common/contexts/app.context";
+import { EStatePac } from "../../../common/constants/api.enum";
+import BeneficiaryTrayPage from "./beneficiary-tray.pages";
 
 function ConsolidatedTrayPage() {
     
@@ -14,56 +15,56 @@ function ConsolidatedTrayPage() {
         const tecnicoPasoCobro = {
             id: "tecnicoPasoCobro", 
             title: "Técnico paso al cobro", 
-            content: (<TechnicianStepCashingPages/>), 
+            content: (<BeneficiaryTrayPage typeState={EStatePac.TecnhicianStepCashing}/>), 
             action: () => {},
-            hide: validateActionAccess('TECNICO_PASO_COBRO') || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
+            hide: validateActionAccess('TECNICO_PASO_COBRO') 
         }
         const servicioSocial = {
             id: "servicioSocial", 
             title: "Servicio social", 
             content:( <></> ), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
+           hide: false /*poner el rol */ 
         }
         const certificacionValores = {
             id: "certificacionValores", 
             title: "Certificación de valores", 
             content: (<></>), 
             action: () => {},
-            hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
+            hide: false /*poner el rol */ 
         }
         const tecnicoProfesional = {
             id: "tecnicoProfesional", 
             title: "Técnico profesional", 
-            content: (<></>), 
+            content: (<BeneficiaryTrayPage typeState={EStatePac.ProfessionalTechnician}/>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
+            hide: validateActionAccess('TECNICO_PROFESIONAL') 
         }
         const coordinador = {
             id: "coordinador", 
             title: "Coordinador", 
-            content: (<></>), 
+            content: (<BeneficiaryTrayPage typeState={EStatePac.Coordinator}/>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
+            hide: validateActionAccess('COORDINADOR') 
         }
         const juridica = {
             id: "juridica", 
             title: "Jurídica", 
             content: (<></>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
+            hide: false /*poner el rol */ 
         }
         const liderProyecto = {
             id: "liderProyecto", 
             title: "Lider de proyecto", 
             content: (<></>), 
             action: () => {},
-           hide: false /*poner el rol */ || validateActionAccess('ADMIN_BANDEJA_CONSOLIDACION') 
+            hide: false /*poner el rol */ 
         }
        const result = [
             servicioSocial,
-            tecnicoPasoCobro,
             certificacionValores,
+            tecnicoPasoCobro,
             tecnicoProfesional,
             coordinador,
             juridica,

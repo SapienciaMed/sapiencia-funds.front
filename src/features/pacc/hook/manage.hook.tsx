@@ -7,8 +7,8 @@ import { EResponseCodes } from "../../../common/constants/api.enum"
 
 export const useManage = () => {
 
-    const { id } =  useParams()
-    const {GeBeneficiaryById} = usePaccServices()
+    const { id, typeState } =  useParams()
+    const {GeBeneficiaryById} = usePaccServices(parseInt(typeState))
     const [dataManager, setDataManager] = useState<IManagePage>({
         title: "",
         beneficiaryInformationValues: {

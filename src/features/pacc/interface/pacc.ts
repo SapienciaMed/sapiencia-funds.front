@@ -44,6 +44,7 @@ export interface IConsolidationTrayForTechnicianCollection {
   cutParamId?: number; 
   page: number,
   perPage: number;
+  statusPaccSearch: number
 }
 
 export interface IManagePage{

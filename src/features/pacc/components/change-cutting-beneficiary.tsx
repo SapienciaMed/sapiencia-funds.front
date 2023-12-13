@@ -1,4 +1,4 @@
-import React, { SetStateAction, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import { useForm } from 'react-hook-form';
 import { EDirection } from "../../../common/constants/input.enum";
@@ -13,15 +13,14 @@ import { IDropdownProps } from "../../../common/interfaces/select.interface";
 interface IProp{
     idBenef: number,
     idCutData: IDropdownProps[],
-    setListSearch?:(value: SetStateAction<{ data: {}; status: boolean }>) => void,
-    loadTableData?: (searchCriteria?: object) => void
+    typeState: number
 }
 
-function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
+function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp>) {
 
     const { setMessage } = useContext(AppContext);
     const resolver = useYupValidationResolver(changeCuttingBeneficiary);
-    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices()
+    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices(typeState)
     const [actualCut, setActualCut] = useState('')
     const [ cut, setCut ] = useState<IDropdownProps[]>([])
 
@@ -66,7 +65,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
                 UpdateCutBeneficiary(data).then(response => {
                     if(response.operation.code === EResponseCodes.OK){
                         setMessage({});
-                        window.location.reload();
+                        window.location.reload();     
                     }
                 
                 })
@@ -96,16 +95,16 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
                             value={actualCut}
                         />
                     </section>
-                    <section className='grid-form-1-container mt-14px '>
+                    <section className='grid-form-1-container mt-14px'>
                         <SelectComponent
                             idInput={"idCut"}
                             control={control}
                             data={cut}
                             label="Corte"
-                            className="select-basic big"
+                            className="select-basic big select-disabled-list"
                             classNameLabel='text-black biggest text-with-colons text-required'
                             filter={true}
-                            placeholder="Seleccionar."
+                            placeholder="Seleccionar"
                             direction={EDirection.column}
                             errors={errors}
                         />
