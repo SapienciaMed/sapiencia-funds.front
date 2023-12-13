@@ -6,9 +6,10 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 import useRenewalReportApi from "./renewal-report-api.hook";
 import { renewalCreateSchema } from "../../../common/schemas/renewal-shema";
+import ItemsEditePage from "../pages/items-edit.page";
 
 
-export default function useActaItems(renewalitem, renewal: ICallRenewal,selectedperiodo: string, loadTableData: (value?:object)=> void, dataTableServices?: any[]) {
+export default function useActaItems(renewalitem, renewal: ICallRenewal, selectedperiodo: string, loadTableData: (value?: object) => void, dataTableServices?: any[]) {
     //contex
     const { setMessage, setdataGridRenewal, dataGridRenewal } = useContext(AppContext);
     const [selectedRenewal, setSelectedRenewal] = useState<ICallRenewal | null>(null);
@@ -25,9 +26,9 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
 
 
 
-   
-   //states
-   const [showTable, setShowTable] = useState(false);
+
+    //states
+    const [showTable, setShowTable] = useState(false);
     const [datos, setDatos] = useState<ICallRenewal[]>([]);
     const [typeProgram, setTypeProgram] = useState([]);
     const [masterList, setMasterList] = useState([]);
@@ -43,7 +44,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
     const [resourcesCredit, setResourcesCredit] = useState("0");
     const [periods, setPeriods] = useState("");
     const [percentage, setPercentage] = useState(0);
-    
+
     //form
     const {
         handleSubmit,
@@ -57,50 +58,79 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
 
     const enabled = watch('enabled')
 
-    useEffect(() =>{
-        setValue("fund",renewal.fund)
+    useEffect(() => {
+        setValue("fund", renewal.fund)
         //setValue("percentage",renewal.percentage)
-        setValue("renewed",renewal.renewed)
-  
-    },[renewal])
+        setValue("renewed", renewal.renewed)
+
+    }, [renewal])
 
 
     useEffect(() => {
         if (Number(enabled) > 0 && Number(renewal.renewed) > 0) {
-          const porcentaje = (Number(enabled) * 100 / Number(renewal.renewed)).toFixed(2);
-          setValue("percentage", porcentaje);
+            const porcentaje = (Number(enabled) * 100 / Number(renewal.renewed)).toFixed(2);
+            setValue("percentage", porcentaje);
         } else {
-          setValue("percentage", "0");
+            setValue("percentage", "0");
         }
-      }, [enabled, renewal]);
-   
-   
+    }, [enabled, renewal]);
+
+
     useEffect(() => {
         setSelectedRenewal(renewal);
         // Resto del código...
     }, []);
 
     const updateDataGridRenewal = handleSubmit(async (data: any) => {
-            
 
-            console.log(selectedperiodo, data)
-        
-            const datos = {
-                
-                    fund: String(data.fund),
-                    enabled: data.enabled,
-                    renewed: data.renewed,
-                    percentage: String(data.percentage),
-                    period: String(selectedperiodo)
-                
-            };
-            
-            const res = await createRenewal(datos);
+        const datos = {
 
-            console.log('res',res)
+            fund: String(data.fund),
+            enabled: data.enabled,
+            renewed: data.renewed,
+            percentage: String(data.percentage),
+            period: String(selectedperiodo)
 
-            if (res && res?.operation?.code === EResponseCodes.OK) {
-              setMessage({
+        };
+
+        setMessage({
+            show: true,
+            title: "Guardar cambios",
+            description: "¿Estás segur@ de guardar la información?",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            onOk() {
+                confirmCreation(datos)
+            },
+            onCancel() {
+                /* reset();
+                setMessage({}); */
+                setMessage({
+                    show: true,
+                    title: "Editar ítem",
+                    description: <ItemsEditePage renewal={renewal} renewalitem={renewal} selectedperiodo={selectedperiodo} loadTableData={loadTableData} />,
+                    background: true,
+                    size: "items",
+                    items: true,
+                    onOk() {
+                        setMessage({});
+                    },
+                });
+            },
+            background: true
+
+        });
+    });
+
+
+    const confirmCreation = async (datos: ICallRenewal) => {
+
+        const res = await createRenewal(datos);
+
+        console.log('res', res)
+
+        if (res && res?.operation?.code === EResponseCodes.OK) {
+            setMessage({
                 OkTitle: "Aceptar",
                 description: "Guardado exitosamente",
                 title: "Guardar información",
@@ -108,37 +138,34 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
                 type: EResponseCodes.OK,
                 background: true,
                 onOk() {
-                  reset();
-                  setMessage({});
-                  //navigate("/fondos/maestros/consultar");
-                  loadTableData({
-                      period: selectedperiodo
-                  })
+                    reset();
+                    setMessage({});
+                    //navigate("/fondos/maestros/consultar");
+                    loadTableData({
+                        period: selectedperiodo
+                    })
                 },
                 onClose() {
-                  reset();
-                  setMessage({});
+                    reset();
+                    setMessage({});
                 },
-              });      
-            } else {
-              setMessage({
+            });
+        } else {
+            setMessage({
                 type: EResponseCodes.FAIL,
                 title: "Validación de datos",
                 description: "¡El dato ya existe!",
                 show: true,
                 OkTitle: "Aceptar",
                 background: true,
-              });   
-            }
+            });
+        }
 
-        
-    });
 
-    
-   
+    };
 
     //Al momento de que el componente se desmonte reinicie todo
-    useEffect(() => {   
+    useEffect(() => {
         return () => {
             reset();
             setShowTable(false);
@@ -160,7 +187,33 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
     }, []);
 
     const CancelFunction = () => {
-        setMessage((prev) => ({ ...prev, show: false }));
+
+        setMessage({
+            show: true,
+            title: "Cancelar edición ",
+            description: "¿Estás segur@ de cancelar la edición?",
+            OkTitle: "Aceptar",
+            cancelTitle: "Cancelar",
+            onOk() {
+                setMessage({});
+            },
+            onCancel() {
+                /* reset();
+                setMessage({}); */
+                setMessage({
+                    show: true,
+                    title: "Editar ítem",
+                    description: <ItemsEditePage renewal={renewal} renewalitem={renewal} selectedperiodo={selectedperiodo} loadTableData={loadTableData} />,
+                    background: true,
+                    size: "items",
+                    items: true,
+                    onOk() {
+                        setMessage({});
+                    },
+                });
+            },
+            background: true,
+        });        
     };
 
     return {
@@ -174,7 +227,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal,selected
         datos,
         updateDataGridRenewal,
         CancelFunction,
-        
-        
+
+
     }
 }

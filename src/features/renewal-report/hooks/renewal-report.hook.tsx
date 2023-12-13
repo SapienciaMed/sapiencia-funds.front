@@ -221,41 +221,54 @@ export default function useRenewaReportSearch() {
 
 
     function downloadCollection() {
-        // Suponiendo que response es la respuesta de getRenewalReport
-        const excelData = dataReports.map((row) => ({
-            "Fondo": row.fund,
-            "Nro. habilitados": row.enabled ?? "0", // Asegúrate de manejar valores nulos o indefinidos
-            "Nro. Renovados": row.renewed ?? "0",
-            "Porcentaje": row.percentage + "%" ?? "0.0",
-        }));
-
-
-        const book = XLSX.utils.book_new()
-        const sheet = XLSX.utils.json_to_sheet(excelData)
-
-        XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`)
-
-        setTimeout(() => {
-            XLSX.writeFile(book, `Informe Renovación.xlsx`)
-            setMessage({
-                title: "Descargar",
-                description: "Información descargada exitosamente",
-                OkTitle: "Cerrar",
-                show: true,
-                type: EResponseCodes.OK,
-                background: true,
-                onOk() {
+        const data = {
+          period: selectedperiodo
+        };
+      
+        getRenewalReport(data)
+          .then((response) => {
+            if (response && response?.operation?.code === EResponseCodes.OK) {             
+      
+              // Genera el excel con los datos de la respuesta
+              const excelData = response.data.array.map((row) => ({
+                "Fondo": row.fund,
+                "Nro. habilitados": row.enabled ?? "0", // Asegúrate de manejar valores nulos o indefinidos
+                "Nro. Renovados": row.renewed ?? "0",
+                "Porcentaje": (row.percentage ?? "0.0") + "%",
+              }));
+      
+              const book = XLSX.utils.book_new();
+              const sheet = XLSX.utils.json_to_sheet(excelData);
+              XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`);
+      
+              // Descarga el archivo
+              setTimeout(() => {
+                XLSX.writeFile(book, `Informe Renovación.xlsx`);
+                setMessage({
+                  title: "Descargar",
+                  description: "Información descargada exitosamente",
+                  OkTitle: "Cerrar",
+                  show: true,
+                  type: EResponseCodes.OK,
+                  background: true,
+                  onOk() {
                     setMessage({});
                     //navigate(-1);
-                },
-                onClose() {
+                  },
+                  onClose() {
                     setMessage({});
                     //navigate(-1);
-                },
-            });
-        },)
-
-    }
+                  },
+                });
+              },);
+            }
+          })
+          .catch((error) => {
+            console.error('Error al obtener el reporte de renovación:', error);
+            // Manejo de error
+          });
+      }
+      
 
 
     //Consultar
