@@ -18,7 +18,7 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport, createRenewal, report, calculate,getBeca,createReportRenewal } = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport, createRenewal, report, calculate, getBeca, createReportRenewal } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
@@ -76,9 +76,9 @@ export default function useRenewaReportSearch() {
         }
     }, []);
 
-    
-        
-    
+
+
+
 
     useEffect(() => {
         // Función para calcular el porcentaje
@@ -156,7 +156,7 @@ export default function useRenewaReportSearch() {
     const selectedperiodo = watch('period');
     const habilitados = watch('enabledBachLeg')
 
-    
+
 
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
         setShowTable(true)
@@ -188,9 +188,9 @@ export default function useRenewaReportSearch() {
 
     const getBecas = async () => {
         try {
-            const response = await getBeca(String(selectedperiodo));           
+            const response = await getBeca(String(selectedperiodo));
 
-            setTotalRenewedBeca(response.data[0].renewed)        
+            setTotalRenewedBeca(response.data[0].renewed)
 
         } catch (error) {
             console.log(error)
@@ -203,72 +203,72 @@ export default function useRenewaReportSearch() {
         }
 
         getRenewalReport(data)
-            .then((response) => {                
+            .then((response) => {
                 if (response && response?.operation?.code === EResponseCodes.OK) {
-                   setDataReports(response.data.array)
+                    setDataReports(response.data.array)
                 }
             })
     }, [selectedperiodo]);
 
 
     useEffect(() => {
-        setPorcentageProm(totalEnabled > 0 ? (totalRenewed*100/totalEnabled).toFixed(2) + "%" : "0.00%")
+        setPorcentageProm(totalEnabled > 0 ? (totalRenewed * 100 / totalEnabled).toFixed(2) + "%" : "0.00%")
     }, [totalRenewed, totalEnabled])
 
-    useEffect(() => {       
-        setPorcentageLegal(habilitados > 0 ? (totalRenewedBeca*100/habilitados).toFixed(2) + "%" : "0.00%")
+    useEffect(() => {
+        setPorcentageLegal(habilitados > 0 ? (totalRenewedBeca * 100 / habilitados).toFixed(2) + "%" : "0.00%")
     }, [totalRenewedBeca, habilitados])
 
 
     function downloadCollection() {
         const data = {
-          period: selectedperiodo
+            period: selectedperiodo
         };
-      
+
         getRenewalReport(data)
-          .then((response) => {
-            if (response && response?.operation?.code === EResponseCodes.OK) {             
-      
-              // Genera el excel con los datos de la respuesta
-              const excelData = response.data.array.map((row) => ({
-                "Fondo": row.fund,
-                "Nro. habilitados": row.enabled ?? "0", // Asegúrate de manejar valores nulos o indefinidos
-                "Nro. Renovados": row.renewed ?? "0",
-                "Porcentaje": (row.percentage ?? "0.0") + "%",
-              }));
-      
-              const book = XLSX.utils.book_new();
-              const sheet = XLSX.utils.json_to_sheet(excelData);
-              XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`);
-      
-              // Descarga el archivo
-              setTimeout(() => {
-                XLSX.writeFile(book, `Informe Renovación.xlsx`);
-                setMessage({
-                  title: "Descargar",
-                  description: "Información descargada exitosamente",
-                  OkTitle: "Cerrar",
-                  show: true,
-                  type: EResponseCodes.OK,
-                  background: true,
-                  onOk() {
-                    setMessage({});
-                    //navigate(-1);
-                  },
-                  onClose() {
-                    setMessage({});
-                    //navigate(-1);
-                  },
-                });
-              },);
-            }
-          })
-          .catch((error) => {
-            console.error('Error al obtener el reporte de renovación:', error);
-            // Manejo de error
-          });
-      }
-      
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+
+                    // Genera el excel con los datos de la respuesta
+                    const excelData = response.data.array.map((row) => ({
+                        "Fondo": row.fund,
+                        "Nro. habilitados": row.enabled ?? "0", // Asegúrate de manejar valores nulos o indefinidos
+                        "Nro. Renovados": row.renewed ?? "0",
+                        "Porcentaje": (row.percentage ?? "0.0") + "%",
+                    }));
+
+                    const book = XLSX.utils.book_new();
+                    const sheet = XLSX.utils.json_to_sheet(excelData);
+                    XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`);
+
+                    // Descarga el archivo
+                    setTimeout(() => {
+                        XLSX.writeFile(book, `Informe Renovación.xlsx`);
+                        setMessage({
+                            title: "Descargar",
+                            description: "Información descargada exitosamente",
+                            OkTitle: "Cerrar",
+                            show: true,
+                            type: EResponseCodes.OK,
+                            background: true,
+                            onOk() {
+                                setMessage({});
+                                //navigate(-1);
+                            },
+                            onClose() {
+                                setMessage({});
+                                //navigate(-1);
+                            },
+                        });
+                    },);
+                }
+            })
+            .catch((error) => {
+                console.error('Error al obtener el reporte de renovación:', error);
+                // Manejo de error
+            });
+    }
+
 
 
     //Consultar
@@ -279,10 +279,10 @@ export default function useRenewaReportSearch() {
 
     /*Functions*/
     const onsubmitCreate = handleSubmit((data: ICallRenewal) => {
-        const datos = {            
-            enabled: String(data.enabledBachLeg)           
+        const datos = {
+            enabled: String(data.enabledBachLeg)
         };
-        
+
         const period = Number(selectedperiodo);
 
         setMessage({
@@ -292,7 +292,7 @@ export default function useRenewaReportSearch() {
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
-                confirmRenewalCreation(period,datos)
+                confirmRenewalCreation(period, datos)
             },
             onClose() {
                 reset();
@@ -302,10 +302,12 @@ export default function useRenewaReportSearch() {
         });
     });
 
-    const confirmRenewalCreation = async (period:number,data: ICallRenewal) => {
+    const confirmRenewalCreation = async (period: number, data: ICallRenewal) => {
 
-        const res = await createReportRenewal(period,data);
-        if (res && res?.operation?.code === EResponseCodes.OK) {
+        console.log(data.enabled)
+
+        if (data.enabled === 'undefined') {
+            // Muestra un mensaje de error o maneja la situación como corresponda
             setMessage({
                 OkTitle: "Aceptar",
                 description: "¡Guardado exitosamente!",
@@ -324,18 +326,42 @@ export default function useRenewaReportSearch() {
                     setMessage({});
                 },
             });
-
         } else {
-            setMessage({
-                type: EResponseCodes.FAIL,
-                title: "Crear informe renovación",
-                description: "Ocurrió un error en el sistema",
-                show: true,
-                OkTitle: "Aceptar",
-                background: true,
-            });
+            const res = await createReportRenewal(period, data);
+            if (res && res?.operation?.code === EResponseCodes.OK) {
+                setMessage({
+                    OkTitle: "Aceptar",
+                    description: "¡Guardado exitosamente!",
+                    title: "Guardar cambios",
+                    show: true,
+                    type: EResponseCodes.OK,
+                    background: true,
+                    onOk() {
+                        reset();
+                        setMessage({});
+                        tableComponentRef.current.emptyData();
+                        setShowTable(false)
+                    },
+                    onClose() {
+                        reset();
+                        setMessage({});
+                    },
+                });
 
-        } 
+            } else {
+                setMessage({
+                    type: EResponseCodes.FAIL,
+                    title: "Crear informe renovación",
+                    description: "Ocurrió un error en el sistema",
+                    show: true,
+                    OkTitle: "Aceptar",
+                    background: true,
+                });
+
+            }
+
+        }
+
 
     };
 
