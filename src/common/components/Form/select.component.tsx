@@ -42,7 +42,7 @@ export function SelectComponent({
   idInput,
   control,
   className = "select-basic",
-  placeholder = "Seleccione",
+  placeholder = "Seleccionar",
   data = [{} as IDropdownProps],
   label,
   classNameLabel = "text-main",
@@ -60,7 +60,7 @@ export function SelectComponent({
   if (data) {
     if (optionSeleccione) {
       const seleccione: IDropdownProps = {
-        name: "Seleccione",
+        name: "Seleccionar",
         value: null,
       };
       const dataSelect = data.find(

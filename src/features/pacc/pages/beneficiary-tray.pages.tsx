@@ -26,7 +26,7 @@ function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) 
                         className="select-basic big select-disabled-list"
                         classNameLabel='text-black biggest text-with-colons'
                         filter={true}
-                        placeholder="Seleccionar."
+                        placeholder="Seleccionar"
                         direction={EDirection.column}
                         fieldArray={true}
                         optionSelected={(value) => handleChangeCut(value)}

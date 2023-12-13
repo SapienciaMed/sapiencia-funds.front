@@ -9,7 +9,6 @@ import { IStepCashing } from "../interface/pacc";
 import { usePaccServices } from "../hook/pacc-serviceshook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
-import { useParams } from "react-router-dom";
 
 interface IProp{
     idBenef: number,
@@ -96,16 +95,16 @@ function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp
                             value={actualCut}
                         />
                     </section>
-                    <section className='grid-form-1-container mt-14px '>
+                    <section className='grid-form-1-container mt-14px'>
                         <SelectComponent
                             idInput={"idCut"}
                             control={control}
                             data={cut}
                             label="Corte"
-                            className="select-basic big"
+                            className="select-basic big select-disabled-list"
                             classNameLabel='text-black biggest text-with-colons text-required'
                             filter={true}
-                            placeholder="Seleccionar."
+                            placeholder="Seleccionar"
                             direction={EDirection.column}
                             errors={errors}
                         />
