@@ -212,7 +212,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             idInput={`enabledBachLeg`}
                             label="Nro habilitados"
                             className="inputNumber-basic medium"
-                            classNameLabel="text-black big text-required"
+                            classNameLabel="text-black big"
                             errors={errors}
                             {...field}
                           />
