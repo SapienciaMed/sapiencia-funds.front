@@ -58,10 +58,11 @@ interface IProps<T> {
   onGlobalFilterChange?: (value: any) => void;
   bodyRequestParameters?: string | number;
   keyBodyRequest?: string;
-  count?: boolean,
-  viePaginator?: boolean
-  isNotBorderClasse?: boolean,
-  setShowSpinner?: Dispatch<SetStateAction<boolean>>
+  count?: boolean;
+  viePaginator?: boolean;
+  isNotBorderClasse?: boolean;
+  setShowFooterActions?: ({}) => {};
+  setShowSpinner?: Dispatch<SetStateAction<boolean>>;
 }
 
 interface IRef {
@@ -91,7 +92,8 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     count,
     viePaginator = true,
     isNotBorderClasse,
-    setShowSpinner
+    setShowFooterActions,
+    setShowSpinner,
   } = props;
 
   // States
@@ -105,6 +107,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const [searchCriteria, setSearchCriteria] = useState<object>();
   const { width } = useWidth();
   const { setMessage } = useContext(AppContext);
+
+  useEffect(() => {
+    if (!setShowFooterActions) return;
+    const thereAreData = resultData?.array?.length > 0;
+    setShowFooterActions(thereAreData);
+  }, [resultData]);
 
   // Declaraciones
 
@@ -132,7 +140,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
-      setShowSpinner && setShowSpinner(false)
+      setShowSpinner && setShowSpinner(false);
       if (props.onResult) props.onResult(res?.data?.array || []);
       if (res.data?.array?.length <= 0 && isShowModal) {
         setMessage({
@@ -241,11 +249,14 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
-      <div className={`spc-common-table ${isNotBorderClasse && 'spc-common-table-without-border'}`}>
+      <div
+        className={`spc-common-table ${
+          isNotBorderClasse && "spc-common-table-without-border"
+        }`}
+      >
         {title && <div className="spc-table-title">{title}</div>}
 
-        {
-          viePaginator && 
+        {viePaginator && (
           <Paginator
             className="between spc-table-paginator"
             template={paginatorHeader}
@@ -259,8 +270,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               onGlobalFilterChange
             )}
           />
-        }
-
+        )}
 
         {width > 830 || !isMobil ? (
           <div>
@@ -271,10 +281,13 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               scrollable={true}
               emptyMessage={emptyMessage}
             >
-              {
-                count && <Column header="Número"  body={(data, options) => options.rowIndex + 1}/>
-              }
-              
+              {count && (
+                <Column
+                  header="Número"
+                  body={(data, options) => options.rowIndex + 1}
+                />
+              )}
+
               {columns.map((col) => (
                 <Column
                   key={col.fieldName}
@@ -312,8 +325,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           />
         )}
 
-        {
-          viePaginator && 
+        {viePaginator && (
           <Paginator
             className="spc-table-paginator"
             template={paginatorFooter}
@@ -322,8 +334,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             totalRecords={resultData?.meta?.total || 0}
             onPageChange={onPageChange}
           />
-        }
-
+        )}
       </div>
     );
   }
