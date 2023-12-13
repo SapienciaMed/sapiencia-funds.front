@@ -88,19 +88,23 @@ const ItemsEditePage = ({ renewalitem, renewal, selectedperiodo, loadTableData }
                                     name={"percentage"}
                                     render={({ field }) => {
                                         return (
-                                            <InputComponent
-                                                id={field.name}
+                                            <InputNumberComponent
                                                 idInput={field.name}
-                                                label="Porcentaje"
                                                 className="inputNumber-basic medium"
-                                                typeInput="text"
-                                                //placeholder={renewal ? renewal.fund : ""}
-                                                classNameLabel="text-black biggest"
+                                                label="Porcentage"
+                                                classNameLabel={`text-black biggest text-required`}
                                                 errors={errors}
-                                                register={register}
-                                                disabled={true}
+                                                placeholder={""}
+                                               
+                                                suffix="%"
+                                                mode="decimal"
+                                                minFractionDigits={1}
+                                                maxFractionDigits={1}
+                                                min={0}
+                                                max={100}
+                                                control={control}
                                                 {...field}
-                                            />                                           
+                                            />                    
                                         );
                                     }}
                                 />
