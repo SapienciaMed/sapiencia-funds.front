@@ -123,7 +123,7 @@ const { width } = useWidth();
 
   return (
     <Fragment>
-      <div className=" container-form-grid">
+      <div className="main-page">
         <div className="container-form padding-form">
           <p className="text-black huge mg-0">Resultados votación</p>
           <div className="card-table-user">
@@ -324,11 +324,11 @@ const { width } = useWidth();
             </div>
           </div>
           <div style={{ display: sendingXLSX ? "block" : "none" }}>
-            <div className="button-save-container-display-users margin-right0">
+            <div className="button-save-container-display-users margin-right0 mt-20px">
               <ButtonComponent
                 value={
                   <>
-                    <div className="container-buttonText">
+                    <div className="container-buttonText ">
                       <span>Descargar</span>
                       <Svgs svg="excel" width={23.593} height={28.505} />
                     </div>
