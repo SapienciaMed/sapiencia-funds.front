@@ -68,7 +68,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, selecte
 
     useEffect(() => {
         if (Number(enabled) > 0 && Number(renewal.renewed) > 0) {
-            const porcentaje = (Number(enabled) * 100 / Number(renewal.renewed)).toFixed(2);
+            const porcentaje = (Number(renewal.renewed) * 100 / Number(enabled)).toFixed(2);
             setValue("percentage", porcentaje);
         } else {
             setValue("percentage", "0");
