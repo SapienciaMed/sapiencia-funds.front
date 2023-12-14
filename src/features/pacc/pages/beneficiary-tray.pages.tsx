@@ -34,7 +34,7 @@ function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) 
 
                 </FormComponent>                 
             </section>
-            <section className=" card-table mt-20px">
+            <section className="card-table mt-20px">
                 {
                     showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
                 }
@@ -52,6 +52,7 @@ function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) 
                     valueFilterTable={valueFilterTable}
                     isMobil={false}
                     resetValue={getCuts}
+                    isNotBorderClasse={true}
                 />
             </section>
 
