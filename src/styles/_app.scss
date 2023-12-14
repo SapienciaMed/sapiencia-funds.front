@@ -7,6 +7,7 @@
 @import "./input.scss";
 @import "./totals.scss";
 @import './font-family.scss';
+
 // :root {
 //   --color-black: #0b060e;
 //   --color-gray: #535353;
@@ -23,6 +24,12 @@ body {
   margin: 0;
   font-family: "RubikRegular", sans-serif;
   // font-size: 16px;
+}
+
+.alin {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
 }
 
 a {
@@ -267,7 +274,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   justify-content: end;
   flex-direction: row;
 
-  margin: 15px 0 ;
+  margin: 15px 0;
 
   @media (max-width: 700px) {
     flex-direction: column;
@@ -500,13 +507,15 @@ div[id="single-spa-application:@sapiencia/funds"] {
   border-radius: var(--spacing-spacing-0, 0px);
   border: 1px solid var(--border-table, #f2f2f2);
 }
-.text-red{
+
+.text-red {
   color: red
 }
 
 .text-orange {
   color: orange;
 }
+
 .text-black.huge,
 .huge.text-black-2 {
   font-size: 29px;
@@ -735,11 +744,48 @@ div[id="single-spa-application:@sapiencia/funds"] {
   }
 }
 
-@for $inx from 1 through 100 {
-  @for $i from 1 through 4 {
-    .#{nth((mt, mb, mr, ml), $i)}-#{inx}px {
-      #{nth((margin-top, margin-bottom, margin-right, margin-left), $i)}: calc(1px * $inx);
-    }
+@for $inx from -18 through 100 {
+  $current-margin: 1px * $inx;
+  $current-padding: 1px * $inx;
+
+  .mt-#{$inx}px {
+    margin-top: $current-margin;
+  }
+
+  .mb-#{$inx}px {
+    margin-bottom: $current-margin;
+  }
+
+  .mr-#{$inx}px {
+    margin-right: $current-margin;
+  }
+
+  .ml-#{$inx}px {
+    margin-left: $current-margin;
+  }
+
+  .m-#{$inx}px {
+    margin: $current-margin;
+  }
+
+  .p-#{$inx}px {
+    padding: $current-padding;
+  }
+
+  .pt-#{$inx}px {
+    padding-top: $current-padding;
+  }
+
+  .pr-#{$inx}px {
+    padding-right: $current-padding;
+  }
+
+  .pb-#{$inx}px {
+    padding-bottom: $current-padding;
+  }
+
+  .pl-#{$inx}px {
+    padding-left: $current-padding;
   }
 }
 
@@ -757,15 +803,19 @@ div[id="single-spa-application:@sapiencia/funds"] {
     margin-left: 4px;
     margin-bottom: 10px;
 
-    .button-save { /* Asegúrate de que esta clase corresponde al botón Guardar */
-      order: 1; /* Esto coloca el botón Guardar primero */
+    .button-save {
+      /* Asegúrate de que esta clase corresponde al botón Guardar */
+      order: 1;
+      /* Esto coloca el botón Guardar primero */
       width: 100%;
       padding: 12px 16px;
       margin-top: 24px;
     }
 
-    .button-clean { /* Asegúrate de que esta clase corresponde al botón Cancelar */
-      order: 2; /* Esto coloca el botón Cancelar después del botón Guardar */
+    .button-clean {
+      /* Asegúrate de que esta clase corresponde al botón Cancelar */
+      order: 2;
+      /* Esto coloca el botón Cancelar después del botón Guardar */
       width: 100%;
       margin-left: 9px;
       margin-top: 5px;

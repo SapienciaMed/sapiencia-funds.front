@@ -166,16 +166,15 @@ export default function useBeneficiaryTray(typeState: number) {
             icon: "ChangeCut",
             onClick: (row) => {
                 let newArray = idCutData.filter(item => item.value !== "TODOS");
-               setMessage({
-                    show: true,
-                    title: "Mover beneficiario a otro corte",
-                    description: <ChangeCuttingBeneficiary idBenef={row.idBenef} idCutData={newArray} typeState={typeState}/>,
-                    background: true,
-                    onOk() {
-                        setMessage({});
-                    },
-                });
-               
+                setMessage({
+                        show: true,
+                        title: "Mover beneficiario a otro corte",
+                        description: <ChangeCuttingBeneficiary idBenef={row.idBenef} idCutData={newArray} typeState={typeState}/>,
+                        background: true,
+                        onOk() {
+                            setMessage({});
+                        },
+                    }); 
             },
         },
         {
@@ -281,7 +280,7 @@ export default function useBeneficiaryTray(typeState: number) {
                 setIdCutData(newData)
 
             }
-        })
+        }).catch(error => console.log(error))
     }
 
     

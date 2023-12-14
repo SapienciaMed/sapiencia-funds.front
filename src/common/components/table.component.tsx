@@ -53,13 +53,16 @@ interface IProps<T> {
   isMobil?: boolean;
   classSizeTable?: string;
   isInputSearch?: boolean;
+  bodyRequestParameters?: string | number;
+  keyBodyRequest?: string;
+  setShowFooterActions?: ({}) => {};
   onGlobalFilterChange?: (value: any) => void; // Es necesario llamar una funcion para que haga la peticion para el filtrado interno.
-  valueFilterTable?: string // Es necesario llamar el value para el filtro.
-  count?: boolean,
-  viePaginator?: boolean
-  isNotBorderClasse?: boolean,
-  setShowSpinner?: Dispatch<SetStateAction<boolean>>,
-  resetValue?: () => void
+  valueFilterTable?: string; // Es necesario llamar el value para el filtro.
+  count?: boolean;
+  viePaginator?: boolean;
+  isNotBorderClasse?: boolean;
+  setShowSpinner?: Dispatch<SetStateAction<boolean>>;
+  resetValue?: () => void;
 }
 
 interface IRef {
@@ -88,8 +91,9 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     count,
     viePaginator = true,
     isNotBorderClasse,
-    setShowSpinner, 
-    resetValue
+    setShowFooterActions,
+    setShowSpinner,
+    resetValue,
   } = props;
 
   // States
@@ -102,6 +106,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   const [searchCriteria, setSearchCriteria] = useState<object>();
   const { width } = useWidth();
   const { setMessage } = useContext(AppContext);
+
+  useEffect(() => {
+    if (!setShowFooterActions) return;
+    const thereAreData = resultData?.array?.length > 0;
+    setShowFooterActions(thereAreData);
+  }, [resultData]);
 
   // Declaraciones
   const { post } = useCrudService(url);
@@ -127,7 +137,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
-      setShowSpinner && setShowSpinner(false)
+      setShowSpinner && setShowSpinner(false);
       if (props.onResult) props.onResult(res?.data?.array || []);
       if (res.data?.array?.length <= 0 && isShowModal) {
         setMessage({
@@ -144,7 +154,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           },
           background: true,
         });
-        resetValue && resetValue()
+        resetValue && resetValue();
       }
     } else {
       setMessage({
@@ -157,7 +167,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           setMessage({});
         },
       });
-      resetValue && resetValue()
+      resetValue && resetValue();
     }
     setLoading(false);
   }
@@ -237,11 +247,14 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
-      <div className={`spc-common-table ${isNotBorderClasse && 'spc-common-table-without-border'}`}>
+      <div
+        className={`spc-common-table ${
+          isNotBorderClasse && "spc-common-table-without-border"
+        }`}
+      >
         {title && <div className="spc-table-title">{title}</div>}
 
-        {
-          viePaginator && 
+        {viePaginator && (
           <Paginator
             className="between spc-table-paginator"
             template={paginatorHeader}
@@ -256,8 +269,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               valueFilterTable
             )}
           />
-        }
-
+        )}
 
         {width > 830 || !isMobil ? (
           <div>
@@ -268,10 +280,13 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               scrollable={true}
               emptyMessage={emptyMessage}
             >
-              {
-                count && <Column header="Número"  body={(data, options) => options.rowIndex + 1}/>
-              }
-              
+              {count && (
+                <Column
+                  header="Número"
+                  body={(data, options) => options.rowIndex + 1}
+                />
+              )}
+
               {columns.map((col) => (
                 <Column
                   key={col.fieldName}
@@ -309,8 +324,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           />
         )}
 
-        {
-          viePaginator && 
+        {viePaginator && (
           <Paginator
             className="spc-table-paginator"
             template={paginatorFooter}
@@ -319,8 +333,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             totalRecords={resultData?.meta?.total || 0}
             onPageChange={onPageChange}
           />
-        }
-
+        )}
       </div>
     );
   }
@@ -469,7 +482,7 @@ const leftContent = (
   //TODO: Para utilizar el filtro es necesario las prop isInputSearch, onGlobalFilterChange y valueFilterTable
   return (
     <>
-      {(isInputSearch && onGlobalFilterChange && valueFilterTable != null) ? (
+      {isInputSearch && onGlobalFilterChange && valueFilterTable != null ? (
         <div className="col-1 col-100 seeker">
           <span className="p-input-icon-left">
             <i className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center">

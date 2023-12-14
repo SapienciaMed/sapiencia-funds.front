@@ -16,7 +16,7 @@ import {
 } from "primereact/paginator";
 import { classNames } from "primereact/utils";
 import * as Icons from "react-icons/fa";
-import * as IconsBS from 'react-icons/bs';
+import * as IconsBS from "react-icons/bs";
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
 
@@ -33,7 +33,7 @@ interface IProps<T> {
   classSizeTable?: string;
   showPaginator?: boolean;
   isDisabled?: boolean;
-  isMobil?: boolean
+  isMobil?: boolean;
 }
 
 interface IRef {
@@ -50,7 +50,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     classSizeTable,
     showPaginator = true,
     isDisabled,
-    isMobil = true
+    isMobil = true,
   } = props;
 
   // States
@@ -69,7 +69,7 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
       <div className="card-grid-item">
         <div className="card-header">
           {columns.map((column) => {
-            const properties = column.fieldName.split(".");
+            const properties = column?.fieldName?.split(".");
             let field =
               properties.length === 2
                 ? item[properties[0]][properties[1]]
@@ -82,26 +82,24 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
             );
           })}
         </div>
-        {
-          actions && (
-            <div className="card-footer">
-              <section className="position-absolute top text-black bold text-center">
-                {" "}
-                Acciones{" "}
-              </section>
-              <section className="section-action">
-                {actions?.map((action) => (
-                  <div
-                    key={action.icon}
-                    onClick={() => !isDisabled && action.onClick(item)}
-                  >
-                    {getIconElement(action.icon, "src", isDisabled)}
-                  </div>
-                ))}
-              </section>
-            </div>
-          )
-        }
+        {actions && (
+          <div className="card-footer">
+            <section className="position-absolute top text-black bold text-center">
+              {" "}
+              Acciones{" "}
+            </section>
+            <section className="section-action">
+              {actions?.map((action) => (
+                <div
+                  key={action.icon}
+                  onClick={() => !isDisabled && action.onClick(item)}
+                >
+                  {getIconElement(action.icon, "src", isDisabled)}
+                </div>
+              ))}
+            </section>
+          </div>
+        )}
       </div>
     );
   };
@@ -110,24 +108,23 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     <div className="spc-common-table">
       {title && <div className="spc-table-title">{title}</div>}
 
-      {
-        showPaginator && 
-          <Paginator
-            className="between spc-table-paginator"
-            template={paginatorHeader}
-            first={first}
-            rows={perPage}
-            onPageChange={onPageChange}
-            totalRecords={props.data.length || 0} // Cambia 'meta' por 'pagingInfo'
-            leftContent={
-              <p className="header-information text-black biggest">
-                {secondaryTitle ?? "Resultados de búsqueda"}
-              </p>
-            }
-          />
-      }
+      {showPaginator && (
+        <Paginator
+          className="between spc-table-paginator"
+          template={paginatorHeader}
+          first={first}
+          rows={perPage}
+          onPageChange={onPageChange}
+          totalRecords={props.data.length || 0} // Cambia 'meta' por 'pagingInfo'
+          leftContent={
+            <p className="header-information text-black biggest">
+              {secondaryTitle ?? "Resultados de búsqueda"}
+            </p>
+          }
+        />
+      )}
 
-      { (width > 830 || !isMobil) ? (
+      {width > 830 || !isMobil ? (
         <div>
           <DataTable
             className={`spc-table full-height ${classSizeTable}`}
@@ -152,7 +149,13 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                     <div className="spc-header-title">Acciones</div>
                   </div>
                 }
-                body={(row) => <ActionComponent row={row} actions={actions} isDisabled={isDisabled} />}
+                body={(row) => (
+                  <ActionComponent
+                    row={row}
+                    actions={actions}
+                    isDisabled={isDisabled}
+                  />
+                )}
               />
             )}
           </DataTable>
@@ -178,7 +181,11 @@ const BasicTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
 });
 
 // Metodo que retorna el icono o nombre de la accion
-function getIconElement(icon: string, element: "name" | "src", isDisabled: boolean) {
+function getIconElement(
+  icon: string,
+  element: "name" | "src",
+  isDisabled: boolean
+) {
   switch (icon) {
     case "Detail":
       return element == "name" ? (
@@ -204,15 +211,15 @@ function getIconElement(icon: string, element: "name" | "src", isDisabled: boole
       ) : (
         <Icons.FaLink className="button grid-button button-link" />
       );
-      case "download":
-        return element == "name" ? (
-          "descargar"
-        ) : (
-          <IconsBS.BsDownload 
-          className="button grid-button button-download" 
-          style={{ color: '#533893' }}
-          />
-        );
+    case "download":
+      return element == "name" ? (
+        "descargar"
+      ) : (
+        <IconsBS.BsDownload
+          className="button grid-button button-download"
+          style={{ color: "#533893" }}
+        />
+      );
 
     default:
       return "";
@@ -224,9 +231,7 @@ const paginatorHeader: PaginatorTemplateOptions = {
   CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
     return (
       <>
-        <p className="header-information text-black big">
-          Total de resultados
-        </p>
+        <p className="header-information text-black big">Total de resultados</p>
         <p className="header-information text-three big">
           {options.totalRecords}
         </p>
@@ -297,7 +302,7 @@ export const paginatorFooter: PaginatorTemplateOptions = {
           ...
         </span>
       );
-    } 
+    }
 
     return (
       <button

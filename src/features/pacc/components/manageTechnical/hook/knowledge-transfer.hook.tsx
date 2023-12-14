@@ -28,7 +28,8 @@ export default function useKnowledgeTransfer() {
     useEffect(() => {
         loadTableData({
             idBeneficiary: parseInt(id),
-            user: authorization.user.numberDocument
+            user: authorization.user.numberDocument,
+            statusPaccSearch: typeState
         })
         getUploadKnow()
     },[])
