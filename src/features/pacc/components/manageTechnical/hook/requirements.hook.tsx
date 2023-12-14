@@ -52,7 +52,7 @@ export default function useRequeriments() {
     useEffect(() => {
         if (filesUploadData != null) {
             //Guarda el archivo
-            uploadFiles(idCode, [filesUploadData], setMessage, loadTableData, authorization)
+            uploadFiles(idCode, [filesUploadData], setMessage, loadTableData, authorization, parseInt(typeState))
         }
     },[filesUploadData])
 

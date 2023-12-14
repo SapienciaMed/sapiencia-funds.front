@@ -64,7 +64,8 @@ export default function useManageTransfer({ idSelect, loadTableData, idBeneficia
             status: watchState == 'true' ? true : false,
             observations: data.observation || 'Ninguna',
             user: authorization.user.numberDocument,
-            workedHours: parseInt(data.workedHours)
+            workedHours: parseInt(data.workedHours),
+            statusPaccSearch: parseInt(typeState)
         }
         const showMessage = false
         const url = `/consolidation-tray/upload-knowledge-transfer-file/${idSelect}/${String(idBeneficiary)}`
