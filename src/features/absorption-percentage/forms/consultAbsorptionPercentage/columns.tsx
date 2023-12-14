@@ -19,21 +19,21 @@ export const tableColumns: ITableElement<IPeriodsAbsorption>[] = [
     fieldName: "sceneryPercentage1",
     header: "% 1",
     renderCell: (row) => {
-      return <>{formaterNumberToCurrency(row.sceneryPercentage1)}</>;
+      return <>{`${row.sceneryPercentage1} %`}</>;
     },
   },
   {
     fieldName: "sceneryPercentage2",
     header: "% 2",
     renderCell: (row) => {
-      return <>{formaterNumberToCurrency(row.sceneryPercentage2)}</>;
+      return <>{`${row.sceneryPercentage2} %`}</>;
     },
   },
   {
     fieldName: "sceneryPercentage3",
     header: "% 3",
     renderCell: (row) => {
-      return <>{formaterNumberToCurrency(row.sceneryPercentage3)}</>;
+      return <>{`${row.sceneryPercentage3} %`}</>;
     },
   },
   {

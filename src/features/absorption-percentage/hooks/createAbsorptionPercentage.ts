@@ -15,7 +15,10 @@ import { createPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAb
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 
-export const useCreateAbsorptionPercentageModal = (announcementId) => {
+export const useCreateAbsorptionPercentageModal = (
+  announcementId,
+  reloadTable
+) => {
   const { setMessage } = useContext(AppContext);
   const { post } = useCrudService(urlApiFunds);
   const { communeFund: communeFundData, searchCommuneFundByValue } =
@@ -42,7 +45,7 @@ export const useCreateAbsorptionPercentageModal = (announcementId) => {
     try {
       setMessage({
         title: "Guardar",
-        description: "¿Estas seguro que deseas guardar la información?",
+        description: "¿Estás segur@ de guardar la información?",
         show: true,
         OkTitle: "Aceptar",
         cancelTitle: "Cancelar",
@@ -69,6 +72,8 @@ export const useCreateAbsorptionPercentageModal = (announcementId) => {
     try {
       const endpoint = "/api/v1/absorption-percentage/create";
       const resp = await post<IPeriodsAbsorption>(endpoint, fullData);
+      await reloadTable({ announcementId });
+
       if (resp.operation.code === EResponseCodes.FAIL) {
         return setMessage({
           title: "Error",
