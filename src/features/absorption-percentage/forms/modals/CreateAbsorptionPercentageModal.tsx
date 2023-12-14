@@ -7,7 +7,7 @@ import {
 } from "../../../../common/components/Form";
 import { useCreateAbsorptionPercentageModal } from "../../hooks/createAbsorptionPercentage";
 
-const CreateAbsorptionPercentage = ({ announcementId }) => {
+const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
   const {
     errors,
     control,
@@ -18,7 +18,7 @@ const CreateAbsorptionPercentage = ({ announcementId }) => {
     submitDisabled,
     communeFundData,
     handleChange,
-  } = useCreateAbsorptionPercentageModal(announcementId);
+  } = useCreateAbsorptionPercentageModal(announcementId, reloadTable);
   return (
     <FormComponent
       id="CreateAbsorptionPercentageModal"

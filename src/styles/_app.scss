@@ -744,6 +744,10 @@ div[id="single-spa-application:@sapiencia/funds"] {
   }
 }
 
+.mr-auto {
+  margin-right: auto !important;
+}
+
 @for $inx from -18 through 100 {
   $current-margin: 1px * $inx;
   $current-padding: 1px * $inx;
