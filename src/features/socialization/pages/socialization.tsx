@@ -34,7 +34,7 @@ export const Socialization = () => {
     <div className="container-form">
       <div className="title-area">
         <p className="text-black text-29 ml-24px mt-20px mg-0">
-          Resumen de socialización, informes de gestión
+          Resumen socialización recursos ejecutados
         </p>
       </div>
       <div className="container-form padding-form ">
