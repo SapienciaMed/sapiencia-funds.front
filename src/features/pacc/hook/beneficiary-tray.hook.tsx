@@ -245,12 +245,28 @@ export default function useBeneficiaryTray(typeState: number) {
             })
         }
     } 
-
+    
     const getCuts = () => {
         GetCutsForConsolidationTray().then(response => {
             setShowSpinner(false)
             if(response.operation.code === EResponseCodes.OK){
-                const data = response.data?.map((item: any) => {
+                const CurrentDate = new Date();
+
+                const elementsWithCurrentDate = response.data.filter(item => {
+                    const fromDate = new Date(item.from);
+                    const untilDate = new Date(item.until);
+                    return fromDate <= CurrentDate && CurrentDate <= untilDate;
+                });
+
+                // Ordena los elementos filtrados por fecha de creación en orden descendente
+                elementsWithCurrentDate.sort((a, b) => new Date(b.createDate).getTime() - new Date(a.createDate).getTime());
+
+                // Filtra los elementos que no contienen la fecha actual en su rango
+                const elementsWithoutCurrentDate = response.data.filter(item => !elementsWithCurrentDate.includes(item));
+
+                const dataConcat = elementsWithCurrentDate.concat(elementsWithoutCurrentDate);
+
+                const data = dataConcat?.map((item: any) => {
                     return {
                         name: item.name,
                         value: item.id
@@ -263,6 +279,7 @@ export default function useBeneficiaryTray(typeState: number) {
 
                 setValue('idCut', newData[0].value)
                 setIdCutData(newData)
+
             }
         })
     }
