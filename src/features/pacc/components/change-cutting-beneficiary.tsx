@@ -21,7 +21,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp
     const { setMessage } = useContext(AppContext);
     const resolver = useYupValidationResolver(changeCuttingBeneficiary);
     const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices(typeState)
-    const [actualCut, setActualCut] = useState('')
+    const [ actualCut, setActualCut ] = useState('')
     const [ cut, setCut ] = useState<IDropdownProps[]>([])
 
     const formatDate = (fechaISO: string) => {
@@ -40,7 +40,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp
                 setActualCut(`${item.cut} - desde ${formatDate(item.dateIncomeCut)} hasta ${formatDate(item.dateFinallyCut)}`)
                 setCut(idCutData.filter(us => us.name != item.cut))
             }
-        })
+        }).catch(error => console.log(error))
     },[])
 
     const {
@@ -67,8 +67,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp
                         setMessage({});
                         window.location.reload();     
                     }
-                
-                })
+                }).catch(error => console.log(error))
             },
             onCancel() {
                 setMessage({});

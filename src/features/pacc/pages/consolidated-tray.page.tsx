@@ -57,9 +57,9 @@ function ConsolidatedTrayPage() {
         const liderProyecto = {
             id: "liderProyecto", 
             title: "Lider de proyecto", 
-            content: (<></>), 
+            content: (<BeneficiaryTrayPage typeState={EStatePac.ProjectManager}/>),
             action: () => {},
-            hide: false /*poner el rol */ 
+            hide: validateActionAccess('LIDER_PROYECTO') 
         }
        const result = [
             servicioSocial,
