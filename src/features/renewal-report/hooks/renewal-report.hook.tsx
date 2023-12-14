@@ -192,7 +192,7 @@ export default function useRenewaReportSearch() {
 
             setTotalRenewedBeca(response.data[0].renewed)
 
-            setValue("enabledBachLeg",response.data[0].enabled)
+            setValue("enabledBachLeg", response.data[0].enabled)
 
             setPorcentageLegal(response.data[0].enabled > 0 ? (response.data[0].renewed * 100 / response.data[0].enabled).toFixed(2) + "%" : "0.00%")
 
@@ -371,7 +371,7 @@ export default function useRenewaReportSearch() {
 
 
     function loadTableData(searchCriteria?: object): void {
-        
+
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
@@ -383,14 +383,14 @@ export default function useRenewaReportSearch() {
 
 
     function restoreData(): void {
-        
+
         reset();
-                  tableComponentRef.current.emptyData();
-                  setShowTable(false)
+        tableComponentRef.current.emptyData();
+        setShowTable(false)
     }
 
 
-  
+
 
     return {
         selectedperiodo,

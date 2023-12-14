@@ -30,7 +30,7 @@ const ItemsEditePage = ({ renewalitem, renewal, selectedperiodo, loadTableData, 
                                                 id={field.name}
                                                 idInput={field.name}
                                                 label="Fondo"
-                                                className="inputNumber-basic medium"
+                                                className="input-basic medium"
                                                 typeInput="text"
                                                 //placeholder={renewal ? renewal.fund : ""}
                                                 classNameLabel="text-black biggest"
@@ -101,7 +101,7 @@ const ItemsEditePage = ({ renewalitem, renewal, selectedperiodo, loadTableData, 
                                                 minFractionDigits={1}
                                                 maxFractionDigits={1}
                                                 min={0}
-                                                max={100}
+                                                
                                                 control={control}
                                                 {...field}
                                             />                    

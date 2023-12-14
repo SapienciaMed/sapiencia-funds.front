@@ -16,9 +16,9 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
   const {
     control, errors, tableComponentRef, showTable,
-    setShowTable, onSubmit, reset, announcementList, searchRenewal, downloadCollection, totalEnabled, 
-    onsubmitCreate, selectedperiodo,loadTableData, totalRenewed, porcentageProm, porcentageLegal, 
-    totalRenewedBeca,restoreData
+    setShowTable, onSubmit, reset, announcementList, searchRenewal, downloadCollection, totalEnabled,
+    onsubmitCreate, selectedperiodo, loadTableData, totalRenewed, porcentageProm, porcentageLegal,
+    totalRenewedBeca, restoreData
   } = useRenewaReportSearch();
 
 
@@ -58,7 +58,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
         setMessage({
           show: true,
           title: "Editar ítem",
-          description: <ItemsEditePage renewal={dataEditTable} renewalitem={row} selectedperiodo={selectedperiodo} loadTableData={loadTableData} restoreData={restoreData}/>,
+          description: <ItemsEditePage renewal={dataEditTable} renewalitem={row} selectedperiodo={selectedperiodo} loadTableData={loadTableData} restoreData={restoreData} />,
           background: true,
           size: "items",
           items: true,
@@ -99,7 +99,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                   className={"select-basic medium select-disabled-list input-basic input-regular"}
                   classNameLabel="text-black big medium label-regular"
                   filter={true}
-                  placeholder="Seleccione."
+                  placeholder="Seleccionar"
                 />
               </div>
             </div>
@@ -119,7 +119,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
               <ButtonComponent
                 form="searchRenewal"
                 value={`Buscar`}
-                action={() => {                  
+                action={() => {
                   searchRenewal();
                 }}
                 className="button-save large hover-three disabled-black"
@@ -132,7 +132,6 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
           {
             showTable &&
-
             <div>
 
               <div className="container-sections-forms">
@@ -157,7 +156,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                   <InputComponent
                     register={control.register}
                     idInput="totalEnabled"
-                    className="input-basic medium"
+                    className="input-basic medium mb-16px"
                     typeInput="text"
                     label="Nro habilitados"
                     classNameLabel="text-black"
@@ -168,7 +167,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                   <InputComponent
                     register={control.register}
                     idInput="totalrenewed"
-                    className="input-basic medium"
+                    className="input-basic medium mb-16px"
                     typeInput="text"
                     label="Nro renovados"
                     classNameLabel="text-black"
@@ -179,7 +178,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                   <InputComponent
                     register={control.register}
                     idInput="totalpercentage"
-                    className="input-basic medium"
+                    className="input-basic medium mb-16px"
                     typeInput="text"
                     label="Porcentaje"
                     classNameLabel="text-black"
@@ -208,7 +207,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                             control={control}
                             idInput={`enabledBachLeg`}
                             label="Nro habilitados"
-                            className="inputNumber-basic medium"
+                            className="inputNumber-basic medium mb-16px"
                             classNameLabel="text-black big"
                             errors={errors}
                             {...field}
@@ -220,7 +219,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     <InputComponent
                       register={control.register}
                       idInput="renewedBachLeg"
-                      className="input-basic medium"
+                      className="input-basic medium mb-16px"
                       typeInput="text"
                       label="Nro renovados"
                       classNameLabel="text-black"
@@ -231,7 +230,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
                     <InputComponent
                       register={control.register}
                       idInput="PercentageBachLeg"
-                      className="input-basic medium"
+                      className="input-basic medium mb-16px"
                       typeInput="text"
                       label="Porcentaje"
                       classNameLabel="text-black"
@@ -246,7 +245,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
               </div>
 
 
-              <div>
+              <div className="mr-24px">
                 <div className="button-save-container-display mr-24px">
                 </div>
 
@@ -266,7 +265,18 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
 
               </div>
 
-              <div className="button-save-container-display m-top-20">
+              <div className="button-save-container-display-actas margin-right0 mr-24px">
+              <ButtonComponent
+                    form="createActaForm"
+                    value="Cancelar"
+                    type="button"
+                    className="button-cancel-text large hover-three disabled-black"
+                    action={() => {
+                      reset();
+                      tableComponentRef.current.emptyData();
+                      setShowTable(false)
+                    }}
+                />
                 <ButtonComponent
                   value={`Guardar`}
                   className="button-save large hover-three disabled-black"
