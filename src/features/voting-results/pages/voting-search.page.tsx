@@ -56,7 +56,7 @@ const { width } = useWidth();
       header: "Código catalogo dnp",
     },
     {
-      fieldName: "activity.typesProgram.name",
+      fieldName: "activity.program",
       header: "Programa",
     },
     {
