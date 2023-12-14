@@ -15,11 +15,10 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
   const { setMessage } = useContext(AppContext);
 
   const {
-    control, errors, watch, register, setValue, navigate, tableComponentRef, showTable,
-    setShowTable, onSubmit, reset, announcementList, dataGridRenewal, searchRenewal, downloadCollection,
-    totalEnabled, totalrenewed, averagePercentage, enabledBachLeg, renewedBachLeg, setdataGridRenewal,
-    percentageBachLeg, setInputEnabledBachLeg, inputEnabledBachLeg, onsubmitCreate, selectedperiodo,
-    loadTableData, totalRenewed, porcentageProm, porcentageLegal, totalRenewedBeca
+    control, errors, tableComponentRef, showTable,
+    setShowTable, onSubmit, reset, announcementList, searchRenewal, downloadCollection, totalEnabled, 
+    onsubmitCreate, selectedperiodo,loadTableData, totalRenewed, porcentageProm, porcentageLegal, 
+    totalRenewedBeca,restoreData
   } = useRenewaReportSearch();
 
 
@@ -59,7 +58,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
         setMessage({
           show: true,
           title: "Editar ítem",
-          description: <ItemsEditePage renewal={dataEditTable} renewalitem={row} selectedperiodo={selectedperiodo} loadTableData={loadTableData} />,
+          description: <ItemsEditePage renewal={dataEditTable} renewalitem={row} selectedperiodo={selectedperiodo} loadTableData={loadTableData} restoreData={restoreData}/>,
           background: true,
           size: "items",
           items: true,
@@ -120,9 +119,7 @@ const SearchRenewalReportPage = (): React.JSX.Element => {
               <ButtonComponent
                 form="searchRenewal"
                 value={`Buscar`}
-                action={() => {
-                  // Limpiar dataGridRenewal cuando cambie la convocatoria
-                  setdataGridRenewal([]);
+                action={() => {                  
                   searchRenewal();
                 }}
                 className="button-save large hover-three disabled-black"

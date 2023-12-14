@@ -8,11 +8,11 @@ import { Controller } from "react-hook-form";
 import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 
-const ItemsEditePage = ({ renewalitem, renewal, selectedperiodo, loadTableData }: { renewalitem, renewal?: ICallRenewal, selectedperiodo, loadTableData }) => {
+const ItemsEditePage = ({ renewalitem, renewal, selectedperiodo, loadTableData, restoreData }: { renewalitem, renewal?: ICallRenewal, selectedperiodo, loadTableData,restoreData }) => {
 
 
     const { errors, control, updateDataGridRenewal, CancelFunction, register
-    } = useActaItems(renewalitem, renewal, selectedperiodo, loadTableData);
+    } = useActaItems(renewalitem, renewal, selectedperiodo, loadTableData,restoreData);
 
     return (
         <Fragment>

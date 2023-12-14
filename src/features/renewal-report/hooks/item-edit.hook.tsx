@@ -9,10 +9,10 @@ import { renewalCreateSchema } from "../../../common/schemas/renewal-shema";
 import ItemsEditePage from "../pages/items-edit.page";
 
 
-export default function useActaItems(renewalitem, renewal: ICallRenewal, selectedperiodo: string, loadTableData: (value?: object) => void, dataTableServices?: any[]) {
+export default function useActaItems(renewalitem, renewal: ICallRenewal, selectedperiodo: string, loadTableData: (value?: object) => void,restoreData?: () => void) {
     //contex
-    const { setMessage, setdataGridRenewal, dataGridRenewal } = useContext(AppContext);
-    const [selectedRenewal, setSelectedRenewal] = useState<ICallRenewal | null>(null);
+    const { setMessage } = useContext(AppContext);
+    const [setSelectedRenewal] = useState<ICallRenewal | null>(null);
 
     //refs
     const tableComponentRef = useRef(null);
@@ -22,7 +22,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, selecte
     const resolver = useYupValidationResolver(renewalCreateSchema);
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport, createRenewal } = useRenewalReportApi();
+    const { createRenewal } = useRenewalReportApi();
 
 
 
@@ -73,13 +73,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, selecte
         } else {
             setValue("percentage", "0");
         }
-    }, [enabled, renewal]);
-
-
-    useEffect(() => {
-        setSelectedRenewal(renewal);
-        // Resto del código...
-    }, []);
+    }, [enabled, renewal]);    
 
     const updateDataGridRenewal = handleSubmit(async (data: any) => {
 
@@ -108,7 +102,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, selecte
                 setMessage({
                     show: true,
                     title: "Editar ítem",
-                    description: <ItemsEditePage renewal={renewal} renewalitem={renewal} selectedperiodo={selectedperiodo} loadTableData={loadTableData} />,
+                    description: <ItemsEditePage renewal={renewal} renewalitem={renewal} selectedperiodo={selectedperiodo} loadTableData={loadTableData} restoreData={restoreData} />,
                     background: true,
                     size: "items",
                     items: true,
@@ -140,16 +134,19 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, selecte
                 onOk() {
                     reset();
                     setMessage({});
-                    //navigate("/fondos/maestros/consultar");
-                    loadTableData({
+                    //navigate("/fondos/informe-renovacion/consultar");
+                   /*  loadTableData({
                         period: selectedperiodo
-                    })
+                    }) */
+                    restoreData() 
+
                 },
                 onClose() {
                     reset();
                     setMessage({});
                 },
             });
+          
         } else {
             setMessage({
                 type: EResponseCodes.FAIL,
@@ -203,7 +200,7 @@ export default function useActaItems(renewalitem, renewal: ICallRenewal, selecte
                 setMessage({
                     show: true,
                     title: "Editar ítem",
-                    description: <ItemsEditePage renewal={renewal} renewalitem={renewal} selectedperiodo={selectedperiodo} loadTableData={loadTableData} />,
+                    description: <ItemsEditePage renewal={renewal} renewalitem={renewal} selectedperiodo={selectedperiodo} loadTableData={loadTableData} restoreData={restoreData}/>,
                     background: true,
                     size: "items",
                     items: true,
