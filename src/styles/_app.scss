@@ -431,6 +431,9 @@ div[id="single-spa-application:@sapiencia/funds"] {
   font-family: "Rubik" !important;
 }
 
+
+
+
 .content-tblt {
   width: 201px;
   height: 104px;
@@ -438,14 +441,17 @@ div[id="single-spa-application:@sapiencia/funds"] {
   background: #f8f9fa;
   color: #000;
   text-align: center;
-  /* Font/Large/Medium */
   font-family: Rubik;
   font-size: 17px;
   font-style: normal;
   font-weight: 500;
   line-height: 120%;
-  /* 20.4px */
+  display: flex; /* Agrega display flex al contenedor */
+  align-items: center; /* Centra verticalmente el contenido */
+  justify-content: center; /* Centra horizontalmente el contenido */
 }
+
+
 
 .modal-container .modal-header p {
   font-size: 29px !important;
@@ -825,5 +831,9 @@ div[id="single-spa-application:@sapiencia/funds"] {
       margin-top: 5px;
       margin-bottom: 60px;
     }
+  }
+
+  .text{
+    margin-top: 24px;
   }
 }

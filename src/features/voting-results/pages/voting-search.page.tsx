@@ -248,8 +248,8 @@ const { width } = useWidth();
           <div style={{ display: dataTblTotal.length > 0 ? "block" : "none" }}>
             <div>
               <div className="content-tbl-totales">
-                <span className="content-tblt">
-                  <p>Totales</p>
+                <span className="content-tblt ">
+                  <p className="text">Totales</p>
                 </span>
                 <div className="content-tbltotls">
                   <div className="content-tbltotlscolumn">
