@@ -4,7 +4,7 @@ import useYupValidationResolver from "../../../common/hooks/form-validator.hook"
 import { renewalSchma } from "../../../common/schemas/renewal-shema";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
-import { ICallRenewal, IRenewalDataGrid } from "../../../common/interfaces/funds.interfaces";
+import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import useRenewalReportApi from "./renewal-report-api.hook";
 
@@ -18,7 +18,7 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport, createRenewal, report, calculate, getBeca, createReportRenewal } = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport, calculate, getBeca, createReportRenewal } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
@@ -369,16 +369,9 @@ export default function useRenewaReportSearch() {
 
     };
 
-    useEffect(() => {
-        /*  if (selectedperiodo != null) {
-           loadTableData({
-             period: selectedperiodo,        
-           })
-         } */
-    }, [selectedperiodo])
 
     function loadTableData(searchCriteria?: object): void {
-        //setShowSpinner(false)
+        
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
@@ -388,6 +381,16 @@ export default function useRenewaReportSearch() {
         })
     }
 
+
+    function restoreData(): void {
+        
+        reset();
+                  tableComponentRef.current.emptyData();
+                  setShowTable(false)
+    }
+
+
+  
 
     return {
         selectedperiodo,
@@ -421,6 +424,7 @@ export default function useRenewaReportSearch() {
         totalRenewed,
         porcentageProm,
         porcentageLegal,
-        totalRenewedBeca
+        totalRenewedBeca,
+        restoreData
     }
 }
