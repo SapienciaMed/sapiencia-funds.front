@@ -50,9 +50,9 @@ function ConsolidatedTrayPage() {
         const juridica = {
             id: "juridica", 
             title: "Jurídica", 
-            content: (<></>), 
+            content: (<BeneficiaryTrayPage typeState={EStatePac.Juridical}/>), 
             action: () => {},
-            hide: false /*poner el rol */ 
+            hide: validateActionAccess('JURIDICA') 
         }
         const liderProyecto = {
             id: "liderProyecto", 
