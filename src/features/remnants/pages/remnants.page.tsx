@@ -36,7 +36,7 @@ const RemnantsPage = () => {
                                 className="select-basic medium select-disabled-list mb-24px"
                                 classNameLabel="text-black big bold"
                                 placeholder="Seleccionar"
-                                filter
+                                filter={true}
                             />
 
                             <SelectComponent
@@ -52,7 +52,7 @@ const RemnantsPage = () => {
                                 className="select-basic medium select-disabled-list mb-24px"
                                 classNameLabel="text-black big bold"
                                 placeholder="Seleccionar"
-                                filter
+                                filter={true}
                             />
                             <SelectComponent
                                 idInput="announcementId"
@@ -67,7 +67,7 @@ const RemnantsPage = () => {
                                 className="select-basic medium select-disabled-list mb-14px"
                                 classNameLabel="text-black big bold"
                                 placeholder="Seleccionar"
-                                filter
+                                filter={true}
                             />
                         </div>
                     </div>
