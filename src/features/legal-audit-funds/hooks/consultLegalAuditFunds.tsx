@@ -5,19 +5,19 @@ import { AppContext } from "../../../common/contexts/app.context";
 
 import { ITableAction } from "../../../common/interfaces/table.interfaces";
 import { useWidth } from "../../../common/hooks/use-width";
-import { useGetAllPeriodsHook } from "./getAllPeriodsHook";
+
 import {
   ICallPeriodsResfilters,
   IPeriodsAbsorption,
 } from "../../../common/interfaces/PeriodsAbsorption.interface";
-import CreateAbsorptionPercentage from "../forms/modals/CreateAbsorptionPercentageModal";
 import { filtersPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAbsorption.shema";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { urlApiFunds } from "../../../common/utils/base-url";
-import EditAbsorptionPercentageModal from "../forms/modals/EditAbsorptionPercentageModal";
 import useCrudService from "../../../common/hooks/crud-service.hook";
+import { useGetAllPeriodsHook } from "../../absorption-percentage/hooks/getAllPeriodsHook";
+import EditLegalAuditFundsModal from "../forms/modals/EditLegalAuditFundsModal";
 
-export const useConsultAbsorptionPercentage = () => {
+export const useConsultLegalAuditFunds = () => {
   const urlGet = `${urlApiFunds}/api/v1/absorption-percentage/get-all-paginated`;
   const navigate = useNavigate();
   const { deleted } = useCrudService(urlApiFunds);
@@ -51,7 +51,7 @@ export const useConsultAbsorptionPercentage = () => {
           show: true,
           title: "Editar ítem",
           description: (
-            <EditAbsorptionPercentageModal
+            <EditLegalAuditFundsModal
               announcementId={periods}
               row={row}
               reloadTable={handleReloadTable}
@@ -61,13 +61,6 @@ export const useConsultAbsorptionPercentage = () => {
           size: "items",
           items: true,
         });
-      },
-    },
-
-    {
-      icon: "Delete",
-      onClick: (row) => {
-        handleDelete(row);
       },
     },
   ];
@@ -113,65 +106,6 @@ export const useConsultAbsorptionPercentage = () => {
     window.open(url.toString(), "_blank");
   }, [paginateData, periods]);
 
-  const handleDelete = (row) => {
-    setMessage({
-      title: "Porcentaje de absorción",
-      description: "¿Estás segur@ de eliminar el ítem?",
-      show: true,
-      OkTitle: "Aceptar",
-      cancelTitle: "Cancelar",
-      onOk: async () => {
-        setMessage({ show: false });
-        await deleteItem(row);
-        await handleReloadTable({
-          announcementId: periods,
-        });
-      },
-      onClose: () => setMessage({ show: false }),
-      background: true,
-    });
-  };
-
-  const deleteItem = async (row) => {
-    try {
-      const endpoint = `/api/v1/absorption-percentage/${row.id}/delete-by-id`;
-      await deleted<null>(endpoint);
-      setMessage({
-        title: "Porcentaje de absorción",
-        description: "Ítem eliminado exitosamente",
-        show: true,
-        OkTitle: "Cerrar",
-        onOk: async () => {
-          setMessage({ show: false });
-        },
-        background: true,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleAggItem = async (ev) => {
-    try {
-      ev.preventDefault();
-      setMessage({
-        show: true,
-        title: "Agregar ítem",
-        description: (
-          <CreateAbsorptionPercentage
-            announcementId={periods}
-            reloadTable={handleReloadTable}
-          />
-        ),
-        background: true,
-        size: "items",
-        items: true,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleClean = () => {
     reset();
     setSubmitDisabled(true);
@@ -204,7 +138,6 @@ export const useConsultAbsorptionPercentage = () => {
     urlGet,
     validateActionAccess,
     width,
-    handleAggItem,
     periodsData,
   };
 };

@@ -11,7 +11,7 @@ import { tableColumns } from "./columns";
 import { useWidth } from "../../../../common/hooks/use-width";
 import { BiPlusCircle } from "react-icons/bi";
 
-const AbsorptionPercentageForm = ({
+const LegalAuditFundsForm = ({
   tableView,
   onSubmit,
   control,
@@ -23,7 +23,6 @@ const AbsorptionPercentageForm = ({
   showFooterActions,
   setShowFooterActions,
   width,
-  handleAggItem,
   periodsData,
   tableActions,
   setPaginateData,
@@ -37,11 +36,11 @@ const AbsorptionPercentageForm = ({
       className="form-signIn"
       action={onSubmit}
     >
-      <span className="text-black large  grid-span-4-columns mt-10px ml-14px">
-        Porcentaje de absorción
+      <span className="text-black large  grid-span-4-columns mt-15px ml-27px">
+        Legalizados
       </span>
 
-      <div className=" container-sections-forms ml-5px mr-10px">
+      <div className=" container-sections-forms ml-20px mr-20px">
         <div className="grid-form-4-container gap-25">
           <SelectComponent
             idInput="announcementId"
@@ -61,24 +60,6 @@ const AbsorptionPercentageForm = ({
         </div>
       </div>
       <div className="button-save-container-display mr-24px">
-        {tableView && (
-          <div className="mr-auto ml-25px">
-            <div>
-              <div
-                className={`title-button  ${
-                  width < 300 ? "font-medium" : "font-big"
-                } mt-12px mr-15px hover`}
-                onClick={handleAggItem}
-              >
-                <div className="button-border colorTittle alin pr-23px pl-23px">
-                  <BiPlusCircle />
-                  <span className="p-2px"> Agregar ítem </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {tableView && (
           <ButtonComponent
             value="Limpiar campos"
@@ -141,4 +122,4 @@ const AbsorptionPercentageForm = ({
   </div>
 );
 
-export default memo(AbsorptionPercentageForm);
+export default memo(LegalAuditFundsForm);
