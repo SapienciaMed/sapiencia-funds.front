@@ -18,7 +18,7 @@ function SocialServices() {
 
       <TableComponent
         ref={tableComponentRef}
-        url={`${process.env.urlApiFunds}/api/v1/consolidation-tray/get-knowledge-transfer-by-beneficiary`}
+        url={`${process.env.urlApiFunds}/api/v1/service-social/get-paginated`}
         columns={tableColumns}
         titleMessageModalNoResult="Buscar"
         descriptionModalNoResult="No se encontraron datos de servicio social"
@@ -29,6 +29,7 @@ function SocialServices() {
         viePaginator={false}
         isNotBorderClasse={true}
         setShowSpinner={setShowSpinner}
+        title="Horas servicio social"
       />
     </section>
   );

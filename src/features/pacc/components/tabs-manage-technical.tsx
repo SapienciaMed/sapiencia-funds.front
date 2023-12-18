@@ -9,7 +9,7 @@ import Requirements from "./manageTechnical/requirements";
 import KnowledgeTransfer from "./manageTechnical/knowledge-transfer";
 import SocialServices from "./manageTechnical/social-services";
 
-function TabsManageTechnical({ document }) {
+function TabsManageTechnical({ document, typeState }) {
   const { option } = useParams();
   const { validateActionAccess } = useContext(AppContext);
 
@@ -21,7 +21,7 @@ function TabsManageTechnical({ document }) {
       action: () => {},
       hide:
         validateActionAccess("ADMIN_BANDEJA_CONSOLIDACION") ||
-        false /*poner el rol */,
+        true /*poner el rol */,
     };
     const soportesPQRSDF = {
       id: "soportesPQRSDF",

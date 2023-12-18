@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 
 export const useManage = () => {
-  const { id } = useParams();
-  const { GeBeneficiaryById } = usePaccServices();
+  const { id, typeState } = useParams();
+  const { GeBeneficiaryById } = usePaccServices(parseInt(typeState));
   const [dataManager, setDataManager] = useState<IManagePage>({
     title: "",
     beneficiaryInformationValues: {
@@ -51,7 +51,12 @@ export const useManage = () => {
             }/${year}`,
             reasonCompletion: response.data.reason,
           },
-          component: <TabsManageTechnical document={response.data.document} />,
+          component: (
+            <TabsManageTechnical
+              document={response.data.document}
+              typeState={typeState}
+            />
+          ),
         });
 
         setShowSpinner(false);

@@ -1,29 +1,49 @@
 import { useEffect, useRef, useContext, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { ITableElement } from "../../../../../common/interfaces";
-import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
-import { MenuItem } from "primereact/menuitem";
 import { AppContext } from "../../../../../common/contexts/app.context";
 import { useParams } from "react-router";
 import { IApplyKnowledgeTransfer } from "../interface/manage-technical";
-import { usePaccServices } from "../../../hook/pacc-serviceshook";
-import { EResponseCodes } from "../../../../../common/constants/api.enum";
+import { ISocialServiceBeneficiary } from "../interface/social-service";
+import { Tag } from "primereact/tag";
+import { Accordion, AccordionTab } from "primereact/accordion";
+import {
+  FormComponent,
+  InputComponent,
+  SelectComponent,
+} from "../../../../../common/components/Form";
+import { Controller, useForm } from "react-hook-form";
+import { TextAreaComponent } from "../../../../../common/components/Form/input-text-area.component";
+import { EServiceSocialStates } from "../../../constants/service.social.states.enum";
+import { MenuItem } from "primereact/menuitem";
+import { FiPaperclip } from "react-icons/fi";
+import { OverlayPanel } from "primereact/overlaypanel";
+import { Menu } from "primereact/menu";
+import { Tooltip } from "primereact/tooltip";
 import { downloadFile } from "../helper/dowloadFile";
 
-export default function useKnowledgeTransfer() {
+export default function useSocialServices() {
   const { id } = useParams();
-  const tableComponentRef = useRef(null);
-  const { setMessage, authorization } = useContext(AppContext);
-  const { GetUploadKnowledgeTransferFiles } = usePaccServices();
+
   const [filesService, setFilesService] = useState([]);
+
+  const toast = useRef(null);
+  const tableComponentRef = useRef(null);
+
+  const { register, control, setValue } = useForm({
+    defaultValues: {
+      state: null,
+      observation: "",
+    },
+  });
+
+  const { setMessage, authorization } = useContext(AppContext);
 
   useEffect(() => {
     loadTableData({
-      idBeneficiary: parseInt(id),
-      user: authorization.user.numberDocument,
+      id: parseInt(id),
     });
-    getUploadKnow();
   }, []);
 
   function loadTableData(searchCriteria?: object): void {
@@ -32,25 +52,82 @@ export default function useKnowledgeTransfer() {
     }
   }
 
-  function getUploadKnow(): void {
-    GetUploadKnowledgeTransferFiles(id).then((response) => {
-      if (response.operation.code === EResponseCodes.OK) {
-        setFilesService(response.data);
-      }
-    });
+  function showDetailSocialService(row: ISocialServiceBeneficiary) {
+    console.log(row.state);
+    console.log(row.observation);
+
+    setValue("state", row.state);
+    setValue("observation", row.observation);
+
+    return (
+      <>
+        <Accordion
+          activeIndex={1}
+          style={{ width: "100%", marginBottom: "1rem" }}
+        >
+          <AccordionTab header="Requisitos" style={{ fontSize: "1.22em" }}>
+            {row.beneficiarieConsolidate.requerimentsConsolidate.map(
+              (us, index) => {
+                return (
+                  <div
+                    key={us.id}
+                    className="content-accordion-tab medium mt-14px"
+                    style={{ fontWeight: "400" }}
+                  >
+                    {index + 1}. {us.descriptionRequirement}
+                  </div>
+                );
+              }
+            )}
+          </AccordionTab>
+        </Accordion>
+        <div className="card-table gap-0 full-width">
+          <FormComponent id="formManageTransfer">
+            <div className="grid-form-2-container ">
+              <SelectComponent
+                idInput={"state"}
+                control={control}
+                data={[
+                  { name: "Aprobado", value: EServiceSocialStates.Aprobado },
+                  { name: "Rechazado", value: EServiceSocialStates.Rechazado },
+                ]}
+                label="Estado"
+                className="select-basic medium select-disabled-list"
+                classNameLabel="text-black biggest"
+                filter={true}
+                placeholder="Seleccionar."
+                disabled={true}
+              />
+            </div>
+            <div className="mt-24px">
+              <TextAreaComponent
+                idInput={"observation"}
+                label="Observación"
+                className="text-area-basic"
+                classNameLabel="text-black biggest"
+                rows={2}
+                placeholder="Escribe aquí"
+                register={register}
+                disabled={true}
+              />
+            </div>
+          </FormComponent>
+        </div>
+      </>
+    );
   }
 
-  const tableColumns: ITableElement<IApplyKnowledgeTransfer>[] = [
+  const tableColumns: ITableElement<ISocialServiceBeneficiary>[] = [
     {
-      fieldName: "committedHours",
+      fieldName: "legalizationPeriod",
       header: "Período",
     },
     {
-      fieldName: "workedHours",
+      fieldName: "committedHours",
       header: "Horas comprometidas",
     },
     {
-      fieldName: "pendingHours",
+      fieldName: "hoursDone",
       header: "Horas realizadas",
     },
     {
@@ -62,13 +139,17 @@ export default function useKnowledgeTransfer() {
       header: "Total horas pendientes",
     },
     {
-      fieldName: "status",
+      fieldName: "state",
       header: "Estado",
       renderCell: (row) => {
+        if (row.state === null) {
+          return <></>;
+        }
+
         return (
           <Tag
-            severity={row.status == 0 ? "danger" : "success"}
-            value={row.status == 1 ? "Aprobado" : "Rechazado"}
+            severity={row.state ? "danger" : "success"}
+            value={row.state ? "Aprobado" : "Rechazado"}
             rounded
           />
         );
@@ -83,9 +164,38 @@ export default function useKnowledgeTransfer() {
             <section className="card-options">
               <Button
                 className="button-table"
-                icon={<FaEye className="icon-size" />}
-                onClick={(e) => {}}
+                title="Revisar"
+                icon={<FaEye color="#058cc1" className="icon-size" />}
+                onClick={(e) => {
+                  setMessage({
+                    show: true,
+                    title: "Revisar",
+                    description: showDetailSocialService(row),
+                    OkTitle: "Cerrar",
+                    onOk: () => {
+                      setMessage({});
+                    },
+                  });
+                }}
               />
+            </section>
+            <section className="card-options">
+              <Tooltip target=".adjunto" style={{ borderRadius: "1px" }} />
+              <i
+                className="style-tooltip adjunto"
+                data-pr-tooltip="Adjuntar"
+                data-pr-position="right"
+              >
+                <Button
+                  className="button-table"
+                  icon={<FiPaperclip className="icon-size" />}
+                  onClick={(e) => toast.current.toggle(e)}
+                />
+
+                <OverlayPanel ref={toast}>
+                  <Menu model={items(row.id)} className="menu-style" />
+                </OverlayPanel>
+              </i>
             </section>
           </div>
         );
@@ -107,7 +217,12 @@ export default function useKnowledgeTransfer() {
                     <button
                       className="p-menuitem-link button-menu-tooltip"
                       onClick={() => {
-                        downloadFile(file, authorization, setMessage);
+                        downloadFile(
+                          file,
+                          authorization,
+                          setMessage,
+                          "/uploadInformation/files/get-file"
+                        );
                       }}
                     >
                       <span className="p-menuitem-text ml-5px">
