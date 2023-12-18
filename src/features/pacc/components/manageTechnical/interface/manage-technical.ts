@@ -44,6 +44,7 @@ export interface IChageStatusKnowledgeTransfer {
   observations: string;
   user: string;
   workedHours: number;
+  statusPaccSearch:number
 }
 
 export interface IPropManageTransfer {
