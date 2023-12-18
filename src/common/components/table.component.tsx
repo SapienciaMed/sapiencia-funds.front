@@ -485,7 +485,7 @@ const leftContent = (
       {isInputSearch && onGlobalFilterChange && valueFilterTable != null ? (
         <div className="col-1 col-100 seeker">
           <span className="p-input-icon-left">
-            <i className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center">
+            <i className="custom-target-icon p-text-secondary p-overlay-badge flex justify-center">
               <svg
                 width="18"
                 height="18"
