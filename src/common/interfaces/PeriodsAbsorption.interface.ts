@@ -6,8 +6,8 @@ export interface ICallPeriodsRes {
   minimumSalary: number;
 }
 export interface ICallPeriodsResfilters {
-  value: number;
-  name: string;
+  value?: number;
+  name?: string;
   announcementId: number;
 }
 

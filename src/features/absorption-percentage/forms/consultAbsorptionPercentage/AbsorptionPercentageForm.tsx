@@ -37,7 +37,7 @@ const AbsorptionPercentageForm = ({
       className="form-signIn"
       action={onSubmit}
     >
-      <span className="text-black large bold grid-span-4-columns mt-15px ml-27px">
+      <span className="text-black large  grid-span-4-columns mt-15px ml-27px">
         Porcentaje de absorción
       </span>
 
@@ -54,7 +54,7 @@ const AbsorptionPercentageForm = ({
               </div>
             }
             className="select-basic medium"
-            classNameLabel="text-black big bold"
+            classNameLabel="text-black big "
             placeholder="Seleccione."
             filter
           />
@@ -62,28 +62,31 @@ const AbsorptionPercentageForm = ({
       </div>
       <div className="button-save-container-display mr-24px">
         {tableView && (
-          <>
-            <div
-              className={`title-button  ${
-                width < 300 ? "font-medium" : "font-big"
-              } mt-12px mr-15px hover`}
-              onClick={handleAggItem}
-            >
-              <div className="button-border colorTittle alin pr-23px pl-23px">
-                <BiPlusCircle />
-                <span className="p-2px"> Agregar ítem </span>
+          <div className="mr-auto ml-25px">
+            <div>
+              <div
+                className={`title-button  ${
+                  width < 300 ? "font-medium" : "font-big"
+                } mt-12px mr-15px hover`}
+                onClick={handleAggItem}
+              >
+                <div className="button-border colorTittle alin pr-23px pl-23px">
+                  <BiPlusCircle />
+                  <span className="p-2px"> Agregar ítem </span>
+                </div>
               </div>
             </div>
-
-            <ButtonComponent
-              value="Limpiar campos"
-              className="button-clean bold mr-3px mt-14px"
-              type="button"
-              action={handleClean}
-            />
-          </>
+          </div>
         )}
 
+        {tableView && (
+          <ButtonComponent
+            value="Limpiar campos"
+            className="button-clean  mr-3px mt-14px"
+            type="button"
+            action={handleClean}
+          />
+        )}
         <ButtonComponent
           value="Buscar"
           className={`button-save ${
@@ -130,12 +133,6 @@ const AbsorptionPercentageForm = ({
               }
               className="button-download large "
               action={downloadCollection}
-            />
-
-            <ButtonComponent
-              value="Cerrar"
-              className="button-save big"
-              action={handleClean}
             />
           </div>
         )}
