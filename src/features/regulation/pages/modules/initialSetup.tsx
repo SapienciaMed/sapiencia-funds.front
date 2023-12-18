@@ -8,6 +8,8 @@ import SwitchComponent from "../../../../common/components/Form/switch.component
 import { Controller } from "react-hook-form";
 import Acordion from "../../components/acordion";
 import { LIST_DATA_GRACE_PERIOD } from "../../service";
+import { InputNumberComponent } from "../../../../common/components/Form/input-number.component";
+import { EDirection } from "../../../../common/constants/input.enum";
 
 const InitialSetup = ({
   register,
@@ -121,31 +123,64 @@ const InitialSetup = ({
           />
         </div>
       </div>
-      <div className="percentageSemiannualPayment mb-24px">
-        <Controller
-          control={control}
-          name={"theoreticalPercentage"}
-          defaultValue={updateData?.theoreticalPercentage}
-          render={({ field }) => {
-            return (
-              <InputComponent
-                idInput={field.name}
-                errors={errors}
-                disabled={onlyView ? true : false}
-                defaultValue={`${updateData?.theoreticalPercentage}`}
-                typeInput="text"
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                value={field.value ? field.value : ""}
-                className="input-basic input-size"
-                classNameLabel="text-black biggest text-required font-500"
-                label="Porcentaje de pago teórico semestral"
-              />
-            );
+      
+      <div>
+        <Acordion
+          title="¿Aplica porcentaje de pago teórico semestral?"
+          isOpen={toggleControl?.applyTheoreticalSemester}
+          onClick={async () => {
+            if (onlyView) return;
+            setValue("applyTheoreticalSemester", !getValues().applyTheoreticalSemester);
+            await setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                applyTheoreticalSemester: getValues().applyTheoreticalSemester,
+              });
+            }, 400);
+              setValue("theoreticalPercentage", null);
           }}
-        />
+          switchElement={
+            <SwitchComponent
+              idInput={"applyTheoreticalSemester"}
+              errors={errors}
+              disabled={onlyView ? true : false}
+              control={control}
+              onClick={() => {
+                if (onlyView) return;
+                setToggleControl({
+                  ...toggleControl,
+                  applyTheoreticalSemester: !getValues().applyTheoreticalSemester,
+                });
+              }}
+              onChange={() => {
+                setValue("theoreticalPercentage", null);
+              }}
+              size="small"
+              className="select-basic select-disabled-list input-size"
+              classNameLabel="text-black biggest font-500"
+            />
+          }
+        >
+          <div className="grid-form-2-container gap-15">
+            <InputNumberComponent
+              idInput={'theoreticalPercentage'}
+              className="inputNumber-basic medium"
+              label="Porcentaje de pago teórico semestral"
+              classNameLabel='text-black big text-with-colons text-required'
+              errors={errors}
+              placeholder={""}
+              direction={EDirection.column}
+              suffix="%"
+              mode="decimal"
+              minFractionDigits={1}
+              maxFractionDigits={1}
+              min={0}
+              max={100}
+              control={control}
+            />
+          </div>
+        </Acordion>
       </div>
-
       <div>
         <Acordion
           title="¿Aplica servicio social?"
@@ -200,7 +235,7 @@ const InitialSetup = ({
                       typeInput="number"
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size "
                       classNameLabel="text-black biggest text-required font-500"
                       label="Porcentaje de descuento por periodo"
@@ -222,7 +257,7 @@ const InitialSetup = ({
                       typeInput="number"
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required font-500"
                       label="Horas por periodo"
@@ -291,7 +326,7 @@ const InitialSetup = ({
                       onChange={field.onChange}
                       disabled={onlyView ? true : false}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size "
                       classNameLabel="text-black biggest text-required font-500"
                       label="Porcentaje de cumplimiento"
@@ -313,7 +348,7 @@ const InitialSetup = ({
                       typeInput="number"
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required font-500"
                       label="Horas totales por el crédito"
@@ -377,7 +412,7 @@ const InitialSetup = ({
                       typeInput="number"
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required font-500"
                       label="Meses"
@@ -462,7 +497,7 @@ const InitialSetup = ({
                       typeInput="number"
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required font-500"
                       label="Cantidad"
@@ -529,7 +564,7 @@ const InitialSetup = ({
                       typeInput="number"
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required font-500"
                       label="Cantidad"
@@ -595,7 +630,7 @@ const InitialSetup = ({
                       typeInput="number"
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required font-500"
                       label="Cantidad"
@@ -657,7 +692,7 @@ const InitialSetup = ({
                       typeInput="number"
                       onChange={field.onChange}
                       onBlur={field.onBlur}
-                      value={field.value}
+                      value={field?.value}
                       className="input-basic input-size"
                       classNameLabel="text-black biggest text-required font-500"
                       label="Cantidad"

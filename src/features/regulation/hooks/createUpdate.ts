@@ -38,6 +38,7 @@ export default function useRegulationHook(auth) {
     extensionApply: boolean;
     applyCondonationPerformancePeriod: boolean;
     accomulatedIncomeCondonationApplies: boolean;
+    applyTheoreticalSemester?: boolean
   }>();
   const [listPrograms, setListPrograms] = useState<
     { name: string; value: number }[]
@@ -103,6 +104,7 @@ export default function useRegulationHook(auth) {
   const getUpdateData = async () => {
     if (id) {
       const res = await getRegulationById(id);
+      console.log("🚀  res:", res)
       if (res?.data[0]) {
         for (let clave in res?.data[0]) {
           if (res?.data[0][clave] === null) {
@@ -147,6 +149,7 @@ export default function useRegulationHook(auth) {
   };
 
   const onsubmitCreate = handleSubmit((data: IRegulation) => {
+    console.log("🚀 ~ file: createUpdate.ts:152 ~ onsubmitCreate ~ data:", data)
     if (data.applyCondonationPerformancePeriod && !data.performancePeriod) {
       return setPerformancePeriodErrors(true);
     } else {

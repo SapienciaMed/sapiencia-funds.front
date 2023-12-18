@@ -31,6 +31,7 @@ export interface IRegulation {
   modifyDate?: string;
   createUser: string;
   createDate: string;
+  applyTheoreticalSemester: boolean
 }
 
 export interface IRegulationSearch {

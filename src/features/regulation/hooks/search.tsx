@@ -126,28 +126,28 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const tableColumns: ITableElement<IRegulation>[] = [
     {
       fieldName: "row.regulation.program",
-      header: <div style={{ fontWeight: 400 }}>{"Programa"}</div>,
+      header: 'Programa',
       renderCell: (row) => {
         const getListItem: any = listPrograms.find(
           (item) => item.name === row.program || item.value === row.program
         );
-        return <>{getListItem.name}</>;
+        return <>{getListItem?.name}</>;
       },
     },
     {
       fieldName: "row.regulation.initialPeriod",
-      header: <div style={{ fontWeight: 400 }}>{"Periodo inicial"}</div>,
+      header: 'Periodo inicial',
       renderCell: (row) => {
         const getListItem: any = periods.find(
           (item) =>
             item.name === row.initialPeriod || item.value === row.initialPeriod
         );
-        return <>{getListItem.name}</>;
+        return <>{getListItem?.name}</>;
       },
     },
     {
       fieldName: "row.regulation.endPeriod",
-      header: <div style={{ fontWeight: 400 }}>{"Periodo Final"}</div>,
+      header: 'Periodo Final',
       renderCell: (row) => {
         const getListItem: any = periods.find(
           (item) => item.name === row.endPeriod || item.value === row.endPeriod
