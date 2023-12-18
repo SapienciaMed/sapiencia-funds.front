@@ -68,7 +68,7 @@ export const FilterUploadInformationForm = ({
                   className="select-basic medium"
                   classNameLabel="text-black big text-required"
                   filter={true}
-                  placeholder="Seleccione."
+                  placeholder="Seleccionar"
                   //disabled={action === "edit" ? true : false} 
                 />
 
@@ -85,7 +85,7 @@ export const FilterUploadInformationForm = ({
                   className="select-basic medium"
                   classNameLabel="text-black big text-required"
                   filter={true}
-                  placeholder="Seleccione."
+                  placeholder="Seleccionar"
                   //disabled={action === "edit" ? true : false} 
                 />
 
@@ -102,7 +102,7 @@ export const FilterUploadInformationForm = ({
                   className="select-basic medium"
                   classNameLabel="text-black big text-required"
                   filter={true}
-                  placeholder="Seleccione."
+                  placeholder="Seleccionar"
                   //disabled={action === "edit" ? true : false} 
                 />
 
