@@ -1,4 +1,4 @@
-import React, { SetStateAction, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
 import { useForm } from 'react-hook-form';
 import { EDirection } from "../../../common/constants/input.enum";
@@ -13,16 +13,15 @@ import { IDropdownProps } from "../../../common/interfaces/select.interface";
 interface IProp{
     idBenef: number,
     idCutData: IDropdownProps[],
-    setListSearch?:(value: SetStateAction<{ data: {}; status: boolean }>) => void,
-    loadTableData?: (searchCriteria?: object) => void
+    typeState: number
 }
 
-function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
+function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp>) {
 
     const { setMessage } = useContext(AppContext);
     const resolver = useYupValidationResolver(changeCuttingBeneficiary);
-    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices()
-    const [actualCut, setActualCut] = useState('')
+    const { GeBeneficiaryById, UpdateCutBeneficiary } = usePaccServices(typeState)
+    const [ actualCut, setActualCut ] = useState('')
     const [ cut, setCut ] = useState<IDropdownProps[]>([])
 
     const formatDate = (fechaISO: string) => {
@@ -41,7 +40,7 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
                 setActualCut(`${item.cut} - desde ${formatDate(item.dateIncomeCut)} hasta ${formatDate(item.dateFinallyCut)}`)
                 setCut(idCutData.filter(us => us.name != item.cut))
             }
-        })
+        }).catch(error => console.log(error))
     },[])
 
     const {
@@ -66,10 +65,9 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
                 UpdateCutBeneficiary(data).then(response => {
                     if(response.operation.code === EResponseCodes.OK){
                         setMessage({});
-                        window.location.reload();
+                        window.location.reload();     
                     }
-                
-                })
+                }).catch(error => console.log(error))
             },
             onCancel() {
                 setMessage({});
@@ -96,16 +94,16 @@ function ChangeCuttingBeneficiary({idBenef, idCutData}:Readonly<IProp>) {
                             value={actualCut}
                         />
                     </section>
-                    <section className='grid-form-1-container mt-14px '>
+                    <section className='grid-form-1-container mt-14px'>
                         <SelectComponent
                             idInput={"idCut"}
                             control={control}
                             data={cut}
                             label="Corte"
-                            className="select-basic big"
+                            className="select-basic big select-disabled-list"
                             classNameLabel='text-black biggest text-with-colons text-required'
                             filter={true}
-                            placeholder="Seleccionar."
+                            placeholder="Seleccionar"
                             direction={EDirection.column}
                             errors={errors}
                         />

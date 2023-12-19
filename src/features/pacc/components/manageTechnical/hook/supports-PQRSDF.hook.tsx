@@ -1,17 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { ITableAction, ITableElement } from "../../../../../common/interfaces";
-import { useParams } from "react-router-dom";
 import { PqrsdfResultSimple } from "../interface/manage-technical";
 import { Tooltip } from "primereact/tooltip";
+import { downloadFile } from "../helper/dowloadFile";
+import { IFiles } from "../../../../../common/interfaces/storage.interfaces";
+import { AppContext } from "../../../../../common/contexts/app.context";
 
-export default function useSupportsPQRSDF() {
+export default function useSupportsPQRSDF({ document }) {
     
     const tableComponentRef = useRef(null);
-    const [ showSpinner,   setShowSpinner ] = useState(false)
+    const { setMessage, authorization } = useContext(AppContext);
 
     useEffect(() => {
-        setShowSpinner(true)
-        loadTableData()
+        loadTableData({ identification: document })
     },[])
 
 
@@ -87,7 +88,11 @@ export default function useSupportsPQRSDF() {
         {
             icon: "Paperclip",
             onClick: (row) => {
-
+                const file: IFiles = {
+                    name: 'test5.pdf',
+                    path: ' sapiencia-citizen-attention/proyectos-digitales/test5.pdf',
+                }
+                // downloadFile(file, authorization, setMessage, '/consolidation-tray/get-pqrsdf-external')
             },
         },
        
@@ -97,7 +102,6 @@ export default function useSupportsPQRSDF() {
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
-            setShowSpinner(false)
         }
     }
 
@@ -105,6 +109,5 @@ export default function useSupportsPQRSDF() {
         tableComponentRef,
         tableColumns,
         tableActions,
-        showSpinner
     }
 }

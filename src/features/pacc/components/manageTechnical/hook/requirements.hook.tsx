@@ -19,12 +19,12 @@ import { uploadFiles } from "../helper/uploadFile";
 
 export default function useRequeriments() {
       
-    const { id } =  useParams()
+    const { id, typeState } =  useParams()
     const navigate = useNavigate();
     const tableComponentRef = useRef(null);
     const toast = useRef(null);
     const [visible, setVisible] = useState<boolean>(false);
-    const { GetRequirementsByBeneficiary, GetRequirementFile, ComplianceAssignmentBeneficiary, DeleteUploadFiles } = usePaccServices()
+    const { GetRequirementsByBeneficiary, GetRequirementFile, ComplianceAssignmentBeneficiary, DeleteUploadFiles } = usePaccServices(parseInt(typeState))
     const [filesUploadData, setFilesUploadData] = useState<File>(null);
     const { setMessage, setDisabledFields, authorization } = useContext(AppContext);
     const [ idBeneficiary, setIdBeneficiary] = useState('')
@@ -52,7 +52,7 @@ export default function useRequeriments() {
     useEffect(() => {
         if (filesUploadData != null) {
             //Guarda el archivo
-            uploadFiles(idCode, [filesUploadData], setMessage, loadTableData, authorization)
+            uploadFiles(idCode, [filesUploadData], setMessage, loadTableData, authorization, parseInt(typeState))
         }
     },[filesUploadData])
 
@@ -60,7 +60,7 @@ export default function useRequeriments() {
         GetRequirementsByBeneficiary({ idBeneficiary: id }).then(response => {
             if(response.operation.code === EResponseCodes.OK){
                 setShowTable(true)
-                loadTableData()
+                loadTableData({idBeneficiary: parseInt(id)})
             }else {
                 setShowTable(false)
             }
@@ -106,7 +106,7 @@ export default function useRequeriments() {
             header: 'Obligatorio para',
             renderCell:(row) => {
                 return(
-                    <> { row.mandatoryFor ? `${row.mandatoryFor}` : '-' } </>
+                    <> { row.mandatoryFor ? `${row.mandatoryFor}` : 'N/A' } </>
                 )
             }
         },
@@ -206,7 +206,7 @@ export default function useRequeriments() {
                                                     },
                                                 });
                                            }else {
-                                            downloadFile(response.data, authorization, setMessage )
+                                            downloadFile(response.data[0], authorization, setMessage, '/uploadInformation/files/get-file' )
                                            }
                                             setShowSpinner(false)
                                             toast.current.hide();
@@ -400,8 +400,8 @@ export default function useRequeriments() {
         tableColumns,
         tableComponentRef,
         visible,
-        id,
         showTable,
+        typeState,
         setVisible,
         setFilesUploadData,
         onCancel,

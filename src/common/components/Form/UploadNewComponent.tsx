@@ -7,6 +7,7 @@ import { trashIcon } from "../icons/trash";
 import { clip } from "../icons/clip";
 import { imagesicon } from "../icons/images";
 import { Tag } from "primereact/tag";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 interface Atributos {
   id: string;
@@ -23,6 +24,7 @@ const UploadNewComponent = (props: Atributos) => {
   const toast = useRef(null);
   const [totalSize, setTotalSize] = useState(0);
   const fileUploadRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
 
   const onTemplateSelect = (e) => {
     let _totalSize = totalSize;
@@ -86,13 +88,14 @@ const UploadNewComponent = (props: Atributos) => {
     const extencion = file.name.split(".");
 
     if (extencion[extencion.length - 1] !== 'pdf') {
+      setUploading(false);
       onTemplateRemove(file, props.onRemove);
       return;
     }
     if(fileGlobal.current){
       dataArchivo(inFile);
     }
-
+    setUploading(false);
     return (
       <div className="flex align-items-center">
         <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -177,6 +180,9 @@ const UploadNewComponent = (props: Atributos) => {
 
   return (
     <div>
+      {
+        uploading && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
+      }
       <Tooltip target=".custom-choose-btn" content="Seleccionar" position="bottom" />
       <Tooltip target=".custom-upload-btn" content="Cargar" position="bottom" />
       <Tooltip target=".custom-cancel-btn" content="Limpiar" position="bottom" />
@@ -198,6 +204,8 @@ const UploadNewComponent = (props: Atributos) => {
         chooseOptions={chooseOptions}
         uploadOptions={uploadOptions}
         cancelOptions={cancelOptions}
+        onBeforeSelect={() => { setUploading(true) }}
+        onBeforeDrop={() => setUploading(true)}
       />
     </div>
   );

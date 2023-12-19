@@ -1,11 +1,10 @@
 @import './font-family.scss';
-@mixin generate-grid(
-  $columns,
+
+@mixin generate-grid($columns,
   $column-width,
   $gap: null,
   $column-gap: null,
-  $row-gap: null
-) {
+  $row-gap: null) {
   $grid-template-columns: "";
 
   @for $i from 1 through $columns {
@@ -21,14 +20,12 @@
   row-gap: $row-gap;
 }
 
-@mixin generate-flex-container(
-  $flex-direction: null,
+@mixin generate-flex-container($flex-direction: null,
   $flex-wrap: null,
   $justify-content: null,
   $align-content: null,
   $align-items: null,
-  $gap: null
-) {
+  $gap: null) {
   display: flex;
   flex-direction: $flex-direction;
   flex-wrap: $flex-wrap;
@@ -38,13 +35,11 @@
   gap: $gap;
 }
 
-@mixin generate-label(
-  $color: null,
+@mixin generate-label($color: null,
   $font-family: null,
   $font-size: null,
   $font-weight: null,
-  $text-align: null
-) {
+  $text-align: null) {
   font-family: $font-family;
   color: $color;
   font-size: $font-size;
@@ -52,15 +47,13 @@
   text-align: $text-align;
 }
 
-@mixin generate-input(
-  $width,
+@mixin generate-input($width,
   $height,
   $border-radius,
   $border,
   $background-color: null,
   $color: null,
-  $font-size: null
-) {
+  $font-size: null) {
   width: $width;
   height: $height;
   border-radius: $border-radius;
@@ -82,12 +75,15 @@
   height: $card-height;
   width: $card-width;
   padding: $padding;
+
   @if $show {
     border: 1px solid #7070701a;
     border-radius: 13px;
     box-shadow: inset 0px 3px 6px #00000029, 0px 3px 6px #00000029;
     background: #ffffff 0% 0% no-repeat padding-box;
-  } @else {
+  }
+
+  @else {
     border: 0px;
     border-radius: 0px;
     box-shadow: 0px 0px;
@@ -95,15 +91,13 @@
   }
 }
 
-@mixin multiple-card-component(
-  $columns,
+@mixin multiple-card-component($columns,
   $margin-horizontal,
   $margin-vertical,
   $card-height,
   $card-width,
   $padding,
-  $cursor: null
-) {
+  $cursor: null) {
   .card-body {
     @include card-component($card-height, $card-width, $padding);
     display: flex;
@@ -127,14 +121,13 @@
     }
   }
 }
-@mixin generate-text-area(
-  $width,
+
+@mixin generate-text-area($width,
   $border-radius,
   $border,
   $background-color: null,
   $color: null,
-  $font-size: null
-) {
+  $font-size: null) {
   width: $width;
   border-radius: $border-radius;
   border: $border;
@@ -144,14 +137,15 @@
   font-family: sans-serif;
 }
 
-@mixin card-component-title-area( $display: flex, $justify-content: space-between, $flex-direction: row, $margin-bottom: 14px, $gap: 8px, $gap2: 1rem, $margin-top: 23px ){
+@mixin card-component-title-area($display: flex, $justify-content: space-between, $flex-direction: row, $margin-bottom: 14px, $gap: 8px, $gap2: 1rem, $margin-top: 23px, $align-items: none) {
   display: $display;
   justify-content: $justify-content;
   flex-direction: $flex-direction;
   margin-bottom: $margin-bottom;
   position: relative;
   gap: $gap2;
-  
+  align-items: $align-items ;
+
   .title-button {
     display: flex;
     align-items: center;
@@ -165,6 +159,11 @@
     svg {
       width: 16px;
     }
+
+    &.color-red {
+      color: #CC0100;
+    }
+
 
     &:hover {
       cursor: pointer;
@@ -191,4 +190,8 @@
     }
 
   }
+}
+
+.hover {
+  cursor: pointer;
 }

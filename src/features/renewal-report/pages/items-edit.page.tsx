@@ -8,11 +8,11 @@ import { Controller } from "react-hook-form";
 import { InputNumberComponent } from "../../../common/components/Form/input-number.component";
 
 
-const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICallRenewal,  }) => {
+const ItemsEditePage = ({ renewalitem, renewal, selectedperiodo, loadTableData, restoreData }: { renewalitem, renewal?: ICallRenewal, selectedperiodo, loadTableData,restoreData }) => {
 
-   
-    const { errors,control,updateDataGridRenewal,CancelFunction
-    } = useActaItems(renewalitem, renewal, );
+
+    const { errors, control, updateDataGridRenewal, CancelFunction, register
+    } = useActaItems(renewalitem, renewal, selectedperiodo, loadTableData,restoreData);
 
     return (
         <Fragment>
@@ -21,23 +21,25 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                     <div className="container-form padding-form">
                         <div>
                             <div className='grid-form-4-container mb-24px'>
-                            <Controller
+                                <Controller
                                     control={control}
                                     name={"fund"}
                                     render={({ field }) => {
                                         return (
-                                            <InputNumberComponent
-                                                control={control}
-                                                idInput={`fund`}
+                                            <InputComponent
+                                                id={field.name}
+                                                idInput={field.name}
                                                 label="Fondo"
-                                                className="inputNumber-basic medium"
-                                                placeholder={renewal ? renewal.fund : ""}
-                                                classNameLabel="text-black biggest text-required"
+                                                className="input-basic medium"
+                                                typeInput="text"
+                                                //placeholder={renewal ? renewal.fund : ""}
+                                                classNameLabel="text-black biggest"
                                                 errors={errors}
+                                                register={register}
                                                 disabled={true}
                                                 {...field}
                                             />
-                                        )
+                                        );
                                     }}
                                 />
                                 <Controller
@@ -55,8 +57,7 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                                                 errors={errors}
                                                 {...field}
                                             />
-                                        )
-
+                                        );
                                     }}
                                 />
                                 <Controller
@@ -70,39 +71,41 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                                                 label="Nro renovados"
                                                 className="inputNumber-basic medium"
                                                 placeholder={renewal ? renewal.renewed : ""}
-                                                classNameLabel="text-black biggest text-required"
+                                                classNameLabel="text-black biggest"
                                                 errors={errors}
-                                                mode="currency"
-                                                currency="COP"
-                                                locale="es-CO"
                                                 fieldArray={true}
                                                 minFractionDigits={0}
                                                 maxFractionDigits={0}
                                                 disabled={true}
                                                 {...field}
                                             />
-                                        )
-
+                                        );
                                     }}
                                 />
+
                                 <Controller
                                     control={control}
                                     name={"percentage"}
                                     render={({ field }) => {
                                         return (
                                             <InputNumberComponent
-                                                control={control}
-                                                idInput={`percentage`}
-                                                label="Porcentaje"
+                                                idInput={field.name}
                                                 className="inputNumber-basic medium"
-                                                placeholder={renewal ? renewal.percentage : ""}
-                                                classNameLabel="text-black biggest text-required"
+                                                label="Porcentaje"
+                                                classNameLabel={`text-black biggest`}
                                                 errors={errors}
-                                                disabled={true}
+                                                placeholder={""}
+                                               disabled
+                                                suffix="%"
+                                                mode="decimal"
+                                                minFractionDigits={1}
+                                                maxFractionDigits={1}
+                                                min={0}
+                                                
+                                                control={control}
                                                 {...field}
-                                            />
-                                        )
-
+                                            />                    
+                                        );
                                     }}
                                 />
 
@@ -113,7 +116,7 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                     </div>
                 </div>
 
-                <div className="button-save-container-display-items margin-right0 mr-24px">
+                <div className="button-save-container-display m-top-20">
                     <ButtonComponent
                         form="searchBudget"
                         value={"Cancelar"}
@@ -124,15 +127,15 @@ const ItemsEditePage = ({ renewalitem, renewal,  }: { renewalitem, renewal?: ICa
                         }
                         }
                     />
-                        <ButtonComponent
-                            form="EditRenewal"
-                            value={`Guardar`}
-                            className="button-save large hover-three disabled-black"
-                            action={() => {
-                                updateDataGridRenewal()
-                            }}
-                        />
-                    </div>
+                    <ButtonComponent
+                        form="EditRenewal"
+                        value={`Guardar`}
+                        className="button-save large hover-three disabled-black"
+                        action={() => {
+                            updateDataGridRenewal()
+                        }}
+                    />
+                </div>
 
             </FormComponent>
 

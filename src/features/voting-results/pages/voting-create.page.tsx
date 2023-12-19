@@ -276,7 +276,7 @@ const VotingResultsPage = () => {
                   </span>
                   <div className="content-tbltotls">
                     <div className="content-tbltotlscolumn">
-                      <div className="colorcontetnmin alingcent-textopciones">
+                     {/*  <div className="colorcontetnmin alingcent-textopciones">
                         <span>Valor de la Actividad</span>
                       </div>
                       <span className="txt-center">
@@ -295,7 +295,7 @@ const VotingResultsPage = () => {
                             }
                           })}
                         </p>
-                      </span>
+                      </span> */}
                     </div>
                     <div className="content-tbltotlscolumn">
                       <div className="colorcontetnmin alingcent-textopciones">
