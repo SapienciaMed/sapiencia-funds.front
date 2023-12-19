@@ -19,12 +19,12 @@ function ConsolidatedTrayPage() {
             action: () => {},
             hide: validateActionAccess('TECNICO_PASO_COBRO') 
         }
-        const servicioSocial = {
+        const servicioSocial = { 
             id: "servicioSocial", 
             title: "Servicio social", 
-            content:( <></> ), 
+            content:( <BeneficiaryTrayPage typeState={EStatePac.SocialService} isCut={false}/> ), 
             action: () => {},
-           hide: false /*poner el rol */ 
+            hide: validateActionAccess('SERVICIO_SOCIAL') 
         }
         const certificacionValores = {
             id: "certificacionValores", 
