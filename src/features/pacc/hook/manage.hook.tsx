@@ -51,12 +51,7 @@ export const useManage = () => {
             }/${year}`,
             reasonCompletion: response.data.reason,
           },
-          component: (
-            <TabsManageTechnical
-              document={response.data.document}
-              typeState={typeState}
-            />
-          ),
+          component: <TabsManageTechnical document={response.data.document} />,
         });
 
         setShowSpinner(false);

@@ -2,9 +2,18 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import React, { useState } from "react";
 import TableComponent from "../../../../common/components/table.component";
 import useSocialServices from "./hook/social-services.hook";
+import { Dialog } from "primereact/dialog";
+import UploadNewComponent from "../../../../common/components/Form/UploadNewComponent";
+import { ButtonComponent } from "../../../../common/components/Form";
 
 function SocialServices() {
-  const { tableColumns, tableComponentRef } = useSocialServices();
+  const {
+    tableColumns,
+    tableComponentRef,
+    visible,
+    setVisible,
+    setFilesUploadData,
+  } = useSocialServices();
   const [showSpinner, setShowSpinner] = useState(true);
 
   return (
@@ -15,6 +24,42 @@ function SocialServices() {
           animationDuration=".5s"
         />
       )}
+
+      <Dialog
+        header="Si tienes más de un documento, se deben unir en un solo archivo para ser cargados"
+        className="text-center div-modal movil"
+        visible={visible}
+        onHide={() => setVisible(false)}
+        pt={{
+          root: { style: { width: "35em" } },
+        }}
+      >
+        <UploadNewComponent
+          id="cargarArchivo"
+          dataArchivo={(files: File) => {
+            if (files && files.name) {
+              setFilesUploadData(files);
+              setVisible(false);
+            }
+          }}
+          showModal={(e: boolean) => {
+            setVisible(e);
+          }}
+          titleFilesAccept="Solo es permitido el formato PDF"
+          filesAccept="application/pdf"
+        />
+        <div className="modal-footer" style={{ margin: "1rem" }}>
+          <ButtonComponent
+            value="Cancelar"
+            className="button-ok small"
+            type="button"
+            action={() => {
+              setVisible(false);
+              setFilesUploadData(null);
+            }}
+          />
+        </div>
+      </Dialog>
 
       <TableComponent
         ref={tableComponentRef}
@@ -29,7 +74,6 @@ function SocialServices() {
         viePaginator={false}
         isNotBorderClasse={true}
         setShowSpinner={setShowSpinner}
-        title="Horas servicio social"
       />
     </section>
   );

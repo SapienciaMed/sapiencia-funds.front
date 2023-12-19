@@ -9,7 +9,7 @@ import Requirements from "./manageTechnical/requirements";
 import KnowledgeTransfer from "./manageTechnical/knowledge-transfer";
 import SocialServices from "./manageTechnical/social-services";
 
-function TabsManageTechnical({ document, typeState }) {
+function TabsManageTechnical({ document }) {
   const { option } = useParams();
   const { validateActionAccess } = useContext(AppContext);
 
