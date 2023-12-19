@@ -2,21 +2,22 @@ import {  useContext, useEffect, useRef, useState } from "react";
 import { ITableAction, ITableElement } from "../../../common/interfaces";
 import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams, IStepCashing } from "../interface/pacc";
 import { usePaccServices } from "./pacc-serviceshook";
-import { EResponseCodes } from "../../../common/constants/api.enum";
+import { EResponseCodes, EStatePac } from "../../../common/constants/api.enum";
 import { IDropdownProps } from "../../../common/interfaces/select.interface";
 import { useForm } from 'react-hook-form';
 import { AppContext } from "../../../common/contexts/app.context";
 import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 import { useNavigate } from "react-router-dom";
+import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
-export default function useBeneficiaryTray(typeState: number) {
-    
+export default function useBeneficiaryTray(typeState: number, isCut: boolean = true) {
+
     const navigate = useNavigate();
     const tableComponentRef = useRef(null);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
     const { setMessage } = useContext(AppContext);
     const { GetCutsForConsolidationTray } = usePaccServices(typeState)
-    const [idCutData, setIdCutData] = useState<IDropdownProps[]>([]);
+    const [ idCutData, setIdCutData ] = useState<IDropdownProps[]>([]);
     const [ listSearch, setListSearch ] = useState({
         data: {},
         status: false
@@ -32,7 +33,7 @@ export default function useBeneficiaryTray(typeState: number) {
 
     useEffect(() => { 
         setShowSpinner(true)
-        getCuts()
+        isCut && getCuts()
 
         if (typeState) {
  
@@ -56,7 +57,7 @@ export default function useBeneficiaryTray(typeState: number) {
             })
         }
 
-    }, [typeState])
+    }, [typeState, isCut])
 
 
     useEffect(() => {
@@ -66,100 +67,118 @@ export default function useBeneficiaryTray(typeState: number) {
     },[listSearch])
 
 
-    const tableColumns: ITableElement<IConsolidationTrayForTechnicianCollectionParams>[] = [
-        {
-            fieldName:'creditId',
-            header: 'Id crédito'
-        },
-        {
-            fieldName:'nroFiducy',
-            header: 'Nro contrato fiduciario'
-        },
-        {
-            fieldName:'document',
-            header: 'Documento'
-        },
-        {
-            fieldName:'fullName',
-            header: 'Nombres y Apellidos'
-        },
-        {
-            fieldName:'program',
-            header: 'Programa'
-        },
-        {
-            fieldName:'legalDate',
-            header: 'Fecha legalización'
-        },
-        {
-            fieldName:'dateIncomeCut',
-            header: 'Fecha ingreso al corte',
-            renderCell(row) {
-                const date = new Date(row.dateIncomeCut);
-                const day = date.getUTCDate();
-                const month = date.getUTCMonth() + 1;
-                const year = date.getUTCFullYear();
-
-                return(
-                    <div>
-                       {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
-                    </div>
-                )
+    const tableColumns = (): ITableElement<IConsolidationTrayForTechnicianCollectionParams>[] => {
+        const a: ITableElement<IConsolidationTrayForTechnicianCollectionParams>[] = [
+            {
+                fieldName:'creditId',
+                header: 'Id crédito',
+                hide: true,
             },
-        },
-        {
-            fieldName:'cut',
-            header: 'Corte'
-        },
-        {
-            fieldName:'dateFinallyCut',
-            header: 'Fecha final corte',
-            renderCell(row) {
-                const date = new Date(row.dateFinallyCut);
-                const day = date.getUTCDate();
-                const month = date.getUTCMonth() + 1;
-                const year = date.getUTCFullYear();
-
-                return(
-                    <div>
-                       {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
-                    </div>
-                )
+            {
+                fieldName:'nroFiducy',
+                header: 'Nro contrato fiduciario',
+                hide: true,
             },
-        },
-        {
-            fieldName:'dateEndGracePeriod',
-            header: 'Fecha fin periodo de gracia',
-            renderCell(row) {
-                const date = new Date(row.dateEndGracePeriod);
-                const day = date.getUTCDate();
-                const month = date.getUTCMonth() + 1;
-                const year = date.getUTCFullYear();
-
-                return(
-                    <div>
-                       {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
-                    </div>
-                )
+            {
+                fieldName:'document',
+                header: 'Documento',
+                hide: true,
             },
-        },
-        {
-            fieldName:'status',
-            header: 'Estado'
-        },
-        {
-            fieldName:'reason',
-            header: 'Motivo'
-        },
-        {
-            fieldName:'characterization',
-            header: 'Caracterización'
-        },
-        {
-            fieldName:'currentResponsible',
-            header: 'Responsable actual'
-        }
-    ]
+            {
+                fieldName:'fullName',
+                header: 'Nombres y Apellidos',
+                hide: true,
+            },
+            {
+                fieldName:'program',
+                header: 'Programa',
+                hide: true,
+            },
+            {
+                fieldName:'legalDate',
+                header: 'Fecha legalización',
+                hide: true,
+            },
+            {
+                fieldName:'dateIncomeCut',
+                header: 'Fecha ingreso al corte',
+                hide: true,
+                renderCell(row) {
+                    const date = new Date(row.dateIncomeCut);
+                    const day = date.getUTCDate();
+                    const month = date.getUTCMonth() + 1;
+                    const year = date.getUTCFullYear();
+    
+                    return(
+                        <div>
+                           {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
+                        </div>
+                    )
+                },
+            },
+            {
+                fieldName:'cut',
+                header: 'Corte',
+                hide: isCut
+            },
+            {
+                fieldName:'dateFinallyCut',
+                header: 'Fecha final corte',
+                hide: true,
+                renderCell(row) {
+                    const date = new Date(row.dateFinallyCut);
+                    const day = date.getUTCDate();
+                    const month = date.getUTCMonth() + 1;
+                    const year = date.getUTCFullYear();
+    
+                    return(
+                        <div>
+                           {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
+                        </div>
+                    )
+                },
+            },
+            {
+                fieldName:'dateEndGracePeriod',
+                header: 'Fecha fin periodo de gracia',
+                hide: true,
+                renderCell(row) {
+                    const date = new Date(row.dateEndGracePeriod);
+                    const day = date.getUTCDate();
+                    const month = date.getUTCMonth() + 1;
+                    const year = date.getUTCFullYear();
+    
+                    return(
+                        <div>
+                           {year}/{ month < 10 ? '0'+ month :  month }/{ day < 10 ? '0' + day :  day}
+                        </div>
+                    )
+                },
+            },
+            {
+                fieldName:'status',
+                header: 'Estado',
+                hide: true,
+            },
+            {
+                fieldName:'reason',
+                header: 'Motivo',
+                hide: true,
+            },
+            {
+                fieldName:'characterization',
+                header: 'Caracterización',
+                hide: true,
+            },
+            {
+                fieldName:'currentResponsible',
+                header: 'Responsable actual',
+                hide: true,
+            }
+        ]
+
+        return a.filter(u => u.hide)
+    }
 
     const tableActions: ITableAction<IConsolidationTrayForTechnicianCollectionParams>[] = [
         {
@@ -176,18 +195,20 @@ export default function useBeneficiaryTray(typeState: number) {
                         },
                     }); 
             },
+            hide: !isCut
         },
         {
             icon: "Manage",
             onClick: (row) => {
-                typeState == 4 && navigate(`./gestion/${row.idBenef}/${typeState}`) // condicion para Tab "Técnico paso al cobro"
+                // condicion para llevar a la vista de gestionar = Tab "Técnico paso al cobro" o Tab "Servicio social"
+                (typeState == EStatePac.TecnhicianStepCashing) && navigate(`./gestion/${row.idBenef}/${typeState}`) 
             },
+            
         },
        
     ];
     
     function loadTableData(searchCriteria?: object): void {
-        setShowSpinner(false)
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
@@ -283,6 +304,17 @@ export default function useBeneficiaryTray(typeState: number) {
         }).catch(error => console.log(error))
     }
 
+    const apiUrl = () => {
+        const baseApiUrl = process.env.urlApiFunds;
+        const endpoint = typeState === EStatePac.SocialService
+            ? 'get-paginated/consolidate'
+            : listSearch.status
+                ? 'get-consolidation-tray-by-cut'
+                : 'get-consolidation-tray';
+    
+        return `${baseApiUrl}/api/v1/${typePrefixeTabs(typeState)}/${endpoint}`;
+    };
+
     
     return{
         tableComponentRef,
@@ -290,11 +322,12 @@ export default function useBeneficiaryTray(typeState: number) {
         tableActions,
         idCutData,
         control,
-        listSearch,
         showSpinner,
         valueFilterTable,
         handleFilterChange,
         handleChangeCut,
-        getCuts
+        getCuts,
+        apiUrl,
+        setShowSpinner
     }
 }
