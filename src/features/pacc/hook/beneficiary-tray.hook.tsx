@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { AppContext } from "../../../common/contexts/app.context";
 import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 import { useNavigate } from "react-router-dom";
+import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
 export default function useBeneficiaryTray(typeState: number, isCut: boolean = true) {
 
@@ -199,7 +200,8 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
         {
             icon: "Manage",
             onClick: (row) => {
-                typeState == EStatePac.TecnhicianStepCashing && navigate(`./gestion/${row.idBenef}/${typeState}`) // condicion para Tab "Técnico paso al cobro"
+                // condicion para llevar a la vista de gestionar = Tab "Técnico paso al cobro" o Tab "Servicio social"
+                (typeState == EStatePac.TecnhicianStepCashing) && navigate(`./gestion/${row.idBenef}/${typeState}`) 
             },
             
         },
@@ -207,7 +209,6 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
     ];
     
     function loadTableData(searchCriteria?: object): void {
-        setShowSpinner(false)
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
         }
@@ -303,6 +304,17 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
         }).catch(error => console.log(error))
     }
 
+    const apiUrl = () => {
+        const baseApiUrl = process.env.urlApiFunds;
+        const endpoint = typeState === EStatePac.SocialService
+            ? 'get-paginated/consolidate'
+            : listSearch.status
+                ? 'get-consolidation-tray-by-cut'
+                : 'get-consolidation-tray';
+    
+        return `${baseApiUrl}/api/v1/${typePrefixeTabs(typeState)}/${endpoint}`;
+    };
+
     
     return{
         tableComponentRef,
@@ -310,11 +322,12 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
         tableActions,
         idCutData,
         control,
-        listSearch,
         showSpinner,
         valueFilterTable,
         handleFilterChange,
         handleChangeCut,
-        getCuts
+        getCuts,
+        apiUrl,
+        setShowSpinner
     }
 }

@@ -11,10 +11,9 @@ import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
 function BeneficiaryTrayPage({ typeState, isCut = true }: Readonly<{ typeState: EStatePac, isCut?: boolean }>) {
 
-    const { tableComponentRef, tableColumns, tableActions, idCutData, control, listSearch, showSpinner, valueFilterTable,
-        handleFilterChange, handleChangeCut, getCuts } = useBeneficiaryTray(typeState, isCut)
+    const { tableComponentRef, tableColumns, tableActions, idCutData, control, showSpinner, valueFilterTable,
+        handleFilterChange, handleChangeCut, getCuts, apiUrl, setShowSpinner } = useBeneficiaryTray(typeState, isCut)
 
-    // TODO: Validar si la url en la TableComponent seria la misma para servicio social
     return(
         <div className="card-table gap-0 mt-14px">
             {
@@ -45,7 +44,7 @@ function BeneficiaryTrayPage({ typeState, isCut = true }: Readonly<{ typeState: 
                 
                 <TableComponent
                     ref={tableComponentRef}
-                    url={`${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(typeState)}/${ listSearch.status ? 'get-consolidation-tray-by-cut' :'get-consolidation-tray'}`}
+                    url={apiUrl()}
                     columns={tableColumns()}
                     actions={tableActions}
                     titleMessageModalNoResult="Buscar"
@@ -58,6 +57,7 @@ function BeneficiaryTrayPage({ typeState, isCut = true }: Readonly<{ typeState: 
                     isMobil={false}
                     resetValue={getCuts}
                     isNotBorderClasse={true}
+                    setShowSpinner={(value) => setShowSpinner(value)}
                 />
             </section>
 

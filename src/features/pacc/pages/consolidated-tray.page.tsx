@@ -24,7 +24,7 @@ function ConsolidatedTrayPage() {
             title: "Servicio social", 
             content:( <BeneficiaryTrayPage typeState={EStatePac.SocialService} isCut={false}/> ), 
             action: () => {},
-            hide: false /* Poner el rol */ 
+            hide: validateActionAccess('SERVICIO_SOCIAL') 
         }
         const certificacionValores = {
             id: "certificacionValores", 
