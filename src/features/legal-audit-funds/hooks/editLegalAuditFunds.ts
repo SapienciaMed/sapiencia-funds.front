@@ -13,6 +13,10 @@ import {
   ICreatePeriodsAbsorption,
   IPeriodsAbsorption,
 } from "../../../common/interfaces/PeriodsAbsorption.interface";
+import {
+  IEditLegalAuditFunds,
+  ILegalAuditFunds,
+} from "../../../common/interfaces/LegalAuditFunds";
 
 export const useEditLegalAuditFundsModal = (
   announcementId,
@@ -35,13 +39,8 @@ export const useEditLegalAuditFundsModal = (
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
 
-  const [formWatch, setFormWatch] = useState<ICreatePeriodsAbsorption>({
-    sceneryPercentage1: 0,
-    sceneryPercentage2: 0,
-    sceneryPercentage3: 0,
-  });
-
   const [communeFundId, resourceValue] = watch(["communeFundId", "resource"]);
+
   const onSubmit = handleSubmit(async (formData) => {
     try {
       setMessage({
@@ -105,43 +104,16 @@ export const useEditLegalAuditFundsModal = (
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
-    setFormWatch({
-      ...formWatch,
-      [name]: parseFloat(value),
-    });
+
     setValue(name, value);
   };
 
   useEffect(() => {
-    const sceneryValue1 = resourceValue * formWatch.sceneryPercentage1;
-    const sceneryValue2 = resourceValue * formWatch.sceneryPercentage2;
-    const sceneryValue3 = resourceValue * formWatch.sceneryPercentage3;
-
-    setValue("sceneryValue1", formaterNumberToCurrency(sceneryValue1));
-    setValue("sceneryValue2", formaterNumberToCurrency(sceneryValue2));
-    setValue("sceneryValue3", formaterNumberToCurrency(sceneryValue3));
-  }, [
-    row,
-    resourceValue,
-    formWatch.sceneryPercentage1,
-    formWatch.sceneryPercentage2,
-    formWatch.sceneryPercentage3,
-  ]);
-
-  useEffect(() => {
-    const { sceneryPercentage1, sceneryPercentage2, sceneryPercentage3 } =
-      formWatch;
-    if (
-      !communeFundId ||
-      !resourceValue ||
-      !sceneryPercentage1 ||
-      !sceneryPercentage2 ||
-      !sceneryPercentage3
-    ) {
+    if (!communeFundId || !resourceValue) {
       return setSubmitDisabled(true);
     }
     setSubmitDisabled(false);
-  }, [communeFundId, formWatch]);
+  }, [communeFundId]);
 
   useEffect(() => {
     const resourceFound = searchCommuneFundByValue(communeFundId);

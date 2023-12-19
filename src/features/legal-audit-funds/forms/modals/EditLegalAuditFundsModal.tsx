@@ -6,6 +6,7 @@ import {
   SelectComponent,
 } from "../../../../common/components/Form";
 import { useEditLegalAuditFundsModal } from "../../hooks/editLegalAuditFunds";
+import { DatePickerComponent } from "../../../../common/components/Form/input-date.component";
 
 const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
   const {
@@ -27,7 +28,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
     >
       <div className="container-form-grid-actas">
         <div className="container-form padding-form">
-          <div className="grid-form-4-container  gap-25 mb-25px">
+          <div className="grid-form-3-container  gap-25 mb-25px">
             <SelectComponent
               idInput="communeFundId"
               control={control}
@@ -35,7 +36,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               data={communeFundData}
               label={
                 <>
-                  Fondo comuna <span>*</span>
+                  ID comuna <span>*</span>
                 </>
               }
               className="select-basic medium"
@@ -60,24 +61,10 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
             />
 
             <InputComponent
-              idInput="sceneryPercentage1"
+              idInput="fiducia"
               label={
                 <>
-                  Escenario 1 <span>*</span>
-                </>
-              }
-              typeInput="number"
-              register={register}
-              errors={errors}
-              onChange={handleChange}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
-            <InputComponent
-              idInput="sceneryPercentage2"
-              label={
-                <>
-                  Escenario 2 <span>*</span>
+                  Fiducia <span>*</span>
                 </>
               }
               typeInput="number"
@@ -88,55 +75,24 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               classNameLabel="text-black big bold"
             />
           </div>
-          <div className="grid-form-4-container gap-25 mt-13px">
-            <InputComponent
-              idInput="sceneryPercentage3"
-              label={
-                <>
-                  Escenario 3 <span>*</span>
-                </>
-              }
-              typeInput="number"
+          <div className="grid-form-3-container gap-25 mt-13px">
+            <DatePickerComponent
+              idInput="update"
               errors={errors}
-              register={register}
-              onChange={handleChange}
-              className="input-basic medium"
+              control={control}
+              label={<> Fecha de actualización</>}
               classNameLabel="text-black big bold"
+              className="dataPicker-basic  medium "
+              placeholder="DD/MM/YYYY"
+              dateFormat="dd/mm/yy"
+              maxDate={new Date()}
             />
             <InputComponent
-              idInput="sceneryValue1"
+              idInput="orden"
               disabled
               label={
                 <>
-                  Valor escenario 1 <span>*</span>
-                </>
-              }
-              typeInput="text"
-              register={register}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
-            <InputComponent
-              idInput="sceneryValue2"
-              disabled
-              label={
-                <>
-                  Valor escenario 2 <span>*</span>
-                </>
-              }
-              typeInput="text"
-              register={register}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
-            <InputComponent
-              idInput="sceneryValue3"
-              disabled
-              label={
-                <>
-                  Valor escenario 3 <span>*</span>
+                  Orden <span>*</span>
                 </>
               }
               typeInput="text"
