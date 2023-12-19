@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useContext,
-  useState,
-} from "react";
+import { useEffect, useRef, useContext, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { ITableElement } from "../../../../../common/interfaces";
 import { Button } from "primereact/button";
@@ -16,9 +11,6 @@ import {
   FormComponent,
   SelectComponent,
 } from "../../../../../common/components/Form";
-import {
-  useForm,
-} from "react-hook-form";
 import { TextAreaComponent } from "../../../../../common/components/Form/input-text-area.component";
 import { EServiceSocialStates } from "../../../constants/service.social.states.enum";
 import { MenuItem } from "primereact/menuitem";
@@ -28,7 +20,7 @@ import { Menu } from "primereact/menu";
 import { Tooltip } from "primereact/tooltip";
 import { downloadFile } from "../helper/dowloadFile";
 import { useWidth } from "../../../../../common/hooks/use-width";
-import ContentSubmitData from "../content-submit-data";
+import ModalUploadChangeData from "../modal-upload-change-data";
 import { EStatePac } from "../../../../../common/constants/api.enum";
 
 export default function useSocialServices() {
@@ -37,17 +29,8 @@ export default function useSocialServices() {
 
   const [filesService, setFilesService] = useState([]);
 
-  const [visible, setVisible] = useState(false);
-
   const toast = useRef(null);
   const tableComponentRef = useRef(null);
-
-  const { register, control, setValue, unregister } = useForm({
-    defaultValues: {
-      state: null,
-      observation: "",
-    },
-  });
 
   const { setMessage, authorization } = useContext(AppContext);
 
@@ -68,66 +51,22 @@ export default function useSocialServices() {
       show: true,
       title: "Revisar",
       description: (
-        <>
-          <Accordion
-            activeIndex={1}
-            style={{ width: "100%", marginBottom: "1rem" }}
-          >
-            <AccordionTab header="Requisitos" style={{ fontSize: "1.22em" }}>
-              {row.beneficiarieConsolidate.requerimentsConsolidate.map(
-                (us, index) => {
-                  return (
-                    <div
-                      key={us.id}
-                      className="content-accordion-tab medium mt-14px"
-                      style={{ fontWeight: "400" }}
-                    >
-                      {index + 1}. {us.descriptionRequirement}
-                    </div>
-                  );
-                }
-              )}
-            </AccordionTab>
-          </Accordion>
-          <div className="card-table gap-0 full-width">
-            <FormComponent id="formManageTransfer">
-              <div className="grid-form-2-container ">
-                <SelectComponent
-                  idInput={"state"}
-                  control={control}
-                  data={[
-                    {
-                      name: "Aprobado",
-                      value: EServiceSocialStates.Aprobado,
-                    },
-                    {
-                      name: "Rechazado",
-                      value: EServiceSocialStates.Rechazado,
-                    },
-                  ]}
-                  label="Estado"
-                  className="select-basic medium select-disabled-list"
-                  classNameLabel="text-black biggest"
-                  filter={true}
-                  placeholder="Seleccionar."
-                  disabled={true}
-                />
-              </div>
-              <div className="mt-24px">
-                <TextAreaComponent
-                  idInput={"observation"}
-                  label="Observación"
-                  className="text-area-basic"
-                  classNameLabel="text-black biggest"
-                  rows={2}
-                  placeholder="Escribe aquí"
-                  register={register}
-                  disabled={true}
-                />
-              </div>
-            </FormComponent>
-          </div>
-        </>
+        <ModalUploadChangeData
+          requirements={row.beneficiarieConsolidate.requerimentsConsolidate.map(
+            (i) => {
+              return { id: i.id, description: i.descriptionRequirement };
+            }
+          )}
+          showState={true}
+          showObservation={true}
+          showUploadFile={false}
+          state={row.state}
+          observation={row.observation}
+          headerAccordion="Requisitos"
+          width={width}
+          action="show"
+          loadTableData={loadTableData}
+        />
       ),
       OkTitle: "Cerrar",
       onOk: () => {
@@ -141,13 +80,20 @@ export default function useSocialServices() {
       show: true,
       title: "Revisar",
       description: (
-        <ContentSubmitData
-          row={row}
-          control={control}
-          register={register}
+        <ModalUploadChangeData
+          requirements={row.beneficiarieConsolidate.requerimentsConsolidate.map(
+            (i) => {
+              return { id: i.id, description: i.descriptionRequirement };
+            }
+          )}
+          showState={true}
+          showObservation={true}
+          showUploadFile={true}
+          state={null}
+          observation={""}
+          headerAccordion="Requisitos"
+          action="edit"
           width={width}
-          unregister={unregister}
-          setMessage={setMessage}
           loadTableData={loadTableData}
         />
       ),
@@ -204,9 +150,11 @@ export default function useSocialServices() {
                 title="Revisar"
                 icon={<FaEye color="#058cc1" className="icon-size" />}
                 onClick={(e) => {
-                  if (Number(typeState) === EStatePac.SocialService) showDetailSocialService(row);
+                  if (Number(typeState) === EStatePac.SocialService)
+                    showDetailSocialService(row);
 
-                  if (Number(typeState) !== EStatePac.SocialService) showModalSubmitData(row);
+                  if (Number(typeState) !== EStatePac.SocialService)
+                    showModalSubmitData(row);
                 }}
               />
             </section>
@@ -276,7 +224,5 @@ export default function useSocialServices() {
   return {
     tableComponentRef,
     tableColumns,
-    visible,
-    setVisible,
   };
 }
