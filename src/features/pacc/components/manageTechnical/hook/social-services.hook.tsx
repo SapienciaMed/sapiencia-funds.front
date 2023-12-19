@@ -151,10 +151,10 @@ export default function useSocialServices() {
                 icon={<FaEye color="#058cc1" className="icon-size" />}
                 onClick={(e) => {
                   if (Number(typeState) === EStatePac.SocialService)
-                    showDetailSocialService(row);
+                    showModalSubmitData(row);
 
                   if (Number(typeState) !== EStatePac.SocialService)
-                    showModalSubmitData(row);
+                    showDetailSocialService(row);
                 }}
               />
             </section>
