@@ -2,25 +2,29 @@ import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
-import { useGetAllPeriodsHook } from "./getAllPeriodsHook";
-import { useGetcommuneFundIdHook } from "./getcommuneFundIdHook";
-import {
-  ICreatePeriodsAbsorption,
-  IPeriodsAbsorption,
-} from "../../../common/interfaces/PeriodsAbsorption.interface";
 import useCrudService from "../../../common/hooks/crud-service.hook";
 import { urlApiFunds } from "../../../common/utils/base-url";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { createPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAbsorption.shema";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import { useGetcommuneFundIdHook } from "../../absorption-percentage/hooks/getcommuneFundIdHook";
+import {
+  ICreatePeriodsAbsorption,
+  IPeriodsAbsorption,
+} from "../../../common/interfaces/PeriodsAbsorption.interface";
+import {
+  IEditLegalAuditFunds,
+  ILegalAuditFunds,
+} from "../../../common/interfaces/LegalAuditFunds";
 
-export const useCreateAbsorptionPercentageModal = (
+export const useEditLegalAuditFundsModal = (
   announcementId,
+  row,
   reloadTable
 ) => {
   const { setMessage } = useContext(AppContext);
-  const { post } = useCrudService(urlApiFunds);
+  const { put } = useCrudService(urlApiFunds);
   const { communeFund: communeFundData, searchCommuneFundByValue } =
     useGetcommuneFundIdHook();
   const [submitDisabled, setSubmitDisabled] = useState(true);
@@ -31,26 +35,22 @@ export const useCreateAbsorptionPercentageModal = (
     register,
     watch,
     setValue,
+    reset,
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
 
-  const [formWatch, setFormWatch] = useState<ICreatePeriodsAbsorption>({
-    sceneryPercentage1: 0,
-    sceneryPercentage2: 0,
-    sceneryPercentage3: 0,
-  });
   const [communeFundId, resourceValue] = watch(["communeFundId", "resource"]);
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
       setMessage({
-        title: "Guardar",
-        description: "¿Estás segur@ de guardar la información?",
+        title: "Actualizar",
+        description: "¿Estas seguro que deseas actualizar la información?",
         show: true,
         OkTitle: "Aceptar",
         cancelTitle: "Cancelar",
         onOk: async () => {
-          await createItem(formData);
+          await EditItem(formData);
         },
         onClose() {
           setMessage({});
@@ -61,17 +61,16 @@ export const useCreateAbsorptionPercentageModal = (
     }
   });
 
-  const createItem = async (data: IPeriodsAbsorption) => {
+  const EditItem = async (data: IPeriodsAbsorption) => {
     const resourceFound = searchCommuneFundByValue(data.communeFundId);
     const fullData = {
       ...data,
       announcementId,
       communeFundId: Number(resourceFound.name),
     };
-    console.log(fullData);
     try {
-      const endpoint = "/api/v1/absorption-percentage/create";
-      const resp = await post<IPeriodsAbsorption>(endpoint, fullData);
+      const endpoint = `/api/v1/absorption-percentage/${row.id}/update-by-id`;
+      const resp = await put<IPeriodsAbsorption>(endpoint, fullData);
       await reloadTable({ announcementId });
 
       if (resp.operation.code === EResponseCodes.FAIL) {
@@ -85,8 +84,8 @@ export const useCreateAbsorptionPercentageModal = (
         });
       }
       setMessage({
-        title: "Guardar",
-        description: "¡Información guardada exitosamente!",
+        title: "Actualizar",
+        description: "¡Información actualizada exitosamente!",
         show: true,
         OkTitle: "Cerrar",
         onOk: () => {
@@ -105,42 +104,16 @@ export const useCreateAbsorptionPercentageModal = (
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
-    setFormWatch({
-      ...formWatch,
-      [name]: parseFloat(value),
-    });
+
     setValue(name, value);
   };
 
   useEffect(() => {
-    const sceneryValue1 = resourceValue * formWatch.sceneryPercentage1;
-    const sceneryValue2 = resourceValue * formWatch.sceneryPercentage2;
-    const sceneryValue3 = resourceValue * formWatch.sceneryPercentage3;
-
-    setValue("sceneryValue1", formaterNumberToCurrency(sceneryValue1));
-    setValue("sceneryValue2", formaterNumberToCurrency(sceneryValue2));
-    setValue("sceneryValue3", formaterNumberToCurrency(sceneryValue3));
-  }, [
-    resourceValue,
-    formWatch.sceneryPercentage1,
-    formWatch.sceneryPercentage2,
-    formWatch.sceneryPercentage3,
-  ]);
-
-  useEffect(() => {
-    const { sceneryPercentage1, sceneryPercentage2, sceneryPercentage3 } =
-      formWatch;
-    if (
-      !communeFundId ||
-      !resourceValue ||
-      !sceneryPercentage1 ||
-      !sceneryPercentage2 ||
-      !sceneryPercentage3
-    ) {
+    if (!communeFundId || !resourceValue) {
       return setSubmitDisabled(true);
     }
     setSubmitDisabled(false);
-  }, [communeFundId, formWatch]);
+  }, [communeFundId]);
 
   useEffect(() => {
     const resourceFound = searchCommuneFundByValue(communeFundId);
@@ -148,9 +121,10 @@ export const useCreateAbsorptionPercentageModal = (
   }, [communeFundId]);
 
   useEffect(() => {
-    console.log("Errors", errors);
-    console.log(isValid);
-  }, [errors, isValid]);
+    reset(row);
+  }, [row]);
+
+  console.log(row);
 
   return {
     handleChange,

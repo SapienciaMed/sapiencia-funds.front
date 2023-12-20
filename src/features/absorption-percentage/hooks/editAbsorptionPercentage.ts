@@ -15,7 +15,11 @@ import { createPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAb
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 
-export const useEditAbsorptionPercentageModal = (announcementId, row) => {
+export const useEditAbsorptionPercentageModal = (
+  announcementId,
+  row,
+  reloadTable
+) => {
   const { setMessage } = useContext(AppContext);
   const { put } = useCrudService(urlApiFunds);
   const { communeFund: communeFundData, searchCommuneFundByValue } =
@@ -37,21 +41,18 @@ export const useEditAbsorptionPercentageModal = (announcementId, row) => {
     sceneryPercentage2: 0,
     sceneryPercentage3: 0,
   });
-  const [communeFundId, resourceValue] = watch([
-    "row.communeFundId",
-    "resource",
-  ]);
 
+  const [communeFundId, resourceValue] = watch(["communeFundId", "resource"]);
   const onSubmit = handleSubmit(async (formData) => {
     try {
       setMessage({
-        title: "Guardar",
-        description: "¿Estas seguro que deseas actualizar la información?",
+        title: "Actualizar",
+        description: "¿Estás segur@ de guardar la información?",
         show: true,
         OkTitle: "Aceptar",
         cancelTitle: "Cancelar",
         onOk: async () => {
-          await createItem(formData);
+          await EditItem(formData);
         },
         onClose() {
           setMessage({});
@@ -62,17 +63,18 @@ export const useEditAbsorptionPercentageModal = (announcementId, row) => {
     }
   });
 
-  const createItem = async (data: IPeriodsAbsorption) => {
+  const EditItem = async (data: IPeriodsAbsorption) => {
     const resourceFound = searchCommuneFundByValue(data.communeFundId);
     const fullData = {
       ...data,
       announcementId,
       communeFundId: Number(resourceFound.name),
     };
-    console.log(fullData);
     try {
-      const endpoint = "/api/v1/absorption-percentage/create";
+      const endpoint = `/api/v1/absorption-percentage/${row.id}/update-by-id`;
       const resp = await put<IPeriodsAbsorption>(endpoint, fullData);
+      await reloadTable({ announcementId });
+
       if (resp.operation.code === EResponseCodes.FAIL) {
         return setMessage({
           title: "Error",
@@ -84,7 +86,7 @@ export const useEditAbsorptionPercentageModal = (announcementId, row) => {
         });
       }
       setMessage({
-        title: "Guardar",
+        title: "Actualizar",
         description: "¡Información guardada exitosamente!",
         show: true,
         OkTitle: "Cerrar",
@@ -120,6 +122,7 @@ export const useEditAbsorptionPercentageModal = (announcementId, row) => {
     setValue("sceneryValue2", formaterNumberToCurrency(sceneryValue2));
     setValue("sceneryValue3", formaterNumberToCurrency(sceneryValue3));
   }, [
+    row,
     resourceValue,
     formWatch.sceneryPercentage1,
     formWatch.sceneryPercentage2,
@@ -144,8 +147,13 @@ export const useEditAbsorptionPercentageModal = (announcementId, row) => {
   useEffect(() => {
     const resourceFound = searchCommuneFundByValue(communeFundId);
     setValue("resource", resourceFound?.value);
-    // setValue("sceneryPercentage1", row.sceneryPercentage1);
   }, [communeFundId]);
+
+  useEffect(() => {
+    reset(row);
+  }, [row]);
+
+  console.log(row);
 
   return {
     handleChange,

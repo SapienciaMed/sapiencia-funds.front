@@ -7,7 +7,11 @@ import {
 } from "../../../../common/components/Form";
 import { useEditAbsorptionPercentageModal } from "../../hooks/editAbsorptionPercentage";
 
-const EditAbsorptionPercentageModal = ({ announcementId, row }) => {
+const EditAbsorptionPercentageModal = ({
+  announcementId,
+  row,
+  reloadTable,
+}) => {
   const {
     errors,
     control,
@@ -18,7 +22,7 @@ const EditAbsorptionPercentageModal = ({ announcementId, row }) => {
     submitDisabled,
     communeFundData,
     handleChange,
-  } = useEditAbsorptionPercentageModal(announcementId, row);
+  } = useEditAbsorptionPercentageModal(announcementId, row, reloadTable);
   return (
     <FormComponent
       id="EditAbsorptionPercentageModal"
@@ -40,7 +44,7 @@ const EditAbsorptionPercentageModal = ({ announcementId, row }) => {
               }
               className="select-basic medium"
               classNameLabel="text-black big bold"
-              placeholder="Seleccione."
+              placeholder="Seleccionar"
               filter
             />
             <InputComponent
@@ -54,7 +58,6 @@ const EditAbsorptionPercentageModal = ({ announcementId, row }) => {
               register={register}
               onChange={handleChange}
               errors={errors}
-              disabled
               className="input-basic medium"
               classNameLabel="text-black big bold"
             />

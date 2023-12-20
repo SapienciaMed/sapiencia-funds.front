@@ -119,6 +119,14 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     loadData: loadData,
   }));
 
+  // REMOVE THIS BECAUSE IS ONLY PARTIAL SOLUTION
+  useEffect(() => {
+    if (setPaginateData) {
+      setPaginateData({ page, perPage });
+    }
+  }, [page, perPage]);
+  // ============================================
+
   // Metodo que hace la peticion para realizar la carga de datos
   async function loadData(
     newSearchCriteria?: object,
@@ -137,7 +145,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
-      setShowSpinner && setShowSpinner(false);
+      setShowSpinner?.(false);
       if (props.onResult) props.onResult(res?.data?.array || []);
       if (res.data?.array?.length <= 0 && isShowModal) {
         setMessage({
@@ -152,9 +160,16 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               onGlobalFilterChange(valor);
             }
           },
+          onClose:() => {
+            setMessage({});
+            if (onGlobalFilterChange) {
+              const valor = { target: { value: "" } as HTMLInputElement };
+              onGlobalFilterChange(valor);
+            }
+          },
           background: true,
         });
-        resetValue && resetValue();
+        resetValue?.();
       }
     } else {
       setMessage({
@@ -167,7 +182,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           setMessage({});
         },
       });
-      resetValue && resetValue();
+      resetValue?.();
     }
     setLoading(false);
   }
@@ -248,7 +263,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
       <div
-        className={`spc-common-table ${
+        className={`spc-common-table2 ${
           isNotBorderClasse && "spc-common-table-without-border"
         }`}
       >
@@ -257,7 +272,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         {viePaginator && (
           <Paginator
             className="between spc-table-paginator"
-            template={paginatorHeader}
+            template={paginatorHeader(width)}
             first={first}
             rows={perPage}
             totalRecords={resultData?.meta?.total || 0}
@@ -485,7 +500,7 @@ const leftContent = (
       {isInputSearch && onGlobalFilterChange && valueFilterTable != null ? (
         <div className="col-1 col-100 seeker">
           <span className="p-input-icon-left">
-            <i className="custom-target-icon pi pi-envelope p-text-secondary p-overlay-badge flex justify-center">
+            <i className="custom-target-icon p-text-secondary p-overlay-badge flex justify-center">
               <svg
                 width="18"
                 height="18"
@@ -520,42 +535,48 @@ const leftContent = (
   );
 };
 // Metodo que retorna el icono o nombre de la accion
-const paginatorHeader: PaginatorTemplateOptions = {
-  layout: "CurrentPageReport RowsPerPageDropdown",
-  CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
-    return (
-      <>
-        <p className="header-information text-black medium big">
-          Total de resultados
-        </p>
-        <p className="header-information text-three medium big">
-          {options.totalRecords}
-        </p>
-      </>
-    );
-  },
-  RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
-    const dropdownOptions = [
-      { label: 10, value: 10 },
-      { label: 30, value: 30 },
-      { label: 50, value: 50 },
-      { label: 100, value: 100 },
-    ];
+const paginatorHeader = (width: number): PaginatorTemplateOptions => {
+  return {
+    layout: `${
+      width < 1024
+        ? "RowsPerPageDropdown CurrentPageReport"
+        : "CurrentPageReport RowsPerPageDropdown"
+    }`,
+    CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
+      return (
+        <section className="content-result">
+          <p className="header-information text-black medium big">
+            Total de resultados
+          </p>
+          <p className="header-information text-three medium big">
+            {options.totalRecords}
+          </p>
+        </section>
+      );
+    },
+    RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
+      const dropdownOptions = [
+        { label: 10, value: 10 },
+        { label: 30, value: 30 },
+        { label: 50, value: 50 },
+        { label: 100, value: 100 },
+      ];
 
-    return (
-      <React.Fragment>
-        <p className="header-information text-black medium big">
-          Registros por página{" "}
-        </p>
-        <Dropdown
-          value={options.value}
-          className="header-information"
-          options={dropdownOptions}
-          onChange={options.onChange}
-        />
-      </React.Fragment>
-    );
-  },
+      return (
+        <section className="content-result">
+          <p className="header-information text-black medium big">
+            Registros por página{" "}
+          </p>
+          <Dropdown
+            value={options.value}
+            className="header-information"
+            options={dropdownOptions}
+            onChange={options.onChange}
+          />
+        </section>
+      );
+    },
+  };
 };
 
 const paginatorFooter: PaginatorTemplateOptions = {

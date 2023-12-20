@@ -9,39 +9,43 @@ import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
 /* ---- Este componente se reutilizara en varias Tabs --- */
 
-function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) {
+function BeneficiaryTrayPage({ typeState, isCut = true }: Readonly<{ typeState: EStatePac, isCut?: boolean }>) {
 
-    const { tableComponentRef, tableColumns, tableActions, idCutData, control, listSearch, showSpinner, valueFilterTable,
-        handleFilterChange, handleChangeCut, getCuts } = useBeneficiaryTray(typeState)
+    const { tableComponentRef, tableColumns, tableActions, idCutData, control, showSpinner, valueFilterTable,
+        handleFilterChange, handleChangeCut, getCuts, apiUrl, setShowSpinner } = useBeneficiaryTray(typeState, isCut)
 
     return(
         <div className="card-table gap-0 mt-14px">
-            <section className='grid-form-3-container'>  
-                <FormComponent action={() => {}}>
-                    <SelectComponent
-                        idInput={"idCut"}
-                        control={control}
-                        data={idCutData}
-                        label="Corte"
-                        className="select-basic big select-disabled-list"
-                        classNameLabel='text-black biggest text-with-colons'
-                        filter={true}
-                        placeholder="Seleccionar"
-                        direction={EDirection.column}
-                        fieldArray={true}
-                        optionSelected={(value) => handleChangeCut(value)}
-                    />
+            {
+                isCut && 
+                    <section className='grid-form-3-container'>  
+                        <FormComponent action={() => {}}>
+                            <SelectComponent
+                                idInput={"idCut"}
+                                control={control}
+                                data={idCutData}
+                                label="Corte"
+                                className="select-basic big select-disabled-list"
+                                classNameLabel='text-black biggest text-with-colons'
+                                filter={true}
+                                placeholder="Seleccionar"
+                                direction={EDirection.column}
+                                fieldArray={true}
+                                optionSelected={(value) => handleChangeCut(value)}
+                            />
 
-                </FormComponent>                 
-            </section>
-            <section className="card-table mt-20px">
+                        </FormComponent>                 
+                    </section>
+            }
+            <section className={isCut ? 'card-table mt-20px' : ''}>
                 {
                     showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
                 }
+                
                 <TableComponent
                     ref={tableComponentRef}
-                    url={`${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(typeState)}/${ listSearch.status ? 'get-consolidation-tray-by-cut' :'get-consolidation-tray'}`}
-                    columns={tableColumns}
+                    url={apiUrl()}
+                    columns={tableColumns()}
                     actions={tableActions}
                     titleMessageModalNoResult="Buscar"
                     descriptionModalNoResult="No se encontraron resultados"
@@ -53,6 +57,7 @@ function BeneficiaryTrayPage({ typeState }: Readonly<{ typeState: EStatePac }>) 
                     isMobil={false}
                     resetValue={getCuts}
                     isNotBorderClasse={true}
+                    setShowSpinner={(value) => setShowSpinner(value)}
                 />
             </section>
 
