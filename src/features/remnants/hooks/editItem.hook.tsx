@@ -19,7 +19,7 @@ export interface datoss {
   communityFund: number
 }
 
-export default function useEditItem(item, loadTableData: (value?: object) => void) { 
+export default function useEditItem(item, loadTableData: (value?: object) => void) {
 
   //service
   const { editRemnant } = useRemnantsApi();
@@ -45,7 +45,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
     reset,
     watch,
     formState: { errors },
-  } = useForm<IRemnantsItems>({resolver});
+  } = useForm<IRemnantsItems>({ resolver });
 
 
   const remaining = watch('remaining') || 0
@@ -60,18 +60,19 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
       const quotas = remaining / averageCost;
       setValue('quotas', quotas);
     }
-    
 
     if (averageCost) {
       const quotaResource = item.quotas * averageCost
       setValue('quotaResource', quotaResource);
     }
 
-   if (quotaResource) {
-      const residual = remaining-quotaResource
-      setValue('residual', residual);
-    } 
-  }, [remaining, averageCost, setValue, item, quotaResource]);
+    if (remaining ===  item.remaining) {
+      setValue("residual", item.residual)
+    }else{
+      const residual = remaining - quotaResource
+      setValue('residual', residual);      
+    }
+  }, [remaining, averageCost, item, quotaResource]);
 
 
 
@@ -107,10 +108,10 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
     const remnant = {
       remaining: data.remaining || 0,
       averageCost: data.averageCost,
-      communityFund: data.communityFund,     
+      communityFund: data.communityFund,
       quotas: data.quotas,
       quotaResource: data.quotaResource,
-      residual: data.residual    
+      residual: data.residual
     };
 
     const res = await editRemnant(id, remnant);
@@ -152,7 +153,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
 
   const CancelFunction = () => {
     setMessage((prev) => ({ ...prev, show: false }));
-};
+  };
 
 
 
@@ -168,7 +169,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
     onSubmit,
     watch,
     CancelFunction,
-    
+
     showTable
   }
 }

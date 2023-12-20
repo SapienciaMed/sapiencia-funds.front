@@ -200,10 +200,7 @@ export default function useRemnants() {
 
 
         const searchData = {
-            //...data,
-            announcement: 10,
-            fund: "1123",
-            trust: 15,
+            ...data           
         };
         setShowTable(true)
         loadTableData(searchData);
