@@ -145,7 +145,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     });
     if (res.operation.code === EResponseCodes.OK) {
       setResultData(res.data);
-      setShowSpinner && setShowSpinner(false);
+      setShowSpinner?.(false);
       if (props.onResult) props.onResult(res?.data?.array || []);
       if (res.data?.array?.length <= 0 && isShowModal) {
         setMessage({
@@ -160,9 +160,16 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
               onGlobalFilterChange(valor);
             }
           },
+          onClose:() => {
+            setMessage({});
+            if (onGlobalFilterChange) {
+              const valor = { target: { value: "" } as HTMLInputElement };
+              onGlobalFilterChange(valor);
+            }
+          },
           background: true,
         });
-        resetValue && resetValue();
+        resetValue?.();
       }
     } else {
       setMessage({
@@ -175,7 +182,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           setMessage({});
         },
       });
-      resetValue && resetValue();
+      resetValue?.();
     }
     setLoading(false);
   }

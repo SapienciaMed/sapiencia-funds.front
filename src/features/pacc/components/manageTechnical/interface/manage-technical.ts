@@ -7,6 +7,10 @@ export interface PqrsdfResultSimple {
   state: string;
   answerDate: Date | string;
   answer: string;
+  fullPath64: string
+  completePath: string;
+  nameFile: string;
+  nameRoute: string;
 }
 
 export interface IRequerimentsResultSimple {
