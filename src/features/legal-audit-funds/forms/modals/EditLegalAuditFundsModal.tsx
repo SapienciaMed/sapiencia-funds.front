@@ -5,9 +5,10 @@ import {
   InputComponent,
   SelectComponent,
 } from "../../../../common/components/Form";
-import { useCreateAbsorptionPercentageModal } from "../../hooks/createAbsorptionPercentage";
+import { useEditLegalAuditFundsModal } from "../../hooks/editLegalAuditFunds";
+import { DatePickerComponent } from "../../../../common/components/Form/input-date.component";
 
-const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
+const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
   const {
     errors,
     control,
@@ -18,16 +19,16 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
     submitDisabled,
     communeFundData,
     handleChange,
-  } = useCreateAbsorptionPercentageModal(announcementId, reloadTable);
+  } = useEditLegalAuditFundsModal(announcementId, row, reloadTable);
   return (
     <FormComponent
-      id="CreateAbsorptionPercentageModal"
+      id="EditLegalAuditFundsModal"
       className="form-signIn"
       action={onSubmit}
     >
       <div className="container-form-grid-actas">
         <div className="container-form padding-form">
-          <div className="grid-form-4-container  gap-25 mb-25px">
+          <div className="grid-form-3-container  gap-25 mb-25px">
             <SelectComponent
               idInput="communeFundId"
               control={control}
@@ -35,12 +36,12 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               data={communeFundData}
               label={
                 <>
-                  Fondo comuna <span>*</span>
+                  ID comuna <span>*</span>
                 </>
               }
               className="select-basic medium"
               classNameLabel="text-black big bold"
-              placeholder="Seleccione."
+              placeholder="Seleccionar"
               filter
             />
             <InputComponent
@@ -54,29 +55,16 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               register={register}
               onChange={handleChange}
               errors={errors}
+              disabled
               className="input-basic medium"
               classNameLabel="text-black big bold"
             />
 
             <InputComponent
-              idInput="sceneryPercentage1"
+              idInput="fiducia"
               label={
                 <>
-                  Escenario 1 <span>*</span>
-                </>
-              }
-              typeInput="number"
-              register={register}
-              errors={errors}
-              onChange={handleChange}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
-            <InputComponent
-              idInput="sceneryPercentage2"
-              label={
-                <>
-                  Escenario 2 <span>*</span>
+                  Fiducia <span>*</span>
                 </>
               }
               typeInput="number"
@@ -87,55 +75,23 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               classNameLabel="text-black big bold"
             />
           </div>
-          <div className="grid-form-4-container gap-25 mt-13px">
-            <InputComponent
-              idInput="sceneryPercentage3"
-              label={
-                <>
-                  Escenario 3 <span>*</span>
-                </>
-              }
-              typeInput="number"
+          <div className="grid-form-3-container gap-25 mt-13px">
+            <DatePickerComponent
+              idInput="update"
               errors={errors}
-              register={register}
-              onChange={handleChange}
-              className="input-basic medium"
+              control={control}
+              label={<> Fecha de actualización</>}
               classNameLabel="text-black big bold"
+              className="dataPicker-basic  medium "
+              placeholder="DD/MM/YYYY"
+              dateFormat="dd/mm/yy"
+              maxDate={new Date()}
             />
             <InputComponent
-              idInput="sceneryValue1"
-              disabled
+              idInput="orden"
               label={
                 <>
-                  Valor escenario 1 <span>*</span>
-                </>
-              }
-              typeInput="text"
-              register={register}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
-            <InputComponent
-              idInput="sceneryValue2"
-              disabled
-              label={
-                <>
-                  Valor escenario 2 <span>*</span>
-                </>
-              }
-              typeInput="text"
-              register={register}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
-            <InputComponent
-              idInput="sceneryValue3"
-              disabled
-              label={
-                <>
-                  Valor escenario 3 <span>*</span>
+                  Orden <span>*</span>
                 </>
               }
               typeInput="text"
@@ -166,4 +122,4 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
     </FormComponent>
   );
 };
-export default CreateAbsorptionPercentage;
+export default EditLegalAuditFundsModal;
