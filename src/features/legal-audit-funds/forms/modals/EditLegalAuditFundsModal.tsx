@@ -89,7 +89,6 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
             />
             <InputComponent
               idInput="orden"
-              disabled
               label={
                 <>
                   Orden <span>*</span>

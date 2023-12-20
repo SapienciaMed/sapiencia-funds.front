@@ -58,7 +58,6 @@ const EditAbsorptionPercentageModal = ({
               register={register}
               onChange={handleChange}
               errors={errors}
-              disabled
               className="input-basic medium"
               classNameLabel="text-black big bold"
             />

@@ -119,6 +119,12 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     loadData: loadData,
   }));
 
+  // REMOVE THIS BECAUSE IS ONLY PARTIAL SOLUTION
+  useEffect(() => {
+    setPaginateData({ page, perPage });
+  }, [page, perPage]);
+  // ============================================
+
   // Metodo que hace la peticion para realizar la carga de datos
   async function loadData(
     newSearchCriteria?: object,

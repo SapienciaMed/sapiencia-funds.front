@@ -36,11 +36,11 @@ const LegalAuditFundsForm = ({
       className="form-signIn"
       action={onSubmit}
     >
-      <span className="text-black large  grid-span-4-columns mt-15px ml-27px">
+      <span className="text-black large  grid-span-4-columns mt-10px ml-14px">
         Legalizados
       </span>
 
-      <div className=" container-sections-forms ml-20px mr-20px">
+      <div className=" container-sections-forms ml-5px mr-10px">
         <div className="grid-form-4-container gap-25">
           <SelectComponent
             idInput="announcementId"

@@ -102,13 +102,13 @@ export const useConsultAbsorptionPercentage = () => {
       `${urlApiFunds}/api/v1/absorption-percentage/generate-xlsx`
     );
     const params = new URLSearchParams();
-    params.append("authorization", token);
-    params.append("permissions", authorization.encryptedAccess);
     params.append("page", page + 1);
     params.append("perPage", perPage);
     if (periods) {
       params.append("announcementId", periods);
     }
+    params.append("permissions", authorization.encryptedAccess);
+    params.append("authorization", token);
     url.search = params.toString();
     window.open(url.toString(), "_blank");
   }, [paginateData, periods]);

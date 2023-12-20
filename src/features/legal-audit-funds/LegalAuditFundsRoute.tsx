@@ -14,7 +14,7 @@ function LegalAuditFundsRoutes() {
         element={
           <PrivateRoute
             element={<ConsultLegalAuditFundsRoute />}
-            allowedAction={"FONDOS_PORCENTAJE_ABSORCION"}
+            allowedAction={"FONDOS_LEGALIZADO"}
           />
         }
       />

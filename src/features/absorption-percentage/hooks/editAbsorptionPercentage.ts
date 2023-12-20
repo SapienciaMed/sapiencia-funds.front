@@ -47,7 +47,7 @@ export const useEditAbsorptionPercentageModal = (
     try {
       setMessage({
         title: "Actualizar",
-        description: "¿Estas seguro que deseas actualizar la información?",
+        description: "¿Estás segur@ de guardar la información?",
         show: true,
         OkTitle: "Aceptar",
         cancelTitle: "Cancelar",
@@ -87,7 +87,7 @@ export const useEditAbsorptionPercentageModal = (
       }
       setMessage({
         title: "Actualizar",
-        description: "¡Información actualizada exitosamente!",
+        description: "¡Información guardada exitosamente!",
         show: true,
         OkTitle: "Cerrar",
         onOk: () => {
