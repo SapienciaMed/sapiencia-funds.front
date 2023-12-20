@@ -12,8 +12,9 @@
 }
 
 .containerIsOpenPeriod {
-  width: 100%;
-  padding: 0px 24px 0px 24px;
+  display: flex;
+  justify-content: center;
+  
 }
 
 .p-24 {
@@ -206,11 +207,17 @@
 
   .containerEndPeriod {
     width: 100%;
+    margin-top: 1rem;
   }
 
   .containerIsOpenPeriod {
-    width: 100%;
-    padding: 24px 0 48px 0;
+    display: flex;
+    justify-content: start;
+  }
+
+  .direction-switch{
+    display: flex;
+    justify-content: flex-end;
   }
 
   .percentageSemiannualPayment {
