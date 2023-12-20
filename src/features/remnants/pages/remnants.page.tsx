@@ -2,21 +2,18 @@ import React, { Fragment } from 'react'
 import { ButtonComponent, FormComponent, SelectComponent } from '../../../common/components/Form';
 import useRemnants from '../hooks/remnants.hook';
 import Svgs from '../../../public/images/icons/svgs';
+import TableComponent from '../../../common/components/table.component';
 
 const RemnantsPage = () => {
 
-    const { control, errors, register } = useRemnants();
+    const { control, errors, register,onSubmit, announcementList,fundList,fiduciaList,tableComponentRef,tableColumns,tableActions,showTable,downloadCollection } = useRemnants();
 
     const select1 = [{ value: 1, name: "prueba" }]
 
     return (
         <Fragment>
             <div className="container-sections-forms mt-24px ml-14px mr-14px p-0">
-                <FormComponent
-                    id="searchAccountStatementForm"
-                    className="form-signIn"
-                    action={""}
-                >
+                <FormComponent id="searchRemnantsForm" className="form-signIn" action={onSubmit}>
                     <span className="text-black extra-large medium grid-span-4-columns mt-15px ml-5px">
                         Remanentes
                     </span>
@@ -24,10 +21,10 @@ const RemnantsPage = () => {
                     <div className=" container-sections-forms ml-5px mr-5px">
                         <div className="grid-form-3-container mb-24px">
                             <SelectComponent
-                                idInput="announcementId"
+                                idInput="announcement"
                                 control={control}
                                 errors={errors}
-                                data={select1}
+                                data={announcementList}
                                 label={
                                     <div className="mb-1px">
                                         Convocatoria <span>*</span>
@@ -40,10 +37,10 @@ const RemnantsPage = () => {
                             />
 
                             <SelectComponent
-                                idInput="announcementId"
+                                idInput="fund"
                                 control={control}
                                 errors={errors}
-                                data={select1}
+                                data={fundList}
                                 label={
                                     <div className="mb-1px">
                                         ID fondo <span>*</span>
@@ -55,10 +52,10 @@ const RemnantsPage = () => {
                                 filter={true}
                             />
                             <SelectComponent
-                                idInput="announcementId"
+                                idInput="trust"
                                 control={control}
                                 errors={errors}
-                                data={select1}
+                                data={fiduciaList}
                                 label={
                                     <div className="mb-1px">
                                         Fiducia <span>*</span>
@@ -75,19 +72,33 @@ const RemnantsPage = () => {
             </div>
             <div className="button-save-container-display-remanentes">                
                 <ButtonComponent
-                    form="createMasterForm"
+                    form="searchRemnantsForm"
                     value="Buscar"
                     type="submit"
                     className="button-save large disabled-black"
                 />
-            </div>
+            </div>           
+           
 
-            
-            {/* aqui va la tabla */}
+            {
+                showTable &&
 
+                <div>
+                <div className="container-form-grid mt-24px">
+                    <div className="container-form padding-form">
+                        <TableComponent
+                            ref={tableComponentRef}
+                            url={`${process.env.urlApiFunds}/api/v1/remnants/get-all-paginated`}
+                            columns={tableColumns}
+                            actions={tableActions}
+                            titleMessageModalNoResult="El remanente no existe"
+                            descriptionModalNoResult="No se encontraron resultados"
+                            isShowModal={true}
 
-
-            {/* ********************* */}
+                        />
+                    </div>
+                </div>
+                       
 
 
 
@@ -102,19 +113,15 @@ const RemnantsPage = () => {
                 </>
               }
               className="button-download large "
-              //action={downloadCollection}
+              action={downloadCollection}
             />
           </div>
+          </div>
+
+} 
         </Fragment>
     )
 }
 
 export default React.memo(RemnantsPage);
 
-
-/* 
-    <label className="text-black extra-large medium">
-            Visualizar informe renovación
-          </label>
-
-*/
