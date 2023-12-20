@@ -9,9 +9,7 @@ import { InputNumberComponent } from '../../../common/components/Form/input-numb
 
 const editItemsPage = ({ item, loadTableData }) => {
 
-    const { control, errors, register, announcementList, fundList, fiduciaList, onSubmit, watch,CancelFunction } = useEditItem(item, loadTableData);
-
-    const select1 = [{ value: 1, name: "prueba" }]
+    const { control, errors, register, onSubmit, CancelFunction } = useEditItem(item, loadTableData);
 
     return (
         <Fragment>
@@ -100,8 +98,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         className="inputNumber-basic medium"
                                         mode="currency"
                                         currency="COP"
-                                        locale="es-CO"
-                                        fieldArray={true}
+                                        locale="es-CO"                                       
                                         label="Costo promedio"
                                         classNameLabel="text-black big medium text-required"
                                         errors={errors}
@@ -111,8 +108,7 @@ const editItemsPage = ({ item, loadTableData }) => {
 
                                 );
                             }}
-                        />
-
+                        /> 
                     </div>
                     <div className="grid-form-3-container mb-24px">
                         <Controller
@@ -168,20 +164,20 @@ const editItemsPage = ({ item, loadTableData }) => {
                             render={({ field }) => {
                                 return (
                                     <InputNumberComponent
-                                    control={control}
-                                    idInput={field.name}
-                                    className="inputNumber-basic medium"
-                                    mode="currency"
-                                    currency="COP"
-                                    locale="es-CO"
-                                    fieldArray={true}
-                                    label="Residual"
-                                    classNameLabel="text-black big medium text-required"
-                                    errors={errors}
-                                    placeholder={""}
-                                    {...field}
-                                    disabled
-                                />
+                                        control={control}
+                                        idInput={field.name}
+                                        className="inputNumber-basic medium"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        label="Residual"
+                                        classNameLabel="text-black big medium text-required"
+                                        errors={errors}
+                                        placeholder={""}
+                                        {...field}
+                                        disabled
+                                    />
                                 );
                             }}
                         />
@@ -197,7 +193,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                     value="Cancelar"
                     type="button"
                     className="button-cancel-text large hover-three disabled-black"
-                    action={() => CancelFunction()} 
+                    action={() => CancelFunction()}
                 />
                 <ButtonComponent
                     form="editItemForm"

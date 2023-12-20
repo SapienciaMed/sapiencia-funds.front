@@ -8,6 +8,9 @@ import EditItemsPage from "../pages/editItems.page";
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 import * as XLSX from "xlsx"
+import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
+import { remnantsFilter } from "../../../common/schemas/remnants-shema";
+import { IRemnantsFilter } from "../../../common/interfaces/remnants.interface";
 interface ReportData {
     announcement: number;
     fund: number;
@@ -29,6 +32,9 @@ export default function useRemnants() {
     const tableComponentRef = useRef(null);
     const { setMessage } = useContext(AppContext);
 
+    const resolver = useYupValidationResolver(remnantsFilter);
+
+
     //form
     const {
         handleSubmit,
@@ -36,8 +42,9 @@ export default function useRemnants() {
         control: control,
         setValue,
         reset,
+        watch,
         formState: { errors },
-    } = useForm<any>({});
+    } = useForm<IRemnantsFilter>({resolver});
 
 
 
@@ -189,8 +196,14 @@ export default function useRemnants() {
     }, []);
 
     const onSubmit = handleSubmit(async (data: { announcement: number, fund: number, trust: number }) => {
+
+
+
         const searchData = {
-            ...data,
+            //...data,
+            announcement: 10,
+            fund: "1123",
+            trust: 15,
         };
         setShowTable(true)
         loadTableData(searchData);
@@ -242,8 +255,19 @@ export default function useRemnants() {
         }
     };
 
+   
+  
     
-    async function downloadCollection() {         
+    
+    async function downloadCollection() { 
+
+        const selected = watch('announcement');
+    
+        const selectedAnnouncement = announcementList.find(item => item.value === selected);        
+        
+        const selectedName = selectedAnnouncement ? selectedAnnouncement.name : '0000';        
+
+
         const res = await getReport({
             announcement: reportData.announcement,
             fund: reportData.fund,
@@ -254,7 +278,7 @@ export default function useRemnants() {
             // Genera el excel con los datos de la respuesta
             const excelData = res.data.array.map((row) => ({
                 "ID comuna": row.communityFund,
-                "Restante": row.remaining ?? "0", // Asegúrate de manejar valores nulos o indefinidos
+                "Restante": row.remaining ?? "0", 
                 "ID fondo": row.communityFund,
                 "Costo promedio": row.averageCost ?? "0",
                 "Cupos": row.quotas ?? "0",
@@ -268,7 +292,7 @@ export default function useRemnants() {
 
             // Descarga el archivo
             setTimeout(() => {
-                XLSX.writeFile(book, `Remanente ${reportData.announcement}.xlsx`);
+                XLSX.writeFile(book, `Remanente ${selectedName}.xlsx`);
                 setMessage({
                     title: "Descargar",
                     description: "Información descargada exitosamente",

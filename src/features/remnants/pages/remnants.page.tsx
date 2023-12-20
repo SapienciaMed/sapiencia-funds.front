@@ -30,7 +30,7 @@ const RemnantsPage = () => {
                                         Convocatoria <span>*</span>
                                     </div>
                                 }
-                                className="select-basic medium select-disabled-list mb-24px"
+                                className="select-basic medium select-disabled-list"
                                 classNameLabel="text-black big bold"
                                 placeholder="Seleccionar"
                                 filter={true}
@@ -46,7 +46,7 @@ const RemnantsPage = () => {
                                         ID fondo <span>*</span>
                                     </div>
                                 }
-                                className="select-basic medium select-disabled-list mb-24px"
+                                className="select-basic medium select-disabled-list"
                                 classNameLabel="text-black big bold"
                                 placeholder="Seleccionar"
                                 filter={true}
@@ -61,7 +61,7 @@ const RemnantsPage = () => {
                                         Fiducia <span>*</span>
                                     </div>
                                 }
-                                className="select-basic medium select-disabled-list mb-14px"
+                                className="select-basic medium select-disabled-list"
                                 classNameLabel="text-black big bold"
                                 placeholder="Seleccionar"
                                 filter={true}

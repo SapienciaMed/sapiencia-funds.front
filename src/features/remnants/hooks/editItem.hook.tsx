@@ -6,10 +6,20 @@ import { ITableAction, ITableElement } from "../../../common/interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import EditItemsPage from "../pages/editItems.page";
 import { useNavigate } from "react-router-dom";
+import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
+import { itemsValidatePrueba } from "../../../common/schemas/remnants-shema";
+import { IRemnantsItems } from "../../../common/interfaces/remnants.interface";
 
-export default function useEditItem(item, loadTableData: (value?: object) => void) {
+export interface datoss {
+  averageCost: number,
+  remaining: number,
+  quotaResource: number,
+  quotas: number,
+  residual: number,
+  communityFund: number
+}
 
-  console.log('item', item)
+export default function useEditItem(item, loadTableData: (value?: object) => void) { 
 
   //service
   const { editRemnant } = useRemnantsApi();
@@ -20,10 +30,11 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
   const [fiduciaList, setFiduciaList] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
-
-
-
+  //contex
   const { setMessage } = useContext(AppContext);
+
+  //validaciones
+  const resolver = useYupValidationResolver(itemsValidatePrueba);
 
   //form
   const {
@@ -34,7 +45,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
     reset,
     watch,
     formState: { errors },
-  } = useForm<any>({});
+  } = useForm<IRemnantsItems>({resolver});
 
 
   const remaining = watch('remaining') || 0
@@ -154,7 +165,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
     onSubmit,
     watch,
     CancelFunction,
-
+    
     showTable
   }
 }
