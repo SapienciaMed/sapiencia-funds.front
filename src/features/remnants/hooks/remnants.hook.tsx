@@ -44,7 +44,7 @@ export default function useRemnants() {
         reset,
         watch,
         formState: { errors },
-    } = useForm<IRemnantsFilter>({resolver});
+    } = useForm<IRemnantsFilter>({});
 
 
 
