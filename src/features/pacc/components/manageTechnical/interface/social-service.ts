@@ -12,3 +12,9 @@ export interface ISocialServiceBeneficiary {
   state: boolean;
   beneficiarieConsolidate?: IBeneficiariesConsolidateInterface;
 }
+
+export interface ISocialServiceBeneficiaryUpdate {
+  id: number;
+  state?: boolean;
+  observation: string;
+}
