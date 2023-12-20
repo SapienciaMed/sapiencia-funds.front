@@ -52,23 +52,25 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
   const averageCost = watch('averageCost')
   const quotaResource = watch('quotaResource')
 
-  console.log(quotaResource)
+
+
 
   useEffect(() => {
     if (remaining && averageCost) {
       const quotas = remaining / averageCost;
       setValue('quotas', quotas);
     }
+    
 
     if (averageCost) {
       const quotaResource = item.quotas * averageCost
       setValue('quotaResource', quotaResource);
     }
 
-    if (quotaResource) {
-      const residual = quotaResource - remaining
+   if (quotaResource) {
+      const residual = remaining-quotaResource
       setValue('residual', residual);
-    }
+    } 
   }, [remaining, averageCost, setValue, item, quotaResource]);
 
 
@@ -78,7 +80,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
     setValue("communityFund", item.communityFund)
     setValue("remaining", item.remaining)
     setValue("averageCost", item.averageCost)
-    setValue("quotaResource", item.quotaResource)
+    setValue("quotaResource", item.quotaResource || 0)
     setValue("residual", item.residual)
     setValue("quotas", item.quotas)
   }, [item])
@@ -102,12 +104,13 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
   });
 
   const confirmEdit = async (id, data: any) => {
-
-
-
     const remnant = {
       remaining: data.remaining || 0,
-      averageCost: data.averageCost
+      averageCost: data.averageCost,
+      communityFund: data.communityFund,     
+      quotas: data.quotas,
+      quotaResource: data.quotaResource,
+      residual: data.residual    
     };
 
     const res = await editRemnant(id, remnant);
