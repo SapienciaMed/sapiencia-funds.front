@@ -3,7 +3,6 @@
 @import "./style_global.scss";
 @import "./texts.scss";
 @import "./tables.scss";
-
 @import "./input.scss";
 @import "./totals.scss";
 @import './font-family.scss';
@@ -78,14 +77,6 @@ hr {
 div[id="single-spa-application:@sapiencia/funds"] {
   height: 100%;
 }
-
-// .grid {
-//   display: grid;
-
-//   &.gap-25 {
-//     gap: 25px;
-//   }
-// }
 
 .container-form {
   background: #ffffff 0% 0% no-repeat padding-box;

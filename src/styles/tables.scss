@@ -101,6 +101,192 @@
   }
 }
 
+.spc-common-table2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .grid-button {
+    font-size: 1.6em;
+  }
+
+  .button-detail {
+    filter: invert(42%) sepia(39%) saturate(6725%) hue-rotate(173deg) brightness(94%) contrast(96%);
+    width: 24px;
+    height: 24px;
+  }
+
+  .button-edit {
+    filter: invert(46%) sepia(75%) saturate(624%) hue-rotate(81deg) brightness(90%) contrast(100%);
+    width: 24px;
+    height: 24px;
+
+    &.disable {
+      filter: invert(72%) sepia(16%) saturate(45%) hue-rotate(344deg) brightness(96%) contrast(87%);
+      cursor: auto;
+    }
+
+  }
+
+  .button-delete {
+    filter: invert(21%) sepia(99%) saturate(7500%) hue-rotate(3deg) brightness(103%) contrast(117%);
+    width: 24px;
+    height: 24px;
+  }
+
+  .p-paginator {
+    padding: 0px;
+
+    .content-result{
+      display: flex;
+      width: 100%;
+        gap: 0;
+        margin-right: 0;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-information {
+      user-select: none;
+      margin: 0.7rem 0
+    }
+
+    .p-dropdown {
+      cursor: pointer;
+      display: flex;
+      padding: 6px 8px;
+      justify-content: center;
+      align-items: center;
+      border-radius: var(--6, 8px);
+      border: 1px solid var(--border-border-input, #E2E2E2);
+      gap: 5px;
+
+      span {
+        display: flex;
+        flex-direction: column;
+        flex: 1 0 0;
+        padding: 0;
+        font: normal normal 400 0.9rem/120% "RubikMedium", sans-serif;
+        color: #121212;
+      }
+
+      .p-dropdown-trigger {
+        width: 16px;
+        height: 16px;
+      }
+
+    }
+
+    .p-paginator-prev .p-paginator-next {
+      margin: 0px !important;
+      padding: 1.5px;
+    }
+  }
+
+  .p-paginator.between {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+
+    .information {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+
+  .p-datatable {
+    // height: 50vh;
+    overflow: auto;
+    border-radius: var(--spacing-spacing-2, 16px);
+    border: 1px solid #DEE2E6;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    padding: 8px;
+    // max-width: 85vw;
+
+    .p-column-header-content {
+      justify-content: center;
+    }
+
+    .p-datatable-tbody tr td {
+      text-align: center;
+    }
+  }
+
+  .p-dataview {
+    font-size: 14px;
+    height: 45vh;
+    overflow: auto;
+
+    .card-grid-item {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      $width: null;
+      $height: null;
+      $padding: 0px;
+      @include card-component($width, $height, $padding);
+
+      .card-header {
+        padding: 5%;
+        height: 80%;
+
+        .item-value-container {
+          display: flex;
+          justify-content: space-between;
+          text-align: center;
+          flex-direction: column;
+
+          p {
+            &:nth-child(even) {
+              background: #F9F9F9;
+              margin: 0;
+              min-height: 6vh;
+              height: auto;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+        }
+      }
+
+      .card-footer {
+        display: flex;
+        justify-content: space-around;
+        padding: 25px 5%;
+        position: relative;
+
+        .section-action {
+          display: flex;
+          justify-content: center;
+          flex-direction: row;
+          height: 6vh;
+          background: #F9F9F9;
+          align-items: center;
+          width: 100%;
+          gap: 0.8rem
+        }
+      }
+    }
+  }
+
+  .table-previus:after {
+    content: "Ant";
+  }
+
+  .table-next:after {
+    content: "Sig";
+  }
+
+  table {
+    tr {
+      border: 1px solid #e9e9e9;
+    }
+
+  }
+}
+
 
 @media (min-width: 1024px) {
   .spc-common-table-citation {
@@ -118,7 +304,66 @@
     }
   }
 
+  .spc-common-table2 {
+    .p-paginator {
+      gap: 8px;
+      justify-content: center;
+
+      .content-result{
+        width: auto;
+        gap: 0.8rem;
+        margin-right: 1rem;
+      }
+
+      .header-information {
+        // margin: 1.2rem 2.25rem 0.25rem 0;
+      }
+    }
+
+    .p-paginator.between {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .grid-button {
+      font-size: 1.3em;
+    }
+
+    table {
+      border-collapse: unset;
+
+      thead {
+        display: contents;
+      }
+
+      tr:nth-child(odd) {
+        background-color: #f8f8f8;
+      }
+    }
+
+    .size-table-wd-150{
+      table {
+        width: 150%;
+      }
+    }
+  }
+
 }
+
+// @media (max-width: 750px) {
+//   .spc-common-table2 {
+//     .p-paginator {
+//       .content-result{
+//         width: 100%;
+//         gap: 0;
+//         margin-right: 0;
+//         justify-content: space-between;
+//       }
+//     }
+//   }
+// }
 
 @media (max-width: 500px) {
   .card-table {
