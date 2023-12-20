@@ -119,6 +119,14 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     loadData: loadData,
   }));
 
+  // REMOVE THIS BECAUSE IS ONLY PARTIAL SOLUTION
+  useEffect(() => {
+    if (setPaginateData) {
+      setPaginateData({ page, perPage });
+    }
+  }, [page, perPage]);
+  // ============================================
+
   // Metodo que hace la peticion para realizar la carga de datos
   async function loadData(
     newSearchCriteria?: object,
@@ -253,7 +261,6 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         }`}
       >
         {title && <div className="spc-table-title">{title}</div>}
-
 
         {viePaginator && (
           <Paginator
@@ -523,7 +530,11 @@ const leftContent = (
 // Metodo que retorna el icono o nombre de la accion
 const paginatorHeader = (width: number): PaginatorTemplateOptions => {
   return {
-    layout: `${width < 1024 ? "RowsPerPageDropdown CurrentPageReport" : "CurrentPageReport RowsPerPageDropdown"}`,
+    layout: `${
+      width < 1024
+        ? "RowsPerPageDropdown CurrentPageReport"
+        : "CurrentPageReport RowsPerPageDropdown"
+    }`,
     CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
       return (
         <section className="content-result">
@@ -558,7 +569,7 @@ const paginatorHeader = (width: number): PaginatorTemplateOptions => {
         </section>
       );
     },
-  }
+  };
 };
 
 const paginatorFooter: PaginatorTemplateOptions = {
