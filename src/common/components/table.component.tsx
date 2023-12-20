@@ -254,16 +254,17 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
   if (resultData && resultData.array && resultData.array.length > 0) {
     return (
       <div
-        className={`spc-common-table ${
+        className={`spc-common-table2 ${
           isNotBorderClasse && "spc-common-table-without-border"
         }`}
       >
         {title && <div className="spc-table-title">{title}</div>}
 
+
         {viePaginator && (
           <Paginator
             className="between spc-table-paginator"
-            template={paginatorHeader}
+            template={paginatorHeader(width)}
             first={first}
             rows={perPage}
             totalRecords={resultData?.meta?.total || 0}
@@ -526,42 +527,44 @@ const leftContent = (
   );
 };
 // Metodo que retorna el icono o nombre de la accion
-const paginatorHeader: PaginatorTemplateOptions = {
-  layout: "CurrentPageReport RowsPerPageDropdown",
-  CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
-    return (
-      <>
-        <p className="header-information text-black medium big">
-          Total de resultados
-        </p>
-        <p className="header-information text-three medium big">
-          {options.totalRecords}
-        </p>
-      </>
-    );
-  },
-  RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
-    const dropdownOptions = [
-      { label: 10, value: 10 },
-      { label: 30, value: 30 },
-      { label: 50, value: 50 },
-      { label: 100, value: 100 },
-    ];
+const paginatorHeader = (width: number): PaginatorTemplateOptions => {
+  return {
+    layout: `${width < 1024 ? "RowsPerPageDropdown CurrentPageReport" : "CurrentPageReport RowsPerPageDropdown"}`,
+    CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
+      return (
+        <section className="content-result">
+          <p className="header-information text-black medium big">
+            Total de resultados
+          </p>
+          <p className="header-information text-three medium big">
+            {options.totalRecords}
+          </p>
+        </section>
+      );
+    },
+    RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
+      const dropdownOptions = [
+        { label: 10, value: 10 },
+        { label: 30, value: 30 },
+        { label: 50, value: 50 },
+        { label: 100, value: 100 },
+      ];
 
-    return (
-      <React.Fragment>
-        <p className="header-information text-black medium big">
-          Registros por página{" "}
-        </p>
-        <Dropdown
-          value={options.value}
-          className="header-information"
-          options={dropdownOptions}
-          onChange={options.onChange}
-        />
-      </React.Fragment>
-    );
-  },
+      return (
+        <section className="content-result">
+          <p className="header-information text-black medium big">
+            Registros por página{" "}
+          </p>
+          <Dropdown
+            value={options.value}
+            className="header-information"
+            options={dropdownOptions}
+            onChange={options.onChange}
+          />
+        </section>
+      );
+    },
+  }
 };
 
 const paginatorFooter: PaginatorTemplateOptions = {

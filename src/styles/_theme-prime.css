@@ -7622,6 +7622,14 @@
   background-color: #FF0000;
   color: #ffffff;
 }
+.p-paginator-left-content{
+  @media (max-width: 1024px) {
+    width: 100%;
+    .p-input-icon-left{
+      width: 100%;
+    }
+  }
+}
 
 /* Customizations to the designer theme should be defined here */
 
