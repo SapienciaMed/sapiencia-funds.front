@@ -146,8 +146,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         className="inputNumber-basic medium"
                                         mode="currency"
                                         currency="COP"
-                                        locale="es-CO"
-                                        fieldArray={true}
+                                        locale="es-CO"                                        
                                         label="Recurso con cupos"
                                         classNameLabel="text-black big medium text-required"
                                         errors={errors}
@@ -169,8 +168,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         className="inputNumber-basic medium"
                                         mode="currency"
                                         currency="COP"
-                                        locale="es-CO"
-                                        fieldArray={true}
+                                        locale="es-CO"                                       
                                         label="Residual"
                                         classNameLabel="text-black big medium text-required"
                                         errors={errors}
