@@ -16,6 +16,7 @@ import UploadNewComponent from "../../../../common/components/Form/UploadNewComp
 import { EServiceSocialStates } from "../../constants/service.social.states.enum";
 
 import useModalUploadChangeData from "./hook/modal-upload-change-data.hook";
+import { ApiResponse } from "../../../../common/utils/api-response";
 
 interface IPropsContentSubmitData {
   readonly action: "edit" | "show";
@@ -27,10 +28,14 @@ interface IPropsContentSubmitData {
   readonly showObservation: boolean;
   readonly showUploadFile: boolean;
   readonly width: number;
+  readonly id: number;
   readonly state: boolean;
   readonly observation: string;
   readonly headerAccordion?: string;
   readonly loadTableData: (searchCriteria?: object) => void;
+  readonly executeFunctionSubmit?: (
+    data: FormData
+  ) => Promise<ApiResponse<any>>;
 }
 
 function ModalUploadChangeData({
@@ -40,10 +45,12 @@ function ModalUploadChangeData({
   showObservation,
   showUploadFile,
   width,
+  id,
   state,
   observation,
   headerAccordion,
   loadTableData,
+  executeFunctionSubmit,
 }: IPropsContentSubmitData): React.JSX.Element {
   const {
     visible,
@@ -51,16 +58,19 @@ function ModalUploadChangeData({
     control,
     formState,
     renderElementFile,
-    handleSubmit,
     handleChangeShowDialog,
     handleChangeUploadFile,
     setMessage,
+    showModalOnSubmit,
   } = useModalUploadChangeData(
+    id,
     state,
     observation,
     action,
     width,
-    showUploadFile
+    showUploadFile,
+    loadTableData,
+    executeFunctionSubmit
   );
 
   return (
@@ -117,7 +127,7 @@ function ModalUploadChangeData({
         </AccordionTab>
       </Accordion>
       <div className="card-table gap-0 full-width">
-        <FormComponent id="formManageTransfer">
+        <FormComponent id="formManageTransfer" action={showModalOnSubmit}>
           <div className="grid-form-2-container ">
             {showState && (
               <SelectComponent
@@ -144,7 +154,7 @@ function ModalUploadChangeData({
           </div>
           {renderElementFile()}
           {showObservation && (
-            <div className="">
+            <div className="mt-14px">
               <Controller
                 control={control}
                 name={"observation"}
