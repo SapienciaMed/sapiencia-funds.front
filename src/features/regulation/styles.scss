@@ -61,11 +61,10 @@
   width: 100%;
 }
 
-.buttonsActions {
+.buttonsActions2 {
   display: flex;
   justify-content: end;
-  margin-right: 24px;
-  width: 98%;
+  margin: 1.5rem 0;
 }
 
 .containerJsonTable {
@@ -210,16 +209,6 @@
     margin-top: 1rem;
   }
 
-  .containerIsOpenPeriod {
-    display: flex;
-    justify-content: start;
-  }
-
-  .direction-switch{
-    display: flex;
-    justify-content: flex-end;
-  }
-
   .percentageSemiannualPayment {
     width: 100%;
   }
@@ -245,5 +234,17 @@
 
   .p-24 {
     padding: 16px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .containerIsOpenPeriod {
+    display: flex;
+    justify-content: start;
+  }
+
+  .direction-switch{
+    display: flex;
+    justify-content: flex-end;
   }
 }

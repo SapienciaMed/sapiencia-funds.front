@@ -1,5 +1,3 @@
-import React from "react";
-import SwitchComponent from "../../../common/components/Form/switch.component";
 import {
   ButtonComponent,
   FormComponent,
@@ -9,6 +7,8 @@ import useSearchRegulation from "../hooks/search";
 import { periods } from "../service";
 import TableComponent from "../../../common/components/table.component";
 import DetailReglament from "./detailt";
+import { BiPlusCircle } from "react-icons/bi";
+import { EDirection } from "../../../common/constants/input.enum";
 
 const Regulation = ({ auth, authDetail, authEdit }) => {
   const {
@@ -18,13 +18,9 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
     register,
     onSubmit,
     formState,
-    deparmetList,
-    formValues,
     newElement,
     reset,
     setshowTable,
-    loading,
-    setLoading,
     control,
     listPrograms,
     tableColumns,
@@ -34,107 +30,92 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
     setValue,
     getValues,
   } = useSearchRegulation(auth, authDetail, authEdit);
-
-  if (loading) return <></>;
-
   return (
-    <div>
-      <div className="containerTitleRegulation">
-        <p className="text-black text-29 ml-24px mt-20px">Reglamento</p>
-        <div
-          className="flex"
-          style={{ alignItems: "center" }}
-          onClick={() => newElement()}
-        >
-          <p className="btnCreate"> Crear</p>
-          <p className="plusBtn">+</p>
-        </div>
-      </div>
-      <div className="container-form">
-        <FormComponent
-          id="regulationSeach"
-          className="form-signIn"
-          action={onSubmit}
-        >
-          <div className="containerGroupSearch mb-24px">
-            <div style={{ padding: "24px" }} className=" mb-24px">
+    <div className="main-page">
+      <div className="card-table gap-0">
+        <section className="title-area-4">
+          <p className="text-black extra-large no-margin">Reglamento</p>
+          <div className="display-align-flex-center">
+            <div 
+              className='title-button font-big'
+              style={{ fontSize: '16px'}}
+              onClick={() => newElement()}
+            >
+              Crear <BiPlusCircle />
+            </div>
+          </div>
+        </section>
+        <section className="card-table mt-20px">
+          <FormComponent  id="regulationSeach" className="form-signIn" action={onSubmit}>
+            <div className="grid-form-3-container gap-15">
               <SelectComponentOld
                 idInput="program"
                 register={register}
-                className="select-basic input-size"
                 placeholder="Seleccionar"
                 label={<>Programa</>}
-                data={listPrograms.length ? listPrograms : []}
-                classNameLabel="text-black biggest font-500"
-                // direction={EDirection.column}
+                data={listPrograms ?? []}
+                direction={EDirection.column}
                 errors={formState.errors}
+                className="select-basic big select-disabled-list"
+                classNameLabel='text-black big text-with-colons'
               />
-            </div>
-            <div
-              style={{ padding: "24px" }}
-              className="containerInitialPeriod "
-            >
               <SelectComponentOld
                 idInput="initialPeriod"
                 register={register}
-                className="select-basic input-size"
                 placeholder="Seleccionar"
                 label={<>Periodo inicial de convocatoria</>}
-                data={periods.length ? periods : []}
-                classNameLabel="text-black biggest font-500"
-                // direction={EDirection.column}
+                data={periods ?? []}
+                direction={EDirection.column}
                 errors={formState.errors}
+                className="select-basic big select-disabled-list"
+                classNameLabel='text-black big text-with-colons'
               />
-            </div>
-
-            <div style={{ padding: "24px" }} className="containerEndPeriod">
               <SelectComponentOld
                 idInput="endPeriod"
                 register={register}
-                className="select-basic input-size"
                 placeholder="Seleccionar"
                 label={<>Periodo final de convocatoria</>}
-                data={periods.length ? periods : []}
-                classNameLabel="text-black biggest font-500"
-                // direction={EDirection.column}
+                data={periods ?? []}
+                direction={EDirection.column}
                 errors={formState.errors}
+                className="select-basic big select-disabled-list"
+                classNameLabel='text-black big text-with-colons'
               />
             </div>
-          </div>
-        </FormComponent>
-      </div>
-      <div className="buttonsActions">
-        <ButtonComponent
-          value="Limpiar Campos"
-          type="button"
-          className="button-cancel-text hover-three disabled-black padding-button"
-          action={() => {
-            setshowTable(false);
-            setLoading(true);
-            reset();
-          }}
-        />
-        <ButtonComponent
-          value="Buscar"
-          form="regulationSeach"
-          type="submit"
-          className="button-save disabled-black padding-button"
-        />
+            
+          </FormComponent>
+        </section>
+        <section className="buttonsActions2">
+          <ButtonComponent
+            value="Limpiar Campos"
+            type="button"
+            className="button-cancel-text hover-three disabled-black padding-button"
+            action={() => {
+              setshowTable(false);
+              reset();
+            }}
+          />
+          <ButtonComponent
+            value="Buscar"
+            form="regulationSeach"
+            type="submit"
+            className="button-save disabled-black padding-button"
+          />
+        </section> 
       </div>
       {showTable && (
-        <div className="container-form padding-form ">
-          <TableComponent
-            ref={tableComponentRef}
-            url={`${process.env.urlApiFunds}/api/v1/reglament/get-paginated`}
-            columns={tableColumns}
-            actions={tableActions}
-            titleMessageModalNoResult="No hay resultados"
-            isShowModal={true}
-            descriptionModalNoResult="No hay resultados"
-            emptyMessage="No hay resultados"
-            classname="table-header"
-          />
-        </div>
+        <TableComponent
+          ref={tableComponentRef}
+          url={`${process.env.urlApiFunds}/api/v1/reglament/get-paginated`}
+          columns={tableColumns}
+          actions={tableActions}
+          titleMessageModalNoResult="No hay resultados"
+          isShowModal={true}
+          descriptionModalNoResult="No hay resultados"
+          emptyMessage="No hay resultados"
+          classname="table-header"
+          isMobil={false}
+        />
       )}
       <DetailReglament
         isOpen={showDetailModal}

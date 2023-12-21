@@ -101,31 +101,57 @@ const DetailReglament = ({
                   />
                 </div>
               </div>
-              <div className="percentageSemiannualPayment mb-24px">
-                <Controller
-                  control={control}
-                  name={"theoreticalPercentage"}
-                  defaultValue={`${detailData?.theoreticalPercentage}%`}
-                  render={({ field }) => {
-                    return (
-                      <InputComponent
-                        idInput={field.name}
-                        errors={errors}
-                        disabled={true}
+              <div onClick={preventClick}>
+              <Acordion
+                  title="¿Aplica porcentaje de pago teórico semestral?"
+                  isOpen={detailData?.theoreticalPercentage}
+                  onClick={() => {}}
+                  onlyView
+                  switchElement={
+                    <SwitchComponent
+                      idInput={"theoreticalPercentage"}
+                      errors={errors}
+                      disabled={true}
+                      defaultValue={detailData?.theoreticalPercentage}
+                      control={control}
+                      onClick={() => {}}
+                      onChange={() => {}}
+                      size="small"
+                      classNameSwitch="opacity"
+                      className="select-basic select-disabled-list input-size opacity"
+                      classNameLabel="text-black biggest font-500"
+                    />
+                  }
+                >
+                  <div className="containerApplyService">
+                    <div className="mb-24px">
+                      <Controller
+                        control={control}
+                        name={"theoreticalPercentage"}
                         defaultValue={`${detailData?.theoreticalPercentage}%`}
-                        typeInput="text"
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        value={`${detailData?.theoreticalPercentage}%`}
-                        className="input-basic input-size"
-                        classNameLabel="text-black biggest font-500"
-                        label="Porcentaje de pago teórico semestral"
-                        min={0}
-                        max={100}
+                        render={({ field }) => {
+                          return (
+                            <InputComponent
+                              idInput={field.name}
+                              errors={errors}
+                              disabled={true}
+                              defaultValue={`${detailData?.theoreticalPercentage}%`}
+                              typeInput="text"
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              value={`${detailData?.theoreticalPercentage}%`}
+                              className="input-basic input-size"
+                              classNameLabel="text-black biggest font-500"
+                              label="Porcentaje de pago teórico semestral"
+                              min={0}
+                              max={100}
+                            />
+                          );
+                        }}
                       />
-                    );
-                  }}
-                />
+                    </div>
+                  </div>
+                </Acordion>
               </div>
               <div onClick={preventClick}>
                 <Acordion
@@ -160,7 +186,7 @@ const DetailReglament = ({
                               idInput={field.name}
                               errors={errors}
                               disabled={true}
-                              defaultValue={`${detailData?.socialServicePercentage}`}
+                              defaultValue={`${detailData?.socialServicePercent}`}
                               typeInput="number"
                               onChange={field.onChange}
                               onBlur={field.onBlur}

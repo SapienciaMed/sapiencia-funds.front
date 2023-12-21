@@ -20,19 +20,11 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const { setMessage, authorization } = useContext(AppContext);
   const [showTable, setshowTable] = useState(false);
   const tableComponentRef = useRef(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [listPrograms, setListPrograms] = useState<
-    { name: string; value: string }[]
-  >([]);
+  const [listPrograms, setListPrograms] = useState<{ name: string; value: string }[]>([]);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailData, setDetailData] = useState<IRegulation>();
 
-  const {
-    getRegulationById,
-    editRegulation,
-    createRegulationAction,
-    getPrograms,
-  } = useRegulationApi();
+  const {getPrograms} = useRegulationApi();
   //react-router-dom
   const navigate = useNavigate();
 
@@ -48,8 +40,6 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     setValue,
     getValues,
   } = useForm<IRegulationSearch>({ resolver });
-
-  const [deparmetList, setDeparmentList] = useState([]);
 
   //permisions
   useEffect(() => {
@@ -106,8 +96,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   };
 
   useEffect(() => {
-    const getListPrograms = async () => {
-      const res = await getPrograms();
+    getPrograms().then(res => {
       if (res?.data) {
         const buildData = res.data.map((item) => {
           return {
@@ -117,11 +106,8 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
         });
         setListPrograms(buildData);
       }
-    };
-
-    getListPrograms();
-    setLoading(false);
-  }, [loading, showDetailModal]);
+    });
+  }, []);
 
   const tableColumns: ITableElement<IRegulation>[] = [
     {
@@ -157,9 +143,9 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     },
     {
       fieldName: "row.regulation.endPeriod",
-      header: <div style={{ fontWeight: 400 }}>{"% Pago Teorico"}</div>,
+      header: <Tooltip text={"¿Aplica pago teórico?"} />,
       renderCell: (row) => {
-        return <>{row.theoreticalPercentage}%</>;
+        return <>{row.theoreticalPercentage ? "SI" : "NO"}</>;
       },
     },
     {
@@ -239,8 +225,6 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
 
   const tableActions: ITableAction<IRegulation>[] = getActions();
 
-  const formValues = watch();
-
   const newElement = () => navigate("form");
 
   const onSubmit = handleSubmit(async (data: IRegulation) => {
@@ -277,16 +261,12 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     control,
     formState,
     onSubmit,
-    formValues,
     showTable,
     tableComponentRef,
     tableActions,
-    deparmetList,
     newElement,
     setshowTable,
     reset,
-    loading,
-    setLoading,
     listPrograms,
     tableColumns,
     showDetailModal,
