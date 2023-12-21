@@ -28,6 +28,7 @@ export default function useRemnants() {
     const [fiduciaList, setFiduciaList] = useState([]);
     const [showTable, setShowTable] = useState(false);
     const [reportData, setReportData] = useState<ReportData>({} as ReportData);
+    const [showDownload, setShowDownload] = useState(false);
 
     const tableComponentRef = useRef(null);
     const { setMessage } = useContext(AppContext);
@@ -197,15 +198,28 @@ export default function useRemnants() {
 
     const onSubmit = handleSubmit(async (data: { announcement: number, fund: number, trust: number }) => {
 
-
-
         const searchData = {
             ...data           
         };
         setShowTable(true)
         loadTableData(searchData);
         setReportData(data)
+
+
+        const res = await getReport({
+            ...data  
+        });
+    
+        // Validar si res.data.array contiene datos
+        if (res.data && res.data.array && res.data.array.length > 0) {
+            console.log(res.data.array);
+            setShowDownload(true);  // Mostrar la opción de descarga solo si hay datos
+        } else {
+            setShowDownload(false); // Ocultar la opción de descarga si no hay datos
+        }
     });
+
+    console.log(showDownload)
     
 
     //Eliminar    
@@ -307,10 +321,7 @@ export default function useRemnants() {
                     },
                 });
             },);
-        }
-
-
-       
+        }       
 
     }
 
@@ -328,6 +339,10 @@ export default function useRemnants() {
         tableColumns,
         tableActions,
         showTable,
-        downloadCollection
+        downloadCollection,
+        showDownload,
+        setShowTable,
+        reset,
+        setShowDownload
     }
 }

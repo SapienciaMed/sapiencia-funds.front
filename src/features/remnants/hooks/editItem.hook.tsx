@@ -30,6 +30,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
   const [fiduciaList, setFiduciaList] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
+
   //contex
   const { setMessage } = useContext(AppContext);
 
@@ -173,7 +174,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
     onSubmit,
     watch,
     CancelFunction,
-
-    showTable
+    showTable,
+    
   }
 }
