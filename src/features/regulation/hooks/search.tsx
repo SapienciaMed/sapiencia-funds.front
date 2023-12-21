@@ -129,9 +129,9 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       header: <div style={{ fontWeight: 400 }}>{"Programa"}</div>,
       renderCell: (row) => {
         const getListItem: any = listPrograms.find(
-          (item) => item.name === row.program || item.value === row.program
+          (item) => parseInt(item.value) == parseInt(row.program)
         );
-        return <>{getListItem.name}</>;
+        return <>{getListItem?.name}</>;
       },
     },
     {
@@ -142,7 +142,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
           (item) =>
             item.name === row.initialPeriod || item.value === row.initialPeriod
         );
-        return <>{getListItem.name}</>;
+        return <>{getListItem?.name}</>;
       },
     },
     {
@@ -159,7 +159,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       fieldName: "row.regulation.endPeriod",
       header: <div style={{ fontWeight: 400 }}>{"% Pago Teorico"}</div>,
       renderCell: (row) => {
-        return <>{row.theoreticalPercentage}%</>;
+        return <>{row.theoreticalPercentage ?? '0'}%</>;
       },
     },
     {
