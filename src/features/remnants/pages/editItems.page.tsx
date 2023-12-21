@@ -116,16 +116,14 @@ const editItemsPage = ({ item, loadTableData }) => {
                             name={"quotas"}
                             render={({ field }) => {
                                 return (
-                                    <InputComponent
+                                    <InputNumberComponent
+                                        control={control}
                                         idInput={field.name}
-                                        errors={errors}
-                                        typeInput={"text"}
-                                        onChange={field.onChange}
-                                        onBlur={field.onBlur}
-                                        value={field.value}
+                                        errors={errors} 
                                         disabled
-                                        className="input-basic medium"
+                                        className="inputNumber-basic medium"
                                         classNameLabel="text-black big medium"
+                                        min={0}                                                                           
                                         label={
                                             <>
                                                 Cupos
