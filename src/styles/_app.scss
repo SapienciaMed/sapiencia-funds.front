@@ -919,5 +919,15 @@ div[id="single-spa-application:@sapiencia/funds"] {
       align-self: stretch;
       margin-top: 24px;
     }
+
   }
+  
+  
+}
+
+.spacing-remanents {
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
+   
+    }
 }
