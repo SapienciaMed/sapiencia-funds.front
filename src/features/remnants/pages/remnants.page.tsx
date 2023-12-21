@@ -113,6 +113,8 @@ const RemnantsPage = () => {
                             titleMessageModalNoResult="El remanente no existe"
                             descriptionModalNoResult="No se encontraron resultados"
                             isShowModal={true}
+                            classSizeTable="size-table-wd-550"
+                            isMobil={false}
 
 
                         />
