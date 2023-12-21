@@ -31,7 +31,8 @@ export default function useRemnants() {
     const [showDownload, setShowDownload] = useState(false);
 
     const tableComponentRef = useRef(null);
-    const { setMessage } = useContext(AppContext);
+    const { setMessage, validateActionAccess } = useContext(AppContext);
+
 
     const resolver = useYupValidationResolver(remnantsFilter);
 
@@ -156,6 +157,7 @@ export default function useRemnants() {
                     },
                 });
             },
+            hide: !validateActionAccess("FONDOS_REMANENTE_EDITAR"),
         },
        /*  {
             icon: "Delete",
