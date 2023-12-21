@@ -123,8 +123,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         disabled
                                         className="inputNumber-basic medium"
                                         classNameLabel="text-black big medium"
-                                        min={0}   
-                                        max={100}                                 
+                                        min={0}                                                                           
                                         label={
                                             <>
                                                 Cupos

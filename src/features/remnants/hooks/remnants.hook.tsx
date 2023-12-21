@@ -156,7 +156,7 @@ export default function useRemnants() {
                 });
             },
         },
-        {
+       /*  {
             icon: "Delete",
             onClick: (row) => {
 
@@ -172,7 +172,7 @@ export default function useRemnants() {
                     background: true,
                 });
             },
-        },
+        }, */
     ];
 
 
