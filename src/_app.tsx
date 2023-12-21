@@ -24,6 +24,8 @@ import ResourcePrioritizationRoutes from "./features/resource-prioritization/res
 import PacRouter from "./features/pacc/pac-routes";
 import ConsolidationSocialService from "./features/consolidationSocialService";
 import AbsorptionPercentageRoutes from "./features/absorption-percentage/AbsorptionPercentageRoute";
+import LegalAuditFundsRoutes from "./features/legal-audit-funds/LegalAuditFundsRoute";
+import RemnantsRoutes from "./features/remnants/remnants-routes";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -108,6 +110,14 @@ function App() {
               <Route
                 path="/fondos/porcentaje-absorcion/*"
                 element={<AbsorptionPercentageRoutes />}
+              />
+              <Route
+                path="/fondos/legalizado/*"
+                element={<LegalAuditFundsRoutes />}
+              />
+              <Route
+                path="/fondos/remanentes/*"
+                element={<RemnantsRoutes />}
               />
             </Routes>
           </Suspense>

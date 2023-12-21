@@ -29,11 +29,12 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
         control,
         setValue,
         getValues,
+        reset
     } = useForm<IStepCashing>();
 
     useEffect(() => { 
         setShowSpinner(true)
-        isCut && getCuts()
+        isCut ? getCuts() : reset({ idCut: null })
 
         if (typeState) {
  
@@ -119,7 +120,7 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
             {
                 fieldName:'cut',
                 header: 'Corte',
-                hide: isCut
+                hide: true,
             },
             {
                 fieldName:'dateFinallyCut',
@@ -233,8 +234,9 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
                 })
             }else{
                 const searchCriteriaData = {
-                    [(getValues('idCut') == 'TODOS' ? 'cutParamName' : 'cutParamId' )]: getValues('idCut') ,
-                    statusPaccSearch: typeState
+                    [(getValues('idCut') == 'TODOS' ? 'cutParamName' : 'cutParamId' )]: getValues('idCut') || '' ,
+                    statusPaccSearch: typeState,
+                    searchParam: value.target.value || '',
                 }
 
                 setListSearch({
@@ -267,7 +269,7 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
     } 
     
     const getCuts = () => {
-        GetCutsForConsolidationTray().then(response => {
+        isCut && GetCutsForConsolidationTray().then(response => {
             setShowSpinner(false)
             if(response.operation.code === EResponseCodes.OK){
                 const CurrentDate = new Date();

@@ -22,10 +22,13 @@ import { downloadFile } from "../helper/dowloadFile";
 import { useWidth } from "../../../../../common/hooks/use-width";
 import ModalUploadChangeData from "../modal-upload-change-data";
 import { EStatePac } from "../../../../../common/constants/api.enum";
+import { usePaccServices } from "../../../hook/pacc-serviceshook";
 
 export default function useSocialServices() {
   const { id, typeState } = useParams();
   const { width } = useWidth();
+
+  const { UpdateSocialService } = usePaccServices(Number(typeState));
 
   const [filesService, setFilesService] = useState([]);
 
@@ -60,6 +63,7 @@ export default function useSocialServices() {
           showState={true}
           showObservation={true}
           showUploadFile={false}
+          id={row?.id}
           state={row.state}
           observation={row.observation}
           headerAccordion="Requisitos"
@@ -89,12 +93,14 @@ export default function useSocialServices() {
           showState={true}
           showObservation={true}
           showUploadFile={true}
-          state={null}
-          observation={""}
+          id={row?.id}
+          state={row.state}
+          observation={row.observation}
           headerAccordion="Requisitos"
           action="edit"
           width={width}
           loadTableData={loadTableData}
+          executeFunctionSubmit={UpdateSocialService}
         />
       ),
     });
@@ -131,7 +137,7 @@ export default function useSocialServices() {
 
         return (
           <Tag
-            severity={row.state ? "danger" : "success"}
+            severity={row.state ? "success" : "danger"}
             value={row.state ? "Aprobado" : "Rechazado"}
             rounded
           />
