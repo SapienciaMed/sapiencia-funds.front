@@ -5,7 +5,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { ITableAction, ITableElement } from "../../../common/interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import EditItemsPage from "../pages/editItems.page";
-import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import { formatNumberToTwoDecimals, formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 import * as XLSX from "xlsx"
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
@@ -123,6 +123,9 @@ export default function useRemnants() {
         {
             fieldName: "quotas",
             header: "Cupos",
+            renderCell: (row) => {
+                return <>{formatNumberToTwoDecimals(row.quotas)}</>;
+            }
         },
         {
             fieldName: "quotaResource",
