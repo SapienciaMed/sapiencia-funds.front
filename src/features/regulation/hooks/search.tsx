@@ -13,7 +13,7 @@ import {
   IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
-import { useRegulationApi } from "../service";
+import { periods, useRegulationApi } from "../service";
 import Tooltip from "../../../common/components/Form/tooltip";
 
 export default function useSearchRegulation(auth, authDetail, authEdit) {
@@ -219,25 +219,25 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
 
   const onSubmit = handleSubmit(async (data: IRegulationSearch) => {
     const getProgram: any = listPrograms.find((item) => item.name === data.programId || item.value === data.programId);
-    // const getListItem: any = periods.find( (item) => item.name === data.initialPeriod || item.value === data.initialPeriod); // esto viene de un endpoint
+    const getListItem: any = periods.find( (item) => item.name === data.initialPeriod || item.value === data.initialPeriod); // esto viene de un endpoint
 
-    //ELIMINAR 
-    // const endPeriod = data?.endPeriod &&
-    //   periods.find(
-    //     (item) => item.name === data.endPeriod || item.value === data.endPeriod
-    // )?.value || null; 
 
-    // const buildData = {
-    //   programId: parseInt(getProgram?.value) ?? null,
-    //   initialPeriod: getListItem?.value ?? null, // TODO: Ajustar
-    //   endPeriod: endPeriod, // TODO: Ajustar
-    // };
+    const endPeriod = data?.endPeriod &&
+      periods.find(
+        (item) => item.name === data.endPeriod || item.value === data.endPeriod
+    )?.value || null; 
+
+    const buildData = {
+      programId: parseInt(getProgram?.value) ?? null,
+      initialPeriod: getListItem?.value ?? null, // TODO: Ajustar
+      endPeriod: endPeriod, // TODO: Ajustar
+    };
 
     setshowTable(true);
 
-    // if (tableComponentRef.current) {
-    //   tableComponentRef.current.loadData(buildData);
-    // }
+    if (tableComponentRef.current) {
+      tableComponentRef.current.loadData(buildData);
+    }
   });
 
   return {
