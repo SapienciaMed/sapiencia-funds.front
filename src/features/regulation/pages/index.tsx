@@ -1,10 +1,5 @@
-import {
-  ButtonComponent,
-  FormComponent,
-} from "../../../common/components/Form";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
+import { ButtonComponent, FormComponent, SelectComponent } from "../../../common/components/Form";
 import useSearchRegulation from "../hooks/search";
-import { periods } from "../service";
 import TableComponent from "../../../common/components/table.component";
 import DetailReglament from "./detailt";
 import { BiPlusCircle } from "react-icons/bi";
@@ -15,7 +10,6 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
     tableComponentRef,
     tableActions,
     showTable,
-    register,
     onSubmit,
     formState,
     newElement,
@@ -30,6 +24,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
     setValue,
     getValues,
   } = useSearchRegulation(auth, authDetail, authEdit);
+
   return (
     <div className="main-page">
       <div className="card-table gap-0">
@@ -48,36 +43,33 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
         <section className="card-table mt-20px">
           <FormComponent  id="regulationSeach" className="form-signIn" action={onSubmit}>
             <div className="grid-form-3-container gap-15">
-              <SelectComponentOld
-                idInput="program"
-                register={register}
+              <SelectComponent
+                idInput="programId"
+                control={control}
                 placeholder="Seleccionar"
-                label={<>Programa</>}
+                label='Programa'
                 data={listPrograms ?? []}
                 direction={EDirection.column}
-                errors={formState.errors}
                 className="select-basic big select-disabled-list"
                 classNameLabel='text-black big text-with-colons'
               />
-              <SelectComponentOld
+              <SelectComponent
                 idInput="initialPeriod"
-                register={register}
+                control={control}
                 placeholder="Seleccionar"
-                label={<>Periodo inicial de convocatoria</>}
-                data={periods ?? []}
+                label='Periodo inicial de convocatoria'
+                // data={periods ?? []}
                 direction={EDirection.column}
-                errors={formState.errors}
                 className="select-basic big select-disabled-list"
                 classNameLabel='text-black big text-with-colons'
               />
-              <SelectComponentOld
+              <SelectComponent
                 idInput="endPeriod"
-                register={register}
+                control={control}
                 placeholder="Seleccionar"
-                label={<>Periodo final de convocatoria</>}
-                data={periods ?? []}
+                label='Periodo final de convocatoria'
+                // data={periods ?? []}
                 direction={EDirection.column}
-                errors={formState.errors}
                 className="select-basic big select-disabled-list"
                 classNameLabel='text-black big text-with-colons'
               />

@@ -9,10 +9,11 @@ import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { searchRegulation } from "../../../common/schemas/regulation-schema";
 import {
+  IReglamentConsolidation,
   IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
-import { periods, useRegulationApi } from "../service";
+import { useRegulationApi } from "../service";
 import Tooltip from "../../../common/components/Form/tooltip";
 
 export default function useSearchRegulation(auth, authDetail, authEdit) {
@@ -22,7 +23,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const tableComponentRef = useRef(null);
   const [listPrograms, setListPrograms] = useState<{ name: string; value: string }[]>([]);
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [detailData, setDetailData] = useState<IRegulation>();
+  const [detailData, setDetailData] = useState<IReglamentConsolidation>();
 
   const {getPrograms} = useRegulationApi();
   //react-router-dom
@@ -35,7 +36,6 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     handleSubmit,
     formState,
     control,
-    watch,
     reset,
     setValue,
     getValues,
@@ -109,71 +109,61 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     });
   }, []);
 
-  const tableColumns: ITableElement<IRegulation>[] = [
+  const tableColumns: ITableElement<IReglamentConsolidation>[] = [
     {
-      fieldName: "row.regulation.program",
+      fieldName: "programs",
       header: 'Programa',
       renderCell: (row) => {
-        const getListItem: any = listPrograms.find(
-          (item) => item.name === row.program || item.value === row.program
-        );
-        return <>{getListItem?.name}</>;
+        return <>{row?.programName}</>;
       },
     },
     {
-      fieldName: "row.regulation.initialPeriod",
+      fieldName: "initialPeriod",
       header: 'Periodo inicial',
       renderCell: (row) => {
-        const getListItem: any = periods.find(
-          (item) =>
-            item.name === row.initialPeriod || item.value === row.initialPeriod
-        );
-        return <>{getListItem?.name}</>;
+        return <>{row?.initialPeriod}</>;
       },
     },
     {
-      fieldName: "row.regulation.endPeriod",
+      fieldName: "endPeriod",
       header: 'Periodo Final',
       renderCell: (row) => {
-        const getListItem: any = periods.find(
-          (item) => item.name === row.endPeriod || item.value === row.endPeriod
-        );
-        return <>{getListItem?.name ? getListItem?.name : ""}</>;
+        return <>{row.endPeriod}</>;
       },
     },
     {
-      fieldName: "row.regulation.endPeriod",
+      fieldName: "theoreticalPercentage",
       header: <Tooltip text={"¿Aplica pago teórico?"} />,
       renderCell: (row) => {
-        return <>{row.theoreticalPercentage ? "SI" : "NO"}</>;
+        return <>{row.applyTheoreticalSemiannualPercent ? "SI" : "NO"}</>;
       },
     },
     {
-      fieldName: "row.regulation.applySocialService",
+      fieldName: "applySocialService",
       header: <Tooltip text={"¿Aplica servicio social?"} />,
       renderCell: (row) => {
         return <>{row.applySocialService ? "SI" : "NO"}</>;
       },
     },
     {
-      fieldName: "row.regulation.knowledgeTransferApply",
+      fieldName: "applyKnowledgeTransfer",
       header: <Tooltip text={"¿Aplica trasferencia de conocimiento?"} />,
       renderCell: (row) => {
-        return <>{row.knowledgeTransferApply ? "SI" : "NO"}</>;
+        return <>{row.applyKnowledgeTransfer ? "SI" : "NO"}</>;
       },
     },
     {
-      fieldName: "row.regulation.gracePeriodApply",
+      fieldName: "applyGracePeriod",
       header: <Tooltip text={"¿Aplica periodo de gracia?"} />,
       renderCell: (row) => {
-        return <>{row.gracePeriodApply ? "SI" : "NO"}</>;
+        return <>{row.applyGracePeriod ? "SI" : "NO"}</>;
       },
     },
     {
-      fieldName: "row.regulation.continuousSuspensionApplies",
+      fieldName: "applyContinuousSuspension",
       header: <Tooltip text={"¿Aplica suspensiones continuas?"} />,
       renderCell: (row) => {
-        return <>{row.continuousSuspensionApplies ? "SI" : "NO"}</>;
+        return <>{row.applyContinuousSuspension ? "SI" : "NO"}</>;
       },
     },
     {
@@ -191,10 +181,10 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       },
     },
     {
-      fieldName: "row.regulation.extensionApply",
+      fieldName: "applyExtension",
       header: <Tooltip text={"¿Aplica prórroga?"} />,
       renderCell: (row) => {
-        return <>{row.extensionApply ? "SI" : "NO"}</>;
+        return <>{row.applyExtension ? "SI" : "NO"}</>;
       },
     },
     {
@@ -209,7 +199,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       },
     },
     {
-      fieldName: "row.regulation.accomulatedIncomeCondonationApplies",
+      fieldName: "applyAccomulatedIncomeCondonation",
       header: (
         <Tooltip
           text={
@@ -218,7 +208,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
         />
       ),
       renderCell: (row) => {
-        return <>{row.accomulatedIncomeCondonationApplies ? "SI" : "NO"}</>;
+        return <>{row.applyAccomulatedIncomeCondonation ? "SI" : "NO"}</>;
       },
     },
   ];
@@ -227,33 +217,27 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
 
   const newElement = () => navigate("form");
 
-  const onSubmit = handleSubmit(async (data: IRegulation) => {
-    const getProgram: any = listPrograms.find(
-      (item) => item.name === data.program || item.value === data.program
-    );
-    const getListItem: any = periods.find(
-      (item) =>
-        item.name === data.initialPeriod || item.value === data.initialPeriod
-    );
+  const onSubmit = handleSubmit(async (data: IRegulationSearch) => {
+    const getProgram: any = listPrograms.find((item) => item.name === data.programId || item.value === data.programId);
+    // const getListItem: any = periods.find( (item) => item.name === data.initialPeriod || item.value === data.initialPeriod); // esto viene de un endpoint
 
-    const endPeriod = data?.endPeriod
-      ? periods.find(
-          (item) =>
-            item.name === data.endPeriod || item.value === data.endPeriod
-        ).value
-      : null;
+    //ELIMINAR 
+    // const endPeriod = data?.endPeriod &&
+    //   periods.find(
+    //     (item) => item.name === data.endPeriod || item.value === data.endPeriod
+    // )?.value || null; 
 
-    const buildData = {
-      program: getProgram?.value ? getProgram?.value : null,
-      initialPeriod: getListItem?.value ? getListItem?.value : null,
-      endPeriod: endPeriod,
-    };
+    // const buildData = {
+    //   programId: parseInt(getProgram?.value) ?? null,
+    //   initialPeriod: getListItem?.value ?? null, // TODO: Ajustar
+    //   endPeriod: endPeriod, // TODO: Ajustar
+    // };
 
     setshowTable(true);
 
-    if (tableComponentRef.current) {
-      tableComponentRef.current.loadData(buildData);
-    }
+    // if (tableComponentRef.current) {
+    //   tableComponentRef.current.loadData(buildData);
+    // }
   });
 
   return {

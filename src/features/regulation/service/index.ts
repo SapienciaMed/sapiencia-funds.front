@@ -2,25 +2,6 @@ import useCrudService from "../../../common/hooks/crud-service.hook";
 import { IRegulation } from "../../../common/interfaces/regulation";
 import { ApiResponse } from "../../../common/utils/api-response";
 
-export const periods: { value: string; name: string }[] = [
-  {
-    value: "period-1",
-    name: "2022-1 (1 Enero a 30 Junio)",
-  },
-  {
-    value: "period-2",
-    name: "2022-2 (1 Julio a 31 Diciembre)",
-  },
-  {
-    value: "period-3",
-    name: "2023-1 (1 Enero a 30 Junio)",
-  },
-  {
-    value: "period-4",
-    name: "2023-2 (1 Julio a 31 Diciembre)",
-  },
-];
-
 export const LIST_DATA_GRACE_PERIOD: { value: string; name: string }[] = [
   {
     value: "from_date_return",
