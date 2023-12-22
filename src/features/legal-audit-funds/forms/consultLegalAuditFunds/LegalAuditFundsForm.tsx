@@ -30,7 +30,7 @@ const LegalAuditFundsForm = ({
       className="form-signIn"
       action={onSubmit}
     >
-      <span className="text-black large  grid-span-4-columns mt-10px ml-14px">
+      <span className="text-black large  grid-span-4-columns mt--4px ml--1px">
         Legalizados
       </span>
 
