@@ -130,7 +130,6 @@ export const useEditAbsorptionPercentageModal = (
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
-    console.log(name, value);
     let rawValue = parseInt(value.replace("%", ""));
     if (isNaN(rawValue)) rawValue = 0;
     setValue(name, `${rawValue}%`);
@@ -140,13 +139,21 @@ export const useEditAbsorptionPercentageModal = (
     });
   };
 
-  useEffect(() => {
-    let rawValue = parseInt(resourceValue?.replace("%", ""));
-    if (isNaN(rawValue)) rawValue = 0;
-    setValue("resource", `${rawValue}%`);
+  const handleChangeResource = ({ target }) => {
+    const { name, value } = target;
     setFormWatch({
       ...formWatch,
-      resource: rawValue,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    let rawValue = parseInt(resourceValue?.replace("$", ""));
+    if (isNaN(rawValue)) rawValue = 0;
+    setValue("resource", `$${rawValue}`);
+    setFormWatch({
+      ...formWatch,
+      resource: resourceRaw,
     });
   }, [resourceValue]);
 
@@ -243,6 +250,7 @@ export const useEditAbsorptionPercentageModal = (
 
   return {
     handleChange,
+    handleChangeResource,
     control,
     register,
     errors,

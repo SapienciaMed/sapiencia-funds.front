@@ -31,25 +31,15 @@ export const useEditLegalAuditFundsModal = (
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
 
-  // const [communeFundId, resource] = watch(["communeFundId", "resource"]);
-
-  const [formWatch, setFormWatch] = useState<ILegalAuditFunds>({
-    resource: "",
-    order: "",
-    fiduciaryId: "",
-  });
+  const [formWatch, setFormWatch] = useState<ICallLegalResfilters>({});
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
-    setFormWatch({
-      ...formWatch,
+    setFormWatch((prevFormWatch) => ({
+      ...prevFormWatch,
       [name]: value,
-    });
+    }));
   };
-
-  useEffect(() => {
-    console.log(formWatch);
-  }, [formWatch]);
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
@@ -74,6 +64,7 @@ export const useEditLegalAuditFundsModal = (
   const EditItem = async (data: ICallLegalResfilters) => {
     const fullData = {
       ...data,
+      fiduciaryId: row?.fiduciaryId,
       ...formWatch,
       announcementId,
     };
@@ -119,6 +110,8 @@ export const useEditLegalAuditFundsModal = (
   }, [row]);
 
   useEffect(() => {
+    console.log("formWatch updated: ", formWatch);
+
     const { resource, order } = formWatch;
     if (!resource || !order) {
       return setSubmitDisabled(false);
