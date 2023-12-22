@@ -11,11 +11,7 @@ import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import { useNavigate } from "react-router-dom";
 
-<<<<<<< HEAD
-const ConsolidateTab = ({  data, reload }) => {
-=======
 const ConsolidateTab = ({ data, reload }) => {
->>>>>>> a3a8646a421dba068f878f40faf4b2329e79f4a8
   const {
     urlGet,
     tableComponentRef,
@@ -32,21 +28,9 @@ const ConsolidateTab = ({ data, reload }) => {
     downloadCollection,
     comunaList,
     TotalView,
-<<<<<<< HEAD
-    color, 
-    tableComponentRef
-  } = consolidateHook(data, reload);
-
-  console.log("RENDERIZA CONSOLIDATE TAB");
-
-
-
-  const navigate = useNavigate();
-=======
     color,
   } = consolidateHook(data, reload);
 
->>>>>>> a3a8646a421dba068f878f40faf4b2329e79f4a8
   const columnsConsolidados: ITableElement<any>[] = [
     {
       fieldName: "resourcePrioritization.communeId",
