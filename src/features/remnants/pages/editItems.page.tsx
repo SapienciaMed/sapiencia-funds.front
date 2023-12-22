@@ -98,7 +98,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         className="inputNumber-basic medium"
                                         mode="currency"
                                         currency="COP"
-                                        locale="es-CO"                                       
+                                        locale="es-CO"
                                         label="Costo promedio"
                                         classNameLabel="text-black big medium text-required"
                                         errors={errors}
@@ -108,7 +108,7 @@ const editItemsPage = ({ item, loadTableData }) => {
 
                                 );
                             }}
-                        /> 
+                        />
                     </div>
                     <div className="grid-form-3-container mb-24px">
                         <Controller
@@ -119,12 +119,14 @@ const editItemsPage = ({ item, loadTableData }) => {
                                     <InputNumberComponent
                                         control={control}
                                         idInput={field.name}
-                                        errors={errors} 
+                                        errors={errors}
                                         disabled
+                                        mode="decimal"
+                                        minFractionDigits={2}
+                                        maxFractionDigits={2} 
                                         className="inputNumber-basic medium"
                                         classNameLabel="text-black big medium"
-                                        min={0}   
-                                        max={100}                                 
+                                        min={0}
                                         label={
                                             <>
                                                 Cupos
@@ -145,7 +147,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         className="inputNumber-basic medium"
                                         mode="currency"
                                         currency="COP"
-                                        locale="es-CO"                                        
+                                        locale="es-CO"
                                         label="Recurso con cupos"
                                         classNameLabel="text-black big medium text-required"
                                         errors={errors}
@@ -167,7 +169,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         className="inputNumber-basic medium"
                                         mode="currency"
                                         currency="COP"
-                                        locale="es-CO"                                       
+                                        locale="es-CO"
                                         label="Residual"
                                         classNameLabel="text-black big medium text-required"
                                         errors={errors}

@@ -30,6 +30,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
   const [fiduciaList, setFiduciaList] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
+
   //contex
   const { setMessage } = useContext(AppContext);
 
@@ -56,12 +57,16 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
 
 
   useEffect(() => {
+
+    
     if (remaining && averageCost) {
       const quotas = remaining / averageCost;
       setValue('quotas', quotas);
     }
 
-    if (averageCost) {
+    if (averageCost === item.averageCost) {
+      setValue("quotaResource", item.quotaResource || 0)      
+    }else{
       const quotaResource = item.quotas * averageCost
       setValue('quotaResource', quotaResource);
     }
@@ -169,7 +174,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
     onSubmit,
     watch,
     CancelFunction,
-
-    showTable
+    showTable,
+    
   }
 }

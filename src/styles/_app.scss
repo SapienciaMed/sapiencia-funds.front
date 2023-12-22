@@ -764,7 +764,12 @@ div[id="single-spa-application:@sapiencia/funds"] {
   justify-content: center;
   align-items: center;
   gap: 0.3rem;
+  flex-wrap: nowrap;
+  /* Asegura que los elementos flex internos no se envuelvan */
+  white-space: nowrap;
+  /* Evita que el texto se envuelva en una nueva línea */
 }
+
 
 .tooltip {
   position: relative;
@@ -966,6 +971,38 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
 
 }
+
+@media (max-width: 768px) {
+  .button-save-container-display-remanentes {
+    flex-direction: column;
+    /* Apilar los botones verticalmente en modo responsive */
+    margin-left: 4px;
+  }
+
+  .button-save-container-display-remanentes .button-cancel-text {
+    order: 2;
+    width: 100%;
+    /* Ocupar todo el ancho en modo responsive */
+    margin-top: 24px;
+    margin-bottom: 24px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .button-save-container-display-remanentes .button-save {
+    order: 1;
+    width: 100%;
+    /* Ocupar todo el ancho en modo responsive */
+    background-color: #533893;
+    padding: 12px 16px;
+    margin-top: 24px;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+
 
 .spacing-remanents {
   @media (max-width: 768px) {

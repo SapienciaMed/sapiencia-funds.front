@@ -5,7 +5,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { ITableAction, ITableElement } from "../../../common/interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import EditItemsPage from "../pages/editItems.page";
-import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import { formatNumberToTwoDecimals, formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 import * as XLSX from "xlsx"
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
@@ -28,9 +28,11 @@ export default function useRemnants() {
     const [fiduciaList, setFiduciaList] = useState([]);
     const [showTable, setShowTable] = useState(false);
     const [reportData, setReportData] = useState<ReportData>({} as ReportData);
+    const [showDownload, setShowDownload] = useState(false);
 
     const tableComponentRef = useRef(null);
-    const { setMessage } = useContext(AppContext);
+    const { setMessage, validateActionAccess } = useContext(AppContext);
+
 
     const resolver = useYupValidationResolver(remnantsFilter);
 
@@ -121,6 +123,9 @@ export default function useRemnants() {
         {
             fieldName: "quotas",
             header: "Cupos",
+            renderCell: (row) => {
+                return <>{formatNumberToTwoDecimals(row.quotas)}</>;
+            }
         },
         {
             fieldName: "quotaResource",
@@ -155,8 +160,9 @@ export default function useRemnants() {
                     },
                 });
             },
+            hide: !validateActionAccess("FONDOS_REMANENTE_EDITAR"),
         },
-        {
+       /*  {
             icon: "Delete",
             onClick: (row) => {
 
@@ -172,7 +178,7 @@ export default function useRemnants() {
                     background: true,
                 });
             },
-        },
+        }, */
     ];
 
 
@@ -197,15 +203,28 @@ export default function useRemnants() {
 
     const onSubmit = handleSubmit(async (data: { announcement: number, fund: number, trust: number }) => {
 
-
-
         const searchData = {
             ...data           
         };
         setShowTable(true)
         loadTableData(searchData);
         setReportData(data)
+
+
+        const res = await getReport({
+            ...data  
+        });
+    
+        // Validar si res.data.array contiene datos
+        if (res.data && res.data.array && res.data.array.length > 0) {
+            console.log(res.data.array);
+            setShowDownload(true);  // Mostrar la opción de descarga solo si hay datos
+        } else {
+            setShowDownload(false); // Ocultar la opción de descarga si no hay datos
+        }
     });
+
+    console.log(showDownload)
     
 
     //Eliminar    
@@ -307,10 +326,7 @@ export default function useRemnants() {
                     },
                 });
             },);
-        }
-
-
-       
+        }       
 
     }
 
@@ -328,6 +344,10 @@ export default function useRemnants() {
         tableColumns,
         tableActions,
         showTable,
-        downloadCollection
+        downloadCollection,
+        showDownload,
+        setShowTable,
+        reset,
+        setShowDownload
     }
 }
