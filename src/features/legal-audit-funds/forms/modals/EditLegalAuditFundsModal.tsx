@@ -59,7 +59,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
             />
 
             <InputComponent
-              idInput="fiducia"
+              idInput="fiduciaryId"
               label={
                 <>
                   Fiducia <span>*</span>
@@ -88,7 +88,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               disabled
             />
             <InputComponent
-              idInput="orden"
+              idInput="order"
               label={
                 <>
                   Orden <span>*</span>
