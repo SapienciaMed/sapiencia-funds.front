@@ -13,15 +13,12 @@ import {
 import { filtersPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAbsorption.shema";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { urlApiFunds } from "../../../common/utils/base-url";
-import useCrudService from "../../../common/hooks/crud-service.hook";
 import { useGetAllPeriodsHook } from "../../absorption-percentage/hooks/getAllPeriodsHook";
 import EditLegalAuditFundsModal from "../forms/modals/EditLegalAuditFundsModal";
+import { useGetCommuneFundByIdLegalHook } from "./getALlByAnnouncementIdHook";
+import { ICallLegalResfilters } from "../../../common/interfaces/LegalAuditFunds";
 
 export const useConsultLegalAuditFunds = () => {
-  const urlGet = `${urlApiFunds}/api/v1/absorption-percentage/get-all-paginated`;
-  const navigate = useNavigate();
-  const { deleted } = useCrudService(urlApiFunds);
-  const { width } = useWidth();
   const { validateActionAccess, authorization } = useContext(AppContext);
   const tableComponentRef = useRef(null);
   const { periods: periodsData } = useGetAllPeriodsHook();
@@ -30,6 +27,10 @@ export const useConsultLegalAuditFunds = () => {
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const { setMessage } = useContext(AppContext);
+
+  const { legalAuditData, getLegalAuditByAnnouncement } =
+    useGetCommuneFundByIdLegalHook();
+
   const resolver = useYupValidationResolver(filtersPeriodsAbsorptionSchema);
   const {
     control,
@@ -65,10 +66,11 @@ export const useConsultLegalAuditFunds = () => {
     },
   ];
 
-  const onSubmit = handleSubmit(async (filters: ICallPeriodsResfilters, ev) => {
+  const onSubmit = handleSubmit(async (filters: ICallLegalResfilters, ev) => {
     try {
       ev.preventDefault();
       setTableView(true);
+      getLegalAuditByAnnouncement(periods);
       await tableComponentRef.current?.loadData({
         ...filters,
       });
@@ -79,29 +81,29 @@ export const useConsultLegalAuditFunds = () => {
   });
 
   const handleReloadTable = useCallback(
-    async (filters: ICallPeriodsResfilters) => {
+    async (filters: ICallLegalResfilters) => {
       setReloadTable((prev) => !prev);
-      await tableComponentRef.current?.loadData({
-        ...filters,
-      });
+      await tableComponentRef.current?.loadData(
+        {
+          ...filters,
+        },
+        getLegalAuditByAnnouncement(periods)
+      );
+      console.log("data*/**", legalAuditData);
     },
     []
   );
 
   const downloadCollection = useCallback(() => {
     const token = localStorage.getItem("token");
-    const { page, perPage } = paginateData;
-    const url = new URL(
-      `${urlApiFunds}/api/v1/absorption-percentage/generate-xlsx`
-    );
+    const url = new URL(`${urlApiFunds}/api/v1/legalized/generate-xlsx`);
     const params = new URLSearchParams();
-    params.append("authorization", token);
-    params.append("permissions", authorization.encryptedAccess);
-    params.append("page", page + 1);
-    params.append("perPage", perPage);
     if (periods) {
       params.append("announcementId", periods);
     }
+    params.append("authorization", token);
+    params.append("permissions", authorization.encryptedAccess);
+
     url.search = params.toString();
     window.open(url.toString(), "_blank");
   }, [paginateData, periods]);
@@ -135,9 +137,8 @@ export const useConsultLegalAuditFunds = () => {
     setPaginateData,
     tableComponentRef,
     downloadCollection,
-    urlGet,
     validateActionAccess,
-    width,
     periodsData,
+    legalAuditData,
   };
 };

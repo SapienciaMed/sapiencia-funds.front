@@ -1,13 +1,12 @@
-import { IPeriodsAbsorption } from "../../../../common/interfaces/PeriodsAbsorption.interface";
+import { ICallLegalResfilters } from "../../../../common/interfaces/LegalAuditFunds";
 import { ITableElement } from "../../../../common/interfaces/table.interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
-export const tableColumns: ITableElement<IPeriodsAbsorption>[] = [
+export const tableColumns: ITableElement<ICallLegalResfilters>[] = [
   {
     fieldName: "communeFundId",
     header: "ID comuna",
   },
-
   {
     fieldName: "resource",
     header: "Recurso",
@@ -16,24 +15,16 @@ export const tableColumns: ITableElement<IPeriodsAbsorption>[] = [
     },
   },
   {
-    fieldName: "sceneryPercentage1",
+    fieldName: "fiduciaryName",
     header: "Fiducia",
-    renderCell: (row) => {
-      return <>{`$ ${row.sceneryPercentage1}`}</>;
-    },
   },
   {
-    fieldName: "sceneryPercentage2",
+    fieldName: "",
     header: "Fecha de actualización",
-    renderCell: (row) => {
-      return <>{`${row.sceneryPercentage2}`}</>;
-    },
+    renderCell: () => <>25/08/2023</>,
   },
   {
-    fieldName: "sceneryPercentage3",
-    header: "Ordern",
-    renderCell: (row) => {
-      return <>{`${row.sceneryPercentage3}`}</>;
-    },
+    fieldName: "order",
+    header: "Orden",
   },
 ];

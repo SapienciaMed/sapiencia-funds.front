@@ -10,6 +10,7 @@ export const useGetcommuneFundIdHook = () => {
 
   const searchCommuneFundByValue = (communeFundId) => {
     if (!communeFund) return;
+    console.log(communeFund, communeFundId);
     const resourceFound = communeFund?.find((el) => el.value === communeFundId);
     return resourceFound;
   };
