@@ -108,7 +108,7 @@ const SwitchComponent = ({
                   field.onChange(!value);
                   setValue(!value);
                 }}
-                checked={field.value}
+                checked={field.value || defaultValue }
                 className={`${className} ${
                   messageError({ idInput, errors, fieldArray })
                     ? "p-invalid"

@@ -142,8 +142,8 @@
 }
 
 .container-modal-body {
-  margin: 32px;
-  height: 75%;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
   overflow-y: auto;
 }
 

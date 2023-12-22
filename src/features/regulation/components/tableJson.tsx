@@ -335,7 +335,7 @@ const TableJson = ({
             />
           </div>
         )}
-        {dataRead?.dataTable.length > 0 && (
+        {dataRead?.dataTable?.length > 0 && (
           <div className="containerJsonTable">
             <div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -378,7 +378,7 @@ const TableJson = ({
                   flexDirection: "column",
                 }}
               >
-                {dataRead?.dataTable.map((item) => {
+                {dataRead?.dataTable?.map((item) => {
                   return (
                     <div
                       style={{

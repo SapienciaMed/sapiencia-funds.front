@@ -1,7 +1,6 @@
 import { ButtonComponent, FormComponent, SelectComponent } from "../../../common/components/Form";
 import useSearchRegulation from "../hooks/search";
 import TableComponent from "../../../common/components/table.component";
-import DetailReglament from "./detailt";
 import { BiPlusCircle } from "react-icons/bi";
 import { EDirection } from "../../../common/constants/input.enum";
 const Regulation = ({ auth, authDetail, authEdit }) => {
@@ -10,18 +9,13 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
     tableActions,
     showTable,
     onSubmit,
-    formState,
     newElement,
     reset,
     setshowTable,
     control,
     listPrograms,
     tableColumns,
-    showDetailModal,
-    setShowDetailModal,
-    detailData,
-    setValue,
-    getValues,
+    arrayPeriod
   } = useSearchRegulation(auth, authDetail, authEdit);
 
   return (
@@ -57,7 +51,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
                 control={control}
                 placeholder="Seleccionar"
                 label='Periodo inicial de convocatoria'
-                data={[]}
+                data={arrayPeriod ?? []}
                 direction={EDirection.column}
                 className="select-basic big select-disabled-list"
                 classNameLabel='text-black big text-with-colons'
@@ -67,7 +61,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
                 control={control}
                 placeholder="Seleccionar"
                 label='Periodo final de convocatoria'
-                data={[]}
+                data={arrayPeriod ?? []}
                 direction={EDirection.column}
                 className="select-basic big select-disabled-list"
                 classNameLabel='text-black big text-with-colons'
@@ -97,7 +91,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
       {showTable && (
         <TableComponent
           ref={tableComponentRef}
-          url={`${process.env.urlApiFunds}/api/v1/reglament/get-paginated`}
+          url={`${process.env.urlApiFunds}/api/v1/reglament-v2/get-paginated`}
           columns={tableColumns}
           actions={tableActions}
           titleMessageModalNoResult="No hay resultados"
@@ -108,16 +102,6 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
           isMobil={false}
         />
       )}
-      <DetailReglament
-        isOpen={showDetailModal}
-        onClose={() => setShowDetailModal(false)}
-        detailData={detailData}
-        errors={formState.errors}
-        control={control}
-        setValue={setValue}
-        getValues={getValues}
-        listPrograms={listPrograms}
-      />
     </div>
   );
 };
