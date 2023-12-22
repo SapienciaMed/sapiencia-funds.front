@@ -17,7 +17,6 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
     register,
     handleCancel,
     submitDisabled,
-    communeFundData,
     handleChange,
   } = useEditLegalAuditFundsModal(announcementId, row, reloadTable);
   return (
@@ -29,20 +28,20 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
       <div className="container-form-grid-actas">
         <div className="container-form padding-form">
           <div className="grid-form-3-container  gap-25 mb-25px">
-            <SelectComponent
+            <InputComponent
               idInput="communeFundId"
-              control={control}
-              errors={errors}
-              data={communeFundData}
               label={
                 <>
                   ID comuna <span>*</span>
                 </>
               }
-              className="select-basic medium"
+              typeInput="number"
+              register={register}
+              errors={errors}
+              onChange={handleChange}
+              className="input-basic medium"
               classNameLabel="text-black big bold"
-              placeholder="Seleccionar"
-              filter
+              disabled
             />
             <InputComponent
               idInput="resource"
@@ -55,13 +54,12 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               register={register}
               onChange={handleChange}
               errors={errors}
-              disabled
               className="input-basic medium"
               classNameLabel="text-black big bold"
             />
 
             <InputComponent
-              idInput="fiducia"
+              idInput="fiduciaryId"
               label={
                 <>
                   Fiducia <span>*</span>
@@ -73,6 +71,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               onChange={handleChange}
               className="input-basic medium"
               classNameLabel="text-black big bold"
+              disabled
             />
           </div>
           <div className="grid-form-3-container gap-25 mt-13px">
@@ -86,9 +85,10 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               placeholder="DD/MM/YYYY"
               dateFormat="dd/mm/yy"
               maxDate={new Date()}
+              disabled
             />
             <InputComponent
-              idInput="orden"
+              idInput="order"
               label={
                 <>
                   Orden <span>*</span>
@@ -97,6 +97,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               typeInput="text"
               register={register}
               errors={errors}
+              onChange={handleChange}
               className="input-basic medium"
               classNameLabel="text-black big bold"
             />

@@ -71,6 +71,10 @@
     @include card-component-title-area(flex, space-between, column-reverse, 0.8rem, null, 1rem, null, center)
 }
 
+.title-area-4{
+    @include card-component-title-area(flex, space-between, row, 0.8rem, 8px, 1rem, null, center)
+}
+
 .width-style{
     width: 100%;
 
@@ -180,6 +184,11 @@
         font-size: 1.8em;
       }
 }
+
+.container-designation-three-objects{
+    row-gap: 1.5rem;
+    display: grid;
+}
   
 @media (min-width: 1024px) {
     .one-filter-container {
@@ -215,11 +224,15 @@
     }
 
     .title-area-2{
-        @include card-component-title-area()
+        @include card-component-title-area(flex, space-between, row, 14px, 8px, 1rem, null, none )
     }
 
     .title-area-3{
         @include card-component-title-area(flex, space-between, column-reverse, 0.8rem, null, 1rem, null, flex-start)
+    }
+
+    .title-area-4{
+        @include card-component-title-area(flex, space-between, row, 14px, 8px, 1rem, null, none )
     }
 
     .container-actions_formTabs {
@@ -231,6 +244,39 @@
           null,
           0.62em
         );
+    }
+
+    .container-designation-three-objects {
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 1rem;
+
+        &.grid-template-container-first{
+            grid-template-columns: 2fr 1fr 1fr;
+        }
+
+        &.grid-template-container-second{
+            grid-template-columns: 1fr 2fr 1fr;
+        }
+
+        &.grid-template-container-third{
+            grid-template-columns: 1fr 1fr 2fr;
+        }
+
+        &.grid-template-container-fourth{
+            grid-template-columns: 2fr 1fr 2fr;
+        }
+  
+        &.col-gap-big{
+          column-gap: 1rem;
+        }
+
+        &.col-gap-normal{
+            column-gap: 0.8rem;
+        }
+
+        &.col-gap-small{
+            column-gap: 0.5rem;
+        }
     }
 }
 
@@ -250,6 +296,10 @@
 
     .title-area{
         flex-direction: column-reverse;
+    }
+
+    .title-area-4{
+        @include card-component-title-area(null, null, column, null, null, 0.8rem);
     }
 }
 @media (max-width: 390px) {

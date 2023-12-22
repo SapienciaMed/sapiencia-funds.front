@@ -157,4 +157,9 @@ export const jsDateToISODate = (jsDate: Date) => {
   return DateTime.fromJSDate(jsDate).toISODate();
 };
 
+export function formatNumberToTwoDecimals(number) {
+  return Number(number).toFixed(2);
+}
+
+
 

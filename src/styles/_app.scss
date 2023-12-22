@@ -221,6 +221,32 @@ div[id="single-spa-application:@sapiencia/funds"] {
   gap: 8px;
 }
 
+
+
+.button-save-container-display-percentage {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    margin: 10%;
+
+    .button-clean1 {
+      order: 0;
+      width: 100%;
+      margin-left: 9px;
+      margin-top: 24px;
+      margin-bottom: 60px;
+      margin-top: 5px;
+    }
+
+
+
+  }
+}
+
 .button-save-container-display-maestros {
   display: flex;
   justify-content: end;
@@ -421,8 +447,10 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
 @media (max-width: 768px) {
   .colorcontetnmin {
-    width: 100%; /* Element takes full width of its container */
-    height: auto; /* Height is adjusted automatically */
+    width: 100%;
+    /* Element takes full width of its container */
+    height: auto;
+    /* Height is adjusted automatically */
     /* Remove !important if possible to avoid conflicts */
   }
 }
@@ -442,17 +470,22 @@ div[id="single-spa-application:@sapiencia/funds"] {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  flex-wrap: wrap; /* Allows items to wrap to the next line if they don't fit */
-  margin-right: -10px; /* Adjusts for the padding in the child elements */
-  margin-bottom: -10px; /* Adjusts for the padding in the child elements */
+  flex-wrap: wrap;
+  /* Allows items to wrap to the next line if they don't fit */
+  margin-right: -10px;
+  /* Adjusts for the padding in the child elements */
+  margin-bottom: -10px;
+  /* Adjusts for the padding in the child elements */
 }
 
 /* Base styles for .content-tblt */
 .content-tblt {
-  flex: 0 1 201px; /* Flex grow is 0, flex shrink is 1, base width is 201px */
+  flex: 0 1 201px;
+  /* Flex grow is 0, flex shrink is 1, base width is 201px */
   height: 104px;
   //margin-right: 10px; /* Adds space between items */
-  margin-bottom: 10px; /* Adds space below items */
+  margin-bottom: 10px;
+  /* Adds space below items */
   background: #f8f9fa;
   color: #000;
   text-align: center;
@@ -462,30 +495,39 @@ div[id="single-spa-application:@sapiencia/funds"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Prevents content from overflowing */
-  word-wrap: break-word; /* Ensures that long words will be broken and wrapped to the next line */
-  padding: 10px; /* Adds some padding inside the blocks */
+  overflow: hidden;
+  /* Prevents content from overflowing */
+  word-wrap: break-word;
+  /* Ensures that long words will be broken and wrapped to the next line */
+  padding: 10px;
+  /* Adds some padding inside the blocks */
 }
 
 /* Base styles for .content-tbltotls */
 .content-tbltotls {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+  flex-wrap: wrap;
+  /* Allows items to wrap on smaller screens */
 }
 
 /* Responsive styles */
 @media (max-width: 768px) {
+
   .content-tbl-totales,
   .content-tbltotls {
     flex-direction: column;
   }
 
   .content-tblt {
-    flex: 0 0 auto; /* Flex grow is 0, flex shrink is 0, flex basis is auto */
-    width: 100%; /* Allows item to expand to full width */
-    height: auto; /* Adjusts height automatically */
-    margin-right: 0; /* Removes right margin for full width */
+    flex: 0 0 auto;
+    /* Flex grow is 0, flex shrink is 0, flex basis is auto */
+    width: 100%;
+    /* Allows item to expand to full width */
+    height: auto;
+    /* Adjusts height automatically */
+    margin-right: 0;
+    /* Removes right margin for full width */
   }
 }
 
@@ -722,8 +764,10 @@ div[id="single-spa-application:@sapiencia/funds"] {
   justify-content: center;
   align-items: center;
   gap: 0.3rem;
-  flex-wrap: nowrap;      /* Asegura que los elementos flex internos no se envuelvan */
-  white-space: nowrap;    /* Evita que el texto se envuelva en una nueva línea */
+  flex-wrap: nowrap;
+  /* Asegura que los elementos flex internos no se envuelvan */
+  white-space: nowrap;
+  /* Evita que el texto se envuelva en una nueva línea */
 }
 
 
@@ -877,11 +921,11 @@ div[id="single-spa-application:@sapiencia/funds"] {
     }
   }
 
-  .text{
+  .text {
     margin-top: 24px;
   }
 
-  
+
 }
 
 
@@ -891,17 +935,54 @@ div[id="single-spa-application:@sapiencia/funds"] {
   flex-direction: row;
   margin-right: 8px;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    //flex-direction: column;
+
+    // margin-top: 150px;
+
+    margin-left: 4px;
+    //margin-bottom: 100px;
+
+    .button-cancel-text {
+      order: 2;
+      width: 100%;
+      margin-left: 9px;
+      margin-top: 24px;
+      margin-bottom: 60px;
+      margin-top: 5px;
+      margin-right: 20px;
+    }
+
+    .button-save {
+      order: 1;
+      width: 100%;
+      background-color: #533893;
+      display: flex;
+      padding: 12px 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      margin-top: 24px;
+    }
+
+  }
+
+
 }
 
 @media (max-width: 768px) {
   .button-save-container-display-remanentes {
-    flex-direction: column;  /* Apilar los botones verticalmente en modo responsive */
+    flex-direction: column;
+    /* Apilar los botones verticalmente en modo responsive */
     margin-left: 4px;
   }
 
   .button-save-container-display-remanentes .button-cancel-text {
     order: 2;
-    width: 100%;            /* Ocupar todo el ancho en modo responsive */
+    width: 100%;
+    /* Ocupar todo el ancho en modo responsive */
     margin-top: 24px;
     margin-bottom: 24px;
     margin-left: 0;
@@ -910,7 +991,8 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
   .button-save-container-display-remanentes .button-save {
     order: 1;
-    width: 100%;            /* Ocupar todo el ancho en modo responsive */
+    width: 100%;
+    /* Ocupar todo el ancho en modo responsive */
     background-color: #533893;
     padding: 12px 16px;
     margin-top: 24px;
@@ -925,6 +1007,6 @@ div[id="single-spa-application:@sapiencia/funds"] {
 .spacing-remanents {
   @media (max-width: 768px) {
     margin-bottom: 24px;
-   
-    }
+
+  }
 }

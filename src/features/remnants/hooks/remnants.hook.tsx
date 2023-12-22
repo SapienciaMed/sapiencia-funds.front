@@ -5,7 +5,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { ITableAction, ITableElement } from "../../../common/interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import EditItemsPage from "../pages/editItems.page";
-import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import { formatNumberToTwoDecimals, formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 import * as XLSX from "xlsx"
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
@@ -31,7 +31,8 @@ export default function useRemnants() {
     const [showDownload, setShowDownload] = useState(false);
 
     const tableComponentRef = useRef(null);
-    const { setMessage } = useContext(AppContext);
+    const { setMessage, validateActionAccess } = useContext(AppContext);
+
 
     const resolver = useYupValidationResolver(remnantsFilter);
 
@@ -122,6 +123,9 @@ export default function useRemnants() {
         {
             fieldName: "quotas",
             header: "Cupos",
+            renderCell: (row) => {
+                return <>{formatNumberToTwoDecimals(row.quotas)}</>;
+            }
         },
         {
             fieldName: "quotaResource",
@@ -156,6 +160,7 @@ export default function useRemnants() {
                     },
                 });
             },
+            hide: !validateActionAccess("FONDOS_REMANENTE_EDITAR"),
         },
        /*  {
             icon: "Delete",
@@ -212,14 +217,13 @@ export default function useRemnants() {
     
         // Validar si res.data.array contiene datos
         if (res.data && res.data.array && res.data.array.length > 0) {
-            console.log(res.data.array);
             setShowDownload(true);  // Mostrar la opción de descarga solo si hay datos
         } else {
             setShowDownload(false); // Ocultar la opción de descarga si no hay datos
         }
     });
 
-    console.log(showDownload)
+ 
     
 
     //Eliminar    

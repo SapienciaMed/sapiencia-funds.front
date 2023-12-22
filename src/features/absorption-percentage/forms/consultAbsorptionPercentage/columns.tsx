@@ -17,23 +17,23 @@ export const tableColumns: ITableElement<IPeriodsAbsorption>[] = [
   },
   {
     fieldName: "sceneryPercentage1",
-    header: "% 1",
+    header: "%1",
     renderCell: (row) => {
-      return <>{`${row.sceneryPercentage1} %`}</>;
+      return <>{`${parseInt(row.sceneryPercentage1)}%`}</>;
     },
   },
   {
     fieldName: "sceneryPercentage2",
-    header: "% 2",
+    header: "%2",
     renderCell: (row) => {
-      return <>{`${row.sceneryPercentage2} %`}</>;
+      return <>{`${parseInt(row.sceneryPercentage2)}%`}</>;
     },
   },
   {
     fieldName: "sceneryPercentage3",
-    header: "% 3",
+    header: "%3",
     renderCell: (row) => {
-      return <>{`${row.sceneryPercentage3} %`}</>;
+      return <>{`${parseInt(row.sceneryPercentage3)}%`}</>;
     },
   },
   {
