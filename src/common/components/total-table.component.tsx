@@ -97,7 +97,7 @@ const TotalTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         template={paginatorHeader}
         rows={perPage}
         onPageChange={(i) => setPerPage(i.rows)}
-        totalRecords={props.data.length} // Cambia 'meta' por 'pagingInfo'
+        totalRecords={props?.data?.length} // Cambia 'meta' por 'pagingInfo'
         leftContent={
           <p className="header-information text-black biggest">
             {secondaryTitle ?? "Totales"}

@@ -7,7 +7,6 @@ interface IRequiremetOnlyView{
     detailData: IRequirementsForReglament[];
 }
 const RequirementOnlyView = ({ detailData }: IRequiremetOnlyView) => {
-
     const tableComponentRef = useRef(null);
 
     const tableColumns: ITableElement<any>[] = [
@@ -19,17 +18,17 @@ const RequirementOnlyView = ({ detailData }: IRequiremetOnlyView) => {
             }
         },
         {
-            fieldName: "percent",
-            header: "Porcentaje",
+            fieldName: "mandatoryFor",
+            header: "Obligatorio para",
             renderCell: (row) => {
-                return <>{row.percent || '0'}%</>;
+                return <>{row?.mandatoryFor || ''}</>;
             }
         },
         {
             fieldName: "description",
             header: "Descripcion",
             renderCell: (row) => {
-                return <>{row.description}</>;
+                return <>{row?.description}</>;
             }
         }
     ]

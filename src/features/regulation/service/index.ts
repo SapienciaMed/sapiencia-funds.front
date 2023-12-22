@@ -52,7 +52,7 @@ export function useRegulationApi() {
   async function getPrograms(): Promise<
     ApiResponse<{ value: string; id: number }[]>
   > {
-    return await get(`${serviceUrl}/programs`);
+    return await get(`/api/v1/reglament/programs`);
   }
 
   async function getPeriodsFromSapiencia(): Promise<

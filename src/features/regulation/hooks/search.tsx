@@ -15,6 +15,8 @@ import {
 } from "../../../common/interfaces/regulation";
 import { useRegulationApi } from "../service";
 import Tooltip from "../../../common/components/Form/tooltip";
+import { EResponseCodes } from "../../../common/constants/api.enum";
+import DetailReglament from '../pages/detailt';
 
 export default function useSearchRegulation(auth, authDetail, authEdit) {
   // Context
@@ -24,10 +26,9 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const [listPrograms, setListPrograms] = useState<
     { name: string; value: string }[]
   >([]);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [detailData, setDetailData] = useState<IReglamentConsolidation>();
+  const [arrayPeriod, setArrayPeriod] = useState<{name: string; value: string; id: number, nameComplementary?: string}[]>([])
 
-  const { getPrograms } = useRegulationApi();
+  const { getPrograms, getPeriodsFromSapiencia } = useRegulationApi();
   //react-router-dom
   const navigate = useNavigate();
 
@@ -88,8 +89,28 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       actions.push({
         icon: "Detail",
         onClick: (row) => {
-          setDetailData(row);
-          setShowDetailModal(true);
+          setMessage({
+            title: "Detalle Reglamento!",
+            description: <DetailReglament
+                detailData={row}
+                errors={formState.errors}
+                control={control}
+                setValue={setValue}
+                getValues={getValues}
+                listPrograms={listPrograms}
+              />,
+            show: true,
+            onClose: () => {
+              setMessage({});
+            },
+           
+            OkTitle: 'Cerrar',
+            onOk: () => {
+              setMessage({});
+            },
+            size: 'large',
+            background: true,
+          });
         },
       });
     }
@@ -109,6 +130,20 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
         setListPrograms(buildData);
       }
     });
+
+    getPeriodsFromSapiencia().then(resp => {
+      if (resp.operation.code === EResponseCodes.OK) {
+        const data = resp.data.map((item) => {
+          return {
+            name: item.nameComplementary,
+            value: item.name,
+            id: item.id,
+            nameComplementary: item.nameComplementary
+          };
+        });
+        setArrayPeriod(data);
+      }
+    })
   }, []);
 
   const tableColumns: ITableElement<IReglamentConsolidation>[] = [
@@ -138,6 +173,20 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       header: <Tooltip text={"¿Aplica pago teórico?"} />,
       renderCell: (row) => {
         return <>{row.applyTheoreticalSemiannualPercent ? "SI" : "NO"}</>;
+      },
+    },
+    {
+      fieldName: "applyAcademicPerformancePercent",
+      header: <Tooltip text={"¿Aplica % RA?"} />,
+      renderCell: (row) => {
+        return <>{row.applyAcademicPerformancePercent ? "SI" : "NO"}</>;
+      },
+    },
+    {
+      fieldName: "requirementsPercent",
+      header: <Tooltip text={"¿Aplica % Requisitos?"} />,
+      renderCell: (row) => {
+        return <>{row.requirementsPercent ? "SI" : "NO"}</>;
       },
     },
     {
@@ -220,39 +269,21 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const newElement = () => navigate("form");
 
   const onSubmit = handleSubmit(async (data: IRegulationSearch) => {
-    // const getProgram: any = listPrograms.find(
-    //   (item) => item.name === data.programId || item.value === data.programId
-    // );
-    // const getListItem: any = periods.find(
-    //   (item) =>
-    //     item.name === data.initialPeriod || item.value === data.initialPeriod
-    // ); // esto viene de un endpoint
+    const buildData = {
+      programId: parseInt(data.programId) || null,
+      initialPeriod: data?.initialPeriod ?? null,
+      endPeriod: data?.endPeriod
+    };
+    setshowTable(true);
 
-    // const endPeriod =
-    //   (data?.endPeriod &&
-    //     periods.find(
-    //       (item) =>
-    //         item.name === data.endPeriod || item.value === data.endPeriod
-    //     )?.value) ||
-    //   null;
-
-    // const buildData = {
-    //   programId: parseInt(getProgram?.value) ?? null,
-    //   initialPeriod: getListItem?.value ?? null, // TODO: Ajustar
-    //   endPeriod: endPeriod, // TODO: Ajustar
-    // };
-
-    // setshowTable(true);
-
-    // if (tableComponentRef.current) {
-    //   tableComponentRef.current.loadData(buildData);
-    // }
+    if (tableComponentRef.current) {
+      tableComponentRef.current.loadData(buildData);
+    }
   });
 
   return {
     register,
     control,
-    formState,
     onSubmit,
     showTable,
     tableComponentRef,
@@ -262,10 +293,6 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     reset,
     listPrograms,
     tableColumns,
-    showDetailModal,
-    setShowDetailModal,
-    detailData,
-    setValue,
-    getValues,
+    arrayPeriod
   };
 }
