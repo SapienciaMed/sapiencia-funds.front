@@ -117,7 +117,9 @@ export const useEditAbsorptionPercentageModal = (
   const handleChange = ({ target }) => {
     const { name, value } = target;
     // suponiendo que viene formateado
-    const rawValue = parseInt(value.replace("%", "")) ?? 0;
+    let rawValue = parseInt(value.replace("%", ""));
+    if (isNaN(rawValue)) rawValue = 0;
+
     // if(
     setValue(name, `${rawValue}%`);
     setFormWatch({
@@ -131,7 +133,6 @@ export const useEditAbsorptionPercentageModal = (
     let sceneryValue1 = 0;
     let sceneryValue2 = 0;
     let sceneryValue3 = 0;
-    console.log(formWatch, resourceRaw);
     if (!isNaN(formWatch.sceneryPercentage1)) {
       sceneryValue1 = (resourceRaw * formWatch.sceneryPercentage1) / 100;
     }
@@ -169,6 +170,7 @@ export const useEditAbsorptionPercentageModal = (
         sceneryPercentage2: row?.sceneryPercentage2,
         sceneryPercentage3: row?.sceneryPercentage3,
       });
+      setValue("resource", formaterNumberToCurrency(communeFundId));
     }
   }, [communeFundId]);
 
