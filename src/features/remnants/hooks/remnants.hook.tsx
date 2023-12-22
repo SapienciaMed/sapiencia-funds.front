@@ -46,7 +46,7 @@ export default function useRemnants() {
         reset,
         watch,
         formState: { errors },
-    } = useForm<IRemnantsFilter>({resolver});
+    } = useForm<IRemnantsFilter>({});
 
 
 
@@ -217,14 +217,13 @@ export default function useRemnants() {
     
         // Validar si res.data.array contiene datos
         if (res.data && res.data.array && res.data.array.length > 0) {
-            console.log(res.data.array);
             setShowDownload(true);  // Mostrar la opción de descarga solo si hay datos
         } else {
             setShowDownload(false); // Ocultar la opción de descarga si no hay datos
         }
     });
 
-    console.log(showDownload)
+ 
     
 
     //Eliminar    
