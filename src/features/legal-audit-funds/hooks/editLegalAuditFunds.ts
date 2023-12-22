@@ -3,10 +3,12 @@ import { useForm } from "react-hook-form";
 import { AppContext } from "../../../common/contexts/app.context";
 import useCrudService from "../../../common/hooks/crud-service.hook";
 import { urlApiFunds } from "../../../common/utils/base-url";
-import { createPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAbsorption.shema";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { useGetcommuneFundIdHook } from "../../absorption-percentage/hooks/getcommuneFundIdHook";
-import { ILegalAuditFunds } from "../../../common/interfaces/LegalAuditFunds";
+import {
+  ICallLegalResfilters,
+  ILegalAuditFunds,
+} from "../../../common/interfaces/LegalAuditFunds";
 import { editLegalAuditSchema } from "../../../common/schemas/legal-audit-schema";
 
 export const useEditLegalAuditFundsModal = (
@@ -31,17 +33,23 @@ export const useEditLegalAuditFundsModal = (
 
   // const [communeFundId, resource] = watch(["communeFundId", "resource"]);
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
-  const [formWatch, setFormWatch] = useState<{
-    resource: number;
-    order: number;
-  }>({
-    resource: 0,
-    order: 0,
+  const [formWatch, setFormWatch] = useState<ILegalAuditFunds>({
+    resource: "",
+    order: "",
+    fiduciaryId: "",
   });
+
+  const handleChange = ({ target }) => {
+    const { name, value } = target;
+    setFormWatch({
+      ...formWatch,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    console.log(formWatch);
+  }, [formWatch]);
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
@@ -63,18 +71,16 @@ export const useEditLegalAuditFundsModal = (
     }
   });
 
-  const EditItem = async (data: ILegalAuditFunds) => {
-    const resourceFound = searchCommuneFundByValue(data.communeFundId);
+  const EditItem = async (data: ICallLegalResfilters) => {
     const fullData = {
       ...data,
       ...formWatch,
       announcementId,
-      communeFundId: Number(resourceFound.name),
     };
     try {
       const endpoint = `/api/v1/legalized/update-commune-budget`;
       const resp = await put(endpoint, fullData);
-      await reloadTable({ announcementId });
+      // await reloadTable({ announcementId });
 
       if (resp.operation.code === "FAIL") {
         return setMessage({
@@ -104,26 +110,18 @@ export const useEditLegalAuditFundsModal = (
     setMessage((prev) => ({ ...prev, show: false }));
   };
 
-  const handleChange = ({ target }) => {
-    const { name, value } = target;
-    setFormWatch({
-      ...formWatch,
-      [name]: value,
-    });
-  };
-
   useEffect(() => {
     setValue("communeFundId", row?.communeFundId);
     setValue("resource", row?.resource);
-    setValue("fiducia", row?.fiduciaryId);
+    setValue("fiduciaryId", row?.fiduciaryId);
     setValue("update", new Date());
     setValue("order", row?.order);
-  }, [setValue, row]);
+  }, [row]);
 
   useEffect(() => {
-    const { resource } = formWatch;
-    if (!resource) {
-      return setSubmitDisabled(true);
+    const { resource, order } = formWatch;
+    if (!resource || !order) {
+      return setSubmitDisabled(false);
     }
     setSubmitDisabled(false);
   }, [formWatch]);

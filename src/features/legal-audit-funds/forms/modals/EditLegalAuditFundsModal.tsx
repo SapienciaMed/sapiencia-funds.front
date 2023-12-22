@@ -59,7 +59,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
             />
 
             <InputComponent
-              idInput="fiducia"
+              idInput="fiduciaryId"
               label={
                 <>
                   Fiducia <span>*</span>
