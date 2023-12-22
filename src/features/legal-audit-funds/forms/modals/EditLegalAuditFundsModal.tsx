@@ -88,7 +88,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               disabled
             />
             <InputComponent
-              idInput="orden"
+              idInput="order"
               label={
                 <>
                   Orden <span>*</span>
@@ -97,6 +97,7 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               typeInput="text"
               register={register}
               errors={errors}
+              onChange={handleChange}
               className="input-basic medium"
               classNameLabel="text-black big bold"
             />

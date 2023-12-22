@@ -31,8 +31,16 @@ export const useEditLegalAuditFundsModal = (
 
   // const [communeFundId, resource] = watch(["communeFundId", "resource"]);
 
-  const [formWatch, setFormWatch] = useState<ILegalAuditFunds>({
-    resource: "",
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
+  const [formWatch, setFormWatch] = useState<{
+    resource: number;
+    order: number;
+  }>({
+    resource: 0,
+    order: 0,
   });
 
   const onSubmit = handleSubmit(async (formData) => {
@@ -59,6 +67,7 @@ export const useEditLegalAuditFundsModal = (
     const resourceFound = searchCommuneFundByValue(data.communeFundId);
     const fullData = {
       ...data,
+      ...formWatch,
       announcementId,
       communeFundId: Number(resourceFound.name),
     };
@@ -108,7 +117,7 @@ export const useEditLegalAuditFundsModal = (
     setValue("resource", row?.resource);
     setValue("fiducia", row?.fiduciaryId);
     setValue("update", new Date());
-    setValue("orden", row?.order);
+    setValue("order", row?.order);
   }, [setValue, row]);
 
   useEffect(() => {
