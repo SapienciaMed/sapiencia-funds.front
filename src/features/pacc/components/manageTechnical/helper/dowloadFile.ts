@@ -3,10 +3,10 @@ import { IAuthorization } from "../../../../../common/interfaces";
 import { IFiles } from "../../../../../common/interfaces/storage.interfaces";
 import { IMessage } from "../../../../../common/interfaces/global.interface";
 
-export const downloadFile = ( data: IFiles[], authorization: IAuthorization, setMessage: (value: SetStateAction<IMessage>) => void ) => {
+export const downloadFile = ( data: IFiles, authorization: IAuthorization, setMessage: (value: SetStateAction<IMessage>) => void, url: string ) => {
   const authToken = localStorage.getItem("token");
   let res 
-  fetch(`${process.env.urlApiFunds}/api/v1/uploadInformation/files/get-file`, {
+  fetch(`${process.env.urlApiFunds}/api/v1${url}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -14,19 +14,19 @@ export const downloadFile = ( data: IFiles[], authorization: IAuthorization, set
       Accept: "application/json",
       permissions: authorization.encryptedAccess,
     },
-    body: JSON.stringify({ fileName: data[0].path }),
+    body: JSON.stringify({ fileName: data.path }),
   }).then(async response => {
     const blob = await response.blob();
     const blobWithType = new Blob([blob], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blobWithType);
     const a = document.createElement('a');
     a.href = url;
-    a.download = data[0].name;
+    a.download = data.name;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    const fileName = data[0].name;
+    const fileName = data.name;
     const fileUrl = new URL(url);
     fileUrl.pathname = `${fileName}.pdf`;
     window.open(fileUrl.toString(), '_blank');

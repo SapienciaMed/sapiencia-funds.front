@@ -6,7 +6,7 @@ import { AppContext } from "../../../../common/contexts/app.context";
 import { ITableAction } from "../../../../common/interfaces";
 import ControlreporteditLegalization from "../../pages/conditionalPagesEdits/ControlreporteditLegalization";
 import * as XLSX from "xlsx";
-export const LegalizationHook = (data) => {
+export const LegalizationHook = (data, reload) => {
   const tableComponentRef = useRef(null);
   const { setMessage } = useContext(AppContext);
   const { post } = useCrudService(urlApiFunds);
@@ -101,7 +101,7 @@ export const LegalizationHook = (data) => {
           totalData.totalPorParticipacion >= 90 &&
           totalData.totalPorParticipacion <= 98
         ) {
-          setColor("text-yellow");
+          setColor("text-orange");
         } else if (
           totalData.totalPorParticipacion > 98 &&
           totalData.totalPorParticipacion <= 100
@@ -116,6 +116,8 @@ export const LegalizationHook = (data) => {
         setTotalDisponible(totalData.totalDisponible);
         setTotalPorParticipacion(totalData.totalPorParticipacion.toFixed(2));
         setTotalNoLegalizados(totalData.totalNoLegalizados);
+      } else {
+        setTotalView(false);
       }
     } catch (error) {}
   };
@@ -189,7 +191,7 @@ export const LegalizationHook = (data) => {
     setTimeout(() => {
       getInfoLegalization(data);
     }, 1000);
-  }, []);
+  }, [reload]);
 
   return {
     tableComponentRef,

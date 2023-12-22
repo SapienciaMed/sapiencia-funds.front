@@ -9,7 +9,7 @@ import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import Svgs from "../../../../public/images/icons/svgs";
 
-const Stratum456Tab = (data) => {
+const Stratum456Tab = ({ data, reload }) => {
   const {
     setPaginateData,
     tableComponentRef,
@@ -24,7 +24,7 @@ const Stratum456Tab = (data) => {
     TotalView,
     downloadCollection,
     color,
-  } = stratum456Hook(data.data);
+  } = stratum456Hook(data, reload);
   console.log(totalPorParticipacion);
   const columnsStratum456: ITableElement<any>[] = [
     {
@@ -35,16 +35,16 @@ const Stratum456Tab = (data) => {
         const foundObj = comunaList?.find(
           (obj) => obj.value == row.resourcePrioritization.communeId
         );
-    
+
         // Verifica si el objeto fue encontrado antes de acceder a su propiedad 'name'
         if (foundObj) {
           return <>{foundObj.name}</>;
         }
-    
+
         // Puedes retornar algo por defecto si el objeto no se encuentra
         return <>No encontrado</>;
       },
-    },    
+    },
     {
       fieldName: "resourceAvailable",
       header: "Recurso Disponible",
@@ -57,10 +57,7 @@ const Stratum456Tab = (data) => {
       fieldName: "granted",
       header: "Otorgado",
       renderCell: (row) => {
-        const numeroConPuntos = formaterNumberToCurrency(row.granted).replace(
-          "$",
-          ""
-        );
+        const numeroConPuntos = formaterNumberToCurrency(row.granted);
         return <>{numeroConPuntos}</>;
       },
     },
@@ -78,10 +75,8 @@ const Stratum456Tab = (data) => {
       fieldName: "porcentParticipacion",
       header: "%Participacion",
       renderCell: (row) => {
-        const porcent = Math.round(
-          (Number(row.granted) / Number(row.resourceAvailable)) * 100
-        );
-
+        const porcent =
+          (Number(row.granted) / Number(row.resourceAvailable)) * 100;
         if (porcent == Infinity || porcent == undefined) {
           return <>0%</>;
         } else {
@@ -89,18 +84,18 @@ const Stratum456Tab = (data) => {
             return (
               <>
                 {" "}
-                <div style={{ color: "yellow" }}>{porcent}%</div>
+                <div style={{ color: "orange" }}>{porcent.toFixed(2)}%</div>
               </>
             );
           } else if (porcent >= 98 && porcent <= 100) {
             return (
               <>
                 {" "}
-                <div style={{ color: "red" }}> {porcent}%</div>
+                <div style={{ color: "red" }}> {porcent.toFixed(2)}%</div>
               </>
             );
           } else {
-            return <>{porcent}%</>;
+            return <>{porcent.toFixed(2)}%</>;
           }
         }
       },
@@ -149,12 +144,7 @@ const Stratum456Tab = (data) => {
                 //errors={errors}
                 placeholder={""}
                 disabled
-                value={String(
-                  formaterNumberToCurrency(totalRecursoDisponible).replace(
-                    "$",
-                    ""
-                  )
-                )}
+                value={String(formaterNumberToCurrency(totalRecursoDisponible))}
               />
               <InputComponent
                 idInput={"tQuantity1"}

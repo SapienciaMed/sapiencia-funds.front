@@ -9,7 +9,7 @@ import { ApiResponse } from "../../../../common/utils/api-response";
 import * as XLSX from "xlsx";
 import { IGenericList } from "../../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../../common/constants/api.enum";
-export const stratum456Hook = (data) => {
+export const stratum456Hook = (data, reload) => {
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
   const { post } = useCrudService(urlApiFunds);
   const [totalOtorgado, setTotalOtorgado] = useState(null);
@@ -54,12 +54,6 @@ export const stratum456Hook = (data) => {
       },
     },
   ];
-
-  useEffect(() => {
-    tableComponentRef.current?.loadData({
-      ...data,
-    });
-  }, []);
 
   useEffect(() => {
     const aux = () => {
@@ -122,7 +116,7 @@ export const stratum456Hook = (data) => {
           dataTotal.porParticipacion >= 90 &&
           dataTotal.porParticipacion <= 98
         ) {
-          setColor("text-yellow");
+          setColor("text-orange");
         } else if (
           dataTotal.porParticipacion > 98 &&
           dataTotal.porParticipacion <= 100
@@ -134,6 +128,8 @@ export const stratum456Hook = (data) => {
         setTotalDisponible(dataTotal.Available);
         setTotalNoLegalizados(dataTotal.legalized);
         setTotalPorParticipacion(dataTotal.porParticipacion.toFixed(2));
+      } else {
+        setTotalView(false);
       }
     } catch (error) {}
   };
@@ -168,10 +164,13 @@ export const stratum456Hook = (data) => {
   };
 
   useEffect(() => {
+    tableComponentRef.current?.loadData({
+      ...data,
+    });
     setTimeout(() => {
       getInfoStatum456(data);
     }, 1000);
-  }, []);
+  }, [reload]);
   return {
     setPaginateData,
     tableComponentRef,

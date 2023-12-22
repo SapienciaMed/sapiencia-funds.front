@@ -109,7 +109,7 @@ export const consolidateHook = (data, reload) => {
           totalData.totalPorParticipacion >= 90 &&
           totalData.totalPorParticipacion <= 98
         ) {
-          setColor("text-yellow");
+          setColor("text-orange");
         } else if (
           totalData.totalPorParticipacion > 98 &&
           totalData.totalPorParticipacion <= 100
@@ -126,6 +126,8 @@ export const consolidateHook = (data, reload) => {
         setTotalNoLegalizados(totalData.totalNoLegalizados);
         setTotalRendimientoFinancieros(totalData.totalRendimientoFinancieros);
         setTableColumns(columnsConsolidados);
+      } else {
+        setTotalView(false);
       }
     } catch (err) {
       console.error(err);

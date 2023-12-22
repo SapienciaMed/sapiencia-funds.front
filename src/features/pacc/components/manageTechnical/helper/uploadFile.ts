@@ -4,8 +4,9 @@ import { EResponseCodes } from "../../../../../common/constants/api.enum";
 import { Dispatch, SetStateAction } from "react";
 import { IMessage } from "../../../../../common/interfaces/global.interface";
 import { IAuthorization } from "../../../../../common/interfaces";
+import { typePrefixeTabs } from "../../../helpers/TypePrefixeTab";
 
-export const uploadFiles = (id: string, filesUploadData: File[], setMessage: Dispatch<SetStateAction<IMessage>>, loadTableData: () => void, authorization: IAuthorization ) => {
+export const uploadFiles = (id: string, filesUploadData: File[], setMessage: Dispatch<SetStateAction<IMessage>>, loadTableData: () => void, authorization: IAuthorization, typeState: number ) => {
     return new Promise<void>((resolve, reject) => {
       const form = new FormData();
       const files = filesUploadData;
@@ -15,7 +16,7 @@ export const uploadFiles = (id: string, filesUploadData: File[], setMessage: Dis
       const authToken = localStorage.getItem("token");
       const options = {
         method: 'POST',
-        url: `${process.env.urlApiFunds}/api/v1/consolidation-tray/upload-requirement-file/${id}`,
+        url: `${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(typeState)}/upload-requirement-file/${id}`,
         headers: { 
           'content-type': 'multipart/form-data', 
           Permissions: authorization.encryptedAccess, 

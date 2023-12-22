@@ -10,7 +10,7 @@ import { columnsLegalization } from "../config-columns/columns-legalization";
 import Svgs from "../../../../public/images/icons/svgs";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
-const LegalizacionTab = (data) => {
+const LegalizacionTab = ({ data, reload }) => {
   const {
     tableComponentRef,
     urlGetLegalization,
@@ -26,7 +26,7 @@ const LegalizacionTab = (data) => {
     downloadCollection,
     TotalView,
     color,
-  } = LegalizationHook(data.data);
+  } = LegalizationHook(data, reload);
   return (
     <>
       <div className="container-sections-forms mr-20px">

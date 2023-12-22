@@ -1,16 +1,12 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { renewalSchma } from "../../../common/schemas/renewal-shema";
-import { RiFileExcel2Line } from "react-icons/ri";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useNavigate } from "react-router-dom";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
-import { ICallRenewal, IRenewalDataGrid } from "../../../common/interfaces/funds.interfaces";
+import { ICallRenewal } from "../../../common/interfaces/funds.interfaces";
 import { AppContext } from "../../../common/contexts/app.context";
 import useRenewalReportApi from "./renewal-report-api.hook";
-import { data } from "../../socialization/service/api";
-import { urlApiFunds } from "../../../common/utils/base-url";
 
 import * as XLSX from "xlsx"
 
@@ -22,17 +18,21 @@ export default function useRenewaReportSearch() {
 
 
     //peticiones api
-    const { getAnnouncement, getRenewalReport } = useRenewalReportApi();
+    const { getAnnouncement, getRenewalReport, calculate, getBeca, createReportRenewal } = useRenewalReportApi();
     const tableComponentRef = useRef(null);
     const [showTable, setShowTable] = useState(false);
     const [announcementList, setAnnouncementList] = useState([]);
-    const [enabledTotal, setEnabledTotal] = useState(0);
-    const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
 
     const [enabledBachLeg, setenabledBachLeg] = useState("0");
     const [renewedBachLeg, setrenewedBachLeg] = useState("0");
     const [percentageBachLeg, setPercentageBachLeg] = useState("0.00%");
     const [inputEnabledBachLeg, setInputEnabledBachLeg] = useState("0");
+    const [dataReports, setDataReports] = useState([]);
+    const [totalEnabled, setTotalEnabled] = useState(0);
+    const [totalRenewed, setTotalRenewed] = useState(0);
+    const [totalRenewedBeca, setTotalRenewedBeca] = useState(0);
+    const [porcentageProm, setPorcentageProm] = useState("0.00%");
+    const [porcentageLegal, setPorcentageLegal] = useState("0.00%");
 
 
 
@@ -77,6 +77,9 @@ export default function useRenewaReportSearch() {
     }, []);
 
 
+
+
+
     useEffect(() => {
         // Función para calcular el porcentaje
         const calculatePercentageBachLeg = (renewed: string, enabled: string | number) => {
@@ -114,10 +117,7 @@ export default function useRenewaReportSearch() {
 
 
     // Calcular Total habilitado
-    const totalEnabled = dataGridRenewal.reduce((total, row) => {
-        const enabled = parseFloat(row.enabled);
-        return total + (isNaN(enabled) ? 0 : enabled);
-    }, 0);
+
 
     // Calcular Total renovados
     const totalrenewed = dataGridRenewal.reduce((total, row) => {
@@ -153,48 +153,127 @@ export default function useRenewaReportSearch() {
         setdataGridRenewal(updatedDataGrid);
     };
     // searchRenewal
+    const selectedperiodo = watch('period');
+    const habilitados = watch('enabledBachLeg')
+
+
+
     const searchRenewal = handleSubmit(async (data: ICallRenewal) => {
+        setShowTable(true)
+        loadTableData({
+            period: selectedperiodo,
+        })
+        dataReport({
+            period: selectedperiodo
+        })
 
-        const selectedperiodo = watch('period');
-        data.period = selectedperiodo;
-        data.page = 1;
-        data.perPage = 10;
+        getBecas()
 
-        const responservice: any = await getRenewalReport(data)
-            .then(async (response) => {
-                return response
-            });
-        // Quitar la última fila del array
-        const dataArrayWithoutLastRow = responservice.data.array.slice(0, -1);
-
-        setdataGridRenewal([])
-        dataArrayWithoutLastRow.map((e) => {
-            const list = {
-                fund: e.fund,
-                enabled: e.enabled,
-                renewed: e.renewed,
-                percentage: calculatePercentage(e.renewed, e.enabled),
-            };
-            dataGridRenewal.push(list);
-            setdataGridRenewal(dataGridRenewal)
-        });
-
-        // La última fila Beca mejores bachilleres legalizados 
-        const lastRow = responservice.data.array.slice(-1)[0];
-
-        setenabledBachLeg(lastRow.enabled)
-        setrenewedBachLeg(lastRow.renewed)
-
-        // Calcular Porcentaje para enabledBachLeg
-        const parsedEnabledBachLeg = parseFloat(lastRow.enabled);
-        const parsedRenewedBachLeg = parseFloat(lastRow.renewed);
-        const percentageBachLeg = parsedEnabledBachLeg !== 0
-            ? ((parsedRenewedBachLeg / parsedEnabledBachLeg)).toFixed(3) + "%"
-            : "0.00%";
-
-        setPercentageBachLeg(percentageBachLeg);
 
     });
+
+
+
+    const dataReport = async (data: ICallRenewal) => {
+        try {
+            const response = await calculate(String(selectedperiodo));
+
+            setTotalEnabled(response.data.sumEnabled)
+            setTotalRenewed(response.data.sumRenewed)
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const getBecas = async () => {
+        try {
+            const response = await getBeca(String(selectedperiodo));
+
+            setTotalRenewedBeca(response.data[0].renewed)
+
+            setValue("enabledBachLeg", response.data[0].enabled)
+
+            setPorcentageLegal(response.data[0].enabled > 0 ? (response.data[0].renewed * 100 / response.data[0].enabled).toFixed(2) + "%" : "0.00%")
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        const data = {
+            period: selectedperiodo
+        }
+
+        getRenewalReport(data)
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+                    setDataReports(response.data.array)
+                }
+            })
+    }, [selectedperiodo]);
+
+
+    useEffect(() => {
+        setPorcentageProm(totalEnabled > 0 ? (totalRenewed * 100 / totalEnabled).toFixed(2) + "%" : "0.00%")
+    }, [totalRenewed, totalEnabled])
+
+    useEffect(() => {
+        setPorcentageLegal(habilitados > 0 ? (totalRenewedBeca * 100 / habilitados).toFixed(2) + "%" : "0.00%")
+    }, [totalRenewedBeca, habilitados])
+
+
+    function downloadCollection() {
+        const data = {
+            period: selectedperiodo
+        };
+
+        getRenewalReport(data)
+            .then((response) => {
+                if (response && response?.operation?.code === EResponseCodes.OK) {
+
+                    // Genera el excel con los datos de la respuesta
+                    const excelData = response.data.array.map((row) => ({
+                        "Fondo": row.fund,
+                        "Nro. habilitados": row.enabled ?? "0", // Asegúrate de manejar valores nulos o indefinidos
+                        "Nro. Renovados": row.renewed ?? "0",
+                        "Porcentaje": (row.percentage ?? "0.0") + "%",
+                    }));
+
+                    const book = XLSX.utils.book_new();
+                    const sheet = XLSX.utils.json_to_sheet(excelData);
+                    XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`);
+
+                    // Descarga el archivo
+                    setTimeout(() => {
+                        XLSX.writeFile(book, `Informe Renovación.xlsx`);
+                        setMessage({
+                            title: "Descargar",
+                            description: "Información descargada exitosamente",
+                            OkTitle: "Cerrar",
+                            show: true,
+                            type: EResponseCodes.OK,
+                            background: true,
+                            onOk() {
+                                setMessage({});
+                                //navigate(-1);
+                            },
+                            onClose() {
+                                setMessage({});
+                                //navigate(-1);
+                            },
+                        });
+                    },);
+                }
+            })
+            .catch((error) => {
+                console.error('Error al obtener el reporte de renovación:', error);
+                // Manejo de error
+            });
+    }
+
+
 
     //Consultar
     const onSubmit = handleSubmit(async (data: ICallRenewal) => {
@@ -204,14 +283,20 @@ export default function useRenewaReportSearch() {
 
     /*Functions*/
     const onsubmitCreate = handleSubmit((data: ICallRenewal) => {
+        const datos = {
+            enabled: String(data.enabledBachLeg)
+        };
+
+        const period = Number(selectedperiodo);
+
         setMessage({
             show: true,
             title: "Guardar cambios",
-            description: "Estás segur@ de guardar la información",
+            description: "¿Estás segur@ de guardar la información?",
             OkTitle: "Aceptar",
             cancelTitle: "Cancelar",
             onOk() {
-                confirmRenewalCreation(data)
+                confirmRenewalCreation(period, datos)
             },
             onClose() {
                 reset();
@@ -221,153 +306,95 @@ export default function useRenewaReportSearch() {
         });
     });
 
-    const confirmRenewalCreation = async (data: ICallRenewal) => {
-        const renewalItems = dataGridRenewal.map((e) => ({
-            fund: e.fund,
-            enabled: e.enabled,
-            renewed: e.renewed,
-            percentage: e.percentage,
-        }));
+    const confirmRenewalCreation = async (period: number, data: ICallRenewal) => {
 
-        // Convertir filas en columnas
-        const transformedData = renewalItems.reduce((acc, item) => {
-            Object.keys(item).forEach((key) => {
-                acc[key] = acc[key] || [];
-                acc[key].push(item[key]);
-            });
-            return acc;
-        }, {});
+        console.log(data.enabled)
 
-
-        console.log("++++++++------transformedData", transformedData)
-        handleModalSuccess();
-
-    };
-
-    `   const res = await createActa(renewalItems);
-
-        if (res && res?.operation?.code === EResponseCodes.OK) {
+        if (data.enabled === 'undefined') {
+            // Muestra un mensaje de error o maneja la situación como corresponda
             setMessage({
-                OkTitle: "Guardar",
-                description: "¡Guardado exitosamente!",
-                title: "Guardar",
-                show: true,
-                type: EResponseCodes.OK,
-                background: true,
-                onOk() {
-                    reset();
-                    setMessage({});
-                    navigate("/fondos/acta/consultar");
-                    setDataGridItems([])
-                    setDataGridUsers([])
-                },
-                onClose() {
-                    reset();
-                    setMessage({});
-                },
-            });
-
-        } else {
-            setMessage({
-                type: EResponseCodes.FAIL,
-                title: "Crear Acta",
-                description: "Ocurrió un error en el sistema",
-                show: true,
                 OkTitle: "Aceptar",
-                background: true,
-            });
-
-        }  `
-
-
-    const handleModalError = (
-        msg = `¡Ha ocurrido un error!`,
-        navigateBoolean = true
-    ) => {
-        setMessage({
-            title: "Error",
-            description: msg,
-            show: true,
-            OkTitle: "cerrar",
-            onOk: () => {
-                if (navigateBoolean) {
-                    navigate("../consultar");
-                }
-                setMessage((prev) => {
-                    return { ...prev, show: false };
-                });
-            },
-            onClose: () => {
-                if (navigateBoolean) {
-                    navigate("../consultar");
-                }
-                setMessage({});
-            },
-            background: true,
-        });
-    };
-
-    const handleModalSuccess = () => {
-        setMessage({
-            title: "Cambios guardados",
-            description: `¡Cambios guardados exitosamente!`,
-            show: true,
-            OkTitle: "Aceptar",
-            onOk: () => {
-                navigate("../consultar");
-                setMessage((prev) => {
-                    return { ...prev, show: false };
-                });
-            },
-            onClose: () => {
-                navigate("../consultar");
-                setMessage({});
-            },
-            background: true,
-        });
-    };
-
-    function downloadCollection() {
-
-        let data = dataGridRenewal.map((d) => {
-            return {
-                "Fondo": d.fund,
-                "Habilitados": d.enabled,
-                "Renovados": d.renewed,
-                "Porcentaje": d.percentage,
-            }
-        
-        })
-
-        const book = XLSX.utils.book_new()
-        const sheet = XLSX.utils.json_to_sheet(data)
-
-        XLSX.utils.book_append_sheet(book, sheet, `Informe Renovación`)
-
-        setTimeout(() => {
-            XLSX.writeFile(book, `Informe Renovación.xlsx`)
-            setMessage({
-                title: "Descargar",
-                description: "Información descargada exitosamente ",
-                OkTitle: "Cerrar",
+                description: "¡Guardado exitosamente!",
+                title: "Guardar cambios",
                 show: true,
                 type: EResponseCodes.OK,
                 background: true,
                 onOk() {
+                    reset();
                     setMessage({});
-                    //navigate(-1);
+                    tableComponentRef.current.emptyData();
+                    setShowTable(false)
                 },
                 onClose() {
+                    reset();
                     setMessage({});
-                    //navigate(-1);
                 },
             });
-        },)
+        } else {
+            const res = await createReportRenewal(period, data);
+            if (res && res?.operation?.code === EResponseCodes.OK) {
+                setMessage({
+                    OkTitle: "Aceptar",
+                    description: "¡Guardado exitosamente!",
+                    title: "Guardar cambios",
+                    show: true,
+                    type: EResponseCodes.OK,
+                    background: true,
+                    onOk() {
+                        reset();
+                        setMessage({});
+                        tableComponentRef.current.emptyData();
+                        setShowTable(false)
+                    },
+                    onClose() {
+                        reset();
+                        setMessage({});
+                    },
+                });
 
+            } else {
+                setMessage({
+                    type: EResponseCodes.FAIL,
+                    title: "Crear informe renovación",
+                    description: "Ocurrió un error en el sistema",
+                    show: true,
+                    OkTitle: "Aceptar",
+                    background: true,
+                });
+
+            }
+
+        }
+
+
+    };
+
+
+    function loadTableData(searchCriteria?: object): void {
+
+        if (tableComponentRef.current) {
+            tableComponentRef.current.loadData(searchCriteria);
+        }
+
+        dataReport({
+            period: selectedperiodo
+        })
     }
 
 
+    function restoreData(): void {
+
+        reset();
+        tableComponentRef.current.emptyData();
+        setShowTable(false)
+    }
+
+
+
+
     return {
+        selectedperiodo,
+        loadTableData,
         control,
         errors,
         register,
@@ -394,5 +421,10 @@ export default function useRenewaReportSearch() {
         setInputEnabledBachLeg,
         inputEnabledBachLeg,
         onsubmitCreate,
+        totalRenewed,
+        porcentageProm,
+        porcentageLegal,
+        totalRenewedBeca,
+        restoreData
     }
 }

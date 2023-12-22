@@ -1,17 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { ITableAction, ITableElement } from "../../../../../common/interfaces";
-import { useParams } from "react-router-dom";
 import { PqrsdfResultSimple } from "../interface/manage-technical";
 import { Tooltip } from "primereact/tooltip";
+import { AppContext } from "../../../../../common/contexts/app.context";
+import { pdfShowFile } from "../../../../../common/utils/file-functions";
 
-export default function useSupportsPQRSDF() {
+export default function useSupportsPQRSDF({ document }) {
     
     const tableComponentRef = useRef(null);
-    const [ showSpinner,   setShowSpinner ] = useState(false)
+    const { setMessage } = useContext(AppContext);
 
     useEffect(() => {
-        setShowSpinner(true)
-        loadTableData()
+        loadTableData({ identification: document })
     },[])
 
 
@@ -83,11 +83,24 @@ export default function useSupportsPQRSDF() {
             }
         }
     ]
-    const tableActions: ITableAction<any>[] = [
+    const tableActions: ITableAction<PqrsdfResultSimple>[] = [
         {
             icon: "Paperclip",
             onClick: (row) => {
-
+                if (row.fullPath64 == '') {
+                    setMessage({
+                       show: true,
+                       title: "Ver adjunto",
+                       description: 'No hay adjunto para visualizar',
+                       background: true,
+                       OkTitle: 'Aceptar',
+                       onOk() {
+                           setMessage({});
+                       },
+                   });
+               }else {
+                pdfShowFile(row.fullPath64, row.nameFile) 
+               }
             },
         },
        
@@ -97,7 +110,6 @@ export default function useSupportsPQRSDF() {
     function loadTableData(searchCriteria?: object): void {
         if (tableComponentRef.current) {
             tableComponentRef.current.loadData(searchCriteria);
-            setShowSpinner(false)
         }
     }
 
@@ -105,6 +117,5 @@ export default function useSupportsPQRSDF() {
         tableComponentRef,
         tableColumns,
         tableActions,
-        showSpinner
     }
 }

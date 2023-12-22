@@ -65,8 +65,12 @@ export const useConsultControlReport = () => {
     setTableView(false);
   };
 
+<<<<<<< HEAD
   const [reload, setReload] = useState(new Date())
 
+=======
+  const [reload, setReload] = useState(new Date());
+>>>>>>> a3a8646a421dba068f878f40faf4b2329e79f4a8
   const onSubmit = handleSubmit((filters: IControlReportFilter) => {
     tableComponentRef.current?.emptyData();
     setTableView(true);
@@ -74,35 +78,38 @@ export const useConsultControlReport = () => {
     const { noProject, validity } = formWatch;
     filters.noProject = noProject;
     filters.validity = validity;
-    tableComponentRef.current?.loadData({
-      ...filters,
-    });
+
+    setReload(new Date());
     switch (filters.idControlSelect) {
       case 1: {
+<<<<<<< HEAD
         setReload(new Date())
           setconditionalPage(
             <ConsolidateTab data={filters} reload={reload} />
           );
+=======
+        setconditionalPage(<ConsolidateTab data={filters} reload={reload} />);
+>>>>>>> a3a8646a421dba068f878f40faf4b2329e79f4a8
         break;
       }
       case 2: {
-        setconditionalPage(<Estratum123Tab filters={filters} />);
+        setconditionalPage(<Estratum123Tab data={filters} reload={reload} />);
         break;
       }
       case 3: {
-        setconditionalPage(<Stratum456Tab data={filters} />);
+        setconditionalPage(<Stratum456Tab data={filters} reload={reload} />);
         break;
       }
       case 4: {
-        setconditionalPage(<LegalizacionTab data={filters} />);
+        setconditionalPage(<LegalizacionTab data={filters} reload={reload} />);
         break;
       }
       case 5: {
-        setconditionalPage(<PagareTab data={filters} />);
+        setconditionalPage(<PagareTab data={filters} reload={reload} />);
         break;
       }
       case 6: {
-        setconditionalPage(<ControlTab data={filters} />);
+        setconditionalPage(<ControlTab data={filters} reload={reload} />);
         break;
       }
       default: {
@@ -111,34 +118,34 @@ export const useConsultControlReport = () => {
     }
   });
 
-  // useEffect(() => {
-  //   const { noProject, validity } = formWatch;
+  useEffect(() => {
+    const { noProject, validity } = formWatch;
 
-  //   if (idControlSelect == 1 || idControlSelect == 2 || idControlSelect == 3) {
-  //     if (noProject && validity && idConvocatoria) {
-  //       return setSubmitDisabled(false);
-  //     } else {
-  //       return setSubmitDisabled(true);
-  //     }
-  //   }
+    if (idControlSelect == 1 || idControlSelect == 2 || idControlSelect == 3) {
+      if (noProject && validity && idConvocatoria) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
 
-  //   if (idControlSelect == 4 || idControlSelect == 5) {
-  //     if (idConvocatoria) {
-  //       return setSubmitDisabled(false);
-  //     } else {
-  //       return setSubmitDisabled(true);
-  //     }
-  //   }
+    if (idControlSelect == 4 || idControlSelect == 5) {
+      if (idConvocatoria) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
 
-  //   if (idControlSelect == 6) {
-  //     if (idConvocatoria && id_comuna) {
-  //       return setSubmitDisabled(false);
-  //     } else {
-  //       return setSubmitDisabled(true);
-  //     }
-  //   }
-  //   setSubmitDisabled(true);
-  // }, [formWatch, idConvocatoria, idControlSelect, id_comuna]);
+    if (idControlSelect == 6) {
+      if (idConvocatoria && id_comuna) {
+        return setSubmitDisabled(false);
+      } else {
+        return setSubmitDisabled(true);
+      }
+    }
+    setSubmitDisabled(true);
+  }, [formWatch, idConvocatoria, idControlSelect, id_comuna]);
 
   useEffect(() => {
     if (idControlSelect == 1 || idControlSelect == 2 || idControlSelect == 3) {

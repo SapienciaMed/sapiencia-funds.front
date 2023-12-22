@@ -11,9 +11,14 @@ import { ITableElement } from "../../../../common/interfaces";
 import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 import { useNavigate } from "react-router-dom";
 
+<<<<<<< HEAD
 const ConsolidateTab = ({  data, reload }) => {
+=======
+const ConsolidateTab = ({ data, reload }) => {
+>>>>>>> a3a8646a421dba068f878f40faf4b2329e79f4a8
   const {
     urlGet,
+    tableComponentRef,
     setPaginateData,
     tableActions,
     totalNoPreseleccionados,
@@ -27,6 +32,7 @@ const ConsolidateTab = ({  data, reload }) => {
     downloadCollection,
     comunaList,
     TotalView,
+<<<<<<< HEAD
     color, 
     tableComponentRef
   } = consolidateHook(data, reload);
@@ -36,6 +42,11 @@ const ConsolidateTab = ({  data, reload }) => {
 
 
   const navigate = useNavigate();
+=======
+    color,
+  } = consolidateHook(data, reload);
+
+>>>>>>> a3a8646a421dba068f878f40faf4b2329e79f4a8
   const columnsConsolidados: ITableElement<any>[] = [
     {
       fieldName: "resourcePrioritization.communeId",
@@ -100,12 +111,10 @@ const ConsolidateTab = ({  data, reload }) => {
       fieldName: "porcentParticipacion",
       header: "%Participacion",
       renderCell: (row) => {
-        const porcent = Math.round(
+        const porcent =
           (Number(row.consolidatedGranted) /
             Number(row.consolidatedResourceAvailable)) *
-            100
-        );
-
+          100;
         if (porcent == Infinity || porcent == undefined || isNaN(porcent)) {
           return <>0%</>;
         } else {
@@ -113,18 +122,18 @@ const ConsolidateTab = ({  data, reload }) => {
             return (
               <>
                 {" "}
-                <div style={{ color: "yellow" }}>{porcent}%</div>
+                <div style={{ color: "orange" }}>{porcent.toFixed(2)}%</div>
               </>
             );
           } else if (porcent >= 98 && porcent <= 100) {
             return (
               <>
                 {" "}
-                <div style={{ color: "red" }}> {porcent}%</div>
+                <div style={{ color: "red" }}> {porcent.toFixed(2)}%</div>
               </>
             );
           } else {
-            return <>{porcent}%</>;
+            return <>{porcent.toFixed(2)}%</>;
           }
         }
       },

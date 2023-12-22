@@ -3,10 +3,10 @@
 @import "./style_global.scss";
 @import "./texts.scss";
 @import "./tables.scss";
-
 @import "./input.scss";
 @import "./totals.scss";
 @import './font-family.scss';
+
 // :root {
 //   --color-black: #0b060e;
 //   --color-gray: #535353;
@@ -23,6 +23,12 @@ body {
   margin: 0;
   font-family: "RubikRegular", sans-serif;
   // font-size: 16px;
+}
+
+.alin {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
 }
 
 a {
@@ -71,14 +77,6 @@ hr {
 div[id="single-spa-application:@sapiencia/funds"] {
   height: 100%;
 }
-
-// .grid {
-//   display: grid;
-
-//   &.gap-25 {
-//     gap: 25px;
-//   }
-// }
 
 .container-form {
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -267,7 +265,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   justify-content: end;
   flex-direction: row;
 
-  margin: 15px 0 ;
+  margin: 15px 0;
 
   @media (max-width: 700px) {
     flex-direction: column;
@@ -381,12 +379,14 @@ div[id="single-spa-application:@sapiencia/funds"] {
   padding: 15px;
 }
 
-.content-tbl-totales {
+/* .content-tbl-totales {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   flex-wrap: nowrap;
 }
+ */
+
 
 .alingcent-textopciones {
   display: flex;
@@ -400,15 +400,15 @@ div[id="single-spa-application:@sapiencia/funds"] {
   height: 60px !important;
 }
 
-.content-tbltotls {
+/* .content-tbltotls {
   display: flex;
   flex-direction: row;
-}
+} */
 
-.content-tbltotlscolumn {
+/* .content-tbltotlscolumn {
   display: flex;
   flex-direction: column;
-}
+} */
 
 .colorcontetnmin {
   width: 201px;
@@ -419,26 +419,80 @@ div[id="single-spa-application:@sapiencia/funds"] {
   background: #f8f9fa;
 }
 
+@media (max-width: 768px) {
+  .colorcontetnmin {
+    width: 100%; /* Element takes full width of its container */
+    height: auto; /* Height is adjusted automatically */
+    /* Remove !important if possible to avoid conflicts */
+  }
+}
+
 .modal-content .text-black-2 {
   font-weight: medium !important;
   font-family: "Rubik" !important;
 }
 
+
+
+
+
+
+/* Base styles for .content-tbl-totales */
+.content-tbl-totales {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  flex-wrap: wrap; /* Allows items to wrap to the next line if they don't fit */
+  margin-right: -10px; /* Adjusts for the padding in the child elements */
+  margin-bottom: -10px; /* Adjusts for the padding in the child elements */
+}
+
+/* Base styles for .content-tblt */
 .content-tblt {
-  width: 201px;
+  flex: 0 1 201px; /* Flex grow is 0, flex shrink is 1, base width is 201px */
   height: 104px;
-  flex-shrink: 0;
+  //margin-right: 10px; /* Adds space between items */
+  margin-bottom: 10px; /* Adds space below items */
   background: #f8f9fa;
   color: #000;
   text-align: center;
-  /* Font/Large/Medium */
   font-family: Rubik;
   font-size: 17px;
-  font-style: normal;
-  font-weight: 500;
   line-height: 120%;
-  /* 20.4px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Prevents content from overflowing */
+  word-wrap: break-word; /* Ensures that long words will be broken and wrapped to the next line */
+  padding: 10px; /* Adds some padding inside the blocks */
 }
+
+/* Base styles for .content-tbltotls */
+.content-tbltotls {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .content-tbl-totales,
+  .content-tbltotls {
+    flex-direction: column;
+  }
+
+  .content-tblt {
+    flex: 0 0 auto; /* Flex grow is 0, flex shrink is 0, flex basis is auto */
+    width: 100%; /* Allows item to expand to full width */
+    height: auto; /* Adjusts height automatically */
+    margin-right: 0; /* Removes right margin for full width */
+  }
+}
+
+
+
+
+
 
 .modal-container .modal-header p {
   font-size: 29px !important;
@@ -500,13 +554,15 @@ div[id="single-spa-application:@sapiencia/funds"] {
   border-radius: var(--spacing-spacing-0, 0px);
   border: 1px solid var(--border-table, #f2f2f2);
 }
-.text-red{
+
+.text-red {
   color: red
 }
 
-.text-yellow {
-  color: yellow;
+.text-orange {
+  color: orange;
 }
+
 .text-black.huge,
 .huge.text-black-2 {
   font-size: 29px;
@@ -666,7 +722,10 @@ div[id="single-spa-application:@sapiencia/funds"] {
   justify-content: center;
   align-items: center;
   gap: 0.3rem;
+  flex-wrap: nowrap;      /* Asegura que los elementos flex internos no se envuelvan */
+  white-space: nowrap;    /* Evita que el texto se envuelva en una nueva línea */
 }
+
 
 .tooltip {
   position: relative;
@@ -735,11 +794,52 @@ div[id="single-spa-application:@sapiencia/funds"] {
   }
 }
 
-@for $inx from 1 through 100 {
-  @for $i from 1 through 4 {
-    .#{nth((mt, mb, mr, ml), $i)}-#{inx}px {
-      #{nth((margin-top, margin-bottom, margin-right, margin-left), $i)}: calc(1px * $inx);
-    }
+.mr-auto {
+  margin-right: auto !important;
+}
+
+@for $inx from -18 through 100 {
+  $current-margin: 1px * $inx;
+  $current-padding: 1px * $inx;
+
+  .mt-#{$inx}px {
+    margin-top: $current-margin;
+  }
+
+  .mb-#{$inx}px {
+    margin-bottom: $current-margin;
+  }
+
+  .mr-#{$inx}px {
+    margin-right: $current-margin;
+  }
+
+  .ml-#{$inx}px {
+    margin-left: $current-margin;
+  }
+
+  .m-#{$inx}px {
+    margin: $current-margin;
+  }
+
+  .p-#{$inx}px {
+    padding: $current-padding;
+  }
+
+  .pt-#{$inx}px {
+    padding-top: $current-padding;
+  }
+
+  .pr-#{$inx}px {
+    padding-right: $current-padding;
+  }
+
+  .pb-#{$inx}px {
+    padding-bottom: $current-padding;
+  }
+
+  .pl-#{$inx}px {
+    padding-left: $current-padding;
   }
 }
 
@@ -757,19 +857,74 @@ div[id="single-spa-application:@sapiencia/funds"] {
     margin-left: 4px;
     margin-bottom: 10px;
 
-    .button-save { /* Asegúrate de que esta clase corresponde al botón Guardar */
-      order: 1; /* Esto coloca el botón Guardar primero */
+    .button-save {
+      /* Asegúrate de que esta clase corresponde al botón Guardar */
+      order: 1;
+      /* Esto coloca el botón Guardar primero */
       width: 100%;
       padding: 12px 16px;
       margin-top: 24px;
     }
 
-    .button-clean { /* Asegúrate de que esta clase corresponde al botón Cancelar */
-      order: 2; /* Esto coloca el botón Cancelar después del botón Guardar */
+    .button-clean {
+      /* Asegúrate de que esta clase corresponde al botón Cancelar */
+      order: 2;
+      /* Esto coloca el botón Cancelar después del botón Guardar */
       width: 100%;
       margin-left: 9px;
       margin-top: 5px;
       margin-bottom: 60px;
     }
   }
+
+  .text{
+    margin-top: 24px;
+  }
+
+  
+}
+
+
+.button-save-container-display-remanentes {
+  display: flex;
+  justify-content: end;
+  flex-direction: row;
+  margin-right: 8px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .button-save-container-display-remanentes {
+    flex-direction: column;  /* Apilar los botones verticalmente en modo responsive */
+    margin-left: 4px;
+  }
+
+  .button-save-container-display-remanentes .button-cancel-text {
+    order: 2;
+    width: 100%;            /* Ocupar todo el ancho en modo responsive */
+    margin-top: 24px;
+    margin-bottom: 24px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .button-save-container-display-remanentes .button-save {
+    order: 1;
+    width: 100%;            /* Ocupar todo el ancho en modo responsive */
+    background-color: #533893;
+    padding: 12px 16px;
+    margin-top: 24px;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+
+
+.spacing-remanents {
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
+   
+    }
 }
