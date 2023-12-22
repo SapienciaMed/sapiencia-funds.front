@@ -60,9 +60,9 @@ const AbsorptionPercentageForm = ({
           />
         </div>
       </div>
-      <div className="button-save-container-display mr-24px">
+      <div className="button-save-container-display-percentage mr-24px">
         {tableView && (
-          <div className="mr-auto ml-25px">
+          <div className="button-clean  mr-auto ml-25px">
             <div>
               <div
                 className={`title-button  ${
@@ -99,7 +99,7 @@ const AbsorptionPercentageForm = ({
     </FormComponent>
     {tableView && (
       <>
-        <div className="container-sections-forms ml-20px mr-20px">
+        <div className="container-sections-forms ml-10px mr-10px">
           <TableComponent
             setPaginateData={setPaginateData}
             ref={tableComponentRef}

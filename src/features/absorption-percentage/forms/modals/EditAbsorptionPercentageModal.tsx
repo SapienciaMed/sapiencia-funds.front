@@ -54,7 +54,7 @@ const EditAbsorptionPercentageModal = ({
                   Recurso <span>*</span>
                 </>
               }
-              typeInput="number"
+              typeInput="text"
               register={register}
               onChange={handleChange}
               errors={errors}
@@ -69,7 +69,7 @@ const EditAbsorptionPercentageModal = ({
                   Escenario 1 <span>*</span>
                 </>
               }
-              typeInput="number"
+              typeInput="text"
               register={register}
               errors={errors}
               onChange={handleChange}
@@ -83,7 +83,7 @@ const EditAbsorptionPercentageModal = ({
                   Escenario 2 <span>*</span>
                 </>
               }
-              typeInput="number"
+              typeInput="text"
               register={register}
               errors={errors}
               onChange={handleChange}
@@ -99,7 +99,7 @@ const EditAbsorptionPercentageModal = ({
                   Escenario 3 <span>*</span>
                 </>
               }
-              typeInput="number"
+              typeInput="text"
               errors={errors}
               register={register}
               onChange={handleChange}
