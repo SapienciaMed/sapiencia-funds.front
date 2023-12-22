@@ -20,6 +20,7 @@ import { ApiResponse } from "../../../../common/utils/api-response";
 
 interface IPropsContentSubmitData {
   readonly action: "edit" | "show";
+  readonly idConsolidationBeneficiary?: number;
   readonly requirements: {
     id: string | number;
     description: string;
@@ -30,6 +31,7 @@ interface IPropsContentSubmitData {
   readonly width: number;
   readonly id: number;
   readonly state: boolean;
+  readonly editable?: boolean;
   readonly observation: string;
   readonly headerAccordion?: string;
   readonly loadTableData: (searchCriteria?: object) => void;
@@ -39,6 +41,7 @@ interface IPropsContentSubmitData {
 }
 
 function ModalUploadChangeData({
+  idConsolidationBeneficiary,
   action,
   requirements,
   showState,
@@ -49,12 +52,12 @@ function ModalUploadChangeData({
   state,
   observation,
   headerAccordion,
+  editable,
   loadTableData,
   executeFunctionSubmit,
 }: IPropsContentSubmitData): React.JSX.Element {
   const {
     visible,
-    fileUploadData,
     control,
     formState,
     renderElementFile,
@@ -64,12 +67,14 @@ function ModalUploadChangeData({
     showModalOnSubmit,
   } = useModalUploadChangeData(
     id,
+    idConsolidationBeneficiary,
     state,
     observation,
     action,
     width,
     showUploadFile,
     loadTableData,
+    editable,
     executeFunctionSubmit
   );
 
@@ -143,12 +148,17 @@ function ModalUploadChangeData({
                     value: EServiceSocialStates.Rechazado,
                   },
                 ]}
-                label="Estado"
+                label={
+                  <>
+                    Estado <span>*</span>
+                  </>
+                }
                 className="select-basic medium select-disabled-list"
                 classNameLabel="text-black biggest"
                 filter={true}
                 placeholder="Seleccionar."
                 disabled={action === "show"}
+                errors={formState.errors}
               />
             )}
           </div>
@@ -167,12 +177,13 @@ function ModalUploadChangeData({
                       value={`${field.value}`}
                       label="Observación"
                       className="text-area-basic"
-                      classNameLabel="text-black biggest text-required"
+                      classNameLabel="text-black biggest"
                       rows={2}
                       placeholder="Escribe aquí"
                       onChange={field.onChange}
                       characters={150}
                       disabled={action === "show"}
+                      errors={formState.errors}
                     />
                   );
                 }}

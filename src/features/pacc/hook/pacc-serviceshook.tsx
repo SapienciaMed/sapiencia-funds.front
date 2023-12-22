@@ -92,7 +92,15 @@ export const usePaccServices = (typeState: number) => {
     data: FormData
   ): Promise<ApiResponse<any>> {
     const endpoint: string = "/update-service-social";
-    return put(`${roleUrl}${endpoint}`, data);
+    return put(`${roleUrl}${endpoint}`, data, {}, true);
+  }
+
+  async function DownloadFile(
+    data: object,
+    path: string
+  ): Promise<ApiResponse<any>> {
+    const endpoint: string = `/${path}`;
+    return post(`${roleUrl}${endpoint}`, data);
   }
 
   return {
@@ -108,5 +116,6 @@ export const usePaccServices = (typeState: number) => {
     GetUploadKnowledgeTransferFiles,
     GetRequirementsKnowledgeTransfer,
     UpdateSocialService,
+    DownloadFile,
   };
 };
