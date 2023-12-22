@@ -29,15 +29,16 @@ export default function useRegulationHook(auth) {
   const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
     useState(false);
   const [toggleControl, setToggleControl] = useState<{
-    applySocialService: boolean;
-    knowledgeTransferApply: boolean;
-    gracePeriodApply: boolean;
-    continuousSuspensionApplies: boolean;
-    applyDiscontinuousSuspension: boolean;
+    applySocialService: number;
+    knowledgeTransferApply: number;
+    gracePeriodApply: number;
+    continuousSuspensionApplies: number;
+    applyDiscontinuousSuspension: number;
     applySpecialSuspensions: boolean;
     extensionApply: boolean;
     applyCondonationPerformancePeriod: boolean;
     accomulatedIncomeCondonationApplies: boolean;
+    applyTheoreticalSemester?: boolean
   }>();
   const [listPrograms, setListPrograms] = useState<
     { name: string; value: number }[]
@@ -103,6 +104,7 @@ export default function useRegulationHook(auth) {
   const getUpdateData = async () => {
     if (id) {
       const res = await getRegulationById(id);
+      console.log("🚀  res:", res)
       if (res?.data[0]) {
         for (let clave in res?.data[0]) {
           if (res?.data[0][clave] === null) {
@@ -147,6 +149,7 @@ export default function useRegulationHook(auth) {
   };
 
   const onsubmitCreate = handleSubmit((data: IRegulation) => {
+    console.log("🚀 ~ file: createUpdate.ts:152 ~ onsubmitCreate ~ data:", data)
     if (data.applyCondonationPerformancePeriod && !data.performancePeriod) {
       return setPerformancePeriodErrors(true);
     } else {
@@ -194,15 +197,11 @@ export default function useRegulationHook(auth) {
       createUser: user.numberDocument,
       createDate: new Date().toISOString(),
       isOpenPeriod: data?.isOpenPeriod ? true : false,
-      applySocialService: data?.applySocialService ? true : false,
-      knowledgeTransferApply: data?.knowledgeTransferApply ? true : false,
-      gracePeriodApply: data?.gracePeriodApply ? true : false,
-      continuousSuspensionApplies: data?.continuousSuspensionApplies
-        ? true
-        : false,
-      applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension
-        ? true
-        : false,
+      applySocialService: data?.applySocialService == 1,
+      knowledgeTransferApply: data?.knowledgeTransferApply  == 1,
+      gracePeriodApply: data?.gracePeriodApply == 1,
+      continuousSuspensionApplies: data?.continuousSuspensionApplies == 1,
+      applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension == 1,
       applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
       extensionApply: data?.extensionApply ? true : false,
       applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
@@ -225,7 +224,7 @@ export default function useRegulationHook(auth) {
     });
   });
 
-  const confirmRegulationCreate = async (data: IRegulation) => {
+  const confirmRegulationCreate = async (data: any) => {
     const { data: dataResponse, operation } = data?.id
       ? await editRegulation(data.id, data)
       : await createRegulationAction(data);

@@ -12,8 +12,9 @@
 }
 
 .containerIsOpenPeriod {
-  width: 100%;
-  padding: 0px 24px 0px 24px;
+  display: flex;
+  justify-content: center;
+  
 }
 
 .p-24 {
@@ -60,11 +61,10 @@
   width: 100%;
 }
 
-.buttonsActions {
+.buttonsActions2 {
   display: flex;
   justify-content: end;
-  margin-right: 24px;
-  width: 98%;
+  margin: 1.5rem 0;
 }
 
 .containerJsonTable {
@@ -153,7 +153,7 @@
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
-  color: #6c757d;
+  color: #000;
 }
 
 .title-disable-jsonTable {
@@ -206,11 +206,7 @@
 
   .containerEndPeriod {
     width: 100%;
-  }
-
-  .containerIsOpenPeriod {
-    width: 100%;
-    padding: 24px 0 48px 0;
+    margin-top: 1rem;
   }
 
   .percentageSemiannualPayment {
@@ -238,5 +234,17 @@
 
   .p-24 {
     padding: 16px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .containerIsOpenPeriod {
+    display: flex;
+    justify-content: start;
+  }
+
+  .direction-switch{
+    display: flex;
+    justify-content: flex-end;
   }
 }

@@ -1,33 +1,27 @@
-import React from "react";
 import Acordion from "../components/acordion";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
-import { Controller } from "react-hook-form";
-import {
-  ButtonComponent,
-  InputComponent,
-} from "../../../common/components/Form";
+import { Control, FieldErrors, UseFormGetValues, UseFormSetValue } from "react-hook-form";
+import { ButtonComponent,InputComponent } from "../../../common/components/Form";
 import TableJson from "../components/tableJson";
-import Requirements from "./modules/requeriments/Requirements";
-import { LIST_DATA_GRACE_PERIOD, periods } from "../service";
+import { LIST_DATA_GRACE_PERIOD } from "../service";
+import { IReglamentConsolidation, IRegulationSearch } from "../../../common/interfaces/regulation";
+import RequirementOnlyView from "./modules/requeriments/RequirementOnlyView";
+interface IPropDetailReglament{
+  isOpen: boolean;
+  detailData: IReglamentConsolidation;
+  listPrograms: any[];
+  errors: FieldErrors<IRegulationSearch>;
+  control: Control<IRegulationSearch, any>;
+  onClose: () => void;
+  setValue: UseFormSetValue<IRegulationSearch>
+  getValues: UseFormGetValues<IRegulationSearch>
+}
 
-const DetailReglament = ({
-  isOpen,
-  onClose,
-  detailData,
-  control,
-  errors,
-  setValue,
-  getValues,
-  listPrograms,
-}) => {
-  if (!isOpen || !detailData) {
-    return null;
-  }
+const DetailReglament = ({ isOpen, onClose, detailData, setValue, getValues, listPrograms, errors, control }: IPropDetailReglament) => {
+  if (!isOpen || !detailData) return null
 
-  const preventClick = (e) => {
-    return e.preventDefault();
-  };
+  const preventClick = (e) => { return e.preventDefault() }
 
   return (
     <div className="modal-overlay">
@@ -42,16 +36,16 @@ const DetailReglament = ({
             classname="container-modal-acordion-title"
             onClick={async () => {}}
             switchElement={<></>}
+            iconRow={true}
           >
             <>
               <div className="containerProgram mb-24px">
                 <SelectComponentOld
                   idInput={"program"}
-                  value={detailData?.program ? detailData?.program : ""}
-                  errors={errors}
+                  value={String(detailData?.idProgram) ?? ""}
                   disabled={true}
                   data={listPrograms}
-                  label={<>Programa</>}
+                  label='Programa'
                   className="select-basic select-disabled-list input-size"
                   classNameLabel="text-black biggest font-500"
                   placeholder="Seleccionar"
@@ -59,27 +53,23 @@ const DetailReglament = ({
               </div>
               <div className="containerGroup mb-24px">
                 <div className="containerInitialPeriod ">
-                  <SelectComponentOld
-                    idInput={"initialPeriod"}
-                    errors={errors}
-                    value={
-                      detailData?.initialPeriod ? detailData?.initialPeriod : ""
-                    }
-                    data={periods}
+                  <InputComponent
+                    idInput='initialPeriod'
                     disabled={true}
-                    label={<>Periodo inicial de convocatoria</>}
-                    className="select-basic select-disabled-list input-size"
+                    defaultValue={detailData?.initialPeriod ?? '0'}
+                    typeInput="text"
+                    value={detailData?.initialPeriod}
+                    className="input-basic input-size"
                     classNameLabel="text-black biggest font-500"
-                    placeholder="Seleccionar"
+                    label="Periodo inicial de convocatoria"
                   />
                 </div>
                 <div className="containerIsOpenPeriod">
                   <SwitchComponent
                     idInput={"isOpenPeriod"}
-                    errors={errors}
-                    control={control}
-                    defaultValue={detailData?.isOpenPeriod}
+                    defaultValue={detailData?.isOpenPeriod == 1}
                     size="normal"
+                    control={control}
                     disabled={true}
                     label={<>Convocatoria abierta</>}
                     className="select-basic select-disabled-list input-size"
@@ -88,60 +78,30 @@ const DetailReglament = ({
                 </div>
 
                 <div className="containerEndPeriod">
-                  <SelectComponentOld
-                    idInput={"endPeriod"}
-                    errors={errors}
+                  <InputComponent
+                    idInput='endPeriod'
                     disabled={true}
+                    defaultValue={detailData?.endPeriod ?? '0'}
+                    typeInput="text"
                     value={detailData?.endPeriod}
-                    data={periods}
-                    label={<>Periodo final de convocatoria</>}
-                    className="select-basic select-disabled-list input-size"
+                    className="input-basic input-size"
                     classNameLabel="text-black biggest font-500"
-                    placeholder="Seleccionar"
+                    label='Periodo final de convocatoria'
                   />
                 </div>
               </div>
-              <div className="percentageSemiannualPayment mb-24px">
-                <Controller
-                  control={control}
-                  name={"theoreticalPercentage"}
-                  defaultValue={`${detailData?.theoreticalPercentage}%`}
-                  render={({ field }) => {
-                    return (
-                      <InputComponent
-                        idInput={field.name}
-                        errors={errors}
-                        disabled={true}
-                        defaultValue={`${detailData?.theoreticalPercentage}%`}
-                        typeInput="text"
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        value={`${detailData?.theoreticalPercentage}%`}
-                        className="input-basic input-size"
-                        classNameLabel="text-black biggest font-500"
-                        label="Porcentaje de pago teórico semestral"
-                        min={0}
-                        max={100}
-                      />
-                    );
-                  }}
-                />
-              </div>
               <div onClick={preventClick}>
                 <Acordion
-                  title="¿Aplica servicio social?"
-                  isOpen={detailData?.applySocialService}
+                  title="¿Aplica porcentaje de pago teórico semestral?"
+                  isOpen={detailData?.applyTheoreticalSemiannualPercent == 1}
                   onClick={() => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      idInput={"applySocialService"}
-                      errors={errors}
+                        control={control}
+                      idInput={"theoreticalSemiannualPercent"}
                       disabled={true}
-                      defaultValue={detailData?.applySocialService}
-                      control={control}
-                      onClick={() => {}}
-                      onChange={() => {}}
+                      defaultValue={detailData?.applyTheoreticalSemiannualPercent == 1}
                       size="small"
                       classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size opacity"
@@ -151,49 +111,59 @@ const DetailReglament = ({
                 >
                   <div className="containerApplyService">
                     <div className="mb-24px">
-                      <Controller
-                        control={control}
-                        name={"socialServicePercentage"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              errors={errors}
-                              disabled={true}
-                              defaultValue={`${detailData?.socialServicePercentage}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size "
-                              classNameLabel="text-black biggest font-500"
-                              label="Porcentaje de descuento por periodo"
-                            />
-                          );
-                        }}
+                        <InputComponent
+                          idInput='theoreticalPercentage'
+                          disabled={true}
+                          defaultValue={`${detailData?.theoreticalSemiannualPercent ?? '0'}%`}
+                          typeInput="text"
+                          className="input-basic input-size"
+                          classNameLabel="text-black biggest font-500"
+                          label="Porcentaje de pago teórico semestral"
+                        />
+                    </div>
+                  </div>
+                </Acordion>
+              </div>
+              <div onClick={preventClick}>
+                <Acordion
+                  title="¿Aplica servicio social?"
+                  isOpen={detailData?.applySocialService == 1}
+                  onClick={() => {}}
+                  onlyView
+                  switchElement={
+                    <SwitchComponent
+                      control={control}
+                      idInput={"applySocialService"}
+                      disabled={true}
+                      defaultValue={detailData?.applySocialService == 1}
+                      size="small"
+                      classNameSwitch="opacity"
+                      className="select-basic select-disabled-list input-size opacity"
+                      classNameLabel="text-black biggest font-500"
+                    />
+                  }
+                >
+                  <div className="containerApplyService">
+                    <div className="mb-24px">
+                      <InputComponent
+                        idInput='socialServicePercentage'         
+                        disabled={true}
+                        defaultValue={`${detailData?.socialServicePercent || '0'}`}
+                        typeInput="number"
+                        className="input-basic input-size "
+                        classNameLabel="text-black biggest font-500"
+                        label="Porcentaje de descuento por periodo"
                       />
                     </div>
                     <div className="mb-24px">
-                      <Controller
-                        control={control}
-                        name={"socialServiceHours"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              errors={errors}
-                              defaultValue={`${detailData?.socialServiceHours}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size"
-                              classNameLabel="text-black biggest font-500"
-                              label="Horas por periodo"
-                              disabled={true}
-                            />
-                          );
-                        }}
+                      <InputComponent
+                        idInput='socialServiceHours'
+                        defaultValue={`${detailData?.socialServiceHours}`}
+                        typeInput="number"
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest font-500"
+                        label="Horas por periodo"
+                        disabled={true}
                       />
                     </div>
                   </div>
@@ -202,16 +172,15 @@ const DetailReglament = ({
               <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica trasferencia de conocimiento?"
-                  isOpen={detailData?.knowledgeTransferApply}
+                  isOpen={detailData?.applyKnowledgeTransfer == 1}
                   onClick={() => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      idInput={"knowledgeTransferApply"}
-                      errors={errors}
-                      disabled={true}
                       control={control}
-                      onChange={() => {}}
+                      idInput='applyKnowledgeTransfer'
+                      disabled={true}
+                      defaultValue={detailData?.applyKnowledgeTransfer == 1}
                       size="small"
                       classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
@@ -221,49 +190,25 @@ const DetailReglament = ({
                 >
                   <div className="containerApplyService">
                     <div className="mb-24px">
-                      <Controller
-                        control={control}
-                        name={"knowledgeTransferPercentage"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              errors={errors}
-                              defaultValue={`${detailData?.knowledgeTransferPercentage}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              disabled={true}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size "
-                              classNameLabel="text-black biggest font-500"
-                              label="Porcentaje de cumplimiento"
-                            />
-                          );
-                        }}
+                      <InputComponent
+                        idInput='knowledgeTransferPercent'
+                        defaultValue={`${detailData?.knowledgeTransferPercent}`}
+                        typeInput="number"
+                        disabled={true}
+                        className="input-basic input-size "
+                        classNameLabel="text-black biggest font-500"
+                        label="Porcentaje de cumplimiento"
                       />
                     </div>
                     <div className="mb-24px">
-                      <Controller
-                        control={control}
-                        name={"knowledgeTransferHours"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              errors={errors}
-                              defaultValue={`${detailData?.knowledgeTransferHours}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size"
-                              classNameLabel="text-black biggest font-500"
-                              label="Horas totales por el crédito"
-                              disabled={true}
-                            />
-                          );
-                        }}
+                      <InputComponent
+                        idInput='knowledgeTransferHours'
+                        defaultValue={`${detailData?.knowledgeTransferHours}`}
+                        typeInput="number"
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest font-500"
+                        label="Horas totales por el crédito"
+                        disabled={true}
                       />
                     </div>
                   </div>
@@ -272,16 +217,15 @@ const DetailReglament = ({
               <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica periodo de gracia?"
-                  isOpen={detailData?.gracePeriodApply}
-                  onClick={async () => {}}
+                  isOpen={detailData?.applyGracePeriod == 1}
+                  onClick={() => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      idInput={"gracePeriodApply"}
-                      errors={errors}
-                      disabled={true}
                       control={control}
-                      onChange={() => {}}
+                      idInput={"applyGracePeriod"} 
+                      disabled={true}
+                      defaultValue={detailData?.applyGracePeriod == 1}
                       size="small"
                       classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
@@ -291,35 +235,22 @@ const DetailReglament = ({
                 >
                   <div className="containerApplyService">
                     <div className="mb-24px">
-                      <Controller
-                        control={control}
-                        name={"gracePeriodMonths"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              errors={errors}
-                              defaultValue={`${detailData?.gracePeriodMonths}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size"
-                              classNameLabel="text-black biggest font-500"
-                              label="Meses"
-                              disabled={true}
-                            />
-                          );
-                        }}
+                      <InputComponent
+                        idInput='gracePeriodMonths'
+                        defaultValue={`${detailData?.gracePeriodMonths}`}
+                        typeInput="number"
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest font-500"
+                        label="Meses"
+                        disabled={true}
                       />
                     </div>
                     <div className="mb-24px">
                       <SelectComponentOld
-                        idInput={"gracePeriodApplication"}
-                        value={detailData?.gracePeriodApplication}
-                        errors={errors}
-                        data={LIST_DATA_GRACE_PERIOD} //pendiente
-                        label={<>Fecha de aplicación</>}
+                        idInput={"graceDateApplication"}
+                        value={detailData?.graceDateApplication}
+                        data={LIST_DATA_GRACE_PERIOD} //pendiente = ¿Porque? comentario del otro desarrollador
+                        label='Fecha de aplicación'
                         className="select-basic select-disabled-list input-size"
                         classNameLabel="text-black biggest font-500"
                         placeholder="Seleccionar"
@@ -332,16 +263,15 @@ const DetailReglament = ({
               <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica suspensiones continuas?"
-                  isOpen={detailData?.continuousSuspensionApplies}
+                  isOpen={detailData?.applyContinuousSuspension == 1}
                   onClick={() => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      idInput={"continuousSuspensionApplies"}
-                      errors={errors}
-                      disabled={true}
                       control={control}
-                      onChange={() => {}}
+                      idInput={"continuousSuspensionApplies"}
+                      defaultValue={detailData?.applyContinuousSuspension == 1}
+                      disabled={true}
                       size="small"
                       classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
@@ -351,26 +281,14 @@ const DetailReglament = ({
                 >
                   <div className="containerApplyService">
                     <div>
-                      <Controller
-                        control={control}
-                        name={"continuosSuspencionQuantity"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              errors={errors}
-                              defaultValue={`${detailData?.continuosSuspencionQuantity}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size"
-                              classNameLabel="text-black biggest font-500"
-                              label="Cantidad"
-                              disabled={true}
-                            />
-                          );
-                        }}
+                      <InputComponent
+                        idInput='continuosSuspencionQuantity'
+                        defaultValue={`${detailData?.continuosSuspencionQuantity}`}
+                        typeInput="number"
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest font-500"
+                        label="Cantidad"
+                        disabled={true}
                       />
                     </div>
                   </div>
@@ -379,16 +297,15 @@ const DetailReglament = ({
               <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica suspensiones discontinuas?"
-                  isOpen={detailData?.applyDiscontinuousSuspension}
+                  isOpen={detailData?.applyDiscontinuousSuspension == 1}
                   onClick={async () => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      idInput={"applyDiscontinuousSuspension"}
-                      errors={errors}
                       control={control}
+                      idInput={"applyDiscontinuousSuspension"}
+                      defaultValue={detailData?.applyDiscontinuousSuspension == 1}
                       disabled={true}
-                      onChange={() => {}}
                       size="small"
                       classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
@@ -398,26 +315,14 @@ const DetailReglament = ({
                 >
                   <div className="containerApplyService">
                     <div>
-                      <Controller
-                        control={control}
-                        name={"discontinuousSuspensionQuantity"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              errors={errors}
-                              defaultValue={`${detailData?.discontinuousSuspensionQuantity}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size"
-                              classNameLabel="text-black biggest font-500"
-                              label="Cantidad"
-                              disabled={true}
-                            />
-                          );
-                        }}
+                      <InputComponent
+                        idInput='discontinuousSuspensionQuantity'
+                        defaultValue={`${detailData?.discontinuousSuspensionQuantity}`}
+                        typeInput="number"
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest font-500"
+                        label="Cantidad"
+                        disabled={true}
                       />
                     </div>
                   </div>
@@ -426,16 +331,15 @@ const DetailReglament = ({
               <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica suspensiones especiales?"
-                  isOpen={detailData?.applySpecialSuspensions}
+                  isOpen={detailData?.applySpecialSuspensions == 1}
                   onClick={async () => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      disabled={true}
-                      idInput={"applySpecialSuspensions"}
-                      errors={errors}
                       control={control}
-                      onChange={() => {}}
+                      disabled={true}
+                      idInput={"applySpecialSuspensions"}  
+                      defaultValue={detailData?.applySpecialSuspensions == 1}
                       size="small"
                       classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size mb-24px"
@@ -445,26 +349,14 @@ const DetailReglament = ({
                 >
                   <div className="containerApplyService">
                     <div>
-                      <Controller
-                        control={control}
-                        name={"applySpecialSuspensionsQuantity"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              disabled={true}
-                              errors={errors}
-                              defaultValue={`${detailData?.applySpecialSuspensionsQuantity}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size"
-                              classNameLabel="text-black biggest font-500"
-                              label="Cantidad"
-                            />
-                          );
-                        }}
+                      <InputComponent
+                        idInput='specialSuspensionsQuantity'
+                        disabled={true}
+                        defaultValue={`${detailData?.specialSuspensionsQuantity}`}
+                        typeInput="number"
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest font-500"
+                        label="Cantidad"
                       />
                     </div>
                   </div>
@@ -473,16 +365,15 @@ const DetailReglament = ({
               <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica prórroga?"
-                  isOpen={detailData?.extensionApply}
-                  onClick={async () => {}}
+                  isOpen={detailData?.applyExtension == 1}
+                  onClick={() => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      idInput={"extensionApply"}
-                      errors={errors}
-                      disabled={true}
                       control={control}
-                      onChange={() => {}}
+                      idInput={"extensionApply"}
+                      disabled={true}
+                      defaultValue={detailData?.applyExtension == 1}
                       size="small"
                       classNameSwitch="opacity"
                       className="select-basic select-disabled-list input-size"
@@ -492,26 +383,14 @@ const DetailReglament = ({
                 >
                   <div className="containerApplyService">
                     <div>
-                      <Controller
-                        control={control}
-                        name={"extensionApplyQuantity"}
-                        render={({ field }) => {
-                          return (
-                            <InputComponent
-                              idInput={field.name}
-                              errors={errors}
-                              disabled={true}
-                              defaultValue={`${detailData?.extensionApplyQuantity}`}
-                              typeInput="number"
-                              onChange={field.onChange}
-                              onBlur={field.onBlur}
-                              value={field.value}
-                              className="input-basic input-size"
-                              classNameLabel="text-black biggest font-500"
-                              label="Cantidad"
-                            />
-                          );
-                        }}
+                      <InputComponent
+                        idInput='extensionQuantity'
+                        disabled={true}
+                        defaultValue={`${detailData?.extensionQuantity}`}
+                        typeInput="number"
+                        className="input-basic input-size"
+                        classNameLabel="text-black biggest font-500"
+                        label="Cantidad"
                       />
                     </div>
                   </div>
@@ -524,22 +403,22 @@ const DetailReglament = ({
             classname="container-modal-acordion-title"
             onClick={async () => {}}
             switchElement={<></>}
+            iconRow={true}
           >
             <>
               <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica condonación por rendimiento académico por periodo?"
-                  isOpen={detailData?.applyCondonationPerformancePeriod}
+                  isOpen={detailData?.applyCondonationPerformancePeriod == 1}
                   onClick={async () => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      idInput={"applyCondonationPerformancePeriod"}
-                      errors={errors}
                       control={control}
+                      idInput={"applyCondonationPerformancePeriod"}
+                      defaultValue={detailData?.applyCondonationPerformancePeriod == 1}
                       disabled={true}
                       classNameSwitch="opacity"
-                      onChange={() => {}}
                       size="small"
                       className="select-basic select-disabled-list input-size"
                       classNameLabel="text-black biggest font-500"
@@ -549,13 +428,13 @@ const DetailReglament = ({
                   <div>
                     <TableJson
                       idInput="performancePeriod"
-                      isOpen={detailData?.applyCondonationPerformancePeriod}
+                      isOpen={detailData?.applyCondonationPerformancePeriod == 1}
                       setValue={setValue}
                       title="promedio y porcentaje de condonación"
                       onlyView={true}
                       getValues={getValues}
                       error={errors}
-                      dataRead={detailData}
+                      dataRead={detailData.performancePeriodStructure}
                     />
                   </div>
                 </Acordion>
@@ -563,16 +442,15 @@ const DetailReglament = ({
               <div onClick={preventClick}>
                 <Acordion
                   title="¿Aplica condonación por rendimiento académico final acumulado?"
-                  isOpen={detailData?.accomulatedIncomeCondonationApplies}
+                  isOpen={detailData?.applyAccomulatedIncomeCondonation == 1}
                   onClick={async () => {}}
                   onlyView
                   switchElement={
                     <SwitchComponent
-                      idInput={"accomulatedIncomeCondonationApplies"}
-                      errors={errors}
-                      disabled={true}
                       control={control}
-                      onChange={() => {}}
+                      idInput='applyAccomulatedIncomeCondonation'
+                      disabled={true}
+                      defaultValue={detailData?.applyAccomulatedIncomeCondonation == 1}
                       classNameSwitch="opacity"
                       size="small"
                       className="select-basic select-disabled-list input-size"
@@ -582,14 +460,14 @@ const DetailReglament = ({
                 >
                   <div>
                     <TableJson
-                      isOpen={detailData?.accomulatedIncomeCondonationApplies}
+                      isOpen={detailData?.applyAccomulatedIncomeCondonation == 1}
                       idInput="accumulatedPerformance"
                       setValue={setValue}
                       title="Agregar promedio y porcentaje de condonación"
                       getValues={getValues}
                       error={errors}
                       onlyView={true}
-                      dataRead={detailData}
+                      dataRead={detailData.accumulatedPerformanceDataTable}
                     />
                   </div>
                 </Acordion>
@@ -601,8 +479,9 @@ const DetailReglament = ({
             classname="container-modal-acordion-title"
             onClick={async () => {}}
             switchElement={<></>}
+            iconRow={true}
           >
-            <Requirements onlyView id={detailData.id} />
+            <RequirementOnlyView  detailData={detailData.requirementsForReglament} />
           </Acordion>
           <div
             style={{
