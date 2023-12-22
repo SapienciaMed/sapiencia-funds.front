@@ -13,7 +13,7 @@ import {
   IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
-import { periods, useRegulationApi } from "../service";
+import { useRegulationApi } from "../service";
 import Tooltip from "../../../common/components/Form/tooltip";
 
 export default function useSearchRegulation(auth, authDetail, authEdit) {
@@ -21,11 +21,13 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const { setMessage, authorization } = useContext(AppContext);
   const [showTable, setshowTable] = useState(false);
   const tableComponentRef = useRef(null);
-  const [listPrograms, setListPrograms] = useState<{ name: string; value: string }[]>([]);
+  const [listPrograms, setListPrograms] = useState<
+    { name: string; value: string }[]
+  >([]);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailData, setDetailData] = useState<IReglamentConsolidation>();
 
-  const {getPrograms} = useRegulationApi();
+  const { getPrograms } = useRegulationApi();
   //react-router-dom
   const navigate = useNavigate();
 
@@ -96,7 +98,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   };
 
   useEffect(() => {
-    getPrograms().then(res => {
+    getPrograms().then((res) => {
       if (res?.data) {
         const buildData = res.data.map((item) => {
           return {
@@ -112,21 +114,21 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const tableColumns: ITableElement<IReglamentConsolidation>[] = [
     {
       fieldName: "programs",
-      header: 'Programa',
+      header: "Programa",
       renderCell: (row) => {
         return <>{row?.programName}</>;
       },
     },
     {
       fieldName: "initialPeriod",
-      header: 'Periodo inicial',
+      header: "Periodo inicial",
       renderCell: (row) => {
         return <>{row?.initialPeriod}</>;
       },
     },
     {
       fieldName: "endPeriod",
-      header: 'Periodo Final',
+      header: "Periodo Final",
       renderCell: (row) => {
         return <>{row.endPeriod}</>;
       },
@@ -218,26 +220,33 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const newElement = () => navigate("form");
 
   const onSubmit = handleSubmit(async (data: IRegulationSearch) => {
-    const getProgram: any = listPrograms.find((item) => item.name === data.programId || item.value === data.programId);
-    const getListItem: any = periods.find( (item) => item.name === data.initialPeriod || item.value === data.initialPeriod); // esto viene de un endpoint
+    // const getProgram: any = listPrograms.find(
+    //   (item) => item.name === data.programId || item.value === data.programId
+    // );
+    // const getListItem: any = periods.find(
+    //   (item) =>
+    //     item.name === data.initialPeriod || item.value === data.initialPeriod
+    // ); // esto viene de un endpoint
 
+    // const endPeriod =
+    //   (data?.endPeriod &&
+    //     periods.find(
+    //       (item) =>
+    //         item.name === data.endPeriod || item.value === data.endPeriod
+    //     )?.value) ||
+    //   null;
 
-    const endPeriod = data?.endPeriod &&
-      periods.find(
-        (item) => item.name === data.endPeriod || item.value === data.endPeriod
-    )?.value || null; 
+    // const buildData = {
+    //   programId: parseInt(getProgram?.value) ?? null,
+    //   initialPeriod: getListItem?.value ?? null, // TODO: Ajustar
+    //   endPeriod: endPeriod, // TODO: Ajustar
+    // };
 
-    const buildData = {
-      programId: parseInt(getProgram?.value) ?? null,
-      initialPeriod: getListItem?.value ?? null, // TODO: Ajustar
-      endPeriod: endPeriod, // TODO: Ajustar
-    };
+    // setshowTable(true);
 
-    setshowTable(true);
-
-    if (tableComponentRef.current) {
-      tableComponentRef.current.loadData(buildData);
-    }
+    // if (tableComponentRef.current) {
+    //   tableComponentRef.current.loadData(buildData);
+    // }
   });
 
   return {

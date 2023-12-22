@@ -4,8 +4,6 @@ import TableComponent from "../../../common/components/table.component";
 import DetailReglament from "./detailt";
 import { BiPlusCircle } from "react-icons/bi";
 import { EDirection } from "../../../common/constants/input.enum";
-import { periods } from "../service";
-
 const Regulation = ({ auth, authDetail, authEdit }) => {
   const {
     tableComponentRef,
@@ -59,7 +57,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
                 control={control}
                 placeholder="Seleccionar"
                 label='Periodo inicial de convocatoria'
-                data={periods ?? []}
+                data={[]}
                 direction={EDirection.column}
                 className="select-basic big select-disabled-list"
                 classNameLabel='text-black big text-with-colons'
@@ -69,7 +67,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
                 control={control}
                 placeholder="Seleccionar"
                 label='Periodo final de convocatoria'
-                data={periods ?? []}
+                data={[]}
                 direction={EDirection.column}
                 className="select-basic big select-disabled-list"
                 classNameLabel='text-black big text-with-colons'

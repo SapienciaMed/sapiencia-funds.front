@@ -49,6 +49,16 @@ export interface IRequeriments {
   description: string;
 }
 
+
+export interface IPeriodSapiencia {
+  id: number;
+  name: string;
+  nameComplementary?: string;
+  minimumSalary: number;
+  status: string;
+}
+
+
 export interface IReglamentConsolidation {
   id?: number;
   idProgram?: number;
