@@ -40,9 +40,22 @@ export const useEditAbsorptionPercentageModal = (
     sceneryPercentage1: 0,
     sceneryPercentage2: 0,
     sceneryPercentage3: 0,
+    resource: 0,
   });
 
-  const [communeFundId, resourceValue] = watch(["communeFundId", "resource"]);
+  const [
+    communeFundId,
+    resourceValue,
+    sceneryPercentage1,
+    sceneryPercentage2,
+    sceneryPercentage3,
+  ] = watch([
+    "communeFundId",
+    "resource",
+    "sceneryPercentage1",
+    "sceneryPercentage2",
+    "sceneryPercentage3",
+  ]);
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
@@ -68,6 +81,7 @@ export const useEditAbsorptionPercentageModal = (
     const resourceFound = searchCommuneFundByValue(data.communeFundId);
     const fullData = {
       ...data,
+      resource: formWatch.resource,
       sceneryPercentage1: parseFloat(
         (data.sceneryPercentage1 || "").replace("%", "")
       ),
@@ -116,17 +130,55 @@ export const useEditAbsorptionPercentageModal = (
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
-    // suponiendo que viene formateado
+    console.log(name, value);
     let rawValue = parseInt(value.replace("%", ""));
     if (isNaN(rawValue)) rawValue = 0;
-
-    // if(
     setValue(name, `${rawValue}%`);
     setFormWatch({
       ...formWatch,
       [name]: rawValue,
     });
   };
+
+  useEffect(() => {
+    let rawValue = parseInt(resourceValue?.replace("%", ""));
+    if (isNaN(rawValue)) rawValue = 0;
+    setValue("resource", `${rawValue}%`);
+    setFormWatch({
+      ...formWatch,
+      resource: rawValue,
+    });
+  }, [resourceValue]);
+
+  useEffect(() => {
+    let rawValue = parseInt(sceneryPercentage1?.replace("%", ""));
+    if (isNaN(rawValue)) rawValue = 0;
+    setValue("sceneryPercentage1", `${rawValue}%`);
+    setFormWatch({
+      ...formWatch,
+      sceneryPercentage1: rawValue,
+    });
+  }, [sceneryPercentage1]);
+
+  useEffect(() => {
+    let rawValue = parseInt(sceneryPercentage2?.replace("%", ""));
+    if (isNaN(rawValue)) rawValue = 0;
+    setValue("sceneryPercentage2", `${rawValue}%`);
+    setFormWatch({
+      ...formWatch,
+      sceneryPercentage2: rawValue,
+    });
+  }, [sceneryPercentage2]);
+
+  useEffect(() => {
+    let rawValue = parseInt(sceneryPercentage3?.replace("%", ""));
+    if (isNaN(rawValue)) rawValue = 0;
+    setValue("sceneryPercentage3", `${rawValue}%`);
+    setFormWatch({
+      ...formWatch,
+      sceneryPercentage3: rawValue,
+    });
+  }, [sceneryPercentage3]);
 
   useEffect(() => {
     // const resourceValueNumeric = parseFloat(resourceValue);
@@ -166,6 +218,7 @@ export const useEditAbsorptionPercentageModal = (
     if (communeFundId) {
       setResourceRaw(communeFundId);
       setFormWatch({
+        ...formWatch,
         sceneryPercentage1: row?.sceneryPercentage1,
         sceneryPercentage2: row?.sceneryPercentage2,
         sceneryPercentage3: row?.sceneryPercentage3,

@@ -38,6 +38,7 @@ export const useCreateAbsorptionPercentageModal = (
     sceneryPercentage1: 0,
     sceneryPercentage2: 0,
     sceneryPercentage3: 0,
+    resource: 0,
   });
   const [communeFundId, resourceValue] = watch(["communeFundId", "resource"]);
 

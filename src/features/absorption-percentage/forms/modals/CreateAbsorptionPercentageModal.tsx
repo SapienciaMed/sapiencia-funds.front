@@ -6,6 +6,7 @@ import {
   SelectComponent,
 } from "../../../../common/components/Form";
 import { useCreateAbsorptionPercentageModal } from "../../hooks/createAbsorptionPercentage";
+import { Controller } from "react-hook-form";
 
 const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
   const {
@@ -58,49 +59,76 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               classNameLabel="text-black big bold"
             />
 
-            <InputComponent
-              idInput="sceneryPercentage1"
-              label={
-                <>
-                  Escenario 1 <span>*</span>
-                </>
-              }
-              typeInput="number"
-              register={register}
-              errors={errors}
-              onChange={handleChange}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
+<Controller
+              control={control}
+              name="sceneryPercentage1"
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput="sceneryPercentage1"
+                    label={
+                      <>
+                        Escenario 1 <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    register={register}
+                    errors={errors}
+                    onChange={handleChange}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
+                );
+              }}
             />
-            <InputComponent
-              idInput="sceneryPercentage2"
-              label={
-                <>
-                  Escenario 2 <span>*</span>
-                </>
-              }
-              typeInput="number"
-              register={register}
-              errors={errors}
-              onChange={handleChange}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
+           <Controller
+              control={control}
+              name="sceneryPercentage2"
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                  idInput="sceneryPercentage2"
+                  label={
+                    <>
+                      Escenario 2 <span>*</span>
+                    </>
+                  }
+                  typeInput="text"
+                  register={register}
+                  errors={errors}
+                  onChange={handleChange}
+                  className="input-basic medium"
+                  classNameLabel="text-black big bold"
+                  {...field}
+                />
+                );
+              }}
             />
           </div>
           <div className="grid-form-4-container gap-25 mt-13px">
-            <InputComponent
-              idInput="sceneryPercentage3"
-              label={
-                <>
-                  Escenario 3 <span>*</span>
-                </>
-              }
-              typeInput="number"
-              errors={errors}
-              register={register}
-              onChange={handleChange}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
+          <Controller
+              control={control}
+              name="sceneryPercentage3"
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                  idInput="sceneryPercentage3"
+                  label={
+                    <>
+                      Escenario 3 <span>*</span>
+                    </>
+                  }
+                  typeInput="text"
+                  errors={errors}
+                  register={register}
+                  className="input-basic medium"
+                  classNameLabel="text-black big bold"
+                  onChange={handleChange}
+                  {...field}
+                />
+                );
+              }}
             />
             <InputComponent
               idInput="sceneryValue1"
