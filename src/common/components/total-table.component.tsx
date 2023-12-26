@@ -31,6 +31,7 @@ interface IProps<T> {
   data: Array<T>;
   classSizeTable?: string;
   isMobil?: boolean;
+  viewPaginator?: boolean;
 }
 
 interface IRef {
@@ -46,6 +47,7 @@ const TotalTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     emptyMessage = "No hay resultados.",
     classSizeTable,
     isMobil = true,
+    viewPaginator = true
   } = props;
 
   // States
@@ -92,26 +94,29 @@ const TotalTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     <div className="spc-common-table">
       {title && <div className="spc-table-title">{title}</div>}
 
-      <Paginator
-        className="between spc-table-paginator"
-        template={paginatorHeader}
-        rows={perPage}
-        onPageChange={(i) => setPerPage(i.rows)}
-        totalRecords={props?.data?.length} // Cambia 'meta' por 'pagingInfo'
-        leftContent={
-          <p className="header-information text-black biggest">
-            {secondaryTitle ?? "Totales"}
-          </p>
-        }
-      />
-
+      {
+        viewPaginator && (
+          <Paginator
+            className="between spc-table-paginator"
+            template={paginatorHeader}
+            rows={perPage}
+            onPageChange={(i) => setPerPage(i.rows)}
+            totalRecords={props?.data?.length} // Cambia 'meta' por 'pagingInfo'
+            leftContent={
+              <p className="header-information text-black biggest">
+                {secondaryTitle ?? "Totales"}
+              </p>
+            }
+          />
+        )
+      }
       {width > 830  || !isMobil ? (
         <div>
           <DataTable
             className={`spc-table full-height ${classSizeTable}`}
             value={props.data}
             scrollable={true}
-            paginator={true}
+            paginator={viewPaginator}
             rows={perPage}
             emptyMessage={emptyMessage}
           >
