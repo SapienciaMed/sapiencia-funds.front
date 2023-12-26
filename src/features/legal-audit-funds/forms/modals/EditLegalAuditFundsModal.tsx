@@ -18,7 +18,6 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
     register,
     handleCancel,
     submitDisabled,
-    handleChange,
   } = useEditLegalAuditFundsModal(announcementId, row, reloadTable);
   return (
     <FormComponent
@@ -44,7 +43,6 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
                     typeInput="text"
                     register={register}
                     errors={errors}
-                    onChange={handleChange}
                     className="input-basic medium"
                     disabled
                     classNameLabel="text-black big bold"
@@ -68,7 +66,6 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
                     typeInput="text"
                     register={register}
                     errors={errors}
-                    onChange={handleChange}
                     className="input-basic medium"
                     classNameLabel="text-black big bold"
                     {...field}
@@ -91,7 +88,6 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
                     typeInput="number"
                     register={register}
                     errors={errors}
-                    onChange={handleChange}
                     className="input-basic medium"
                     disabled
                     classNameLabel="text-black big bold"
@@ -129,7 +125,6 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
                     typeInput="number"
                     register={register}
                     errors={errors}
-                    onChange={handleChange}
                     className="input-basic medium"
                     classNameLabel="text-black big bold"
                     {...field}
