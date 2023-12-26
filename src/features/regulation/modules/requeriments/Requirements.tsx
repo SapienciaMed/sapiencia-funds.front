@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import SwitchComponent from "../../../../../common/components/Form/switch.component";
+import SwitchComponent from "../../../../common/components/Form/switch.component";
 import {
   ButtonComponent,
   FormComponent,
   InputComponent,
-} from "../../../../../common/components/Form";
-import { TextAreaComponent } from "../../../../../common/components/Form/input-text-area.component";
+} from "../../../../common/components/Form";
+import { TextAreaComponent } from "../../../../common/components/Form/input-text-area.component";
 import { Controller } from "react-hook-form";
-import useRequerimentsHook from "./hooks";
-import TableComponent from "../../../../../common/components/table.component";
+import useRequerimentsHook from "../../hooks/requeriments.hook";
+import TableComponent from "../../../../common/components/table.component";
 
 const Requirements = ({ onlyView, id = null }) => {
   const {

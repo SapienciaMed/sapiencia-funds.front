@@ -1,4 +1,3 @@
-import React from "react";
 import "./styles.scss";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -21,7 +20,7 @@ const Acordion = ({
   isOpen = false,
   classname = "",
   onlyView = false,
-  iconRow = false
+  iconRow = false,
 }: IAcordion) => {
   return (
     <div style={{ margin: "16px 0" }}>
@@ -31,7 +30,7 @@ const Acordion = ({
           className={onlyView ? "onlyView" : "summary"}
         >
           <div className={` text-black bold-500 text-font ${classname}`}>
-            {iconRow && <IoIosArrowDown/>} {title}
+            {iconRow && <IoIosArrowDown />} {title}
           </div>
           <div onClick={(e) => e.stopPropagation()}>{switchElement}</div>
         </summary>
