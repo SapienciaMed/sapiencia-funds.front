@@ -14,10 +14,7 @@ import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 import { useNavigate } from "react-router-dom";
 import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
-export default function useBeneficiaryTray(
-  typeState: number,
-  isCut: boolean = true
-) {
+export default function useBeneficiaryTray(typeState: number, isCut: boolean = true, changeCut: boolean = true) {
   const navigate = useNavigate();
   const tableComponentRef = useRef(null);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
@@ -101,7 +98,6 @@ export default function useBeneficiaryTray(
           {
             fieldName: "dateIncomeCut",
             header: "Fecha ingreso al corte",
-            hide: true,
             renderCell(row) {
               const date = new Date(row.dateIncomeCut);
               const day = date.getUTCDate();
@@ -115,68 +111,69 @@ export default function useBeneficiaryTray(
                 </div>
               );
             },
-          },
-          {
-            fieldName: "cut",
-            header: "Corte",
-            hide: true,
-          },
-          {
-            fieldName: "dateFinallyCut",
-            header: "Fecha final corte",
-            hide: true,
-            renderCell(row) {
-              const date = new Date(row.dateFinallyCut);
-              const day = date.getUTCDate();
-              const month = date.getUTCMonth() + 1;
-              const year = date.getUTCFullYear();
+            hide: !changeCut
+        },
+        {
+          fieldName: "cut",
+          header: "Corte",
+          hide: true,
+        },
+        {
+          fieldName: "dateFinallyCut",
+          header: "Fecha final corte",
+          hide: true,
+          renderCell(row) {
+            const date = new Date(row.dateFinallyCut);
+            const day = date.getUTCDate();
+            const month = date.getUTCMonth() + 1;
+            const year = date.getUTCFullYear();
 
-              return (
-                <div>
-                  {year}/{month < 10 ? "0" + month : month}/
-                  {day < 10 ? "0" + day : day}
-                </div>
-              );
-            },
+            return (
+              <div>
+                {year}/{month < 10 ? "0" + month : month}/
+                {day < 10 ? "0" + day : day}
+              </div>
+            );
           },
-          {
-            fieldName: "dateEndGracePeriod",
-            header: "Fecha fin periodo de gracia",
-            hide: true,
-            renderCell(row) {
-              const date = new Date(row.dateEndGracePeriod);
-              const day = date.getUTCDate();
-              const month = date.getUTCMonth() + 1;
-              const year = date.getUTCFullYear();
+        },
+        {
+          fieldName: "dateEndGracePeriod",
+          header: "Fecha fin periodo de gracia",
+          hide: true,
+          renderCell(row) {
+            const date = new Date(row.dateEndGracePeriod);
+            const day = date.getUTCDate();
+            const month = date.getUTCMonth() + 1;
+            const year = date.getUTCFullYear();
 
-              return (
-                <div>
-                  {year}/{month < 10 ? "0" + month : month}/
-                  {day < 10 ? "0" + day : day}
-                </div>
-              );
-            },
+            return (
+              <div>
+                {year}/{month < 10 ? "0" + month : month}/
+                {day < 10 ? "0" + day : day}
+              </div>
+            );
           },
-          {
-            fieldName: "status",
-            header: "Estado",
-            hide: true,
-          },
-          {
-            fieldName: "reason",
-            header: "Motivo",
-            hide: true,
-          },
-          {
-            fieldName: "characterization",
-            header: "Caracterización",
-            hide: true,
-          },
-          {
-            fieldName: "currentResponsible",
-            header: "Responsable actual",
-            hide: true,
-          },
+        },
+        {
+          fieldName: "status",
+          header: "Estado",
+          hide: true,
+        },
+        {
+          fieldName: "reason",
+          header: "Motivo",
+          hide: true,
+        },
+        {
+          fieldName: "characterization",
+          header: "Caracterización",
+          hide: true,
+        },
+        {
+          fieldName: "currentResponsible",
+          header: "Responsable actual",
+          hide: true,
+        },
         ];
 
       return a.filter((u) => u.hide);
