@@ -1,11 +1,15 @@
-import { ButtonComponent, FormComponent, SelectComponent } from "../../../common/components/Form";
-import useSearchRegulation from "../hooks/search";
+import {
+  ButtonComponent,
+  FormComponent,
+  SelectComponent,
+} from "../../../common/components/Form";
+import useSearchRegulation from "../hooks/regulation-search.hook";
 import TableComponent from "../../../common/components/table.component";
 import { BiPlusCircle } from "react-icons/bi";
 import { EDirection } from "../../../common/constants/input.enum";
 import { ProgressSpinner } from "primereact/progressspinner";
 
-const Regulation = ({ auth, authDetail, authEdit }) => {
+const RegulationSearchPage = ({ auth, authDetail, authEdit }) => {
   const {
     tableComponentRef,
     tableActions,
@@ -19,7 +23,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
     listPrograms,
     tableColumns,
     arrayPeriod,
-    showSpinner
+    showSpinner,
   } = useSearchRegulation(auth, authDetail, authEdit);
 
   return (
@@ -28,9 +32,9 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
         <section className="title-area-4">
           <p className="text-black extra-large no-margin">Reglamento</p>
           <div className="display-align-flex-center">
-            <div 
-              className='title-button font-big'
-              style={{ fontSize: '16px'}}
+            <div
+              className="title-button font-big"
+              style={{ fontSize: "16px" }}
               onClick={() => newElement()}
             >
               Crear <BiPlusCircle />
@@ -38,40 +42,43 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
           </div>
         </section>
         <section className="card-table mt-20px">
-          <FormComponent  id="regulationSeach" className="form-signIn" action={onSubmit}>
+          <FormComponent
+            id="regulationSeach"
+            className="form-signIn"
+            action={onSubmit}
+          >
             <div className="grid-form-3-container gap-15">
               <SelectComponent
                 idInput="programId"
                 control={control}
                 placeholder="Seleccionar"
-                label='Programa'
+                label="Programa"
                 data={listPrograms ?? []}
                 direction={EDirection.column}
                 className="select-basic big select-disabled-list"
-                classNameLabel='text-black big text-with-colons'
+                classNameLabel="text-black big text-with-colons"
               />
               <SelectComponent
                 idInput="initialPeriod"
                 control={control}
                 placeholder="Seleccionar"
-                label='Periodo inicial de convocatoria'
+                label="Periodo inicial de convocatoria"
                 data={arrayPeriod ?? []}
                 direction={EDirection.column}
                 className="select-basic big select-disabled-list"
-                classNameLabel='text-black big text-with-colons'
+                classNameLabel="text-black big text-with-colons"
               />
               <SelectComponent
                 idInput="endPeriod"
                 control={control}
                 placeholder="Seleccionar"
-                label='Periodo final de convocatoria'
+                label="Periodo final de convocatoria"
                 data={arrayPeriod ?? []}
                 direction={EDirection.column}
                 className="select-basic big select-disabled-list"
-                classNameLabel='text-black big text-with-colons'
+                classNameLabel="text-black big text-with-colons"
               />
             </div>
-            
           </FormComponent>
         </section>
         <section className="buttonsActions2">
@@ -90,12 +97,15 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
             type="submit"
             className="button-save disabled-black padding-button"
           />
-        </section> 
-        {
-          showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
-        } 
+        </section>
+        {showSpinner && (
+          <ProgressSpinner
+            style={{ width: "25px", height: "25px" }}
+            animationDuration=".5s"
+          />
+        )}
       </div>
-      
+
       {showTable && (
         <TableComponent
           ref={tableComponentRef}
@@ -115,4 +125,4 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
   );
 };
 
-export default Regulation;
+export default RegulationSearchPage;

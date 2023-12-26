@@ -1,7 +1,8 @@
 import React from "react";
-import Acordion from "../../components/acordion";
-import SwitchComponent from "../../../../common/components/Form/switch.component";
-import TableJson from "../../components/tableJson";
+import Acordion from "../components/acordion";
+import SwitchComponent from "../../../common/components/Form/switch.component";
+import TableJson from "../components/tableJson";
+import { IPerformanceStructure } from "../../../common/interfaces/regulation";
 
 const ForgivenessPercentages = ({
   errors,
@@ -58,7 +59,8 @@ const ForgivenessPercentages = ({
           }
         >
           <div>
-            {/* <TableJson
+            <TableJson
+              dataRead={[] as any}
               idInput="performancePeriod"
               isOpen={toggleControl?.applyCondonationPerformancePeriod}
               setValue={setValue}
@@ -66,7 +68,7 @@ const ForgivenessPercentages = ({
               getValues={getValues}
               error={performancePeriodErrors}
               onlyView={onlyView}
-            /> */}
+            />
           </div>
         </Acordion>
       </div>
@@ -111,7 +113,8 @@ const ForgivenessPercentages = ({
           }
         >
           <div>
-            {/* <TableJson
+            <TableJson
+              dataRead={[] as any}
               isOpen={toggleControl?.accomulatedIncomeCondonationApplies}
               idInput="accumulatedPerformance"
               setValue={setValue}
@@ -119,7 +122,7 @@ const ForgivenessPercentages = ({
               getValues={getValues}
               error={accumulatedPerformanceErrors}
               onlyView={onlyView}
-            /> */}
+            />
           </div>
         </Acordion>
       </div>

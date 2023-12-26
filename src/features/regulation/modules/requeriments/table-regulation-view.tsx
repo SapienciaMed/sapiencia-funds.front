@@ -1,14 +1,15 @@
 import { useRef } from "react";
-import { ICondonationPercent, IReglamentConsolidation, IRequirementsForReglament } from "../../../../../common/interfaces/regulation";
-import { ITableElement } from "../../../../../common/interfaces";
-import TotalTableComponent from "../../../../../common/components/total-table.component";
-import { ERegulation } from "../../../../../common/constants/api.enum";
+import { ICondonationPercent, IRegulation, IRequirementsForReglament } from "../../../../common/interfaces/regulation";
+import { ITableElement } from "../../../../common/interfaces";
+import TotalTableComponent from "../../../../common/components/total-table.component";
+import { ERegulation } from "../../../../common/constants/api.enum";
 
 interface IRequiremetOnlyView{
-    detailData: IReglamentConsolidation;
+    detailData: IRegulation;
     typeTable: {
         requirement?: ERegulation.requirement,
-        socialService?: ERegulation.socialService
+        socialService?: ERegulation.socialService,
+        knowledgeTransfer?: ERegulation.knowledgeTransfer
     }
     viewPaginator: boolean
 }
@@ -74,9 +75,16 @@ const TableRegulationView = ({ detailData, typeTable, viewPaginator }: IRequirem
        if (typeTable.socialService) {
             return {
                 colum: tableSocialService,
-                data: detailData.knowledgeTransferCondonationPercent
+                data: detailData.socialServiceCondonationPercent
             };
        }
+
+        if (typeTable.knowledgeTransfer) {
+            return {
+                colum: tableSocialService,
+                data: detailData.knowledgeTransferCondonationPercent
+            };
+        }
 
         return {
             colum: [],

@@ -62,6 +62,7 @@ export const useConsultAbsorptionPercentage = () => {
           items: true,
         });
       },
+      hide: !validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_EDITAR"),
     },
 
     {
@@ -69,6 +70,7 @@ export const useConsultAbsorptionPercentage = () => {
       onClick: (row) => {
         handleDelete(row);
       },
+      hide: !validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_ELIMINAR"),
     },
   ];
 

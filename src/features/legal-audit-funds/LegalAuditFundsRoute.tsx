@@ -14,7 +14,7 @@ function LegalAuditFundsRoutes() {
         element={
           <PrivateRoute
             element={<ConsultLegalAuditFundsRoute />}
-            allowedAction={"FONDOS_LEGALIZADO"}
+            allowedAction={"FONDOS_LEGALIZADO_CONSULTAR"}
           />
         }
       />

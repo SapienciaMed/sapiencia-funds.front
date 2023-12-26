@@ -71,7 +71,6 @@ export const useEditLegalAuditFundsModal = (
     try {
       const endpoint = `/api/v1/legalized/update-commune-budget`;
       const resp = await put(endpoint, fullData);
-      // await reloadTable({ announcementId });
 
       if (resp.operation.code === "FAIL") {
         return setMessage({
@@ -89,7 +88,10 @@ export const useEditLegalAuditFundsModal = (
         description: "¡Información actualizada exitosamente!",
         show: true,
         OkTitle: "Cerrar",
-        onOk: () => setMessage({ show: false }),
+        onOk: async () => {
+          setMessage({ show: false });
+          await reloadTable({ announcementId });
+        },
         background: true,
       });
     } catch (err) {

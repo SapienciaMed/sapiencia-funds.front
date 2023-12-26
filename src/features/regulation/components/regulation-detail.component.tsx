@@ -1,15 +1,23 @@
-import Acordion from "../components/acordion";
+import Acordion from "./acordion";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { InputComponent } from "../../../common/components/Form";
-import TableJson from "../components/tableJson";
+import TableJson from "./tableJson";
 import { IPropDetailReglament } from "../../../common/interfaces/regulation";
-import TableRegulationView from "./modules/requeriments/table-regulation-view";
 import { EDirection } from "../../../common/constants/input.enum";
+import TableRegulationView from "../modules/requeriments/table-regulation-view";
 
-
-const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors, control }: IPropDetailReglament) => {
-  const preventClick = (e) => { return e.preventDefault() }
+const RegulationDetailComponent = ({
+  detailData,
+  setValue,
+  getValues,
+  listPrograms,
+  errors,
+  control,
+}: IPropDetailReglament) => {
+  const preventClick = (e) => {
+    return e.preventDefault();
+  };
 
   return (
     <div className="container-modal-body">
@@ -27,46 +35,45 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               value={String(detailData?.idProgram) ?? ""}
               disabled={true}
               data={listPrograms}
-              label='Programa'
+              label="Programa"
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest font-500"
               placeholder="Seleccionar"
             />
           </div>
           <div className="container-designation-three-objects grid-template-container-fourth col-gap-small mt-16px mb-16px">
-              <InputComponent
-                idInput='initialPeriod'
+            <InputComponent
+              idInput="initialPeriod"
+              disabled={true}
+              defaultValue={detailData?.initialPeriod ?? "0"}
+              typeInput="text"
+              value={detailData?.initialPeriod}
+              className="input-basic input-size"
+              classNameLabel="text-black biggest font-500"
+              label="Periodo inicial de convocatoria"
+            />
+            <div className="containerIsOpenPeriod">
+              <SwitchComponent
+                idInput={"isOpenPeriod"}
+                defaultValue={detailData.isOpenPeriod == 1}
+                size="normal"
+                control={control}
                 disabled={true}
-                defaultValue={detailData?.initialPeriod ?? '0'}
-                typeInput="text"
-                value={detailData?.initialPeriod}
-                className="input-basic input-size"
+                label={<>Convocatoria abierta</>}
+                className="select-basic select-disabled-list input-size"
                 classNameLabel="text-black biggest font-500"
-                label="Periodo inicial de convocatoria"
               />
-              <div className="containerIsOpenPeriod">
-                <SwitchComponent
-                  idInput={"isOpenPeriod"}
-                  defaultValue={detailData.isOpenPeriod == 1}
-                  size="normal"
-                  control={control}
-                  disabled={true}
-                  label={<>Convocatoria abierta</>}
-                  className="select-basic select-disabled-list input-size"
-                  classNameLabel="text-black biggest font-500"
-                />
-
-              </div>
-               <InputComponent
-                idInput='endPeriod'
-                disabled={true}
-                defaultValue={detailData?.endPeriod ?? '0'}
-                typeInput="text"
-                value={detailData?.endPeriod}
-                className="input-basic input-size"
-                classNameLabel="text-black biggest font-500"
-                label='Periodo final de convocatoria'
-              />
+            </div>
+            <InputComponent
+              idInput="endPeriod"
+              disabled={true}
+              defaultValue={detailData?.endPeriod ?? "0"}
+              typeInput="text"
+              value={detailData?.endPeriod}
+              className="input-basic input-size"
+              classNameLabel="text-black biggest font-500"
+              label="Periodo final de convocatoria"
+            />
           </div>
           <div onClick={preventClick}>
             <Acordion
@@ -80,7 +87,9 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                   direction={EDirection.other}
                   idInput={"theoreticalSemiannualPercent"}
                   disabled={true}
-                  defaultValue={detailData?.applyTheoreticalSemiannualPercent == 1}
+                  defaultValue={
+                    detailData?.applyTheoreticalSemiannualPercent == 1
+                  }
                   size="small"
                   classNameSwitch="opacity"
                   className="select-basic select-disabled-list input-size opacity"
@@ -89,15 +98,17 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
             >
               <div className="containerApplyService">
                 <div className="mb-24px">
-                    <InputComponent
-                      idInput='theoreticalPercentage'
-                      disabled={true}
-                      defaultValue={`${detailData?.theoreticalSemiannualPercent ?? '0'}%`}
-                      typeInput="text"
-                      className="input-basic medium"
-                      classNameLabel="text-black big text-required font-500"
-                      label="Porcentaje de pago teórico semestral"
-                    />
+                  <InputComponent
+                    idInput="theoreticalPercentage"
+                    disabled={true}
+                    defaultValue={`${
+                      detailData?.theoreticalSemiannualPercent ?? "0"
+                    }%`}
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Porcentaje de pago teórico semestral"
+                  />
                 </div>
               </div>
             </Acordion>
@@ -114,7 +125,9 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                   direction={EDirection.other}
                   idInput={"extensionApply"}
                   disabled={true}
-                  defaultValue={detailData?.applyAcademicPerformancePercent == 1}
+                  defaultValue={
+                    detailData?.applyAcademicPerformancePercent == 1
+                  }
                   size="small"
                   classNameSwitch="opacity"
                   className="select-basic select-disabled-list input-size"
@@ -125,9 +138,11 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               <div className="containerApplyService">
                 <div>
                   <InputComponent
-                    idInput='academicPerformancePercent'
+                    idInput="academicPerformancePercent"
                     disabled={true}
-                    defaultValue={`${detailData?.academicPerformancePercent ?? 0}%`}
+                    defaultValue={`${
+                      detailData?.academicPerformancePercent ?? 0
+                    }%`}
                     typeInput="text"
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
@@ -160,7 +175,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               <div className="containerApplyService">
                 <div>
                   <InputComponent
-                    idInput='requirementsPercent'
+                    idInput="requirementsPercent"
                     disabled={true}
                     defaultValue={`${detailData?.requirementsPercent ?? 0}%`}
                     typeInput="text"
@@ -193,36 +208,36 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               }
             >
               <div className="grid-form-3-container gap-15">
-                  <InputComponent
-                    idInput='socialServicePercent'         
-                    disabled={true}
-                    defaultValue={`${detailData?.socialServicePercent || '0'} %`}
-                    typeInput="text"
-                    className="input-basic medium"
-                    classNameLabel="text-black big text-required font-500"
-                    label="Porcentaje de descuento por periodo"
-                  />
-                  <InputComponent
-                    idInput='socialServiceHours'
-                    defaultValue={`${detailData?.socialServiceHours}`}
-                    typeInput="number"
-                    className="input-basic medium"
-                    classNameLabel="text-black big text-required font-500"
-                    label="Horas por periodo"
-                    disabled={true}
-                  />
-                  <InputComponent
-                    idInput='socialServiceCondonationType'
-                    defaultValue={`${detailData?.socialServiceCondonationType}`}
-                    typeInput="text"
-                    className="input-basic medium"
-                    classNameLabel="text-black big text-required font-500"
-                    label="Tipo de condonación"
-                    disabled={true}
-                  />
+                <InputComponent
+                  idInput="socialServicePercent"
+                  disabled={true}
+                  defaultValue={`${detailData?.socialServicePercent || "0"} %`}
+                  typeInput="text"
+                  className="input-basic medium"
+                  classNameLabel="text-black big text-required font-500"
+                  label="Porcentaje de descuento por periodo"
+                />
+                <InputComponent
+                  idInput="socialServiceHours"
+                  defaultValue={`${detailData?.socialServiceHours}`}
+                  typeInput="number"
+                  className="input-basic medium"
+                  classNameLabel="text-black big text-required font-500"
+                  label="Horas por periodo"
+                  disabled={true}
+                />
+                <InputComponent
+                  idInput="socialServiceCondonationType"
+                  defaultValue={`${detailData?.socialServiceCondonationType}`}
+                  typeInput="text"
+                  className="input-basic medium"
+                  classNameLabel="text-black big text-required font-500"
+                  label="Tipo de condonación"
+                  disabled={true}
+                />
               </div>
               {
-                detailData?.knowledgeTransferCondonationPercent?.length > 0 &&
+                detailData?.socialServiceCondonationPercent?.length > 0 &&
                   <div className="mt-16px">
                     <TableRegulationView  detailData={detailData} typeTable={{ socialService: 2 }} viewPaginator={false} />
                   </div>
@@ -239,7 +254,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput='applyKnowledgeTransfer'
+                  idInput="applyKnowledgeTransfer"
                   disabled={true}
                   defaultValue={detailData?.applyKnowledgeTransfer == 1}
                   size="small"
@@ -249,15 +264,15 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 />
               }
             >
-              <div className="grid-form-2-container gap-15">
+              <div className="grid-form-3-container gap-15">
                   <InputComponent
                     idInput='knowledgeTransferPercent'
-                    defaultValue={`${detailData?.knowledgeTransferPercent}`}
-                    typeInput="number"
+                    defaultValue={`${detailData?.knowledgeTransferPercent || '0'} %`}
+                    typeInput="text"
                     disabled={true}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
-                    label="Porcentaje de cumplimiento"
+                    label="Porcentaje de descuento por periodo"
                   />
                   <InputComponent
                     idInput='knowledgeTransferHours'
@@ -265,10 +280,25 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     typeInput="number"
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
-                    label="Horas totales por el crédito"
+                    label="Horas por periodo"
+                    disabled={true}
+                  />
+                   <InputComponent
+                    idInput='knowledgeTransferCondonationType'
+                    defaultValue={`${detailData?.knowledgeTransferCondonationType}`}
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Tipo de condonación"
                     disabled={true}
                   />
               </div>
+              {
+                detailData?.knowledgeTransferCondonationPercent?.length > 0 &&
+                  <div className="mt-16px">
+                    <TableRegulationView  detailData={detailData} typeTable={{ knowledgeTransfer: 3 }} viewPaginator={false} />
+                  </div>
+              }
             </Acordion>
           </div>
           <div onClick={preventClick}>
@@ -281,7 +311,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"applyGracePeriod"} 
+                  idInput={"applyGracePeriod"}
                   disabled={true}
                   defaultValue={detailData?.applyGracePeriod == 1}
                   size="small"
@@ -294,7 +324,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               <div className="containerApplyService">
                 <div className="mb-24px">
                   <InputComponent
-                    idInput='gracePeriodMonths'
+                    idInput="gracePeriodMonths"
                     defaultValue={`${detailData?.gracePeriodMonths}`}
                     typeInput="number"
                     className="input-basic medium"
@@ -305,12 +335,12 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 </div>
                 <div className="mb-24px">
                   <InputComponent
-                    idInput='graceDateApplication'
+                    idInput="graceDateApplication"
                     defaultValue={`${detailData?.graceDateApplication}`}
                     typeInput="text"
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
-                    label='Fecha de aplicación'
+                    label="Fecha de aplicación"
                     disabled={true}
                   />
                 </div>
@@ -340,7 +370,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               <div className="containerApplyService">
                 <div>
                   <InputComponent
-                    idInput='continuosSuspencionQuantity'
+                    idInput="continuosSuspencionQuantity"
                     defaultValue={`${detailData?.continuosSuspencionQuantity}`}
                     typeInput="number"
                     className="input-basic medium"
@@ -375,7 +405,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               <div className="containerApplyService">
                 <div>
                   <InputComponent
-                    idInput='discontinuousSuspensionQuantity'
+                    idInput="discontinuousSuspensionQuantity"
                     defaultValue={`${detailData?.discontinuousSuspensionQuantity}`}
                     typeInput="number"
                     className="input-basic medium"
@@ -398,7 +428,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                   control={control}
                   direction={EDirection.other}
                   disabled={true}
-                  idInput={"applySpecialSuspensions"}  
+                  idInput={"applySpecialSuspensions"}
                   defaultValue={detailData?.applySpecialSuspensions == 1}
                   size="small"
                   classNameSwitch="opacity"
@@ -410,7 +440,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               <div className="containerApplyService">
                 <div>
                   <InputComponent
-                    idInput='specialSuspensionsQuantity'
+                    idInput="specialSuspensionsQuantity"
                     disabled={true}
                     defaultValue={`${detailData?.specialSuspensionsQuantity}`}
                     typeInput="number"
@@ -445,7 +475,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               <div className="containerApplyService">
                 <div>
                   <InputComponent
-                    idInput='extensionQuantity'
+                    idInput="extensionQuantity"
                     disabled={true}
                     defaultValue={`${detailData?.extensionQuantity}`}
                     typeInput="number"
@@ -456,7 +486,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 </div>
               </div>
             </Acordion>
-          </div>   
+          </div>
         </>
       </Acordion>
       <Acordion
@@ -478,7 +508,9 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                   control={control}
                   direction={EDirection.other}
                   idInput={"applyCondonationPerformancePeriod"}
-                  defaultValue={detailData?.applyCondonationPerformancePeriod == 1}
+                  defaultValue={
+                    detailData?.applyCondonationPerformancePeriod == 1
+                  }
                   disabled={true}
                   classNameSwitch="opacity"
                   size="small"
@@ -511,9 +543,11 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput='applyAccomulatedIncomeCondonation'
+                  idInput="applyAccomulatedIncomeCondonation"
                   disabled={true}
-                  defaultValue={detailData?.applyAccomulatedIncomeCondonation == 1}
+                  defaultValue={
+                    detailData?.applyAccomulatedIncomeCondonation == 1
+                  }
                   classNameSwitch="opacity"
                   size="small"
                   className="select-basic select-disabled-list input-size"
@@ -544,13 +578,16 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
         switchElement={<></>}
         iconRow={true}
       >
-        {
-          detailData?.requirementsForReglament?.length > 0 &&
-            <TableRegulationView  detailData={detailData} typeTable={{ requirement: 1 }} viewPaginator={true} />
-        }
+        {detailData?.requirementsForReglament?.length > 0 && (
+          <TableRegulationView
+            detailData={detailData}
+            typeTable={{ requirement: 1 }}
+            viewPaginator={true}
+          />
+        )}
       </Acordion>
     </div>
   );
 };
 
-export default DetailReglament;
+export default RegulationDetailComponent;

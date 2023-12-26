@@ -78,7 +78,6 @@ export default function useSocialServices() {
   }
 
   function showModalSubmitData(row: ISocialServiceBeneficiary) {
-    console.log(row);
     setMessage({
       show: true,
       title: "Revisar",
@@ -176,7 +175,7 @@ export default function useSocialServices() {
                       />
                     </svg>
                   ) : (
-                    <FaEye color="#058cc1" className="icon-size" />
+                    row.state && <FaEye color="#058cc1" className="icon-size" />
                   )
                 }
                 onClick={(e) => {

@@ -34,7 +34,7 @@ import { AppContext } from "../contexts/app.context";
 import { ImProfile } from "react-icons/im";
 import { InputText } from "primereact/inputtext";
 import { Tooltip } from "primereact/tooltip";
-import { IReglamentConsolidation } from "../interfaces/regulation";
+import { IRegulation } from "../interfaces/regulation";
 
 interface IProps<T> {
   url: string;
@@ -156,21 +156,23 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           OkTitle: "Aceptar",
           onOk: () => {
             setMessage({});
-            if (onGlobalFilterChange) {
-              const valor = { target: { value: "" } as HTMLInputElement };
-              onGlobalFilterChange(valor);
-            }
+            // if (onGlobalFilterChange) {
+            //   const valor = { target: { value: "" } as HTMLInputElement };
+            //   onGlobalFilterChange(valor);
+            // }
+            resetValue?.();
           },
           onClose:() => {
             setMessage({});
-            if (onGlobalFilterChange) {
-              const valor = { target: { value: "" } as HTMLInputElement };
-              onGlobalFilterChange(valor);
-            }
+            // if (onGlobalFilterChange) {
+            //   const valor = { target: { value: "" } as HTMLInputElement };
+            //   onGlobalFilterChange(valor);
+            // }
+            resetValue?.();
           },
           background: true,
         });
-        resetValue?.();
+        
       }
     } else {
       setMessage({
