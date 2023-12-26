@@ -3,6 +3,8 @@ import useSearchRegulation from "../hooks/search";
 import TableComponent from "../../../common/components/table.component";
 import { BiPlusCircle } from "react-icons/bi";
 import { EDirection } from "../../../common/constants/input.enum";
+import { ProgressSpinner } from "primereact/progressspinner";
+
 const Regulation = ({ auth, authDetail, authEdit }) => {
   const {
     tableComponentRef,
@@ -11,11 +13,13 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
     onSubmit,
     newElement,
     reset,
-    setshowTable,
+    setShowTable,
+    setShowSpinner,
     control,
     listPrograms,
     tableColumns,
-    arrayPeriod
+    arrayPeriod,
+    showSpinner
   } = useSearchRegulation(auth, authDetail, authEdit);
 
   return (
@@ -76,7 +80,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
             type="button"
             className="button-cancel-text hover-three disabled-black padding-button"
             action={() => {
-              setshowTable(false);
+              setShowTable(false);
               reset();
             }}
           />
@@ -87,7 +91,11 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
             className="button-save disabled-black padding-button"
           />
         </section> 
+        {
+          showSpinner && <ProgressSpinner style={{width: '25px', height: '25px'}}  animationDuration=".5s" />
+        } 
       </div>
+      
       {showTable && (
         <TableComponent
           ref={tableComponentRef}
@@ -100,6 +108,7 @@ const Regulation = ({ auth, authDetail, authEdit }) => {
           emptyMessage="No hay resultados"
           classname="table-header"
           isMobil={false}
+          setShowSpinner={setShowSpinner}
         />
       )}
     </div>

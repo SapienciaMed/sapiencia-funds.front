@@ -30,7 +30,7 @@ const Acordion = ({
           onClick={() => onClick?.()}
           className={onlyView ? "onlyView" : "summary"}
         >
-          <div className={` text-black bold-500 text-font ${classname} display-align-flex-center gap-0 gap-05`}>
+          <div className={` text-black bold-500 text-font ${classname}`}>
             {iconRow && <IoIosArrowDown/>} {title}
           </div>
           <div onClick={(e) => e.stopPropagation()}>{switchElement}</div>
