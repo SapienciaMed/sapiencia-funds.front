@@ -7,6 +7,7 @@ import useYupValidationResolver from "../../../common/hooks/form-validator.hook"
 import { useGetcommuneFundIdHook } from "../../absorption-percentage/hooks/getcommuneFundIdHook";
 import { ICallLegalResfilters } from "../../../common/interfaces/LegalAuditFunds";
 import { editLegalAuditSchema } from "../../../common/schemas/legal-audit-schema";
+import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 
 export const useEditLegalAuditFundsModal = (
   announcementId,
@@ -24,19 +25,14 @@ export const useEditLegalAuditFundsModal = (
     handleSubmit,
     register,
     watch,
+    reset,
     setValue,
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
+  const [resourceRaw, setResourceRaw] = useState(0);
 
+  const [resourceValue] = watch(["resource"]);
   const [formWatch, setFormWatch] = useState<ICallLegalResfilters>({});
-
-  const handleChange = ({ target }) => {
-    const { name, value } = target;
-    setFormWatch((prevFormWatch) => ({
-      ...prevFormWatch,
-      [name]: value,
-    }));
-  };
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
@@ -61,9 +57,10 @@ export const useEditLegalAuditFundsModal = (
   const EditItem = async (data: ICallLegalResfilters) => {
     const fullData = {
       ...data,
-      fiduciaryId: row?.fiduciaryId,
       ...formWatch,
       announcementId,
+      fiduciaryId: row?.fiduciaryId,
+      resource: resourceRaw,
     };
     try {
       const endpoint = `/api/v1/legalized/update-commune-budget`;
@@ -101,16 +98,6 @@ export const useEditLegalAuditFundsModal = (
   };
 
   useEffect(() => {
-    setValue("communeFundId", row?.communeFundId);
-    setValue("resource", row?.resource);
-    setValue("fiduciaryId", row?.fiduciaryId);
-    setValue("update", new Date());
-    setValue("order", row?.order);
-  }, [row]);
-
-  useEffect(() => {
-    console.log("formWatch updated: ", formWatch);
-
     const { resource, order } = formWatch;
     if (!resource || !order) {
       return setSubmitDisabled(false);
@@ -118,8 +105,28 @@ export const useEditLegalAuditFundsModal = (
     setSubmitDisabled(false);
   }, [formWatch]);
 
+  useEffect(() => {
+    console.log("RESOURCE", resourceValue);
+    let rawValue = parseInt(
+      resourceValue
+        ?.toString()
+        ?.replace("$", "")
+        .replace(",", "")
+        .replace(".", "")
+    );
+    if (isNaN(rawValue)) rawValue = 0;
+    setValue("resource", formaterNumberToCurrency(rawValue));
+    setResourceRaw(rawValue);
+  }, [resourceValue]);
+
+  useEffect(() => {
+    reset(row);
+    setValue("resource", formaterNumberToCurrency(row?.resource));
+    setValue("update", new Date());
+    setResourceRaw(row?.resource);
+  }, [row]);
+
   return {
-    handleChange,
     control,
     register,
     errors,

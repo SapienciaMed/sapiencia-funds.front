@@ -5,7 +5,7 @@ export interface IEditLegalAuditFunds {
 }
 export interface ICallLegalResfilters {
   communeFundId?: number;
-  resource?: string;
+  resource?: number;
   order?: string;
   announcementId?: number;
   fiduciaryId?: string;
