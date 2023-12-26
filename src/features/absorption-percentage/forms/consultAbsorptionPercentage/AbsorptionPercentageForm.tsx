@@ -61,42 +61,49 @@ const AbsorptionPercentageForm = ({
           />
         </div>
       </div>
-      <div className="button-save-container-display-percentage mr-24px">
-        {tableView &&
-          validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_CREAR") && (
-            <div className="button-clean  mr-auto ml-25px">
-              <div>
-                <div
-                  className={`title-button  ${
-                    width < 300 ? "font-medium" : "font-big"
-                  } mt-12px mr-15px hover`}
-                  onClick={handleAggItem}
-                >
-                  <div className="button-border colorTittle alin pr-23px pl-23px">
-                    <BiPlusCircle />
-                    <span className="p-2px"> Agregar ítem </span>
+      <div className="button-save-container-display-percentage">
+        <div className="agg-item">
+          {tableView &&
+            validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_CREAR") && (
+              <div className="button-clean  mr-auto ml-25px mt--5px">
+                <div>
+                  <div
+                    className={`title-button  ${
+                      width < 300 ? "font-medium" : "font-big"
+                    } mt-12px mr-15px hover`}
+                    onClick={handleAggItem}
+                  >
+                    <div className="button-border colorTittle alin pr-23px pl-23px">
+                      <BiPlusCircle />
+                      <span className="p-2px"> Agregar ítem </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-
-        {tableView && (
-          <ButtonComponent
-            value="Limpiar campos"
-            className="button-clean  mr-3px mt-14px"
-            type="button"
-            action={handleClean}
-          />
-        )}
-        <ButtonComponent
-          value="Buscar"
-          className={`button-save ${
-            !isValid || submitDisabled ? "disabled-black" : ""
-          } big`}
-          type="submit"
-          disabled={!isValid || submitDisabled}
-        />
+            )}
+        </div>
+        <div className="container-actions">
+          <div className="clean-button">
+            {tableView && (
+              <ButtonComponent
+                value="Limpiar campos"
+                className="button-clean  mr-3px mt-14px"
+                type="button"
+                action={handleClean}
+              />
+            )}
+          </div>
+          <div className="search-button">
+            <ButtonComponent
+              value="Buscar"
+              className={`button-save ${
+                !isValid || submitDisabled ? "disabled-black" : ""
+              } big`}
+              type="submit"
+              disabled={!isValid || submitDisabled}
+            />
+          </div>
+        </div>
       </div>
     </FormComponent>
     {tableView && (
