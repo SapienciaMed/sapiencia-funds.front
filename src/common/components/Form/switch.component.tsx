@@ -21,6 +21,7 @@ interface ISwitch<T> {
   onChange?: () => void;
   onClick?: () => void;
   classNameSwitch?: string;
+  classFlexEnd?: string
 }
 
 const messageError = ({ idInput, errors, fieldArray }) => {
@@ -69,6 +70,7 @@ const SwitchComponent = ({
   onClick,
   defaultValue,
   classNameSwitch,
+  classFlexEnd
 }: ISwitch<any>): React.JSX.Element => {
   const [value, setValue] = useState(false);
   return (
@@ -84,7 +86,7 @@ const SwitchComponent = ({
         idInput={idInput}
         classNameLabel={classNameLabel}
       />
-      <div className="flex-container-input">
+      <div className={`flex-container-input ${classFlexEnd ?? ''} `}>
         <Controller
           name={idInput}
           control={control}
@@ -106,7 +108,7 @@ const SwitchComponent = ({
                   field.onChange(!value);
                   setValue(!value);
                 }}
-                checked={field.value}
+                checked={field.value || defaultValue }
                 className={`${className} ${
                   messageError({ idInput, errors, fieldArray })
                     ? "p-invalid"

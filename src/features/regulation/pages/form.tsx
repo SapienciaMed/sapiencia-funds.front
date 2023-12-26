@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useRegulationHook from "../hooks/createUpdate";
-import { periods } from "../service";
-import {
-  ButtonComponent,
-  FormComponent,
-} from "../../../common/components/Form/index";
+import { ButtonComponent,FormComponent } from "../../../common/components/Form/index";
 import InitialSetup from "./modules/initialSetup";
 import Tabs from "./modules/tabs";
 import ForgivenessPercentages from "./modules/ForgivenessPercentages";
@@ -61,7 +57,7 @@ const Form = ({ auth }) => {
             register={register}
             errors={errors}
             updateData={updateData}
-            periods={periods}
+            periods={{}}
             control={control}
             getValues={getValues}
             setValue={setValue}

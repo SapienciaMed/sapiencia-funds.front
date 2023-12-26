@@ -58,7 +58,7 @@ const ForgivenessPercentages = ({
           }
         >
           <div>
-            <TableJson
+            {/* <TableJson
               idInput="performancePeriod"
               isOpen={toggleControl?.applyCondonationPerformancePeriod}
               setValue={setValue}
@@ -66,7 +66,7 @@ const ForgivenessPercentages = ({
               getValues={getValues}
               error={performancePeriodErrors}
               onlyView={onlyView}
-            />
+            /> */}
           </div>
         </Acordion>
       </div>
@@ -111,7 +111,7 @@ const ForgivenessPercentages = ({
           }
         >
           <div>
-            <TableJson
+            {/* <TableJson
               isOpen={toggleControl?.accomulatedIncomeCondonationApplies}
               idInput="accumulatedPerformance"
               setValue={setValue}
@@ -119,7 +119,7 @@ const ForgivenessPercentages = ({
               getValues={getValues}
               error={accumulatedPerformanceErrors}
               onlyView={onlyView}
-            />
+            /> */}
           </div>
         </Acordion>
       </div>

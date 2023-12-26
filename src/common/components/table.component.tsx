@@ -34,6 +34,7 @@ import { AppContext } from "../contexts/app.context";
 import { ImProfile } from "react-icons/im";
 import { InputText } from "primereact/inputtext";
 import { Tooltip } from "primereact/tooltip";
+import { IReglamentConsolidation } from "../interfaces/regulation";
 
 interface IProps<T> {
   url: string;
@@ -661,3 +662,4 @@ const ActionComponent = (props: {
 };
 
 export default React.memo(TableComponent);
+
