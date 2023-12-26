@@ -8,7 +8,8 @@ interface IRequiremetOnlyView{
     detailData: IReglamentConsolidation;
     typeTable: {
         requirement?: ERegulation.requirement,
-        socialService?: ERegulation.socialService
+        socialService?: ERegulation.socialService,
+        knowledgeTransfer?: ERegulation.knowledgeTransfer
     }
     viewPaginator: boolean
 }
@@ -74,9 +75,16 @@ const TableRegulationView = ({ detailData, typeTable, viewPaginator }: IRequirem
        if (typeTable.socialService) {
             return {
                 colum: tableSocialService,
-                data: detailData.knowledgeTransferCondonationPercent
+                data: detailData.socialServiceCondonationPercent
             };
        }
+
+        if (typeTable.knowledgeTransfer) {
+            return {
+                colum: tableSocialService,
+                data: detailData.knowledgeTransferCondonationPercent
+            };
+        }
 
         return {
             colum: [],

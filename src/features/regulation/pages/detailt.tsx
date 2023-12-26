@@ -222,7 +222,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                   />
               </div>
               {
-                detailData?.knowledgeTransferCondonationPercent?.length > 0 &&
+                detailData?.socialServiceCondonationPercent?.length > 0 &&
                   <div className="mt-16px">
                     <TableRegulationView  detailData={detailData} typeTable={{ socialService: 2 }} viewPaginator={false} />
                   </div>
@@ -249,15 +249,15 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 />
               }
             >
-              <div className="grid-form-2-container gap-15">
+              <div className="grid-form-3-container gap-15">
                   <InputComponent
                     idInput='knowledgeTransferPercent'
-                    defaultValue={`${detailData?.knowledgeTransferPercent}`}
-                    typeInput="number"
+                    defaultValue={`${detailData?.knowledgeTransferPercent || '0'} %`}
+                    typeInput="text"
                     disabled={true}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
-                    label="Porcentaje de cumplimiento"
+                    label="Porcentaje de descuento por periodo"
                   />
                   <InputComponent
                     idInput='knowledgeTransferHours'
@@ -265,10 +265,25 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     typeInput="number"
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
-                    label="Horas totales por el crédito"
+                    label="Horas por periodo"
+                    disabled={true}
+                  />
+                   <InputComponent
+                    idInput='knowledgeTransferCondonationType'
+                    defaultValue={`${detailData?.knowledgeTransferCondonationType}`}
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Tipo de condonación"
                     disabled={true}
                   />
               </div>
+              {
+                detailData?.knowledgeTransferCondonationPercent?.length > 0 &&
+                  <div className="mt-16px">
+                    <TableRegulationView  detailData={detailData} typeTable={{ knowledgeTransfer: 3 }} viewPaginator={false} />
+                  </div>
+              }
             </Acordion>
           </div>
           <div onClick={preventClick}>
