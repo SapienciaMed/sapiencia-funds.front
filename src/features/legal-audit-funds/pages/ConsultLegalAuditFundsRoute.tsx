@@ -26,7 +26,7 @@ const ConsultLegalAuditFundsRoute = () => {
     <LegalAuditFundsForm
       showFooterActions={showFooterActions}
       setShowFooterActions={setShowFooterActions}
-      //   validateActionAccess={validateActionAccess}
+      validateActionAccess={validateActionAccess}
       errors={errors}
       control={control}
       isValid={isValid}
