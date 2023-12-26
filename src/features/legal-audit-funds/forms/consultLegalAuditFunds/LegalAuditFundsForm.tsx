@@ -4,13 +4,10 @@ import {
   FormComponent,
   SelectComponent,
 } from "../../../../common/components/Form";
-import { DatePickerComponent } from "../../../../common/components/Form/input-date.component";
-import TableComponent from "../../../../common/components/table.component";
 import Svgs from "../../../../public/images/icons/svgs";
 import { tableColumns } from "./columns";
-import { useWidth } from "../../../../common/hooks/use-width";
-import { BiPlusCircle } from "react-icons/bi";
-
+import BasicTableComponent from "../../../../common/components/basic-table.component";
+import TableDataPropComponent from "../../../../common/components/table-data-prop.component";
 const LegalAuditFundsForm = ({
   tableView,
   onSubmit,
@@ -22,13 +19,11 @@ const LegalAuditFundsForm = ({
   downloadCollection,
   showFooterActions,
   setShowFooterActions,
-  width,
   periodsData,
   tableActions,
-  setPaginateData,
   tableComponentRef,
-  urlGet,
-  register,
+  legalAuditData,
+  validateActionAccess,
 }) => (
   <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
     <FormComponent
@@ -36,7 +31,7 @@ const LegalAuditFundsForm = ({
       className="form-signIn"
       action={onSubmit}
     >
-      <span className="text-black large  grid-span-4-columns mt-10px ml-14px">
+      <span className="text-black large  grid-span-4-columns mt--4px ml--1px">
         Legalizados
       </span>
 
@@ -78,20 +73,18 @@ const LegalAuditFundsForm = ({
         />
       </div>
     </FormComponent>
-    {tableView && (
+    {tableView && legalAuditData && (
       <>
-        <div className="container-sections-forms ml-20px mr-20px">
-          <TableComponent
-            setPaginateData={setPaginateData}
+        <div className="container-sections-forms ml-10px mr-10px">
+          <TableDataPropComponent
             ref={tableComponentRef}
-            url={urlGet}
+            dataTable={legalAuditData}
             columns={tableColumns}
             actions={tableActions}
-            isShowModal={true}
+            isShowModal={false}
             setShowFooterActions={setShowFooterActions}
-            emptyMessage="No se generó resultado en la búsqueda"
-            descriptionModalNoResult="No se generó resultado en la búsqueda"
-            titleMessageModalNoResult="Resultado de búsqueda"
+            titleMessageModalNoResult={"No se encontraron registros"}
+            secondaryTitle="Resultados de busqueda"
           />
         </div>
         <div
@@ -101,22 +94,23 @@ const LegalAuditFundsForm = ({
             backgroundColor: "#e0e0e0",
           }}
         ></div>
-        {showFooterActions && (
-          <div className="button-save-container-display mt-20px mr-24px">
-            <ButtonComponent
-              value={
-                <>
-                  <div className="container-buttonText">
-                    <span>Descargar</span>
-                    <Svgs svg="excel" width={23.593} height={28.505} />
-                  </div>
-                </>
-              }
-              className="button-download large "
-              action={downloadCollection}
-            />
-          </div>
-        )}
+        {showFooterActions &&
+          validateActionAccess("FONDOS_LEGALIZADO_XLSX") && (
+            <div className="button-save-container-display mt-20px mr-24px">
+              <ButtonComponent
+                value={
+                  <>
+                    <div className="container-buttonText">
+                      <span>Descargar</span>
+                      <Svgs svg="excel" width={23.593} height={28.505} />
+                    </div>
+                  </>
+                }
+                className="button-download large "
+                action={downloadCollection}
+              />
+            </div>
+          )}
       </>
     )}
   </div>

@@ -15,6 +15,7 @@ export interface ICreatePeriodsAbsorption {
   sceneryPercentage1: number;
   sceneryPercentage2: number;
   sceneryPercentage3: number;
+  resource: number;
 }
 
 export interface IPeriodsAbsorption {

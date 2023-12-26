@@ -6,9 +6,9 @@ import TableComponent from '../../../common/components/table.component';
 
 const RemnantsPage = () => {
 
-    const { control, errors, register, onSubmit, announcementList, fundList, fiduciaList, tableComponentRef, tableColumns, tableActions, showTable, downloadCollection } = useRemnants();
+    const { control, errors, register, onSubmit, announcementList, fundList, fiduciaList, tableComponentRef, tableColumns, tableActions, showTable, downloadCollection, showDownload, setShowTable, reset, setShowDownload } = useRemnants();
 
-    const select1 = [{ value: 1, name: "prueba" }]
+
 
     return (
         <Fragment>
@@ -79,6 +79,20 @@ const RemnantsPage = () => {
             <div className="button-save-container-display-remanentes">
                 <ButtonComponent
                     form="searchRemnantsForm"
+                    value="Limpiar campos"
+                    type="button"
+                    className="button-cancel-text large hover-three disabled-black"
+                    action={() => {
+                        reset()
+                        if (showTable) {
+                            tableComponentRef.current.emptyData();
+                            setShowDownload(false)
+                            setShowTable(false)
+                        }
+                    }}
+                />
+                <ButtonComponent
+                    form="searchRemnantsForm"
                     value="Buscar"
                     type="submit"
                     className="button-save large disabled-black"
@@ -86,45 +100,49 @@ const RemnantsPage = () => {
             </div>
 
 
+
             {
                 showTable &&
-
-                <div>
-                    <div className="container-form-grid-remants mt-24px">
-                        <div className="container-form padding-form">
-                            <TableComponent
-                                ref={tableComponentRef}
-                                url={`${process.env.urlApiFunds}/api/v1/remnants/get-all-paginated`}
-                                columns={tableColumns}
-                                actions={tableActions}
-                                titleMessageModalNoResult="El remanente no existe"
-                                descriptionModalNoResult="No se encontraron resultados"
-                                isShowModal={true}
-
-                            />
-                        </div>
-                    </div>
+                <div className="container-form-grid-remants mt-24px">
+                    <div className="container-form padding-form">
+                        <TableComponent
+                            ref={tableComponentRef}
+                            url={`${process.env.urlApiFunds}/api/v1/remnants/get-all-paginated`}
+                            columns={tableColumns}
+                            actions={tableActions}
+                            titleMessageModalNoResult="El remanente no existe"
+                            descriptionModalNoResult="No se encontraron resultados"
+                            isShowModal={true}
+                            classSizeTable="size-table-wd-550"
+                            isMobil={false}
 
 
-
-
-                    <div className="button-save-container-display mr-8px mb-20px">
-                        <ButtonComponent
-                            value={
-                                <>
-                                    <div className="container-buttonText">
-                                        <span>Descargar</span>
-                                        <Svgs svg="excel" width={23.593} height={28.505} />
-                                    </div>
-                                </>
-                            }
-                            className="button-download large "
-                            action={downloadCollection}
                         />
                     </div>
                 </div>
 
             }
+
+            {
+                showDownload &&
+                <div className="button-save-container-display mr-8px mb-20px">
+                    <ButtonComponent
+                        value={
+                            <>
+                                <div className="container-buttonText">
+                                    <span>Descargar</span>
+                                    <Svgs svg="excel" width={23.593} height={28.505} />
+                                </div>
+                            </>
+                        }
+                        className="button-download large "
+                        action={downloadCollection}
+                    />
+                </div>
+            }
+
+
+
         </Fragment>
     )
 }

@@ -223,6 +223,7 @@ export const consolidateHook = (data, reload) => {
   ];
 
   useEffect(() => {
+    console.log("RENDERIZA CONSOLIDATE");
     tableComponentRef.current?.loadData({
       ...data,
     });

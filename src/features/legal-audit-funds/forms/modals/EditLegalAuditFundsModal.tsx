@@ -7,6 +7,7 @@ import {
 } from "../../../../common/components/Form";
 import { useEditLegalAuditFundsModal } from "../../hooks/editLegalAuditFunds";
 import { DatePickerComponent } from "../../../../common/components/Form/input-date.component";
+import { Controller } from "react-hook-form";
 
 const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
   const {
@@ -17,7 +18,6 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
     register,
     handleCancel,
     submitDisabled,
-    communeFundData,
     handleChange,
   } = useEditLegalAuditFundsModal(announcementId, row, reloadTable);
   return (
@@ -29,50 +29,76 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
       <div className="container-form-grid-actas">
         <div className="container-form padding-form">
           <div className="grid-form-3-container  gap-25 mb-25px">
-            <SelectComponent
-              idInput="communeFundId"
+            <Controller
               control={control}
-              errors={errors}
-              data={communeFundData}
-              label={
-                <>
-                  ID comuna <span>*</span>
-                </>
-              }
-              className="select-basic medium"
-              classNameLabel="text-black big bold"
-              placeholder="Seleccionar"
-              filter
+              name="communeFundId"
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput="communeFundId"
+                    label={
+                      <>
+                        ID comuna <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    register={register}
+                    errors={errors}
+                    onChange={handleChange}
+                    className="input-basic medium"
+                    disabled
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
+                );
+              }}
             />
-            <InputComponent
-              idInput="resource"
-              label={
-                <>
-                  Recurso <span>*</span>
-                </>
-              }
-              typeInput="number"
-              register={register}
-              onChange={handleChange}
-              errors={errors}
-              disabled
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
+            <Controller
+              control={control}
+              name="resource"
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput="resource"
+                    label={
+                      <>
+                        Recurso <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    register={register}
+                    errors={errors}
+                    onChange={handleChange}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
+                );
+              }}
             />
-
-            <InputComponent
-              idInput="fiducia"
-              label={
-                <>
-                  Fiducia <span>*</span>
-                </>
-              }
-              typeInput="number"
-              register={register}
-              errors={errors}
-              onChange={handleChange}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
+            <Controller
+              control={control}
+              name="fiduciaryId"
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput="fiduciaryId"
+                    label={
+                      <>
+                        Fiducia <span>*</span>
+                      </>
+                    }
+                    typeInput="number"
+                    register={register}
+                    errors={errors}
+                    onChange={handleChange}
+                    className="input-basic medium"
+                    disabled
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
+                );
+              }}
             />
           </div>
           <div className="grid-form-3-container gap-25 mt-13px">
@@ -86,19 +112,30 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
               placeholder="DD/MM/YYYY"
               dateFormat="dd/mm/yy"
               maxDate={new Date()}
+              disabled
             />
-            <InputComponent
-              idInput="orden"
-              label={
-                <>
-                  Orden <span>*</span>
-                </>
-              }
-              typeInput="text"
-              register={register}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
+            <Controller
+              control={control}
+              name="order"
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput="order"
+                    label={
+                      <>
+                        Orden <span>*</span>
+                      </>
+                    }
+                    typeInput="number"
+                    register={register}
+                    errors={errors}
+                    onChange={handleChange}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
+                );
+              }}
             />
           </div>
         </div>

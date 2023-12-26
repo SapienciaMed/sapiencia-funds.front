@@ -18,7 +18,7 @@ function RemnantsRoutes() {
         element={
           <PrivateRoute
             element={<RemnantsPage/>}
-            allowedAction={"MAESTROS_CONSULTAR"}
+            allowedAction={"FONDOS_REMANENTE_CONSULTAR"}
           />
         }
       /> 

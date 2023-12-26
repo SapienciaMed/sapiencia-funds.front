@@ -64,13 +64,16 @@ function useCrudService<T>(baseUrl: string) {
   const put = async <T>(
     endpoint: string,
     data: Object = {},
-    params: Object = {}
+    params: Object = {},
+    dataIsFormData: boolean = false
   ): Promise<ApiResponse<T>> => {
     try {
       return await api({
         method: "put",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": !dataIsFormData
+            ? "application/json"
+            : "multipart/form-data",
           Accept: "application/json",
           permissions: authorization.encryptedAccess,
         },

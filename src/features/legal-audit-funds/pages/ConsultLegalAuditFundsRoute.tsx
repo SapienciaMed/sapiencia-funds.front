@@ -16,33 +16,29 @@ const ConsultLegalAuditFundsRoute = () => {
     setPaginateData,
     tableComponentRef,
     downloadCollection,
-    urlGet,
     validateActionAccess,
     setShowFooterActions,
     showFooterActions,
-    width,
     periodsData,
+    legalAuditData,
   } = useConsultLegalAuditFunds();
   return (
     <LegalAuditFundsForm
       showFooterActions={showFooterActions}
       setShowFooterActions={setShowFooterActions}
-      //   validateActionAccess={validateActionAccess}
+      validateActionAccess={validateActionAccess}
       errors={errors}
       control={control}
       isValid={isValid}
       onSubmit={onSubmit}
-      register={register}
       tableView={tableView}
       handleClean={handleClean}
       tableActions={tableActions}
       submitDisabled={submitDisabled}
-      setPaginateData={setPaginateData}
       tableComponentRef={tableComponentRef}
       downloadCollection={downloadCollection}
-      width={width}
       periodsData={periodsData}
-      urlGet={urlGet}
+      legalAuditData={legalAuditData}
     />
   );
 };
