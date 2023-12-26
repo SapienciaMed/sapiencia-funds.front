@@ -9,6 +9,7 @@ import { updateSocialServiceSchema } from "../../../../../common/schemas/social-
 import { ISocialServiceBeneficiaryUpdate } from "../interface/social-service";
 import { ApiResponse } from "../../../../../common/utils/api-response";
 import { EResponseCodes } from "../../../../../common/constants/api.enum";
+import { NavigateFunction } from "react-router-dom";
 
 export default function useModalUploadChangeData(
   id: number,
@@ -20,7 +21,8 @@ export default function useModalUploadChangeData(
   showUploadFile: boolean,
   loadTableData: (searchCriteria?: object) => void,
   editable: boolean,
-  executeFunctionSubmit?: (data: FormData) => Promise<ApiResponse<any>>
+  executeFunctionSubmit?: (data: FormData) => Promise<ApiResponse<any>>,
+  navigate?: NavigateFunction
 ) {
   const { setMessage } = useContext(AppContext);
 
@@ -76,6 +78,7 @@ export default function useModalUploadChangeData(
                     return { ...prev, show: false };
                   });
                   loadTableData();
+                  navigate("../bandeja-consolidacion");
                   // getUploadKnow()
                   handleChangeUploadFile(null);
                 },

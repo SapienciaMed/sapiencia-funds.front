@@ -17,9 +17,11 @@ import { EServiceSocialStates } from "../../constants/service.social.states.enum
 
 import useModalUploadChangeData from "./hook/modal-upload-change-data.hook";
 import { ApiResponse } from "../../../../common/utils/api-response";
+import { NavigateFunction } from "react-router-dom";
 
 interface IPropsContentSubmitData {
   readonly action: "edit" | "show";
+  readonly navigate?: NavigateFunction;
   readonly idConsolidationBeneficiary?: number;
   readonly requirements: {
     id: string | number;
@@ -55,6 +57,7 @@ function ModalUploadChangeData({
   editable,
   loadTableData,
   executeFunctionSubmit,
+  navigate,
 }: IPropsContentSubmitData): React.JSX.Element {
   const {
     visible,
@@ -75,7 +78,8 @@ function ModalUploadChangeData({
     showUploadFile,
     loadTableData,
     editable,
-    executeFunctionSubmit
+    executeFunctionSubmit,
+    navigate
   );
 
   return (
