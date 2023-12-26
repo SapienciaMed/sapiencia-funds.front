@@ -131,7 +131,7 @@ const InitialSetup = ({
                 applyTheoreticalSemester: getValues().applyTheoreticalSemester,
               });
             }, 400);
-            setValue("theoreticalPercentage", null);
+            setValue("theoreticalSemiannualPercent", null);
           }}
           switchElement={
             <SwitchComponent
@@ -148,7 +148,7 @@ const InitialSetup = ({
                 });
               }}
               onChange={() => {
-                setValue("theoreticalPercentage", null);
+                setValue("theoreticalSemiannualPercent", null);
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
@@ -160,15 +160,15 @@ const InitialSetup = ({
           <div className="grid-form-3-container gap-15">
             <Controller
               control={control}
-              name={"theoreticalPercentage"}
-              defaultValue={updateData?.theoreticalPercentage}
+              name={"theoreticalSemiannualPercent"}
+              defaultValue={updateData?.theoreticalSemiannualPercent}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
                     disabled={onlyView ? true : false}
-                    defaultValue={`${updateData?.theoreticalPercentage}`}
+                    defaultValue={`${updateData?.theoreticalSemiannualPercent}`}
                     typeInput="text"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
@@ -196,7 +196,7 @@ const InitialSetup = ({
                 applySocialService: getValues().applySocialService,
               });
             }, 400);
-            setValue("socialServicePercentage", null);
+            setValue("socialServicePercent", null);
             setValue("socialServiceHours", null);
           }}
           switchElement={
@@ -213,7 +213,7 @@ const InitialSetup = ({
                 });
               }}
               onChange={() => {
-                setValue("socialServicePercentage", null);
+                setValue("socialServicePercent", null);
                 setValue("socialServiceHours", null);
               }}
               size="small"
@@ -226,14 +226,14 @@ const InitialSetup = ({
           <div className="grid-form-3-container mb-16px">
             <Controller
               control={control}
-              name={"socialServicePercentage"}
+              name={"socialServicePercent"}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
                     disabled={onlyView}
-                    defaultValue={`${updateData?.socialServicePercentage}`}
+                    defaultValue={`${updateData?.socialServicePercent}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
@@ -272,25 +272,25 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica trasferencia de conocimiento?"
-          isOpen={toggleControl?.knowledgeTransferApply}
+          isOpen={toggleControl?.applyKnowledgeTransfer}
           onClick={() => {
             if (onlyView) return;
             setValue(
-              "knowledgeTransferApply",
-              !getValues().knowledgeTransferApply
+              "applyKnowledgeTransfer",
+              !getValues().applyKnowledgeTransfer
             );
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
-                knowledgeTransferApply: getValues().knowledgeTransferApply,
+                applyKnowledgeTransfer: getValues().applyKnowledgeTransfer,
               });
             }, 400);
-            setValue("knowledgeTransferPercentage", undefined);
+            setValue("knowledgeTransferPercent", undefined);
             setValue("knowledgeTransferHours", undefined);
           }}
           switchElement={
             <SwitchComponent
-              idInput={"knowledgeTransferApply"}
+              idInput={"applyKnowledgeTransfer"}
               errors={errors}
               disabled={onlyView}
               control={control}
@@ -298,9 +298,9 @@ const InitialSetup = ({
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  knowledgeTransferApply: !getValues().knowledgeTransferApply,
+                  applyKnowledgeTransfer: !getValues().applyKnowledgeTransfer,
                 });
-                setValue("knowledgeTransferPercentage", undefined);
+                setValue("knowledgeTransferPercent", undefined);
                 setValue("knowledgeTransferHours", undefined);
               }}
               size="small"
@@ -313,13 +313,13 @@ const InitialSetup = ({
           <div className="grid-form-3-container mb-16px">
             <Controller
               control={control}
-              name={"knowledgeTransferPercentage"}
+              name={"knowledgeTransferPercent"}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    defaultValue={`${updateData?.knowledgeTransferPercentage}`}
+                    defaultValue={`${updateData?.knowledgeTransferPercent}`}
                     typeInput="number"
                     onChange={field.onChange}
                     disabled={onlyView}
@@ -359,22 +359,22 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica periodo de gracia?"
-          isOpen={toggleControl?.gracePeriodApply}
+          isOpen={toggleControl?.applyGracePeriod}
           onClick={() => {
             if (onlyView) return;
-            setValue("gracePeriodApply", !getValues().gracePeriodApply);
+            setValue("applyGracePeriod", !getValues().applyGracePeriod);
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
-                gracePeriodApply: getValues().gracePeriodApply,
+                applyGracePeriod: getValues().applyGracePeriod,
               });
             }, 400);
             setValue("gracePeriodMonths", undefined);
-            setValue("gracePeriodApplication", undefined);
+            setValue("graceDateApplication", undefined);
           }}
           switchElement={
             <SwitchComponent
-              idInput={"gracePeriodApply"}
+              idInput={"applyGracePeriod"}
               errors={errors}
               disabled={onlyView}
               control={control}
@@ -382,10 +382,10 @@ const InitialSetup = ({
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  gracePeriodApply: !getValues().gracePeriodApply,
+                  applyGracePeriod: !getValues().applyGracePeriod,
                 });
                 setValue("gracePeriodMonths", undefined);
-                setValue("gracePeriodApplication", undefined);
+                setValue("graceDateApplication", undefined);
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
@@ -417,9 +417,9 @@ const InitialSetup = ({
               }}
             />
             <SelectComponentOld
-              idInput={"gracePeriodApplication"}
-              setValue={(e) => setValue("gracePeriodApplication", e)}
-              value={getValues().gracePeriodApplication}
+              idInput={"graceDateApplication"}
+              setValue={(e) => setValue("graceDateApplication", e)}
+              value={getValues().graceDateApplication}
               errors={errors}
               data={LIST_DATA_GRACE_PERIOD ? LIST_DATA_GRACE_PERIOD : []} //pendiente
               label="Fecha de aplicación"
@@ -434,25 +434,25 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica suspensiones continuas?"
-          isOpen={toggleControl?.continuousSuspensionApplies}
+          isOpen={toggleControl?.applyContinuousSuspension}
           onClick={() => {
             if (onlyView) return;
             setValue(
-              "continuousSuspensionApplies",
-              !getValues().continuousSuspensionApplies
+              "applyContinuousSuspension",
+              !getValues().applyContinuousSuspension
             );
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
-                continuousSuspensionApplies:
-                  getValues().continuousSuspensionApplies,
+                applyContinuousSuspension:
+                  getValues().applyContinuousSuspension,
               });
             }, 400);
             setValue("continuosSuspencionQuantity", undefined);
           }}
           switchElement={
             <SwitchComponent
-              idInput={"continuousSuspensionApplies"}
+              idInput={"applyContinuousSuspension"}
               errors={errors}
               disabled={onlyView}
               control={control}
@@ -460,8 +460,8 @@ const InitialSetup = ({
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  continuousSuspensionApplies:
-                    !getValues().continuousSuspensionApplies,
+                  applyContinuousSuspension:
+                    !getValues().applyContinuousSuspension,
                 });
                 setValue("continuosSuspencionQuantity", undefined);
               }}
@@ -579,7 +579,7 @@ const InitialSetup = ({
                 applySpecialSuspensions: getValues().applySpecialSuspensions,
               });
             }, 400);
-            setValue("applySpecialSuspensionsQuantity", undefined);
+            setValue("specialSuspensionsQuantity", undefined);
           }}
           switchElement={
             <SwitchComponent
@@ -593,7 +593,7 @@ const InitialSetup = ({
                   ...toggleControl,
                   applySpecialSuspensions: !getValues().applySpecialSuspensions,
                 });
-                setValue("applySpecialSuspensionsQuantity", undefined);
+                setValue("specialSuspensionsQuantity", undefined);
               }}
               size="small"
               className="select-basic select-disabled-list input-size mb-24px"
@@ -605,14 +605,14 @@ const InitialSetup = ({
           <div className="grid-form-3-container mb-16px">
             <Controller
               control={control}
-              name={"applySpecialSuspensionsQuantity"}
+              name={"specialSuspensionsQuantity"}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     disabled={onlyView}
                     errors={errors}
-                    defaultValue={`${updateData?.applySpecialSuspensionsQuantity}`}
+                    defaultValue={`${updateData?.specialSuspensionsQuantity}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
@@ -630,21 +630,21 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica prórroga?"
-          isOpen={toggleControl?.extensionApply}
+          isOpen={toggleControl?.applyExtension}
           onClick={() => {
             if (onlyView) return;
-            setValue("extensionApply", !getValues().extensionApply);
+            setValue("applyExtension", !getValues().applyExtension);
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
-                extensionApply: getValues().extensionApply,
+                applyExtension: getValues().applyExtension,
               });
             }, 400);
-            setValue("extensionApplyQuantity", undefined);
+            setValue("extensionQuantity", undefined);
           }}
           switchElement={
             <SwitchComponent
-              idInput={"extensionApply"}
+              idInput={"applyExtension"}
               errors={errors}
               disabled={onlyView}
               control={control}
@@ -652,9 +652,9 @@ const InitialSetup = ({
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  extensionApply: !getValues().extensionApply,
+                  applyExtension: !getValues().applyExtension,
                 });
-                setValue("extensionApplyQuantity", undefined);
+                setValue("extensionQuantity", undefined);
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
@@ -666,14 +666,14 @@ const InitialSetup = ({
           <div className="grid-form-3-container mb-16px">
             <Controller
               control={control}
-              name={"extensionApplyQuantity"}
+              name={"extensionQuantity"}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
                     disabled={onlyView}
-                    defaultValue={`${updateData?.extensionApplyQuantity}`}
+                    defaultValue={`${updateData?.extensionQuantity}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}

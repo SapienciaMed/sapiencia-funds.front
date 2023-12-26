@@ -75,25 +75,25 @@ const ForgivenessPercentages = ({
       <div>
         <Acordion
           title="¿Aplica condonación por rendimiento académico final acumulado?"
-          isOpen={toggleControl?.accomulatedIncomeCondonationApplies}
+          isOpen={toggleControl?.applyAccomulatedIncomeCondonation}
           onClick={async () => {
             if (onlyView) return;
             setValue(
-              "accomulatedIncomeCondonationApplies",
-              !getValues().accomulatedIncomeCondonationApplies
+              "applyAccomulatedIncomeCondonation",
+              !getValues().applyAccomulatedIncomeCondonation
             );
             await setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
-                accomulatedIncomeCondonationApplies:
-                  getValues().accomulatedIncomeCondonationApplies,
+                applyAccomulatedIncomeCondonation:
+                  getValues().applyAccomulatedIncomeCondonation,
               });
             }, 400);
             setValue("accumulatedPerformance", "");
           }}
           switchElement={
             <SwitchComponent
-              idInput={"accomulatedIncomeCondonationApplies"}
+              idInput={"applyAccomulatedIncomeCondonation"}
               errors={errors}
               disabled={onlyView ? true : false}
               control={control}
@@ -101,8 +101,8 @@ const ForgivenessPercentages = ({
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  accomulatedIncomeCondonationApplies:
-                    !getValues().accomulatedIncomeCondonationApplies,
+                  applyAccomulatedIncomeCondonation:
+                    !getValues().applyAccomulatedIncomeCondonation,
                 });
                 setValue("accumulatedPerformance", "");
               }}
@@ -115,7 +115,7 @@ const ForgivenessPercentages = ({
           <div>
             <TableJson
               dataRead={[] as any}
-              isOpen={toggleControl?.accomulatedIncomeCondonationApplies}
+              isOpen={toggleControl?.applyAccomulatedIncomeCondonation}
               idInput="accumulatedPerformance"
               setValue={setValue}
               title="Agregar promedio y porcentaje de condonación"

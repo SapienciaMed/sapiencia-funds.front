@@ -25,7 +25,7 @@ export const shemaFormRegulation = yup.object().shape({
       if (!isOpenPeriod[0]) return schema.required(MESSAGE_REQUIRED);
       return schema;
     }),
-  // theoreticalPercentage: yup
+  // theoreticalSemiannualPercent: yup
   //   .number()
   //   .typeError(MESSAGE_REQUIRED)
   //   .required(MESSAGE_REQUIRED)
@@ -36,7 +36,7 @@ export const shemaFormRegulation = yup.object().shape({
   //     /^-?\d+(\.\d{1,2})?$/.test(value.toString())
   //   ),
   applyTheoreticalSemester: yup.boolean().optional().nullable(),
-  theoreticalPercentage: yup
+  theoreticalSemiannualPercent: yup
   .number()
   .nullable()
     .min(1, greaterThan(1))
@@ -59,7 +59,7 @@ export const shemaFormRegulation = yup.object().shape({
     
 
   applySocialService: yup.boolean().optional().nullable(),
-  socialServicePercentage: yup
+  socialServicePercent: yup
     .number()
     .nullable()
     .when("applySocialService", (applySocialService, schema) => {
@@ -89,12 +89,12 @@ export const shemaFormRegulation = yup.object().shape({
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
-  knowledgeTransferApply: yup.boolean().optional().nullable(),
-  knowledgeTransferPercentage: yup
+  applyKnowledgeTransfer: yup.boolean().optional().nullable(),
+  knowledgeTransferPercent: yup
     .number()
     .nullable()
-    .when("knowledgeTransferApply", (knowledgeTransferApply, schema) => {
-      if (knowledgeTransferApply[0])
+    .when("applyKnowledgeTransfer", (applyKnowledgeTransfer, schema) => {
+      if (applyKnowledgeTransfer[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))
@@ -110,8 +110,8 @@ export const shemaFormRegulation = yup.object().shape({
   knowledgeTransferHours: yup
     .number()
     .nullable()
-    .when("knowledgeTransferApply", (knowledgeTransferApply, schema) => {
-      if (knowledgeTransferApply[0])
+    .when("applyKnowledgeTransfer", (applyKnowledgeTransfer, schema) => {
+      if (applyKnowledgeTransfer[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))
@@ -119,12 +119,12 @@ export const shemaFormRegulation = yup.object().shape({
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
-  gracePeriodApply: yup.boolean().optional().nullable(),
+  applyGracePeriod: yup.boolean().optional().nullable(),
   gracePeriodMonths: yup
     .number()
     .nullable()
-    .when("gracePeriodApply", (gracePeriodApply, schema) => {
-      if (gracePeriodApply[0])
+    .when("applyGracePeriod", (applyGracePeriod, schema) => {
+      if (applyGracePeriod[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))
@@ -132,25 +132,25 @@ export const shemaFormRegulation = yup.object().shape({
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
-  gracePeriodApplication: yup
+  graceDateApplication: yup
     .string()
     .nullable()
-    .when("gracePeriodApply", (gracePeriodApply, schema) => {
-      if (gracePeriodApply[0])
+    .when("applyGracePeriod", (applyGracePeriod, schema) => {
+      if (applyGracePeriod[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .typeError(MESSAGE_REQUIRED)
           .max(50, "Solo se permiten 50 caracteres");
       return schema;
     }),
-  continuousSuspensionApplies: yup.boolean().optional().nullable(),
+  applyContinuousSuspension: yup.boolean().optional().nullable(),
   continuosSuspencionQuantity: yup
     .number()
     .nullable()
     .when(
-      "continuousSuspensionApplies",
-      (continuousSuspensionApplies, schema) => {
-        if (continuousSuspensionApplies[0])
+      "applyContinuousSuspension",
+      (applyContinuousSuspension, schema) => {
+        if (applyContinuousSuspension[0])
           return schema
             .required(MESSAGE_REQUIRED)
             .min(1, greaterThan(1))
@@ -176,7 +176,7 @@ export const shemaFormRegulation = yup.object().shape({
       }
     ),
   applySpecialSuspensions: yup.boolean().optional().nullable(),
-  applySpecialSuspensionsQuantity: yup
+  specialSuspensionsQuantity: yup
     .number()
     .nullable()
     .when("applySpecialSuspensions", (applySpecialSuspensions, schema) => {
@@ -188,12 +188,12 @@ export const shemaFormRegulation = yup.object().shape({
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
-  extensionApply: yup.boolean().optional().nullable(),
-  extensionApplyQuantity: yup
+  applyExtension: yup.boolean().optional().nullable(),
+  extensionQuantity: yup
     .number()
     .nullable()
-    .when("extensionApply", (extensionApply, schema) => {
-      if (extensionApply[0])
+    .when("applyExtension", (applyExtension, schema) => {
+      if (applyExtension[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))

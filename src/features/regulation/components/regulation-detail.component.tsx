@@ -99,7 +99,7 @@ const RegulationDetailComponent = ({
               <div className="containerApplyService">
                 <div className="mb-24px">
                   <InputComponent
-                    idInput="theoreticalPercentage"
+                    idInput="theoreticalSemiannualPercent"
                     disabled={true}
                     defaultValue={`${
                       detailData?.theoreticalSemiannualPercent ?? "0"
@@ -123,7 +123,7 @@ const RegulationDetailComponent = ({
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"extensionApply"}
+                  idInput={"applyExtension"}
                   disabled={true}
                   defaultValue={
                     detailData?.applyAcademicPerformancePercent == 1
@@ -162,7 +162,7 @@ const RegulationDetailComponent = ({
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"extensionApply"}
+                  idInput={"applyExtension"}
                   disabled={true}
                   defaultValue={detailData?.applyRequirementsPercent == 1}
                   size="small"
@@ -345,7 +345,7 @@ const RegulationDetailComponent = ({
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"continuousSuspensionApplies"}
+                  idInput={"applyContinuousSuspension"}
                   defaultValue={detailData?.applyContinuousSuspension == 1}
                   disabled={true}
                   size="small"
@@ -450,7 +450,7 @@ const RegulationDetailComponent = ({
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"extensionApply"}
+                  idInput={"applyExtension"}
                   disabled={true}
                   defaultValue={detailData?.applyExtension == 1}
                   size="small"
