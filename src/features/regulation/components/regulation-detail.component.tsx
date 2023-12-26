@@ -236,15 +236,12 @@ const RegulationDetailComponent = ({
                   disabled={true}
                 />
               </div>
-              {detailData?.knowledgeTransferCondonationPercent?.length > 0 && (
-                <div className="mt-16px">
-                  <TableRegulationView
-                    detailData={detailData}
-                    typeTable={{ socialService: 2 }}
-                    viewPaginator={false}
-                  />
-                </div>
-              )}
+              {
+                detailData?.socialServiceCondonationPercent?.length > 0 &&
+                  <div className="mt-16px">
+                    <TableRegulationView  detailData={detailData} typeTable={{ socialService: 2 }} viewPaginator={false} />
+                  </div>
+              }
             </Acordion>
           </div>
           <div onClick={preventClick}>
@@ -267,26 +264,41 @@ const RegulationDetailComponent = ({
                 />
               }
             >
-              <div className="grid-form-2-container gap-15">
-                <InputComponent
-                  idInput="knowledgeTransferPercent"
-                  defaultValue={`${detailData?.knowledgeTransferPercent}`}
-                  typeInput="number"
-                  disabled={true}
-                  className="input-basic medium"
-                  classNameLabel="text-black big text-required font-500"
-                  label="Porcentaje de cumplimiento"
-                />
-                <InputComponent
-                  idInput="knowledgeTransferHours"
-                  defaultValue={`${detailData?.knowledgeTransferHours}`}
-                  typeInput="number"
-                  className="input-basic medium"
-                  classNameLabel="text-black big text-required font-500"
-                  label="Horas totales por el crédito"
-                  disabled={true}
-                />
+              <div className="grid-form-3-container gap-15">
+                  <InputComponent
+                    idInput='knowledgeTransferPercent'
+                    defaultValue={`${detailData?.knowledgeTransferPercent || '0'} %`}
+                    typeInput="text"
+                    disabled={true}
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Porcentaje de descuento por periodo"
+                  />
+                  <InputComponent
+                    idInput='knowledgeTransferHours'
+                    defaultValue={`${detailData?.knowledgeTransferHours}`}
+                    typeInput="number"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Horas por periodo"
+                    disabled={true}
+                  />
+                   <InputComponent
+                    idInput='knowledgeTransferCondonationType'
+                    defaultValue={`${detailData?.knowledgeTransferCondonationType}`}
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Tipo de condonación"
+                    disabled={true}
+                  />
               </div>
+              {
+                detailData?.knowledgeTransferCondonationPercent?.length > 0 &&
+                  <div className="mt-16px">
+                    <TableRegulationView  detailData={detailData} typeTable={{ knowledgeTransfer: 3 }} viewPaginator={false} />
+                  </div>
+              }
             </Acordion>
           </div>
           <div onClick={preventClick}>

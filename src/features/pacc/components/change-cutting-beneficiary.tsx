@@ -66,6 +66,20 @@ function ChangeCuttingBeneficiary({idBenef, idCutData,typeState }:Readonly<IProp
                     if(response.operation.code === EResponseCodes.OK){
                         setMessage({});
                         window.location.reload();     
+                    }else{
+                        setMessage({
+                            show: true,
+                            title: "Error",
+                            description: response.operation.message,
+                            OkTitle: "Aceptar",
+                            onOk() {
+                                setMessage({});
+                            },
+                            onClose() {
+                                setMessage({});
+                            },
+                            background: true,
+                        });
                     }
                 }).catch(error => console.log(error))
             },
