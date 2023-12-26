@@ -1,20 +1,12 @@
 import Acordion from "../components/acordion";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
-import { Control, FieldErrors, UseFormGetValues, UseFormSetValue } from "react-hook-form";
 import { InputComponent } from "../../../common/components/Form";
 import TableJson from "../components/tableJson";
-import { LIST_DATA_GRACE_PERIOD } from "../service";
-import { IReglamentConsolidation, IRegulationSearch } from "../../../common/interfaces/regulation";
-import RequirementOnlyView from "./modules/requeriments/RequirementOnlyView";
-interface IPropDetailReglament{
-  detailData: IReglamentConsolidation;
-  listPrograms: any[];
-  errors: FieldErrors<IRegulationSearch>;
-  control: Control<IRegulationSearch, any>;
-  setValue: UseFormSetValue<IRegulationSearch>
-  getValues: UseFormGetValues<IRegulationSearch>
-}
+import { IPropDetailReglament } from "../../../common/interfaces/regulation";
+import TableRegulationView from "./modules/requeriments/table-regulation-view";
+import { EDirection } from "../../../common/constants/input.enum";
+
 
 const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors, control }: IPropDetailReglament) => {
   const preventClick = (e) => { return e.preventDefault() }
@@ -29,7 +21,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
         iconRow={true}
       >
         <>
-          <div className="containerProgram mb-24px">
+          <div className="grid-form-2-container mb-16p">
             <SelectComponentOld
               idInput={"program"}
               value={String(detailData?.idProgram) ?? ""}
@@ -41,8 +33,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               placeholder="Seleccionar"
             />
           </div>
-          <div className="containerGroup mb-24px">
-            <div className="containerInitialPeriod ">
+          <div className="container-designation-three-objects grid-template-container-fourth col-gap-small mt-16px mb-16px">
               <InputComponent
                 idInput='initialPeriod'
                 disabled={true}
@@ -53,22 +44,20 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 classNameLabel="text-black biggest font-500"
                 label="Periodo inicial de convocatoria"
               />
-            </div>
-            <div className="containerIsOpenPeriod">
-              <SwitchComponent
-                idInput={"isOpenPeriod"}
-                defaultValue={detailData.isOpenPeriod == 1}
-                size="normal"
-                control={control}
-                disabled={true}
-                label={<>Convocatoria abierta</>}
-                className="select-basic select-disabled-list input-size"
-                classNameLabel="text-black biggest font-500"
-              />
-            </div>
+              <div className="containerIsOpenPeriod">
+                <SwitchComponent
+                  idInput={"isOpenPeriod"}
+                  defaultValue={detailData.isOpenPeriod == 1}
+                  size="normal"
+                  control={control}
+                  disabled={true}
+                  label={<>Convocatoria abierta</>}
+                  className="select-basic select-disabled-list input-size"
+                  classNameLabel="text-black biggest font-500"
+                />
 
-            <div className="containerEndPeriod">
-              <InputComponent
+              </div>
+               <InputComponent
                 idInput='endPeriod'
                 disabled={true}
                 defaultValue={detailData?.endPeriod ?? '0'}
@@ -78,7 +67,6 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 classNameLabel="text-black biggest font-500"
                 label='Periodo final de convocatoria'
               />
-            </div>
           </div>
           <div onClick={preventClick}>
             <Acordion
@@ -89,13 +77,13 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"theoreticalSemiannualPercent"}
                   disabled={true}
                   defaultValue={detailData?.applyTheoreticalSemiannualPercent == 1}
                   size="small"
                   classNameSwitch="opacity"
                   className="select-basic select-disabled-list input-size opacity"
-                  classNameLabel="text-black biggest font-500"
                 />
               }
             >
@@ -106,8 +94,8 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                       disabled={true}
                       defaultValue={`${detailData?.theoreticalSemiannualPercent ?? '0'}%`}
                       typeInput="text"
-                      className="input-basic input-size"
-                      classNameLabel="text-black biggest font-500"
+                      className="input-basic medium"
+                      classNameLabel="text-black big text-required font-500"
                       label="Porcentaje de pago teórico semestral"
                     />
                 </div>
@@ -123,6 +111,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"extensionApply"}
                   disabled={true}
                   defaultValue={detailData?.applyAcademicPerformancePercent == 1}
@@ -139,9 +128,9 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     idInput='academicPerformancePercent'
                     disabled={true}
                     defaultValue={`${detailData?.academicPerformancePercent ?? 0}%`}
-                    typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de pago teórico semestral"
                   />
                 </div>
@@ -157,6 +146,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"extensionApply"}
                   disabled={true}
                   defaultValue={detailData?.applyRequirementsPercent == 1}
@@ -173,9 +163,9 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     idInput='requirementsPercent'
                     disabled={true}
                     defaultValue={`${detailData?.requirementsPercent ?? 0}%`}
-                    typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de requisitos"
                   />
                 </div>
@@ -191,6 +181,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"applySocialService"}
                   disabled={true}
                   defaultValue={detailData?.applySocialService == 1}
@@ -201,30 +192,41 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 />
               }
             >
-              <div className="containerApplyService">
-                <div className="mb-24px">
+              <div className="grid-form-3-container gap-15">
                   <InputComponent
-                    idInput='socialServicePercentage'         
+                    idInput='socialServicePercent'         
                     disabled={true}
-                    defaultValue={`${detailData?.socialServicePercent || '0'}`}
-                    typeInput="number"
-                    className="input-basic input-size "
-                    classNameLabel="text-black biggest font-500"
+                    defaultValue={`${detailData?.socialServicePercent || '0'} %`}
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de descuento por periodo"
                   />
-                </div>
-                <div className="mb-24px">
                   <InputComponent
                     idInput='socialServiceHours'
                     defaultValue={`${detailData?.socialServiceHours}`}
                     typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Horas por periodo"
                     disabled={true}
                   />
-                </div>
+                  <InputComponent
+                    idInput='socialServiceCondonationType'
+                    defaultValue={`${detailData?.socialServiceCondonationType}`}
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Tipo de condonación"
+                    disabled={true}
+                  />
               </div>
+              {
+                detailData?.knowledgeTransferCondonationPercent?.length > 0 &&
+                  <div className="mt-16px">
+                    <TableRegulationView  detailData={detailData} typeTable={{ socialService: 2 }} viewPaginator={false} />
+                  </div>
+              }
             </Acordion>
           </div>
           <div onClick={preventClick}>
@@ -236,6 +238,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput='applyKnowledgeTransfer'
                   disabled={true}
                   defaultValue={detailData?.applyKnowledgeTransfer == 1}
@@ -246,29 +249,25 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                 />
               }
             >
-              <div className="containerApplyService">
-                <div className="mb-24px">
+              <div className="grid-form-2-container gap-15">
                   <InputComponent
                     idInput='knowledgeTransferPercent'
                     defaultValue={`${detailData?.knowledgeTransferPercent}`}
                     typeInput="number"
                     disabled={true}
-                    className="input-basic input-size "
-                    classNameLabel="text-black biggest font-500"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de cumplimiento"
                   />
-                </div>
-                <div className="mb-24px">
                   <InputComponent
                     idInput='knowledgeTransferHours'
                     defaultValue={`${detailData?.knowledgeTransferHours}`}
                     typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Horas totales por el crédito"
                     disabled={true}
                   />
-                </div>
               </div>
             </Acordion>
           </div>
@@ -281,6 +280,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"applyGracePeriod"} 
                   disabled={true}
                   defaultValue={detailData?.applyGracePeriod == 1}
@@ -297,21 +297,20 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     idInput='gracePeriodMonths'
                     defaultValue={`${detailData?.gracePeriodMonths}`}
                     typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Meses"
                     disabled={true}
                   />
                 </div>
                 <div className="mb-24px">
-                  <SelectComponentOld
-                    idInput={"graceDateApplication"}
-                    value={detailData?.graceDateApplication}
-                    data={LIST_DATA_GRACE_PERIOD} //pendiente = ¿Porque? comentario del otro desarrollador
+                  <InputComponent
+                    idInput='graceDateApplication'
+                    defaultValue={`${detailData?.graceDateApplication}`}
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label='Fecha de aplicación'
-                    className="select-basic select-disabled-list input-size"
-                    classNameLabel="text-black biggest font-500"
-                    placeholder="Seleccionar"
                     disabled={true}
                   />
                 </div>
@@ -327,6 +326,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"continuousSuspensionApplies"}
                   defaultValue={detailData?.applyContinuousSuspension == 1}
                   disabled={true}
@@ -343,8 +343,8 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     idInput='continuosSuspencionQuantity'
                     defaultValue={`${detailData?.continuosSuspencionQuantity}`}
                     typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
                     disabled={true}
                   />
@@ -361,6 +361,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"applyDiscontinuousSuspension"}
                   defaultValue={detailData?.applyDiscontinuousSuspension == 1}
                   disabled={true}
@@ -377,8 +378,8 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     idInput='discontinuousSuspensionQuantity'
                     defaultValue={`${detailData?.discontinuousSuspensionQuantity}`}
                     typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
                     disabled={true}
                   />
@@ -395,6 +396,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   disabled={true}
                   idInput={"applySpecialSuspensions"}  
                   defaultValue={detailData?.applySpecialSuspensions == 1}
@@ -412,8 +414,8 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     disabled={true}
                     defaultValue={`${detailData?.specialSuspensionsQuantity}`}
                     typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
                   />
                 </div>
@@ -429,6 +431,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"extensionApply"}
                   disabled={true}
                   defaultValue={detailData?.applyExtension == 1}
@@ -446,21 +449,20 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
                     disabled={true}
                     defaultValue={`${detailData?.extensionQuantity}`}
                     typeInput="number"
-                    className="input-basic input-size"
-                    classNameLabel="text-black biggest font-500"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
                   />
                 </div>
               </div>
             </Acordion>
-          </div>
-          
+          </div>   
         </>
       </Acordion>
       <Acordion
         title="Porcentajes de condonación"
         classname="container-modal-acordion-title"
-        onClick={async () => {}}
+        onClick={() => {}}
         switchElement={<></>}
         iconRow={true}
       >
@@ -474,6 +476,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput={"applyCondonationPerformancePeriod"}
                   defaultValue={detailData?.applyCondonationPerformancePeriod == 1}
                   disabled={true}
@@ -507,6 +510,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
               switchElement={
                 <SwitchComponent
                   control={control}
+                  direction={EDirection.other}
                   idInput='applyAccomulatedIncomeCondonation'
                   disabled={true}
                   defaultValue={detailData?.applyAccomulatedIncomeCondonation == 1}
@@ -542,7 +546,7 @@ const DetailReglament = ({ detailData, setValue, getValues, listPrograms, errors
       >
         {
           detailData?.requirementsForReglament?.length > 0 &&
-            <RequirementOnlyView  detailData={detailData.requirementsForReglament} />
+            <TableRegulationView  detailData={detailData} typeTable={{ requirement: 1 }} viewPaginator={true} />
         }
       </Acordion>
     </div>

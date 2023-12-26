@@ -21,7 +21,8 @@ import DetailReglament from '../pages/detailt';
 export default function useSearchRegulation(auth, authDetail, authEdit) {
   // Context
   const { setMessage, authorization } = useContext(AppContext);
-  const [showTable, setshowTable] = useState(false);
+  const [showTable, setShowTable] = useState(false);
+  const [ showSpinner, setShowSpinner ] = useState(false)
   const tableComponentRef = useRef(null);
   const [listPrograms, setListPrograms] = useState<
     { name: string; value: string }[]
@@ -61,7 +62,6 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
         },
         background: true,
       });
-      return;
     }
   }, [auth, authorization]);
 
@@ -269,12 +269,13 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const newElement = () => navigate("form");
 
   const onSubmit = handleSubmit(async (data: IRegulationSearch) => {
+    setShowSpinner(true)
     const buildData = {
       programId: parseInt(data.programId) || null,
       initialPeriod: data?.initialPeriod ?? null,
       endPeriod: data?.endPeriod
     };
-    setshowTable(true);
+    setShowTable(true);
 
     if (tableComponentRef.current) {
       tableComponentRef.current.loadData(buildData);
@@ -289,10 +290,12 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     tableComponentRef,
     tableActions,
     newElement,
-    setshowTable,
+    setShowTable,
     reset,
+    setShowSpinner,
     listPrograms,
     tableColumns,
-    arrayPeriod
+    arrayPeriod,
+    showSpinner
   };
 }

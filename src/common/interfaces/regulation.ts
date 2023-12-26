@@ -1,3 +1,5 @@
+import { Control, FieldErrors, UseFormGetValues, UseFormSetValue } from "react-hook-form";
+
 export interface IRegulation {
   id?: number;
   program: string;
@@ -160,4 +162,13 @@ export interface IRequirementsForReglament {
   mandatoryFor?: string;
   description: string;
   percent: number
+}
+
+export interface IPropDetailReglament{
+  detailData: IReglamentConsolidation;
+  listPrograms: any[];
+  errors: FieldErrors<IRegulationSearch>;
+  control: Control<IRegulationSearch, any>;
+  setValue: UseFormSetValue<IRegulationSearch>
+  getValues: UseFormGetValues<IRegulationSearch>
 }
