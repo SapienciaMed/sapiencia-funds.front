@@ -5,10 +5,7 @@ import useCrudService from "../../../common/hooks/crud-service.hook";
 import { urlApiFunds } from "../../../common/utils/base-url";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { useGetcommuneFundIdHook } from "../../absorption-percentage/hooks/getcommuneFundIdHook";
-import {
-  ICallLegalResfilters,
-  ILegalAuditFunds,
-} from "../../../common/interfaces/LegalAuditFunds";
+import { ICallLegalResfilters } from "../../../common/interfaces/LegalAuditFunds";
 import { editLegalAuditSchema } from "../../../common/schemas/legal-audit-schema";
 
 export const useEditLegalAuditFundsModal = (
@@ -31,25 +28,15 @@ export const useEditLegalAuditFundsModal = (
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
 
-  // const [communeFundId, resource] = watch(["communeFundId", "resource"]);
-
-  const [formWatch, setFormWatch] = useState<ILegalAuditFunds>({
-    resource: "",
-    order: "",
-    fiduciaryId: "",
-  });
+  const [formWatch, setFormWatch] = useState<ICallLegalResfilters>({});
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
-    setFormWatch({
-      ...formWatch,
+    setFormWatch((prevFormWatch) => ({
+      ...prevFormWatch,
       [name]: value,
-    });
+    }));
   };
-
-  useEffect(() => {
-    console.log(formWatch);
-  }, [formWatch]);
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
@@ -74,13 +61,13 @@ export const useEditLegalAuditFundsModal = (
   const EditItem = async (data: ICallLegalResfilters) => {
     const fullData = {
       ...data,
+      fiduciaryId: row?.fiduciaryId,
       ...formWatch,
       announcementId,
     };
     try {
       const endpoint = `/api/v1/legalized/update-commune-budget`;
       const resp = await put(endpoint, fullData);
-      // await reloadTable({ announcementId });
 
       if (resp.operation.code === "FAIL") {
         return setMessage({
@@ -98,7 +85,10 @@ export const useEditLegalAuditFundsModal = (
         description: "¡Información actualizada exitosamente!",
         show: true,
         OkTitle: "Cerrar",
-        onOk: () => setMessage({ show: false }),
+        onOk: async () => {
+          setMessage({ show: false });
+          await reloadTable({ announcementId });
+        },
         background: true,
       });
     } catch (err) {
@@ -119,6 +109,8 @@ export const useEditLegalAuditFundsModal = (
   }, [row]);
 
   useEffect(() => {
+    console.log("formWatch updated: ", formWatch);
+
     const { resource, order } = formWatch;
     if (!resource || !order) {
       return setSubmitDisabled(false);

@@ -16,7 +16,7 @@ function AbsorptionPercentageRoutes() {
         element={
           <PrivateRoute
             element={<ConsultAbsorptionPercentage />}
-            allowedAction={"FONDOS_PORCENTAJE_ABSORCION"}
+            allowedAction={"FONDOS_PORCENTAJE_ABSORCION_CONSULTAR"}
           />
         }
       />

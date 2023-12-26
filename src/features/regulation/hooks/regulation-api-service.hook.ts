@@ -1,25 +1,9 @@
 import useCrudService from "../../../common/hooks/crud-service.hook";
-import { IRegulation } from "../../../common/interfaces/regulation";
+import {
+  IPeriodSapiencia,
+  IRegulation,
+} from "../../../common/interfaces/regulation";
 import { ApiResponse } from "../../../common/utils/api-response";
-
-export const periods: { value: string; name: string }[] = [
-  {
-    value: "period-1",
-    name: "2022-1 (1 Enero a 30 Junio)",
-  },
-  {
-    value: "period-2",
-    name: "2022-2 (1 Julio a 31 Diciembre)",
-  },
-  {
-    value: "period-3",
-    name: "2023-1 (1 Enero a 30 Junio)",
-  },
-  {
-    value: "period-4",
-    name: "2023-2 (1 Julio a 31 Diciembre)",
-  },
-];
 
 export const LIST_DATA_GRACE_PERIOD: { value: string; name: string }[] = [
   {
@@ -48,10 +32,10 @@ export function useRegulationApi() {
     return await get(`${serviceUrl}/get-by-id/${id}`);
   }
 
-  async function createRegulationAction(
+  async function createRegulation(
     data: IRegulation
   ): Promise<ApiResponse<IRegulation>> {
-    return await post(`${serviceUrl}/create/`, data);
+    return await post(`/api/v1/reglament-v2/create-reglament/`, data);
   }
 
   async function editRegulation(
@@ -68,15 +52,24 @@ export function useRegulationApi() {
   async function getPrograms(): Promise<
     ApiResponse<{ value: string; id: number }[]>
   > {
-    return await get(`${serviceUrl}/programs`);
+    return await get(`/api/v1/reglament/programs`);
+  }
+
+  async function getPeriodsFromSapiencia(): Promise<
+    ApiResponse<IPeriodSapiencia[]>
+  > {
+    return await post<IPeriodSapiencia[]>(
+      `/api/v1/reglament-v2/get-periods-sapi`
+    );
   }
 
   return {
-    createRegulationAction,
+    createRegulation,
     getRegulationById,
     editRegulation,
     getRegulation,
     getLastId,
     getPrograms,
+    getPeriodsFromSapiencia,
   };
 }

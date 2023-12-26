@@ -24,6 +24,7 @@ const EditAbsorptionPercentageModal = ({
     submitDisabled,
     communeFundData,
     handleChange,
+    handleChangeResource,
   } = useEditAbsorptionPercentageModal(announcementId, row, reloadTable);
   return (
     <FormComponent
@@ -55,20 +56,20 @@ const EditAbsorptionPercentageModal = ({
               render={({ field }) => {
                 return (
                   <InputComponent
-                  idInput="resource"
-                  label={
-                    <>
-                      Recurso <span>*</span>
-                    </>
-                  }
-                  typeInput="text"
-                  register={register}
-                  onChange={handleChange}
-                  errors={errors}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold"
-                  {...field}
-                />
+                    idInput="resource"
+                    label={
+                      <>
+                        Recurso <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    register={register}
+                    onChange={handleChangeResource}
+                    errors={errors}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
                 );
               }}
             />
@@ -101,45 +102,45 @@ const EditAbsorptionPercentageModal = ({
               render={({ field }) => {
                 return (
                   <InputComponent
-                  idInput="sceneryPercentage2"
-                  label={
-                    <>
-                      Escenario 2 <span>*</span>
-                    </>
-                  }
-                  typeInput="text"
-                  register={register}
-                  errors={errors}
-                  onChange={handleChange}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold"
-                  {...field}
-                />
+                    idInput="sceneryPercentage2"
+                    label={
+                      <>
+                        Escenario 2 <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    register={register}
+                    errors={errors}
+                    onChange={handleChange}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
                 );
               }}
             />
           </div>
           <div className="grid-form-4-container gap-25 mt-13px">
-          <Controller
+            <Controller
               control={control}
               name="sceneryPercentage3"
               render={({ field }) => {
                 return (
                   <InputComponent
-                  idInput="sceneryPercentage3"
-                  label={
-                    <>
-                      Escenario 3 <span>*</span>
-                    </>
-                  }
-                  typeInput="text"
-                  errors={errors}
-                  register={register}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold"
-                  onChange={handleChange}
-                  {...field}
-                />
+                    idInput="sceneryPercentage3"
+                    label={
+                      <>
+                        Escenario 3 <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    errors={errors}
+                    register={register}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    onChange={handleChange}
+                    {...field}
+                  />
                 );
               }}
             />

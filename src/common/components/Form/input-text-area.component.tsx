@@ -52,7 +52,7 @@ function TextAreaElement({
   cols,
   optionsRegister = {},
   setCount,
-  maxCaracter
+  maxCaracter,
 }): React.JSX.Element {
   return (
     <textarea

@@ -9,10 +9,10 @@ import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
 /* ---- Este componente se reutilizara en varias Tabs --- */
 
-function BeneficiaryTrayPage({ typeState, isCut = true }: Readonly<{ typeState: EStatePac, isCut?: boolean }>) {
+function BeneficiaryTrayPage({ typeState, isCut = true, changeCut = true }: Readonly<{ typeState: EStatePac, isCut?: boolean, changeCut?: boolean }>) {
 
     const { tableComponentRef, tableColumns, tableActions, idCutData, control, showSpinner, valueFilterTable,
-        handleFilterChange, handleChangeCut, getCuts, apiUrl, setShowSpinner } = useBeneficiaryTray(typeState, isCut)
+        handleFilterChange, handleChangeCut,  apiUrl, setShowSpinner, resetValue } = useBeneficiaryTray(typeState, isCut, changeCut)
 
     return(
         <div className="card-table gap-0 mt-14px">
@@ -55,7 +55,7 @@ function BeneficiaryTrayPage({ typeState, isCut = true }: Readonly<{ typeState: 
                     onGlobalFilterChange={handleFilterChange}
                     valueFilterTable={valueFilterTable}
                     isMobil={false}
-                    resetValue={getCuts}
+                    resetValue={resetValue}
                     isNotBorderClasse={true}
                     setShowSpinner={(value) => setShowSpinner(value)}
                 />

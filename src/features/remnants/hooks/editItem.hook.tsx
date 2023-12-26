@@ -52,6 +52,7 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
   const remaining = watch('remaining') || 0
   const averageCost = watch('averageCost')
   const quotaResource = watch('quotaResource')
+  const quotass = watch('quotas')
 
 
 
@@ -59,25 +60,53 @@ export default function useEditItem(item, loadTableData: (value?: object) => voi
   useEffect(() => {
 
     
-    if (remaining && averageCost) {
-      const quotas = remaining / averageCost;
-      setValue('quotas', quotas);
+    if (remaining && averageCost) {      
+      setValue('quotas', remaining / averageCost);
     }
 
     if (averageCost === item.averageCost) {
       setValue("quotaResource", item.quotaResource || 0)      
     }else{
-      const quotaResource = item.quotas * averageCost
+      const quotaResource = quotass * averageCost
       setValue('quotaResource', quotaResource);
     }
 
     if (remaining ===  item.remaining) {
       setValue("residual", item.residual)
-    }else{
-      const residual = remaining - quotaResource
+    }else{   
+      const residual = remaining - (quotass*averageCost)
       setValue('residual', residual);      
     }
-  }, [remaining, averageCost, item, quotaResource]);
+  }, [remaining, averageCost, item, quotaResource,quotass]);
+
+  /* useEffect(() => {
+    let calculatedQuotas, quotaResource, residual;
+
+    // Calcular 'Cupos' si 'remaining' y 'averageCost' están disponibles
+    if (remaining && averageCost) {
+      calculatedQuotas = remaining / averageCost;
+      setValue('quotas', calculatedQuotas);
+    } else {
+      calculatedQuotas = quotas; // Usar el valor observado si no se puede calcular
+    }
+
+    // Calcular 'Recurso con Cupos'
+    if (averageCost === item.averageCost) {
+      quotaResource = item.quotaResource || 0;
+    } else {
+      quotaResource = (calculatedQuotas !== undefined ? calculatedQuotas : item.quotas) * averageCost;
+    }
+    setValue('quotaResource', quotaResource);
+
+    // Calcular 'Residual'
+    if (remaining === item.remaining) {
+      residual = item.residual;
+    } else {
+      residual = remaining - quotaResource;
+    }
+    setValue('residual', residual);
+
+  }, [remaining, averageCost, item, quotas, setValue]); */
 
 
 

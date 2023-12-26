@@ -4,11 +4,11 @@ export interface IEditLegalAuditFunds {
   updatedAt: Date; // PAB_FECHA_MODIFICO
 }
 export interface ICallLegalResfilters {
-  communeFundId: number;
-  resource: string;
-  order: string;
+  communeFundId?: number;
+  resource?: string;
+  order?: string;
   announcementId?: number;
-  fiduciaryId: string;
+  fiduciaryId?: string;
   fiduciaryName?: string;
 }
 

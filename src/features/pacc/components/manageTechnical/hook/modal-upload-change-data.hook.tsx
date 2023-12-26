@@ -9,16 +9,20 @@ import { updateSocialServiceSchema } from "../../../../../common/schemas/social-
 import { ISocialServiceBeneficiaryUpdate } from "../interface/social-service";
 import { ApiResponse } from "../../../../../common/utils/api-response";
 import { EResponseCodes } from "../../../../../common/constants/api.enum";
+import { NavigateFunction } from "react-router-dom";
 
 export default function useModalUploadChangeData(
   id: number,
+  idConsolidationBeneficiary: number,
   state: boolean,
   observation: string,
   action: "edit" | "show",
   width: number,
   showUploadFile: boolean,
   loadTableData: (searchCriteria?: object) => void,
-  executeFunctionSubmit?: (data: FormData) => Promise<ApiResponse<any>>
+  editable: boolean,
+  executeFunctionSubmit?: (data: FormData) => Promise<ApiResponse<any>>,
+  navigate?: NavigateFunction
 ) {
   const { setMessage } = useContext(AppContext);
 
@@ -30,8 +34,10 @@ export default function useModalUploadChangeData(
     useForm<ISocialServiceBeneficiaryUpdate>({
       defaultValues: {
         id,
-        observation: observation ?? "",
+        observation: observation ?? null,
         state: state ?? null,
+        editable,
+        idConsolidationBeneficiary,
       },
       resolver: useYupValidationResolver(updateSocialServiceSchema),
     });
@@ -46,11 +52,18 @@ export default function useModalUploadChangeData(
         OkTitle: "Aceptar",
         cancelTitle: "Cancelar",
         onOk: () => {
-          let formData = new FormData();
+          const formData = new FormData();
           formData.append("id", String(data.id));
-          formData.append("files", fileUploadData);
-          formData.append("documentPath", `${id}/socialServices`);
-          formData.append("state", data.state ? "true" : "false");
+
+          if (fileUploadData) {
+            formData.append("files", fileUploadData);
+          }
+
+          formData.append(
+            "idConsolidationBeneficiary",
+            String(data.idConsolidationBeneficiary)
+          );
+          formData.append("state", Number(data.state) ? "true" : "false");
           formData.append("observation", data.observation);
 
           executeFunctionSubmit(formData).then((response) => {
@@ -65,6 +78,7 @@ export default function useModalUploadChangeData(
                     return { ...prev, show: false };
                   });
                   loadTableData();
+                  navigate("../bandeja-consolidacion");
                   // getUploadKnow()
                   handleChangeUploadFile(null);
                 },
@@ -72,6 +86,24 @@ export default function useModalUploadChangeData(
                   setMessage({});
                   loadTableData();
                   // getUploadKnow()
+                  handleChangeUploadFile(null);
+                },
+                background: true,
+              });
+            } else {
+              setMessage({
+                title: "Errpr",
+                description: `Error al guardar cambios!`,
+                show: true,
+                OkTitle: "Aceptar",
+                onOk: () => {
+                  setMessage((prev) => {
+                    return { ...prev, show: false };
+                  });
+                  handleChangeUploadFile(null);
+                },
+                onClose: () => {
+                  setMessage({});
                   handleChangeUploadFile(null);
                 },
                 background: true,

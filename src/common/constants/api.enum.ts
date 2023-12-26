@@ -16,3 +16,9 @@ export enum EStatePac{
   Committee = 9,
   Consolidated = 10 
 }
+
+export enum ERegulation{
+  requirement = 1,
+  socialService = 2,
+  knowledgeTransfer = 3,
+}

@@ -6,7 +6,7 @@ const lessThan = (number: number) =>
 const greaterThan = (number: number) =>
   `El número debe de ser mayor o igual a ${number}`;
 
-export const createRegulation = yup.object().shape({
+export const shemaFormRegulation = yup.object().shape({
   program: yup
     .string()
     .typeError(MESSAGE_REQUIRED)
@@ -25,16 +25,39 @@ export const createRegulation = yup.object().shape({
       if (!isOpenPeriod[0]) return schema.required(MESSAGE_REQUIRED);
       return schema;
     }),
+  // theoreticalPercentage: yup
+  //   .number()
+  //   .typeError(MESSAGE_REQUIRED)
+  //   .required(MESSAGE_REQUIRED)
+  //   .min(1, greaterThan(1))
+  //   .max(100, lessThan(100))
+  //   .typeError(MESSAGE_REQUIRED)
+  //   .test("decimal-places", "Ingresa un número con dos decimales", (value) =>
+  //     /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+  //   ),
+  applyTheoreticalSemester: yup.boolean().optional().nullable(),
   theoreticalPercentage: yup
-    .number()
-    .typeError(MESSAGE_REQUIRED)
-    .required(MESSAGE_REQUIRED)
+  .number()
+  .nullable()
     .min(1, greaterThan(1))
     .max(100, lessThan(100))
-    .typeError(MESSAGE_REQUIRED)
-    .test("decimal-places", "Ingresa un número con dos decimales", (value) =>
-      /^-?\d+(\.\d{1,2})?$/.test(value.toString())
-    ),
+    .when("applyTheoreticalSemester",(applyTheoreticalSemester, schema) => {
+      if (applyTheoreticalSemester[0])
+        return schema
+          .required(MESSAGE_REQUIRED)
+          .typeError(MESSAGE_REQUIRED)
+          .min(1, greaterThan(1))
+          .max(100, lessThan(100))
+          .typeError(MESSAGE_REQUIRED)
+          .test(
+            "decimal-places",
+            "Ingresa un número con dos decimales",
+            (value) => /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+          );
+      return schema;
+    }),
+    
+
   applySocialService: yup.boolean().optional().nullable(),
   socialServicePercentage: yup
     .number()

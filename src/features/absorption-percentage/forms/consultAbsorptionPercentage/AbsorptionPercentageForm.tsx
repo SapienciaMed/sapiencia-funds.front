@@ -29,6 +29,7 @@ const AbsorptionPercentageForm = ({
   setPaginateData,
   tableComponentRef,
   urlGet,
+  validateActionAccess,
   register,
 }) => (
   <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
@@ -37,7 +38,7 @@ const AbsorptionPercentageForm = ({
       className="form-signIn"
       action={onSubmit}
     >
-      <span className="text-black large  grid-span-4-columns mt-10px ml-14px">
+      <span className="text-black large  grid-span-4-columns mt--4px ml--1px">
         Porcentaje de absorción
       </span>
 
@@ -60,41 +61,49 @@ const AbsorptionPercentageForm = ({
           />
         </div>
       </div>
-      <div className="button-save-container-display-percentage mr-24px">
-        {tableView && (
-          <div className="button-clean  mr-auto ml-25px">
-            <div>
-              <div
-                className={`title-button  ${
-                  width < 300 ? "font-medium" : "font-big"
-                } mt-12px mr-15px hover`}
-                onClick={handleAggItem}
-              >
-                <div className="button-border colorTittle alin pr-23px pl-23px">
-                  <BiPlusCircle />
-                  <span className="p-2px"> Agregar ítem </span>
+      <div className="button-save-container-display-percentage">
+        <div className="agg-item">
+          {tableView &&
+            validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_CREAR") && (
+              <div className="button-clean  mr-auto ml-25px mt--5px">
+                <div>
+                  <div
+                    className={`title-button  ${
+                      width < 300 ? "font-medium" : "font-big"
+                    } mt-12px mr-15px hover`}
+                    onClick={handleAggItem}
+                  >
+                    <div className="button-border colorTittle alin pr-23px pl-23px">
+                      <BiPlusCircle />
+                      <span className="p-2px"> Agregar ítem </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+        </div>
+        <div className="container-actions">
+          <div className="clean-button">
+            {tableView && (
+              <ButtonComponent
+                value="Limpiar campos"
+                className="button-clean  mr-3px mt-14px"
+                type="button"
+                action={handleClean}
+              />
+            )}
           </div>
-        )}
-
-        {tableView && (
-          <ButtonComponent
-            value="Limpiar campos"
-            className="button-clean  mr-3px mt-14px"
-            type="button"
-            action={handleClean}
-          />
-        )}
-        <ButtonComponent
-          value="Buscar"
-          className={`button-save ${
-            !isValid || submitDisabled ? "disabled-black" : ""
-          } big`}
-          type="submit"
-          disabled={!isValid || submitDisabled}
-        />
+          <div className="search-button">
+            <ButtonComponent
+              value="Buscar"
+              className={`button-save ${
+                !isValid || submitDisabled ? "disabled-black" : ""
+              } big`}
+              type="submit"
+              disabled={!isValid || submitDisabled}
+            />
+          </div>
+        </div>
       </div>
     </FormComponent>
     {tableView && (
@@ -120,22 +129,23 @@ const AbsorptionPercentageForm = ({
             backgroundColor: "#e0e0e0",
           }}
         ></div>
-        {showFooterActions && (
-          <div className="button-save-container-display mt-20px mr-24px">
-            <ButtonComponent
-              value={
-                <>
-                  <div className="container-buttonText">
-                    <span>Descargar</span>
-                    <Svgs svg="excel" width={23.593} height={28.505} />
-                  </div>
-                </>
-              }
-              className="button-download large "
-              action={downloadCollection}
-            />
-          </div>
-        )}
+        {showFooterActions &&
+          validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_XLSX") && (
+            <div className="button-save-container-display mt-20px mr-24px">
+              <ButtonComponent
+                value={
+                  <>
+                    <div className="container-buttonText">
+                      <span>Descargar</span>
+                      <Svgs svg="excel" width={23.593} height={28.505} />
+                    </div>
+                  </>
+                }
+                className="button-download large "
+                action={downloadCollection}
+              />
+            </div>
+          )}
       </>
     )}
   </div>

@@ -4,10 +4,7 @@ import TableComponent from "../../../../common/components/table.component";
 import useSocialServices from "./hook/social-services.hook";
 
 function SocialServices() {
-  const {
-    tableColumns,
-    tableComponentRef,
-  } = useSocialServices();
+  const { tableColumns, tableComponentRef } = useSocialServices();
   const [showSpinner, setShowSpinner] = useState(true);
 
   return (
@@ -28,7 +25,7 @@ function SocialServices() {
         classSizeTable="size-table-wd-110"
         princialTitle="Servicio social"
         isMobil={false}
-        viePaginator={false}
+        viePaginator={true}
         isNotBorderClasse={true}
         setShowSpinner={setShowSpinner}
       />

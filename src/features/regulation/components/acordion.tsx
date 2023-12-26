@@ -1,5 +1,16 @@
-import React from "react";
 import "./styles.scss";
+import { IoIosArrowDown } from "react-icons/io";
+
+interface IAcordion {
+  title?: string;
+  switchElement?: any;
+  children?: any;
+  onClick?: () => void;
+  isOpen?: boolean;
+  classname?: string;
+  onlyView?: boolean;
+  iconRow?: boolean;
+}
 
 const Acordion = ({
   title = "test",
@@ -9,16 +20,17 @@ const Acordion = ({
   isOpen = false,
   classname = "",
   onlyView = false,
-}) => {
+  iconRow = false,
+}: IAcordion) => {
   return (
     <div style={{ margin: "16px 0" }}>
       <details className="details" open={isOpen}>
         <summary
-          onClick={onClick}
+          onClick={() => onClick?.()}
           className={onlyView ? "onlyView" : "summary"}
         >
           <div className={` text-black bold-500 text-font ${classname}`}>
-            {title}
+            {iconRow && <IoIosArrowDown />} {title}
           </div>
           <div onClick={(e) => e.stopPropagation()}>{switchElement}</div>
         </summary>

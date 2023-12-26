@@ -26,7 +26,7 @@ function ConsolidatedTrayPage() {
       content: (
         <BeneficiaryTrayPage
           typeState={EStatePac.SocialService}
-          isCut={false}
+          changeCut={false}
         />
       ),
       action: () => {},

@@ -25,6 +25,7 @@ export const useConsultAbsorptionPercentage = () => {
   const { validateActionAccess, authorization } = useContext(AppContext);
   const tableComponentRef = useRef(null);
   const { periods: periodsData } = useGetAllPeriodsHook();
+
   const [showFooterActions, setShowFooterActions] = useState(false);
   const [tableView, setTableView] = useState<boolean>(false);
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });
@@ -62,6 +63,7 @@ export const useConsultAbsorptionPercentage = () => {
           items: true,
         });
       },
+      hide: !validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_EDITAR"),
     },
 
     {
@@ -69,6 +71,7 @@ export const useConsultAbsorptionPercentage = () => {
       onClick: (row) => {
         handleDelete(row);
       },
+      hide: !validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_ELIMINAR"),
     },
   ];
 
