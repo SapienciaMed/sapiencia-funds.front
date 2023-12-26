@@ -14,23 +14,20 @@ import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 import { useNavigate } from "react-router-dom";
 import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
-export default function useBeneficiaryTray(
-  typeState: number,
-  isCut: boolean = true
-) {
+export default function useBeneficiaryTray(typeState: number, isCut: boolean = true, changeCut: boolean = true) {
   const navigate = useNavigate();
   const tableComponentRef = useRef(null);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const { setMessage } = useContext(AppContext);
   const { GetCutsForConsolidationTray } = usePaccServices(typeState);
   const [idCutData, setIdCutData] = useState<IDropdownProps[]>([]);
+
   const [listSearch, setListSearch] = useState({
     data: {},
     status: false,
   });
   const [valueFilterTable, setValueFilterTable] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
-
   const { control, setValue, getValues, reset } = useForm<IStepCashing>();
 
   useEffect(() => {
@@ -101,7 +98,6 @@ export default function useBeneficiaryTray(
           {
             fieldName: "dateIncomeCut",
             header: "Fecha ingreso al corte",
-            hide: true,
             renderCell(row) {
               const date = new Date(row.dateIncomeCut);
               const day = date.getUTCDate();
@@ -115,68 +111,69 @@ export default function useBeneficiaryTray(
                 </div>
               );
             },
-          },
-          {
-            fieldName: "cut",
-            header: "Corte",
-            hide: true,
-          },
-          {
-            fieldName: "dateFinallyCut",
-            header: "Fecha final corte",
-            hide: true,
-            renderCell(row) {
-              const date = new Date(row.dateFinallyCut);
-              const day = date.getUTCDate();
-              const month = date.getUTCMonth() + 1;
-              const year = date.getUTCFullYear();
+            hide: !changeCut
+        },
+        {
+          fieldName: "cut",
+          header: "Corte",
+          hide: true,
+        },
+        {
+          fieldName: "dateFinallyCut",
+          header: "Fecha final corte",
+          hide: true,
+          renderCell(row) {
+            const date = new Date(row.dateFinallyCut);
+            const day = date.getUTCDate();
+            const month = date.getUTCMonth() + 1;
+            const year = date.getUTCFullYear();
 
-              return (
-                <div>
-                  {year}/{month < 10 ? "0" + month : month}/
-                  {day < 10 ? "0" + day : day}
-                </div>
-              );
-            },
+            return (
+              <div>
+                {year}/{month < 10 ? "0" + month : month}/
+                {day < 10 ? "0" + day : day}
+              </div>
+            );
           },
-          {
-            fieldName: "dateEndGracePeriod",
-            header: "Fecha fin periodo de gracia",
-            hide: true,
-            renderCell(row) {
-              const date = new Date(row.dateEndGracePeriod);
-              const day = date.getUTCDate();
-              const month = date.getUTCMonth() + 1;
-              const year = date.getUTCFullYear();
+        },
+        {
+          fieldName: "dateEndGracePeriod",
+          header: "Fecha fin periodo de gracia",
+          hide: true,
+          renderCell(row) {
+            const date = new Date(row.dateEndGracePeriod);
+            const day = date.getUTCDate();
+            const month = date.getUTCMonth() + 1;
+            const year = date.getUTCFullYear();
 
-              return (
-                <div>
-                  {year}/{month < 10 ? "0" + month : month}/
-                  {day < 10 ? "0" + day : day}
-                </div>
-              );
-            },
+            return (
+              <div>
+                {year}/{month < 10 ? "0" + month : month}/
+                {day < 10 ? "0" + day : day}
+              </div>
+            );
           },
-          {
-            fieldName: "status",
-            header: "Estado",
-            hide: true,
-          },
-          {
-            fieldName: "reason",
-            header: "Motivo",
-            hide: true,
-          },
-          {
-            fieldName: "characterization",
-            header: "Caracterización",
-            hide: true,
-          },
-          {
-            fieldName: "currentResponsible",
-            header: "Responsable actual",
-            hide: true,
-          },
+        },
+        {
+          fieldName: "status",
+          header: "Estado",
+          hide: true,
+        },
+        {
+          fieldName: "reason",
+          header: "Motivo",
+          hide: true,
+        },
+        {
+          fieldName: "characterization",
+          header: "Caracterización",
+          hide: true,
+        },
+        {
+          fieldName: "currentResponsible",
+          header: "Responsable actual",
+          hide: true,
+        },
         ];
 
       return a.filter((u) => u.hide);
@@ -228,11 +225,7 @@ export default function useBeneficiaryTray(
     timer && clearTimeout(timer);
     const newTimer = setTimeout(() => {
       setShowSpinner(true);
-      if (
-        value.target.value != undefined &&
-        value.target.value.length > 0 &&
-        getValues("idCut") != null
-      ) {
+      if (value.target.value != undefined && value.target.value.length > 0 && getValues("idCut") != null) {
         const searchCriteriaData = {
           searchParam: value.target.value,
           [getValues("idCut") == "TODOS" ? "cutParamName" : "cutParamId"]:
@@ -319,7 +312,6 @@ export default function useBeneficiaryTray(
               };
             });
             const newData = [...data, { name: "Todos", value: "TODOS" }];
-
             setValue("idCut", newData[0].value);
             setIdCutData(newData);
           }
@@ -329,15 +321,16 @@ export default function useBeneficiaryTray(
 
   const apiUrl = () => {
     const baseApiUrl = process.env.urlApiFunds;
-    const endpoint =
-      typeState === EStatePac.SocialService
-        ? "get-paginated/consolidate"
-        : listSearch.status
+    const endpoint = listSearch.status
         ? "get-consolidation-tray-by-cut"
         : "get-consolidation-tray";
 
     return `${baseApiUrl}/api/v1/${typePrefixeTabs(typeState)}/${endpoint}`;
   };
+
+  const resetValue = () => {
+    setValueFilterTable("");
+  }
 
   return {
     tableComponentRef,
@@ -349,8 +342,8 @@ export default function useBeneficiaryTray(
     valueFilterTable,
     handleFilterChange,
     handleChangeCut,
-    getCuts,
     apiUrl,
     setShowSpinner,
+    resetValue
   };
 }

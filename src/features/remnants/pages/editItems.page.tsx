@@ -149,7 +149,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         currency="COP"
                                         locale="es-CO"
                                         label="Recurso con cupos"
-                                        classNameLabel="text-black big medium text-required"
+                                        classNameLabel="text-black big medium"
                                         errors={errors}
                                         placeholder={""}
                                         {...field}
@@ -171,7 +171,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         currency="COP"
                                         locale="es-CO"
                                         label="Residual"
-                                        classNameLabel="text-black big medium text-required"
+                                        classNameLabel="text-black big medium"
                                         errors={errors}
                                         placeholder={""}
                                         {...field}

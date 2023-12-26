@@ -57,9 +57,11 @@ export default function useSupportsPQRSDF({ document }) {
                 const month = date.getUTCMonth() + 1;
                 const year = date.getUTCFullYear();
 
+                //{day < 10 ? '0' + day :  day}/{ month < 10 ? '0'+ month :  month }/{year}
+
                 return(
                     <div>
-                        {day < 10 ? '0' + day :  day}/{ month < 10 ? '0'+ month :  month }/{year}
+                        { row.answerDate ? `${day < 10 ? '0' + day :  day}/${ month < 10 ? '0'+ month :  month }/${year}` : ''}
                     </div>
                 )
             }
@@ -76,7 +78,7 @@ export default function useSupportsPQRSDF({ document }) {
                             data-pr-tooltip={row.answer}
                             data-pr-position="bottom"
                         >
-                        {row.answer}
+                        {row.answer || ''}
                         </i>
                     </>
                 )

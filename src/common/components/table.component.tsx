@@ -156,21 +156,23 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           OkTitle: "Aceptar",
           onOk: () => {
             setMessage({});
-            if (onGlobalFilterChange) {
-              const valor = { target: { value: "" } as HTMLInputElement };
-              onGlobalFilterChange(valor);
-            }
+            // if (onGlobalFilterChange) {
+            //   const valor = { target: { value: "" } as HTMLInputElement };
+            //   onGlobalFilterChange(valor);
+            // }
+            resetValue?.();
           },
           onClose:() => {
             setMessage({});
-            if (onGlobalFilterChange) {
-              const valor = { target: { value: "" } as HTMLInputElement };
-              onGlobalFilterChange(valor);
-            }
+            // if (onGlobalFilterChange) {
+            //   const valor = { target: { value: "" } as HTMLInputElement };
+            //   onGlobalFilterChange(valor);
+            // }
+            resetValue?.();
           },
           background: true,
         });
-        resetValue?.();
+        
       }
     } else {
       setMessage({
