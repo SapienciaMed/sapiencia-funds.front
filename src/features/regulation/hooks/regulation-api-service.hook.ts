@@ -32,10 +32,10 @@ export function useRegulationApi() {
     return await get(`${serviceUrl}/get-by-id/${id}`);
   }
 
-  async function createRegulationAction(
+  async function createRegulation(
     data: IRegulation
   ): Promise<ApiResponse<IRegulation>> {
-    return await post(`${serviceUrl}/create/`, data);
+    return await post(`/api/v1/reglament-v2/create-reglament/`, data);
   }
 
   async function editRegulation(
@@ -64,12 +64,12 @@ export function useRegulationApi() {
   }
 
   return {
-    createRegulationAction,
+    createRegulation,
     getRegulationById,
     editRegulation,
     getRegulation,
     getLastId,
     getPrograms,
-    getPeriodsFromSapiencia
+    getPeriodsFromSapiencia,
   };
 }

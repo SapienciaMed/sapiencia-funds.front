@@ -63,6 +63,7 @@ export const useConsultLegalAuditFunds = () => {
           items: true,
         });
       },
+      hide: !validateActionAccess("FONDOS_LEGALIZADO_EDITAR"),
     },
   ];
 

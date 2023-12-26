@@ -1,25 +1,32 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ButtonComponent,
   InputComponent,
 } from "../../../common/components/Form";
 import * as Icons from "react-icons/fa";
-import { FieldErrors, UseFormGetValues, UseFormSetValue } from "react-hook-form";
-import { IPerformanceStructure, IReglamentConsolidation, IRegulationSearch } from "../../../common/interfaces/regulation";
+import {
+  FieldErrors,
+  UseFormGetValues,
+  UseFormSetValue,
+} from "react-hook-form";
+import {
+  IPerformanceStructure,
+  IRegulationSearch,
+} from "../../../common/interfaces/regulation";
 
 const INIT_DATA = { percentCondonation: "", dataTable: [] };
 const INIT_TEMP_DATA = { initialAverage: "", endAverage: "", percent: "" };
 const DEFAULT_MESSAGE = "Campo requerido";
 
-interface ITableJson{
-  title: string,
-  setValue: UseFormSetValue<IRegulationSearch>,
-  idInput: string,
-  isOpen: boolean,
-  getValues: UseFormGetValues<IRegulationSearch> ,
-  error: FieldErrors<IRegulationSearch>,
-  onlyView: boolean,
-  dataRead: IPerformanceStructure
+interface ITableJson {
+  title: string;
+  setValue: UseFormSetValue<IRegulationSearch>;
+  idInput: string;
+  isOpen: boolean;
+  getValues: UseFormGetValues<IRegulationSearch>;
+  error: FieldErrors<IRegulationSearch>;
+  onlyView: boolean;
+  dataRead: IPerformanceStructure;
 }
 
 const TableJson = ({
