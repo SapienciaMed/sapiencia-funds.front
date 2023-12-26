@@ -1,42 +1,7 @@
 import { Control, FieldErrors, UseFormGetValues, UseFormSetValue } from "react-hook-form";
 
-export interface IRegulation {
-  id?: number;
-  program: string;
-  initialPeriod: string;
-  openPeriod: boolean;
-  isOpenPeriod: boolean;
-  endPeriod?: string;
-  theoreticalPercentage: number;
-  applySocialService: number;
-  socialServicePercentage?: number;
-  socialServiceHours?: number;
-  knowledgeTransferApply: number;
-  knowledgeTransferPercentage?: number;
-  knowledgeTransferHours?: number;
-  gracePeriodApply: number;
-  gracePeriodMonths?: number;
-  gracePeriodApplication?: string;
-  continuousSuspensionApplies: number;
-  continuosSuspencionQuantity?: number;
-  applyDiscontinuousSuspension: number ;
-  discontinuousSuspensionQuantity?: number;
-  applySpecialSuspensions: boolean;
-  applySpecialSuspensionsQuantity?: number;
-  extensionApply: boolean;
-  extensionApplyQuantity?: number;
-  applyCondonationPerformancePeriod: boolean;
-  performancePeriod?: string;
-  accomulatedIncomeCondonationApplies: boolean;
-  accumulatedPerformance?: string;
-  modifyUser?: string;
-  modifyDate?: string;
-  createUser: string;
-  createDate: string;
-  applyTheoreticalSemester: boolean
-}
 
-export interface IRegulationSearch extends IReglamentConsolidation  {
+export interface IRegulationSearch extends IRegulation  {
   programId: string;
   initialPeriod: string;
   endPeriod: string;
@@ -61,7 +26,7 @@ export interface IPeriodSapiencia {
 }
 
 
-export interface IReglamentConsolidation {
+export interface IRegulation {
   id?: number;
   idProgram?: number;
   programName?: string
@@ -165,7 +130,7 @@ export interface IRequirementsForReglament {
 }
 
 export interface IPropDetailReglament{
-  detailData: IReglamentConsolidation;
+  detailData: IRegulation;
   listPrograms: any[];
   errors: FieldErrors<IRegulationSearch>;
   control: Control<IRegulationSearch, any>;

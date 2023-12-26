@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
-import {
-  FormComponent,
-  InputComponent,
-} from "../../../../common/components/Form";
-import { SelectComponentOld } from "../../../../common/components/Form/select.component.old";
-import SwitchComponent from "../../../../common/components/Form/switch.component";
+import { InputComponent } from "../../../common/components/Form";
+import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
+import SwitchComponent from "../../../common/components/Form/switch.component";
 import { Controller } from "react-hook-form";
-import Acordion from "../../components/acordion";
-import { LIST_DATA_GRACE_PERIOD } from "../../service";
-import { InputNumberComponent } from "../../../../common/components/Form/input-number.component";
-import { EDirection } from '../../../../common/constants/input.enum';
+import Acordion from "../components/acordion";
+import { LIST_DATA_GRACE_PERIOD } from "../hooks/regulation-api-service.hook";
+import { EDirection } from "../../../common/constants/input.enum";
 
 const InitialSetup = ({
-  register,
   errors,
   updateData,
-  periods,
+  periodList,
   control,
   getValues,
   setValue,
@@ -25,7 +19,6 @@ const InitialSetup = ({
   loading,
   listPrograms,
   onlyView,
-  reset,
 }) => {
   if (loading) return <></>;
   const isDisabled = onlyView || (updateData?.program ? true : false);
@@ -35,14 +28,15 @@ const InitialSetup = ({
         <SelectComponentOld
           idInput={"program"}
           setValue={(e) => setValue("program", e)}
-          value={ updateData?.program
-            ? Number(updateData?.program)
-            : getValues().program
+          value={
+            updateData?.program
+              ? Number(updateData?.program)
+              : getValues().program
           }
           errors={errors}
           disabled={isDisabled}
           data={listPrograms.length ? listPrograms : []}
-          label='Programa'
+          label="Programa"
           className="select-basic select-disabled-list input-size"
           classNameLabel="text-black biggest font-500 text-required"
           placeholder="Seleccionar"
@@ -58,9 +52,14 @@ const InitialSetup = ({
               ? updateData?.initialPeriod
               : getValues().initialPeriod
           }
-          data={periods ?? []}
+          data={periodList.map((i) => {
+            return {
+              name: i.name,
+              value: i.name,
+            };
+          })}
           disabled={onlyView}
-          label='Periodo inicial de convocatoria'
+          label="Periodo inicial de convocatoria"
           className="select-basic select-disabled-list input-size"
           classNameLabel="text-black biggest font-500 text-required"
           placeholder="Seleccionar"
@@ -78,7 +77,7 @@ const InitialSetup = ({
             }
             size="normal"
             disabled={onlyView}
-            label='Convocatoria abierta'
+            label="Convocatoria abierta"
             className="select-basic select-disabled-list input-size"
             classNameLabel="text-black biggest font-500 text-required"
             direction={EDirection.other}
@@ -96,23 +95,36 @@ const InitialSetup = ({
                 ? updateData?.endPeriod
                 : getValues().endPeriod
             }
-            data={watch().isOpenPeriod ? [] : periods || []} //pendiente = ¿porque pendiente? lo coloco el desarrollador anterior
-            label='Periodo final de convocatoria'
+            data={
+              watch().isOpenPeriod
+                ? []
+                : periodList.map((i) => {
+                    return {
+                      name: i.name,
+                      value: i.name,
+                    };
+                  })
+            } //pendiente = ¿porque pendiente? lo coloco el desarrollador anterior
+            label="Periodo final de convocatoria"
             className="select-basic select-disabled-list input-size"
-            classNameLabel={`text-black biggest font-500 ${!getValues().isOpenPeriod && 'text-required'}`}
+            classNameLabel={`text-black biggest font-500 ${
+              !getValues().isOpenPeriod && "text-required"
+            }`}
             placeholder="Seleccionar"
           />
-
         </div>
       </div>
-      
+
       <div>
         <Acordion
           title="¿Aplica porcentaje de pago teórico semestral?"
           isOpen={toggleControl?.applyTheoreticalSemester}
           onClick={() => {
             if (onlyView) return;
-            setValue("applyTheoreticalSemester", !getValues().applyTheoreticalSemester);
+            setValue(
+              "applyTheoreticalSemester",
+              !getValues().applyTheoreticalSemester
+            );
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
@@ -131,7 +143,8 @@ const InitialSetup = ({
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  applyTheoreticalSemester: !getValues().applyTheoreticalSemester,
+                  applyTheoreticalSemester:
+                    !getValues().applyTheoreticalSemester,
                 });
               }}
               onChange={() => {
@@ -159,7 +172,7 @@ const InitialSetup = ({
                     typeInput="text"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ''}
+                    value={field?.value || ""}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de pago teórico semestral"
@@ -171,10 +184,10 @@ const InitialSetup = ({
         </Acordion>
       </div>
       <div>
-      <Acordion
+        <Acordion
           title="¿Aplica servicio social?"
-          isOpen={toggleControl?.applySocialService}  
-          onClick={ () => {
+          isOpen={toggleControl?.applySocialService}
+          onClick={() => {
             if (onlyView) return;
             setValue("applySocialService", !getValues().applySocialService);
             setTimeout(() => {
@@ -211,49 +224,48 @@ const InitialSetup = ({
           }
         >
           <div className="grid-form-3-container mb-16px">
-              <Controller
-                control={control}
-                name={"socialServicePercentage"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput={field.name}
-                      errors={errors}
-                      disabled={onlyView}
-                      defaultValue={`${updateData?.socialServicePercentage}`}
-                      typeInput="number"
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field?.value || ''}
-                      className="input-basic medium"
-                      classNameLabel="text-black big text-required font-500"
-                      label="Porcentaje de descuento por periodo"
-                    />
-                  );
-                }}
-              />
-              <Controller
-                control={control}
-                name={"socialServiceHours"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput={field.name}
-                      errors={errors}
-                      defaultValue={`${updateData?.socialServiceHours}`}
-                      typeInput="number"
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field?.value || ''}
-                      className="input-basic medium"
-                      classNameLabel="text-black big text-required font-500"
-                      label="Horas por periodo"
-                      disabled={onlyView}
-                    />
-                  );
-                }}
-              />
-           
+            <Controller
+              control={control}
+              name={"socialServicePercentage"}
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput={field.name}
+                    errors={errors}
+                    disabled={onlyView}
+                    defaultValue={`${updateData?.socialServicePercentage}`}
+                    typeInput="number"
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    value={field?.value || ""}
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Porcentaje de descuento por periodo"
+                  />
+                );
+              }}
+            />
+            <Controller
+              control={control}
+              name={"socialServiceHours"}
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput={field.name}
+                    errors={errors}
+                    defaultValue={`${updateData?.socialServiceHours}`}
+                    typeInput="number"
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    value={field?.value || ""}
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Horas por periodo"
+                    disabled={onlyView}
+                  />
+                );
+              }}
+            />
           </div>
         </Acordion>
       </div>
@@ -261,7 +273,7 @@ const InitialSetup = ({
         <Acordion
           title="¿Aplica trasferencia de conocimiento?"
           isOpen={toggleControl?.knowledgeTransferApply}
-          onClick={ () => {
+          onClick={() => {
             if (onlyView) return;
             setValue(
               "knowledgeTransferApply",
@@ -299,7 +311,7 @@ const InitialSetup = ({
           }
         >
           <div className="grid-form-3-container mb-16px">
-          <Controller
+            <Controller
               control={control}
               name={"knowledgeTransferPercentage"}
               render={({ field }) => {
@@ -312,7 +324,7 @@ const InitialSetup = ({
                     onChange={field.onChange}
                     disabled={onlyView}
                     onBlur={field.onBlur}
-                    value={field?.value || ''}
+                    value={field?.value || ""}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de cumplimiento"
@@ -332,7 +344,7 @@ const InitialSetup = ({
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ''}
+                    value={field?.value || ""}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Horas totales por el crédito"
@@ -340,7 +352,7 @@ const InitialSetup = ({
                   />
                 );
               }}
-              />
+            />
           </div>
         </Acordion>
       </div>
@@ -395,7 +407,7 @@ const InitialSetup = ({
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ''}
+                    value={field?.value || ""}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Meses"
@@ -404,19 +416,19 @@ const InitialSetup = ({
                 );
               }}
             />
-             <SelectComponentOld
-                idInput={"gracePeriodApplication"}
-                setValue={(e) => setValue("gracePeriodApplication", e)}
-                value={getValues().gracePeriodApplication}
-                errors={errors}
-                data={LIST_DATA_GRACE_PERIOD ? LIST_DATA_GRACE_PERIOD : []} //pendiente
-                label='Fecha de aplicación'
-                className="select-basic select-disabled-list medium"
-                classNameLabel="text-black big font-500 tex-required"
-                placeholder="Seleccionar"
-               disabled={onlyView}
-              />
-            </div>
+            <SelectComponentOld
+              idInput={"gracePeriodApplication"}
+              setValue={(e) => setValue("gracePeriodApplication", e)}
+              value={getValues().gracePeriodApplication}
+              errors={errors}
+              data={LIST_DATA_GRACE_PERIOD ? LIST_DATA_GRACE_PERIOD : []} //pendiente
+              label="Fecha de aplicación"
+              className="select-basic select-disabled-list medium"
+              classNameLabel="text-black big font-500 tex-required"
+              placeholder="Seleccionar"
+              disabled={onlyView}
+            />
+          </div>
         </Acordion>
       </div>
       <div>
@@ -442,13 +454,14 @@ const InitialSetup = ({
             <SwitchComponent
               idInput={"continuousSuspensionApplies"}
               errors={errors}
-             disabled={onlyView}
+              disabled={onlyView}
               control={control}
               onChange={() => {
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  continuousSuspensionApplies: !getValues().continuousSuspensionApplies,
+                  continuousSuspensionApplies:
+                    !getValues().continuousSuspensionApplies,
                 });
                 setValue("continuosSuspencionQuantity", undefined);
               }}
@@ -472,7 +485,7 @@ const InitialSetup = ({
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ''}
+                    value={field?.value || ""}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
@@ -508,12 +521,13 @@ const InitialSetup = ({
               idInput={"applyDiscontinuousSuspension"}
               errors={errors}
               control={control}
-             disabled={onlyView}
+              disabled={onlyView}
               onChange={() => {
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  applyDiscontinuousSuspension: !getValues().applyDiscontinuousSuspension,
+                  applyDiscontinuousSuspension:
+                    !getValues().applyDiscontinuousSuspension,
                 });
                 setValue("discontinuousSuspensionQuantity", undefined);
               }}
@@ -537,7 +551,7 @@ const InitialSetup = ({
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ''}
+                    value={field?.value || ""}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
@@ -569,7 +583,7 @@ const InitialSetup = ({
           }}
           switchElement={
             <SwitchComponent
-             disabled={onlyView}
+              disabled={onlyView}
               idInput={"applySpecialSuspensions"}
               errors={errors}
               control={control}
@@ -602,7 +616,7 @@ const InitialSetup = ({
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ''}
+                    value={field?.value || ""}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
@@ -617,7 +631,7 @@ const InitialSetup = ({
         <Acordion
           title="¿Aplica prórroga?"
           isOpen={toggleControl?.extensionApply}
-          onClick={ () => {
+          onClick={() => {
             if (onlyView) return;
             setValue("extensionApply", !getValues().extensionApply);
             setTimeout(() => {
@@ -632,7 +646,7 @@ const InitialSetup = ({
             <SwitchComponent
               idInput={"extensionApply"}
               errors={errors}
-             disabled={onlyView}
+              disabled={onlyView}
               control={control}
               onChange={() => {
                 if (onlyView) return;
@@ -663,7 +677,7 @@ const InitialSetup = ({
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ''}
+                    value={field?.value || ""}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Cantidad"

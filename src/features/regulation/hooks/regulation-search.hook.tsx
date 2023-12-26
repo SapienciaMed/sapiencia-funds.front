@@ -9,25 +9,26 @@ import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { searchRegulation } from "../../../common/schemas/regulation-schema";
 import {
-  IReglamentConsolidation,
   IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
-import { useRegulationApi } from "../service";
+import { useRegulationApi } from "./regulation-api-service.hook";
 import Tooltip from "../../../common/components/Form/tooltip";
 import { EResponseCodes } from "../../../common/constants/api.enum";
-import DetailReglament from '../pages/detailt';
+import RegulationDetailComponent from "../components/regulation-detail.component";
 
 export default function useSearchRegulation(auth, authDetail, authEdit) {
   // Context
   const { setMessage, authorization } = useContext(AppContext);
   const [showTable, setShowTable] = useState(false);
-  const [ showSpinner, setShowSpinner ] = useState(false)
+  const [showSpinner, setShowSpinner] = useState(false);
   const tableComponentRef = useRef(null);
   const [listPrograms, setListPrograms] = useState<
     { name: string; value: string }[]
   >([]);
-  const [arrayPeriod, setArrayPeriod] = useState<{name: string; value: string; id: number, nameComplementary?: string}[]>([])
+  const [arrayPeriod, setArrayPeriod] = useState<
+    { name: string; value: string; id: number; nameComplementary?: string }[]
+  >([]);
 
   const { getPrograms, getPeriodsFromSapiencia } = useRegulationApi();
   //react-router-dom
@@ -91,24 +92,26 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
         onClick: (row) => {
           setMessage({
             title: "Detalle Reglamento!",
-            description: <DetailReglament
+            description: (
+              <RegulationDetailComponent
                 detailData={row}
                 errors={formState.errors}
                 control={control}
                 setValue={setValue}
                 getValues={getValues}
                 listPrograms={listPrograms}
-              />,
+              />
+            ),
             show: true,
             onClose: () => {
               setMessage({});
             },
-           
-            OkTitle: 'Cerrar',
+
+            OkTitle: "Cerrar",
             onOk: () => {
               setMessage({});
             },
-            size: 'large',
+            size: "large",
             background: true,
           });
         },
@@ -131,22 +134,22 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       }
     });
 
-    getPeriodsFromSapiencia().then(resp => {
+    getPeriodsFromSapiencia().then((resp) => {
       if (resp.operation.code === EResponseCodes.OK) {
         const data = resp.data.map((item) => {
           return {
             name: item.nameComplementary,
             value: item.name,
             id: item.id,
-            nameComplementary: item.nameComplementary
+            nameComplementary: item.nameComplementary,
           };
         });
         setArrayPeriod(data);
       }
-    })
+    });
   }, []);
 
-  const tableColumns: ITableElement<IReglamentConsolidation>[] = [
+  const tableColumns: ITableElement<IRegulation>[] = [
     {
       fieldName: "programs",
       header: "Programa",
@@ -269,11 +272,11 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   const newElement = () => navigate("form");
 
   const onSubmit = handleSubmit(async (data: IRegulationSearch) => {
-    setShowSpinner(true)
+    setShowSpinner(true);
     const buildData = {
       programId: parseInt(data.programId) || null,
       initialPeriod: data?.initialPeriod ?? null,
-      endPeriod: data?.endPeriod
+      endPeriod: data?.endPeriod,
     };
     setShowTable(true);
 
@@ -296,6 +299,6 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     listPrograms,
     tableColumns,
     arrayPeriod,
-    showSpinner
+    showSpinner,
   };
 }

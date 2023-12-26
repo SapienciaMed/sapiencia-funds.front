@@ -1,5 +1,5 @@
 import React from "react";
-import { ButtonComponent } from "../../../../common/components/Form";
+import { ButtonComponent } from "../../../common/components/Form";
 
 const StepButtons = ({ view, setView }) => {
   return (
