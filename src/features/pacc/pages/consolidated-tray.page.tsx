@@ -69,6 +69,14 @@ function ConsolidatedTrayPage() {
       action: () => {},
       hide: validateActionAccess("LIDER_PROYECTO"),
     };
+    const comite =  {
+      id: "comite",
+      title: "Comité",
+      content: <BeneficiaryTrayPage typeState={EStatePac.Committee} />,
+      action: () => {},
+      hide: validateActionAccess("COMITE") 
+    };
+    
     const result = [
       servicioSocial,
       certificacionValores,
@@ -77,6 +85,7 @@ function ConsolidatedTrayPage() {
       coordinador,
       juridica,
       liderProyecto,
+      comite
     ].filter((item) => item?.hide);
 
     return result;

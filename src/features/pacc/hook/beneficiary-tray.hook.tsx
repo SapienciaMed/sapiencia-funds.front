@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
 export default function useBeneficiaryTray(typeState: number, isCut: boolean = true, changeCut: boolean = true) {
+ 
   const navigate = useNavigate();
   const tableComponentRef = useRef(null);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
@@ -201,7 +202,7 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
             },
           });
         },
-        hide: !isCut,
+        hide: !changeCut,
       },
       {
         icon: "Manage",
