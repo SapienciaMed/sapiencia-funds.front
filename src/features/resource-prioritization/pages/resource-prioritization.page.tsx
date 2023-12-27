@@ -16,7 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 import Svgs from "../../../public/images/icons/svgs";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { ResourcePrioritizationSearch } from "../../../common/schemas/voting-schema";
-import { useRegulationApi } from "../../regulation/hooks/regulation-api-service.hook";
+import { useRegulationApi } from "../../regulation/service/index"; //AKIVE REVERSION
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { IGenericList } from "../../../common/interfaces/global.interface";

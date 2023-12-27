@@ -6,7 +6,7 @@ import { set, useForm } from "react-hook-form";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useRegulationApi } from "../service";
-import { createRegulation } from "../../../common/schemas/regulation-schema";
+import { shemaFormRegulation } from "../../../common/schemas/regulation-schema";
 import { IRegulation } from "../../../common/interfaces/regulation";
 import { useRequerimentsApi } from "../service/requeriments";
 
@@ -14,7 +14,7 @@ export default function useRegulationHook(auth) {
   const { setMessage, authorization } = useContext(AppContext);
   const { id, onlyView } = useParams();
   const { getListByGrouper } = useGenericListService();
-  const resolver = useYupValidationResolver(createRegulation);
+  const resolver = useYupValidationResolver(shemaFormRegulation);
   const {
     getRegulationById,
     editRegulation,
@@ -191,7 +191,7 @@ export default function useRegulationHook(auth) {
 
     const buildData = {
       ...data,
-      createUser: user.numberDocument,
+      createUser: '',
       createDate: new Date().toISOString(),
       isOpenPeriod: data?.isOpenPeriod ? true : false,
       applySocialService: data?.applySocialService ? true : false,

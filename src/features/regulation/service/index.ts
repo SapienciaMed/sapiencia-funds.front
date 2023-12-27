@@ -3,6 +3,24 @@ import { IRegulation } from "../../../common/interfaces/regulation";
 import { ApiResponse } from "../../../common/utils/api-response";
 
 export const periods: { value: string; name: string }[] = [
+
+  {
+    value: "period-7",
+    name: "2020-1 (1 Enero a 30 Junio)",
+  },
+  {
+    value: "period-8",
+    name: "2020-2 (1 Julio a 31 Diciembre)",
+  },
+  {
+    value: "period-5",
+    name: "2021-1 (1 Enero a 30 Junio)",
+  },
+  {
+    value: "period-6",
+    name: "2021-2 (1 Julio a 31 Diciembre)",
+  },
+
   {
     value: "period-1",
     name: "2022-1 (1 Enero a 30 Junio)",
