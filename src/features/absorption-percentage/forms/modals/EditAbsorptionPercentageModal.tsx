@@ -88,7 +88,7 @@ const EditAbsorptionPercentageModal = ({
               mode="decimal"
               prefix="% "
               maxFractionDigits={2}
-              max={100}
+              max={101}
               min={0}
             />
 
@@ -106,7 +106,7 @@ const EditAbsorptionPercentageModal = ({
               mode="decimal"
               prefix="% "
               maxFractionDigits={2}
-              max={100}
+              max={101}
               min={0}
             />
           </div>
@@ -125,7 +125,7 @@ const EditAbsorptionPercentageModal = ({
               mode="decimal"
               prefix="% "
               maxFractionDigits={2}
-              max={100}
+              max={101}
               min={0}
             />
 
