@@ -59,7 +59,7 @@ export const useEditLegalAuditFundsModal = (
       ...data,
       ...formWatch,
       announcementId,
-      fiduciaryId: row?.fiduciaryId,
+      fiduciaryName: row?.fiduciaryName,
       resource: resourceRaw,
     };
     try {
