@@ -56,14 +56,14 @@ export default function useFormRegulation(auth) {
   >([]);
   const [toggleControl, setToggleControl] = useState<{
     applySocialService: number;
-    knowledgeTransferApply: number;
-    gracePeriodApply: number;
-    continuousSuspensionApplies: number;
+    applyKnowledgeTransfer: number;
+    applyGracePeriod: number;
+    applyContinuousSuspension: number;
     applyDiscontinuousSuspension: number;
     applySpecialSuspensions: boolean;
-    extensionApply: boolean;
+    applyExtension: boolean;
     applyCondonationPerformancePeriod: boolean;
-    accomulatedIncomeCondonationApplies: boolean;
+    applyAccomulatedIncomeCondonation: boolean;
     applyTheoreticalSemester?: boolean;
   }>();
 
@@ -141,15 +141,15 @@ export default function useFormRegulation(auth) {
   const controlToggle = (data) => {
     setToggleControl({
       applySocialService: data.applySocialService,
-      knowledgeTransferApply: data.knowledgeTransferApply,
-      gracePeriodApply: data.gracePeriodApply,
-      continuousSuspensionApplies: data.continuousSuspensionApplies,
+      applyKnowledgeTransfer: data.applyKnowledgeTransfer,
+      applyGracePeriod: data.applyGracePeriod,
+      applyContinuousSuspension: data.applyContinuousSuspension,
       applyDiscontinuousSuspension: data.applyDiscontinuousSuspension,
       applySpecialSuspensions: data.applySpecialSuspensions,
-      extensionApply: data.extensionApply,
+      applyExtension: data.applyExtension,
       applyCondonationPerformancePeriod: data.applyCondonationPerformancePeriod,
-      accomulatedIncomeCondonationApplies:
-        data.accomulatedIncomeCondonationApplies,
+      applyAccomulatedIncomeCondonation:
+        data.applyAccomulatedIncomeCondonation,
     });
   };
 
@@ -181,16 +181,16 @@ export default function useFormRegulation(auth) {
       createDate: new Date().toISOString(),
       isOpenPeriod: data?.isOpenPeriod ? true : false,
       applySocialService: data?.applySocialService == 1,
-      knowledgeTransferApply: data?.applyKnowledgeTransfer == 1,
-      gracePeriodApply: data?.applyGracePeriod == 1,
-      continuousSuspensionApplies: data?.applyContinuousSuspension == 1,
+      applyKnowledgeTransfer: data?.applyKnowledgeTransfer == 1,
+      applyGracePeriod: data?.applyGracePeriod == 1,
+      applyContinuousSuspension: data?.applyContinuousSuspension == 1,
       applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension == 1,
       applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
-      extensionApply: data?.applyExtension ? true : false,
+      applyExtension: data?.applyExtension ? true : false,
       applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
         ? true
         : false,
-      accomulatedIncomeCondonationApplies:
+      applyAccomulatedIncomeCondonation:
         data?.applyAccomulatedIncomeCondonation ? true : false,
     };
 

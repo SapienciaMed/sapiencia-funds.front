@@ -19,6 +19,7 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
     submitDisabled,
     communeFundData,
     handleChange,
+    handleChangeResource,
   } = useCreateAbsorptionPercentageModal(announcementId, reloadTable);
   return (
     <FormComponent
@@ -44,22 +45,31 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               placeholder="Seleccione."
               filter
             />
-            <InputComponent
-              idInput="resource"
-              label={
-                <>
-                  Recurso <span>*</span>
-                </>
-              }
-              typeInput="number"
-              register={register}
-              onChange={handleChange}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
+            <Controller
+              control={control}
+              name="resource"
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput="resource"
+                    label={
+                      <>
+                        Recurso <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    register={register}
+                    onChange={handleChangeResource}
+                    errors={errors}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
+                );
+              }}
             />
 
-<Controller
+            <Controller
               control={control}
               name="sceneryPercentage1"
               render={({ field }) => {
@@ -82,51 +92,51 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
                 );
               }}
             />
-           <Controller
+            <Controller
               control={control}
               name="sceneryPercentage2"
               render={({ field }) => {
                 return (
                   <InputComponent
-                  idInput="sceneryPercentage2"
-                  label={
-                    <>
-                      Escenario 2 <span>*</span>
-                    </>
-                  }
-                  typeInput="text"
-                  register={register}
-                  errors={errors}
-                  onChange={handleChange}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold"
-                  {...field}
-                />
+                    idInput="sceneryPercentage2"
+                    label={
+                      <>
+                        Escenario 2 <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    register={register}
+                    errors={errors}
+                    onChange={handleChange}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    {...field}
+                  />
                 );
               }}
             />
           </div>
           <div className="grid-form-4-container gap-25 mt-13px">
-          <Controller
+            <Controller
               control={control}
               name="sceneryPercentage3"
               render={({ field }) => {
                 return (
                   <InputComponent
-                  idInput="sceneryPercentage3"
-                  label={
-                    <>
-                      Escenario 3 <span>*</span>
-                    </>
-                  }
-                  typeInput="text"
-                  errors={errors}
-                  register={register}
-                  className="input-basic medium"
-                  classNameLabel="text-black big bold"
-                  onChange={handleChange}
-                  {...field}
-                />
+                    idInput="sceneryPercentage3"
+                    label={
+                      <>
+                        Escenario 3 <span>*</span>
+                      </>
+                    }
+                    typeInput="text"
+                    errors={errors}
+                    register={register}
+                    className="input-basic medium"
+                    classNameLabel="text-black big bold"
+                    onChange={handleChange}
+                    {...field}
+                  />
                 );
               }}
             />

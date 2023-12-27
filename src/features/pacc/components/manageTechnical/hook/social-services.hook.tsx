@@ -24,9 +24,11 @@ import ModalUploadChangeData from "../modal-upload-change-data";
 import { EStatePac } from "../../../../../common/constants/api.enum";
 import { usePaccServices } from "../../../hook/pacc-serviceshook";
 import { IFiles } from "../../../../../common/interfaces/storage.interfaces";
+import { useNavigate } from "react-router-dom";
 
 export default function useSocialServices() {
   const { id, typeState } = useParams();
+  const navigate = useNavigate();
   const { width } = useWidth();
 
   const { UpdateSocialService } = usePaccServices(Number(typeState));
@@ -83,6 +85,7 @@ export default function useSocialServices() {
       title: "Revisar",
       description: (
         <ModalUploadChangeData
+          navigate={navigate}
           requirements={row.beneficiarieConsolidate.requerimentsConsolidate.map(
             (i) => {
               return { id: i.id, description: i.descriptionRequirement };

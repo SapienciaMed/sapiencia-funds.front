@@ -26,6 +26,8 @@ export const useEditAbsorptionPercentageModal = (
     useGetcommuneFundIdHook();
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const resolver = useYupValidationResolver(createPeriodsAbsorptionSchema);
+  const [resourceRaw, setResourceRaw] = useState(0);
+
   const {
     control,
     handleSubmit,
@@ -35,7 +37,7 @@ export const useEditAbsorptionPercentageModal = (
     reset,
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
-  const [resourceRaw, setResourceRaw] = useState(0);
+
   const [formWatch, setFormWatch] = useState<ICreatePeriodsAbsorption>({
     sceneryPercentage1: 0,
     sceneryPercentage2: 0,
@@ -148,9 +150,9 @@ export const useEditAbsorptionPercentageModal = (
   };
 
   useEffect(() => {
-    let rawValue = parseInt(resourceValue?.replace("$", ""));
+    let rawValue = parseInt(resourceValue?.toString()?.replace("$", ""));
     if (isNaN(rawValue)) rawValue = 0;
-    setValue("resource", `$${rawValue}`);
+    setValue("resource", formaterNumberToCurrency(resourceRaw));
     setFormWatch({
       ...formWatch,
       resource: resourceRaw,
@@ -230,7 +232,7 @@ export const useEditAbsorptionPercentageModal = (
         sceneryPercentage2: row?.sceneryPercentage2,
         sceneryPercentage3: row?.sceneryPercentage3,
       });
-      setValue("resource", formaterNumberToCurrency(communeFundId));
+      setValue("resource", communeFundId);
     }
   }, [communeFundId]);
 

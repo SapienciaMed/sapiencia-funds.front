@@ -5,10 +5,7 @@ import useCrudService from "../../../common/hooks/crud-service.hook";
 import { urlApiFunds } from "../../../common/utils/base-url";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { useGetcommuneFundIdHook } from "../../absorption-percentage/hooks/getcommuneFundIdHook";
-import {
-  ICallLegalResfilters,
-  ILegalAuditFunds,
-} from "../../../common/interfaces/LegalAuditFunds";
+import { ICallLegalResfilters } from "../../../common/interfaces/LegalAuditFunds";
 import { editLegalAuditSchema } from "../../../common/schemas/legal-audit-schema";
 
 export const useEditLegalAuditFundsModal = (
