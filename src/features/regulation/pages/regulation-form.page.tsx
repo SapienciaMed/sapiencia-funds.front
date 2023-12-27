@@ -46,7 +46,7 @@ const RegulationFormPage = ({ auth }) => {
       </div>
       <Tabs view={view} />
 
-      <FormComponent id="regulationCreate" className="form-signIn">
+      <FormComponent id="regulationCreate" className="form-signIn" action={onSubmitRegulationForm}>
         {view === 0 && (
           <InitialSetup
             errors={errors}
@@ -91,8 +91,8 @@ const RegulationFormPage = ({ auth }) => {
         />
         <ButtonComponent
           value="Guardar"
-          form="form-signIn"
-          action={() => onSubmitRegulationForm()}
+          form="regulationCreate"
+          
           type="submit"
           className="button-save disabled-black padding-button"
           disabled={onlyView ? true : false}

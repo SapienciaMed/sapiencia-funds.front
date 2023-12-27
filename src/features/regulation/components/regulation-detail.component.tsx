@@ -2,7 +2,6 @@ import Acordion from "./acordion";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { InputComponent } from "../../../common/components/Form";
-import TableJson from "./tableJson";
 import { IPropDetailReglament } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
 import TableRegulationView from "../modules/requeriments/table-regulation-view";
@@ -520,16 +519,14 @@ const RegulationDetailComponent = ({
               }
             >
               <div>
-                <TableJson
-                  idInput="performancePeriod"
-                  isOpen={detailData?.applyCondonationPerformancePeriod == 1}
-                  setValue={setValue}
-                  title="promedio y porcentaje de condonación"
-                  onlyView={true}
-                  getValues={getValues}
-                  error={errors}
-                  dataRead={detailData.performancePeriodStructure}
-                />
+                <p className="title-disable-jsonTable">Porcentaje de condonación</p>
+                { detailData?.performancePeriodStructure?.dataTable?.length > 0 && (
+                  <TableRegulationView
+                    detailData={detailData}
+                    typeTable={{ cumulativeAcademicPeriod: 4 }}
+                    viewPaginator={false}
+                  />
+                )}
               </div>
             </Acordion>
           </div>
@@ -556,16 +553,14 @@ const RegulationDetailComponent = ({
               }
             >
               <div>
-                <TableJson
-                  isOpen={detailData?.applyAccomulatedIncomeCondonation == 1}
-                  idInput="accumulatedPerformance"
-                  setValue={setValue}
-                  title="Agregar promedio y porcentaje de condonación"
-                  getValues={getValues}
-                  error={errors}
-                  onlyView={true}
-                  dataRead={detailData.accumulatedPerformanceDataTable}
-                />
+              <p className="title-disable-jsonTable">Porcentaje de condonación</p>
+                { detailData?.accumulatedPerformanceDataTable?.dataTable?.length > 0 && (
+                  <TableRegulationView
+                    detailData={detailData}
+                    typeTable={{ cumulativeAcademicPerformance: 5 }}
+                    viewPaginator={false}
+                  />
+                )}
               </div>
             </Acordion>
           </div>
