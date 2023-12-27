@@ -73,77 +73,62 @@ const EditAbsorptionPercentageModal = ({
                 );
               }}
             />
-            <Controller
+
+            <InputNumberComponent
+              idInput="sceneryPercentage1"
               control={control}
-              name="sceneryPercentage1"
-              render={({ field }) => {
-                return (
-                  <InputComponent
-                    idInput="sceneryPercentage1"
-                    label={
-                      <>
-                        Escenario 1 <span>*</span>
-                      </>
-                    }
-                    typeInput="text"
-                    register={register}
-                    errors={errors}
-                    onChange={handleChange}
-                    className="input-basic medium"
-                    classNameLabel="text-black big bold"
-                    {...field}
-                  />
-                );
-              }}
+              errors={errors}
+              label={
+                <>
+                  Escenario 1 <span>*</span>
+                </>
+              }
+              classNameLabel="text-black big bold text-required"
+              className="inputNumber-basic medium "
+              mode="decimal"
+              prefix="% "
+              maxFractionDigits={2}
+              max={101}
+              min={0}
             />
-            <Controller
+
+            <InputNumberComponent
+              idInput="sceneryPercentage2"
               control={control}
-              name="sceneryPercentage2"
-              render={({ field }) => {
-                return (
-                  <InputComponent
-                    idInput="sceneryPercentage2"
-                    label={
-                      <>
-                        Escenario 2 <span>*</span>
-                      </>
-                    }
-                    typeInput="text"
-                    register={register}
-                    errors={errors}
-                    onChange={handleChange}
-                    className="input-basic medium"
-                    classNameLabel="text-black big bold"
-                    {...field}
-                  />
-                );
-              }}
+              errors={errors}
+              label={
+                <>
+                  Escenario 2 <span>*</span>
+                </>
+              }
+              classNameLabel="text-black big bold text-required"
+              className="inputNumber-basic medium "
+              mode="decimal"
+              prefix="% "
+              maxFractionDigits={2}
+              max={101}
+              min={0}
             />
           </div>
           <div className="grid-form-4-container gap-25 mt-13px">
-            <Controller
+            <InputNumberComponent
+              idInput="sceneryPercentage3"
               control={control}
-              name="sceneryPercentage3"
-              render={({ field }) => {
-                return (
-                  <InputComponent
-                    idInput="sceneryPercentage3"
-                    label={
-                      <>
-                        Escenario 3 <span>*</span>
-                      </>
-                    }
-                    typeInput="text"
-                    errors={errors}
-                    register={register}
-                    className="input-basic medium"
-                    classNameLabel="text-black big bold"
-                    onChange={handleChange}
-                    {...field}
-                  />
-                );
-              }}
+              errors={errors}
+              label={
+                <>
+                  Escenario 3 <span>*</span>
+                </>
+              }
+              classNameLabel="text-black big bold text-required"
+              className="inputNumber-basic medium "
+              mode="decimal"
+              prefix="% "
+              maxFractionDigits={2}
+              max={101}
+              min={0}
             />
+
             <InputComponent
               idInput="sceneryValue1"
               disabled

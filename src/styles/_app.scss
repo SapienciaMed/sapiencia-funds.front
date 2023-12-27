@@ -225,27 +225,66 @@ div[id="single-spa-application:@sapiencia/funds"] {
 
 .button-save-container-display-percentage {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   flex-direction: row;
+
+  .container-actions {
+    display: flex;
+    flex-direction: row;
+    margin-right: 24px;
+
+  }
 
   @media (max-width: 768px) {
     flex-direction: column;
+    align-items: center;
 
-    margin: 10%;
-
-    .button-clean1 {
-      order: 0;
+    .agg-item {
+      order: 2;
       width: 100%;
-      margin-left: 9px;
-      margin-top: 24px;
-      margin-bottom: 60px;
       margin-top: 5px;
+      text-align: center;
+
+      .title-button {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
     }
 
+    .clean-button {
+      order: 1;
+      width: 100%;
+      text-align: center;
+    }
+
+    .search-button {
+      order: 0;
+      width: 100%;
+      text-align: center;
+    }
+
+    .container-actions {
+      flex-direction: column;
+      width: auto;
+      margin-right: 0px;
+    }
+  }
 
 
+
+  @media (min-width: 769px) {
+    .agg-item {
+      order: 0;
+      width: auto;
+      margin-top: 0;
+      text-align: left;
+    }
   }
 }
+
+
 
 .button-save-container-display-maestros {
   display: flex;

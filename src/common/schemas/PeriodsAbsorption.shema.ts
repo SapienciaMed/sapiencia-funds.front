@@ -4,19 +4,19 @@ export const createPeriodsAbsorptionSchema = yup.object({
   communeFundId: yup.number().required("Selecciona fondo comuna"),
   resource: yup.string().required("Escribe un recurso"),
   sceneryPercentage1: yup
-    .string()
-    .trim()
-    .matches(/^\d{1,3}%$/, "Debe ser un procentaje")
+    .number()
+    .min(0, "El porcentaje debe ser superior a 0")
+    .max(100, "El porcentaje no debe ser mayor a 100")
     .required("Completar información"),
   sceneryPercentage2: yup
-    .string()
-    .trim()
-    .matches(/^\d{1,3}%$/, "Debe ser un procentaje")
-    .required(),
+    .number()
+    .min(0, "El porcentaje debe ser superior a 0")
+    .max(100, "El porcentaje no debe ser mayor a 100")
+    .required("Completar información"),
   sceneryPercentage3: yup
-    .string()
-    .trim()
-    .matches(/^\d{1,3}%$/, "Debe ser un procentaje")
+    .number()
+    .min(0, "El porcentaje debe ser superior a 0")
+    .max(100, "El porcentaje no debe ser mayor a 100")
     .required("Completar información"),
 });
 
