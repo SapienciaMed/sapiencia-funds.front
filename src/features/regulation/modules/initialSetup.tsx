@@ -5,6 +5,8 @@ import { Controller } from "react-hook-form";
 import Acordion from "../components/acordion";
 import { LIST_DATA_GRACE_PERIOD } from "../hooks/regulation-api-service.hook";
 import { EDirection } from "../../../common/constants/input.enum";
+import TableJson from "../components/tableJson";
+import TableInitialConfiguration from "../components/table-initial-configuration";
 
 const InitialSetup = ({
   errors,
@@ -26,12 +28,12 @@ const InitialSetup = ({
     <div className="container-form p-24">
       <div className="grid-form-2-container mb-16px">
         <SelectComponentOld
-          idInput={"program"}
-          setValue={(e) => setValue("program", e)}
+          idInput={"idProgram"}
+          setValue={(e) => setValue("idProgram", e)}
           value={
-            updateData?.program
-              ? Number(updateData?.program)
-              : getValues().program
+            updateData?.idProgram
+              ? Number(updateData?.idProgram)
+              : getValues().idProgram
           }
           errors={errors}
           disabled={isDisabled}
@@ -118,17 +120,17 @@ const InitialSetup = ({
       <div>
         <Acordion
           title="¿Aplica porcentaje de pago teórico semestral?"
-          isOpen={toggleControl?.applyTheoreticalSemester}
+          isOpen={toggleControl?.applyTheoreticalSemiannualPercent}
           onClick={() => {
             if (onlyView) return;
             setValue(
-              "applyTheoreticalSemester",
-              !getValues().applyTheoreticalSemester
+              "applyTheoreticalSemiannualPercent",
+              !getValues().applyTheoreticalSemiannualPercent
             );
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
-                applyTheoreticalSemester: getValues().applyTheoreticalSemester,
+                applyTheoreticalSemiannualPercent: getValues().applyTheoreticalSemiannualPercent,
               });
             }, 400);
             setValue("theoreticalSemiannualPercent", null);
@@ -266,7 +268,38 @@ const InitialSetup = ({
                 );
               }}
             />
+             {/* <SelectComponentOld
+                idInput={"socialServiceCondonationType"}
+                setValue={(e) => setValue("socialServiceCondonationType", e)}
+                value={getValues('socialServiceCondonationType')}
+                errors={errors}
+                data={[
+                  { name: "Total", value: "total" },
+                  { name: "Parcial", value: "Parcial" },
+                  { name: 'Por SS Prestado por giro', value: 'Por SS Prestado por giro'}
+                ]}
+                label="Tipo de condonación"
+                className="select-basic select-disabled-list medium"
+                classNameLabel="text-black big font-500 tex-required"
+                placeholder="Seleccionar"
+
+              /> */}
           </div>
+          {/* {
+            getValues('socialServiceCondonationType') === 'Parcial' && (
+              <div>
+                <TableInitialConfiguration
+                  dataRead={updateData}
+                  isOpen={toggleControl?.applySocialService}
+                  idInput="socialServiceCondonationPercent"
+                  setValue={setValue}
+                  title="Agregar porcentaje de condonación parcial"
+                  getValues={getValues}
+                  onlyView={onlyView}
+                />
+              </div>
+            )
+          } */}
         </Acordion>
       </div>
       <div>

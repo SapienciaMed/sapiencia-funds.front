@@ -124,7 +124,6 @@ export default function useFormRegulation(auth) {
   const getUpdateData = async () => {
     if (id) {
       const res = await getRegulationById(id);
-      console.log("🚀  res:", res);
       if (res?.data[0]) {
         for (let clave in res?.data[0]) {
           if (res?.data[0][clave] === null) {
@@ -154,10 +153,6 @@ export default function useFormRegulation(auth) {
   };
 
   const onSubmitRegulationForm = handleSubmit((data: IRegulation) => {
-    console.log(
-      "🚀 ~ file: createUpdate.ts:152 ~ onsubmitCreate ~ data:",
-      data
-    );
     if (
       data.applyCondonationPerformancePeriod &&
       !data.performancePeriodStructure
@@ -192,7 +187,11 @@ export default function useFormRegulation(auth) {
         : false,
       applyAccomulatedIncomeCondonation:
         data?.applyAccomulatedIncomeCondonation ? true : false,
+      academicPerformancePercent: '30', //Ajustar
+      requirementsPercent: '30' //Ajustar
     };
+
+    console.log("🚀 buildData:", buildData)
 
     setMessage({
       show: true,

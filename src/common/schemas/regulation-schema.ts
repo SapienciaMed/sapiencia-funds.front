@@ -7,7 +7,7 @@ const greaterThan = (number: number) =>
   `El número debe de ser mayor o igual a ${number}`;
 
 export const shemaFormRegulation = yup.object().shape({
-  program: yup
+  idProgram: yup
     .string()
     .typeError(MESSAGE_REQUIRED)
     .required(MESSAGE_REQUIRED)
