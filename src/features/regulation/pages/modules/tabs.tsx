@@ -1,5 +1,5 @@
 import React from "react";
-import Tab from "../../../common/components/Form/tab.component";
+import Tab from "../../../../common/components/Form/tab.component";
 
 const Tabs = ({ view }) => {
   return (

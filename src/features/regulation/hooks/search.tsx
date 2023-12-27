@@ -12,25 +12,27 @@ import {
   IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
-import { useRegulationApi } from "./regulation-api-service.hook";
+import { periods, useRegulationApi } from "../service";
 import Tooltip from "../../../common/components/Form/tooltip";
-import { EResponseCodes } from "../../../common/constants/api.enum";
-import RegulationDetailComponent from "../components/regulation-detail.component";
 
 export default function useSearchRegulation(auth, authDetail, authEdit) {
   // Context
   const { setMessage, authorization } = useContext(AppContext);
-  const [showTable, setShowTable] = useState(false);
-  const [showSpinner, setShowSpinner] = useState(false);
+  const [showTable, setshowTable] = useState(false);
   const tableComponentRef = useRef(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [listPrograms, setListPrograms] = useState<
     { name: string; value: string }[]
   >([]);
-  const [arrayPeriod, setArrayPeriod] = useState<
-    { name: string; value: string; id: number; nameComplementary?: string }[]
-  >([]);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [detailData, setDetailData] = useState<IRegulation>();
 
-  const { getPrograms, getPeriodsFromSapiencia } = useRegulationApi();
+  const {
+    getRegulationById,
+    editRegulation,
+    createRegulationAction,
+    getPrograms,
+  } = useRegulationApi();
   //react-router-dom
   const navigate = useNavigate();
 
@@ -41,10 +43,13 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
     handleSubmit,
     formState,
     control,
+    watch,
     reset,
     setValue,
     getValues,
   } = useForm<IRegulationSearch>({ resolver });
+
+  const [deparmetList, setDeparmentList] = useState([]);
 
   //permisions
   useEffect(() => {
@@ -63,6 +68,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
         },
         background: true,
       });
+      return;
     }
   }, [auth, authorization]);
 
@@ -90,30 +96,8 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       actions.push({
         icon: "Detail",
         onClick: (row) => {
-          setMessage({
-            title: "Detalle Reglamento!",
-            description: (
-              <RegulationDetailComponent
-                detailData={row}
-                errors={formState.errors}
-                control={control}
-                setValue={setValue}
-                getValues={getValues}
-                listPrograms={listPrograms}
-              />
-            ),
-            show: true,
-            onClose: () => {
-              setMessage({});
-            },
-
-            OkTitle: "Cerrar",
-            onOk: () => {
-              setMessage({});
-            },
-            size: "large",
-            background: true,
-          });
+          setDetailData(row);
+          setShowDetailModal(true);
         },
       });
     }
@@ -122,7 +106,8 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   };
 
   useEffect(() => {
-    getPrograms().then((res) => {
+    const getListPrograms = async () => {
+      const res = await getPrograms();
       if (res?.data) {
         const buildData = res.data.map((item) => {
           return {
@@ -132,92 +117,77 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
         });
         setListPrograms(buildData);
       }
-    });
+    };
 
-    getPeriodsFromSapiencia().then((resp) => {
-      if (resp.operation.code === EResponseCodes.OK) {
-        const data = resp.data.map((item) => {
-          return {
-            name: item.nameComplementary,
-            value: item.name,
-            id: item.id,
-            nameComplementary: item.nameComplementary,
-          };
-        });
-        setArrayPeriod(data);
-      }
-    });
-  }, []);
+    getListPrograms();
+    setLoading(false);
+  }, [loading, showDetailModal]);
 
   const tableColumns: ITableElement<IRegulation>[] = [
     {
-      fieldName: "programs",
-      header: "Programa",
+      fieldName: "row.regulation.program",
+      header: <div style={{ fontWeight: 400 }}>{"Programa"}</div>,
       renderCell: (row) => {
-        return <>{row?.programName}</>;
+        const getListItem: any = listPrograms.find(
+          (item) => item.name === row.program || item.value === row.program
+        );
+        return <>{getListItem.name}</>;
       },
     },
     {
-      fieldName: "initialPeriod",
-      header: "Periodo inicial",
+      fieldName: "row.regulation.initialPeriod",
+      header: <div style={{ fontWeight: 400 }}>{"Periodo inicial"}</div>,
       renderCell: (row) => {
-        return <>{row?.initialPeriod}</>;
+        const getListItem: any = periods.find(
+          (item) =>
+            item.name === row.initialPeriod || item.value === row.initialPeriod
+        );
+        return <>{getListItem.name}</>;
       },
     },
     {
-      fieldName: "endPeriod",
-      header: "Periodo Final",
+      fieldName: "row.regulation.endPeriod",
+      header: <div style={{ fontWeight: 400 }}>{"Periodo Final"}</div>,
       renderCell: (row) => {
-        return <>{row.endPeriod}</>;
+        const getListItem: any = periods.find(
+          (item) => item.name === row.endPeriod || item.value === row.endPeriod
+        );
+        return <>{getListItem?.name ? getListItem?.name : ""}</>;
       },
     },
     {
-      fieldName: "theoreticalPercentage",
-      header: <Tooltip text={"¿Aplica pago teórico?"} />,
+      fieldName: "row.regulation.endPeriod",
+      header: <div style={{ fontWeight: 400 }}>{"% Pago Teorico"}</div>,
       renderCell: (row) => {
-        return <>{row.applyTheoreticalSemiannualPercent ? "SI" : "NO"}</>;
+        return <>{row.theoreticalPercentage}%</>;
       },
     },
     {
-      fieldName: "applyAcademicPerformancePercent",
-      header: <Tooltip text={"¿Aplica % RA?"} />,
-      renderCell: (row) => {
-        return <>{row.applyAcademicPerformancePercent ? "SI" : "NO"}</>;
-      },
-    },
-    {
-      fieldName: "requirementsPercent",
-      header: <Tooltip text={"¿Aplica % Requisitos?"} />,
-      renderCell: (row) => {
-        return <>{row.requirementsPercent ? "SI" : "NO"}</>;
-      },
-    },
-    {
-      fieldName: "applySocialService",
+      fieldName: "row.regulation.applySocialService",
       header: <Tooltip text={"¿Aplica servicio social?"} />,
       renderCell: (row) => {
         return <>{row.applySocialService ? "SI" : "NO"}</>;
       },
     },
     {
-      fieldName: "applyKnowledgeTransfer",
+      fieldName: "row.regulation.knowledgeTransferApply",
       header: <Tooltip text={"¿Aplica trasferencia de conocimiento?"} />,
       renderCell: (row) => {
-        return <>{row.applyKnowledgeTransfer ? "SI" : "NO"}</>;
+        return <>{row.knowledgeTransferApply ? "SI" : "NO"}</>;
       },
     },
     {
-      fieldName: "applyGracePeriod",
+      fieldName: "row.regulation.gracePeriodApply",
       header: <Tooltip text={"¿Aplica periodo de gracia?"} />,
       renderCell: (row) => {
-        return <>{row.applyGracePeriod ? "SI" : "NO"}</>;
+        return <>{row.gracePeriodApply ? "SI" : "NO"}</>;
       },
     },
     {
-      fieldName: "applyContinuousSuspension",
+      fieldName: "row.regulation.continuousSuspensionApplies",
       header: <Tooltip text={"¿Aplica suspensiones continuas?"} />,
       renderCell: (row) => {
-        return <>{row.applyContinuousSuspension ? "SI" : "NO"}</>;
+        return <>{row.continuousSuspensionApplies ? "SI" : "NO"}</>;
       },
     },
     {
@@ -235,10 +205,10 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       },
     },
     {
-      fieldName: "applyExtension",
+      fieldName: "row.regulation.extensionApply",
       header: <Tooltip text={"¿Aplica prórroga?"} />,
       renderCell: (row) => {
-        return <>{row.applyExtension ? "SI" : "NO"}</>;
+        return <>{row.extensionApply ? "SI" : "NO"}</>;
       },
     },
     {
@@ -253,7 +223,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       },
     },
     {
-      fieldName: "applyAccomulatedIncomeCondonation",
+      fieldName: "row.regulation.accomulatedIncomeCondonationApplies",
       header: (
         <Tooltip
           text={
@@ -262,23 +232,40 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
         />
       ),
       renderCell: (row) => {
-        return <>{row.applyAccomulatedIncomeCondonation ? "SI" : "NO"}</>;
+        return <>{row.accomulatedIncomeCondonationApplies ? "SI" : "NO"}</>;
       },
     },
   ];
 
   const tableActions: ITableAction<IRegulation>[] = getActions();
 
+  const formValues = watch();
+
   const newElement = () => navigate("form");
 
-  const onSubmit = handleSubmit(async (data: IRegulationSearch) => {
-    setShowSpinner(true);
+  const onSubmit = handleSubmit(async (data: IRegulation) => {
+    const getProgram: any = listPrograms.find(
+      (item) => item.name === data.program || item.value === data.program
+    );
+    const getListItem: any = periods.find(
+      (item) =>
+        item.name === data.initialPeriod || item.value === data.initialPeriod
+    );
+
+    const endPeriod = data?.endPeriod
+      ? periods.find(
+          (item) =>
+            item.name === data.endPeriod || item.value === data.endPeriod
+        ).value
+      : null;
+
     const buildData = {
-      programId: parseInt(data.programId) || null,
-      initialPeriod: data?.initialPeriod ?? null,
-      endPeriod: data?.endPeriod,
+      program: getProgram?.value ? getProgram?.value : null,
+      initialPeriod: getListItem?.value ? getListItem?.value : null,
+      endPeriod: endPeriod,
     };
-    setShowTable(true);
+
+    setshowTable(true);
 
     if (tableComponentRef.current) {
       tableComponentRef.current.loadData(buildData);
@@ -288,17 +275,24 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
   return {
     register,
     control,
+    formState,
     onSubmit,
+    formValues,
     showTable,
     tableComponentRef,
     tableActions,
+    deparmetList,
     newElement,
-    setShowTable,
+    setshowTable,
     reset,
-    setShowSpinner,
+    loading,
+    setLoading,
     listPrograms,
     tableColumns,
-    arrayPeriod,
-    showSpinner,
+    showDetailModal,
+    setShowDetailModal,
+    detailData,
+    setValue,
+    getValues,
   };
 }

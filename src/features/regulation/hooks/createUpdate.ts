@@ -2,30 +2,47 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../common/contexts/app.context";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { useNavigate, useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
+import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";
-import { useRegulationApi } from "./regulation-api-service.hook";
-import { shemaFormRegulation } from "../../../common/schemas/regulation-schema";
-import {
-  IPeriodSapiencia,
-  IRegulation,
-} from "../../../common/interfaces/regulation";
-import { useRequerimentsApi } from "./requeriments-api-service.hook";
+import { useRegulationApi } from "../service";
+import { createRegulation } from "../../../common/schemas/regulation-schema";
+import { IRegulation } from "../../../common/interfaces/regulation";
+import { useRequerimentsApi } from "../service/requeriments";
 
-export default function useFormRegulation(auth) {
-  // Servicios
+export default function useRegulationHook(auth) {
   const { setMessage, authorization } = useContext(AppContext);
   const { id, onlyView } = useParams();
-  const resolver = useYupValidationResolver(shemaFormRegulation);
+  const { getListByGrouper } = useGenericListService();
+  const resolver = useYupValidationResolver(createRegulation);
   const {
     getRegulationById,
     editRegulation,
-    createRegulation,
+    createRegulationAction,
     getPrograms,
-    getPeriodsFromSapiencia,
   } = useRegulationApi();
   const { deleteByReglamentId } = useRequerimentsApi();
   const navigate = useNavigate();
+  const [updateData, setUpdateData] = useState<IRegulation>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [performancePeriodErrors, setPerformancePeriodErrors] = useState(false);
+  const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
+    useState(false);
+  const [toggleControl, setToggleControl] = useState<{
+    applySocialService: boolean;
+    knowledgeTransferApply: boolean;
+    gracePeriodApply: boolean;
+    continuousSuspensionApplies: boolean;
+    applyDiscontinuousSuspension: boolean;
+    applySpecialSuspensions: boolean;
+    extensionApply: boolean;
+    applyCondonationPerformancePeriod: boolean;
+    accomulatedIncomeCondonationApplies: boolean;
+  }>();
+  const [listPrograms, setListPrograms] = useState<
+    { name: string; value: number }[]
+  >([]);
+
   const {
     handleSubmit,
     register,
@@ -44,30 +61,7 @@ export default function useFormRegulation(auth) {
     },
   });
 
-  // States
-  const [updateData, setUpdateData] = useState<IRegulation>();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [performancePeriodErrors, setPerformancePeriodErrors] = useState(false);
-  const [periodList, setPeriodList] = useState<IPeriodSapiencia[]>([]);
-  const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
-    useState(false);
-  const [listPrograms, setListPrograms] = useState<
-    { name: string; value: number }[]
-  >([]);
-  const [toggleControl, setToggleControl] = useState<{
-    applySocialService: number;
-    knowledgeTransferApply: number;
-    gracePeriodApply: number;
-    continuousSuspensionApplies: number;
-    applyDiscontinuousSuspension: number;
-    applySpecialSuspensions: boolean;
-    extensionApply: boolean;
-    applyCondonationPerformancePeriod: boolean;
-    accomulatedIncomeCondonationApplies: boolean;
-    applyTheoreticalSemester?: boolean;
-  }>();
-
-  // Effects
+  //permissions
   useEffect(() => {
     const findPermission = authorization?.allowedActions?.findIndex(
       (i) => i == auth
@@ -90,7 +84,7 @@ export default function useFormRegulation(auth) {
   }, [auth, authorization]);
 
   useEffect(() => {
-    const loadData = async () => {
+    const getListPrograms = async () => {
       const res = await getPrograms();
       if (res?.data) {
         const buildData = res.data.map((item) => {
@@ -101,30 +95,14 @@ export default function useFormRegulation(auth) {
         });
         setListPrograms(buildData);
       }
-
-      const res2 = await getPeriodsFromSapiencia();
-      if (res2?.data) {
-        const buildData = [...res2.data].sort(function (a, b) {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
-        });
-        setPeriodList(buildData);
-      }
     };
 
-    loadData();
+    getListPrograms();
   }, []);
 
-  // Metodos
   const getUpdateData = async () => {
     if (id) {
       const res = await getRegulationById(id);
-      console.log("🚀  res:", res);
       if (res?.data[0]) {
         for (let clave in res?.data[0]) {
           if (res?.data[0][clave] === null) {
@@ -153,45 +131,85 @@ export default function useFormRegulation(auth) {
     });
   };
 
-  const onSubmitRegulationForm = handleSubmit((data: IRegulation) => {
-    console.log(
-      "🚀 ~ file: createUpdate.ts:152 ~ onsubmitCreate ~ data:",
-      data
-    );
-    if (
-      data.applyCondonationPerformancePeriod &&
-      !data.performancePeriodStructure
-    ) {
+  const validRangesJsonTable = (data: string) => {
+    let sum = 0;
+    const maxNumber = 5;
+    const ranges = JSON.parse(data).dataTable;
+    ranges.map((item) => {
+      const initial = item.initialAverage;
+      const end = item.endAverage;
+      sum = Number((0.01 + sum + (end - initial)).toFixed(2));
+    });
+
+    if ((sum - 0.01).toFixed(2) < maxNumber.toFixed(2)) return true;
+
+    return false;
+  };
+
+  const onsubmitCreate = handleSubmit((data: IRegulation) => {
+    if (data.applyCondonationPerformancePeriod && !data.performancePeriod) {
       return setPerformancePeriodErrors(true);
     } else {
       setPerformancePeriodErrors(false);
     }
     if (
-      data.applyAccomulatedIncomeCondonation &&
-      !data.accumulatedPerformanceDataTable
+      data.accomulatedIncomeCondonationApplies &&
+      !data.accumulatedPerformance
     ) {
       return setAccumulatedPerformanceErrors(true);
     } else {
       setAccumulatedPerformanceErrors(false);
     }
 
+    let validRangesAccumulated = false;
+    let validRangesPerformance = false;
+    const user = JSON.parse(localStorage.getItem("credentials"));
+
+    if (data.accumulatedPerformance?.length) {
+      validRangesAccumulated = validRangesJsonTable(
+        data.accumulatedPerformance
+      );
+    }
+
+    if (data.performancePeriod?.length) {
+      validRangesPerformance = validRangesJsonTable(data.performancePeriod);
+    }
+
+    if (validRangesAccumulated) {
+      return handleModalError(
+        "No se ha configurado completamente los rangos de promedios de la condonación por rendimiento académico por periodo, debe finalizarla para poder guardar",
+        false
+      );
+    }
+
+    if (validRangesPerformance) {
+      return handleModalError(
+        "No se ha configurado completamente los rangos de promedios de la condonación por rendimiento académico final acumulado, debe finalizarla para poder guardar",
+        false
+      );
+    }
+
     const buildData = {
       ...data,
-      createUser: authorization.user.numberDocument,
+      createUser: user.numberDocument,
       createDate: new Date().toISOString(),
       isOpenPeriod: data?.isOpenPeriod ? true : false,
-      applySocialService: data?.applySocialService == 1,
-      knowledgeTransferApply: data?.applyKnowledgeTransfer == 1,
-      gracePeriodApply: data?.applyGracePeriod == 1,
-      continuousSuspensionApplies: data?.applyContinuousSuspension == 1,
-      applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension == 1,
+      applySocialService: data?.applySocialService ? true : false,
+      knowledgeTransferApply: data?.knowledgeTransferApply ? true : false,
+      gracePeriodApply: data?.gracePeriodApply ? true : false,
+      continuousSuspensionApplies: data?.continuousSuspensionApplies
+        ? true
+        : false,
+      applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension
+        ? true
+        : false,
       applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
-      extensionApply: data?.applyExtension ? true : false,
+      extensionApply: data?.extensionApply ? true : false,
       applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
         ? true
         : false,
       accomulatedIncomeCondonationApplies:
-        data?.applyAccomulatedIncomeCondonation ? true : false,
+        data?.accomulatedIncomeCondonationApplies ? true : false,
     };
 
     setMessage({
@@ -207,10 +225,10 @@ export default function useFormRegulation(auth) {
     });
   });
 
-  const confirmRegulationCreate = async (data: any) => {
+  const confirmRegulationCreate = async (data: IRegulation) => {
     const { data: dataResponse, operation } = data?.id
       ? await editRegulation(data.id, data)
-      : await createRegulation(data);
+      : await createRegulationAction(data);
 
     if (operation.code === EResponseCodes.OK) {
       handleModalSuccess();
@@ -283,7 +301,7 @@ export default function useFormRegulation(auth) {
     register,
     setValue,
     handleSubmit,
-    onSubmitRegulationForm,
+    onsubmitCreate,
     goBack,
     updateData,
     loading,
@@ -297,6 +315,5 @@ export default function useFormRegulation(auth) {
     listPrograms,
     onlyView,
     reset,
-    periodList,
   };
 }

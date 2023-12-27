@@ -21,7 +21,6 @@
 
 .summary:hover {
   background-color: #e9ecef;
-  border-radius: 16px;
 }
 
 .details {
@@ -53,19 +52,8 @@
   cursor: not-allowed; /* Cambia el cursor para indicar que no se puede interactuar */
 }
 
-@media only screen and (max-width: 550px) and (min-width: 200px) {
+@media only screen and (max-width: 500px) and (min-width: 200px) {
   .text-font {
-    font-size: 0.8rem;
-  }
-
-  .onlyView {
-    gap: 0.8rem;
-  }
-
-  .onlyView  > *:first-of-type {
-    width: 90% 
-  }
-  .onlyView  > *:last-of-type {
-    width: 10% 
+    font-size: 10px;
   }
 }

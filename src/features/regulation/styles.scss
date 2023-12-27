@@ -12,9 +12,8 @@
 }
 
 .containerIsOpenPeriod {
-  display: flex;
-  justify-content: center;
-  
+  width: 100%;
+  padding: 0px 24px 0px 24px;
 }
 
 .p-24 {
@@ -61,10 +60,11 @@
   width: 100%;
 }
 
-.buttonsActions2 {
+.buttonsActions {
   display: flex;
   justify-content: end;
-  margin: 1.5rem 0;
+  margin-right: 24px;
+  width: 98%;
 }
 
 .containerJsonTable {
@@ -142,8 +142,8 @@
 }
 
 .container-modal-body {
-  width: -webkit-fill-available;
-  height: -webkit-fill-available;
+  margin: 32px;
+  height: 75%;
   overflow-y: auto;
 }
 
@@ -153,7 +153,7 @@
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
-  color: #000;
+  color: #6c757d;
 }
 
 .title-disable-jsonTable {
@@ -206,7 +206,11 @@
 
   .containerEndPeriod {
     width: 100%;
-    margin-top: 1rem;
+  }
+
+  .containerIsOpenPeriod {
+    width: 100%;
+    padding: 24px 0 48px 0;
   }
 
   .percentageSemiannualPayment {
@@ -234,17 +238,5 @@
 
   .p-24 {
     padding: 16px;
-  }
-}
-
-@media (max-width: 1023px) {
-  .containerIsOpenPeriod {
-    display: flex;
-    justify-content: start;
-  }
-
-  .direction-switch{
-    display: flex;
-    justify-content: flex-end;
   }
 }

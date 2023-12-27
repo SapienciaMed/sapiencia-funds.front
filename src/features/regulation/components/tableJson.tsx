@@ -1,33 +1,13 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ButtonComponent,
   InputComponent,
 } from "../../../common/components/Form";
 import * as Icons from "react-icons/fa";
-import {
-  FieldErrors,
-  UseFormGetValues,
-  UseFormSetValue,
-} from "react-hook-form";
-import {
-  IPerformanceStructure,
-  IRegulationSearch,
-} from "../../../common/interfaces/regulation";
 
 const INIT_DATA = { percentCondonation: "", dataTable: [] };
 const INIT_TEMP_DATA = { initialAverage: "", endAverage: "", percent: "" };
 const DEFAULT_MESSAGE = "Campo requerido";
-
-interface ITableJson {
-  title: string;
-  setValue: UseFormSetValue<IRegulationSearch>;
-  idInput: string;
-  isOpen: boolean;
-  getValues: UseFormGetValues<IRegulationSearch>;
-  error: FieldErrors<IRegulationSearch>;
-  onlyView: boolean;
-  dataRead: IPerformanceStructure;
-}
 
 const TableJson = ({
   title,
@@ -37,8 +17,8 @@ const TableJson = ({
   getValues,
   error,
   onlyView,
-  dataRead,
-}: ITableJson) => {
+  dataRead = {},
+}) => {
   const [data, setData] = useState(INIT_DATA);
   const [tempData, setTempData] = useState(INIT_TEMP_DATA);
   const [percentCondonation, setPercentCondonation] = useState("");
@@ -46,21 +26,21 @@ const TableJson = ({
   const [endAverage, setEndAverage] = useState("");
   const [percent, setPercent] = useState("");
 
-  // useEffect(() => {
-  //   let getData;
-  //   if (onlyView) {
-  //     getData = dataRead;
-  //   } else {
-  //     getData = getValues();
-  //   }
-  //   if (getData[`${idInput}`]) {
-  //     const parceData = JSON.parse(getData[`${idInput}`]);
-  //     setData(parceData);
-  //   } else {
-  //     setData(INIT_DATA);
-  //     setTempData(INIT_TEMP_DATA);
-  //   }
-  // }, [isOpen]);
+  useEffect(() => {
+    let getData;
+    if (onlyView) {
+      getData = dataRead;
+    } else {
+      getData = getValues();
+    }
+    if (getData[`${idInput}`]) {
+      const parceData = JSON.parse(getData[`${idInput}`]);
+      setData(parceData);
+    } else {
+      setData(INIT_DATA);
+      setTempData(INIT_TEMP_DATA);
+    }
+  }, [isOpen]);
 
   const validateFields = () => {
     let isError = false;
@@ -128,7 +108,7 @@ const TableJson = ({
     const objWithIdIndex = copyArr.findIndex((obj) => obj.id === id);
     copyArr.splice(objWithIdIndex, 1);
     setData({ ...data, dataTable: copyArr });
-    // setValue(idInput, JSON.stringify(data));
+    setValue(idInput, JSON.stringify(data));
   };
 
   const addItem = () => {
@@ -144,18 +124,18 @@ const TableJson = ({
       ],
     });
     setTempData(INIT_TEMP_DATA);
-    // setTimeout(() => {
-    //   setValue(
-    //     idInput,
-    //     JSON.stringify({
-    //       ...data,
-    //       dataTable: [
-    //         ...data.dataTable,
-    //         { ...tempData, id: new Date().toISOString() },
-    //       ],
-    //     })
-    //   );
-    // }, 500);
+    setTimeout(() => {
+      setValue(
+        idInput,
+        JSON.stringify({
+          ...data,
+          dataTable: [
+            ...data.dataTable,
+            { ...tempData, id: new Date().toISOString() },
+          ],
+        })
+      );
+    }, 500);
   };
 
   const validateRanges = () => {
@@ -213,12 +193,12 @@ const TableJson = ({
             <InputComponent
               idInput="percentCondonation"
               typeInput="number"
-              disabled={onlyView}
-              value={dataRead.percentCondonation}
-              // onChange={(e) => {
-              //   if (validateDecimales(e.target.value)) return;
-              //   setData({ ...data, percentCondonation: e.target.value });
-              // }}
+              disabled={onlyView ? true : false}
+              value={data.percentCondonation}
+              onChange={(e) => {
+                if (validateDecimales(e.target.value)) return;
+                setData({ ...data, percentCondonation: e.target.value });
+              }}
               className="input-basic input-size"
               classNameLabel="text-black biggest text-required font-500"
               label="Porcentaje de condonación"
@@ -244,7 +224,7 @@ const TableJson = ({
           <div className="container-disable-jsonTable">
             <p className="title-disable-jsonTable">Porcentaje de condonación</p>
             <div className="data-disable-jsonTable">
-              {dataRead?.percentCondonation}
+              {data?.percentCondonation}
             </div>
           </div>
         )}
@@ -342,7 +322,7 @@ const TableJson = ({
             />
           </div>
         )}
-        {dataRead?.dataTable?.length > 0 && (
+        {data.dataTable.length > 0 && (
           <div className="containerJsonTable">
             <div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -385,7 +365,7 @@ const TableJson = ({
                   flexDirection: "column",
                 }}
               >
-                {dataRead?.dataTable?.map((item) => {
+                {data.dataTable.map((item) => {
                   return (
                     <div
                       style={{

@@ -1,19 +1,19 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { AppContext } from "../../../common/contexts/app.context";
-import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
-import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
-import { createRequeriment } from "../../../common/schemas/requeriments-schema";
-import { useRequerimentsApi } from "./requeriments-api-service.hook";
+import { AppContext } from "../../../../../../common/contexts/app.context";
+import { useGenericListService } from "../../../../../../common/hooks/generic-list-service.hook";
+import useYupValidationResolver from "../../../../../../common/hooks/form-validator.hook";
+import { createRequeriment } from "../../../../../../common/schemas/requeriments-schema";
+import { useRequerimentsApi } from "../../../../service/requeriments";
 import { useNavigate, useParams } from "react-router-dom";
-import { IRequeriments } from "../../../common/interfaces/regulation";
+import { IRequeriments } from "../../../../../../common/interfaces/regulation";
 import { useForm } from "react-hook-form";
-import { EResponseCodes } from "../../../common/constants/api.enum";
+import { EResponseCodes } from "../../../../../../common/constants/api.enum";
 import {
   ITableAction,
   ITableElement,
-} from "../../../common/interfaces/table.interfaces";
-import SwitchComponent from "../../../common/components/Form/switch.component";
-import { useRegulationApi } from "./regulation-api-service.hook";
+} from "../../../../../../common/interfaces/table.interfaces";
+import SwitchComponent from "../../../../../../common/components/Form/switch.component";
+import { useRegulationApi } from "../../../../service";
 
 const useRequerimentsHook = (setOnlyView, idSearch) => {
   const { setMessage, authorization } = useContext(AppContext);

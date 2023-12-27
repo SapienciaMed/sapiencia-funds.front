@@ -1,21 +1,23 @@
-import { useState } from "react";
-import useFormRegulation from "../hooks/regulation-form.hook";
+import React, { useEffect, useState } from "react";
+import useRegulationHook from "../hooks/createUpdate";
+import { periods } from "../service";
 import {
   ButtonComponent,
   FormComponent,
 } from "../../../common/components/Form/index";
-import InitialSetup from "../modules/initialSetup";
-import Tabs from "../modules/tabs";
-import ForgivenessPercentages from "../modules/ForgivenessPercentages";
-import Requirements from "../modules/requeriments/Requirements";
-import StepButtons from "../modules/stepButtons";
+import InitialSetup from "./modules/initialSetup";
+import Tabs from "./modules/tabs";
+import ForgivenessPercentages from "./modules/ForgivenessPercentages";
+import Requirements from "./modules/requeriments/Requirements";
+import StepButtons from "./modules/stepButtons";
 import Divider from "../../../common/components/Form/divider";
 
-const RegulationFormPage = ({ auth }) => {
+const Form = ({ auth }) => {
   const {
     control,
     errors,
-    onSubmitRegulationForm,
+    register,
+    onsubmitCreate,
     goBack,
     updateData,
     loading,
@@ -29,8 +31,8 @@ const RegulationFormPage = ({ auth }) => {
     id,
     listPrograms,
     onlyView,
-    periodList,
-  } = useFormRegulation(auth);
+    reset,
+  } = useRegulationHook(auth);
   const [view, setView] = useState(0);
 
   if (loading) return <></>;
@@ -46,12 +48,20 @@ const RegulationFormPage = ({ auth }) => {
       </div>
       <Tabs view={view} />
 
-      <FormComponent id="regulationCreate" className="form-signIn">
+      <FormComponent
+        id="regulationCreate"
+        className="form-signIn"
+        action={(e) => {
+          e.preventDefault();
+          onsubmitCreate();
+        }}
+      >
         {view === 0 && (
           <InitialSetup
+            register={register}
             errors={errors}
             updateData={updateData}
-            periodList={periodList}
+            periods={periods}
             control={control}
             getValues={getValues}
             setValue={setValue}
@@ -61,6 +71,7 @@ const RegulationFormPage = ({ auth }) => {
             loading={loading}
             listPrograms={listPrograms}
             onlyView={onlyView}
+            reset={reset}
           />
         )}
         {view === 1 && (
@@ -91,8 +102,7 @@ const RegulationFormPage = ({ auth }) => {
         />
         <ButtonComponent
           value="Guardar"
-          form="form-signIn"
-          action={() => onSubmitRegulationForm()}
+          form="regulationCreate"
           type="submit"
           className="button-save disabled-black padding-button"
           disabled={onlyView ? true : false}
@@ -102,4 +112,4 @@ const RegulationFormPage = ({ auth }) => {
   );
 };
 
-export default RegulationFormPage;
+export default Form;

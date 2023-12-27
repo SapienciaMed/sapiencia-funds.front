@@ -1,8 +1,7 @@
 import React from "react";
-import Acordion from "../components/acordion";
-import SwitchComponent from "../../../common/components/Form/switch.component";
-import TableJson from "../components/tableJson";
-import { IPerformanceStructure } from "../../../common/interfaces/regulation";
+import Acordion from "../../components/acordion";
+import SwitchComponent from "../../../../common/components/Form/switch.component";
+import TableJson from "../../components/tableJson";
 
 const ForgivenessPercentages = ({
   errors,
@@ -60,7 +59,6 @@ const ForgivenessPercentages = ({
         >
           <div>
             <TableJson
-              dataRead={[] as any}
               idInput="performancePeriod"
               isOpen={toggleControl?.applyCondonationPerformancePeriod}
               setValue={setValue}
@@ -114,7 +112,6 @@ const ForgivenessPercentages = ({
         >
           <div>
             <TableJson
-              dataRead={[] as any}
               isOpen={toggleControl?.accomulatedIncomeCondonationApplies}
               idInput="accumulatedPerformance"
               setValue={setValue}

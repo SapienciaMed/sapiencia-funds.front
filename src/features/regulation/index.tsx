@@ -4,8 +4,8 @@ import PrivateRoute from "../../common/utils/auth-private-guard";
 import "./styles.scss";
 
 function RegulationRoute() {
-  const Regulation = lazy(() => import("./pages/regulation-serch.page"));
-  const Form = lazy(() => import("./pages/regulation-form.page"));
+  const Regulation = lazy(() => import("./pages"));
+  const Form = lazy(() => import("./pages/form"));
 
   return (
     <Routes>
