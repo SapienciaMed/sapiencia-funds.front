@@ -147,8 +147,7 @@ export default function useFormRegulation(auth) {
       applySpecialSuspensions: data.applySpecialSuspensions,
       applyExtension: data.applyExtension,
       applyCondonationPerformancePeriod: data.applyCondonationPerformancePeriod,
-      applyAccomulatedIncomeCondonation:
-        data.applyAccomulatedIncomeCondonation,
+      applyAccomulatedIncomeCondonation: data.applyAccomulatedIncomeCondonation,
     });
   };
 
@@ -170,6 +169,50 @@ export default function useFormRegulation(auth) {
       setAccumulatedPerformanceErrors(false);
     }
 
+    // Ajustar
+    const defaultData = {
+      idProgram: "",
+      initialPeriod: "2",
+      isOpenPeriod: false,
+      endPeriod: "",
+      applyTheoreticalSemiannualPercent: false,
+      theoreticalSemiannualPercent: 0,
+
+      applyAcademicPerformancePercent: false,
+      academicPerformancePercent: 0,
+      applyRequirementsPercent: false,
+      requirementsPercent: 0,
+
+      applySocialService: false,
+      socialServicePercent: 0,
+      socialServiceHours: 0,
+      socialServiceCondonationType: "Total",
+      socialServiceCondonationPercent: [],
+      applyKnowledgeTransfer: true,
+      knowledgeTransferPercent: 0,
+      knowledgeTransferHours: 0,
+      knowledgeTransferCondonationType: "Total",
+      knowledgeTransferCondonationPercent: [],
+      applyGracePeriod: false,
+      gracePeriodMonths: 0,
+      graceDateApplication: "",
+
+      applyContinuousSuspension: false,
+      continuosSuspencionQuantity: 0,
+      applyDiscontinuousSuspension: false,
+      discontinuousSuspensionQuantity: 0,
+      applySpecialSuspensions: false,
+      specialSuspensionsQuantity: 0,
+
+      applyExtension: false,
+      extensionQuantity: 0,
+
+      applyCondonationPerformancePeriod: false,
+      performancePeriodStructure: {
+        percentCondonation: 0,
+      },
+    };
+
     const buildData = {
       ...data,
       createUser: authorization.user.numberDocument,
@@ -185,13 +228,20 @@ export default function useFormRegulation(auth) {
       applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
         ? true
         : false,
-      applyAccomulatedIncomeCondonation:
-        data?.applyAccomulatedIncomeCondonation ? true : false,
-      academicPerformancePercent: '30', //Ajustar
-      requirementsPercent: '30' //Ajustar
+      applyAccomulatedIncomeCondonation: data?.applyAccomulatedIncomeCondonation
+        ? true
+        : false,
+      academicPerformancePercent:
+        100 -
+        (Number(data.socialServicePercent || 0) +
+          Number(data.knowledgeTransferPercent || 0)), //Ajustar
+      requirementsPercent: 0, //Ajustar
     };
 
-    console.log("🚀 buildData:", buildData)
+    console.log("🚀 buildData:", {
+      ...defaultData,
+      ...buildData,
+    });
 
     setMessage({
       show: true,
@@ -200,7 +250,10 @@ export default function useFormRegulation(auth) {
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
-        confirmRegulationCreate(buildData);
+        confirmRegulationCreate({
+          ...defaultData,
+          ...buildData,
+        });
       },
       background: true,
     });
