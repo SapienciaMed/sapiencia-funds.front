@@ -75,11 +75,11 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
             />
             <Controller
               control={control}
-              name="fiduciaryId"
+              name="fiduciaryName"
               render={({ field }) => {
                 return (
                   <InputComponent
-                    idInput="fiduciaryId"
+                    idInput="fiduciaryName"
                     label={
                       <>
                         Fiducia <span>*</span>
