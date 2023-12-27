@@ -5,11 +5,10 @@ import useBeneficiaryTray from "../hook/beneficiary-tray.hook";
 import { FormComponent,  SelectComponent } from "../../../common/components/Form";
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { EStatePac } from "../../../common/constants/api.enum";
-import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
 /* ---- Este componente se reutilizara en varias Tabs --- */
 
-function BeneficiaryTrayPage({ typeState, isCut = true, changeCut = true }: Readonly<{ typeState: EStatePac, isCut?: boolean, changeCut?: boolean }>) {
+function BeneficiaryTrayPage({ typeState, isCut = true, changeCut }: Readonly<{ typeState: EStatePac, isCut?: boolean, changeCut?: boolean }>) {
 
     const { tableComponentRef, tableColumns, tableActions, idCutData, control, showSpinner, valueFilterTable,
         handleFilterChange, handleChangeCut,  apiUrl, setShowSpinner, resetValue } = useBeneficiaryTray(typeState, isCut, changeCut)

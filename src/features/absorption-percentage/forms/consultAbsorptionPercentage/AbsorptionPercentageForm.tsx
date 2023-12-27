@@ -30,7 +30,6 @@ const AbsorptionPercentageForm = ({
   tableComponentRef,
   urlGet,
   validateActionAccess,
-  register,
 }) => (
   <div className="container-sections-forms mt-24px ml-16px mr-16px p-0">
     <FormComponent
@@ -65,7 +64,7 @@ const AbsorptionPercentageForm = ({
         <div className="agg-item">
           {tableView &&
             validateActionAccess("FONDOS_PORCENTAJE_ABSORCION_CREAR") && (
-              <div className="button-clean  mr-auto ml-25px mt--5px">
+              <div className="button-clean  mr-auto ml-auto mt--5px">
                 <div>
                   <div
                     className={`title-button  ${
@@ -117,6 +116,8 @@ const AbsorptionPercentageForm = ({
             actions={tableActions}
             isShowModal={true}
             setShowFooterActions={setShowFooterActions}
+            classSizeTable="size-table-wd-550"
+            isMobil={false}
             emptyMessage="No se generó resultado en la búsqueda"
             descriptionModalNoResult="No se generó resultado en la búsqueda"
             titleMessageModalNoResult="Resultado de búsqueda"

@@ -60,7 +60,7 @@ const SearchMasterPage = (): React.JSX.Element => {
                         classNameLabel="text-black big medium"
                         label={
                           <>
-                            Actividad <span>*</span>
+                            Actividad
                           </>
                         }
                       />

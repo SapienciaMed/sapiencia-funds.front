@@ -148,6 +148,10 @@ export default function useSocialServices() {
       },
     },
     {
+      fieldName: "observation",
+      header: "Observacion",
+    },
+    {
       fieldName: "actions",
       header: "Acciones",
       renderCell: (row) => {

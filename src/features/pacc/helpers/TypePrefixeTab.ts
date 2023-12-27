@@ -8,7 +8,8 @@ export const typePrefixeTabs = (tipo: number) => {
         [EStatePac.Coordinator, 'consolidation-tray-coordinator'],
         [EStatePac.Juridical, 'consolidation-tray-legal'],
         [EStatePac.ProjectManager, 'consolidation-tray-project-leader'],
-        [EStatePac.SocialService, 'consolidation-tray-social-service']
+        [EStatePac.SocialService, 'consolidation-tray-social-service'],
+        [EStatePac.Committee, 'consolidation-tray-committee'],
     ]);
 
     return valorHas(typePrefix, tipo);

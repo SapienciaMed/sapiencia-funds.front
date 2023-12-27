@@ -163,9 +163,9 @@ const { width } = useWidth();
                   control={control}
                   className="select-basic medium"
                   placeholder="Seleccionar"
-                  label="Número proyecto"
+                  label={<>Número proyecto</>}
                   data={projectList ? projectList : []}
-                  classNameLabel="text-black big text-required bold"
+                  classNameLabel="text-black big bold"
                   direction={EDirection.column}
                   errors={errors}
                 />
@@ -203,7 +203,7 @@ const { width } = useWidth();
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
-                        classNameLabel="text-black big bold text-required"
+                        classNameLabel="text-black big bold"
                         label="Idea de proyecto"
                       />
                     );

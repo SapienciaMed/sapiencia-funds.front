@@ -23,7 +23,7 @@ function SocialServices() {
         descriptionModalNoResult="No se encontraron datos de servicio social"
         isShowModal={true}
         classSizeTable="size-table-wd-110"
-        princialTitle="Servicio social"
+        princialTitle="Horas servicio social"
         isMobil={false}
         viePaginator={true}
         isNotBorderClasse={true}
