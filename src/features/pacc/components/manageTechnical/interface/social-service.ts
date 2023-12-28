@@ -1,6 +1,18 @@
 import { IFiles } from "../../../../../common/interfaces/storage.interfaces";
 import { IBeneficiariesConsolidateInterface } from "./beneficiaries-consolidate";
 
+export interface ExternalFilesSapiencia {
+  documentPath: string;
+  parameters: [
+    {
+      documento: string;
+      tipo: string;
+      periodo: string;
+      npseleccion: string;
+    }
+  ];
+}
+
 export interface ISocialServiceBeneficiary {
   id?: number;
   legalizationPeriod: string;
@@ -12,6 +24,7 @@ export interface ISocialServiceBeneficiary {
   observation: string;
   state: boolean;
   infoFiles?: IFiles[];
+  externalInfoFiles?: ExternalFilesSapiencia;
   editable: boolean;
   beneficiarieConsolidate?: IBeneficiariesConsolidateInterface;
 }
