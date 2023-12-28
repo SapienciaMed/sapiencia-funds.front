@@ -65,6 +65,7 @@ export const useEditLegalAuditFundsModal = (
     try {
       const endpoint = `/api/v1/legalized/update-commune-budget`;
       const resp = await put(endpoint, fullData);
+      await reloadTable({ announcementId });
 
       if (resp.operation.code === "FAIL") {
         return setMessage({
@@ -84,7 +85,6 @@ export const useEditLegalAuditFundsModal = (
         OkTitle: "Cerrar",
         onOk: async () => {
           setMessage({ show: false });
-          await reloadTable({ announcementId });
         },
         background: true,
       });
@@ -106,18 +106,23 @@ export const useEditLegalAuditFundsModal = (
   }, [formWatch]);
 
   useEffect(() => {
-    console.log("RESOURCE", resourceValue);
-    let rawValue = parseInt(
-      resourceValue
-        ?.toString()
-        ?.replace("$", "")
-        .replace(",", "")
-        .replace(".", "")
-    );
+    let rawValue = parseInt(resourceValue?.toString()?.replace("$", ""));
     if (isNaN(rawValue)) rawValue = 0;
-    setValue("resource", formaterNumberToCurrency(rawValue));
-    setResourceRaw(rawValue);
-  }, []);
+    setValue("resource", formaterNumberToCurrency(resourceRaw));
+    setFormWatch({
+      ...formWatch,
+      resource: resourceRaw,
+    });
+  }, [resourceValue]);
+
+  useEffect(() => {
+    const rawValueFromRow = parseFloat(row?.resource);
+    if (!isNaN(rawValueFromRow)) {
+      setValue("resource", formaterNumberToCurrency(rawValueFromRow));
+      setResourceRaw(rawValueFromRow);
+    }
+    setValue("update", new Date());
+  }, [row]);
 
   useEffect(() => {
     reset(row);
