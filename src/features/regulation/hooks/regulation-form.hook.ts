@@ -28,7 +28,6 @@ export default function useFormRegulation(auth) {
   const navigate = useNavigate();
   const {
     handleSubmit,
-    register,
     control,
     setValue,
     getValues,
@@ -47,12 +46,18 @@ export default function useFormRegulation(auth) {
   const [updateData, setUpdateData] = useState<IRegulation>();
   const [loading, setLoading] = useState<boolean>(true);
   const [performancePeriodErrors, setPerformancePeriodErrors] = useState(false);
-  const [periodList, setPeriodList] = useState<IPeriodSapiencia[]>([]);
+  // const [periodList, setPeriodList] = useState<IPeriodSapiencia[]>([]);
+  // const [listPrograms, setListPrograms] = useState<
+  //   { name: string; value: number }[]
+  // >([]);
+  const [listPrograms, setListPrograms] = useState<
+    { name: string; value: string }[]
+  >([]);
+  const [arrayPeriod, setArrayPeriod] = useState<
+    { name: string; value: string; id: number; nameComplementary?: string }[]
+  >([]);
   const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
     useState(false);
-  const [listPrograms, setListPrograms] = useState<
-    { name: string; value: number }[]
-  >([]);
   const [toggleControl, setToggleControl] = useState<{
     applySocialService: number;
     applyKnowledgeTransfer: number;
@@ -87,36 +92,33 @@ export default function useFormRegulation(auth) {
       return;
     }
   }, [auth, authorization]);
-
+  
   useEffect(() => {
-    const loadData = async () => {
-      const res = await getPrograms();
+    getPrograms().then((res) => {
       if (res?.data) {
         const buildData = res.data.map((item) => {
           return {
             name: item.value,
-            value: item.id,
+            value: item.id.toString(),
           };
         });
         setListPrograms(buildData);
       }
+    });
 
-      const res2 = await getPeriodsFromSapiencia();
-      if (res2?.data) {
-        const buildData = [...res2.data].sort(function (a, b) {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
+    getPeriodsFromSapiencia().then((resp) => {
+      if (resp.operation.code === EResponseCodes.OK) {
+        const data = resp.data.map((item) => {
+          return {
+            name: item.nameComplementary,
+            value: item.name,
+            id: item.id,
+            nameComplementary: item.nameComplementary,
+          };
         });
-        setPeriodList(buildData);
+        setArrayPeriod(data);
       }
-    };
-
-    loadData();
+    });
   }, []);
 
   // Metodos
@@ -146,8 +148,7 @@ export default function useFormRegulation(auth) {
       applySpecialSuspensions: data.applySpecialSuspensions,
       applyExtension: data.applyExtension,
       applyCondonationPerformancePeriod: data.applyCondonationPerformancePeriod,
-      applyAccomulatedIncomeCondonation:
-        data.applyAccomulatedIncomeCondonation,
+      applyAccomulatedIncomeCondonation: data.applyAccomulatedIncomeCondonation,
     });
   };
 
@@ -169,6 +170,50 @@ export default function useFormRegulation(auth) {
       setAccumulatedPerformanceErrors(false);
     }
 
+    // Ajustar
+    const defaultData = {
+      idProgram: "",
+      initialPeriod: "",
+      isOpenPeriod: false,
+      endPeriod: "",
+      applyTheoreticalSemiannualPercent: false,
+      theoreticalSemiannualPercent: 0,
+
+      applyAcademicPerformancePercent: false,
+      academicPerformancePercent: 0,
+      applyRequirementsPercent: false,
+      requirementsPercent: 0,
+
+      applySocialService: false,
+      socialServicePercent: 0,
+      socialServiceHours: 0,
+      socialServiceCondonationType: "Total",
+      socialServiceCondonationPercent: [],
+      applyKnowledgeTransfer: true,
+      knowledgeTransferPercent: 0,
+      knowledgeTransferHours: 0,
+      knowledgeTransferCondonationType: "Total",
+      knowledgeTransferCondonationPercent: [],
+      applyGracePeriod: false,
+      gracePeriodMonths: 0,
+      graceDateApplication: "",
+
+      applyContinuousSuspension: false,
+      continuosSuspencionQuantity: 0,
+      applyDiscontinuousSuspension: false,
+      discontinuousSuspensionQuantity: 0,
+      applySpecialSuspensions: false,
+      specialSuspensionsQuantity: 0,
+
+      applyExtension: false,
+      extensionQuantity: 0,
+
+      applyCondonationPerformancePeriod: false,
+      performancePeriodStructure: {
+        percentCondonation: 0,
+      },
+    };
+
     const buildData = {
       ...data,
       createUser: authorization.user.numberDocument,
@@ -184,13 +229,17 @@ export default function useFormRegulation(auth) {
       applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
         ? true
         : false,
-      applyAccomulatedIncomeCondonation:
-        data?.applyAccomulatedIncomeCondonation ? true : false,
-      academicPerformancePercent: '30', //Ajustar
-      requirementsPercent: '30' //Ajustar
+      applyAccomulatedIncomeCondonation: data?.applyAccomulatedIncomeCondonation
+        ? true
+        : false,
+      academicPerformancePercent: data?.academicPerformancePercent,
+      requirementsPercent: data?.requirementsPercent
     };
 
-    console.log("🚀 buildData:", buildData)
+    console.log("🚀 buildData:", {
+      ...defaultData,
+      ...buildData,
+    });
 
     setMessage({
       show: true,
@@ -199,7 +248,10 @@ export default function useFormRegulation(auth) {
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
-        confirmRegulationCreate(buildData);
+        confirmRegulationCreate({
+          ...defaultData,
+          ...buildData,
+        });
       },
       background: true,
     });
@@ -278,7 +330,6 @@ export default function useFormRegulation(auth) {
   return {
     control,
     errors,
-    register,
     setValue,
     handleSubmit,
     onSubmitRegulationForm,
@@ -294,6 +345,6 @@ export default function useFormRegulation(auth) {
     id,
     listPrograms,
     onlyView,
-    periodList,
+    arrayPeriod,
   };
 }

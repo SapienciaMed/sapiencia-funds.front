@@ -37,7 +37,7 @@ const InitialSetup = ({
           }
           errors={errors}
           disabled={isDisabled}
-          data={listPrograms.length ? listPrograms : []}
+          data={listPrograms ?? []}
           label="Programa"
           className="select-basic select-disabled-list input-size"
           classNameLabel="text-black biggest font-500 text-required"
@@ -54,12 +54,7 @@ const InitialSetup = ({
               ? updateData?.initialPeriod
               : getValues().initialPeriod
           }
-          data={periodList.map((i) => {
-            return {
-              name: i.name,
-              value: i.name,
-            };
-          })}
+          data={periodList ?? []}
           disabled={onlyView}
           label="Periodo inicial de convocatoria"
           className="select-basic select-disabled-list input-size"

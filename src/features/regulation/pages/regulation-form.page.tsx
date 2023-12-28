@@ -29,7 +29,7 @@ const RegulationFormPage = ({ auth }) => {
     id,
     listPrograms,
     onlyView,
-    periodList,
+    arrayPeriod,
   } = useFormRegulation(auth);
   const [view, setView] = useState(0);
 
@@ -51,7 +51,7 @@ const RegulationFormPage = ({ auth }) => {
           <InitialSetup
             errors={errors}
             updateData={updateData}
-            periodList={periodList}
+            periodList={arrayPeriod}
             control={control}
             getValues={getValues}
             setValue={setValue}
@@ -100,7 +100,6 @@ const RegulationFormPage = ({ auth }) => {
         <ButtonComponent
           value="Guardar"
           form="regulationCreate"
-          
           type="submit"
           className="button-save disabled-black padding-button"
           disabled={onlyView ? true : false}

@@ -59,12 +59,8 @@ export function useRegulationApi() {
     return await get(`/api/v1/reglament/programs`);
   }
 
-  async function getPeriodsFromSapiencia(): Promise<
-    ApiResponse<IPeriodSapiencia[]>
-  > {
-    return await post<IPeriodSapiencia[]>(
-      `/api/v1/reglament-v2/get-periods-sapi`
-    );
+  async function getPeriodsFromSapiencia(): Promise<ApiResponse<IPeriodSapiencia[]>> {
+    return post('/api/v1/reglament-v2/get-periods-sapi')
   }
 
   return {
