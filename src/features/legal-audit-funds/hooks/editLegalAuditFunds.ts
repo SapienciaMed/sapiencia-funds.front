@@ -106,14 +106,18 @@ export const useEditLegalAuditFundsModal = (
   }, [formWatch]);
 
   useEffect(() => {
-    let rawValue = parseInt(resourceValue?.toString()?.replace("$", ""));
+    console.log("RESOURCE", resourceValue);
+    let rawValue = parseInt(
+      resourceValue
+        ?.toString()
+        ?.replace("$", "")
+        .replace(",", "")
+        .replace(".", "")
+    );
     if (isNaN(rawValue)) rawValue = 0;
-    setValue("resource", formaterNumberToCurrency(resourceRaw));
-    setFormWatch({
-      ...formWatch,
-      resource: resourceRaw,
-    });
-  }, [resourceValue]);
+    setValue("resource", formaterNumberToCurrency(rawValue));
+    setResourceRaw(rawValue);
+  }, []);
 
   useEffect(() => {
     const rawValueFromRow = parseFloat(row?.resource);
