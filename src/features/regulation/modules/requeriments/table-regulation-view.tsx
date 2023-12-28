@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { ICondonationPercent, IRegulation, IRequirementsForReglament } from "../../../../common/interfaces/regulation";
+import { ICondonationPercent, IRegulation, IRequirementsForReglament, ITableMicroStructure } from "../../../../common/interfaces/regulation";
 import { ITableElement } from "../../../../common/interfaces";
 import TotalTableComponent from "../../../../common/components/total-table.component";
 import { ERegulation } from "../../../../common/constants/api.enum";
@@ -9,7 +9,9 @@ interface IRequiremetOnlyView{
     typeTable: {
         requirement?: ERegulation.requirement,
         socialService?: ERegulation.socialService,
-        knowledgeTransfer?: ERegulation.knowledgeTransfer
+        knowledgeTransfer?: ERegulation.knowledgeTransfer,
+        cumulativeAcademicPeriod?: ERegulation.cumulativeAcademicPeriod,
+        cumulativeAcademicPerformance?: ERegulation.cumulativeAcademicPerformance
     }
     viewPaginator: boolean
 }
@@ -64,6 +66,30 @@ const TableRegulationView = ({ detailData, typeTable, viewPaginator }: IRequirem
         }
     ]
 
+    const tableAcademicPerformance: ITableElement<ITableMicroStructure>[] = [
+        {
+            fieldName: "initialAverage",
+            header: "Promedio Inicial",
+            renderCell: (row) => {
+                return <>{row.initialAverage || '0'} %</>;
+            }
+        },
+        {
+            fieldName: "endAverage",
+            header: "Promedio Final",
+            renderCell: (row) => {
+                return <>{row?.endAverage || '0'} %</>;
+            }
+        },
+        {
+            fieldName: "percent",
+            header: "Porcentaje",
+            renderCell: (row) => {
+                return <>{row?.percent || '0'} %</>;
+            }
+        }
+    ]
+
     const tableSelect = () => {
        if (typeTable.requirement) {
             return {
@@ -85,6 +111,21 @@ const TableRegulationView = ({ detailData, typeTable, viewPaginator }: IRequirem
                 data: detailData.knowledgeTransferCondonationPercent
             };
         }
+
+        if (typeTable.cumulativeAcademicPeriod) {
+            return {
+                colum: tableAcademicPerformance,
+                data: detailData.performancePeriodStructure.dataTable
+            };
+        }
+
+        if (typeTable.cumulativeAcademicPerformance) {
+            return {
+                colum: tableAcademicPerformance,
+                data: detailData.accumulatedPerformanceDataTable.dataTable
+            };
+        }
+
 
         return {
             colum: [],

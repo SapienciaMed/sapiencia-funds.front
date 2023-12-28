@@ -6,10 +6,7 @@ import { useForm } from "react-hook-form";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useRegulationApi } from "./regulation-api-service.hook";
 import { shemaFormRegulation } from "../../../common/schemas/regulation-schema";
-import {
-  IPeriodSapiencia,
-  IRegulation,
-} from "../../../common/interfaces/regulation";
+import {IRegulation} from "../../../common/interfaces/regulation";
 import { useRequerimentsApi } from "./requeriments-api-service.hook";
 
 export default function useFormRegulation(auth) {
@@ -28,11 +25,9 @@ export default function useFormRegulation(auth) {
   const navigate = useNavigate();
   const {
     handleSubmit,
-    register,
-    control: control,
+    control,
     setValue,
     getValues,
-    reset,
     watch,
     formState: { errors },
   } = useForm<IRegulation>({
@@ -48,23 +43,28 @@ export default function useFormRegulation(auth) {
   const [updateData, setUpdateData] = useState<IRegulation>();
   const [loading, setLoading] = useState<boolean>(true);
   const [performancePeriodErrors, setPerformancePeriodErrors] = useState(false);
-  const [periodList, setPeriodList] = useState<IPeriodSapiencia[]>([]);
+  const [listPrograms, setListPrograms] = useState<
+    { name: string; value: string }[]
+  >([]);
+  const [arrayPeriod, setArrayPeriod] = useState<
+    { name: string; value: string; id: number; nameComplementary?: string }[]
+  >([]);
   const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
     useState(false);
-  const [listPrograms, setListPrograms] = useState<
-    { name: string; value: number }[]
-  >([]);
   const [toggleControl, setToggleControl] = useState<{
     applySocialService: number;
-    knowledgeTransferApply: number;
-    gracePeriodApply: number;
-    continuousSuspensionApplies: number;
+    applyKnowledgeTransfer: number;
+    applyGracePeriod: number;
+    applyContinuousSuspension: number;
     applyDiscontinuousSuspension: number;
     applySpecialSuspensions: boolean;
-    extensionApply: boolean;
+    applyExtension: boolean;
     applyCondonationPerformancePeriod: boolean;
-    accomulatedIncomeCondonationApplies: boolean;
+    applyAccomulatedIncomeCondonation: boolean;
     applyTheoreticalSemester?: boolean;
+    applyAcademicPerformancePercent?: boolean;
+    applyRequirementsPercent?: boolean
+    applyTheoreticalSemiannualPercent?: boolean
   }>();
 
   // Effects
@@ -88,43 +88,39 @@ export default function useFormRegulation(auth) {
       return;
     }
   }, [auth, authorization]);
-
+  
   useEffect(() => {
-    const loadData = async () => {
-      const res = await getPrograms();
+    getPrograms().then((res) => {
       if (res?.data) {
         const buildData = res.data.map((item) => {
           return {
             name: item.value,
-            value: item.id,
+            value: item.id.toString(),
           };
         });
         setListPrograms(buildData);
       }
+    });
 
-      const res2 = await getPeriodsFromSapiencia();
-      if (res2?.data) {
-        const buildData = [...res2.data].sort(function (a, b) {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
+    getPeriodsFromSapiencia().then((resp) => {
+      if (resp.operation.code === EResponseCodes.OK) {
+        const data = resp.data.map((item) => {
+          return {
+            name: item.nameComplementary,
+            value: item.name,
+            id: item.id,
+            nameComplementary: item.nameComplementary,
+          };
         });
-        setPeriodList(buildData);
+        setArrayPeriod(data);
       }
-    };
-
-    loadData();
+    });
   }, []);
 
   // Metodos
   const getUpdateData = async () => {
     if (id) {
       const res = await getRegulationById(id);
-      console.log("🚀  res:", res);
       if (res?.data[0]) {
         for (let clave in res?.data[0]) {
           if (res?.data[0][clave] === null) {
@@ -141,23 +137,19 @@ export default function useFormRegulation(auth) {
   const controlToggle = (data) => {
     setToggleControl({
       applySocialService: data.applySocialService,
-      knowledgeTransferApply: data.knowledgeTransferApply,
-      gracePeriodApply: data.gracePeriodApply,
-      continuousSuspensionApplies: data.continuousSuspensionApplies,
+      applyKnowledgeTransfer: data.applyKnowledgeTransfer,
+      applyGracePeriod: data.applyGracePeriod,
+      applyContinuousSuspension: data.applyContinuousSuspension,
       applyDiscontinuousSuspension: data.applyDiscontinuousSuspension,
       applySpecialSuspensions: data.applySpecialSuspensions,
-      extensionApply: data.extensionApply,
+      applyExtension: data.applyExtension,
       applyCondonationPerformancePeriod: data.applyCondonationPerformancePeriod,
-      accomulatedIncomeCondonationApplies:
-        data.accomulatedIncomeCondonationApplies,
+      applyAccomulatedIncomeCondonation: data.applyAccomulatedIncomeCondonation,
     });
   };
 
   const onSubmitRegulationForm = handleSubmit((data: IRegulation) => {
-    console.log(
-      "🚀 ~ file: createUpdate.ts:152 ~ onsubmitCreate ~ data:",
-      data
-    );
+    // console.log("🚀 ~ file: regulation-form.hook.ts:155 ~ onSubmitRegulationForm ~ data:", data)
     if (
       data.applyCondonationPerformancePeriod &&
       !data.performancePeriodStructure
@@ -175,24 +167,72 @@ export default function useFormRegulation(auth) {
       setAccumulatedPerformanceErrors(false);
     }
 
+    // Ajustar
+    const defaultData = {
+      idProgram: "",
+      initialPeriod: "",
+      isOpenPeriod: false,
+      endPeriod: "",
+      applyTheoreticalSemiannualPercent: false,
+      theoreticalSemiannualPercent: 0,
+
+      applyAcademicPerformancePercent: false,
+      academicPerformancePercent: 0,
+      applyRequirementsPercent: false,
+      requirementsPercent: 0,
+
+      applySocialService: false,
+      socialServicePercent: 0,
+      socialServiceHours: 0,
+      socialServiceCondonationType: "",
+      socialServiceCondonationPercent: '',
+      applyKnowledgeTransfer: true,
+      knowledgeTransferPercent: 0,
+      knowledgeTransferHours: 0,
+      knowledgeTransferCondonationType: "",
+      knowledgeTransferCondonationPercent: '',
+      applyGracePeriod: false,
+      gracePeriodMonths: 0,
+      graceDateApplication: "",
+
+      applyContinuousSuspension: false,
+      continuosSuspencionQuantity: 0,
+      applyDiscontinuousSuspension: false,
+      discontinuousSuspensionQuantity: 0,
+      applySpecialSuspensions: false,
+      specialSuspensionsQuantity: 0,
+
+      applyExtension: false,
+      extensionQuantity: 0,
+
+      applyCondonationPerformancePeriod: false,
+      performancePeriodStructure: {
+        percentCondonation: 0,
+      },
+    };
+
     const buildData = {
       ...data,
       createUser: authorization.user.numberDocument,
       createDate: new Date().toISOString(),
       isOpenPeriod: data?.isOpenPeriod ? true : false,
       applySocialService: data?.applySocialService == 1,
-      knowledgeTransferApply: data?.applyKnowledgeTransfer == 1,
-      gracePeriodApply: data?.applyGracePeriod == 1,
-      continuousSuspensionApplies: data?.applyContinuousSuspension == 1,
+      applyKnowledgeTransfer: data?.applyKnowledgeTransfer == 1,
+      applyGracePeriod: data?.applyGracePeriod == 1,
+      applyContinuousSuspension: data?.applyContinuousSuspension == 1,
       applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension == 1,
       applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
-      extensionApply: data?.applyExtension ? true : false,
-      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
-        ? true
-        : false,
-      accomulatedIncomeCondonationApplies:
-        data?.applyAccomulatedIncomeCondonation ? true : false,
+      applyExtension: data?.applyExtension ? true : false,
+      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod ? true : false,
+      applyAccomulatedIncomeCondonation: data?.applyAccomulatedIncomeCondonation ? true : false,
+      academicPerformancePercent: data?.academicPerformancePercent || 0,
+      requirementsPercent: data?.requirementsPercent || 0
     };
+
+    console.log("🚀 buildData:", {
+      ...defaultData,
+      ...buildData,
+    });
 
     setMessage({
       show: true,
@@ -201,7 +241,10 @@ export default function useFormRegulation(auth) {
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
-        confirmRegulationCreate(buildData);
+        confirmRegulationCreate({
+          ...defaultData,
+          ...buildData,
+        });
       },
       background: true,
     });
@@ -243,7 +286,7 @@ export default function useFormRegulation(auth) {
       title: "Error",
       description: msg,
       show: true,
-      OkTitle: "cerrar",
+      OkTitle: "Cerrar",
       onClose: () => {
         if (navigateBoolean) {
           navigate("/fondos/administracion/reglamento/");
@@ -280,7 +323,6 @@ export default function useFormRegulation(auth) {
   return {
     control,
     errors,
-    register,
     setValue,
     handleSubmit,
     onSubmitRegulationForm,
@@ -296,7 +338,6 @@ export default function useFormRegulation(auth) {
     id,
     listPrograms,
     onlyView,
-    reset,
-    periodList,
+    arrayPeriod,
   };
 }

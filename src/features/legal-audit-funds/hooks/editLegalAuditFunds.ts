@@ -59,7 +59,7 @@ export const useEditLegalAuditFundsModal = (
       ...data,
       ...formWatch,
       announcementId,
-      fiduciaryId: row?.fiduciaryId,
+      fiduciaryName: row?.fiduciaryName,
       resource: resourceRaw,
     };
     try {
@@ -117,7 +117,7 @@ export const useEditLegalAuditFundsModal = (
     if (isNaN(rawValue)) rawValue = 0;
     setValue("resource", formaterNumberToCurrency(rawValue));
     setResourceRaw(rawValue);
-  }, [resourceValue]);
+  }, []);
 
   useEffect(() => {
     reset(row);

@@ -6,17 +6,17 @@ export const createPeriodsAbsorptionSchema = yup.object({
   sceneryPercentage1: yup
     .number()
     .min(0, "El porcentaje debe ser superior a 0")
-    .max(100, "El porcentaje no debe ser mayor a 100")
+    // .max(100, "El porcentaje no debe ser mayor a 100")
     .required("Completar información"),
   sceneryPercentage2: yup
     .number()
     .min(0, "El porcentaje debe ser superior a 0")
-    .max(100, "El porcentaje no debe ser mayor a 100")
+    // .max(100, "El porcentaje no debe ser mayor a 100")
     .required("Completar información"),
   sceneryPercentage3: yup
     .number()
     .min(0, "El porcentaje debe ser superior a 0")
-    .max(100, "El porcentaje no debe ser mayor a 100")
+    // .max(100, "El porcentaje no debe ser mayor a 100")
     .required("Completar información"),
 });
 

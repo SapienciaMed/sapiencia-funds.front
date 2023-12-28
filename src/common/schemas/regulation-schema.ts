@@ -7,7 +7,7 @@ const greaterThan = (number: number) =>
   `El número debe de ser mayor o igual a ${number}`;
 
 export const shemaFormRegulation = yup.object().shape({
-  program: yup
+  idProgram: yup
     .string()
     .typeError(MESSAGE_REQUIRED)
     .required(MESSAGE_REQUIRED)
@@ -25,24 +25,14 @@ export const shemaFormRegulation = yup.object().shape({
       if (!isOpenPeriod[0]) return schema.required(MESSAGE_REQUIRED);
       return schema;
     }),
-  // theoreticalPercentage: yup
-  //   .number()
-  //   .typeError(MESSAGE_REQUIRED)
-  //   .required(MESSAGE_REQUIRED)
-  //   .min(1, greaterThan(1))
-  //   .max(100, lessThan(100))
-  //   .typeError(MESSAGE_REQUIRED)
-  //   .test("decimal-places", "Ingresa un número con dos decimales", (value) =>
-  //     /^-?\d+(\.\d{1,2})?$/.test(value.toString())
-  //   ),
-  applyTheoreticalSemester: yup.boolean().optional().nullable(),
-  theoreticalPercentage: yup
+  applyTheoreticalSemiannualPercent: yup.boolean().optional().nullable(),
+  theoreticalSemiannualPercent: yup
   .number()
   .nullable()
     .min(1, greaterThan(1))
     .max(100, lessThan(100))
-    .when("applyTheoreticalSemester",(applyTheoreticalSemester, schema) => {
-      if (applyTheoreticalSemester[0])
+    .when("applyTheoreticalSemiannualPercent",(applyTheoreticalSemiannualPercent, schema) => {
+      if (applyTheoreticalSemiannualPercent[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .typeError(MESSAGE_REQUIRED)
@@ -56,10 +46,46 @@ export const shemaFormRegulation = yup.object().shape({
           );
       return schema;
     }),
-    
-
+  applyAcademicPerformancePercent: yup.boolean().optional().nullable(),
+  academicPerformancePercent: yup
+    .number()
+    .nullable()
+    .when("applyAcademicPerformancePercent", (applyAcademicPerformancePercent, schema) => {
+      if (applyAcademicPerformancePercent[0])
+        return schema
+          .required(MESSAGE_REQUIRED)
+          .typeError(MESSAGE_REQUIRED)
+          .min(1, greaterThan(1))
+          .max(100, lessThan(100))
+          .typeError(MESSAGE_REQUIRED)
+          .test(
+            "decimal-places",
+            "Ingresa un número con dos decimales",
+            (value) => /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+          );
+      return schema;
+    }),
+  applyRequirementsPercent: yup.boolean().optional().nullable(),
+  requirementsPercent: yup
+    .number()
+    .nullable()
+    .when("applyRequirementsPercent", (applyRequirementsPercent, schema) => {
+      if (applyRequirementsPercent[0])
+        return schema
+          .required(MESSAGE_REQUIRED)
+          .typeError(MESSAGE_REQUIRED)
+          .min(1, greaterThan(1))
+          .max(100, lessThan(100))
+          .typeError(MESSAGE_REQUIRED)
+          .test(
+            "decimal-places",
+            "Ingresa un número con dos decimales",
+            (value) => /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+          );
+      return schema;
+    }),
   applySocialService: yup.boolean().optional().nullable(),
-  socialServicePercentage: yup
+  socialServicePercent: yup
     .number()
     .nullable()
     .when("applySocialService", (applySocialService, schema) => {
@@ -81,20 +107,31 @@ export const shemaFormRegulation = yup.object().shape({
     .number()
     .nullable()
     .when("applySocialService", (applySocialService, schema) => {
-      if (applySocialService[0])
+      if (applySocialService[0]){
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))
           .max(999, lessThan(999))
           .typeError(MESSAGE_REQUIRED);
+        }
       return schema;
     }),
-  knowledgeTransferApply: yup.boolean().optional().nullable(),
-  knowledgeTransferPercentage: yup
+  socialServiceCondonationType: yup
+  .string()
+  .nullable()
+  .when("applySocialService", (applySocialService, schema) => {
+    if (applySocialService[0]){
+      return schema
+        .required(MESSAGE_REQUIRED)
+      }
+    return schema;
+  }),
+  applyKnowledgeTransfer: yup.boolean().optional().nullable(),
+  knowledgeTransferPercent: yup
     .number()
     .nullable()
-    .when("knowledgeTransferApply", (knowledgeTransferApply, schema) => {
-      if (knowledgeTransferApply[0])
+    .when("applyKnowledgeTransfer", (applyKnowledgeTransfer, schema) => {
+      if (applyKnowledgeTransfer[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))
@@ -110,8 +147,8 @@ export const shemaFormRegulation = yup.object().shape({
   knowledgeTransferHours: yup
     .number()
     .nullable()
-    .when("knowledgeTransferApply", (knowledgeTransferApply, schema) => {
-      if (knowledgeTransferApply[0])
+    .when("applyKnowledgeTransfer", (applyKnowledgeTransfer, schema) => {
+      if (applyKnowledgeTransfer[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))
@@ -119,12 +156,22 @@ export const shemaFormRegulation = yup.object().shape({
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
-  gracePeriodApply: yup.boolean().optional().nullable(),
+  knowledgeTransferCondonationType: yup
+  .string()
+  .nullable()
+  .when("applyKnowledgeTransfer", (applyKnowledgeTransfer, schema) => {
+    if (applyKnowledgeTransfer[0]){
+      return schema
+        .required(MESSAGE_REQUIRED)
+      }
+    return schema;
+  }),
+  applyGracePeriod: yup.boolean().optional().nullable(),
   gracePeriodMonths: yup
     .number()
     .nullable()
-    .when("gracePeriodApply", (gracePeriodApply, schema) => {
-      if (gracePeriodApply[0])
+    .when("applyGracePeriod", (applyGracePeriod, schema) => {
+      if (applyGracePeriod[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))
@@ -132,25 +179,25 @@ export const shemaFormRegulation = yup.object().shape({
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
-  gracePeriodApplication: yup
+  graceDateApplication: yup
     .string()
     .nullable()
-    .when("gracePeriodApply", (gracePeriodApply, schema) => {
-      if (gracePeriodApply[0])
+    .when("applyGracePeriod", (applyGracePeriod, schema) => {
+      if (applyGracePeriod[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .typeError(MESSAGE_REQUIRED)
           .max(50, "Solo se permiten 50 caracteres");
       return schema;
     }),
-  continuousSuspensionApplies: yup.boolean().optional().nullable(),
+  applyContinuousSuspension: yup.boolean().optional().nullable(),
   continuosSuspencionQuantity: yup
     .number()
     .nullable()
     .when(
-      "continuousSuspensionApplies",
-      (continuousSuspensionApplies, schema) => {
-        if (continuousSuspensionApplies[0])
+      "applyContinuousSuspension",
+      (applyContinuousSuspension, schema) => {
+        if (applyContinuousSuspension[0])
           return schema
             .required(MESSAGE_REQUIRED)
             .min(1, greaterThan(1))
@@ -176,7 +223,7 @@ export const shemaFormRegulation = yup.object().shape({
       }
     ),
   applySpecialSuspensions: yup.boolean().optional().nullable(),
-  applySpecialSuspensionsQuantity: yup
+  specialSuspensionsQuantity: yup
     .number()
     .nullable()
     .when("applySpecialSuspensions", (applySpecialSuspensions, schema) => {
@@ -188,12 +235,12 @@ export const shemaFormRegulation = yup.object().shape({
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
-  extensionApply: yup.boolean().optional().nullable(),
-  extensionApplyQuantity: yup
+  applyExtension: yup.boolean().optional().nullable(),
+  extensionQuantity: yup
     .number()
     .nullable()
-    .when("extensionApply", (extensionApply, schema) => {
-      if (extensionApply[0])
+    .when("applyExtension", (applyExtension, schema) => {
+      if (applyExtension[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))

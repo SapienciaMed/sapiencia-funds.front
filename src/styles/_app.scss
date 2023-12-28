@@ -240,39 +240,62 @@ div[id="single-spa-application:@sapiencia/funds"] {
     flex-direction: column;
     align-items: center;
 
+    .container-actions {
+      width: 95%;
+      display: flex;
+      flex-direction: column;
+    }
+
     .agg-item {
       order: 2;
       width: 100%;
       margin-top: 5px;
+      margin-left: 0px;
       text-align: center;
-
-      .title-button {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 10px;
-      }
     }
 
     .clean-button {
       order: 1;
       width: 100%;
       text-align: center;
+      margin-left: 0px;
+    }
+
+    .button-save {
+      order: 1;
+      width: 100%;
+      background-color: #533893;
+      display: flex;
+      padding: 12px 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+      margin-top: 24px;
+    }
+
+    .button-save-container-display-percentage .button-save {
+      order: 1;
+      width: 100%;
+      /* Ocupar todo el ancho en modo responsive */
+      background-color: #533893;
+      padding: 12px 16px;
+      margin-top: 14px;
+      margin-bottom: 0;
+      margin-left: 0;
+      margin-right: 0;
     }
 
     .search-button {
       order: 0;
-      width: 100%;
-      text-align: center;
-    }
-
-    .container-actions {
+      display: flex;
+      align-items: center;
       flex-direction: column;
-      width: auto;
-      margin-right: 0px;
+      text-align: center;
+      margin-bottom: -12px;
     }
+
   }
-
-
 
   @media (min-width: 769px) {
     .agg-item {
@@ -705,16 +728,16 @@ div[id="single-spa-application:@sapiencia/funds"] {
 // }
 
 .toggle-control input:checked~.size-normal:after {
-  left: 30px;
+  left: 32px;
 }
 
 .size-normal {
-  height: 32px;
+  height: 30px;
   width: 60px;
 }
 
 .size-normal:checked {
-  height: 32px;
+  height: 30px;
   width: 60px;
 }
 
@@ -722,7 +745,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   width: 25px;
   height: 25px;
   left: 0.313rem;
-  top: 4px;
+  top: 2px;
 }
 
 .toggle-control input:checked~.size-small:after {
@@ -743,7 +766,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   width: 12.55px;
   height: 12.55px;
   left: 0.313rem;
-  top: 2px;
+  top: 1.5px;
 }
 
 .toggle-control .control {

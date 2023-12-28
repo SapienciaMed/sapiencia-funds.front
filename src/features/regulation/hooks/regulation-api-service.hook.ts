@@ -7,13 +7,17 @@ import { ApiResponse } from "../../../common/utils/api-response";
 
 export const LIST_DATA_GRACE_PERIOD: { value: string; name: string }[] = [
   {
-    value: "from_date_return",
-    name: "Desde fecha de regreso al departamento",
+    value: "A01",
+    name: "Al culminar los estudios",
   },
   {
-    value: "after_last_turn",
-    name: "Después de último giro",
+    value: "A02",
+    name: "Desde fecha de regreso al departamento ",
   },
+  {
+    value:'A03',
+    name: 'Después de último giro'
+  }
 ];
 
 export function useRegulationApi() {
@@ -55,12 +59,8 @@ export function useRegulationApi() {
     return await get(`/api/v1/reglament/programs`);
   }
 
-  async function getPeriodsFromSapiencia(): Promise<
-    ApiResponse<IPeriodSapiencia[]>
-  > {
-    return await post<IPeriodSapiencia[]>(
-      `/api/v1/reglament-v2/get-periods-sapi`
-    );
+  async function getPeriodsFromSapiencia(): Promise<ApiResponse<IPeriodSapiencia[]>> {
+    return post('/api/v1/reglament-v2/get-periods-sapi')
   }
 
   return {

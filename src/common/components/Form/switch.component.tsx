@@ -128,7 +128,7 @@ const SwitchComponent = ({
         )}
       </div>
       {messageError({ idInput, errors, fieldArray }) && (
-        <p className="error-message bold not-margin-padding">
+        <p className="error-message not-margin-padding">
           {messageError({ idInput, errors, fieldArray })}
         </p>
       )}

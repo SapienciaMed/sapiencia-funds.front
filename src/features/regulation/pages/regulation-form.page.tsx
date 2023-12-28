@@ -29,7 +29,7 @@ const RegulationFormPage = ({ auth }) => {
     id,
     listPrograms,
     onlyView,
-    periodList,
+    arrayPeriod,
   } = useFormRegulation(auth);
   const [view, setView] = useState(0);
 
@@ -46,12 +46,12 @@ const RegulationFormPage = ({ auth }) => {
       </div>
       <Tabs view={view} />
 
-      <FormComponent id="regulationCreate" className="form-signIn">
+      <FormComponent id="regulationCreate" className="form-signIn" action={onSubmitRegulationForm}>
         {view === 0 && (
           <InitialSetup
             errors={errors}
             updateData={updateData}
-            periodList={periodList}
+            periodList={arrayPeriod}
             control={control}
             getValues={getValues}
             setValue={setValue}
@@ -60,7 +60,7 @@ const RegulationFormPage = ({ auth }) => {
             setToggleControl={setToggleControl}
             loading={loading}
             listPrograms={listPrograms}
-            onlyView={onlyView}
+            onlyView={onlyView == '1'} // Esta haciendo algo?
           />
         )}
         {view === 1 && (
@@ -79,7 +79,15 @@ const RegulationFormPage = ({ auth }) => {
           />
         )}
       </FormComponent>
-      {view === 2 && <Requirements onlyView={onlyView} />}
+      {view === 2 && (
+        <Requirements 
+          errors={errors}
+          updateData={updateData}
+          control={control}
+          getValues={getValues}
+          setValue={setValue}
+        />
+      )}
       <StepButtons view={view} setView={setView} />
       <Divider />
       <div className="buttonsActions">
@@ -91,8 +99,7 @@ const RegulationFormPage = ({ auth }) => {
         />
         <ButtonComponent
           value="Guardar"
-          form="form-signIn"
-          action={() => onSubmitRegulationForm()}
+          form="regulationCreate"
           type="submit"
           className="button-save disabled-black padding-button"
           disabled={onlyView ? true : false}

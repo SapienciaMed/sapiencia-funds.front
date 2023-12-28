@@ -1173,7 +1173,7 @@
   transition-duration: 0.2s;
 }
 .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before {
-  transform: translateX(1.25rem);
+  transform: translateX(0.9rem);
 }
 .p-inputswitch.p-focus .p-inputswitch-slider {
   outline: 0 none;
