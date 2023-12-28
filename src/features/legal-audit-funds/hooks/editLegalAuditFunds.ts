@@ -65,6 +65,7 @@ export const useEditLegalAuditFundsModal = (
     try {
       const endpoint = `/api/v1/legalized/update-commune-budget`;
       const resp = await put(endpoint, fullData);
+      await reloadTable({ announcementId });
 
       if (resp.operation.code === "FAIL") {
         return setMessage({
@@ -84,7 +85,6 @@ export const useEditLegalAuditFundsModal = (
         OkTitle: "Cerrar",
         onOk: async () => {
           setMessage({ show: false });
-          await reloadTable({ announcementId });
         },
         background: true,
       });
@@ -118,6 +118,15 @@ export const useEditLegalAuditFundsModal = (
     setValue("resource", formaterNumberToCurrency(rawValue));
     setResourceRaw(rawValue);
   }, []);
+
+  useEffect(() => {
+    const rawValueFromRow = parseFloat(row?.resource);
+    if (!isNaN(rawValueFromRow)) {
+      setValue("resource", formaterNumberToCurrency(rawValueFromRow));
+      setResourceRaw(rawValueFromRow);
+    }
+    setValue("update", new Date());
+  }, [row]);
 
   useEffect(() => {
     reset(row);
