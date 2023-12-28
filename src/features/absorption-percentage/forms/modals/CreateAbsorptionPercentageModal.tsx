@@ -73,17 +73,12 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               idInput="sceneryPercentage1"
               control={control}
               errors={errors}
-              label={
-                <>
-                  Escenario 1 <span>*</span>
-                </>
-              }
+              label={<>Escenario 1</>}
               classNameLabel="text-black big bold text-required"
               className="inputNumber-basic medium "
               mode="decimal"
               prefix="% "
               maxFractionDigits={2}
-              max={100}
               min={0}
             />
 
@@ -91,17 +86,12 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               idInput="sceneryPercentage2"
               control={control}
               errors={errors}
-              label={
-                <>
-                  Escenario 2 <span>*</span>
-                </>
-              }
+              label={<>Escenario 2</>}
               classNameLabel="text-black big bold text-required"
               className="inputNumber-basic medium "
               mode="decimal"
               prefix="% "
               maxFractionDigits={2}
-              max={100}
               min={0}
             />
           </div>
@@ -110,17 +100,12 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               idInput="sceneryPercentage3"
               control={control}
               errors={errors}
-              label={
-                <>
-                  Escenario 3 <span>*</span>
-                </>
-              }
+              label={<>Escenario 3</>}
               classNameLabel="text-black big bold text-required"
               className="inputNumber-basic medium "
               mode="decimal"
               prefix="% "
               maxFractionDigits={2}
-              max={100}
               min={0}
             />
             <InputComponent
