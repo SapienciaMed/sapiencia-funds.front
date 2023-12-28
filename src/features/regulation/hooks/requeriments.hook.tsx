@@ -86,7 +86,8 @@ const useRequerimentsHook = ({ getValues, setValue}: IRequerimentsHook) => {
     const objWithIdIndex = copyArr.findIndex((obj) => obj?.id === id);
     copyArr.splice(objWithIdIndex, 1);
     setData({ ...data, ...copyArr });
-    setValue('requirementsForReglament', data.dataTable);    
+    setValue('requirementsForReglament', data.dataTable);  
+    loadTableData()  
   };
 
   const changeSwitche = (id: number) => {
@@ -150,6 +151,19 @@ const useRequerimentsHook = ({ getValues, setValue}: IRequerimentsHook) => {
         }
     }
   ]
+
+  function loadTableData(searchCriteria?: object): void {
+    if (tableComponentRef.current) {
+      tableComponentRef.current.loadData(searchCriteria);
+    }
+  }
+
+  useEffect(() => {
+    loadTableData({
+        page: 1,
+        perPage: 100,
+    });
+  }, [])
 
   return {
     addItem,

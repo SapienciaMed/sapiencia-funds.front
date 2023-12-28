@@ -85,11 +85,11 @@ export interface IRegulation {
 
   //Tab siguiente, Aplica Condonación por Rendimiento Periodo
   applyCondonationPerformancePeriod?: number;
-  performancePeriodStructure?: IPerformanceStructure  //? Acá se guardará el String JSON
+  performancePeriodStructure?: IPerformanceStructure 
 
   //Tab siguiente, Aplica Condonación por Rendimiento Acumulado
   applyAccomulatedIncomeCondonation?: number;
-  accumulatedPerformanceDataTable?: IPerformanceStructure; //? Acá se guardará el String JSON
+  accumulatedPerformanceDataTable?: IPerformanceStructure; 
 
   //Información adicional de registro
   modifyUser?: string;

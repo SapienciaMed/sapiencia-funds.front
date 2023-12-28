@@ -10,6 +10,7 @@ import {
 } from "react-hook-form";
 import {
   IPerformanceStructure,
+  IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
@@ -23,9 +24,9 @@ interface ITableInitialConfiguration {
   setValue: UseFormSetValue<any>;
   idInput: 'socialServiceCondonationPercent' | 'knowledgeTransferCondonationPercent';
   isOpen: boolean;
-  getValues: UseFormGetValues<IRegulationSearch>;
+  getValues: UseFormGetValues<IRegulation>;
   onlyView: boolean;
-  dataRead: IPerformanceStructure;
+  dataRead: IRegulation;
 }
 const TableInitialConfiguration = ({
   title,

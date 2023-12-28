@@ -25,24 +25,14 @@ export const shemaFormRegulation = yup.object().shape({
       if (!isOpenPeriod[0]) return schema.required(MESSAGE_REQUIRED);
       return schema;
     }),
-  // theoreticalSemiannualPercent: yup
-  //   .number()
-  //   .typeError(MESSAGE_REQUIRED)
-  //   .required(MESSAGE_REQUIRED)
-  //   .min(1, greaterThan(1))
-  //   .max(100, lessThan(100))
-  //   .typeError(MESSAGE_REQUIRED)
-  //   .test("decimal-places", "Ingresa un número con dos decimales", (value) =>
-  //     /^-?\d+(\.\d{1,2})?$/.test(value.toString())
-  //   ),
-  applyTheoreticalSemester: yup.boolean().optional().nullable(),
+  applyTheoreticalSemiannualPercent: yup.boolean().optional().nullable(),
   theoreticalSemiannualPercent: yup
   .number()
   .nullable()
     .min(1, greaterThan(1))
     .max(100, lessThan(100))
-    .when("applyTheoreticalSemester",(applyTheoreticalSemester, schema) => {
-      if (applyTheoreticalSemester[0])
+    .when("applyTheoreticalSemiannualPercent",(applyTheoreticalSemiannualPercent, schema) => {
+      if (applyTheoreticalSemiannualPercent[0])
         return schema
           .required(MESSAGE_REQUIRED)
           .typeError(MESSAGE_REQUIRED)
@@ -56,8 +46,44 @@ export const shemaFormRegulation = yup.object().shape({
           );
       return schema;
     }),
-    
-
+  applyAcademicPerformancePercent: yup.boolean().optional().nullable(),
+  academicPerformancePercent: yup
+    .number()
+    .nullable()
+    .when("applyAcademicPerformancePercent", (applyAcademicPerformancePercent, schema) => {
+      if (applyAcademicPerformancePercent[0])
+        return schema
+          .required(MESSAGE_REQUIRED)
+          .typeError(MESSAGE_REQUIRED)
+          .min(1, greaterThan(1))
+          .max(100, lessThan(100))
+          .typeError(MESSAGE_REQUIRED)
+          .test(
+            "decimal-places",
+            "Ingresa un número con dos decimales",
+            (value) => /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+          );
+      return schema;
+    }),
+  applyRequirementsPercent: yup.boolean().optional().nullable(),
+  requirementsPercent: yup
+    .number()
+    .nullable()
+    .when("applyRequirementsPercent", (applyRequirementsPercent, schema) => {
+      if (applyRequirementsPercent[0])
+        return schema
+          .required(MESSAGE_REQUIRED)
+          .typeError(MESSAGE_REQUIRED)
+          .min(1, greaterThan(1))
+          .max(100, lessThan(100))
+          .typeError(MESSAGE_REQUIRED)
+          .test(
+            "decimal-places",
+            "Ingresa un número con dos decimales",
+            (value) => /^-?\d+(\.\d{1,2})?$/.test(value.toString())
+          );
+      return schema;
+    }),
   applySocialService: yup.boolean().optional().nullable(),
   socialServicePercent: yup
     .number()

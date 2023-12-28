@@ -99,25 +99,25 @@ const Requirements = ({ updateData, errors, control, setValue, getValues }: IReq
                   value="Agregar"
                   type="submit"
                   action={() => addItem()}
-                  className="button-save disabled-black padding-button"
+                  className="button-save disabled-black padding-button btn-back"
                 />
               </div>
+          {
+            data.dataTable.length > 0 && 
+              <div className="mt-16px">
+                <TotalTableComponent
+                  ref={tableComponentRef}
+                  data={data.dataTable}
+                  columns={tableColumns}
+                  isShowModal={true}
+                  secondaryTitle='Requisitos creados'
+                  isMobil={false}
+                  classSizeTable='size-table-wd-150' 
+                />
+            </div>
+          } 
         </div>
       </div>
-      {
-        data.dataTable.length > 0 && 
-          <div className="padding-form">
-            <TotalTableComponent
-              ref={tableComponentRef}
-              data={data.dataTable}
-              columns={tableColumns}
-              isShowModal={true}
-              secondaryTitle='Requisitos creados'
-              isMobil={false}
-              classSizeTable="size-table-wd-content"  
-            />
-          </div>
-      } 
     </>
   );
 };
