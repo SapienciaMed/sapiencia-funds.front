@@ -116,7 +116,6 @@ const InitialSetup = ({
           />
         </div>
       </div>
-
       <div>
         <Acordion
           title="¿Aplica porcentaje de pago teórico semestral?"
@@ -268,9 +267,12 @@ const InitialSetup = ({
                 );
               }}
             />
-             {/* <SelectComponentOld
+             <SelectComponentOld
                 idInput={"socialServiceCondonationType"}
-                setValue={(e) => setValue("socialServiceCondonationType", e)}
+                setValue={(value) => {
+                  if (value != 'Parcial') setValue('socialServiceCondonationPercent', null)
+                  setValue("socialServiceCondonationType", value)
+                }}
                 value={getValues('socialServiceCondonationType')}
                 errors={errors}
                 data={[
@@ -280,12 +282,12 @@ const InitialSetup = ({
                 ]}
                 label="Tipo de condonación"
                 className="select-basic select-disabled-list medium"
-                classNameLabel="text-black big font-500 tex-required"
+                classNameLabel="text-black big font-500 text-required"
                 placeholder="Seleccionar"
 
-              /> */}
+              />
           </div>
-          {/* {
+          {
             getValues('socialServiceCondonationType') === 'Parcial' && (
               <div>
                 <TableInitialConfiguration
@@ -299,7 +301,7 @@ const InitialSetup = ({
                 />
               </div>
             )
-          } */}
+          }
         </Acordion>
       </div>
       <div>
@@ -386,7 +388,40 @@ const InitialSetup = ({
                 );
               }}
             />
+             <SelectComponentOld
+                idInput={"knowledgeTransferCondonationType"}
+                setValue={(value) => {
+                  if (value != 'Parcial') setValue('knowledgeTransferCondonationPercent', null)
+                  setValue("knowledgeTransferCondonationType", value)
+                }}
+                value={getValues('knowledgeTransferCondonationType')}
+                errors={errors}
+                data={[
+                  { name: "Total", value: "total" },
+                  { name: "Parcial", value: "Parcial" },
+                ]}
+                label="Tipo de condonación"
+                className="select-basic select-disabled-list medium"
+                classNameLabel="text-black big font-500 text-required"
+                placeholder="Seleccionar"
+
+              />
           </div>
+          {
+            getValues('knowledgeTransferCondonationType') === 'Parcial' && (
+              <div>
+                <TableInitialConfiguration
+                  dataRead={updateData}
+                  isOpen={toggleControl?.applySocialService}
+                  idInput="knowledgeTransferCondonationPercent"
+                  setValue={setValue}
+                  title="Agregar porcentaje de condonación parcial"
+                  getValues={getValues}
+                  onlyView={onlyView}
+                />
+              </div>
+            )
+          }
         </Acordion>
       </div>
       <div>
@@ -454,7 +489,7 @@ const InitialSetup = ({
               setValue={(e) => setValue("graceDateApplication", e)}
               value={getValues().graceDateApplication}
               errors={errors}
-              data={LIST_DATA_GRACE_PERIOD ? LIST_DATA_GRACE_PERIOD : []} //pendiente
+              data={LIST_DATA_GRACE_PERIOD || []}
               label="Fecha de aplicación"
               className="select-basic select-disabled-list medium"
               classNameLabel="text-black big font-500 tex-required"

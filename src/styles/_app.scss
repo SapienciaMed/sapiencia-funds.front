@@ -705,16 +705,16 @@ div[id="single-spa-application:@sapiencia/funds"] {
 // }
 
 .toggle-control input:checked~.size-normal:after {
-  left: 30px;
+  left: 32px;
 }
 
 .size-normal {
-  height: 32px;
+  height: 30px;
   width: 60px;
 }
 
 .size-normal:checked {
-  height: 32px;
+  height: 30px;
   width: 60px;
 }
 
@@ -722,7 +722,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   width: 25px;
   height: 25px;
   left: 0.313rem;
-  top: 4px;
+  top: 2px;
 }
 
 .toggle-control input:checked~.size-small:after {
@@ -743,7 +743,7 @@ div[id="single-spa-application:@sapiencia/funds"] {
   width: 12.55px;
   height: 12.55px;
   left: 0.313rem;
-  top: 2px;
+  top: 1.5px;
 }
 
 .toggle-control .control {

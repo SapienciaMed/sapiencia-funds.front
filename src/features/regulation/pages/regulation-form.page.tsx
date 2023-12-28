@@ -79,7 +79,15 @@ const RegulationFormPage = ({ auth }) => {
           />
         )}
       </FormComponent>
-      {view === 2 && <Requirements onlyView={onlyView} />}
+      {view === 2 && (
+        <Requirements 
+          errors={errors}
+          updateData={updateData}
+          control={control}
+          getValues={getValues}
+          setValue={setValue}
+        />
+      )}
       <StepButtons view={view} setView={setView} />
       <Divider />
       <div className="buttonsActions">

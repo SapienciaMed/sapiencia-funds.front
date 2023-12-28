@@ -29,10 +29,9 @@ export default function useFormRegulation(auth) {
   const {
     handleSubmit,
     register,
-    control: control,
+    control,
     setValue,
     getValues,
-    reset,
     watch,
     formState: { errors },
   } = useForm<IRegulation>({
@@ -295,7 +294,6 @@ export default function useFormRegulation(auth) {
     id,
     listPrograms,
     onlyView,
-    reset,
     periodList,
   };
 }

@@ -14,14 +14,14 @@ import {
 } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
 
-const INIT_DATA = { percentCondonation: "", dataTable: [] };
-const INIT_TEMP_DATA = { maximumHourPercent: "", minimumHourPercent: "", condonationPercent: "" };
+const INIT_DATA = { dataTable: []};
+const INIT_TEMP_DATA = { maximumHourPercent: '', minimumHourPercent: '', condonationPercent: '' };
 const DEFAULT_MESSAGE = "Campo requerido";
 
 interface ITableInitialConfiguration {
   title: string;
-  setValue: UseFormSetValue<IRegulationSearch>;
-  idInput: 'socialServiceCondonationPercent' | 'accumulatedPerformanceDataTable';
+  setValue: UseFormSetValue<any>;
+  idInput: 'socialServiceCondonationPercent' | 'knowledgeTransferCondonationPercent';
   isOpen: boolean;
   getValues: UseFormGetValues<IRegulationSearch>;
   onlyView: boolean;
@@ -39,7 +39,7 @@ const TableInitialConfiguration = ({
   const [data, setData] = useState(INIT_DATA);
   const [tempData, setTempData] = useState(INIT_TEMP_DATA); 
   const [messageError, setMessageError] = useState({})
-
+  
   useEffect(() => {
     let getData
     if (onlyView) {  // No se esta usando 
@@ -56,12 +56,13 @@ const TableInitialConfiguration = ({
     }
   }, [isOpen]);
 
+
   const deleteItem = (id: string) => {
     const copyArr = data.dataTable;
-    const objWithIdIndex = copyArr.findIndex((obj) => obj.id === id);
+    const objWithIdIndex = copyArr.findIndex((obj) => obj?.id === id);
     copyArr.splice(objWithIdIndex, 1);
-    setData({ ...data, dataTable: copyArr });
-    setValue(idInput, data);    
+    setData({ ...data, ...copyArr });
+    setValue(idInput, data.dataTable);    
   };
 
   const addItem = () => {
@@ -77,13 +78,13 @@ const TableInitialConfiguration = ({
       }
     };
 
-    if (tempData.condonationPercent.length === 0 || tempData.minimumHourPercent.length === 0 || tempData.maximumHourPercent.length === 0) {
+    if (tempData.condonationPercent == '' || tempData.minimumHourPercent == '' || tempData.maximumHourPercent == '') {
       validateField('condonationPercent', tempData.condonationPercent, DEFAULT_MESSAGE);
       validateField('minimumHourPercent', tempData.minimumHourPercent, DEFAULT_MESSAGE);
       validateField('maximumHourPercent', tempData.maximumHourPercent, DEFAULT_MESSAGE);
     } else if(parseInt(tempData.condonationPercent) < 0 || parseInt(tempData.condonationPercent) > 100){
       setMessageError({
-        ...({'percent':{
+        ...({'condonationPercent':{
             "type": "optionality",
             "message": "El campo no puede ser mayor a 100 y menor que 0"
           }
@@ -99,12 +100,14 @@ const TableInitialConfiguration = ({
       })
     } else if(parseInt(tempData.minimumHourPercent) < 0 || parseInt(tempData.minimumHourPercent) > 100){
       setMessageError({
-        ...({'endAverage':{
+        ...({'minimumHourPercent':{
             "type": "optionality",
             "message": "El campo no puede ser mayor a 100 y menor que cero"
           }
         })
       })
+    }else if(validateRanges()){
+      return
     } else {
       setMessageError({})
       setData({
@@ -113,22 +116,46 @@ const TableInitialConfiguration = ({
           ...data.dataTable,
           { ...tempData, id: new Date().toISOString() },
         ],
+        
       });
     setTempData(INIT_TEMP_DATA);
-    setTimeout(() => {
-      setValue(
-        idInput,
-        {
-          ...data,
-          dataTable: [
-            ...data.dataTable,
-            { ...tempData},
-          ],
-        },
-      );
-    }, 500);
     }
   }
+
+  useEffect(() => {
+   if( data?.dataTable?.length > 0 ){
+    setValue( idInput, [ ...data.dataTable ]);
+   }
+  },[data])
+
+  const validateRanges = () => {
+    let isValidRange = false;
+    data.dataTable.forEach((range) => {
+      if (
+        tempData.minimumHourPercent >= range.minimumHourPercent && tempData.minimumHourPercent <= range.maximumHourPercent
+      ) {
+        isValidRange = true;
+        setMessageError({
+          ...messageError,
+          'minimumHourPercent':{
+            "type": "optionality",
+            "message": "No se permite agregar el promedio porque se está solapando con otro ya ingresado"
+          }
+        })
+      }
+      if (tempData.maximumHourPercent >= range.minimumHourPercent && tempData.maximumHourPercent <= range.maximumHourPercent) {
+        isValidRange = true;
+        setMessageError({
+          ...messageError,
+          'maximumHourPercent':{
+            "type": "optionality",
+            "message": "No se permite agregar el promedio porque se está solapando con otro ya ingresado"
+          }
+        })
+      }
+    });
+    return isValidRange;
+  };
 
   const validateDecimales = (number) => {
     const parts = number.toString().split(".");
@@ -140,21 +167,7 @@ const TableInitialConfiguration = ({
     <div>
       <section className="container-form-children p-24 ">
         <label className={"text-black biggest font-500"}>{title}</label>
-        <div className="dynamic-grid mb-16px mt-16px">
-          <InputComponent
-            idInput="maximumHourPercent"
-            typeInput="number"
-            onChange={(e) => {
-              if (validateDecimales(e.target.value)) return;
-              setTempData({ ...tempData, maximumHourPercent: e.target.value });
-            }}
-            value={tempData.maximumHourPercent}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
-            direction={EDirection.column}
-            label="% horas máximas"
-            errors={messageError}
-          />
+        <div className="dynamic-grid mb-16px mt-16px"> 
           <InputComponent
             idInput="minimumHourPercent"
             typeInput="number"
@@ -163,10 +176,24 @@ const TableInitialConfiguration = ({
               setTempData({ ...tempData, minimumHourPercent: e.target.value });
             }}
             value={tempData.minimumHourPercent}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
+            className="input-basic medium"
+            classNameLabel="text-black big text-required font-500"
             direction={EDirection.column}
             label="% horas mínimas"
+            errors={messageError}
+          />
+           <InputComponent
+            idInput="maximumHourPercent"
+            typeInput="number"
+            onChange={(e) => {
+              if (validateDecimales(e.target.value)) return;
+              setTempData({ ...tempData, maximumHourPercent: e.target.value });
+            }}
+            value={tempData.maximumHourPercent}
+            className="input-basic medium"
+            classNameLabel="text-black big text-required font-500"
+            direction={EDirection.column}
+            label="% horas máximas"
             errors={messageError}
           />
           <InputComponent
@@ -177,8 +204,8 @@ const TableInitialConfiguration = ({
               setTempData({ ...tempData, condonationPercent: e.target.value });
             }}
             value={tempData.condonationPercent}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
+            className="input-basic medium"
+            classNameLabel="text-black big text-required font-500"
             direction={EDirection.column}
             label="% Condonado"
             errors={messageError}
@@ -196,7 +223,8 @@ const TableInitialConfiguration = ({
           </div>
         </div>
       </section>
-      {data?.dataTable?.length > 0 && (
+
+        {data?.dataTable?.length > 0 && (
           <div className="containerJsonTable">
             <div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -239,7 +267,7 @@ const TableInitialConfiguration = ({
                   flexDirection: "column",
                 }}
               >
-                {data?.dataTable?.map((item) => {
+                {data?.dataTable.map((item) => {
                   return (
                     <div
                       style={{
@@ -262,7 +290,7 @@ const TableInitialConfiguration = ({
                           style={{ padding: "16px 23.5px 16px 23.5px" }}
                           className="text-black  biggest"
                         >
-                          {item.initialAverage}
+                          {item.minimumHourPercent}%
                         </label>
                       </div>
                       <div
@@ -276,7 +304,7 @@ const TableInitialConfiguration = ({
                           style={{ padding: "14px 33px 14px 33px" }}
                           className="text-black  biggest"
                         >
-                          {item.endAverage}
+                          {item.maximumHourPercent}%
                         </label>
                       </div>
                       <div
@@ -290,7 +318,7 @@ const TableInitialConfiguration = ({
                           style={{ padding: "14px 33px 14px 33px" }}
                           className="text-black  biggest"
                         >
-                          {item.percent}%
+                          {item.condonationPercent}%
                         </label>
                       </div>
                       <div

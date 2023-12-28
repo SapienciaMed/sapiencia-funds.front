@@ -81,14 +81,25 @@ export const shemaFormRegulation = yup.object().shape({
     .number()
     .nullable()
     .when("applySocialService", (applySocialService, schema) => {
-      if (applySocialService[0])
+      if (applySocialService[0]){
         return schema
           .required(MESSAGE_REQUIRED)
           .min(1, greaterThan(1))
           .max(999, lessThan(999))
           .typeError(MESSAGE_REQUIRED);
+        }
       return schema;
     }),
+  socialServiceCondonationType: yup
+  .string()
+  .nullable()
+  .when("applySocialService", (applySocialService, schema) => {
+    if (applySocialService[0]){
+      return schema
+        .required(MESSAGE_REQUIRED)
+      }
+    return schema;
+  }),
   applyKnowledgeTransfer: yup.boolean().optional().nullable(),
   knowledgeTransferPercent: yup
     .number()
@@ -119,6 +130,16 @@ export const shemaFormRegulation = yup.object().shape({
           .typeError(MESSAGE_REQUIRED);
       return schema;
     }),
+  knowledgeTransferCondonationType: yup
+  .string()
+  .nullable()
+  .when("applyKnowledgeTransfer", (applyKnowledgeTransfer, schema) => {
+    if (applyKnowledgeTransfer[0]){
+      return schema
+        .required(MESSAGE_REQUIRED)
+      }
+    return schema;
+  }),
   applyGracePeriod: yup.boolean().optional().nullable(),
   gracePeriodMonths: yup
     .number()
