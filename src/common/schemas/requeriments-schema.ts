@@ -8,13 +8,9 @@ const greaterThan = (number: number) =>
 
 export const createRequeriment = yup.object().shape({
   status: yup.boolean().optional().nullable(),
-  percent: yup
-    .number()
-    .min(1, greaterThan(1))
-    .max(100, lessThan(100))
-    .optional()
-    .transform((value) => (isNaN(value) ? undefined : value)) // Transforma NaN a undefined
-    .nullable(), // Acepta valores nulos (null)
+  mandatoryFor: yup
+    .string()
+    .required(MESSAGE_REQUIRED),
   description: yup
     .string()
     .required()

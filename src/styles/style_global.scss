@@ -57,11 +57,34 @@
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 16px 16px;
     }
+
+    &.grid-colum-requirent{
+        grid-template-columns: 0.1fr 0.5fr 1fr;
+        grid-gap: 0.5rem 1rem;
+    }
     
 }
-  
+
 .no-margin{
     margin: 0px;
+}
+
+.switch-new{    
+    width: 1.9rem !important;
+    height: 1rem !important;
+    .p-inputswitch-slider{
+        box-shadow: none !important;
+        border: none;
+
+        &:before{
+            width: 11.5px !important;
+            height: 11.5px !important;
+            top: 0.1rem !important;
+            left: 0.16rem !important;
+            margin-top: 0 !important;
+        }
+        
+    }
 }
 
 .title-area-2{
@@ -193,7 +216,7 @@
 .dynamic-grid{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 0 16px;
+    grid-gap: 16px;
     align-items: stretch;
 
     &.gap-15 {
@@ -296,7 +319,6 @@
     }
 }
 
-//650px
 @media (max-width: 750px) {
     .display-align-flex-center{
         flex-direction: column
@@ -304,6 +326,13 @@
 
     .card-user{
         width: 100%;
+    }
+
+    .grid-form-3-container-area{
+        &.grid-colum-requirent{
+            grid-template-columns: 0.1fr 1fr;
+            grid-gap: 0.3rem;
+        }
     }
 }
 

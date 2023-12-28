@@ -1,11 +1,10 @@
-import { InputComponent } from "../../../common/components/Form";
+import { InputComponent, SelectComponent } from "../../../common/components/Form";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { Controller } from "react-hook-form";
 import Acordion from "../components/acordion";
 import { LIST_DATA_GRACE_PERIOD } from "../hooks/regulation-api-service.hook";
 import { EDirection } from "../../../common/constants/input.enum";
-import TableJson from "../components/tableJson";
 import TableInitialConfiguration from "../components/table-initial-configuration";
 
 const InitialSetup = ({
@@ -23,7 +22,8 @@ const InitialSetup = ({
   onlyView,
 }) => {
   if (loading) return <></>;
-  const isDisabled = onlyView || (updateData?.program ? true : false);
+  const isDisabled = onlyView || !!updateData?.program ;
+  
   return (
     <div className="container-form p-24">
       <div className="grid-form-2-container mb-16px">
@@ -37,7 +37,7 @@ const InitialSetup = ({
           }
           errors={errors}
           disabled={isDisabled}
-          data={listPrograms.length ? listPrograms : []}
+          data={listPrograms ?? []}
           label="Programa"
           className="select-basic select-disabled-list input-size"
           classNameLabel="text-black biggest font-500 text-required"
@@ -49,17 +49,11 @@ const InitialSetup = ({
           idInput={"initialPeriod"}
           errors={errors}
           setValue={(e) => setValue("initialPeriod", e)}
-          value={
-            updateData?.initialPeriod
-              ? updateData?.initialPeriod
-              : getValues().initialPeriod
+          value={ updateData?.initialPeriod
+            ? updateData?.initialPeriod
+            : getValues().initialPeriod
           }
-          data={periodList.map((i) => {
-            return {
-              name: i.name,
-              value: i.name,
-            };
-          })}
+          data={periodList ?? []}
           disabled={onlyView}
           label="Periodo inicial de convocatoria"
           className="select-basic select-disabled-list input-size"
@@ -92,21 +86,11 @@ const InitialSetup = ({
             errors={errors}
             disabled={onlyView || watch().isOpenPeriod}
             setValue={(e) => setValue("endPeriod", e)}
-            value={
-              updateData?.endPeriod
-                ? updateData?.endPeriod
-                : getValues().endPeriod
+            value={ updateData?.endPeriod
+              ? updateData?.endPeriod
+              : getValues().endPeriod
             }
-            data={
-              watch().isOpenPeriod
-                ? []
-                : periodList.map((i) => {
-                    return {
-                      name: i.name,
-                      value: i.name,
-                    };
-                  })
-            } //pendiente = ¿porque pendiente? lo coloco el desarrollador anterior
+            data={periodList ?? []} 
             label="Periodo final de convocatoria"
             className="select-basic select-disabled-list input-size"
             classNameLabel={`text-black biggest font-500 ${
@@ -116,17 +100,13 @@ const InitialSetup = ({
           />
         </div>
       </div>
-
-      <div>
+      <section>
         <Acordion
           title="¿Aplica porcentaje de pago teórico semestral?"
           isOpen={toggleControl?.applyTheoreticalSemiannualPercent}
           onClick={() => {
             if (onlyView) return;
-            setValue(
-              "applyTheoreticalSemiannualPercent",
-              !getValues().applyTheoreticalSemiannualPercent
-            );
+            setValue("applyTheoreticalSemiannualPercent", !getValues().applyTheoreticalSemiannualPercent);
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
@@ -137,7 +117,7 @@ const InitialSetup = ({
           }}
           switchElement={
             <SwitchComponent
-              idInput={"applyTheoreticalSemester"}
+              idInput={"applyTheoreticalSemiannualPercent"}
               errors={errors}
               disabled={onlyView}
               control={control}
@@ -145,9 +125,9 @@ const InitialSetup = ({
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  applyTheoreticalSemester:
-                    !getValues().applyTheoreticalSemester,
+                  applyTheoreticalSemiannualPercent: !getValues().applyTheoreticalSemiannualPercent,
                 });
+                
               }}
               onChange={() => {
                 setValue("theoreticalSemiannualPercent", null);
@@ -184,8 +164,137 @@ const InitialSetup = ({
             />
           </div>
         </Acordion>
-      </div>
-      <div>
+      </section>
+      <section>
+        <Acordion
+          title="¿Aplica porcentaje de rendimiento académico?"
+          isOpen={toggleControl?.applyAcademicPerformancePercent}
+          onClick={() => {
+            if (onlyView) return;
+            setValue("applyAcademicPerformancePercent", !getValues().applyAcademicPerformancePercent);
+            setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                applyAcademicPerformancePercent: getValues().applyAcademicPerformancePercent,
+              });
+            }, 400);
+            setValue("academicPerformancePercent", null);
+          }}
+          switchElement={
+            <SwitchComponent
+              idInput={"applyAcademicPerformancePercent"}
+              errors={errors}
+              disabled={onlyView}
+              control={control}
+              onClick={() => {
+                if (onlyView) return;
+                setToggleControl({
+                  ...toggleControl,
+                  applyAcademicPerformancePercent: !getValues().applyAcademicPerformancePercent,
+                });
+              }}
+              onChange={() => {
+                setValue("academicPerformancePercent", null);
+              }}
+              size="small"
+              className="select-basic select-disabled-list input-size"
+              classNameLabel="text-black biggest font-500"
+              direction={EDirection.other}
+            />
+          }
+        >
+          <div className="grid-form-3-container gap-15">
+            <Controller
+              control={control}
+              name={"academicPerformancePercent"}
+              defaultValue={updateData?.academicPerformancePercent}
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput={field.name}
+                    errors={errors}
+                    disabled={onlyView ? true : false}
+                    defaultValue={`${updateData?.academicPerformancePercent}`}
+                    typeInput="text"
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    value={field?.value || ""}
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Porcentaje de rendimiento académico"
+                  />
+                );
+              }}
+            />
+          </div>
+        </Acordion>
+      </section>
+      <section>
+        <Acordion
+          title="¿Aplica porcentaje de requisitos?"
+          isOpen={toggleControl?.applyRequirementsPercent}
+          onClick={() => {
+            if (onlyView) return;
+            setValue("applyRequirementsPercent", !getValues().applyRequirementsPercent );
+            setTimeout(() => {
+              setToggleControl({
+                ...toggleControl,
+                applyRequirementsPercent: getValues().applyRequirementsPercent,
+              });
+            }, 400);
+            setValue("requirementsPercent", null);
+          }}
+          switchElement={
+            <SwitchComponent
+              idInput={"applyRequirementsPercent"}
+              errors={errors}
+              disabled={onlyView}
+              control={control}
+              onClick={() => {
+                if (onlyView) return;
+                setToggleControl({
+                  ...toggleControl,
+                  applyRequirementsPercent:
+                    !getValues().applyRequirementsPercent,
+                });
+              }}
+              onChange={() => {
+                setValue("requirementsPercent", null);
+              }}
+              size="small"
+              className="select-basic select-disabled-list input-size"
+              classNameLabel="text-black biggest font-500"
+              direction={EDirection.other}
+            />
+          }
+        >
+          <div className="grid-form-3-container gap-15">
+            <Controller
+              control={control}
+              name={"requirementsPercent"}
+              defaultValue={updateData?.requirementsPercent}
+              render={({ field }) => {
+                return (
+                  <InputComponent
+                    idInput={field.name}
+                    errors={errors}
+                    disabled={onlyView}
+                    defaultValue={`${updateData?.requirementsPercent}`}
+                    typeInput="text"
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    value={field?.value || ""}
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Porcentaje de requisitos"
+                  />
+                );
+              }}
+            />
+          </div>
+        </Acordion>
+      </section>
+      <section>
         <Acordion
           title="¿Aplica servicio social?"
           isOpen={toggleControl?.applySocialService}
@@ -200,6 +309,8 @@ const InitialSetup = ({
             }, 400);
             setValue("socialServicePercent", null);
             setValue("socialServiceHours", null);
+            // Valor por defecto al select Tipo de condonación
+            getValues().applySocialService ? setValue('socialServiceCondonationType','Total') : setValue('socialServiceCondonationType','')
           }}
           switchElement={
             <SwitchComponent
@@ -268,24 +379,28 @@ const InitialSetup = ({
                 );
               }}
             />
-             {/* <SelectComponentOld
-                idInput={"socialServiceCondonationType"}
-                setValue={(e) => setValue("socialServiceCondonationType", e)}
-                value={getValues('socialServiceCondonationType')}
-                errors={errors}
-                data={[
-                  { name: "Total", value: "total" },
-                  { name: "Parcial", value: "Parcial" },
-                  { name: 'Por SS Prestado por giro', value: 'Por SS Prestado por giro'}
-                ]}
+              <SelectComponent
+                idInput={`socialServiceCondonationType`}
+                control={control}
                 label="Tipo de condonación"
                 className="select-basic select-disabled-list medium"
-                classNameLabel="text-black big font-500 tex-required"
-                placeholder="Seleccionar"
-
-              /> */}
+                classNameLabel="text-black big text-required"
+                placeholder={"Seleccionar"}
+                data={[
+                  { id: 1, name: "Total", value: "Total" },
+                  { id: 2, name: "Parcial", value: "Parcial" },
+                  { id: 3, name: "Por SS Prestado por giro", value: "Por SS Prestado por giro" },
+                ]}
+                filter={true}
+                fieldArray={true}
+                errors={errors}
+                disabled={onlyView}
+                onChange={(value) => {
+                  if (value != 'Parcial') setValue('socialServiceCondonationPercent', [])
+                }}
+              />
           </div>
-          {/* {
+          {
             getValues('socialServiceCondonationType') === 'Parcial' && (
               <div>
                 <TableInitialConfiguration
@@ -299,19 +414,16 @@ const InitialSetup = ({
                 />
               </div>
             )
-          } */}
+          }
         </Acordion>
-      </div>
-      <div>
+      </section>
+      <section>
         <Acordion
           title="¿Aplica trasferencia de conocimiento?"
           isOpen={toggleControl?.applyKnowledgeTransfer}
           onClick={() => {
             if (onlyView) return;
-            setValue(
-              "applyKnowledgeTransfer",
-              !getValues().applyKnowledgeTransfer
-            );
+            setValue( "applyKnowledgeTransfer", !getValues().applyKnowledgeTransfer );
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
@@ -320,6 +432,8 @@ const InitialSetup = ({
             }, 400);
             setValue("knowledgeTransferPercent", undefined);
             setValue("knowledgeTransferHours", undefined);
+            // Valor por defecto al select Tipo de condonación
+            getValues().applyKnowledgeTransfer ? setValue('knowledgeTransferCondonationType','Total') : setValue('knowledgeTransferCondonationType','') 
           }}
           switchElement={
             <SwitchComponent
@@ -386,10 +500,44 @@ const InitialSetup = ({
                 );
               }}
             />
+              <SelectComponent
+                idInput={`knowledgeTransferCondonationType`}
+                control={control}
+                label="Tipo de condonación"
+                className="select-basic select-disabled-list medium"
+                classNameLabel="text-black big text-required"
+                placeholder={"Seleccionar"}
+                data={[
+                  { id: 1, name: "Total", value: "Total" },
+                  { id: 2, name: "Parcial", value: "Parcial" },
+                ]}
+                filter={true}
+                fieldArray={true}
+                errors={errors}
+                disabled={onlyView}
+                onChange={(value) => {
+                  if (value != 'Parcial') setValue('knowledgeTransferCondonationPercent', [])
+                }}
+              />
           </div>
+          {
+            getValues('knowledgeTransferCondonationType') === 'Parcial' && (
+              <div>
+                <TableInitialConfiguration
+                  dataRead={updateData}
+                  isOpen={toggleControl?.applySocialService}
+                  idInput="knowledgeTransferCondonationPercent"
+                  setValue={setValue}
+                  title="Agregar porcentaje de condonación parcial"
+                  getValues={getValues}
+                  onlyView={onlyView}
+                />
+              </div>
+            )
+          }
         </Acordion>
-      </div>
-      <div>
+      </section>
+      <section>
         <Acordion
           title="¿Aplica periodo de gracia?"
           isOpen={toggleControl?.applyGracePeriod}
@@ -454,7 +602,7 @@ const InitialSetup = ({
               setValue={(e) => setValue("graceDateApplication", e)}
               value={getValues().graceDateApplication}
               errors={errors}
-              data={LIST_DATA_GRACE_PERIOD ? LIST_DATA_GRACE_PERIOD : []} //pendiente
+              data={LIST_DATA_GRACE_PERIOD || []}
               label="Fecha de aplicación"
               className="select-basic select-disabled-list medium"
               classNameLabel="text-black big font-500 tex-required"
@@ -463,17 +611,14 @@ const InitialSetup = ({
             />
           </div>
         </Acordion>
-      </div>
-      <div>
+      </section>
+      <section>
         <Acordion
           title="¿Aplica suspensiones continuas?"
           isOpen={toggleControl?.applyContinuousSuspension}
           onClick={() => {
             if (onlyView) return;
-            setValue(
-              "applyContinuousSuspension",
-              !getValues().applyContinuousSuspension
-            );
+            setValue( "applyContinuousSuspension", !getValues().applyContinuousSuspension );
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
@@ -529,17 +674,14 @@ const InitialSetup = ({
             />
           </div>
         </Acordion>
-      </div>
-      <div>
+      </section>
+      <section>
         <Acordion
           title="¿Aplica suspensiones discontinuas?"
           isOpen={toggleControl?.applyDiscontinuousSuspension}
           onClick={() => {
             if (onlyView) return;
-            setValue(
-              "applyDiscontinuousSuspension",
-              !getValues().applyDiscontinuousSuspension
-            );
+            setValue( "applyDiscontinuousSuspension", !getValues().applyDiscontinuousSuspension );
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
@@ -595,17 +737,14 @@ const InitialSetup = ({
             />
           </div>
         </Acordion>
-      </div>
-      <div>
+      </section>
+      <section>
         <Acordion
           title="¿Aplica suspensiones especiales?"
           isOpen={toggleControl?.applySpecialSuspensions}
           onClick={() => {
             if (onlyView) return;
-            setValue(
-              "applySpecialSuspensions",
-              !getValues().applySpecialSuspensions
-            );
+            setValue( "applySpecialSuspensions", !getValues().applySpecialSuspensions );
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
@@ -659,8 +798,8 @@ const InitialSetup = ({
             />
           </div>
         </Acordion>
-      </div>
-      <div>
+      </section>
+      <section>
         <Acordion
           title="¿Aplica prórroga?"
           isOpen={toggleControl?.applyExtension}
@@ -720,7 +859,7 @@ const InitialSetup = ({
             />
           </div>
         </Acordion>
-      </div>
+      </section>
     </div>
   );
 };

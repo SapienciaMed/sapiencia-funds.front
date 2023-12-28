@@ -1,197 +1,179 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../common/contexts/app.context";
-import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
-import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
-import { createRequeriment } from "../../../common/schemas/requeriments-schema";
 import { useRequerimentsApi } from "./requeriments-api-service.hook";
-import { useNavigate, useParams } from "react-router-dom";
-import { IRequeriments } from "../../../common/interfaces/regulation";
-import { useForm } from "react-hook-form";
-import { EResponseCodes } from "../../../common/constants/api.enum";
-import {
-  ITableAction,
-  ITableElement,
-} from "../../../common/interfaces/table.interfaces";
-import SwitchComponent from "../../../common/components/Form/switch.component";
-import { useRegulationApi } from "./regulation-api-service.hook";
+import { IRegulation, IRequirementsForReglament } from "../../../common/interfaces/regulation";
+import { Control, FieldErrors, UseFormGetValues, UseFormResetField, UseFormSetValue, useForm } from "react-hook-form";
+import {ITableElement } from "../../../common/interfaces/table.interfaces";
+import * as Icons from "react-icons/fa";
+import { SwitchNewComponent } from "../../../common/components/Form/switch-new.component";
 
-const useRequerimentsHook = (setOnlyView, idSearch) => {
-  const { setMessage, authorization } = useContext(AppContext);
-  const { getListByGrouper } = useGenericListService();
-  const resolver = useYupValidationResolver(createRequeriment);
-  const { createRequerimentAction, editRequeriment, deleteRequeriment } =
-    useRequerimentsApi();
-  const { getLastId } = useRegulationApi();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(false);
+const INIT_TEMP_DATA = { active: false, mandatoryFor: '', description: '' };
+const INIT_DATA = { dataTable: []};
+interface IRequerimentsHook{
+  getValues: UseFormGetValues<IRegulation>
+  setValue: UseFormSetValue<IRegulation>
+  updateData: IRegulation;
+  errors: FieldErrors<IRegulation>
+  control: Control<IRegulation, any>
+}
+
+const useRequerimentsHook = ({ getValues, setValue}: IRequerimentsHook) => {
   const tableComponentRef = useRef(null);
-  const [codReglament, setCodReglament] = useState<number>();
-  const { id, onlyView } = useParams();
+  const [data, setData] = useState(INIT_DATA);
+  const [tempData, setTempData] = useState(INIT_TEMP_DATA); 
+  const [messageError, setMessageError] = useState({})
 
   const {
-    handleSubmit,
-    register,
-    control: control,
-    setValue,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm<any>({
-    resolver,
-    defaultValues: { active: true },
-  });
+    control: controlRequirement,
+    reset,
+  } = useForm<IRequirementsForReglament>({});
 
   useEffect(() => {
-    setLoading(true);
-    const getLastIdAction = async () => {
-      const { data: dataResponse, operation } = await getLastId();
-      if (operation.code === EResponseCodes.OK) {
-        let newId = 0;
-        if (setOnlyView && idSearch) {
-          newId = Number(idSearch);
-        } else if (id) {
-          newId = Number(id);
-        } else {
-          newId = dataResponse + 1;
-        }
-        localStorage.setItem("reglamentId", newId.toString());
-        setCodReglament(newId);
-        if (tableComponentRef.current) {
-          tableComponentRef.current.loadData({ codReglament: newId });
-        }
-      } else {
-        handleModalError(operation.message, false);
-      }
-    };
-    getLastIdAction();
-    setLoading(false);
+    if (getValues('requirementsForReglament')) {
+      setData({
+        dataTable: getValues('requirementsForReglament')
+      });
+    } else {
+      setData(INIT_DATA);
+      setTempData(INIT_TEMP_DATA);
+    }
   }, []);
 
-  const onsubmitCreate = handleSubmit(async (data: IRequeriments) => {
-    if (!codReglament)
-      return handleModalError(
-        "ocurrio un error inesperado, intente mas tarde por favor",
-        false
-      );
-    const buildData = {
-      ...data,
-      codReglament: codReglament,
-      active: data.active ? true : false,
-    };
-    const { data: dataResponse, operation } = await createRequerimentAction(
-      buildData
-    );
-    if (operation.code === EResponseCodes.OK) {
-      if (!codReglament) return;
-      const buildData = {
-        codReglament: codReglament,
-      };
-      if (tableComponentRef.current) {
-        tableComponentRef.current.loadData(buildData);
-      }
-    } else {
-      handleModalError(operation.message, false);
+  useEffect(() => {
+    if (data?.dataTable?.length > 0 ) {
+      setValue('requirementsForReglament', [...data.dataTable]);
     }
-  });
+  },[data])
 
-  const handleModalError = (
-    msg = `¡Ha ocurrido un error!`,
-    navigateBoolean = true
-  ) => {
-    setMessage({
-      title: "Error",
-      description: msg,
-      show: true,
-      OkTitle: "cerrar",
-      background: true,
-    });
-  };
-
-  const updateRequeriment = async (id: number, data: IRequeriments) => {
-    const buildData = { ...data, active: data.active ? false : true };
-    const { data: dataResponse, operation } = await editRequeriment(
-      id,
-      buildData
-    );
-    if (operation.code === EResponseCodes.OK) {
-    } else {
-      handleModalError(operation.message, false);
-    }
-  };
-
-  const deleteRequerimentAction = async (id: number) => {
-    setLoading(true);
-    const { data: dataResponse, operation } = await deleteRequeriment(id);
-    if (operation.code === EResponseCodes.OK) {
-      setLoading(false);
-    } else {
-      handleModalError(operation.message, false);
-    }
-  };
-
-  const tableColumns: ITableElement<IRequeriments>[] = [
-    {
-      fieldName: "row.requeriment.active",
-      header: "Activo",
-      renderCell: (row) => {
-        setValue(row.id.toString(), row.active);
-        if (setOnlyView) {
-          return <p>{row.active ? "SI" : "NO"}</p>;
-        } else {
-          return (
-            <SwitchComponent
-              idInput={row.id.toString()}
-              control={control}
-              disabled={onlyView ? true : false}
-              size="small"
-              className="select-basic select-disabled-list input-size"
-              onChange={() => updateRequeriment(row.id, row)}
-            />
-          );
+  const addItem = () => {
+    if (tempData.description == '' ) {
+      setMessageError(prevState => ({
+        ...prevState,
+        description: {
+          type: 'optionality',
+          message: 'Campo requerido'
         }
-      },
-    },
-    {
-      fieldName: "row.requeriment.percent",
-      header: "Porcentaje",
-      renderCell: (row) => {
-        return <>{row.percent}%</>;
-      },
-    },
-    {
-      fieldName: "row.requeriment.description",
-      header: "Descripcion",
-      renderCell: (row) => {
-        return <>{row.description}</>;
-      },
-    },
-  ];
+      }))
+    }
+    if (tempData.mandatoryFor == '') {
+      setMessageError(prevState => ({
+        ...prevState,
+        mandatoryFor: {
+          type: 'optionality',
+          message: 'Campo requerido'
+        }
+      }))
+    }
 
-  const tableActions: ITableAction<IRequeriments>[] = !setOnlyView
-    ? [
-        {
-          icon: "DeleteFill",
-          onClick: (row) => {
-            if (onlyView) return;
-            deleteRequerimentAction(row.id);
-          },
-        },
-      ]
-    : [];
+    if (tempData.description &&  tempData.mandatoryFor) {
+      setMessageError({})
+      setData({
+        ...data,
+        dataTable: [
+          ...data.dataTable,
+          { ...tempData, id: new Date().toISOString() },
+        ],
+      });
+      setTempData(INIT_TEMP_DATA);
+      reset({
+        mandatoryFor: '',
+      })
+    }
+  }
+
+  const deleteItem = (id: string) => {
+    const copyArr = data.dataTable;
+    const objWithIdIndex = copyArr.findIndex((obj) => obj?.id === id);
+    copyArr.splice(objWithIdIndex, 1);
+    setData({ ...data, ...copyArr });
+    setValue('requirementsForReglament', data.dataTable);  
+    loadTableData()  
+  };
+
+  const changeSwitche = (id: number) => {
+    const copyArr = data.dataTable;
+    const objWithIdIndex = copyArr.findIndex((obj) => obj?.id === id);
+    copyArr[objWithIdIndex].active = !copyArr[objWithIdIndex].active;
+    setData({ ...data, ...copyArr });
+    setValue('requirementsForReglament', data.dataTable);
+  }
+  const tableColumns: ITableElement<IRequirementsForReglament>[] = [
+    {
+        fieldName: "aproved",
+        header: "Activo",
+        renderCell: (row) => {
+          return (
+            <SwitchNewComponent
+              idInput={`checkRow${row.id}`}
+              value={ row.active }
+              onChange={(value) => {
+                 changeSwitche(row?.id)
+              }}
+              className="switch-new"
+            />
+          )
+      }
+    },
+    {
+        fieldName: "mandatoryFor",
+        header: "Obligatorio para",
+        renderCell: (row) => {
+            return <>{row?.mandatoryFor || ''}</>;
+        }
+    },
+    {
+        fieldName: "description",
+        header: "Descripcion",
+        renderCell: (row) => {
+          return <>{row?.description}</>;
+        }
+    },
+    {
+        fieldName: "actions",
+        header: "Acciones",
+        renderCell: (row) => {
+            return (
+                <>
+                  <div>
+                    <label
+                      style={{ padding: "14px 33px 14px 33px" }}
+                      className="text-black  biggest"
+                      onClick={() => { deleteItem(String(row?.id)) }}
+                    >
+                      <Icons.FaTrashAlt
+                        style={{ color: "red" }}
+                        className="button grid-button button-delete"
+                      />
+                    </label>
+                  </div>
+                </>
+            );
+        }
+    }
+  ]
+
+  function loadTableData(searchCriteria?: object): void {
+    if (tableComponentRef.current) {
+      tableComponentRef.current.loadData(searchCriteria);
+    }
+  }
+
+  useEffect(() => {
+    loadTableData({
+        page: 1,
+        perPage: 100,
+    });
+  }, [])
 
   return {
-    control,
-    errors,
-    register,
-    setValue,
-    handleSubmit,
-    onsubmitCreate,
-    loading,
-    getValues,
-    watch,
-    tableActions,
+    addItem,
+    setTempData,
+    tempData,
     tableColumns,
     tableComponentRef,
+    data,
+    messageError,
+    controlRequirement
   };
 };
 

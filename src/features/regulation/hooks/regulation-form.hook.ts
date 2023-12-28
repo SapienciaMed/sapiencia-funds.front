@@ -6,10 +6,7 @@ import { useForm } from "react-hook-form";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useRegulationApi } from "./regulation-api-service.hook";
 import { shemaFormRegulation } from "../../../common/schemas/regulation-schema";
-import {
-  IPeriodSapiencia,
-  IRegulation,
-} from "../../../common/interfaces/regulation";
+import {IRegulation} from "../../../common/interfaces/regulation";
 import { useRequerimentsApi } from "./requeriments-api-service.hook";
 
 export default function useFormRegulation(auth) {
@@ -28,11 +25,9 @@ export default function useFormRegulation(auth) {
   const navigate = useNavigate();
   const {
     handleSubmit,
-    register,
-    control: control,
+    control,
     setValue,
     getValues,
-    reset,
     watch,
     formState: { errors },
   } = useForm<IRegulation>({
@@ -48,12 +43,14 @@ export default function useFormRegulation(auth) {
   const [updateData, setUpdateData] = useState<IRegulation>();
   const [loading, setLoading] = useState<boolean>(true);
   const [performancePeriodErrors, setPerformancePeriodErrors] = useState(false);
-  const [periodList, setPeriodList] = useState<IPeriodSapiencia[]>([]);
+  const [listPrograms, setListPrograms] = useState<
+    { name: string; value: string }[]
+  >([]);
+  const [arrayPeriod, setArrayPeriod] = useState<
+    { name: string; value: string; id: number; nameComplementary?: string }[]
+  >([]);
   const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
     useState(false);
-  const [listPrograms, setListPrograms] = useState<
-    { name: string; value: number }[]
-  >([]);
   const [toggleControl, setToggleControl] = useState<{
     applySocialService: number;
     applyKnowledgeTransfer: number;
@@ -65,6 +62,9 @@ export default function useFormRegulation(auth) {
     applyCondonationPerformancePeriod: boolean;
     applyAccomulatedIncomeCondonation: boolean;
     applyTheoreticalSemester?: boolean;
+    applyAcademicPerformancePercent?: boolean;
+    applyRequirementsPercent?: boolean
+    applyTheoreticalSemiannualPercent?: boolean
   }>();
 
   // Effects
@@ -88,36 +88,33 @@ export default function useFormRegulation(auth) {
       return;
     }
   }, [auth, authorization]);
-
+  
   useEffect(() => {
-    const loadData = async () => {
-      const res = await getPrograms();
+    getPrograms().then((res) => {
       if (res?.data) {
         const buildData = res.data.map((item) => {
           return {
             name: item.value,
-            value: item.id,
+            value: item.id.toString(),
           };
         });
         setListPrograms(buildData);
       }
+    });
 
-      const res2 = await getPeriodsFromSapiencia();
-      if (res2?.data) {
-        const buildData = [...res2.data].sort(function (a, b) {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
+    getPeriodsFromSapiencia().then((resp) => {
+      if (resp.operation.code === EResponseCodes.OK) {
+        const data = resp.data.map((item) => {
+          return {
+            name: item.nameComplementary,
+            value: item.name,
+            id: item.id,
+            nameComplementary: item.nameComplementary,
+          };
         });
-        setPeriodList(buildData);
+        setArrayPeriod(data);
       }
-    };
-
-    loadData();
+    });
   }, []);
 
   // Metodos
@@ -152,6 +149,7 @@ export default function useFormRegulation(auth) {
   };
 
   const onSubmitRegulationForm = handleSubmit((data: IRegulation) => {
+    // console.log("🚀 ~ file: regulation-form.hook.ts:155 ~ onSubmitRegulationForm ~ data:", data)
     if (
       data.applyCondonationPerformancePeriod &&
       !data.performancePeriodStructure
@@ -172,7 +170,7 @@ export default function useFormRegulation(auth) {
     // Ajustar
     const defaultData = {
       idProgram: "",
-      initialPeriod: "2",
+      initialPeriod: "",
       isOpenPeriod: false,
       endPeriod: "",
       applyTheoreticalSemiannualPercent: false,
@@ -186,13 +184,13 @@ export default function useFormRegulation(auth) {
       applySocialService: false,
       socialServicePercent: 0,
       socialServiceHours: 0,
-      socialServiceCondonationType: "Total",
-      socialServiceCondonationPercent: [],
+      socialServiceCondonationType: "",
+      socialServiceCondonationPercent: '',
       applyKnowledgeTransfer: true,
       knowledgeTransferPercent: 0,
       knowledgeTransferHours: 0,
-      knowledgeTransferCondonationType: "Total",
-      knowledgeTransferCondonationPercent: [],
+      knowledgeTransferCondonationType: "",
+      knowledgeTransferCondonationPercent: '',
       applyGracePeriod: false,
       gracePeriodMonths: 0,
       graceDateApplication: "",
@@ -225,17 +223,10 @@ export default function useFormRegulation(auth) {
       applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension == 1,
       applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
       applyExtension: data?.applyExtension ? true : false,
-      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
-        ? true
-        : false,
-      applyAccomulatedIncomeCondonation: data?.applyAccomulatedIncomeCondonation
-        ? true
-        : false,
-      academicPerformancePercent:
-        100 -
-        (Number(data.socialServicePercent || 0) +
-          Number(data.knowledgeTransferPercent || 0)), //Ajustar
-      requirementsPercent: 0, //Ajustar
+      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod ? true : false,
+      applyAccomulatedIncomeCondonation: data?.applyAccomulatedIncomeCondonation ? true : false,
+      academicPerformancePercent: data?.academicPerformancePercent || 0,
+      requirementsPercent: data?.requirementsPercent || 0
     };
 
     console.log("🚀 buildData:", {
@@ -295,7 +286,7 @@ export default function useFormRegulation(auth) {
       title: "Error",
       description: msg,
       show: true,
-      OkTitle: "cerrar",
+      OkTitle: "Cerrar",
       onClose: () => {
         if (navigateBoolean) {
           navigate("/fondos/administracion/reglamento/");
@@ -332,7 +323,6 @@ export default function useFormRegulation(auth) {
   return {
     control,
     errors,
-    register,
     setValue,
     handleSubmit,
     onSubmitRegulationForm,
@@ -348,7 +338,6 @@ export default function useFormRegulation(auth) {
     id,
     listPrograms,
     onlyView,
-    reset,
-    periodList,
+    arrayPeriod,
   };
 }
