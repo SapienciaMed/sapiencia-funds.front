@@ -17,7 +17,7 @@ interface IRequerimentsHook{
   control: Control<IRegulation, any>
 }
 
-const useRequerimentsHook = ({ getValues, setValue}: IRequerimentsHook) => {
+const useRequerimentsHook = ({ getValues, setValue, updateData}: IRequerimentsHook) => {
   const tableComponentRef = useRef(null);
   const [data, setData] = useState(INIT_DATA);
   const [tempData, setTempData] = useState(INIT_TEMP_DATA); 
@@ -45,6 +45,15 @@ const useRequerimentsHook = ({ getValues, setValue}: IRequerimentsHook) => {
     }
   },[data])
 
+  //Validar para editar
+  // useEffect(() => {
+  //   if (updateData) {
+  //     setData({
+  //       dataTable: [updateData]
+  //     })
+  //   }
+  // },[updateData])
+
   const addItem = () => {
     if (tempData.description == '' ) {
       setMessageError(prevState => ({
@@ -71,12 +80,15 @@ const useRequerimentsHook = ({ getValues, setValue}: IRequerimentsHook) => {
         ...data,
         dataTable: [
           ...data.dataTable,
-          { ...tempData, id: new Date().toISOString() },
+          { ...tempData, 
+            id: new Date().toISOString() 
+          },
         ],
       });
       setTempData(INIT_TEMP_DATA);
       reset({
         mandatoryFor: '',
+        state: false
       })
     }
   }

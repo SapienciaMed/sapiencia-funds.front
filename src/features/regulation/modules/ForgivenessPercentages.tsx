@@ -11,9 +11,6 @@ const ForgivenessPercentages = ({
   setValue,
   toggleControl,
   setToggleControl,
-  watch,
-  performancePeriodErrors,
-  accumulatedPerformanceErrors,
   onlyView,
 }) => {
   return (
