@@ -73,8 +73,14 @@ export const createItems = yup.object({
 
 export const searchVotings = yup.object({
   communeNeighborhood: yup
-    .string()
-    .required("El nombre de la comuna es obligatorio"),
+    .mixed()
+    .test(
+      "isNumberOrArray",
+      "El nombre de la comuna es obligatorio",
+      (value) => {
+        return typeof value === "number" || Array.isArray(value);
+      }
+    ),
   numberProject: yup
     .string()
     .optional()

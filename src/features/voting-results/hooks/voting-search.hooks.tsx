@@ -5,7 +5,7 @@ import { AppContext } from "../../../common/contexts/app.context";
 import { useNavigate } from "react-router-dom";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { searchVotings } from "../../../common/schemas/voting-schema";
-import { IVotingCreate } from "../../../common/interfaces/voting.interfaces";
+import { IVotingCreate, IVotingPaginateFilters } from "../../../common/interfaces/voting.interfaces";
 import { ApiResponse } from "../../../common/utils/api-response";
 import { IGenericList } from "../../../common/interfaces/global.interface";
 import { EResponseCodes } from "../../../common/constants/api.enum";
@@ -54,16 +54,17 @@ export const useVotingResultsSearch = () => {
     };
   
     /*Functions*/
-  const onSubmitSearchVoting = handleSubmit(async (data: IVotingCreate) => {
-        loadTableData({
-          communeNeighborhood: data?.communeNeighborhood,
-          numberProject: data?.numberProject,
-          validity: data?.validity,
-          ideaProject: data?.ideaProject,
-        });
+  const onSubmitSearchVoting = handleSubmit(async (data: IVotingPaginateFilters) => {
+    const auxData = {
+      communeNeighborhood: data.communeNeighborhood.map(el => Number(el)),
+      numberProject: data?.numberProject,
+      validity: data?.validity.toString(),
+      ideaProject: data?.ideaProject,
+    }
+        loadTableData(auxData);
       if (data?.numberProject && data?.validity && data?.ideaProject && data?.communeNeighborhood) {
-        const dataConsult: any = await consultVoting(data);
-        const dataGrid: any = await consultDataGrid(data)
+        const dataConsult: any = await consultVoting(auxData);
+        const dataGrid: any = await consultDataGrid(auxData)
         if (dataGrid.data.array.length > 0) {
             setSendingXLSX(true);
             setDataTblTotal(dataConsult.data.data);

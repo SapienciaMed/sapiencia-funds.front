@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
+import { ButtonComponent, FormComponent, InputComponent, MultiSelects, SelectComponent } from "../../../common/components/Form";
 import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useVotingResultsSearch } from "../hooks/voting-search.hooks";
@@ -146,6 +146,20 @@ const { width } = useWidth();
               action={onSubmitSearchVoting}
             >
               <section className="funcionality-filters-container gap-15">
+              <MultiSelects
+                  idInput="communeNeighborhood"
+                  control={control}
+                  errors={errors}
+                  data={deparmetList ? deparmetList : []}
+                  label="Comuna y/o corregimiento"
+                  className={
+                    "select-basic medium select-disabled-list input-basic input-regular"
+                  }
+                  classNameLabel="text-black big text-required bold"
+                  placeholder="Seleccionar"
+                  filter={true}
+                />
+{/* 
                 <SelectComponent
                   idInput="communeNeighborhood"
                   control={control}
@@ -156,7 +170,7 @@ const { width } = useWidth();
                   classNameLabel="text-black big text-required bold"
                   direction={EDirection.column}
                   errors={errors}
-                />
+                /> */}
 
                 <SelectComponent
                   idInput="numberProject"
