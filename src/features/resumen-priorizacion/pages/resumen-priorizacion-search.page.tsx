@@ -26,6 +26,7 @@ const VotingResultsSearchPage = () => {
     reset,
     control,
     downloadXLSX,
+    projectList,
   } = useResumenPriorizacionSearch();
 
   const [sendingReportXlsx, setSendingReportXlsx] = useState(false);
@@ -83,28 +84,17 @@ const VotingResultsSearchPage = () => {
           action={onSubmitSearchVoting}
         >
           <section className="funcionality-filters-container gap-15">
-            <Controller
+            <SelectComponent
+              idInput="numberProject"
               control={control}
-              name={"numberProject"}
-              render={({ field }) => {
-                return (
-                  <InputComponent
-                    idInput={field.name}
-                    errors={errors}
-                    typeInput={"number"}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    value={field.value}
-                    className="input-basic medium"
-                    classNameLabel="text-black big bold"
-                    label={
-                      <>
-                        Proyecto <span>*</span>
-                      </>
-                    }
-                  />
-                );
-              }}
+              className="select-basic medium"
+              placeholder="Seleccionar"
+              label="Proyecto"
+              data={projectList ? projectList : []}
+              classNameLabel="text-black big text-required bold"
+              direction={EDirection.column}
+              errors={errors}
+              filter
             />
 
             <MultiSelects

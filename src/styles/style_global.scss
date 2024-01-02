@@ -223,6 +223,11 @@
       gap: 15px;
     }
 }
+
+.display-flex-direction-column{
+    display: flex;
+    flex-direction: column;
+}
   
 @media (min-width: 1024px) {
     .one-filter-container {
@@ -297,7 +302,7 @@
         }
 
         &.grid-template-container-fourth{
-            grid-template-columns: 2fr 1fr 2fr;
+            grid-template-columns: 1.5fr 1fr 1.5fr;
         }
   
         &.col-gap-big{

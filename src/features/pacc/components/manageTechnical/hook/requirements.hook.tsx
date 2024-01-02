@@ -63,6 +63,16 @@ export default function useRequeriments() {
                 loadTableData({idBeneficiary: parseInt(id)})
             }else {
                 setShowTable(false)
+                setMessage({
+                    title: `Error en la consulta de datos`,
+                    show: true,
+                    description: response.operation.message,
+                    OkTitle: "Aceptar",
+                    background: true,
+                    onOk: () => {
+                      setMessage({});
+                    },
+                  });
             }
         })
 

@@ -50,8 +50,9 @@ const TableInitialConfiguration = ({
     }
 
     if (getData[`${idInput}`]) {
-      setData(getData[`${idInput}`]);
+      setData({...data,dataTable: getData[`${idInput}`],});
     } else {
+      console.log('entro2');
       setData(INIT_DATA);
       setTempData(INIT_TEMP_DATA);
     }
@@ -140,7 +141,7 @@ const TableInitialConfiguration = ({
           ...messageError,
           'minimumHourPercent':{
             "type": "optionality",
-            "message": "No se permite agregar el promedio porque se está solapando con otro ya ingresado"
+            "message": "No se permite agregar el porcentaje porque se está solapando con otro ya ingresado"
           }
         })
       }
@@ -150,7 +151,7 @@ const TableInitialConfiguration = ({
           ...messageError,
           'maximumHourPercent':{
             "type": "optionality",
-            "message": "No se permite agregar el promedio porque se está solapando con otro ya ingresado"
+            "message": "No se permite agregar el porcentaje porque se está solapando con otro ya ingresado"
           }
         })
       }
@@ -164,6 +165,15 @@ const TableInitialConfiguration = ({
     return false;
   };
 
+  //Valida que el valor ingresado no sea mayor a 100
+  const handleInputChange = (value: string, key: string) => {
+    if (/^\d+$/.test(value) && parseInt(value) >= 0 && parseInt(value) <= 100) {
+      setTempData({ ...tempData, [key]: value });
+    }else {
+      setTempData({ ...tempData, [key]: '' });
+    }
+  };
+
   return (
     <div>
       <section className="container-form-children p-24 ">
@@ -174,7 +184,7 @@ const TableInitialConfiguration = ({
             typeInput="number"
             onChange={(e) => {
               if (validateDecimales(e.target.value)) return;
-              setTempData({ ...tempData, minimumHourPercent: e.target.value });
+              handleInputChange(e.target.value, 'minimumHourPercent')
             }}
             value={tempData.minimumHourPercent}
             className="input-basic medium"
@@ -182,13 +192,15 @@ const TableInitialConfiguration = ({
             direction={EDirection.column}
             label="% horas mínimas"
             errors={messageError}
+            max={3}
+            min={0}
           />
            <InputComponent
             idInput="maximumHourPercent"
             typeInput="number"
             onChange={(e) => {
               if (validateDecimales(e.target.value)) return;
-              setTempData({ ...tempData, maximumHourPercent: e.target.value });
+              handleInputChange(e.target.value, 'maximumHourPercent')    
             }}
             value={tempData.maximumHourPercent}
             className="input-basic medium"
@@ -202,7 +214,7 @@ const TableInitialConfiguration = ({
             typeInput="number"
             onChange={(e) => {
               if (validateDecimales(e.target.value)) return;
-              setTempData({ ...tempData, condonationPercent: e.target.value });
+              handleInputChange(e.target.value, 'condonationPercent')
             }}
             value={tempData.condonationPercent}
             className="input-basic medium"
