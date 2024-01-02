@@ -85,11 +85,11 @@ export interface IRegulation {
 
   //Tab siguiente, Aplica Condonación por Rendimiento Periodo
   applyCondonationPerformancePeriod?: number;
-  performancePeriodStructure?: IPerformanceStructure  //? Acá se guardará el String JSON
+  performancePeriodStructure?: IPerformanceStructure 
 
   //Tab siguiente, Aplica Condonación por Rendimiento Acumulado
   applyAccomulatedIncomeCondonation?: number;
-  accumulatedPerformanceDataTable?: IPerformanceStructure; //? Acá se guardará el String JSON
+  accumulatedPerformanceDataTable?: IPerformanceStructure; 
 
   //Información adicional de registro
   modifyUser?: string;
@@ -123,10 +123,10 @@ export interface ITableMicroStructure {
 export interface IRequirementsForReglament {
   id?: number;
   codReglament?: number;
-  active: number;
+  active: boolean;
   mandatoryFor?: string;
-  description: string;
-  percent: number
+  description?: string;
+  percent?: number
 }
 
 export interface IPropDetailReglament{
