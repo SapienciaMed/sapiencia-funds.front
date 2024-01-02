@@ -19,9 +19,8 @@ export const tableColumns: ITableElement<ICallLegalResfilters>[] = [
     header: "Fiducia",
   },
   {
-    fieldName: "",
+    fieldName: "updatedAt",
     header: "Fecha de actualización",
-    renderCell: () => <>25/08/2023</>,
   },
   {
     fieldName: "order",

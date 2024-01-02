@@ -7,6 +7,13 @@ export interface IVotingCreate {
   observation?: string;
 }
 
+export type IVotingPaginateFilters = {
+  communeNeighborhood: number[];
+  numberProject?: number;
+  validity: string;
+  ideaProject?: string;
+};
+
 export interface IItemCreate {
   id?: number;
   aimStraight: number;
@@ -21,7 +28,7 @@ export interface IItemCreate {
 
 export interface IVotingSearcheResult {
   activity: any;
-  total: any
+  total: any;
   id?: number;
   aimStraight: number;
   productCatalogueDnp: number;
