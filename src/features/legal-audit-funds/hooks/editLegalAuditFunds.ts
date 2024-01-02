@@ -115,7 +115,7 @@ export const useEditLegalAuditFundsModal = (
         .replace(".", "")
     );
     if (isNaN(rawValue)) rawValue = 0;
-    // setValue("resource", formaterNumberToCurrency(rawValue));
+    setValue("resource", formaterNumberToCurrency(rawValue));
     setResourceRaw(rawValue);
   }, [resourceValue]);
 
