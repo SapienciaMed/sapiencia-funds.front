@@ -10,6 +10,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useGenericListService } from "../../../common/hooks/generic-list-service.hook";
 import { IResumenPriorizacion } from "../../../common/interfaces/resumenPriorizacion.interfaces";
 import useSumaryPrioricions from "../hooks/resumen-priorizacion-api.hooks"
+import useVotingItemApi from "../../voting-results/hooks/voting-items-api.hooks";
 export const useResumenPriorizacionSearch = () => {
   const { setMessage } =
     useContext(AppContext);
@@ -17,6 +18,8 @@ export const useResumenPriorizacionSearch = () => {
   const resolver = useYupValidationResolver(searchResumenPriorizacion);
   const tableComponentRef = useRef(null);
   const [sending, setSending] = useState(false);
+  const { getProjectsList } = useVotingItemApi();
+  const [projectList, setProjectsList] = useState([]);
   const [deparmetList, setDeparmentList] = useState<
     { name: string; value: string }[]
   >([]);
@@ -120,6 +123,24 @@ export const useResumenPriorizacionSearch = () => {
     );
   }, []);
 
+  useEffect(() => { 
+     getProjectsList().then((response) => {
+       if (response && response?.operation?.code === EResponseCodes.OK) {
+         setProjectsList(
+           response.data.map((item) => {
+            const { bpin, goal, project } = item
+             const list = {
+               value: bpin,
+               name: `${bpin} - ${project}`,
+               meta: goal,
+             };
+             return list;
+           })
+         );
+       }
+     });
+   }, []);
+
   return {
     onSubmitSearch,
     loadTableData,
@@ -135,6 +156,7 @@ export const useResumenPriorizacionSearch = () => {
     setValCommuneNeighborhood,
     reset,
     control,
-    downloadXLSX
+    downloadXLSX,
+    projectList
   };
 };

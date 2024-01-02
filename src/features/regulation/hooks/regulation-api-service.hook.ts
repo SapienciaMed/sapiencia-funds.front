@@ -32,7 +32,7 @@ export function useRegulationApi() {
 
   async function getRegulationById(
     id: string
-  ): Promise<ApiResponse<IRegulation>> {
+  ): Promise<ApiResponse<IRegulation[]>> {
     return await get(`${serviceUrl}/get-by-id/${id}`);
   }
 

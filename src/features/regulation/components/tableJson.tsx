@@ -156,7 +156,7 @@ const TableJson = ({
           ...messageError,
           'initialAverage':{
             "type": "optionality",
-            "message": "No se permite agregar el promedio porque se está solapando con otro ya ingresado"
+            "message": "No se permite agregar el porcentaje porque se está solapando con otro ya ingresado"
           }
         })
       }
@@ -166,7 +166,7 @@ const TableJson = ({
           ...messageError,
           'endAverage':{
             "type": "optionality",
-            "message": "No se permite agregar el promedio porque se está solapando con otro ya ingresado"
+            "message": "No se permite agregar el porcentaje porque se está solapando con otro ya ingresado"
           }
         })
       }

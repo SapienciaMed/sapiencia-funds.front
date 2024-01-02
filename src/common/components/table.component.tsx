@@ -482,7 +482,7 @@ function getIconElement(
             data-pr-tooltip="Ver adjunto"
             data-pr-position="left"
           >
-            <IconFI.FiPaperclip />
+            <IconFI.FiPaperclip style={{color: '#533893'}} />
           </i>
         </>
       );

@@ -127,6 +127,7 @@ export interface IRequirementsForReglament {
   mandatoryFor?: string;
   description?: string;
   percent?: number
+  state?: boolean
 }
 
 export interface IPropDetailReglament{
