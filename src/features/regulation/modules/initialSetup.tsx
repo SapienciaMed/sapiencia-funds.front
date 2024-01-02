@@ -17,17 +17,15 @@ const InitialSetup = ({
   watch,
   toggleControl,
   setToggleControl,
-  loading,
   listPrograms,
   onlyView,
 }) => {
-  if (loading) return <></>;
   const isDisabled = onlyView || !!updateData?.program ;
-  
+
   return (
-    <div className="container-form p-24">
+    <div className="container-form p-24 display-flex-direction-column">
       <div className="grid-form-2-container mb-16px">
-        <SelectComponentOld
+        {/* <SelectComponentOld
           idInput={"idProgram"}
           setValue={(e) => setValue("idProgram", e)}
           value={
@@ -42,23 +40,33 @@ const InitialSetup = ({
           className="select-basic select-disabled-list input-size"
           classNameLabel="text-black biggest font-500 text-required"
           placeholder="Seleccionar"
+        /> */}
+
+        <SelectComponent
+          idInput={"idProgram"}
+          control={control}
+          label="Programa"
+          className="select-basic select-disabled-list medium"
+          classNameLabel="text-black big text-required"
+          placeholder={"Seleccionar"}
+          data={listPrograms}
+          filter={true}
+          errors={errors}
+          disabled={isDisabled}
         />
       </div>
       <div className="container-designation-three-objects grid-template-container-fourth col-gap-small mt-16px mb-16px">
-        <SelectComponentOld
+        <SelectComponent
           idInput={"initialPeriod"}
-          errors={errors}
-          setValue={(e) => setValue("initialPeriod", e)}
-          value={ updateData?.initialPeriod
-            ? updateData?.initialPeriod
-            : getValues().initialPeriod
-          }
-          data={periodList ?? []}
-          disabled={onlyView}
+          control={control}
           label="Periodo inicial de convocatoria"
-          className="select-basic select-disabled-list input-size"
-          classNameLabel="text-black biggest font-500 text-required"
-          placeholder="Seleccionar"
+          className="select-basic select-disabled-list medium"
+          classNameLabel="text-black big text-required"
+          placeholder={"Seleccionar"}
+          data={periodList}
+          filter={true}
+          errors={errors}
+          disabled={onlyView}
         />
         <div className="containerIsOpenPeriod">
           <SwitchComponent
@@ -81,22 +89,17 @@ const InitialSetup = ({
           />
         </div>
         <div className="containerEndPeriod">
-          <SelectComponentOld
+          <SelectComponent
             idInput={"endPeriod"}
+            control={control}
+            label="Periodo final de convocatoria"
+            className="select-basic select-disabled-list medium"
+            classNameLabel="text-black big text-required"
+            placeholder={"Seleccionar"}
+            data={periodList}
+            filter={true}
             errors={errors}
             disabled={onlyView || watch().isOpenPeriod}
-            setValue={(e) => setValue("endPeriod", e)}
-            value={ updateData?.endPeriod
-              ? updateData?.endPeriod
-              : getValues().endPeriod
-            }
-            data={periodList ?? []} 
-            label="Periodo final de convocatoria"
-            className="select-basic select-disabled-list input-size"
-            classNameLabel={`text-black biggest font-500 ${
-              !getValues().isOpenPeriod && "text-required"
-            }`}
-            placeholder="Seleccionar"
           />
         </div>
       </div>
@@ -136,6 +139,7 @@ const InitialSetup = ({
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest font-500"
               direction={EDirection.other}
+              defaultValue={getValues().applyTheoreticalSemiannualPercent }
             />
           }
         >
@@ -143,15 +147,14 @@ const InitialSetup = ({
             <Controller
               control={control}
               name={"theoreticalSemiannualPercent"}
-              defaultValue={updateData?.theoreticalSemiannualPercent}
+              defaultValue={`${updateData?.theoreticalSemiannualPercent}`}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    disabled={onlyView ? true : false}
-                    defaultValue={`${updateData?.theoreticalSemiannualPercent}`}
-                    typeInput="text"
+                    defaultValue={`${String(updateData?.theoreticalSemiannualPercent)}`}
+                    typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     value={field?.value || ""}
@@ -215,7 +218,7 @@ const InitialSetup = ({
                     errors={errors}
                     disabled={onlyView ? true : false}
                     defaultValue={`${updateData?.academicPerformancePercent}`}
-                    typeInput="text"
+                    typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     value={field?.value || ""}
