@@ -28,7 +28,7 @@ const RemnantsPage = () => {
                                     className={
                                         "select-basic medium select-disabled-list input-basic input-regular"
                                     }
-                                    classNameLabel="text-black big text-required bold"
+                                    classNameLabel="text-black biggest text-required "
                                     placeholder="Seleccionar"
                                     filter={true}
                                 />
@@ -43,7 +43,7 @@ const RemnantsPage = () => {
                                     className={
                                         "select-basic medium select-disabled-list input-basic input-regular"
                                     }
-                                    classNameLabel="text-black big text-required bold"
+                                    classNameLabel="text-black biggest text-required "
                                     placeholder="Seleccionar"
                                     filter={true}
                                 />

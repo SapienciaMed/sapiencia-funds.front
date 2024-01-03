@@ -12,10 +12,8 @@ export const remnantsFilter = yup.object({
     .required("Completar información"),
   fund: yup
     .number()
-    .required("Completar información"),
-  trust: yup
-    .number()
     .required("Completar información")
+  
 });
 
 
