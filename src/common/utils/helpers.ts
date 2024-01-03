@@ -88,11 +88,14 @@ export function calculateLimiteEdad(birthDate) {
   return age < 80;
 }
 
-export function formaterNumberToCurrency(number) {
+export function formaterNumberToCurrency(
+  number,
+  minimumFractionDigits: number = 2
+) {
   const formatter = new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",
-    minimumFractionDigits: 2,
+    minimumFractionDigits,
   });
 
   return formatter.format(number);
@@ -161,5 +164,37 @@ export function formatNumberToTwoDecimals(number) {
   return Number(number).toFixed(2);
 }
 
+export const reverseFormat = (
+  lang: string,
+  currency: string,
+  money: string
+) => {
+  const separatorDecimal = new Intl.NumberFormat(lang, {
+    style: "decimal",
+  })
+    .format(11.11)
+    .replace(/\d/g, "");
 
+  const separatorThousands = new Intl.NumberFormat(lang, {
+    style: "decimal",
+  })
+    .format(1111)
+    .replace(/\d/g, "");
 
+  const symbolOnLeft = new Intl.NumberFormat(lang, {
+    style: "currency",
+    currency,
+  })
+    .format(1)
+    .replace(
+      new RegExp(`\\d|[${separatorDecimal}${separatorThousands}]*`, "g"),
+      ""
+    );
+
+  const stringNumber = money
+    .replace(new RegExp(`[${separatorThousands}]`, "g"), "")
+    .replace(separatorDecimal, ".")
+    .replace(new RegExp(`[${symbolOnLeft}]`, "g"), "");
+
+  return parseFloat(stringNumber);
+};

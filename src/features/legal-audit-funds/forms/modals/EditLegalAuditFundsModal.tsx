@@ -8,6 +8,7 @@ import {
 import { useEditLegalAuditFundsModal } from "../../hooks/editLegalAuditFunds";
 import { DatePickerComponent } from "../../../../common/components/Form/input-date.component";
 import { Controller } from "react-hook-form";
+import { formaterNumberToCurrency } from "../../../../common/utils/helpers";
 
 const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
   const {
@@ -18,6 +19,8 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
     register,
     handleCancel,
     submitDisabled,
+    resourceRaw,
+    handleResourceChange
   } = useEditLegalAuditFundsModal(announcementId, row, reloadTable);
   return (
     <FormComponent
@@ -51,28 +54,31 @@ const EditLegalAuditFundsModal = ({ announcementId, row, reloadTable }) => {
                 );
               }}
             />
-            <Controller
+            {/* <Controller
               control={control}
               name="resource"
               render={({ field }) => {
-                return (
+                console.log(field);
+                return ( */}
                   <InputComponent
-                    idInput="resource"
-                    label={
-                      <>
+                  idInput="resource"
+                  onChange={handleResourceChange}
+                  label={
+                    <>
                         Recurso <span>*</span>
                       </>
                     }
+                    value={String(formaterNumberToCurrency(resourceRaw, 0))}
                     typeInput="text"
                     register={register}
                     errors={errors}
                     className="input-basic medium"
                     classNameLabel="text-black big bold"
-                    {...field}
+                    // {...field}
                   />
-                );
-              }}
-            />
+                {/* );
+              }} */}
+            {/* /> */}
             <Controller
               control={control}
               name="fiduciaryName"
