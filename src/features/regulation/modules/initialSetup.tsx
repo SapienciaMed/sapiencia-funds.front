@@ -1,5 +1,4 @@
 import { InputComponent, SelectComponent } from "../../../common/components/Form";
-import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { Controller } from "react-hook-form";
 import Acordion from "../components/acordion";
@@ -20,28 +19,10 @@ const InitialSetup = ({
   listPrograms,
   onlyView,
 }) => {
-  const isDisabled = onlyView || !!updateData?.program ;
 
   return (
     <div className="container-form p-24 display-flex-direction-column">
       <div className="grid-form-2-container mb-16px">
-        {/* <SelectComponentOld
-          idInput={"idProgram"}
-          setValue={(e) => setValue("idProgram", e)}
-          value={
-            updateData?.idProgram
-              ? Number(updateData?.idProgram)
-              : getValues().idProgram
-          }
-          errors={errors}
-          disabled={isDisabled}
-          data={listPrograms ?? []}
-          label="Programa"
-          className="select-basic select-disabled-list input-size"
-          classNameLabel="text-black biggest font-500 text-required"
-          placeholder="Seleccionar"
-        /> */}
-
         <SelectComponent
           idInput={"idProgram"}
           control={control}
@@ -52,7 +33,6 @@ const InitialSetup = ({
           data={listPrograms}
           filter={true}
           errors={errors}
-          disabled={isDisabled}
         />
       </div>
       <div className="container-designation-three-objects grid-template-container-fourth col-gap-small mt-16px mb-16px">
@@ -147,17 +127,15 @@ const InitialSetup = ({
             <Controller
               control={control}
               name={"theoreticalSemiannualPercent"}
-              defaultValue={`${updateData?.theoreticalSemiannualPercent}`}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    defaultValue={`${String(updateData?.theoreticalSemiannualPercent)}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de pago teórico semestral"
@@ -210,18 +188,16 @@ const InitialSetup = ({
             <Controller
               control={control}
               name={"academicPerformancePercent"}
-              defaultValue={updateData?.academicPerformancePercent}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
                     disabled={onlyView ? true : false}
-                    defaultValue={`${updateData?.academicPerformancePercent}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value  || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de rendimiento académico"
@@ -275,18 +251,16 @@ const InitialSetup = ({
             <Controller
               control={control}
               name={"requirementsPercent"}
-              defaultValue={updateData?.requirementsPercent}
               render={({ field }) => {
                 return (
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
                     disabled={onlyView}
-                    defaultValue={`${updateData?.requirementsPercent}`}
                     typeInput="text"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value  || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de requisitos"
@@ -349,11 +323,10 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     disabled={onlyView}
-                    defaultValue={`${updateData?.socialServicePercent}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de descuento por periodo"
@@ -369,11 +342,10 @@ const InitialSetup = ({
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    defaultValue={`${updateData?.socialServiceHours}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Horas por periodo"
@@ -397,7 +369,6 @@ const InitialSetup = ({
                 filter={true}
                 fieldArray={true}
                 errors={errors}
-                disabled={onlyView}
                 onChange={(value) => {
                   if (value != 'Parcial') setValue('socialServiceCondonationPercent', [])
                 }}
@@ -469,12 +440,11 @@ const InitialSetup = ({
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    defaultValue={`${updateData?.knowledgeTransferPercent}`}
                     typeInput="number"
                     onChange={field.onChange}
                     disabled={onlyView}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Porcentaje de cumplimiento"
@@ -490,11 +460,10 @@ const InitialSetup = ({
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    defaultValue={`${updateData?.knowledgeTransferHours}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value  || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Horas totales por el crédito"
@@ -587,11 +556,10 @@ const InitialSetup = ({
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    defaultValue={`${updateData?.gracePeriodMonths}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Meses"
@@ -600,17 +568,17 @@ const InitialSetup = ({
                 );
               }}
             />
-            <SelectComponentOld
+            <SelectComponent
               idInput={"graceDateApplication"}
-              setValue={(e) => setValue("graceDateApplication", e)}
-              value={getValues().graceDateApplication}
-              errors={errors}
-              data={LIST_DATA_GRACE_PERIOD || []}
+              control={control}
               label="Fecha de aplicación"
               className="select-basic select-disabled-list medium"
-              classNameLabel="text-black big font-500 tex-required"
-              placeholder="Seleccionar"
-              disabled={onlyView}
+              classNameLabel="text-black big text-required"
+              placeholder={"Seleccionar"}
+              data={LIST_DATA_GRACE_PERIOD}
+              filter={true}
+              fieldArray={true}
+              errors={errors}
             />
           </div>
         </Acordion>
@@ -662,11 +630,10 @@ const InitialSetup = ({
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    defaultValue={`${updateData?.continuosSuspencionQuantity}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
@@ -725,11 +692,10 @@ const InitialSetup = ({
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    defaultValue={`${updateData?.discontinuousSuspensionQuantity}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Cantidad"
@@ -787,7 +753,6 @@ const InitialSetup = ({
                     idInput={field.name}
                     disabled={onlyView}
                     errors={errors}
-                    defaultValue={`${updateData?.specialSuspensionsQuantity}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
@@ -848,11 +813,10 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     disabled={onlyView}
-                    defaultValue={`${updateData?.extensionQuantity}`}
                     typeInput="number"
                     onChange={field.onChange}
                     onBlur={field.onBlur}
-                    value={field?.value || ""}
+                    value={field?.value || ''}
                     className="input-basic medium"
                     classNameLabel="text-black big text-required font-500"
                     label="Cantidad"

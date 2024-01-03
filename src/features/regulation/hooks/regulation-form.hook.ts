@@ -7,7 +7,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useRegulationApi } from "./regulation-api-service.hook";
 import { shemaFormRegulation } from "../../../common/schemas/regulation-schema";
 import {IRegulation} from "../../../common/interfaces/regulation";
-import { useRequerimentsApi } from "./requeriments-api-service.hook";
+import { controlToggle, setValuesRegulation } from "../helpers/regulation-form.helper";
 
 export default function useFormRegulation(auth) {
   // Servicios
@@ -21,7 +21,6 @@ export default function useFormRegulation(auth) {
     getPrograms,
     getPeriodsFromSapiencia,
   } = useRegulationApi();
-  const { deleteByReglamentId } = useRequerimentsApi();
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -30,27 +29,18 @@ export default function useFormRegulation(auth) {
     getValues,
     watch,
     formState: { errors },
-  } = useForm<IRegulation>({
-    resolver,
-    // defaultValues: async () => {
-    //   const res = await getUpdateData();
-    //   setLoading(false);
-    //   return res;
-    // },
-  });
+  } = useForm<IRegulation>({ resolver });
 
   // States
   const [updateData, setUpdateData] = useState<IRegulation>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [performancePeriodErrors, setPerformancePeriodErrors] = useState(false);
   const [listPrograms, setListPrograms] = useState<
     { name: string; value: number }[] 
   >([]);
   const [arrayPeriod, setArrayPeriod] = useState<
     { name: string; value: string; id: number; nameComplementary?: string }[]
   >([]);
-  const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
-    useState(false);
+
   const [toggleControl, setToggleControl] = useState<{
     applySocialService: number;
     applyKnowledgeTransfer: number;
@@ -66,10 +56,7 @@ export default function useFormRegulation(auth) {
     applyRequirementsPercent?: boolean
     applyTheoreticalSemiannualPercent?: boolean
   }>();
-  const [loadingUpdate, setLoadingUpdate] = useState({
-    program: false,
-    period: false,
-  })
+  const [loadingUpdate, setLoadingUpdate] = useState({ program: false, period: false })
 
   // Effects
   useEffect(() => {
@@ -145,68 +132,18 @@ export default function useFormRegulation(auth) {
     if (id) {
       getRegulationById(id).then(response => {
         if (response.operation.code === EResponseCodes.OK) {
-          setUpdateData(response.data[0])
-          controlToggle(response.data[0])
+          setUpdateData(response.data)
+          controlToggle(response.data, setToggleControl)
+          setValuesRegulation(response, setValue)
           setLoading(false)
-          setValue('idProgram', response.data[0]?.idProgram)
-          setValue('initialPeriod', response.data[0]?.initialPeriod)
-          setValue('endPeriod', response.data[0]?.endPeriod)
-          setValue('isOpenPeriod', response.data[0]?.isOpenPeriod)
-          setValue('applyTheoreticalSemiannualPercent', response.data[0]?.applyTheoreticalSemiannualPercent)
-          // setValue('theoreticalSemiannualPercent', response.data[0]?.theoreticalSemiannualPercent)
-
         }else{
           handleModalError(response.operation.message, false);
         }
       }).catch(error => console.log(error))
-
-      // const res = await getRegulationById(id);
-      // if (res?.data[0]) {
-      //   for (let clave in res?.data[0]) {
-      //     if (res?.data[0][clave] === null) {
-      //       delete res?.data[0][clave];
-      //     }
-      //   }
-      //   setUpdateData(res?.data[0]);
-      // }
-      // controlToggle(res?.data[0]);
-      // return { ...res?.data[0] };
     }
-  };
-
-  const controlToggle = (data: IRegulation) => {
-    setToggleControl({
-      applySocialService: data.applySocialService,
-      applyKnowledgeTransfer: data.applyKnowledgeTransfer,
-      applyGracePeriod: data.applyGracePeriod,
-      applyContinuousSuspension: data.applyContinuousSuspension,
-      applyDiscontinuousSuspension: data.applyDiscontinuousSuspension,
-      applySpecialSuspensions: data.applySpecialSuspensions == 1,
-      applyExtension: data.applyExtension == 1,
-      applyCondonationPerformancePeriod: data.applyCondonationPerformancePeriod == 1,
-      applyAccomulatedIncomeCondonation: data.applyAccomulatedIncomeCondonation == 1,
-      applyTheoreticalSemiannualPercent: data.applyTheoreticalSemiannualPercent == 1
-    });
   };
 
   const onSubmitRegulationForm = handleSubmit((data: IRegulation) => {
-    if (
-      data.applyCondonationPerformancePeriod &&
-      !data.performancePeriodStructure
-    ) {
-      return setPerformancePeriodErrors(true);
-    } else {
-      setPerformancePeriodErrors(false);
-    }
-    if (
-      data.applyAccomulatedIncomeCondonation &&
-      !data.accumulatedPerformanceDataTable
-    ) {
-      return setAccumulatedPerformanceErrors(true);
-    } else {
-      setAccumulatedPerformanceErrors(false);
-    }
-
     // Ajustar
     const defaultData = {
       idProgram: "",
@@ -286,8 +223,8 @@ export default function useFormRegulation(auth) {
   });
 
   const confirmRegulationCreate = async (data: any) => {
-    const { data: dataResponse, operation } = data?.id
-      ? await editRegulation(data.id, data)
+    const { operation } = (data?.id || id)
+      ? await editRegulation(parseInt(id), data)
       : await createRegulation(data);
 
     if (operation.code === EResponseCodes.OK) {
@@ -340,19 +277,13 @@ export default function useFormRegulation(auth) {
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
-        confirmGoBack();
+        setMessage((prev) => {
+          return { ...prev, show: false };
+        });
+        navigate("/fondos/administracion/reglamento/");
       },
       background: true,
     });
-  };
-
-  const confirmGoBack = async () => {
-    const ReglamentId = Number(localStorage.getItem("reglamentId"));
-    await deleteByReglamentId(ReglamentId);
-    setMessage((prev) => {
-      return { ...prev, show: false };
-    });
-    navigate("/fondos/administracion/reglamento/");
   };
 
   return {
@@ -368,8 +299,6 @@ export default function useFormRegulation(auth) {
     watch,
     toggleControl,
     setToggleControl,
-    performancePeriodErrors,
-    accumulatedPerformanceErrors,
     id,
     listPrograms,
     onlyView,

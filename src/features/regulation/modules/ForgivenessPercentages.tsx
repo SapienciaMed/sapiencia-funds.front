@@ -20,7 +20,6 @@ const ForgivenessPercentages = ({
           title="¿Aplica condonación por rendimiento académico por periodo?"
           isOpen={toggleControl?.applyCondonationPerformancePeriod}
           onClick={() => {
-            if (onlyView) return;
             setValue(
               "applyCondonationPerformancePeriod",
               !getValues().applyCondonationPerformancePeriod
@@ -62,7 +61,6 @@ const ForgivenessPercentages = ({
               setValue={setValue}
               title="Agregar promedio y porcentaje de condonación"
               getValues={getValues}
-              onlyView={onlyView}
             />
           </div>
         </Acordion>
@@ -115,7 +113,6 @@ const ForgivenessPercentages = ({
               setValue={setValue}
               title="Agregar promedio y porcentaje de condonación"
               getValues={getValues}
-              onlyView={onlyView}
             />
           </div>
         </Acordion>
