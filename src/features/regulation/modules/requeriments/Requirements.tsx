@@ -11,6 +11,7 @@ import useRequerimentsHook from "../../hooks/requeriments.hook";
 import { EDirection } from "../../../../common/constants/input.enum";
 import { IRegulation } from "../../../../common/interfaces/regulation";
 import TotalTableComponent from "../../../../common/components/total-table.component";
+import { SwitchNewComponent } from "../../../../common/components/Form/switch-new.component";
 
 interface IRequirements {
   getValues: UseFormGetValues<IRegulation>
@@ -43,18 +44,17 @@ const Requirements = ({ updateData, errors, control, setValue, getValues }: IReq
           </section>
           <FormComponent id="regulationCreate"  action={() => {}}>
               <section className='grid-form-3-container-area grid-colum-requirent'>
-                <SwitchComponent
+                <SwitchNewComponent
                   idInput={"state"}
                   errors={errors}
-                  control={controlRequirement}
                   size="normal"
                   label="Estado"
-                  className="select-basic select-disabled-list input-size mr-12"
+                  className="switch-new size-big"
                   classNameLabel="text-black biggest font-500 text-required"
                   onChange={() => {
                     setTempData({...tempData, active: !tempData.active })
                   }}
-                  defaultValue={tempData.active }  
+                  value={tempData.active}
                 />
                 <SelectComponent
                     idInput='mandatoryFor'

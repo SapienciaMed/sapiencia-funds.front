@@ -21,10 +21,6 @@ function RegulationRoute() {
       />
 
       <Route path={"/form"} element={<Form auth={"CREAR_REGLAMENTO"} />} />
-      <Route
-        path={"/form/:id/:onlyView"}
-        element={<Form auth={"DETALLE_REGLAMENTO"} />}
-      />
       <Route path={"/form/:id"} element={<Form auth={"EDITAR_REGLAMENTO"} />} />
     </Routes>
   );
