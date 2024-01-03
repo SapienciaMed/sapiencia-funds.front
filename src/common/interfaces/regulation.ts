@@ -123,7 +123,7 @@ export interface ITableMicroStructure {
 export interface IRequirementsForReglament {
   id?: number;
   codReglament?: number;
-  active: boolean;
+  active: number;
   mandatoryFor?: string;
   description?: string;
   percent?: number

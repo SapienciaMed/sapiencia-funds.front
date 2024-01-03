@@ -5,11 +5,15 @@ import {
 } from "../../../common/components/Form";
 import * as Icons from "react-icons/fa";
 import {
+  Control,
+  Controller,
   UseFormGetValues,
+  UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
 import {
   IPerformanceStructure,
+  IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
@@ -24,8 +28,7 @@ interface ITableJson {
   idInput: 'performancePeriodStructure' | 'accumulatedPerformanceDataTable';
   isOpen: boolean;
   getValues: UseFormGetValues<IRegulationSearch>;
-  onlyView: boolean;
-  dataRead: IPerformanceStructure;
+  dataRead: IRegulation;
 }
 
 const TableJson = ({
@@ -34,7 +37,6 @@ const TableJson = ({
   idInput,
   isOpen,
   getValues,
-  onlyView,
   dataRead,
 }: ITableJson) => {
   const [data, setData] = useState(INIT_DATA);
@@ -44,8 +46,9 @@ const TableJson = ({
 
   useEffect(() => {
     let getData
-    if (onlyView) {  // No se esta usando 
+    if (dataRead) { 
       getData = dataRead;
+      setPercentCondonationValue(String(dataRead?.[idInput]?.percentCondonation))
     } else {
       getData = getValues();
     }
@@ -84,19 +87,19 @@ const TableJson = ({
       validateField('percent', tempData.percent, DEFAULT_MESSAGE);
       validateField('endAverage', tempData.endAverage, DEFAULT_MESSAGE);
       validateField('initialAverage', tempData.initialAverage, DEFAULT_MESSAGE);
-    } else if (parseInt(percentCondonationValue) < 1 || parseInt(percentCondonationValue) > 100 ) {
+    } else if (parseInt(percentCondonationValue) < 0 || parseInt(percentCondonationValue) > 100 ) {
       setMessageError({
         ...({'percentCondonation':{
             "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 1"
+            "message": "El campo no puede ser mayor a 100 y menor que 0"
           }
         }),
       })
-    } else if(parseInt(tempData.percent) < 1 || parseInt(tempData.percent) > 100){
+    } else if(parseInt(tempData.percent) < 0 || parseInt(tempData.percent) > 100){
       setMessageError({
         ...({'percent':{
             "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 1"
+            "message": "El campo no puede ser mayor a 100 y menor que 0"
           }
         })
       })
@@ -180,15 +183,21 @@ const TableJson = ({
     return false;
   };
 
+  // Ordena de forma ascendente 
+  const sortedData = [...data.dataTable].sort((a, b) => a.initialAverage - b.initialAverage);
+
+
   return (
     <div>
       <section className="grid-form-2-container mb-16px">
         <InputComponent
           idInput='percentCondonation'
           typeInput="number"
-          disabled={onlyView}
-          value={dataRead?.percentCondonation}
-          onChange={(e) => {setPercentCondonationValue(e.target.value)}}
+          value={percentCondonationValue}
+          onChange={(e) => {
+            setPercentCondonationValue(e.target.value)
+            setValue(`${idInput}.percentCondonation`, e.target.value)
+          }}
           className="input-basic color-default-value"
           classNameLabel="text-black weight-500 big text-required"
           direction={EDirection.column}
@@ -246,7 +255,6 @@ const TableJson = ({
               value="Agregar"
               type="button"
               action={() => {
-                if (onlyView) return;
                 addItem()
               }}
               className="button-save big disabled-black padding-button no-margin"
@@ -278,15 +286,12 @@ const TableJson = ({
                 >
                   Porcentaje
                 </label>
-
-                {!onlyView && (
                   <label
                     style={{ padding: "14px 33px 14px 33px" }}
                     className="text-black biggest  bold-500"
                   >
                     Accion
                   </label>
-                )}
               </div>
             </div>
             <div>
@@ -297,7 +302,7 @@ const TableJson = ({
                   flexDirection: "column",
                 }}
               >
-                {data?.dataTable?.map((item) => {
+                {sortedData.map((item) => {
                   return (
                     <div
                       style={{
@@ -362,7 +367,6 @@ const TableJson = ({
                             style={{ padding: "14px 33px 14px 33px" }}
                             className="text-black  biggest"
                             onClick={() => {
-                              if (onlyView) return;
                               deleteItem(item.id);
                             }}
                           >
