@@ -116,7 +116,7 @@ function App() {
                 element={<LegalAuditFundsRoutes />}
               />
               <Route
-                path="/fondos/remanentes/*"
+                path="/fondos/excedentes-contratos/*"
                 element={<RemnantsRoutes />}
               />
             </Routes>
