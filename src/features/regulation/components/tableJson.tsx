@@ -5,7 +5,10 @@ import {
 } from "../../../common/components/Form";
 import * as Icons from "react-icons/fa";
 import {
+  Control,
+  Controller,
   UseFormGetValues,
+  UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
 import {
@@ -45,6 +48,7 @@ const TableJson = ({
     let getData
     if (dataRead) { 
       getData = dataRead;
+      setPercentCondonationValue(String(dataRead?.[idInput]?.percentCondonation))
     } else {
       getData = getValues();
     }
@@ -83,19 +87,19 @@ const TableJson = ({
       validateField('percent', tempData.percent, DEFAULT_MESSAGE);
       validateField('endAverage', tempData.endAverage, DEFAULT_MESSAGE);
       validateField('initialAverage', tempData.initialAverage, DEFAULT_MESSAGE);
-    } else if (parseInt(percentCondonationValue) < 1 || parseInt(percentCondonationValue) > 100 ) {
+    } else if (parseInt(percentCondonationValue) < 0 || parseInt(percentCondonationValue) > 100 ) {
       setMessageError({
         ...({'percentCondonation':{
             "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 1"
+            "message": "El campo no puede ser mayor a 100 y menor que 0"
           }
         }),
       })
-    } else if(parseInt(tempData.percent) < 1 || parseInt(tempData.percent) > 100){
+    } else if(parseInt(tempData.percent) < 0 || parseInt(tempData.percent) > 100){
       setMessageError({
         ...({'percent':{
             "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 1"
+            "message": "El campo no puede ser mayor a 100 y menor que 0"
           }
         })
       })
@@ -179,14 +183,21 @@ const TableJson = ({
     return false;
   };
 
+  // Ordena de forma ascendente 
+  const sortedData = [...data.dataTable].sort((a, b) => a.initialAverage - b.initialAverage);
+
+
   return (
     <div>
       <section className="grid-form-2-container mb-16px">
         <InputComponent
           idInput='percentCondonation'
           typeInput="number"
-          value={data.percentCondonation || dataRead?.accumulatedPerformanceDataTable?.percentCondonation}
-          onChange={(e) => {setPercentCondonationValue(e.target.value)}}
+          value={percentCondonationValue}
+          onChange={(e) => {
+            setPercentCondonationValue(e.target.value)
+            setValue(`${idInput}.percentCondonation`, e.target.value)
+          }}
           className="input-basic color-default-value"
           classNameLabel="text-black weight-500 big text-required"
           direction={EDirection.column}
@@ -291,7 +302,7 @@ const TableJson = ({
                   flexDirection: "column",
                 }}
               >
-                {data?.dataTable?.map((item) => {
+                {sortedData.map((item) => {
                   return (
                     <div
                       style={{

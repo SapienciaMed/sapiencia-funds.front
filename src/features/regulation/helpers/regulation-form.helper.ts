@@ -52,4 +52,6 @@ export const setValuesRegulation = (response: ApiResponse<IRegulation>, setValue
   setValue('specialSuspensionsQuantity', response.data.specialSuspensionsQuantity)
   setValue('extensionQuantity', response.data.extensionQuantity)
   setValue('theoreticalSemiannualPercent', response.data.theoreticalSemiannualPercent)
+  setValue('performancePeriodStructure', response.data.performancePeriodStructure)
+  setValue('socialServiceCondonationPercent', response.data.socialServiceCondonationPercent)
 };
