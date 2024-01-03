@@ -48,6 +48,7 @@ const TableJson = ({
     let getData
     if (dataRead) { 
       getData = dataRead;
+      setPercentCondonationValue(String(dataRead?.[idInput]?.percentCondonation))
     } else {
       getData = getValues();
     }
@@ -182,13 +183,17 @@ const TableJson = ({
     return false;
   };
 
+  // Ordena de forma ascendente 
+  const sortedData = [...data.dataTable].sort((a, b) => a.initialAverage - b.initialAverage);
+
+
   return (
     <div>
       <section className="grid-form-2-container mb-16px">
         <InputComponent
           idInput='percentCondonation'
           typeInput="number"
-          value={percentCondonationValue || dataRead?.[idInput]?.percentCondonation}
+          value={percentCondonationValue}
           onChange={(e) => {
             setPercentCondonationValue(e.target.value)
             setValue(`${idInput}.percentCondonation`, e.target.value)
@@ -297,7 +302,7 @@ const TableJson = ({
                   flexDirection: "column",
                 }}
               >
-                {data?.dataTable?.map((item) => {
+                {sortedData.map((item) => {
                   return (
                     <div
                       style={{
