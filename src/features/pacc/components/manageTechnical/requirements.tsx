@@ -53,6 +53,7 @@ function Requirements() {
                 <section className=" card-table mt-20px">
                     {
                         showTable &&
+                        <>
                             <TableComponent
                                 ref={tableComponentRef}
                                 url={`${process.env.urlApiFunds}/api/v1/${typePrefixeTabs(parseInt(typeState))}/get-requirements-by-beneficiary-list`}
@@ -65,21 +66,23 @@ function Requirements() {
                                 isNotBorderClasse={true}
                                 descriptionModalNoResult="No se encontraron Requisitos"
                             />
+                            <div className="funcionality-buttons-container">
+                                <ButtonComponent
+                                    value="Cancelar"
+                                    type="button"
+                                    className="button-clean-fields bold"
+                                    action={onCancel}
+                                />
+                                <ButtonComponent
+                                    className="button-main huge hover-three"
+                                    value="Guardar"
+                                    type="submit"
+                                    action={saveFile}
+                                />
+                            </div>   
+                        
+                        </>
                     }
-                    <div className="funcionality-buttons-container">
-                        <ButtonComponent
-                            value="Cancelar"
-                            type="button"
-                            className="button-clean-fields bold"
-                            action={onCancel}
-                        />
-                        <ButtonComponent
-                            className="button-main huge hover-three"
-                            value="Guardar"
-                            type="submit"
-                            action={saveFile}
-                        />
-                    </div>   
                 </section>  
             
         </>

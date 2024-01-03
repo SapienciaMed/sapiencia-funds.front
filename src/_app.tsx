@@ -26,6 +26,7 @@ import ConsolidationSocialService from "./features/consolidationSocialService";
 import AbsorptionPercentageRoutes from "./features/absorption-percentage/AbsorptionPercentageRoute";
 import LegalAuditFundsRoutes from "./features/legal-audit-funds/LegalAuditFundsRoute";
 import RemnantsRoutes from "./features/remnants/remnants-routes";
+import FinancialMonitoringRoutes from "./features/financial-monitoring/FinancialMonitoringRoute";
 
 function App() {
   const { publish } = useAppCominicator();
@@ -115,9 +116,10 @@ function App() {
                 path="/fondos/legalizado/*"
                 element={<LegalAuditFundsRoutes />}
               />
+              <Route path="/fondos/excedentes-contratos/*" element={<RemnantsRoutes />} />
               <Route
-                path="/fondos/remanentes/*"
-                element={<RemnantsRoutes />}
+                path="/fondos/seguimiento/*"
+                element={<FinancialMonitoringRoutes />}
               />
             </Routes>
           </Suspense>

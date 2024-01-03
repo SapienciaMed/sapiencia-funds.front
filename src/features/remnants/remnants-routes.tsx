@@ -1,8 +1,6 @@
 import React, { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "../../common/utils/auth-private-guard";
-import RemnantsPage from "./pages/remnants.page";
-
 
 function RemnantsRoutes() {
  
@@ -18,7 +16,7 @@ function RemnantsRoutes() {
         element={
           <PrivateRoute
             element={<RemnantsPage/>}
-            allowedAction={"FONDOS_REMANENTE_CONSULTAR"}
+            allowedAction={"EXCEDENTE_CONTRATOS_CONSULTAR"}
           />
         }
       /> 

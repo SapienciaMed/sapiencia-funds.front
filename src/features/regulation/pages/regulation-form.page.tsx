@@ -33,8 +33,6 @@ const RegulationFormPage = ({ auth }) => {
   } = useFormRegulation(auth);
   const [view, setView] = useState(0);
 
-  if (loading) return <></>;
-
   if (id && !getValues().id && listPrograms.length === 0) return <></>;
 
   return (
@@ -58,7 +56,6 @@ const RegulationFormPage = ({ auth }) => {
             watch={watch}
             toggleControl={toggleControl}
             setToggleControl={setToggleControl}
-            loading={loading}
             listPrograms={listPrograms}
             onlyView={onlyView == '1'} // Esta haciendo algo?
           />
@@ -72,9 +69,6 @@ const RegulationFormPage = ({ auth }) => {
             setValue={setValue}
             toggleControl={toggleControl}
             setToggleControl={setToggleControl}
-            watch={watch}
-            performancePeriodErrors={performancePeriodErrors}
-            accumulatedPerformanceErrors={accumulatedPerformanceErrors}
             onlyView={onlyView}
           />
         )}

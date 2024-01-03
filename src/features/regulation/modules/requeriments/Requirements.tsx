@@ -46,7 +46,7 @@ const Requirements = ({ updateData, errors, control, setValue, getValues }: IReq
                 <SwitchComponent
                   idInput={"state"}
                   errors={errors}
-                  control={control}
+                  control={controlRequirement}
                   size="normal"
                   label="Estado"
                   className="select-basic select-disabled-list input-size mr-12"
@@ -54,6 +54,7 @@ const Requirements = ({ updateData, errors, control, setValue, getValues }: IReq
                   onChange={() => {
                     setTempData({...tempData, active: !tempData.active })
                   }}
+                  defaultValue={tempData.active }  
                 />
                 <SelectComponent
                     idInput='mandatoryFor'
