@@ -116,7 +116,7 @@ function App() {
                 path="/fondos/legalizado/*"
                 element={<LegalAuditFundsRoutes />}
               />
-              <Route path="/fondos/remanentes/*" element={<RemnantsRoutes />} />
+              <Route path="/fondos/excedentes-contratos/*" element={<RemnantsRoutes />} />
               <Route
                 path="/fondos/seguimiento/*"
                 element={<FinancialMonitoringRoutes />}
