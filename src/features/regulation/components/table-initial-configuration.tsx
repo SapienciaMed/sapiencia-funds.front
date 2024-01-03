@@ -43,16 +43,15 @@ const TableInitialConfiguration = ({
   
   useEffect(() => {
     let getData
-    if (onlyView) {  // No se esta usando 
+    if (dataRead) {  
       getData = dataRead;
     } else {
       getData = getValues();
     }
 
     if (getData[`${idInput}`]) {
-      setData({...data,dataTable: getData[`${idInput}`],});
+      setData({...data, dataTable: getData[`${idInput}`],});
     } else {
-      console.log('entro2');
       setData(INIT_DATA);
       setTempData(INIT_TEMP_DATA);
     }
@@ -167,12 +166,15 @@ const TableInitialConfiguration = ({
 
   //Valida que el valor ingresado no sea mayor a 100
   const handleInputChange = (value: string, key: string) => {
-    if (/^\d+$/.test(value) && parseInt(value) >= 0 && parseInt(value) <= 100) {
+    if (/^\d*\.?\d*$/.test(value) && parseFloat(value) >= 0 && parseFloat(value) <= 100) {
       setTempData({ ...tempData, [key]: value });
     }else {
       setTempData({ ...tempData, [key]: '' });
     }
   };
+
+  // Ordena de forma ascendente 
+  const sortedData = [...data.dataTable].sort((a, b) => a.minimumHourPercent - b.minimumHourPercent);
 
   return (
     <div>
@@ -192,8 +194,6 @@ const TableInitialConfiguration = ({
             direction={EDirection.column}
             label="% horas mínimas"
             errors={messageError}
-            max={3}
-            min={0}
           />
            <InputComponent
             idInput="maximumHourPercent"
@@ -228,7 +228,6 @@ const TableInitialConfiguration = ({
               value="Agregar"
               type="button"
               action={() => {
-                if (onlyView) return;
                 addItem()
               }}
               className="button-save big disabled-black padding-button no-margin"
@@ -280,7 +279,7 @@ const TableInitialConfiguration = ({
                   flexDirection: "column",
                 }}
               >
-                {data?.dataTable.map((item) => {
+                {sortedData?.map((item) => {
                   return (
                     <div
                       style={{

@@ -10,6 +10,7 @@ import {
 } from "react-hook-form";
 import {
   IPerformanceStructure,
+  IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
@@ -24,8 +25,7 @@ interface ITableJson {
   idInput: 'performancePeriodStructure' | 'accumulatedPerformanceDataTable';
   isOpen: boolean;
   getValues: UseFormGetValues<IRegulationSearch>;
-  onlyView: boolean;
-  dataRead: IPerformanceStructure;
+  dataRead: IRegulation;
 }
 
 const TableJson = ({
@@ -34,7 +34,6 @@ const TableJson = ({
   idInput,
   isOpen,
   getValues,
-  onlyView,
   dataRead,
 }: ITableJson) => {
   const [data, setData] = useState(INIT_DATA);
@@ -44,7 +43,7 @@ const TableJson = ({
 
   useEffect(() => {
     let getData
-    if (onlyView) {  // No se esta usando 
+    if (dataRead) { 
       getData = dataRead;
     } else {
       getData = getValues();
@@ -186,8 +185,7 @@ const TableJson = ({
         <InputComponent
           idInput='percentCondonation'
           typeInput="number"
-          disabled={onlyView}
-          value={dataRead?.percentCondonation}
+          value={data.percentCondonation || dataRead?.accumulatedPerformanceDataTable?.percentCondonation}
           onChange={(e) => {setPercentCondonationValue(e.target.value)}}
           className="input-basic color-default-value"
           classNameLabel="text-black weight-500 big text-required"
@@ -246,7 +244,6 @@ const TableJson = ({
               value="Agregar"
               type="button"
               action={() => {
-                if (onlyView) return;
                 addItem()
               }}
               className="button-save big disabled-black padding-button no-margin"
@@ -278,15 +275,12 @@ const TableJson = ({
                 >
                   Porcentaje
                 </label>
-
-                {!onlyView && (
                   <label
                     style={{ padding: "14px 33px 14px 33px" }}
                     className="text-black biggest  bold-500"
                   >
                     Accion
                   </label>
-                )}
               </div>
             </div>
             <div>
@@ -362,7 +356,6 @@ const TableJson = ({
                             style={{ padding: "14px 33px 14px 33px" }}
                             className="text-black  biggest"
                             onClick={() => {
-                              if (onlyView) return;
                               deleteItem(item.id);
                             }}
                           >

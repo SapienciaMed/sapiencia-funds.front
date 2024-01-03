@@ -18,14 +18,11 @@ const RegulationFormPage = ({ auth }) => {
     onSubmitRegulationForm,
     goBack,
     updateData,
-    loading,
     setValue,
     getValues,
     watch,
     toggleControl,
     setToggleControl,
-    performancePeriodErrors,
-    accumulatedPerformanceErrors,
     id,
     listPrograms,
     onlyView,
@@ -96,7 +93,6 @@ const RegulationFormPage = ({ auth }) => {
           form="regulationCreate"
           type="submit"
           className="button-save disabled-black padding-button"
-          disabled={onlyView ? true : false}
         />
       </div>
     </div>

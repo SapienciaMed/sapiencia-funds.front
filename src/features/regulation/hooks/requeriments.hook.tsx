@@ -7,7 +7,7 @@ import {ITableElement } from "../../../common/interfaces/table.interfaces";
 import * as Icons from "react-icons/fa";
 import { SwitchNewComponent } from "../../../common/components/Form/switch-new.component";
 
-const INIT_TEMP_DATA = { active: false, mandatoryFor: '', description: '' };
+const INIT_TEMP_DATA = { active: true, mandatoryFor: '', description: '' };
 const INIT_DATA = { dataTable: []};
 interface IRequerimentsHook{
   getValues: UseFormGetValues<IRegulation>
@@ -26,7 +26,11 @@ const useRequerimentsHook = ({ getValues, setValue, updateData}: IRequerimentsHo
   const {
     control: controlRequirement,
     reset,
-  } = useForm<IRequirementsForReglament>({});
+  } = useForm<IRequirementsForReglament>({
+    defaultValues: {
+      state: true
+    }
+  });
 
   useEffect(() => {
     if (getValues('requirementsForReglament')) {
@@ -46,13 +50,13 @@ const useRequerimentsHook = ({ getValues, setValue, updateData}: IRequerimentsHo
   },[data])
 
   //Validar para editar
-  // useEffect(() => {
-  //   if (updateData) {
-  //     setData({
-  //       dataTable: [updateData]
-  //     })
-  //   }
-  // },[updateData])
+  useEffect(() => {
+    if (updateData) {
+      setData({
+        dataTable: updateData.requirementsForReglament
+      })
+    }
+  },[updateData])
 
   const addItem = () => {
     if (tempData.description == '' ) {
@@ -64,17 +68,7 @@ const useRequerimentsHook = ({ getValues, setValue, updateData}: IRequerimentsHo
         }
       }))
     }
-    if (tempData.mandatoryFor == '') {
-      setMessageError(prevState => ({
-        ...prevState,
-        mandatoryFor: {
-          type: 'optionality',
-          message: 'Campo requerido'
-        }
-      }))
-    }
-
-    if (tempData.description &&  tempData.mandatoryFor) {
+    if (tempData.description ) {
       setMessageError({})
       setData({
         ...data,
@@ -88,7 +82,7 @@ const useRequerimentsHook = ({ getValues, setValue, updateData}: IRequerimentsHo
       setTempData(INIT_TEMP_DATA);
       reset({
         mandatoryFor: '',
-        state: false
+        state: true
       })
     }
   }
@@ -117,7 +111,7 @@ const useRequerimentsHook = ({ getValues, setValue, updateData}: IRequerimentsHo
           return (
             <SwitchNewComponent
               idInput={`checkRow${row.id}`}
-              value={ row.active }
+              value={ row.active == 1 }
               onChange={(value) => {
                  changeSwitche(row?.id)
               }}
@@ -126,6 +120,7 @@ const useRequerimentsHook = ({ getValues, setValue, updateData}: IRequerimentsHo
           )
       }
     },
+        
     {
         fieldName: "mandatoryFor",
         header: "Obligatorio para",
