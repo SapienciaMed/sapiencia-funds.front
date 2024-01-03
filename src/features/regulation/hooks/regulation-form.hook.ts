@@ -246,6 +246,12 @@ export default function useFormRegulation(auth) {
           return { ...prev, show: false };
         });
       },
+      onClose: () => {
+        navigate("/fondos/administracion/reglamento");
+        setMessage((prev) => {
+          return { ...prev, show: false };
+        });
+      },
       background: true,
     });
   };
