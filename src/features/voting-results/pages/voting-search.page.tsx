@@ -1,6 +1,15 @@
 import React, { Fragment, useContext } from "react";
-import { ButtonComponent, FormComponent, InputComponent, SelectComponent } from "../../../common/components/Form";
-import { ITableAction, ITableElement } from "../../../common/interfaces/table.interfaces";
+import {
+  ButtonComponent,
+  FormComponent,
+  InputComponent,
+  MultiSelects,
+  SelectComponent,
+} from "../../../common/components/Form";
+import {
+  ITableAction,
+  ITableElement,
+} from "../../../common/interfaces/table.interfaces";
 import { IVotingSearcheResult } from "../../../common/interfaces/voting.interfaces";
 import { useVotingResultsSearch } from "../hooks/voting-search.hooks";
 import { EDirection } from "../../../common/constants/input.enum";
@@ -13,8 +22,6 @@ import { Controller } from "react-hook-form";
 import Svgs from "../../../../src/public/images/icons/svgs";
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
 import { useWidth } from "../../../common/hooks/use-width";
-
-
 
 const VotingResultsSearchPage = () => {
   const {
@@ -36,7 +43,7 @@ const VotingResultsSearchPage = () => {
     setSendingXLSX,
     onSubmitSearch,
   } = useVotingResultsSearch();
-const { width } = useWidth();
+  const { width } = useWidth();
   const navigate = useNavigate();
   let aucumActivity = 0;
   let acumTotal = 0;
@@ -91,35 +98,35 @@ const { width } = useWidth();
     },
   ];
 
-    const tableActions: ITableAction<IVotingSearcheResult>[] = [
-      {
-        icon: "Edit",
-        onClick: (row) => {
-          setMessage({
-            show: true,
-            title: "Editar item",
-            onOk() {
-              setMessage({});
-            },
-            background: true,
-            description: (
-              <ItemResultsPage
-                dataVoting={row}
-                action={"editVoting"}
-                collback={onSubmitSearch}
-              />
-            ),
-            size: "items",
-            style: "mdl-agregarItem-voting",
-            onClose() {
-              //reset();
-              setMessage({});
-            },
-          });
-        },
-        hide: !validateActionAccess("USUARIOS_EDITAR"),
+  const tableActions: ITableAction<IVotingSearcheResult>[] = [
+    {
+      icon: "Edit",
+      onClick: (row) => {
+        setMessage({
+          show: true,
+          title: "Editar item",
+          onOk() {
+            setMessage({});
+          },
+          background: true,
+          description: (
+            <ItemResultsPage
+              dataVoting={row}
+              action={"editVoting"}
+              collback={onSubmitSearch}
+            />
+          ),
+          size: "items",
+          style: "mdl-agregarItem-voting",
+          onClose() {
+            //reset();
+            setMessage({});
+          },
+        });
       },
-    ];
+      hide: !validateActionAccess("USUARIOS_EDITAR"),
+    },
+  ];
 
   return (
     <Fragment>
@@ -146,16 +153,18 @@ const { width } = useWidth();
               action={onSubmitSearchVoting}
             >
               <section className="funcionality-filters-container gap-15">
-                <SelectComponent
+                <MultiSelects
                   idInput="communeNeighborhood"
                   control={control}
-                  className="select-basic medium"
-                  placeholder="Seleccionar"
-                  label="Comuna y/o corregimiento "
-                  data={deparmetList ? deparmetList : []}
-                  classNameLabel="text-black big text-required bold"
-                  direction={EDirection.column}
                   errors={errors}
+                  data={deparmetList ? deparmetList : []}
+                  label="Comuna y/o corregimiento"
+                  className={
+                    "select-basic medium select-disabled-list input-basic input-regular"
+                  }
+                  classNameLabel="text-black big text-required bold"
+                  placeholder="Seleccionar"
+                  filter={true}
                 />
 
                 <SelectComponent
@@ -163,9 +172,9 @@ const { width } = useWidth();
                   control={control}
                   className="select-basic medium"
                   placeholder="Seleccionar"
-                  label="Número proyecto"
+                  label={<>Número proyecto</>}
                   data={projectList ? projectList : []}
-                  classNameLabel="text-black big text-required bold"
+                  classNameLabel="text-black big bold"
                   direction={EDirection.column}
                   errors={errors}
                 />
@@ -203,7 +212,7 @@ const { width } = useWidth();
                         onBlur={field.onBlur}
                         value={field.value}
                         className="input-basic medium"
-                        classNameLabel="text-black big bold text-required"
+                        classNameLabel="text-black big bold"
                         label="Idea de proyecto"
                       />
                     );

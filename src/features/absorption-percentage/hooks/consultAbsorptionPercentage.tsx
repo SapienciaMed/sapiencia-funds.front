@@ -25,6 +25,7 @@ export const useConsultAbsorptionPercentage = () => {
   const { validateActionAccess, authorization } = useContext(AppContext);
   const tableComponentRef = useRef(null);
   const { periods: periodsData } = useGetAllPeriodsHook();
+
   const [showFooterActions, setShowFooterActions] = useState(false);
   const [tableView, setTableView] = useState<boolean>(false);
   const [paginateData, setPaginateData] = useState({ page: "", perPage: "" });

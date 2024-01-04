@@ -1,13 +1,14 @@
-import React, { useState, forwardRef } from "react";
+import React, { useState, forwardRef, useContext, useEffect, useImperativeHandle } from "react";
 import { ITableAction, ITableElement } from "../interfaces/table.interfaces";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { DataView } from "primereact/dataview";
-import { IUnifiedPagingData } from "../utils/api-response";
+import { ApiResponse, IPagingData, IUnifiedPagingData } from "../utils/api-response";
 import {
   Paginator,
   PaginatorCurrentPageReportOptions,
   PaginatorNextPageLinkOptions,
+  PaginatorPageChangeEvent,
   PaginatorPageLinksOptions,
   PaginatorPrevPageLinkOptions,
   PaginatorRowsPerPageDropdownOptions,
@@ -18,6 +19,8 @@ import * as Icons from "react-icons/fa";
 import * as IconsBS from 'react-icons/bs';
 import { Dropdown } from "primereact/dropdown";
 import { useWidth } from "../hooks/use-width";
+import { EResponseCodes } from "../constants/api.enum";
+import { AppContext } from "../contexts/app.context";
 
 interface IProps<T> {
   emptyMessage?: string;
@@ -32,6 +35,8 @@ interface IProps<T> {
   classSizeTable?: string;
   isMobil?: boolean;
   viewPaginator?: boolean;
+  classname?: string;
+  isNotBorderClasse?: boolean;
 }
 
 interface IRef {
@@ -47,18 +52,92 @@ const TotalTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
     emptyMessage = "No hay resultados.",
     classSizeTable,
     isMobil = true,
-    viewPaginator = true
+    viewPaginator = true,
+    data,
+    classname,
+    isNotBorderClasse
   } = props;
 
   // States
 
+  const [charged, setCharged] = useState<boolean>(false);
+  const [resultData, setResultData] = useState<IPagingData<any>>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [perPage, setPerPage] = useState<number>(10);
+  const [page, setPage] = useState<number>(0);
+  const [first, setFirst] = useState<number>(0);
   const { width } = useWidth();
+  const { setMessage } = useContext(AppContext);
+
+  useImperativeHandle(ref, () => ({
+    loadData: loadData,
+  }));
+
+  useEffect(() => {
+    loadData()
+  }, [data])
+
+  async function loadData(
+    newSearchCriteria?: object,
+    currentPage?: number
+  ): Promise<void> {
+    setLoading(true);
+
+    const startIndex = (page ?? 1 * perPage - perPage);
+    const lastPage = Math.ceil(data?.length / perPage);
+    const endIndex = page != lastPage
+      ? startIndex + perPage
+      : data.length ?? 0// Índice de final
+    const filteredData = data?.slice(startIndex, endIndex);
+
+    const res: ApiResponse<IPagingData<any>> = {
+      data: {
+        meta: {
+          total: data?.length ?? 0,
+          currentPage,
+          perPage,
+          firstPageUrl: "/?page=1",
+          lastPageUrl: "/?page=2",
+          nextPageUrl: null,
+          previousPageUrl: null
+        },
+        array: filteredData
+      },
+      operation: {
+        code: EResponseCodes.OK,
+        message: 'Respuesta'
+      }
+    }
+
+    if (res.operation.code === EResponseCodes.OK) {
+      setResultData(res.data);
+    }
+
+    setLoading(false);
+  }
+
+  function onPageChange(event: PaginatorPageChangeEvent): void {
+    setPerPage(event.rows);
+    setFirst(event.first);
+    setPage(event.page);
+  }
+
+  useEffect(() => {
+    if (charged) loadData(undefined, page + 1);
+  }, [perPage, first, page]);
+
+  useEffect(() => {
+    setCharged(true);
+
+    return () => {
+      setCharged(false);
+    };
+  }, []);
 
   const mobilTemplate = (item) => {
     return (
       <div className="card-grid-item">
-        <div className="card-header">
+        <div className={` card-header ${classname}`}>
           {columns.map((column) => {
             const properties = column.fieldName.split(".");
             let field =
@@ -67,7 +146,7 @@ const TotalTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
                 : item[properties[0]];
             return (
               <div key={item} className="item-value-container">
-                <p className="text-black bold text-center">{column.header}</p>
+                <p className="text-black medium">{column.header}</p>
                 <p> {column.renderCell ? column.renderCell(item) : field} </p>
               </div>
             );
@@ -88,20 +167,36 @@ const TotalTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         </div>
       </div>
     );
-  };
+  }
+
+  useImperativeHandle(ref, () => ({
+    loadData: loadData,
+    emptyData: EmptyData,
+  }));
+
+  async function EmptyData(): Promise<void> {
+    setLoading(true);
+    setResultData({ array: [], meta: { total: 0 } });
+    setLoading(false);
+  }
 
   return (
-    <div className="spc-common-table">
+    <div
+        className={`spc-common-table2 ${
+          isNotBorderClasse && "spc-common-table-without-border"
+        }`}
+      >
       {title && <div className="spc-table-title">{title}</div>}
 
       {
         viewPaginator && (
           <Paginator
             className="between spc-table-paginator"
-            template={paginatorHeader}
+            template={paginatorHeader(width)}
+            first={first}
             rows={perPage}
-            onPageChange={(i) => setPerPage(i.rows)}
-            totalRecords={props?.data?.length} // Cambia 'meta' por 'pagingInfo'
+            totalRecords={resultData?.meta?.total || 0} 
+            onPageChange={onPageChange}
             leftContent={
               <p className="header-information text-black biggest">
                 {secondaryTitle ?? "Totales"}
@@ -114,10 +209,9 @@ const TotalTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         <div>
           <DataTable
             className={`spc-table full-height ${classSizeTable}`}
-            value={props.data}
+            value={resultData?.array || []}
+            loading={loading}
             scrollable={true}
-            paginator={viewPaginator}
-            rows={perPage}
             emptyMessage={emptyMessage}
           >
             {columns.map((col) => (
@@ -150,6 +244,17 @@ const TotalTableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           emptyMessage={emptyMessage}
         />
       )}
+
+      {viewPaginator && (
+          <Paginator
+            className="spc-table-paginator"
+            template={paginatorFooter}
+            first={first}
+            rows={perPage}
+            totalRecords={resultData?.meta?.total || 0}
+            onPageChange={onPageChange}
+          />
+        )}
     </div>
   );
 });
@@ -196,41 +301,50 @@ function getIconElement(icon: string, element: "name" | "src") {
   }
 }
 
-const paginatorHeader: PaginatorTemplateOptions = {
-  layout: "CurrentPageReport RowsPerPageDropdown",
-  CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
-    return (
-      <>
-        <p className="header-information text-black big">Total de resultados</p>
-        <p className="header-information text-three big">
-          {options.totalRecords}
-        </p>
-      </>
-    );
-  },
-  RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
-    const dropdownOptions = [
-      { label: 10, value: 10 },
-      { label: 30, value: 30 },
-      { label: 50, value: 50 },
-      { label: 100, value: 100 },
-    ];
+const paginatorHeader = (width: number): PaginatorTemplateOptions => {
+  return {
+    layout: `${
+      width < 1024
+        ? "RowsPerPageDropdown CurrentPageReport"
+        : "CurrentPageReport RowsPerPageDropdown"
+    }`,
+    CurrentPageReport: (options: PaginatorCurrentPageReportOptions) => {
+      return (
+        <section className="content-result">
+          <p className="header-information text-black medium big">
+            Total de resultados
+          </p>
+          <p className="header-information text-three medium big">
+            {options.totalRecords}
+          </p>
+        </section>
+      );
+    },
+    RowsPerPageDropdown: (options: PaginatorRowsPerPageDropdownOptions) => {
+      const dropdownOptions = [
+        { label: 10, value: 10 },
+        { label: 30, value: 30 },
+        { label: 50, value: 50 },
+        { label: 100, value: 100 },
+      ];
 
-    return (
-      <React.Fragment>
-        <p className="header-information text-black big">
-          Registros por página{" "}
-        </p>
-        <Dropdown
-          value={options.value}
-          className="header-information"
-          options={dropdownOptions}
-          onChange={options.onChange}
-        />
-      </React.Fragment>
-    );
-  },  
+      return (
+        <section className="content-result">
+          <p className="header-information text-black medium big">
+            Registros por página{" "}
+          </p>
+          <Dropdown
+            value={options.value}
+            className="header-information"
+            options={dropdownOptions}
+            onChange={options.onChange}
+          />
+        </section>
+      );
+    },
+  };
 };
+
 
 export const paginatorFooter: PaginatorTemplateOptions = {
   layout: "PrevPageLink PageLinks NextPageLink",

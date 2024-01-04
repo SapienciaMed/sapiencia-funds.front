@@ -84,13 +84,7 @@ export const useConsultLegalAuditFunds = () => {
   const handleReloadTable = useCallback(
     async (filters: ICallLegalResfilters) => {
       setReloadTable((prev) => !prev);
-      await tableComponentRef.current?.loadData(
-        {
-          ...filters,
-        },
-        getLegalAuditByAnnouncement(periods)
-      );
-      console.log("data*/**", legalAuditData);
+      await getLegalAuditByAnnouncement(filters.announcementId);
     },
     []
   );

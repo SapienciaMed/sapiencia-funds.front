@@ -19,5 +19,8 @@ export enum EStatePac{
 
 export enum ERegulation{
   requirement = 1,
-  socialService = 2
+  socialService = 2,
+  knowledgeTransfer = 3,
+  cumulativeAcademicPeriod = 4,
+  cumulativeAcademicPerformance = 5
 }

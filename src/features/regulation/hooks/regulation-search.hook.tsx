@@ -172,7 +172,7 @@ export default function useSearchRegulation(auth, authDetail, authEdit) {
       },
     },
     {
-      fieldName: "theoreticalPercentage",
+      fieldName: "theoreticalSemiannualPercent",
       header: <Tooltip text={"¿Aplica pago teórico?"} />,
       renderCell: (row) => {
         return <>{row.applyTheoreticalSemiannualPercent ? "SI" : "NO"}</>;

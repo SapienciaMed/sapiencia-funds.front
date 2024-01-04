@@ -5,15 +5,22 @@ import {
 } from "../../../common/interfaces/regulation";
 import { ApiResponse } from "../../../common/utils/api-response";
 
-export const LIST_DATA_GRACE_PERIOD: { value: string; name: string }[] = [
+export const LIST_DATA_GRACE_PERIOD: { value: string; name: string, id: number }[] = [
   {
-    value: "from_date_return",
-    name: "Desde fecha de regreso al departamento",
+    id: 1,
+    value: "A01",
+    name: "Al culminar los estudios",
   },
   {
-    value: "after_last_turn",
-    name: "Después de último giro",
+    id: 2,
+    value: "A02",
+    name: "Desde fecha de regreso al departamento ",
   },
+  {
+    id: 3,
+    value:'A03',
+    name: 'Después de último giro'
+  }
 ];
 
 export function useRegulationApi() {
@@ -22,14 +29,10 @@ export function useRegulationApi() {
 
   const { get, post, put } = useCrudService(baseURL);
 
-  async function getRegulation(): Promise<ApiResponse<IRegulation[]>> {
-    return await get(`${serviceUrl}/`);
-  }
-
   async function getRegulationById(
     id: string
   ): Promise<ApiResponse<IRegulation>> {
-    return await get(`${serviceUrl}/get-by-id/${id}`);
+    return await get(`/api/v1/reglament-v2/get-by-id/${id}`);
   }
 
   async function createRegulation(
@@ -42,11 +45,7 @@ export function useRegulationApi() {
     id: number,
     data: IRegulation
   ): Promise<ApiResponse<IRegulation>> {
-    return await put(`${serviceUrl}/edit/${id}`, data);
-  }
-
-  async function getLastId(): Promise<ApiResponse<number>> {
-    return await get(`${serviceUrl}/get-last-id`);
+    return await post(`/api/v1/reglament-v2/edit-reglament/${id}`, data);
   }
 
   async function getPrograms(): Promise<
@@ -55,20 +54,14 @@ export function useRegulationApi() {
     return await get(`/api/v1/reglament/programs`);
   }
 
-  async function getPeriodsFromSapiencia(): Promise<
-    ApiResponse<IPeriodSapiencia[]>
-  > {
-    return await post<IPeriodSapiencia[]>(
-      `/api/v1/reglament-v2/get-periods-sapi`
-    );
+  async function getPeriodsFromSapiencia(): Promise<ApiResponse<IPeriodSapiencia[]>> {
+    return post('/api/v1/reglament-v2/get-periods-sapi')
   }
 
   return {
     createRegulation,
     getRegulationById,
     editRegulation,
-    getRegulation,
-    getLastId,
     getPrograms,
     getPeriodsFromSapiencia,
   };

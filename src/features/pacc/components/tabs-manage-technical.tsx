@@ -8,9 +8,10 @@ import { ButtonComponent } from "../../../common/components/Form";
 import Requirements from "./manageTechnical/requirements";
 import KnowledgeTransfer from "./manageTechnical/knowledge-transfer";
 import SocialServices from "./manageTechnical/social-services";
+import { EStatePac } from "../../../common/constants/api.enum";
 
 function TabsManageTechnical({ document }) {
-  const { option } = useParams();
+  const { option, typeState } = useParams();
   const { validateActionAccess } = useContext(AppContext);
 
   const tabs = (): ITabsMenuTemplate[] => {
@@ -60,13 +61,19 @@ function TabsManageTechnical({ document }) {
         validateActionAccess("VER_TRANSFERENCIA_CONOCIMIENTO"),
     };
 
-    const result = [
-      transferenciaConocimiento,
-      servicioSocial,
-      soportesPQRSDF,
-      requisitos,
-      liquidacion,
-    ].filter((item) => item?.hide);
+    let result: ITabsMenuTemplate[];
+
+    if (Number(typeState) === EStatePac.SocialService) {
+      result = [servicioSocial].filter((item) => item?.hide);
+    } else {
+      result = [
+        transferenciaConocimiento,
+        servicioSocial,
+        soportesPQRSDF,
+        requisitos,
+        liquidacion,
+      ].filter((item) => item?.hide);
+    }
 
     return result;
   };
@@ -76,16 +83,14 @@ function TabsManageTechnical({ document }) {
   );
 
   return (
-    <>
-      <section className="mt-20px">
-        <TabListComponent
-          tabs={tabs()}
-          start={start}
-          titleMessage="Cambios sin guardar"
-          description="¿Estas segur@ de salir sin guardar los cambios?"
-        />
-      </section>
-    </>
+    <section className="mt-20px">
+      <TabListComponent
+        tabs={tabs()}
+        start={start}
+        titleMessage="Cambios sin guardar"
+        description="¿Estas segur@ de salir sin guardar los cambios?"
+      />
+    </section>
   );
 }
 

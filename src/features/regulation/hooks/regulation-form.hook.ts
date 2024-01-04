@@ -6,11 +6,8 @@ import { useForm } from "react-hook-form";
 import { EResponseCodes } from "../../../common/constants/api.enum";
 import { useRegulationApi } from "./regulation-api-service.hook";
 import { shemaFormRegulation } from "../../../common/schemas/regulation-schema";
-import {
-  IPeriodSapiencia,
-  IRegulation,
-} from "../../../common/interfaces/regulation";
-import { useRequerimentsApi } from "./requeriments-api-service.hook";
+import {IRegulation} from "../../../common/interfaces/regulation";
+import { controlToggle, setValuesRegulation } from "../helpers/regulation-form.helper";
 
 export default function useFormRegulation(auth) {
   // Servicios
@@ -24,48 +21,42 @@ export default function useFormRegulation(auth) {
     getPrograms,
     getPeriodsFromSapiencia,
   } = useRegulationApi();
-  const { deleteByReglamentId } = useRequerimentsApi();
   const navigate = useNavigate();
   const {
     handleSubmit,
-    register,
-    control: control,
+    control,
     setValue,
     getValues,
-    reset,
     watch,
     formState: { errors },
-  } = useForm<IRegulation>({
-    resolver,
-    defaultValues: async () => {
-      const res = await getUpdateData();
-      setLoading(false);
-      return res;
-    },
-  });
+  } = useForm<IRegulation>({ resolver });
 
   // States
   const [updateData, setUpdateData] = useState<IRegulation>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [performancePeriodErrors, setPerformancePeriodErrors] = useState(false);
-  const [periodList, setPeriodList] = useState<IPeriodSapiencia[]>([]);
-  const [accumulatedPerformanceErrors, setAccumulatedPerformanceErrors] =
-    useState(false);
   const [listPrograms, setListPrograms] = useState<
-    { name: string; value: number }[]
+    { name: string; value: number }[] 
   >([]);
+  const [arrayPeriod, setArrayPeriod] = useState<
+    { name: string; value: string; id: number; nameComplementary?: string }[]
+  >([]);
+
   const [toggleControl, setToggleControl] = useState<{
     applySocialService: number;
-    knowledgeTransferApply: number;
-    gracePeriodApply: number;
-    continuousSuspensionApplies: number;
+    applyKnowledgeTransfer: number;
+    applyGracePeriod: number;
+    applyContinuousSuspension: number;
     applyDiscontinuousSuspension: number;
     applySpecialSuspensions: boolean;
-    extensionApply: boolean;
+    applyExtension: boolean;
     applyCondonationPerformancePeriod: boolean;
-    accomulatedIncomeCondonationApplies: boolean;
+    applyAccomulatedIncomeCondonation: boolean;
     applyTheoreticalSemester?: boolean;
+    applyAcademicPerformancePercent?: boolean;
+    applyRequirementsPercent?: boolean
+    applyTheoreticalSemiannualPercent?: boolean
   }>();
+  const [loadingUpdate, setLoadingUpdate] = useState({ program: false, period: false })
 
   // Effects
   useEffect(() => {
@@ -88,11 +79,10 @@ export default function useFormRegulation(auth) {
       return;
     }
   }, [auth, authorization]);
-
+  
   useEffect(() => {
-    const loadData = async () => {
-      const res = await getPrograms();
-      if (res?.data) {
+    getPrograms().then((res) => {
+      if (res.operation.code === EResponseCodes.OK) {
         const buildData = res.data.map((item) => {
           return {
             name: item.value,
@@ -100,80 +90,103 @@ export default function useFormRegulation(auth) {
           };
         });
         setListPrograms(buildData);
+        setLoadingUpdate(prevState => ({
+          ...prevState,
+          program: true
+        }));
+      }else {
+        handleModalError(res.operation.message, false);
       }
+    });
 
-      const res2 = await getPeriodsFromSapiencia();
-      if (res2?.data) {
-        const buildData = [...res2.data].sort(function (a, b) {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
+    getPeriodsFromSapiencia().then((resp) => {
+      if (resp.operation.code === EResponseCodes.OK) {
+        const data = resp.data.map((item) => {
+          return {
+            name: item.nameComplementary,
+            value: item.name,
+            id: item.id,
+            nameComplementary: item.nameComplementary,
+          };
         });
-        setPeriodList(buildData);
+        setArrayPeriod(data);
+        setLoadingUpdate(prevState => ({
+          ...prevState,
+          period: true
+        }));
+      }else {
+        handleModalError(resp.operation.message, false);
       }
-    };
-
-    loadData();
+    });
   }, []);
 
-  // Metodos
+  useEffect(() => {
+    if(loadingUpdate.period && loadingUpdate.program && id ){
+      getUpdateData()
+    }
+  },[loadingUpdate ])
+
+
+  // Metodos para editar
   const getUpdateData = async () => {
     if (id) {
-      const res = await getRegulationById(id);
-      console.log("🚀  res:", res);
-      if (res?.data[0]) {
-        for (let clave in res?.data[0]) {
-          if (res?.data[0][clave] === null) {
-            delete res?.data[0][clave];
-          }
+      getRegulationById(id).then(response => {
+        if (response.operation.code === EResponseCodes.OK) {
+          setUpdateData(response.data)
+          controlToggle(response.data, setToggleControl)
+          setValuesRegulation(response, setValue)
+          setLoading(false)
+        }else{
+          handleModalError(response.operation.message, false);
         }
-        setUpdateData(res?.data[0]);
-      }
-      controlToggle(res?.data[0]);
-      return { ...res?.data[0] };
+      }).catch(error => console.log(error))
     }
-  };
-
-  const controlToggle = (data) => {
-    setToggleControl({
-      applySocialService: data.applySocialService,
-      knowledgeTransferApply: data.knowledgeTransferApply,
-      gracePeriodApply: data.gracePeriodApply,
-      continuousSuspensionApplies: data.continuousSuspensionApplies,
-      applyDiscontinuousSuspension: data.applyDiscontinuousSuspension,
-      applySpecialSuspensions: data.applySpecialSuspensions,
-      extensionApply: data.extensionApply,
-      applyCondonationPerformancePeriod: data.applyCondonationPerformancePeriod,
-      accomulatedIncomeCondonationApplies:
-        data.accomulatedIncomeCondonationApplies,
-    });
   };
 
   const onSubmitRegulationForm = handleSubmit((data: IRegulation) => {
-    console.log(
-      "🚀 ~ file: createUpdate.ts:152 ~ onsubmitCreate ~ data:",
-      data
-    );
-    if (
-      data.applyCondonationPerformancePeriod &&
-      !data.performancePeriodStructure
-    ) {
-      return setPerformancePeriodErrors(true);
-    } else {
-      setPerformancePeriodErrors(false);
-    }
-    if (
-      data.applyAccomulatedIncomeCondonation &&
-      !data.accumulatedPerformanceDataTable
-    ) {
-      return setAccumulatedPerformanceErrors(true);
-    } else {
-      setAccumulatedPerformanceErrors(false);
-    }
+    // Ajustar
+    const defaultData = {
+      idProgram: "",
+      initialPeriod: "",
+      isOpenPeriod: false,
+      endPeriod: "",
+      applyTheoreticalSemiannualPercent: false,
+      theoreticalSemiannualPercent: 0,
+
+      applyAcademicPerformancePercent: false,
+      academicPerformancePercent: 0,
+      applyRequirementsPercent: false,
+      requirementsPercent: 0,
+
+      applySocialService: false,
+      socialServicePercent: 0,
+      socialServiceHours: 0,
+      socialServiceCondonationType: "",
+      socialServiceCondonationPercent: '',
+      applyKnowledgeTransfer: true,
+      knowledgeTransferPercent: 0,
+      knowledgeTransferHours: 0,
+      knowledgeTransferCondonationType: "",
+      knowledgeTransferCondonationPercent: '',
+      applyGracePeriod: false,
+      gracePeriodMonths: 0,
+      graceDateApplication: "",
+
+      applyContinuousSuspension: false,
+      continuosSuspencionQuantity: 0,
+      applyDiscontinuousSuspension: false,
+      discontinuousSuspensionQuantity: 0,
+      applySpecialSuspensions: false,
+      specialSuspensionsQuantity: 0,
+
+      applyExtension: false,
+      extensionQuantity: 0,
+
+      applyCondonationPerformancePeriod: false,
+      performancePeriodStructure: {
+        percentCondonation: 0,
+      },
+    };
 
     const buildData = {
       ...data,
@@ -181,17 +194,16 @@ export default function useFormRegulation(auth) {
       createDate: new Date().toISOString(),
       isOpenPeriod: data?.isOpenPeriod ? true : false,
       applySocialService: data?.applySocialService == 1,
-      knowledgeTransferApply: data?.applyKnowledgeTransfer == 1,
-      gracePeriodApply: data?.applyGracePeriod == 1,
-      continuousSuspensionApplies: data?.applyContinuousSuspension == 1,
+      applyKnowledgeTransfer: data?.applyKnowledgeTransfer == 1,
+      applyGracePeriod: data?.applyGracePeriod == 1,
+      applyContinuousSuspension: data?.applyContinuousSuspension == 1,
       applyDiscontinuousSuspension: data?.applyDiscontinuousSuspension == 1,
       applySpecialSuspensions: data?.applySpecialSuspensions ? true : false,
-      extensionApply: data?.applyExtension ? true : false,
-      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod
-        ? true
-        : false,
-      accomulatedIncomeCondonationApplies:
-        data?.applyAccomulatedIncomeCondonation ? true : false,
+      applyExtension: data?.applyExtension ? true : false,
+      applyCondonationPerformancePeriod: data?.applyCondonationPerformancePeriod ? true : false,
+      applyAccomulatedIncomeCondonation: data?.applyAccomulatedIncomeCondonation ? true : false,
+      academicPerformancePercent: data?.academicPerformancePercent || 0,
+      requirementsPercent: data?.requirementsPercent || 0
     };
 
     setMessage({
@@ -201,15 +213,18 @@ export default function useFormRegulation(auth) {
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
-        confirmRegulationCreate(buildData);
+        confirmRegulationCreate({
+          ...defaultData,
+          ...buildData,
+        });
       },
       background: true,
     });
   });
 
   const confirmRegulationCreate = async (data: any) => {
-    const { data: dataResponse, operation } = data?.id
-      ? await editRegulation(data.id, data)
+    const { operation } = (data?.id || id)
+      ? await editRegulation(parseInt(id), data)
       : await createRegulation(data);
 
     if (operation.code === EResponseCodes.OK) {
@@ -231,6 +246,12 @@ export default function useFormRegulation(auth) {
           return { ...prev, show: false };
         });
       },
+      onClose: () => {
+        navigate("/fondos/administracion/reglamento");
+        setMessage((prev) => {
+          return { ...prev, show: false };
+        });
+      },
       background: true,
     });
   };
@@ -243,7 +264,7 @@ export default function useFormRegulation(auth) {
       title: "Error",
       description: msg,
       show: true,
-      OkTitle: "cerrar",
+      OkTitle: "Cerrar",
       onClose: () => {
         if (navigateBoolean) {
           navigate("/fondos/administracion/reglamento/");
@@ -262,25 +283,18 @@ export default function useFormRegulation(auth) {
       OkTitle: "Aceptar",
       cancelTitle: "Cancelar",
       onOk() {
-        confirmGoBack();
+        setMessage((prev) => {
+          return { ...prev, show: false };
+        });
+        navigate("/fondos/administracion/reglamento/");
       },
       background: true,
     });
   };
 
-  const confirmGoBack = async () => {
-    const ReglamentId = Number(localStorage.getItem("reglamentId"));
-    await deleteByReglamentId(ReglamentId);
-    setMessage((prev) => {
-      return { ...prev, show: false };
-    });
-    navigate("/fondos/administracion/reglamento/");
-  };
-
   return {
     control,
     errors,
-    register,
     setValue,
     handleSubmit,
     onSubmitRegulationForm,
@@ -291,12 +305,9 @@ export default function useFormRegulation(auth) {
     watch,
     toggleControl,
     setToggleControl,
-    performancePeriodErrors,
-    accumulatedPerformanceErrors,
     id,
     listPrograms,
     onlyView,
-    reset,
-    periodList,
+    arrayPeriod,
   };
 }

@@ -26,6 +26,8 @@ export const useEditAbsorptionPercentageModal = (
     useGetcommuneFundIdHook();
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const resolver = useYupValidationResolver(createPeriodsAbsorptionSchema);
+  const [resourceRaw, setResourceRaw] = useState(0);
+
   const {
     control,
     handleSubmit,
@@ -35,7 +37,7 @@ export const useEditAbsorptionPercentageModal = (
     reset,
     formState: { errors, isValid },
   } = useForm({ resolver, mode: "all" });
-  const [resourceRaw, setResourceRaw] = useState(0);
+
   const [formWatch, setFormWatch] = useState<ICreatePeriodsAbsorption>({
     sceneryPercentage1: 0,
     sceneryPercentage2: 0,
@@ -82,15 +84,9 @@ export const useEditAbsorptionPercentageModal = (
     const fullData = {
       ...data,
       resource: formWatch.resource,
-      sceneryPercentage1: parseFloat(
-        (data.sceneryPercentage1 || "").replace("%", "")
-      ),
-      sceneryPercentage2: parseFloat(
-        (data.sceneryPercentage2 || "").replace("%", "")
-      ),
-      sceneryPercentage3: parseFloat(
-        (data.sceneryPercentage3 || "").replace("%", "")
-      ),
+      sceneryPercentage1: parseFloat(data.sceneryPercentage1 || ""),
+      sceneryPercentage2: parseFloat(data.sceneryPercentage2 || ""),
+      sceneryPercentage3: parseFloat(data.sceneryPercentage3 || ""),
       announcementId,
       communeFundId: Number(resourceFound.name),
     };
@@ -148,9 +144,9 @@ export const useEditAbsorptionPercentageModal = (
   };
 
   useEffect(() => {
-    let rawValue = parseInt(resourceValue?.replace("$", ""));
+    let rawValue = parseInt(resourceValue?.toString()?.replace("$", ""));
     if (isNaN(rawValue)) rawValue = 0;
-    setValue("resource", `$${rawValue}`);
+    setValue("resource", formaterNumberToCurrency(resourceRaw));
     setFormWatch({
       ...formWatch,
       resource: resourceRaw,
@@ -158,68 +154,50 @@ export const useEditAbsorptionPercentageModal = (
   }, [resourceValue]);
 
   useEffect(() => {
-    let rawValue = parseInt(sceneryPercentage1?.replace("%", ""));
-    if (isNaN(rawValue)) rawValue = 0;
-    setValue("sceneryPercentage1", `${rawValue}%`);
-    setFormWatch({
-      ...formWatch,
-      sceneryPercentage1: rawValue,
-    });
-  }, [sceneryPercentage1]);
-
-  useEffect(() => {
-    let rawValue = parseInt(sceneryPercentage2?.replace("%", ""));
-    if (isNaN(rawValue)) rawValue = 0;
-    setValue("sceneryPercentage2", `${rawValue}%`);
-    setFormWatch({
-      ...formWatch,
-      sceneryPercentage2: rawValue,
-    });
-  }, [sceneryPercentage2]);
-
-  useEffect(() => {
-    let rawValue = parseInt(sceneryPercentage3?.replace("%", ""));
-    if (isNaN(rawValue)) rawValue = 0;
-    setValue("sceneryPercentage3", `${rawValue}%`);
-    setFormWatch({
-      ...formWatch,
-      sceneryPercentage3: rawValue,
-    });
-  }, [sceneryPercentage3]);
-
-  useEffect(() => {
     // const resourceValueNumeric = parseFloat(resourceValue);
     let sceneryValue1 = 0;
     let sceneryValue2 = 0;
     let sceneryValue3 = 0;
-    if (!isNaN(formWatch.sceneryPercentage1)) {
-      sceneryValue1 = (resourceRaw * formWatch.sceneryPercentage1) / 100;
+    const sceneryPercentageValue1 = Number(
+      sceneryPercentage1?.toString()?.replace("%", "")
+    );
+    const sceneryPercentageValue2 = Number(
+      sceneryPercentage2?.toString()?.replace("%", "")
+    );
+    const sceneryPercentageValue3 = Number(
+      sceneryPercentage3?.toString()?.replace("%", "")
+    );
+    if (!isNaN(sceneryPercentageValue1)) {
+      sceneryValue1 = (resourceRaw * sceneryPercentageValue1) / 100;
     }
-    if (!isNaN(formWatch.sceneryPercentage2)) {
-      sceneryValue2 = (resourceRaw * formWatch.sceneryPercentage2) / 100;
+    if (!isNaN(sceneryPercentageValue2)) {
+      sceneryValue2 = (resourceRaw * sceneryPercentageValue2) / 100;
     }
-    if (!isNaN(formWatch.sceneryPercentage3)) {
-      sceneryValue3 = (resourceRaw * formWatch.sceneryPercentage3) / 100;
+    if (!isNaN(sceneryPercentageValue3)) {
+      sceneryValue3 = (resourceRaw * sceneryPercentageValue3) / 100;
     }
     setValue("sceneryValue1", formaterNumberToCurrency(sceneryValue1));
     setValue("sceneryValue2", formaterNumberToCurrency(sceneryValue2));
     setValue("sceneryValue3", formaterNumberToCurrency(sceneryValue3));
-  }, [resourceRaw, formWatch]);
+  }, [resourceRaw, sceneryPercentage1, sceneryPercentage2, sceneryPercentage3]);
 
   useEffect(() => {
-    const { sceneryPercentage1, sceneryPercentage2, sceneryPercentage3 } =
-      formWatch;
     if (
       !communeFundId ||
       !resourceValue ||
-      !sceneryPercentage1 ||
-      !sceneryPercentage2 ||
-      !sceneryPercentage3
+      !watch("sceneryPercentage1") ||
+      !watch("sceneryPercentage2") ||
+      !watch("sceneryPercentage3")
     ) {
       return setSubmitDisabled(true);
     }
     setSubmitDisabled(false);
-  }, [communeFundId, formWatch]);
+  }, [
+    communeFundId,
+    sceneryPercentage1,
+    sceneryPercentage2,
+    sceneryPercentage3,
+  ]);
 
   useEffect(() => {
     if (communeFundId) {
@@ -230,7 +208,7 @@ export const useEditAbsorptionPercentageModal = (
         sceneryPercentage2: row?.sceneryPercentage2,
         sceneryPercentage3: row?.sceneryPercentage3,
       });
-      setValue("resource", formaterNumberToCurrency(communeFundId));
+      setValue("resource", communeFundId);
     }
   }, [communeFundId]);
 
@@ -242,9 +220,9 @@ export const useEditAbsorptionPercentageModal = (
       sceneryValue1: formaterNumberToCurrency(row?.sceneryValue1),
       sceneryValue2: formaterNumberToCurrency(row?.sceneryValue2),
       sceneryValue3: formaterNumberToCurrency(row?.sceneryValue3),
-      sceneryPercentage1: `${parseInt(row?.sceneryPercentage1)}%`,
-      sceneryPercentage2: `${parseInt(row?.sceneryPercentage2)}%`,
-      sceneryPercentage3: `${parseInt(row?.sceneryPercentage3)}%`,
+      sceneryPercentage1: row?.sceneryPercentage1,
+      sceneryPercentage2: row?.sceneryPercentage2,
+      sceneryPercentage3: row?.sceneryPercentage3,
     });
   }, []);
 

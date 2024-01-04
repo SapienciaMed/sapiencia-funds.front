@@ -17,9 +17,11 @@ import { EServiceSocialStates } from "../../constants/service.social.states.enum
 
 import useModalUploadChangeData from "./hook/modal-upload-change-data.hook";
 import { ApiResponse } from "../../../../common/utils/api-response";
+import { NavigateFunction } from "react-router-dom";
 
 interface IPropsContentSubmitData {
   readonly action: "edit" | "show";
+  readonly navigate?: NavigateFunction;
   readonly idConsolidationBeneficiary?: number;
   readonly requirements: {
     id: string | number;
@@ -55,6 +57,7 @@ function ModalUploadChangeData({
   editable,
   loadTableData,
   executeFunctionSubmit,
+  navigate,
 }: IPropsContentSubmitData): React.JSX.Element {
   const {
     visible,
@@ -75,7 +78,8 @@ function ModalUploadChangeData({
     showUploadFile,
     loadTableData,
     editable,
-    executeFunctionSubmit
+    executeFunctionSubmit,
+    navigate
   );
 
   return (
@@ -148,11 +152,7 @@ function ModalUploadChangeData({
                     value: EServiceSocialStates.Rechazado,
                   },
                 ]}
-                label={
-                  <>
-                    Estado <span>*</span>
-                  </>
-                }
+                label={<>Estado {action !== "show" && <span>*</span>}</>}
                 className="select-basic medium select-disabled-list"
                 classNameLabel="text-black biggest"
                 filter={true}
@@ -181,7 +181,7 @@ function ModalUploadChangeData({
                       rows={2}
                       placeholder="Escribe aquí"
                       onChange={field.onChange}
-                      characters={150}
+                      characters={action === "show" ? null : 150}
                       disabled={action === "show"}
                       errors={formState.errors}
                     />

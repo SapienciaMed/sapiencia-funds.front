@@ -15,19 +15,20 @@ import { useNavigate } from "react-router-dom";
 import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
 
 export default function useBeneficiaryTray(typeState: number, isCut: boolean = true, changeCut: boolean = true) {
+ 
   const navigate = useNavigate();
   const tableComponentRef = useRef(null);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const { setMessage } = useContext(AppContext);
   const { GetCutsForConsolidationTray } = usePaccServices(typeState);
   const [idCutData, setIdCutData] = useState<IDropdownProps[]>([]);
+
   const [listSearch, setListSearch] = useState({
     data: {},
     status: false,
   });
   const [valueFilterTable, setValueFilterTable] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
-
   const { control, setValue, getValues, reset } = useForm<IStepCashing>();
 
   useEffect(() => {
@@ -201,7 +202,7 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
             },
           });
         },
-        hide: !isCut,
+        hide: !changeCut,
       },
       {
         icon: "Manage",
@@ -225,11 +226,7 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
     timer && clearTimeout(timer);
     const newTimer = setTimeout(() => {
       setShowSpinner(true);
-      if (
-        value.target.value != undefined &&
-        value.target.value.length > 0 &&
-        getValues("idCut") != null
-      ) {
+      if (value.target.value != undefined && value.target.value.length > 0 && getValues("idCut") != null) {
         const searchCriteriaData = {
           searchParam: value.target.value,
           [getValues("idCut") == "TODOS" ? "cutParamName" : "cutParamId"]:
@@ -316,7 +313,6 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
               };
             });
             const newData = [...data, { name: "Todos", value: "TODOS" }];
-
             setValue("idCut", newData[0].value);
             setIdCutData(newData);
           }
@@ -326,15 +322,16 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
 
   const apiUrl = () => {
     const baseApiUrl = process.env.urlApiFunds;
-    const endpoint =
-      typeState === EStatePac.SocialService
-        ? "get-paginated/consolidate"
-        : listSearch.status
+    const endpoint = listSearch.status
         ? "get-consolidation-tray-by-cut"
         : "get-consolidation-tray";
 
     return `${baseApiUrl}/api/v1/${typePrefixeTabs(typeState)}/${endpoint}`;
   };
+
+  const resetValue = () => {
+    setValueFilterTable("");
+  }
 
   return {
     tableComponentRef,
@@ -346,8 +343,8 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
     valueFilterTable,
     handleFilterChange,
     handleChangeCut,
-    getCuts,
     apiUrl,
     setShowSpinner,
+    resetValue
   };
 }

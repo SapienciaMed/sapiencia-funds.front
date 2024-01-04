@@ -2,7 +2,6 @@ import React from "react";
 import Acordion from "../components/acordion";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import TableJson from "../components/tableJson";
-import { IPerformanceStructure } from "../../../common/interfaces/regulation";
 
 const ForgivenessPercentages = ({
   errors,
@@ -12,9 +11,6 @@ const ForgivenessPercentages = ({
   setValue,
   toggleControl,
   setToggleControl,
-  watch,
-  performancePeriodErrors,
-  accumulatedPerformanceErrors,
   onlyView,
 }) => {
   return (
@@ -23,20 +19,19 @@ const ForgivenessPercentages = ({
         <Acordion
           title="¿Aplica condonación por rendimiento académico por periodo?"
           isOpen={toggleControl?.applyCondonationPerformancePeriod}
-          onClick={async () => {
-            if (onlyView) return;
+          onClick={() => {
             setValue(
               "applyCondonationPerformancePeriod",
               !getValues().applyCondonationPerformancePeriod
             );
-            await setTimeout(() => {
+            setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
                 applyCondonationPerformancePeriod:
                   getValues().applyCondonationPerformancePeriod,
               });
             }, 400);
-            setValue("performancePeriod", "");
+            setValue("performancePeriodStructure", "");
           }}
           switchElement={
             <SwitchComponent
@@ -50,7 +45,7 @@ const ForgivenessPercentages = ({
                   applyCondonationPerformancePeriod:
                     !getValues().applyCondonationPerformancePeriod,
                 });
-                setValue("performancePeriod", "");
+                setValue("performancePeriodStructure", "");
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
@@ -60,14 +55,12 @@ const ForgivenessPercentages = ({
         >
           <div>
             <TableJson
-              dataRead={[] as any}
-              idInput="performancePeriod"
+              dataRead={updateData}
+              idInput="performancePeriodStructure"
               isOpen={toggleControl?.applyCondonationPerformancePeriod}
               setValue={setValue}
               title="Agregar promedio y porcentaje de condonación"
               getValues={getValues}
-              error={performancePeriodErrors}
-              onlyView={onlyView}
             />
           </div>
         </Acordion>
@@ -75,36 +68,36 @@ const ForgivenessPercentages = ({
       <div>
         <Acordion
           title="¿Aplica condonación por rendimiento académico final acumulado?"
-          isOpen={toggleControl?.accomulatedIncomeCondonationApplies}
-          onClick={async () => {
+          isOpen={toggleControl?.applyAccomulatedIncomeCondonation}
+          onClick={() => {
             if (onlyView) return;
             setValue(
-              "accomulatedIncomeCondonationApplies",
-              !getValues().accomulatedIncomeCondonationApplies
+              "applyAccomulatedIncomeCondonation",
+              !getValues().applyAccomulatedIncomeCondonation
             );
-            await setTimeout(() => {
+            setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
-                accomulatedIncomeCondonationApplies:
-                  getValues().accomulatedIncomeCondonationApplies,
+                applyAccomulatedIncomeCondonation:
+                  getValues().applyAccomulatedIncomeCondonation,
               });
             }, 400);
-            setValue("accumulatedPerformance", "");
+            setValue("accumulatedPerformanceDataTable", "");
           }}
           switchElement={
             <SwitchComponent
-              idInput={"accomulatedIncomeCondonationApplies"}
+              idInput={"applyAccomulatedIncomeCondonation"}
               errors={errors}
-              disabled={onlyView ? true : false}
+              disabled={onlyView}
               control={control}
               onChange={() => {
                 if (onlyView) return;
                 setToggleControl({
                   ...toggleControl,
-                  accomulatedIncomeCondonationApplies:
-                    !getValues().accomulatedIncomeCondonationApplies,
+                  applyAccomulatedIncomeCondonation:
+                    !getValues().applyAccomulatedIncomeCondonation,
                 });
-                setValue("accumulatedPerformance", "");
+                setValue("accumulatedPerformanceDataTable", "");
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
@@ -114,14 +107,12 @@ const ForgivenessPercentages = ({
         >
           <div>
             <TableJson
-              dataRead={[] as any}
-              isOpen={toggleControl?.accomulatedIncomeCondonationApplies}
-              idInput="accumulatedPerformance"
+              dataRead={updateData}
+              isOpen={toggleControl?.applyAccomulatedIncomeCondonation}
+              idInput="accumulatedPerformanceDataTable"
               setValue={setValue}
               title="Agregar promedio y porcentaje de condonación"
               getValues={getValues}
-              error={accumulatedPerformanceErrors}
-              onlyView={onlyView}
             />
           </div>
         </Acordion>

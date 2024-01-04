@@ -24,9 +24,11 @@ import ModalUploadChangeData from "../modal-upload-change-data";
 import { EStatePac } from "../../../../../common/constants/api.enum";
 import { usePaccServices } from "../../../hook/pacc-serviceshook";
 import { IFiles } from "../../../../../common/interfaces/storage.interfaces";
+import { useNavigate } from "react-router-dom";
 
 export default function useSocialServices() {
   const { id, typeState } = useParams();
+  const navigate = useNavigate();
   const { width } = useWidth();
 
   const { UpdateSocialService } = usePaccServices(Number(typeState));
@@ -78,12 +80,12 @@ export default function useSocialServices() {
   }
 
   function showModalSubmitData(row: ISocialServiceBeneficiary) {
-    console.log(row);
     setMessage({
       show: true,
       title: "Revisar",
       description: (
         <ModalUploadChangeData
+          navigate={navigate}
           requirements={row.beneficiarieConsolidate.requerimentsConsolidate.map(
             (i) => {
               return { id: i.id, description: i.descriptionRequirement };
@@ -146,6 +148,10 @@ export default function useSocialServices() {
       },
     },
     {
+      fieldName: "observation",
+      header: "Observacion",
+    },
+    {
       fieldName: "actions",
       header: "Acciones",
       renderCell: (row) => {
@@ -176,7 +182,7 @@ export default function useSocialServices() {
                       />
                     </svg>
                   ) : (
-                    <FaEye color="#058cc1" className="icon-size" />
+                    row.state && <FaEye color="#058cc1" className="icon-size" />
                   )
                 }
                 onClick={(e) => {
@@ -259,7 +265,81 @@ export default function useSocialServices() {
                 },
               ],
       },
+      { separator: true },
+      {
+        items:
+          row.externalInfoFiles.parameters.length > 0 &&
+          row.externalInfoFiles.parameters.map((fileExternal) => {
+            console.log(fileExternal);
+            return {
+              id: String(row.id),
+              label: fileExternal.tipo,
+              icon: "",
+              template: () => {
+                return (
+                  <button
+                    className="p-menuitem-link button-menu-tooltip"
+                    onClick={() => {
+                      viewDocuments(
+                        row.externalInfoFiles.documentPath,
+                        fileExternal.tipo,
+                        fileExternal.documento,
+                        fileExternal.periodo,
+                        fileExternal.npseleccion
+                      );
+                    }}
+                  >
+                    <span className="p-menuitem-text ml-5px">
+                      {fileExternal.tipo}
+                    </span>
+                  </button>
+                );
+              },
+            };
+          }),
+      },
     ];
+  };
+
+  const viewDocuments = (
+    path: string,
+    tipo: string,
+    documento: string,
+    id_periodo_giro: string,
+    pseleccion: string
+  ) => {
+    const url = path;
+    const form = document.createElement("form");
+    form.action = url;
+    form.method = "POST";
+    form.target = "_blank";
+    form.style.display = "none";
+
+    // Definir el tipo para los elementos del formulario
+    type FormElement = {
+      name: string;
+      value: string;
+    };
+
+    // Agregar inputs al formulario
+    const formElements: FormElement[] = [
+      { name: "tipo", value: tipo },
+      { name: "documento", value: documento },
+      { name: "periodo", value: id_periodo_giro },
+      { name: "npseleccion", value: pseleccion },
+    ];
+
+    formElements.forEach(({ name, value }) => {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
   };
 
   return {

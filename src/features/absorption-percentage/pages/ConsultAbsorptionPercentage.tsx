@@ -33,7 +33,6 @@ const ConsultAbsorptionPercentage = () => {
       control={control}
       isValid={isValid}
       onSubmit={onSubmit}
-      register={register}
       tableView={tableView}
       handleClean={handleClean}
       tableActions={tableActions}

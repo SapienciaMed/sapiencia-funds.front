@@ -1,119 +1,124 @@
-import React, { useEffect } from "react";
+
 import SwitchComponent from "../../../../common/components/Form/switch.component";
 import {
   ButtonComponent,
   FormComponent,
-  InputComponent,
+  SelectComponent,
 } from "../../../../common/components/Form";
 import { TextAreaComponent } from "../../../../common/components/Form/input-text-area.component";
-import { Controller } from "react-hook-form";
+import { Control, FieldErrors, UseFormGetValues, UseFormReset, UseFormResetField, UseFormSetValue } from "react-hook-form";
 import useRequerimentsHook from "../../hooks/requeriments.hook";
-import TableComponent from "../../../../common/components/table.component";
+import { EDirection } from "../../../../common/constants/input.enum";
+import { IRegulation } from "../../../../common/interfaces/regulation";
+import TotalTableComponent from "../../../../common/components/total-table.component";
+import { SwitchNewComponent } from "../../../../common/components/Form/switch-new.component";
 
-const Requirements = ({ onlyView, id = null }) => {
+interface IRequirements {
+  getValues: UseFormGetValues<IRegulation>
+  setValue: UseFormSetValue<IRegulation>
+  updateData: IRegulation;
+  errors: FieldErrors<IRegulation>
+  control: Control<IRegulation, any>
+}
+
+const Requirements = ({ updateData, errors, control, setValue, getValues }: IRequirements ) => {
   const {
-    control,
-    errors,
-    onsubmitCreate,
-    loading,
-    tableActions,
     tableColumns,
     tableComponentRef,
-  } = useRequerimentsHook(onlyView, id);
-
-  if (loading) return <></>;
+    data,
+    tempData,
+    messageError,
+    controlRequirement,
+    addItem,
+    setTempData
+  } = useRequerimentsHook({ getValues, setValue, updateData, errors, control });
 
   return (
     <>
-      {!onlyView && (
-        <FormComponent id="requerimentCreate" action={onsubmitCreate}>
-          <div className="container-form p-24">
-            <p className="text-black text-29 mg-0">Requisitos</p>
-            <div style={{ display: "flex" }}>
-              <div style={{ marginRight: "24px" }}>
-                <SwitchComponent
-                  idInput={"active"}
+      <div className="main-page">
+        <div className="card-table gap-0 mt-14px">
+          <section className="title-area-2">
+            <div className="text-black extra-large">
+              Requisitos
+            </div>
+          </section>
+          <FormComponent id="regulationCreate"  action={() => {}}>
+              <section className='grid-form-3-container-area grid-colum-requirent'>
+                <SwitchNewComponent
+                  idInput={"state"}
                   errors={errors}
-                  disabled={onlyView ? true : false}
-                  control={control}
                   size="normal"
                   label="Estado"
-                  className="select-basic select-disabled-list input-size mr-12"
-                  classNameLabel="text-black biggest font-500"
+                  className="switch-new size-big"
+                  classNameLabel="text-black biggest font-500 text-required"
+                  onChange={() => {
+                    setTempData({...tempData, active: !tempData.active })
+                  }}
+                  value={tempData.active}
                 />
-              </div>
+                <SelectComponent
+                    idInput='mandatoryFor'
+                    control={controlRequirement}
+                    placeholder="Seleccionar"
+                    label="Obligatorio para"
+                    data={[
+                      { name:'Servicio social', value:'Servicio social'},
+                      { name:'Transferencia de conocimiento', value:'Transferencia de conocimiento'},
+                      { name:'Rendimiento académico', value:'Rendimiento académico'},
+                      { name:'Porcentaje de requisitos', value:'Porcentaje de requisitos'},
+                    ]}
+                    direction={EDirection.column}
+                    className="select-basic big select-disabled-list"
+                    classNameLabel="text-black big text-with-colons"
+                    optionSelected={(value) => {
+                      setTempData({...tempData, mandatoryFor: value })
+                    }}
+                    errors={messageError}
+                  />
+              </section>
 
-              <Controller
-                control={control}
-                name={"percent"}
-                render={({ field }) => {
-                  return (
-                    <InputComponent
-                      idInput={field.name}
-                      errors={errors}
-                      disabled={onlyView ? true : false}
-                      typeInput="number"
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
-                      value={field.value}
-                      className="input-basic input-size "
-                      classNameLabel="text-black biggest font-500 "
-                      label="Porcentaje de descuento por periodo"
-                    />
-                  );
-                }}
-              />
-            </div>
-            <div style={{ marginTop: "24px" }}>
-              <Controller
-                control={control}
-                name={"description"}
-                render={({ field }) => {
-                  return (
-                    <TextAreaComponent
-                      idInput={field.name}
-                      id="rew"
-                      label="Descripción"
-                      className="text-area-basic"
-                      classNameLabel="text-black biggest text-required font-500"
-                      rows={2}
-                      disabled={onlyView ? true : false}
-                      onChange={field.onChange}
-                      value={field.value}
-                      placeholder="Escribe aquí"
-                      errors={errors}
-                      characters={200}
-                    ></TextAreaComponent>
-                  );
-                }}
-              />
+              <section className="mt-16px">
+                  <TextAreaComponent
+                    idInput='description'
+                    id="rew"
+                    label="Descripción"
+                    className="text-area-basic"
+                    classNameLabel="text-black biggest text-required font-500"
+                    rows={2}
+                    onChange={(e) =>{
+                      setTempData({...tempData, description: e.target.value })
+                    }}
+                    placeholder="Escribe aquí"
+                    errors={messageError}
+                    characters={200}
+                    value={tempData.description}
+                  />
+              </section>
+          </FormComponent>
               <div style={{ display: "flex", justifyContent: "end" }}>
                 <ButtonComponent
                   value="Agregar"
                   type="submit"
-                  className="button-save disabled-black padding-button"
-                  form="requerimentCreate"
-                  disabled={onlyView ? true : false}
+                  action={() => addItem()}
+                  className="button-save disabled-black padding-button btn-back"
                 />
               </div>
+          {
+            data.dataTable.length > 0 && 
+              <div className="mt-16px">
+                <TotalTableComponent
+                  ref={tableComponentRef}
+                  data={data.dataTable}
+                  columns={tableColumns}
+                  isShowModal={true}
+                  secondaryTitle='Requisitos creados'
+                  isMobil={false}
+                  classSizeTable='size-table-wd-150' 
+                />
             </div>
-          </div>
-        </FormComponent>
-      )}
-
-      {!loading && (
-        <div className="container-form padding-form ">
-          <TableComponent
-            princialTitle="Requisitos creados"
-            ref={tableComponentRef}
-            url={`${process.env.urlApiFunds}/api/v1/requeriments/get-paginated`}
-            columns={tableColumns}
-            actions={tableActions}
-            isShowModal={false}
-            descriptionModalNoResult="No existen resultados"
-          />
+          } 
         </div>
-      )}
+      </div>
     </>
   );
 };

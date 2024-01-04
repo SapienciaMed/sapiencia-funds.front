@@ -2,7 +2,6 @@ import Acordion from "./acordion";
 import SwitchComponent from "../../../common/components/Form/switch.component";
 import { SelectComponentOld } from "../../../common/components/Form/select.component.old";
 import { InputComponent } from "../../../common/components/Form";
-import TableJson from "./tableJson";
 import { IPropDetailReglament } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
 import TableRegulationView from "../modules/requeriments/table-regulation-view";
@@ -99,7 +98,7 @@ const RegulationDetailComponent = ({
               <div className="containerApplyService">
                 <div className="mb-24px">
                   <InputComponent
-                    idInput="theoreticalPercentage"
+                    idInput="theoreticalSemiannualPercent"
                     disabled={true}
                     defaultValue={`${
                       detailData?.theoreticalSemiannualPercent ?? "0"
@@ -123,7 +122,7 @@ const RegulationDetailComponent = ({
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"extensionApply"}
+                  idInput={"applyExtension"}
                   disabled={true}
                   defaultValue={
                     detailData?.applyAcademicPerformancePercent == 1
@@ -162,7 +161,7 @@ const RegulationDetailComponent = ({
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"extensionApply"}
+                  idInput={"applyExtension"}
                   disabled={true}
                   defaultValue={detailData?.applyRequirementsPercent == 1}
                   size="small"
@@ -236,15 +235,12 @@ const RegulationDetailComponent = ({
                   disabled={true}
                 />
               </div>
-              {detailData?.knowledgeTransferCondonationPercent?.length > 0 && (
-                <div className="mt-16px">
-                  <TableRegulationView
-                    detailData={detailData}
-                    typeTable={{ socialService: 2 }}
-                    viewPaginator={false}
-                  />
-                </div>
-              )}
+              {
+                detailData?.socialServiceCondonationPercent?.length > 0 &&
+                  <div className="mt-16px">
+                    <TableRegulationView  detailData={detailData} typeTable={{ socialService: 2 }} viewPaginator={false} />
+                  </div>
+              }
             </Acordion>
           </div>
           <div onClick={preventClick}>
@@ -267,26 +263,41 @@ const RegulationDetailComponent = ({
                 />
               }
             >
-              <div className="grid-form-2-container gap-15">
-                <InputComponent
-                  idInput="knowledgeTransferPercent"
-                  defaultValue={`${detailData?.knowledgeTransferPercent}`}
-                  typeInput="number"
-                  disabled={true}
-                  className="input-basic medium"
-                  classNameLabel="text-black big text-required font-500"
-                  label="Porcentaje de cumplimiento"
-                />
-                <InputComponent
-                  idInput="knowledgeTransferHours"
-                  defaultValue={`${detailData?.knowledgeTransferHours}`}
-                  typeInput="number"
-                  className="input-basic medium"
-                  classNameLabel="text-black big text-required font-500"
-                  label="Horas totales por el crédito"
-                  disabled={true}
-                />
+              <div className="grid-form-3-container gap-15">
+                  <InputComponent
+                    idInput='knowledgeTransferPercent'
+                    defaultValue={`${detailData?.knowledgeTransferPercent || '0'} %`}
+                    typeInput="text"
+                    disabled={true}
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Porcentaje de descuento por periodo"
+                  />
+                  <InputComponent
+                    idInput='knowledgeTransferHours'
+                    defaultValue={`${detailData?.knowledgeTransferHours}`}
+                    typeInput="number"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Horas por periodo"
+                    disabled={true}
+                  />
+                   <InputComponent
+                    idInput='knowledgeTransferCondonationType'
+                    defaultValue={`${detailData?.knowledgeTransferCondonationType}`}
+                    typeInput="text"
+                    className="input-basic medium"
+                    classNameLabel="text-black big text-required font-500"
+                    label="Tipo de condonación"
+                    disabled={true}
+                  />
               </div>
+              {
+                detailData?.knowledgeTransferCondonationPercent?.length > 0 &&
+                  <div className="mt-16px">
+                    <TableRegulationView  detailData={detailData} typeTable={{ knowledgeTransfer: 3 }} viewPaginator={false} />
+                  </div>
+              }
             </Acordion>
           </div>
           <div onClick={preventClick}>
@@ -345,7 +356,7 @@ const RegulationDetailComponent = ({
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"continuousSuspensionApplies"}
+                  idInput={"applyContinuousSuspension"}
                   defaultValue={detailData?.applyContinuousSuspension == 1}
                   disabled={true}
                   size="small"
@@ -450,7 +461,7 @@ const RegulationDetailComponent = ({
                 <SwitchComponent
                   control={control}
                   direction={EDirection.other}
-                  idInput={"extensionApply"}
+                  idInput={"applyExtension"}
                   disabled={true}
                   defaultValue={detailData?.applyExtension == 1}
                   size="small"
@@ -508,16 +519,14 @@ const RegulationDetailComponent = ({
               }
             >
               <div>
-                <TableJson
-                  idInput="performancePeriod"
-                  isOpen={detailData?.applyCondonationPerformancePeriod == 1}
-                  setValue={setValue}
-                  title="promedio y porcentaje de condonación"
-                  onlyView={true}
-                  getValues={getValues}
-                  error={errors}
-                  dataRead={detailData.performancePeriodStructure}
-                />
+                <p className="title-disable-jsonTable">Porcentaje de condonación</p>
+                { detailData?.performancePeriodStructure?.dataTable?.length > 0 && (
+                  <TableRegulationView
+                    detailData={detailData}
+                    typeTable={{ cumulativeAcademicPeriod: 4 }}
+                    viewPaginator={false}
+                  />
+                )}
               </div>
             </Acordion>
           </div>
@@ -544,16 +553,14 @@ const RegulationDetailComponent = ({
               }
             >
               <div>
-                <TableJson
-                  isOpen={detailData?.applyAccomulatedIncomeCondonation == 1}
-                  idInput="accumulatedPerformance"
-                  setValue={setValue}
-                  title="Agregar promedio y porcentaje de condonación"
-                  getValues={getValues}
-                  error={errors}
-                  onlyView={true}
-                  dataRead={detailData.accumulatedPerformanceDataTable}
-                />
+              <p className="title-disable-jsonTable">Porcentaje de condonación</p>
+                { detailData?.accumulatedPerformanceDataTable?.dataTable?.length > 0 && (
+                  <TableRegulationView
+                    detailData={detailData}
+                    typeTable={{ cumulativeAcademicPerformance: 5 }}
+                    viewPaginator={false}
+                  />
+                )}
               </div>
             </Acordion>
           </div>
