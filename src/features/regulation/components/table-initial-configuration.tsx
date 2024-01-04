@@ -8,11 +8,7 @@ import {
   UseFormGetValues,
   UseFormSetValue,
 } from "react-hook-form";
-import {
-  IPerformanceStructure,
-  IRegulation,
-  IRegulationSearch,
-} from "../../../common/interfaces/regulation";
+import {IRegulation } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
 
 const INIT_DATA = { dataTable: []};
@@ -166,9 +162,12 @@ const TableInitialConfiguration = ({
 
   //Valida que el valor ingresado no sea mayor a 100
   const handleInputChange = (value: string, key: string) => {
-    if (/^\d*\.?\d*$/.test(value) && parseFloat(value) >= 0 && parseFloat(value) <= 100) {
+    value = value.replace(/^0+(?=\d)/, '');
+    
+
+    if (value === '' || (/^\d*\.?\d*$/.test(value) && parseFloat(value) >= 0 && parseFloat(value) <= 100)) {
       setTempData({ ...tempData, [key]: value });
-    }else {
+    } else {
       setTempData({ ...tempData, [key]: '' });
     }
   };

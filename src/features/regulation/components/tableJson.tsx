@@ -5,15 +5,11 @@ import {
 } from "../../../common/components/Form";
 import * as Icons from "react-icons/fa";
 import {
-  Control,
-  Controller,
   UseFormGetValues,
-  UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
 import {
-  IPerformanceStructure,
-  IRegulation,
+ IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
@@ -87,39 +83,7 @@ const TableJson = ({
       validateField('percent', tempData.percent, DEFAULT_MESSAGE);
       validateField('endAverage', tempData.endAverage, DEFAULT_MESSAGE);
       validateField('initialAverage', tempData.initialAverage, DEFAULT_MESSAGE);
-    } else if (parseInt(percentCondonationValue) < 0 || parseInt(percentCondonationValue) > 100 ) {
-      setMessageError({
-        ...({'percentCondonation':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 0"
-          }
-        }),
-      })
-    } else if(parseInt(tempData.percent) < 0 || parseInt(tempData.percent) > 100){
-      setMessageError({
-        ...({'percent':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 0"
-          }
-        })
-      })
-    } else if (parseInt(tempData.initialAverage) < 0 || parseInt(tempData.initialAverage) > 5 ) {
-      setMessageError({
-        ...({'initialAverage':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 5 y menor que cero"
-          }
-        }),
-      })
-    } else if(parseInt(tempData.endAverage) < 0 || parseInt(tempData.endAverage) > 5){
-      setMessageError({
-        ...({'endAverage':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 5 y menor que cero"
-          }
-        })
-      })
-    }else if(validateRanges()){
+    } else if(validateRanges()){
       return
     } else {
       setMessageError({})
@@ -183,8 +147,35 @@ const TableJson = ({
     return false;
   };
 
+  const validateSize = (number: string) => { return parseInt(number) > 5.00 };
+
   // Ordena de forma ascendente 
   const sortedData = [...data.dataTable].sort((a, b) => a.initialAverage - b.initialAverage);
+
+  function handleInputChange3(value: string, minSize: number, maxSize: number, setTargetValue: (newValue: string) => void) {
+    const cleanValue = formatInputValue(value);
+    const floatValue = parseFloat(cleanValue);
+  
+    if (
+      floatValue > maxSize ||
+      isNaN(floatValue) ||
+      parseInt(cleanValue) < minSize ||
+      cleanValue === '00' ||
+      cleanValue === '0.00'
+    ) {
+      setTargetValue('');
+    } else {
+      setTargetValue(cleanValue);
+    }
+  }
+  
+  function formatInputValue(value: string): string {
+    return value
+    .replace(/^0+(?=\d)/, '')
+    .replace(/[^0-9.]/g, '')
+    .replace(/\.(\d{2})\d*$/, '.$1') 
+    .replace(/^\./, '0.');
+  }
 
 
   return (
@@ -194,10 +185,10 @@ const TableJson = ({
           idInput='percentCondonation'
           typeInput="number"
           value={percentCondonationValue}
-          onChange={(e) => {
-            setPercentCondonationValue(e.target.value)
-            setValue(`${idInput}.percentCondonation`, e.target.value)
-          }}
+          onChange={(e) => {  handleInputChange3(e.target.value, 0, 100, (newValue) => {
+            setPercentCondonationValue(newValue);
+            setValue(`${idInput}.percentCondonation`, newValue);
+          }); }}
           className="input-basic color-default-value"
           classNameLabel="text-black weight-500 big text-required"
           direction={EDirection.column}
@@ -213,6 +204,7 @@ const TableJson = ({
             typeInput="number"
             onChange={(e) => {
               if (validateDecimales(e.target.value)) return;
+              if (validateSize(e.target.value)) return;
               setTempData({ ...tempData, initialAverage: e.target.value });
             }}
             value={tempData.initialAverage}
@@ -227,6 +219,7 @@ const TableJson = ({
             typeInput="number"
             onChange={(e) => {
               if (validateDecimales(e.target.value)) return;
+              if (validateSize(e.target.value)) return;
               setTempData({ ...tempData, endAverage: e.target.value });
             }}
             value={tempData.endAverage}
@@ -240,8 +233,9 @@ const TableJson = ({
             idInput="percent"
             typeInput="number"
             onChange={(e) => {
-              if (validateDecimales(e.target.value)) return;
-              setTempData({ ...tempData, percent: e.target.value });
+              handleInputChange3(e.target.value, 1, 100, (newValue) => {
+                setTempData({ ...tempData, percent: newValue });
+              });
             }}
             value={tempData.percent}
             className="input-basic color-default-value"

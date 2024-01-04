@@ -54,7 +54,7 @@ export default function useFormRegulation(auth) {
     applyTheoreticalSemester?: boolean;
     applyAcademicPerformancePercent?: boolean;
     applyRequirementsPercent?: boolean
-    applyTheoreticalSemiannualPercent?: boolean
+    applyTheoreticalSemiannualPercent?: boolean,
   }>();
   const [loadingUpdate, setLoadingUpdate] = useState({ program: false, period: false })
 
@@ -185,7 +185,13 @@ export default function useFormRegulation(auth) {
       applyCondonationPerformancePeriod: false,
       performancePeriodStructure: {
         percentCondonation: 0,
+        dataTable:[]
       },
+      applyAccomulatedIncomeCondonation: false,
+      accumulatedPerformanceDataTable: {
+        percentCondonation: 0,
+        dataTable:[]
+      }
     };
 
     const buildData = {

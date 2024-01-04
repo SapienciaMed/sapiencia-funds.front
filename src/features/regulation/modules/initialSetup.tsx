@@ -1,6 +1,6 @@
 import { InputComponent, SelectComponent } from "../../../common/components/Form";
 import SwitchComponent from "../../../common/components/Form/switch.component";
-import { Controller } from "react-hook-form";
+import { Controller, ControllerRenderProps, FieldValues } from "react-hook-form";
 import Acordion from "../components/acordion";
 import { LIST_DATA_GRACE_PERIOD } from "../hooks/regulation-api-service.hook";
 import { EDirection } from "../../../common/constants/input.enum";
@@ -19,6 +19,26 @@ const InitialSetup = ({
   listPrograms,
   onlyView,
 }) => {
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, field: ControllerRenderProps<FieldValues, any>, minSize = 1,  maxSize = 100) => {
+    let valor = event.target.value;
+    valor = valor.replace(/^0+(?=\d)/, '');
+    valor = valor.replace(/[^0-9.]/g, '');
+
+    // Permitir solo un dígito después del punto decimal
+    const partes = valor.split('.');
+    if (partes.length > 1) {
+      partes[1] = partes[1].slice(0, 2);
+      valor = partes.join('.');
+    }
+
+    const valorNumerico = parseFloat(valor);
+
+    if (isNaN(valorNumerico) || valorNumerico < minSize || valorNumerico > maxSize || valor == '100.') {
+      valor = '';
+    } 
+    field.onChange(valor);
+  };
 
   return (
     <div className="container-form p-24 display-flex-direction-column">
@@ -53,12 +73,9 @@ const InitialSetup = ({
             idInput={"isOpenPeriod"}
             errors={errors}
             control={control}
-            onChange={() => setValue("isOpenPeriod", undefined)}
-            defaultValue={
-              updateData?.isOpenPeriod
-                ? updateData?.isOpenPeriod
-                : getValues().isOpenPeriod
-            }
+            onChange={() => {
+              (watch('endPeriod') != undefined || watch('endPeriod') != null) ? setValue('endPeriod', undefined): updateData != undefined && setValue('endPeriod', updateData?.endPeriod)
+            }}
             size="normal"
             disabled={onlyView}
             label="Convocatoria abierta"
@@ -66,6 +83,7 @@ const InitialSetup = ({
             classNameLabel="text-black biggest font-500 text-required"
             direction={EDirection.other}
             classFlexEnd="direction-switch"
+            isEdit={updateData != undefined}
           />
         </div>
         <div className="containerEndPeriod">
@@ -79,7 +97,7 @@ const InitialSetup = ({
             data={periodList}
             filter={true}
             errors={errors}
-            disabled={onlyView || watch().isOpenPeriod}
+            disabled={watch('isOpenPeriod')}
           />
         </div>
       </div>
@@ -96,13 +114,13 @@ const InitialSetup = ({
                 applyTheoreticalSemiannualPercent: getValues().applyTheoreticalSemiannualPercent,
               });
             }, 400);
-            setValue("theoreticalSemiannualPercent", null);
+            setValue("theoreticalSemiannualPercent", undefined);
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyTheoreticalSemiannualPercent"}
               errors={errors}
-              disabled={onlyView}
               control={control}
               onClick={() => {
                 if (onlyView) return;
@@ -113,13 +131,12 @@ const InitialSetup = ({
                 
               }}
               onChange={() => {
-                setValue("theoreticalSemiannualPercent", null);
+                setValue("theoreticalSemiannualPercent", undefined);
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
               classNameLabel="text-black biggest font-500"
               direction={EDirection.other}
-              defaultValue={getValues().applyTheoreticalSemiannualPercent }
             />
           }
         >
@@ -133,7 +150,7 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field)}
                     onBlur={field.onBlur}
                     value={field?.value || ''}
                     className="input-basic medium"
@@ -159,10 +176,11 @@ const InitialSetup = ({
                 applyAcademicPerformancePercent: getValues().applyAcademicPerformancePercent,
               });
             }, 400);
-            setValue("academicPerformancePercent", null);
+            setValue("academicPerformancePercent", undefined);
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyAcademicPerformancePercent"}
               errors={errors}
               disabled={onlyView}
@@ -175,7 +193,7 @@ const InitialSetup = ({
                 });
               }}
               onChange={() => {
-                setValue("academicPerformancePercent", null);
+                setValue("academicPerformancePercent", undefined);
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
@@ -193,9 +211,8 @@ const InitialSetup = ({
                   <InputComponent
                     idInput={field.name}
                     errors={errors}
-                    disabled={onlyView ? true : false}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field)}
                     onBlur={field.onBlur}
                     value={field?.value  || ''}
                     className="input-basic medium"
@@ -221,10 +238,11 @@ const InitialSetup = ({
                 applyRequirementsPercent: getValues().applyRequirementsPercent,
               });
             }, 400);
-            setValue("requirementsPercent", null);
+            setValue("requirementsPercent", undefined);
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyRequirementsPercent"}
               errors={errors}
               disabled={onlyView}
@@ -238,7 +256,7 @@ const InitialSetup = ({
                 });
               }}
               onChange={() => {
-                setValue("requirementsPercent", null);
+                setValue("requirementsPercent", undefined);
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
@@ -258,7 +276,7 @@ const InitialSetup = ({
                     errors={errors}
                     disabled={onlyView}
                     typeInput="text"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field)}
                     onBlur={field.onBlur}
                     value={field?.value  || ''}
                     className="input-basic medium"
@@ -278,19 +296,20 @@ const InitialSetup = ({
           onClick={() => {
             if (onlyView) return;
             setValue("applySocialService", !getValues().applySocialService);
+            setValue("socialServicePercent", undefined);
+            setValue("socialServiceHours", undefined);
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
                 applySocialService: getValues().applySocialService,
               });
             }, 400);
-            setValue("socialServicePercent", null);
-            setValue("socialServiceHours", null);
             // Valor por defecto al select Tipo de condonación
             getValues().applySocialService ? setValue('socialServiceCondonationType','Total') : setValue('socialServiceCondonationType','')
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applySocialService"}
               errors={errors}
               disabled={onlyView}
@@ -303,8 +322,8 @@ const InitialSetup = ({
                 });
               }}
               onChange={() => {
-                setValue("socialServicePercent", null);
-                setValue("socialServiceHours", null);
+                setValue("socialServicePercent", undefined);
+                setValue("socialServiceHours", undefined);
               }}
               size="small"
               className="select-basic select-disabled-list input-size"
@@ -324,7 +343,7 @@ const InitialSetup = ({
                     errors={errors}
                     disabled={onlyView}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field)}
                     onBlur={field.onBlur}
                     value={field?.value || ''}
                     className="input-basic medium"
@@ -343,7 +362,7 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field, 1, 999)}
                     onBlur={field.onBlur}
                     value={field?.value || ''}
                     className="input-basic medium"
@@ -375,7 +394,7 @@ const InitialSetup = ({
               />
           </div>
           {
-            getValues('socialServiceCondonationType') === 'Parcial' && (
+            watch('socialServiceCondonationType') === 'Parcial' && (
               <div>
                 <TableInitialConfiguration
                   dataRead={updateData}
@@ -398,19 +417,20 @@ const InitialSetup = ({
           onClick={() => {
             if (onlyView) return;
             setValue( "applyKnowledgeTransfer", !getValues().applyKnowledgeTransfer );
+            setValue("knowledgeTransferPercent", undefined);
+            setValue("knowledgeTransferHours", undefined);
             setTimeout(() => {
               setToggleControl({
                 ...toggleControl,
                 applyKnowledgeTransfer: getValues().applyKnowledgeTransfer,
               });
             }, 400);
-            setValue("knowledgeTransferPercent", undefined);
-            setValue("knowledgeTransferHours", undefined);
             // Valor por defecto al select Tipo de condonación
             getValues().applyKnowledgeTransfer ? setValue('knowledgeTransferCondonationType','Total') : setValue('knowledgeTransferCondonationType','') 
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyKnowledgeTransfer"}
               errors={errors}
               disabled={onlyView}
@@ -441,7 +461,7 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field)}
                     disabled={onlyView}
                     onBlur={field.onBlur}
                     value={field?.value || ''}
@@ -461,7 +481,7 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field, 1, 999)}
                     onBlur={field.onBlur}
                     value={field?.value  || ''}
                     className="input-basic medium"
@@ -493,7 +513,7 @@ const InitialSetup = ({
               />
           </div>
           {
-            getValues('knowledgeTransferCondonationType') === 'Parcial' && (
+            watch('knowledgeTransferCondonationType') === 'Parcial' && (
               <div>
                 <TableInitialConfiguration
                   dataRead={updateData}
@@ -527,6 +547,7 @@ const InitialSetup = ({
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyGracePeriod"}
               errors={errors}
               disabled={onlyView}
@@ -557,7 +578,7 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field, 1, 99)}
                     onBlur={field.onBlur}
                     value={field?.value || ''}
                     className="input-basic medium"
@@ -601,6 +622,7 @@ const InitialSetup = ({
           }}
           switchElement={
             <SwitchComponent
+            isEdit={updateData != undefined}
               idInput={"applyContinuousSuspension"}
               errors={errors}
               disabled={onlyView}
@@ -631,7 +653,7 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field, 1, 9)}
                     onBlur={field.onBlur}
                     value={field?.value || ''}
                     className="input-basic medium"
@@ -663,6 +685,7 @@ const InitialSetup = ({
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyDiscontinuousSuspension"}
               errors={errors}
               control={control}
@@ -693,7 +716,7 @@ const InitialSetup = ({
                     idInput={field.name}
                     errors={errors}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field, 1, 9)}
                     onBlur={field.onBlur}
                     value={field?.value || ''}
                     className="input-basic medium"
@@ -724,6 +747,7 @@ const InitialSetup = ({
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               disabled={onlyView}
               idInput={"applySpecialSuspensions"}
               errors={errors}
@@ -754,7 +778,7 @@ const InitialSetup = ({
                     disabled={onlyView}
                     errors={errors}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field, 1, 9)}
                     onBlur={field.onBlur}
                     value={field?.value || ""}
                     className="input-basic medium"
@@ -784,6 +808,7 @@ const InitialSetup = ({
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyExtension"}
               errors={errors}
               disabled={onlyView}
@@ -814,7 +839,7 @@ const InitialSetup = ({
                     errors={errors}
                     disabled={onlyView}
                     typeInput="number"
-                    onChange={field.onChange}
+                    onChange={(value) => handleInputChange(value, field, 1, 9)}
                     onBlur={field.onBlur}
                     value={field?.value || ''}
                     className="input-basic medium"
