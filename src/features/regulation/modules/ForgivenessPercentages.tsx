@@ -35,6 +35,7 @@ const ForgivenessPercentages = ({
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyCondonationPerformancePeriod"}
               errors={errors}
               control={control}
@@ -86,6 +87,7 @@ const ForgivenessPercentages = ({
           }}
           switchElement={
             <SwitchComponent
+              isEdit={updateData != undefined}
               idInput={"applyAccomulatedIncomeCondonation"}
               errors={errors}
               disabled={onlyView}

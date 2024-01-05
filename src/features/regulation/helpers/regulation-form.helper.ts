@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { IRegulation } from "../../../common/interfaces/regulation";
 import { ApiResponse } from "../../../common/utils/api-response";
-import { EResponseCodes } from "../../../common/constants/api.enum";
 import { UseFormSetValue } from "react-hook-form";
 
 export const controlToggle = (data: IRegulation, setToggleControl: Dispatch<SetStateAction<any>>) => {
@@ -54,4 +53,6 @@ export const setValuesRegulation = (response: ApiResponse<IRegulation>, setValue
   setValue('theoreticalSemiannualPercent', response.data.theoreticalSemiannualPercent)
   setValue('performancePeriodStructure', response.data.performancePeriodStructure)
   setValue('socialServiceCondonationPercent', response.data.socialServiceCondonationPercent)
+  setValue('applyAccomulatedIncomeCondonation', response.data.applyAccomulatedIncomeCondonation)
+  setValue('accumulatedPerformanceDataTable', response.data.accumulatedPerformanceDataTable)
 };

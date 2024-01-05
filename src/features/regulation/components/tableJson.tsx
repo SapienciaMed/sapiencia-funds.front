@@ -3,20 +3,17 @@ import {
   ButtonComponent,
   InputComponent,
 } from "../../../common/components/Form";
-import * as Icons from "react-icons/fa";
 import {
-  Control,
-  Controller,
   UseFormGetValues,
-  UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
 import {
-  IPerformanceStructure,
-  IRegulation,
+ IRegulation,
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 
 const INIT_DATA = { percentCondonation: "", dataTable: [] };
 const INIT_TEMP_DATA = { initialAverage: "", endAverage: "", percent: "" };
@@ -87,39 +84,7 @@ const TableJson = ({
       validateField('percent', tempData.percent, DEFAULT_MESSAGE);
       validateField('endAverage', tempData.endAverage, DEFAULT_MESSAGE);
       validateField('initialAverage', tempData.initialAverage, DEFAULT_MESSAGE);
-    } else if (parseInt(percentCondonationValue) < 0 || parseInt(percentCondonationValue) > 100 ) {
-      setMessageError({
-        ...({'percentCondonation':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 0"
-          }
-        }),
-      })
-    } else if(parseInt(tempData.percent) < 0 || parseInt(tempData.percent) > 100){
-      setMessageError({
-        ...({'percent':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 0"
-          }
-        })
-      })
-    } else if (parseInt(tempData.initialAverage) < 0 || parseInt(tempData.initialAverage) > 5 ) {
-      setMessageError({
-        ...({'initialAverage':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 5 y menor que cero"
-          }
-        }),
-      })
-    } else if(parseInt(tempData.endAverage) < 0 || parseInt(tempData.endAverage) > 5){
-      setMessageError({
-        ...({'endAverage':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 5 y menor que cero"
-          }
-        })
-      })
-    }else if(validateRanges()){
+    } else if(validateRanges()){
       return
     } else {
       setMessageError({})
@@ -183,8 +148,35 @@ const TableJson = ({
     return false;
   };
 
+  const validateSize = (number: string) => { return parseInt(number) > 5.00 };
+
   // Ordena de forma ascendente 
-  const sortedData = [...data.dataTable].sort((a, b) => a.initialAverage - b.initialAverage);
+  const sortedData = [...data?.dataTable].sort((a, b) => a?.initialAverage - b?.initialAverage);
+
+  function handleInputChange3(value: string, minSize: number, maxSize: number, setTargetValue: (newValue: string) => void) {
+    const cleanValue = formatInputValue(value);
+    const floatValue = parseFloat(cleanValue);
+  
+    if (
+      floatValue > maxSize ||
+      isNaN(floatValue) ||
+      parseInt(cleanValue) < minSize ||
+      cleanValue === '00' ||
+      cleanValue === '0.00'
+    ) {
+      setTargetValue('');
+    } else {
+      setTargetValue(cleanValue);
+    }
+  }
+  
+  function formatInputValue(value: string): string {
+    return value
+    .replace(/^0+(?=\d)/, '')
+    .replace(/[^0-9.]/g, '')
+    .replace(/\.(\d{2})\d*$/, '.$1') 
+    .replace(/^\./, '0.');
+  }
 
 
   return (
@@ -194,12 +186,12 @@ const TableJson = ({
           idInput='percentCondonation'
           typeInput="number"
           value={percentCondonationValue}
-          onChange={(e) => {
-            setPercentCondonationValue(e.target.value)
-            setValue(`${idInput}.percentCondonation`, e.target.value)
-          }}
-          className="input-basic color-default-value"
-          classNameLabel="text-black weight-500 big text-required"
+          onChange={(e) => {  handleInputChange3(e.target.value, 0, 100, (newValue) => {
+            setPercentCondonationValue(newValue);
+            setValue(`${idInput}.percentCondonation`, newValue);
+          }); }}
+          className="input-basic big"
+          classNameLabel="text-black big text-required font-500 text-required"
           direction={EDirection.column}
           label="Porcentaje de condonación"
           errors={messageError}
@@ -213,11 +205,12 @@ const TableJson = ({
             typeInput="number"
             onChange={(e) => {
               if (validateDecimales(e.target.value)) return;
+              if (validateSize(e.target.value)) return;
               setTempData({ ...tempData, initialAverage: e.target.value });
             }}
             value={tempData.initialAverage}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
+            className="input-basic big"
+            classNameLabel="text-black big text-required font-500 text-required"
             direction={EDirection.column}
             label="Promedio inicial"
             errors={messageError}
@@ -227,11 +220,12 @@ const TableJson = ({
             typeInput="number"
             onChange={(e) => {
               if (validateDecimales(e.target.value)) return;
+              if (validateSize(e.target.value)) return;
               setTempData({ ...tempData, endAverage: e.target.value });
             }}
             value={tempData.endAverage}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
+            className="input-basic big"
+            classNameLabel="text-black big text-required font-500 text-required"
             direction={EDirection.column}
             label="Promedio final"
             errors={messageError}
@@ -240,12 +234,13 @@ const TableJson = ({
             idInput="percent"
             typeInput="number"
             onChange={(e) => {
-              if (validateDecimales(e.target.value)) return;
-              setTempData({ ...tempData, percent: e.target.value });
+              handleInputChange3(e.target.value, 1, 100, (newValue) => {
+                setTempData({ ...tempData, percent: newValue });
+              });
             }}
             value={tempData.percent}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
+            className="input-basic big"
+            classNameLabel="text-black big text-required font-500 text-required"
             direction={EDirection.column}
             label="Porcentaje"
             errors={messageError}
@@ -262,127 +257,45 @@ const TableJson = ({
           </div>
         </div>
       </section>
-      {data?.dataTable?.length > 0 && (
-          <div className="containerJsonTable">
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <label
-                  style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black  biggest bold-500"
-                >
-                  Promedio Inicial
-                </label>
-
-                <label
-                  style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black  biggest bold-500"
-                >
-                  Promedio Final
-                </label>
-
-                <label
-                  style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black biggest bold-500"
-                >
-                  Porcentaje
-                </label>
-                  <label
-                    style={{ padding: "14px 33px 14px 33px" }}
-                    className="text-black biggest  bold-500"
-                  >
-                    Accion
-                  </label>
+      {
+        (data?.dataTable?.length > 0 && sortedData.length > 0) && (
+          <div className='spc-customized-table spc-common-table-without-border'>
+            <div className="containerJsonTable" >
+                <DataTable value={sortedData} className={`spc-table full-height`} paginator={false} scrollable>
+                  <Column field="initialAverage" header="Promedio Inicial"></Column>
+                  <Column field="endAverage" header="Promedio Final"></Column>
+                  <Column field="percent" header="Porcentaje"></Column>
+                  <Column
+                    className="spc-table-actions"
+                    header={
+                      <div>
+                        <div className="spc-header-title">Acciones</div>
+                      </div>
+                    }
+                    body={(row) => (
+                      <label
+                        style={{ padding: "16px", cursor: 'pointer' }}
+                        className="text-black  biggest"
+                        onClick={() => {
+                          deleteItem(row.id);
+                        }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M16.6901 21H8.30603C7.24587 21 6.36494 20.192 6.28596 19.147L5.37769 7H19.5881L18.7102 19.142C18.6342 20.189 17.7523 21 16.6901 21V21Z" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M12.4999 11V17" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M4.39941 7H20.6005" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M17.5628 7L16.5371 4.298C16.2404 3.517 15.485 3 14.6405 3H10.3594C9.51492 3 8.75955 3.517 8.46286 4.298L7.43713 7" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M15.9731 11L15.5377 17" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M9.02674 11L9.46214 17" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </label>
+                    )}
+                  />
+                </DataTable>
               </div>
-            </div>
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                }}
-              >
-                {sortedData.map((item) => {
-                  return (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        background: "#F4F4F4",
-                        width: "100%",
-                        minWidth: "560px",
-                      }}
-                      key={"keyTable"}
-                    >
-                      <div
-                        style={{
-                          width: "175px",
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <label
-                          style={{ padding: "16px 23.5px 16px 23.5px" }}
-                          className="text-black  biggest"
-                        >
-                          {item.initialAverage}
-                        </label>
-                      </div>
-                      <div
-                        style={{
-                          width: "175px",
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <label
-                          style={{ padding: "14px 33px 14px 33px" }}
-                          className="text-black  biggest"
-                        >
-                          {item.endAverage}
-                        </label>
-                      </div>
-                      <div
-                        style={{
-                          width: "175px",
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <label
-                          style={{ padding: "14px 33px 14px 33px" }}
-                          className="text-black  biggest"
-                        >
-                          {item.percent}%
-                        </label>
-                      </div>
-                      <div
-                          style={{
-                            width: "175px",
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <label
-                            style={{ padding: "14px 33px 14px 33px" }}
-                            className="text-black  biggest"
-                            onClick={() => {
-                              deleteItem(item.id);
-                            }}
-                          >
-                            <Icons.FaTrashAlt
-                              style={{ color: "red" }}
-                              className="button grid-button button-delete"
-                            />
-                          </label>
-                        </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
           </div>
-        )}
+        )
+      }
     </div>
   );
 };
