@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { EDirection } from "../../constants/input.enum";
 import { LabelComponent } from "./label.component";
 import { MdOutlineError } from "react-icons/md";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, useController, useFormState } from "react-hook-form";
 
 interface ISwitch<T> {
   idInput: string;
@@ -21,7 +21,8 @@ interface ISwitch<T> {
   onChange?: () => void;
   onClick?: () => void;
   classNameSwitch?: string;
-  classFlexEnd?: string
+  classFlexEnd?: string,
+  isEdit?: boolean
 }
 
 const messageError = ({ idInput, errors, fieldArray }) => {
@@ -70,9 +71,31 @@ const SwitchComponent = ({
   onClick,
   defaultValue,
   classNameSwitch,
-  classFlexEnd
+  classFlexEnd,
+  isEdit
 }: ISwitch<any>): React.JSX.Element => {
   const [value, setValue] = useState(false);
+  const hasEffectRun = useRef(false);
+
+  const { field} = useController({
+    name: idInput,
+    control,
+  });
+
+  useEffect(() => {
+    if(field.value === 1 && isEdit && !hasEffectRun.current){
+      setValue(true)
+      hasEffectRun.current = true;
+    } 
+  },[isEdit, field.value])
+
+  useEffect(() => {
+    return (() => {
+      setValue(false)
+      hasEffectRun.current = false;
+    })
+  },[])
+
   return (
     <div
       className={
@@ -108,7 +131,7 @@ const SwitchComponent = ({
                   field.onChange(!value);
                   setValue(!value);
                 }}
-                checked={field.value || defaultValue }
+                checked={field.value}
                 className={`${className} ${
                   messageError({ idInput, errors, fieldArray })
                     ? "p-invalid"

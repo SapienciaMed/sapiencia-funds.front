@@ -54,7 +54,7 @@ const RegulationFormPage = ({ auth }) => {
             toggleControl={toggleControl}
             setToggleControl={setToggleControl}
             listPrograms={listPrograms}
-            onlyView={onlyView == '1'} // Esta haciendo algo?
+            onlyView={onlyView == '1'}
           />
         )}
         {view === 1 && (
