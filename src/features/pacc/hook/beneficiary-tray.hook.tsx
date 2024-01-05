@@ -13,15 +13,18 @@ import { AppContext } from "../../../common/contexts/app.context";
 import ChangeCuttingBeneficiary from "../components/change-cutting-beneficiary";
 import { useNavigate } from "react-router-dom";
 import { typePrefixeTabs } from "../helpers/TypePrefixeTab";
+import { useRegulationApi } from "../../regulation/hooks/regulation-api-service.hook";
 
-export default function useBeneficiaryTray(typeState: number, isCut: boolean = true, changeCut: boolean = true) {
+export default function useBeneficiaryTray(typeState: number, isCut: boolean = true, changeCut: boolean = true, isProgram?: boolean, isDowloadFile?: boolean) {
  
   const navigate = useNavigate();
   const tableComponentRef = useRef(null);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const { setMessage } = useContext(AppContext);
   const { GetCutsForConsolidationTray } = usePaccServices(typeState);
+  const { getPrograms } = useRegulationApi()
   const [idCutData, setIdCutData] = useState<IDropdownProps[]>([]);
+  const [ idProgramData, setIdProgramData ] = useState<IDropdownProps[]>([]);
 
   const [listSearch, setListSearch] = useState({
     data: {},
@@ -33,7 +36,8 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
 
   useEffect(() => {
     setShowSpinner(true);
-    isCut ? getCuts() : reset({ idCut: null });
+    isCut ? getCuts() : reset({ idCut: undefined });
+    isProgram ? getProgram() : reset({ idProgram: undefined })
 
     if (typeState) {
       setValueFilterTable("");
@@ -54,7 +58,7 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
         status: false,
       });
     };
-  }, [typeState, isCut]);
+  }, [typeState, isCut, isProgram]);
 
   useEffect(() => {
     if (listSearch.status) {
@@ -235,6 +239,11 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
           perPage: 10,
           statusPaccSearch: typeState,
         };
+        
+        const idProgramValue = getValues('idProgram');
+        if (idProgramValue !== undefined) {
+          searchCriteriaData.programParamId = parseInt(idProgramValue);
+        }
         setListSearch({
           data: searchCriteriaData,
           status: true,
@@ -268,6 +277,12 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
         perPage: 10,
         statusPaccSearch: typeState,
       };
+  
+      // Verificar si getValues('idProgram') tiene valor antes de añadirlo al objeto
+      const idProgramValue = getValues('idProgram');
+      if (idProgramValue !== undefined) {
+        data.programParamId = parseInt(idProgramValue);
+      }
 
       setListSearch({
         data,
@@ -275,6 +290,25 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
       });
     }
   };
+
+  const handleChangeProgram = (value: any) => {
+    if (value != null) {
+      const data: IConsolidationTrayForTechnicianCollection = {
+        programParamId: value,
+        searchParam: valueFilterTable || "",
+        page: 1,
+        perPage: 10,
+        statusPaccSearch: typeState,
+        [value === "TODOS" ? "cutParamName" : "cutParamId"]: getValues('idCut'),
+      };
+
+      setListSearch({
+        data,
+        status: true,
+      });
+     
+    }
+  }
 
   const getCuts = () => {
     isCut &&
@@ -320,6 +354,25 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
         .catch((error) => console.log(error));
   };
 
+  const getProgram = () => {
+    isProgram &&
+      getPrograms()
+        .then((response) => {
+          setShowSpinner(false);
+          if (response.operation.code === EResponseCodes.OK) {
+            const data = response.data?.map((item: any) => {
+              return {
+                name: item.value,
+                value: item.id,
+              };
+            });
+            setValue("idProgram", data[0].value);
+            setIdProgramData(data);    
+          }
+        })
+        .catch((error) => console.log(error));
+  }
+
   const apiUrl = () => {
     const baseApiUrl = process.env.urlApiFunds;
     const endpoint = listSearch.status
@@ -341,10 +394,12 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
     control,
     showSpinner,
     valueFilterTable,
+    idProgramData,
     handleFilterChange,
     handleChangeCut,
     apiUrl,
     setShowSpinner,
-    resetValue
+    resetValue,
+    handleChangeProgram
   };
 }

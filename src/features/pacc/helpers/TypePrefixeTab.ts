@@ -10,6 +10,7 @@ export const typePrefixeTabs = (tipo: number) => {
         [EStatePac.ProjectManager, 'consolidation-tray-project-leader'],
         [EStatePac.SocialService, 'consolidation-tray-social-service'],
         [EStatePac.Committee, 'consolidation-tray-committee'],
+        [EStatePac.AdministrativeAct, 'consolidation-tray-administrative-act'], //TODO: VALIDAR SI ES ESTO
     ]);
 
     return valorHas(typePrefix, tipo);
