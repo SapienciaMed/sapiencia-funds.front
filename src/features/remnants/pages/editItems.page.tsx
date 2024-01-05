@@ -34,7 +34,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         classNameLabel="text-black big medium"
                                         label={
                                             <>
-                                                ID comuna
+                                                Contrato
                                             </>
                                         }
                                     />
@@ -54,58 +54,12 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         currency="COP"
                                         locale="es-CO"
                                         fieldArray={true}
-                                        label="Restante"
+                                        label="N. Beneficios"
                                         classNameLabel="text-black big medium "
                                         errors={errors}
                                         placeholder={""}
                                         {...field}
                                     />
-                                );
-                            }}
-                        />
-                        <Controller
-                            control={control}
-                            name={"communityFund"}
-                            render={({ field }) => {
-                                return (
-                                    <InputComponent
-                                        idInput={field.name}
-                                        errors={errors}
-                                        typeInput={"text"}
-                                        onChange={field.onChange}
-                                        onBlur={field.onBlur}
-                                        value={field.value}
-                                        disabled
-                                        className="input-basic medium"
-                                        classNameLabel="text-black big medium"
-                                        label={
-                                            <>
-                                                ID fondo
-                                            </>
-                                        }
-                                    />
-                                );
-                            }}
-                        />
-                        <Controller
-                            control={control}
-                            name={"averageCost"}
-                            render={({ field }) => {
-                                return (
-                                    <InputNumberComponent
-                                        control={control}
-                                        idInput={field.name}
-                                        className="inputNumber-basic medium"
-                                        mode="currency"
-                                        currency="COP"
-                                        locale="es-CO"
-                                        label="Costo promedio"
-                                        classNameLabel="text-black big medium text-required"
-                                        errors={errors}
-                                        placeholder={""}
-                                        {...field}
-                                    />
-
                                 );
                             }}
                         />
@@ -113,25 +67,22 @@ const editItemsPage = ({ item, loadTableData }) => {
                     <div className="grid-form-4-container mb-24px">
                         <Controller
                             control={control}
-                            name={"communityFund"}
+                            name={"remaining"}
                             render={({ field }) => {
                                 return (
-                                    <InputComponent
+                                    <InputNumberComponent
+                                        control={control}
                                         idInput={field.name}
+                                        className="inputNumber-basic medium"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        label="Valor inversión contrato"
+                                        classNameLabel="text-black big medium "
                                         errors={errors}
-                                        typeInput={"text"}
-                                        onChange={field.onChange}
-                                        onBlur={field.onBlur}
-                                        value={field.value}
-                                        register={register}
-                                        disabled
-                                        className="input-basic medium"
-                                        classNameLabel="text-black big medium"
-                                        label={
-                                            <>
-                                                ID comuna
-                                            </>
-                                        }
+                                        placeholder={""}
+                                        {...field}
                                     />
                                 );
                             }}
@@ -149,7 +100,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         currency="COP"
                                         locale="es-CO"
                                         fieldArray={true}
-                                        label="Restante"
+                                        label="Valor proyectado"
                                         classNameLabel="text-black big medium "
                                         errors={errors}
                                         placeholder={""}
@@ -160,31 +111,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                         />
                         <Controller
                             control={control}
-                            name={"communityFund"}
-                            render={({ field }) => {
-                                return (
-                                    <InputComponent
-                                        idInput={field.name}
-                                        errors={errors}
-                                        typeInput={"text"}
-                                        onChange={field.onChange}
-                                        onBlur={field.onBlur}
-                                        value={field.value}
-                                        disabled
-                                        className="input-basic medium"
-                                        classNameLabel="text-black big medium"
-                                        label={
-                                            <>
-                                                ID fondo
-                                            </>
-                                        }
-                                    />
-                                );
-                            }}
-                        />
-                        <Controller
-                            control={control}
-                            name={"averageCost"}
+                            name={"remaining"}
                             render={({ field }) => {
                                 return (
                                     <InputNumberComponent
@@ -194,39 +121,58 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         mode="currency"
                                         currency="COP"
                                         locale="es-CO"
-                                        label="Costo promedio"
-                                        classNameLabel="text-black big medium text-required"
+                                        fieldArray={true}
+                                        label="Valor comprometido Proyectado"
+                                        classNameLabel="text-black big medium "
                                         errors={errors}
                                         placeholder={""}
                                         {...field}
                                     />
-
                                 );
                             }}
                         />
-                    </div>
-                    <div className="grid-form-3-container mb-24px">
                         <Controller
                             control={control}
-                            name={"quotas"}
+                            name={"remaining"}
                             render={({ field }) => {
                                 return (
                                     <InputNumberComponent
                                         control={control}
                                         idInput={field.name}
-                                        errors={errors}
-                                        disabled
-                                        mode="decimal"
-                                        minFractionDigits={2}
-                                        maxFractionDigits={2} 
                                         className="inputNumber-basic medium"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        label="Valor excedente"
+                                        classNameLabel="text-black big medium "
+                                        errors={errors}
+                                        placeholder={""}
+                                        {...field}
+                                    />
+                                );
+                            }}
+                        />                       
+                    </div>
+                    <div className="grid-form-3-container mb-24px">                       
+                        <Controller
+                            control={control}
+                            name={"quotaResource"}
+                            render={({ field }) => {
+                                return (
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={field.name}
+                                        className="inputNumber-basic medium"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        label="Girado"
                                         classNameLabel="text-black big medium"
-                                        min={0}
-                                        label={
-                                            <>
-                                                Cupos
-                                            </>
-                                        }
+                                        errors={errors}
+                                        placeholder={""}
+                                        {...field}
+                                        disabled
                                     />
                                 );
                             }}
@@ -243,7 +189,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         mode="currency"
                                         currency="COP"
                                         locale="es-CO"
-                                        label="Recurso con cupos"
+                                        label="Pendiente por girar comprometido"
                                         classNameLabel="text-black big medium"
                                         errors={errors}
                                         placeholder={""}
@@ -255,7 +201,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                         />
                         <Controller
                             control={control}
-                            name={"residual"}
+                            name={"quotaResource"}
                             render={({ field }) => {
                                 return (
                                     <InputNumberComponent
@@ -265,7 +211,7 @@ const editItemsPage = ({ item, loadTableData }) => {
                                         mode="currency"
                                         currency="COP"
                                         locale="es-CO"
-                                        label="Residual"
+                                        label="Pendiente por girar proyectado"
                                         classNameLabel="text-black big medium"
                                         errors={errors}
                                         placeholder={""}
@@ -274,7 +220,32 @@ const editItemsPage = ({ item, loadTableData }) => {
                                     />
                                 );
                             }}
-                        />
+                        />                       
+
+                    </div>
+                    <div className="grid-form-3-container mb-24px">
+                        <Controller
+                            control={control}
+                            name={"quotaResource"}
+                            render={({ field }) => {
+                                return (
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={field.name}
+                                        className="inputNumber-basic medium"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        label="Recursos sin ejecución"
+                                        classNameLabel="text-black big medium"
+                                        errors={errors}
+                                        placeholder={""}
+                                        {...field}
+                                        disabled
+                                    />
+                                );
+                            }}
+                        />     
 
                     </div>
 
