@@ -148,7 +148,10 @@ const TableJson = ({
     return false;
   };
 
-  const validateSize = (number: string) => { return parseInt(number) > 5.00 };
+  const validateSize = (number: string) => { 
+    const parsedNumber = parseFloat(number);
+    return !isNaN(parsedNumber) && parsedNumber > 5.00;
+  };
 
   // Ordena de forma ascendente 
   const sortedData = [...data?.dataTable].sort((a, b) => a?.initialAverage - b?.initialAverage);
