@@ -100,47 +100,68 @@ export default function useRemnants() {
     const tableColumns: ITableElement<any>[] = [
         {
             fieldName: "communityFund",
-            header: "ID comuna",
+            header: "Contrato",
+        },
+        {
+            fieldName: "communityFund",
+            header: "N. Beneficios",
         },
         {
             fieldName: "remaining",
-            header: "Restante",
+            header: "Valor inversión contrato",
             renderCell: (row) => {
                 return <>{formaterNumberToCurrency(row.remaining)}</>;
             }
         },
         {
-            fieldName: "communityFund",
-            header: "ID fondo",
-        },
-        {
             fieldName: "averageCost",
-            header: "Costo promedio",
+            header: "Valor proyectado",
             renderCell: (row) => {
                 return <>{formaterNumberToCurrency(row.averageCost)}</>;
             }
         },
         {
             fieldName: "quotas",
-            header: "Cupos",
+            header: "Valor comprometido Proyectado",
             renderCell: (row) => {
                 return <>{formatNumberToTwoDecimals(row.quotas)}</>;
             }
         },
         {
             fieldName: "quotaResource",
-            header: "Recurso con cupos",
+            header: "Valor excedente",
             renderCell: (row) => {
                 return <>{formaterNumberToCurrency(row.quotaResource)}</>;
             }
         },
         {
             fieldName: "residual",
-            header: "Residual",
+            header: "Girado",
             renderCell: (row) => {
                 return <>{formaterNumberToCurrency(row.residual)}</>;
             }
-        } 
+        }, 
+        {
+            fieldName: "residual",
+            header: "Pendiente por girar comprometido",
+            renderCell: (row) => {
+                return <>{formaterNumberToCurrency(row.residual)}</>;
+            }
+        }, 
+        {
+            fieldName: "residual",
+            header: "pendiente por girar proyectado",
+            renderCell: (row) => {
+                return <>{formaterNumberToCurrency(row.residual)}</>;
+            }
+        }, 
+        {
+            fieldName: "residual",
+            header: "recursos sin ejecución",
+            renderCell: (row) => {
+                return <>{formaterNumberToCurrency(row.residual)}</>;
+            }
+        }, 
     ];
 
     const tableActions: ITableAction<any>[] = [
@@ -160,7 +181,7 @@ export default function useRemnants() {
                     },
                 });
             },
-            hide: !validateActionAccess("FONDOS_REMANENTE_EDITAR"),
+            hide: !validateActionAccess("EXCEDENTE_CONTRATOS_EDITAR"),
         },
        /*  {
             icon: "Delete",

@@ -110,6 +110,101 @@ const editItemsPage = ({ item, loadTableData }) => {
                             }}
                         />
                     </div>
+                    <div className="grid-form-4-container mb-24px">
+                        <Controller
+                            control={control}
+                            name={"communityFund"}
+                            render={({ field }) => {
+                                return (
+                                    <InputComponent
+                                        idInput={field.name}
+                                        errors={errors}
+                                        typeInput={"text"}
+                                        onChange={field.onChange}
+                                        onBlur={field.onBlur}
+                                        value={field.value}
+                                        register={register}
+                                        disabled
+                                        className="input-basic medium"
+                                        classNameLabel="text-black big medium"
+                                        label={
+                                            <>
+                                                ID comuna
+                                            </>
+                                        }
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            name={"remaining"}
+                            render={({ field }) => {
+                                return (
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={field.name}
+                                        className="inputNumber-basic medium"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        fieldArray={true}
+                                        label="Restante"
+                                        classNameLabel="text-black big medium "
+                                        errors={errors}
+                                        placeholder={""}
+                                        {...field}
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            name={"communityFund"}
+                            render={({ field }) => {
+                                return (
+                                    <InputComponent
+                                        idInput={field.name}
+                                        errors={errors}
+                                        typeInput={"text"}
+                                        onChange={field.onChange}
+                                        onBlur={field.onBlur}
+                                        value={field.value}
+                                        disabled
+                                        className="input-basic medium"
+                                        classNameLabel="text-black big medium"
+                                        label={
+                                            <>
+                                                ID fondo
+                                            </>
+                                        }
+                                    />
+                                );
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            name={"averageCost"}
+                            render={({ field }) => {
+                                return (
+                                    <InputNumberComponent
+                                        control={control}
+                                        idInput={field.name}
+                                        className="inputNumber-basic medium"
+                                        mode="currency"
+                                        currency="COP"
+                                        locale="es-CO"
+                                        label="Costo promedio"
+                                        classNameLabel="text-black big medium text-required"
+                                        errors={errors}
+                                        placeholder={""}
+                                        {...field}
+                                    />
+
+                                );
+                            }}
+                        />
+                    </div>
                     <div className="grid-form-3-container mb-24px">
                         <Controller
                             control={control}
