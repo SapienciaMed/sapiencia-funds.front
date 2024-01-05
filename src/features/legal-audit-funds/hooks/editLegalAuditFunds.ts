@@ -7,7 +7,10 @@ import useYupValidationResolver from "../../../common/hooks/form-validator.hook"
 import { useGetcommuneFundIdHook } from "../../absorption-percentage/hooks/getcommuneFundIdHook";
 import { ICallLegalResfilters } from "../../../common/interfaces/LegalAuditFunds";
 import { editLegalAuditSchema } from "../../../common/schemas/legal-audit-schema";
-import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import {
+  formaterNumberToCurrency,
+  reverseFormat,
+} from "../../../common/utils/helpers";
 
 export const useEditLegalAuditFundsModal = (
   announcementId,
@@ -97,6 +100,13 @@ export const useEditLegalAuditFundsModal = (
     setMessage((prev) => ({ ...prev, show: false }));
   };
 
+  const handleResourceChange = ({ target }) => {
+    const { value } = target;
+    let rawValue = reverseFormat("es-CO", "COP", value);
+    if (isNaN(rawValue)) rawValue = 0;
+    setResourceRaw(rawValue);
+  };
+
   useEffect(() => {
     const { resource, order } = formWatch;
     if (!resource || !order) {
@@ -104,20 +114,6 @@ export const useEditLegalAuditFundsModal = (
     }
     setSubmitDisabled(false);
   }, [formWatch]);
-
-  useEffect(() => {
-    console.log("RESOURCE", resourceValue);
-    let rawValue = parseInt(
-      resourceValue
-        ?.toString()
-        ?.replace("$", "")
-        .replace(",", "")
-        .replace(".", "")
-    );
-    if (isNaN(rawValue)) rawValue = 0;
-    setValue("resource", formaterNumberToCurrency(rawValue));
-    setResourceRaw(rawValue);
-  }, []);
 
   useEffect(() => {
     const rawValueFromRow = parseFloat(row?.resource);
@@ -144,5 +140,7 @@ export const useEditLegalAuditFundsModal = (
     submitDisabled,
     onSubmit: handleSubmit(onSubmit),
     communeFundData,
+    resourceRaw,
+    handleResourceChange,
   };
 };
