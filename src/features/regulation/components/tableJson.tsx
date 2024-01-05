@@ -3,7 +3,6 @@ import {
   ButtonComponent,
   InputComponent,
 } from "../../../common/components/Form";
-import * as Icons from "react-icons/fa";
 import {
   UseFormGetValues,
   UseFormSetValue,
@@ -13,6 +12,8 @@ import {
   IRegulationSearch,
 } from "../../../common/interfaces/regulation";
 import { EDirection } from "../../../common/constants/input.enum";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 
 const INIT_DATA = { percentCondonation: "", dataTable: [] };
 const INIT_TEMP_DATA = { initialAverage: "", endAverage: "", percent: "" };
@@ -150,7 +151,7 @@ const TableJson = ({
   const validateSize = (number: string) => { return parseInt(number) > 5.00 };
 
   // Ordena de forma ascendente 
-  const sortedData = [...data.dataTable].sort((a, b) => a.initialAverage - b.initialAverage);
+  const sortedData = [...data?.dataTable].sort((a, b) => a?.initialAverage - b?.initialAverage);
 
   function handleInputChange3(value: string, minSize: number, maxSize: number, setTargetValue: (newValue: string) => void) {
     const cleanValue = formatInputValue(value);
@@ -189,8 +190,8 @@ const TableJson = ({
             setPercentCondonationValue(newValue);
             setValue(`${idInput}.percentCondonation`, newValue);
           }); }}
-          className="input-basic color-default-value"
-          classNameLabel="text-black weight-500 big text-required"
+          className="input-basic big"
+          classNameLabel="text-black big text-required font-500 text-required"
           direction={EDirection.column}
           label="Porcentaje de condonación"
           errors={messageError}
@@ -208,8 +209,8 @@ const TableJson = ({
               setTempData({ ...tempData, initialAverage: e.target.value });
             }}
             value={tempData.initialAverage}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
+            className="input-basic big"
+            classNameLabel="text-black big text-required font-500 text-required"
             direction={EDirection.column}
             label="Promedio inicial"
             errors={messageError}
@@ -223,8 +224,8 @@ const TableJson = ({
               setTempData({ ...tempData, endAverage: e.target.value });
             }}
             value={tempData.endAverage}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
+            className="input-basic big"
+            classNameLabel="text-black big text-required font-500 text-required"
             direction={EDirection.column}
             label="Promedio final"
             errors={messageError}
@@ -238,8 +239,8 @@ const TableJson = ({
               });
             }}
             value={tempData.percent}
-            className="input-basic color-default-value"
-            classNameLabel="text-black weight-500 big text-required"
+            className="input-basic big"
+            classNameLabel="text-black big text-required font-500 text-required"
             direction={EDirection.column}
             label="Porcentaje"
             errors={messageError}
@@ -256,127 +257,45 @@ const TableJson = ({
           </div>
         </div>
       </section>
-      {data?.dataTable?.length > 0 && (
-          <div className="containerJsonTable">
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <label
-                  style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black  biggest bold-500"
-                >
-                  Promedio Inicial
-                </label>
-
-                <label
-                  style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black  biggest bold-500"
-                >
-                  Promedio Final
-                </label>
-
-                <label
-                  style={{ padding: "14px 33px 14px 33px" }}
-                  className="text-black biggest bold-500"
-                >
-                  Porcentaje
-                </label>
-                  <label
-                    style={{ padding: "14px 33px 14px 33px" }}
-                    className="text-black biggest  bold-500"
-                  >
-                    Accion
-                  </label>
+      {
+        (data?.dataTable?.length > 0 && sortedData.length > 0) && (
+          <div className='spc-customized-table spc-common-table-without-border'>
+            <div className="containerJsonTable" >
+                <DataTable value={sortedData} className={`spc-table full-height`} paginator={false} scrollable>
+                  <Column field="initialAverage" header="Promedio Inicial"></Column>
+                  <Column field="endAverage" header="Promedio Final"></Column>
+                  <Column field="percent" header="Porcentaje"></Column>
+                  <Column
+                    className="spc-table-actions"
+                    header={
+                      <div>
+                        <div className="spc-header-title">Acciones</div>
+                      </div>
+                    }
+                    body={(row) => (
+                      <label
+                        style={{ padding: "16px", cursor: 'pointer' }}
+                        className="text-black  biggest"
+                        onClick={() => {
+                          deleteItem(row.id);
+                        }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M16.6901 21H8.30603C7.24587 21 6.36494 20.192 6.28596 19.147L5.37769 7H19.5881L18.7102 19.142C18.6342 20.189 17.7523 21 16.6901 21V21Z" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M12.4999 11V17" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M4.39941 7H20.6005" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M17.5628 7L16.5371 4.298C16.2404 3.517 15.485 3 14.6405 3H10.3594C9.51492 3 8.75955 3.517 8.46286 4.298L7.43713 7" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M15.9731 11L15.5377 17" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          <path d="M9.02674 11L9.46214 17" stroke="#FF0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </label>
+                    )}
+                  />
+                </DataTable>
               </div>
-            </div>
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                }}
-              >
-                {sortedData.map((item) => {
-                  return (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        background: "#F4F4F4",
-                        width: "100%",
-                        minWidth: "560px",
-                      }}
-                      key={"keyTable"}
-                    >
-                      <div
-                        style={{
-                          width: "175px",
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <label
-                          style={{ padding: "16px 23.5px 16px 23.5px" }}
-                          className="text-black  biggest"
-                        >
-                          {item.initialAverage}
-                        </label>
-                      </div>
-                      <div
-                        style={{
-                          width: "175px",
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <label
-                          style={{ padding: "14px 33px 14px 33px" }}
-                          className="text-black  biggest"
-                        >
-                          {item.endAverage}
-                        </label>
-                      </div>
-                      <div
-                        style={{
-                          width: "175px",
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <label
-                          style={{ padding: "14px 33px 14px 33px" }}
-                          className="text-black  biggest"
-                        >
-                          {item.percent}%
-                        </label>
-                      </div>
-                      <div
-                          style={{
-                            width: "175px",
-                            display: "flex",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <label
-                            style={{ padding: "14px 33px 14px 33px" }}
-                            className="text-black  biggest"
-                            onClick={() => {
-                              deleteItem(item.id);
-                            }}
-                          >
-                            <Icons.FaTrashAlt
-                              style={{ color: "red" }}
-                              className="button grid-button button-delete"
-                            />
-                          </label>
-                        </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
           </div>
-        )}
+        )
+      }
     </div>
   );
 };
