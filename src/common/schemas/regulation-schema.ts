@@ -29,8 +29,6 @@ export const shemaFormRegulation = yup.object().shape({
   theoreticalSemiannualPercent: yup
   .number()
   .nullable()
-    .min(1, greaterThan(1))
-    .max(100, lessThan(100))
     .when("applyTheoreticalSemiannualPercent",(applyTheoreticalSemiannualPercent, schema) => {
       if (applyTheoreticalSemiannualPercent[0])
         return schema
