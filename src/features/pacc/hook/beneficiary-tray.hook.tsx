@@ -48,7 +48,10 @@ export default function useBeneficiaryTray(typeState: number, isCut: boolean = t
 
       setTimeout(() => {
         setShowSpinner(false);
-        loadTableData({ statusPaccSearch: typeState });
+        loadTableData({ 
+          statusPaccSearch: typeState,
+          programParamId: getValues('idProgram')
+        });
       }, 600);
     }
 

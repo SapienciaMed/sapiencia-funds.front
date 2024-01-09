@@ -15,7 +15,7 @@ export enum EStatePac{
   ProjectManager = 8,
   Committee = 9,
   Consolidated = 10 ,
-  AdministrativeAct = 11 // No se cual es
+  AdministrativeAct = 11 
 }
 
 export enum ERegulation{

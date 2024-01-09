@@ -117,21 +117,19 @@ const TableJson = ({
     let isValidRange = false;
     data.dataTable.forEach((range) => {
       if (
-        tempData.initialAverage >= range.initialAverage && tempData.initialAverage <= range.endAverage
+        parseFloat(tempData.initialAverage) <= parseFloat(range.endAverage)
       ) {
         isValidRange = true;
         setMessageError({
-          ...messageError,
           'initialAverage':{
             "type": "optionality",
             "message": "No se permite agregar el porcentaje porque se está solapando con otro ya ingresado"
           }
         })
       }
-      if (tempData.endAverage >= range.initialAverage && tempData.endAverage <= range.endAverage) {
+      else if ( parseFloat(tempData.endAverage) <= parseFloat(range.endAverage)) {
         isValidRange = true;
         setMessageError({
-          ...messageError,
           'endAverage':{
             "type": "optionality",
             "message": "No se permite agregar el porcentaje porque se está solapando con otro ya ingresado"

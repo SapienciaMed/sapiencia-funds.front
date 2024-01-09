@@ -16,7 +16,7 @@ function BeneficiaryTrayPage({ typeState, isCut = true, changeCut, isProgram, is
 
     return(
         <div className="card-table gap-0 mt-14px">
-            <section className='grid-form-3-container'>  
+            <section className='grid-form-3-container-2'>  
                 {
                     isCut && 
                             <FormComponent action={() => {}}>
