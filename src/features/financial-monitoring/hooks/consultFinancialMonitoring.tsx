@@ -1,9 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../common/contexts/app.context";
 
-import { ITableAction } from "../../../common/interfaces/table.interfaces";
 import { useWidth } from "../../../common/hooks/use-width";
 import {
   ICallPeriodsResfilters,
@@ -12,9 +10,6 @@ import {
 import { filtersPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAbsorption.shema";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { urlApiFunds } from "../../../common/utils/base-url";
-import useCrudService from "../../../common/hooks/crud-service.hook";
-import CreateAbsorptionPercentage from "../../absorption-percentage/forms/modals/CreateAbsorptionPercentageModal";
-import EditAbsorptionPercentageModal from "../../absorption-percentage/forms/modals/EditAbsorptionPercentageModal";
 import { useGetAllPeriodsHook } from "../../absorption-percentage/hooks/getAllPeriodsHook";
 import useBudgetApi from "../../budget-convocation/hooks/budget-api.hook";
 import { EResponseCodes } from "../../../common/constants/api.enum";

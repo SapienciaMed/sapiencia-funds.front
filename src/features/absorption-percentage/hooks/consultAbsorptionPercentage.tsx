@@ -10,11 +10,11 @@ import {
   ICallPeriodsResfilters,
   IPeriodsAbsorption,
 } from "../../../common/interfaces/PeriodsAbsorption.interface";
-import CreateAbsorptionPercentage from "../forms/modals/CreateAbsorptionPercentageModal";
+import CreateAbsorptionPercentage from "../forms/formsActions/CreateAbsorptionPercentageModal";
 import { filtersPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAbsorption.shema";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { urlApiFunds } from "../../../common/utils/base-url";
-import EditAbsorptionPercentageModal from "../forms/modals/EditAbsorptionPercentageModal";
+import EditAbsorptionPercentageModal from "../forms/formsActions/EditAbsorptionPercentageModal";
 import useCrudService from "../../../common/hooks/crud-service.hook";
 
 export const useConsultAbsorptionPercentage = () => {
@@ -157,19 +157,21 @@ export const useConsultAbsorptionPercentage = () => {
   const handleAggItem = async (ev) => {
     try {
       ev.preventDefault();
-      setMessage({
-        show: true,
-        title: "Agregar ítem",
-        description: (
-          <CreateAbsorptionPercentage
-            announcementId={periods}
-            reloadTable={handleReloadTable}
-          />
-        ),
-        background: true,
-        size: "items",
-        items: true,
-      });
+      navigate("/fondos/porcentaje-absorcion/crear");
+
+      // setMessage({
+      //   show: true,
+      //   title: "Agregar ítem",
+      //   description: (
+      //     <CreateAbsorptionPercentage
+      //       announcementId={periods}
+      //       reloadTable={handleReloadTable}
+      //     />
+      //   ),
+      //   background: true,
+      //   size: "items",
+      //   items: true,
+      // });
     } catch (err) {
       console.log(err);
     }

@@ -46,7 +46,7 @@ export default function useRemnants() {
         reset,
         watch,
         formState: { errors },
-    } = useForm<IRemnantsFilter>({resolver});
+    } = useForm<IRemnantsFilter>({});
 
 
 
@@ -223,6 +223,8 @@ export default function useRemnants() {
     }, []);
 
     const onSubmit = handleSubmit(async (data: { announcement: number, fund: number, trust: number }) => {
+
+        console.log(data)
 
         const searchData = {
             ...data           
