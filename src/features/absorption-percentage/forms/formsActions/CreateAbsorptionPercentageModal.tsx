@@ -55,126 +55,141 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               filter={true}
             />
           </div>
-          {/* <SelectComponent
-              idInput="communeFundId"
-              control={control}
-              errors={errors}
-              data={communeFundData}
-              label={
-                <>
-                  Fondo comuna <span>*</span>
-                </>
-              }
-              className="select-basic medium"
-              classNameLabel="text-black big bold"
-              placeholder="Seleccione."
-              filter
-            /> */}
 
-          {/* <Controller
-              control={control}
-              name="resource"
-              render={({ field }) => {
-                return (
-                  <InputComponent
-                    idInput="resource"
-                    label={
-                      <>
-                        Recurso <span>*</span>
-                      </>
-                    }
-                    typeInput="text"
-                    register={register}
-                    onChange={handleChangeResource}
-                    errors={errors}
-                    className="input-basic medium"
-                    classNameLabel="text-black big bold"
-                    {...field}
-                  />
-                );
-              }}
-            /> */}
-          <InputNumberComponent
-            idInput="sceneryPercentage1"
-            control={control}
-            errors={errors}
-            label={<>Escenario 1</>}
-            classNameLabel="text-black big bold text-required"
-            className="inputNumber-basic medium "
-            mode="decimal"
-            prefix="% "
-            maxFractionDigits={2}
-            min={0}
-          />
+          <div className="mt--25px" style={{ display: "flex" }}>
+            <div className="grid-form-4-container display-flex-direction-column  ml--2px padding-form container-form">
+              <span className="text-black biggest  ">Valores</span>
 
-          <InputNumberComponent
-            idInput="sceneryPercentage2"
-            control={control}
-            errors={errors}
-            label={<>Escenario 2</>}
-            classNameLabel="text-black big bold text-required"
-            className="inputNumber-basic medium "
-            mode="decimal"
-            prefix="% "
-            maxFractionDigits={2}
-            min={0}
-          />
+              <div className="grid-form-4-container ">
+                <Controller
+                  control={control}
+                  name="resource"
+                  render={({ field }) => {
+                    return (
+                      <InputComponent
+                        idInput="resource"
+                        label={
+                          <>
+                            Recurso <span>*</span>
+                          </>
+                        }
+                        typeInput="text"
+                        register={register}
+                        onChange={handleChangeResource}
+                        errors={errors}
+                        className="input-basic medium"
+                        classNameLabel="text-black big bold"
+                        {...field}
+                      />
+                    );
+                  }}
+                />
 
-          <div className="grid-form-4-container gap-25 mt-13px">
-            <InputNumberComponent
-              idInput="sceneryPercentage3"
-              control={control}
-              errors={errors}
-              label={<>Escenario 3</>}
-              classNameLabel="text-black big bold text-required"
-              className="inputNumber-basic medium "
-              mode="decimal"
-              prefix="% "
-              maxFractionDigits={2}
-              min={0}
-            />
-            <InputComponent
-              idInput="sceneryValue1"
-              disabled
-              label={
-                <>
-                  Valor escenario 1 <span>*</span>
-                </>
-              }
-              typeInput="text"
-              register={register}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
-            <InputComponent
-              idInput="sceneryValue2"
-              disabled
-              label={
-                <>
-                  Valor escenario 2 <span>*</span>
-                </>
-              }
-              typeInput="text"
-              register={register}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
-            <InputComponent
-              idInput="sceneryValue3"
-              disabled
-              label={
-                <>
-                  Valor escenario 3 <span>*</span>
-                </>
-              }
-              typeInput="text"
-              register={register}
-              errors={errors}
-              className="input-basic medium"
-              classNameLabel="text-black big bold"
-            />
+                <InputNumberComponent
+                  idInput="sceneryPercentage1"
+                  control={control}
+                  errors={errors}
+                  label={<>Escenario 1</>}
+                  classNameLabel="text-black big bold text-required"
+                  className="inputNumber-basic medium "
+                  mode="decimal"
+                  prefix="% "
+                  maxFractionDigits={2}
+                  min={0}
+                />
+
+                <InputNumberComponent
+                  idInput="sceneryPercentage2"
+                  control={control}
+                  errors={errors}
+                  label={<>Escenario 2</>}
+                  classNameLabel="text-black big bold text-required"
+                  className="inputNumber-basic medium "
+                  mode="decimal"
+                  prefix="% "
+                  maxFractionDigits={2}
+                  min={0}
+                />
+                <InputNumberComponent
+                  idInput="sceneryPercentage3"
+                  control={control}
+                  errors={errors}
+                  label={<>Escenario 3</>}
+                  classNameLabel="text-black big bold text-required"
+                  className="inputNumber-basic medium "
+                  mode="decimal"
+                  prefix="% "
+                  maxFractionDigits={2}
+                  min={0}
+                />
+              </div>
+            </div>
+            <div className="mt-27px">
+              <SelectComponent
+                idInput="communeFundId"
+                control={control}
+                errors={errors}
+                data={communeFundData}
+                label={
+                  <>
+                    Fondo comuna <span>*</span>
+                  </>
+                }
+                className="select-basic medium"
+                classNameLabel="text-black big bold"
+                placeholder="Seleccione."
+                filter
+              />
+            </div>
+          </div>
+
+          <div className="grid-form-4-container display-flex-direction-column  ml--2px mr-0px padding-form container-form">
+            <span className="text-black biggest  ">Porcentajes escenarios</span>
+
+            <div className="grid-form-3-container ">
+              <InputComponent
+                idInput="sceneryValue1"
+                disabled
+                label={
+                  <>
+                    Valor escenario 1 <span>*</span>
+                  </>
+                }
+                typeInput="text"
+                register={register}
+                errors={errors}
+                className="input-basic medium"
+                classNameLabel="text-black big bold"
+              />
+              <InputComponent
+                idInput="sceneryValue2"
+                disabled
+                label={
+                  <>
+                    Valor escenario 2 <span>*</span>
+                  </>
+                }
+                typeInput="text"
+                register={register}
+                errors={errors}
+                className="input-basic medium"
+                classNameLabel="text-black big bold"
+              />
+              <InputComponent
+                idInput="sceneryValue3"
+                disabled
+                label={
+                  <>
+                    Valor escenario 3 <span>*</span>
+                  </>
+                }
+                typeInput="text"
+                register={register}
+                errors={errors}
+                className="input-basic medium"
+                classNameLabel="text-black big bold"
+              />
+            </div>
           </div>
         </div>
       </div>
