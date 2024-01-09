@@ -35,7 +35,8 @@ export interface ICutInterface {
 }
 
 export interface IStepCashing{
-  idCut: string
+  idCut: string,
+  idProgram: string
 }
 
 export interface IConsolidationTrayForTechnicianCollection {
@@ -44,7 +45,8 @@ export interface IConsolidationTrayForTechnicianCollection {
   cutParamId?: number; 
   page: number,
   perPage: number;
-  statusPaccSearch: number
+  statusPaccSearch: number,
+  programParamId?: number
 }
 
 export interface IManagePage{

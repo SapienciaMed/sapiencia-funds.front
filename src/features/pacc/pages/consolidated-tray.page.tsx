@@ -32,13 +32,6 @@ function ConsolidatedTrayPage() {
       action: () => {},
       hide: validateActionAccess("SERVICIO_SOCIAL"),
     };
-    const certificacionValores = {
-      id: "certificacionValores",
-      title: "Certificación de valores",
-      content: <></>,
-      action: () => {},
-      hide: false /*poner el rol */,
-    };
     const tecnicoProfesional = {
       id: "tecnicoProfesional",
       title: "Técnico profesional",
@@ -76,16 +69,23 @@ function ConsolidatedTrayPage() {
       action: () => {},
       hide: validateActionAccess("COMITE") 
     };
+    const actoAdministrativo = {
+      id: "actoAdministrativo",
+      title: "Acto Administrativo Pacc",
+      content: <BeneficiaryTrayPage typeState={EStatePac.AdministrativeAct} isProgram={true} isDowloadFile={true} />,
+      action: () => {},
+      hide: validateActionAccess('ACTO_ADMINISTRATIVO_PAC')
+    }
     
     const result = [
       servicioSocial,
-      certificacionValores,
       tecnicoPasoCobro,
       tecnicoProfesional,
       coordinador,
       juridica,
       liderProyecto,
-      comite
+      comite,
+      actoAdministrativo
     ].filter((item) => item?.hide);
 
     return result;

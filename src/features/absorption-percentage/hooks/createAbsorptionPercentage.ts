@@ -14,6 +14,7 @@ import { EResponseCodes } from "../../../common/constants/api.enum";
 import { createPeriodsAbsorptionSchema } from "../../../common/schemas/PeriodsAbsorption.shema";
 import useYupValidationResolver from "../../../common/hooks/form-validator.hook";
 import { formaterNumberToCurrency } from "../../../common/utils/helpers";
+import useBudgetApi from "../../budget-convocation/hooks/budget-api.hook";
 
 export const useCreateAbsorptionPercentageModal = (
   announcementId,
@@ -21,6 +22,8 @@ export const useCreateAbsorptionPercentageModal = (
 ) => {
   const { setMessage } = useContext(AppContext);
   const { post } = useCrudService(urlApiFunds);
+  const { getbudget } = useBudgetApi();
+  const [budgetList, setbudgetList] = useState([]);
   const { communeFund: communeFundData, searchCommuneFundByValue } =
     useGetcommuneFundIdHook();
   const [submitDisabled, setSubmitDisabled] = useState(true);
@@ -220,6 +223,20 @@ export const useCreateAbsorptionPercentageModal = (
     console.log(isValid);
   }, [errors, isValid]);
 
+  // carga combos
+  useEffect(() => {
+    getbudget().then((response) => {
+      if (response && response?.operation?.code === EResponseCodes.OK) {
+        setbudgetList(
+          response.data.map((item) => ({
+            name: item.id_comuna,
+            value: item.id_comuna,
+          }))
+        );
+      }
+    });
+  }, []);
+
   return {
     handleChange,
     control,
@@ -231,5 +248,6 @@ export const useCreateAbsorptionPercentageModal = (
     onSubmit: handleSubmit(onSubmit),
     communeFundData,
     handleChangeResource,
+    budgetList,
   };
 };
