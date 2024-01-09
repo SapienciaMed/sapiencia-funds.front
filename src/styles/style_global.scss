@@ -244,7 +244,10 @@
 }
 
 .grid-form-3-container-2{
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 0px 16px;
+    align-items: stretch;
 }
   
 @media (min-width: 1024px) {
@@ -344,10 +347,7 @@
 
 @media (min-width: 920px) {
     .grid-form-3-container-2{
-        display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        grid-gap: 0px 16px;
-        align-items: stretch;
     }
 }
 
