@@ -3,6 +3,7 @@ import {
   ButtonComponent,
   FormComponent,
   InputComponent,
+  MultiSelects,
   SelectComponent,
 } from "../../../../common/components/Form";
 import { useCreateAbsorptionPercentageModal } from "../../hooks/createAbsorptionPercentage";
@@ -20,6 +21,7 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
     submitDisabled,
     communeFundData,
     handleChange,
+    budgetList,
     handleChangeResource,
   } = useCreateAbsorptionPercentageModal(announcementId, reloadTable);
   return (
@@ -30,8 +32,30 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
     >
       <div className="container-form-grid-actas">
         <div className="container-form padding-form">
-          <div className="grid-form-4-container  gap-25 mb-25px">
-            <SelectComponent
+          <span className="text-black large bold grid-span-3-columns  ml-18px ">
+            Agregar ítem
+          </span>
+
+          <div className="grid-form-4-container mr-0px ml--2px padding-form container-form">
+            <MultiSelects
+              idInput={"id_comuna"}
+              control={control}
+              errors={errors}
+              data={budgetList}
+              label={
+                <>
+                  Fondo comuna <span>*</span>
+                </>
+              }
+              className={
+                "select-basic medium select-disabled-list input-basic input-regular"
+              }
+              classNameLabel="text-black big bold"
+              placeholder="Seleccionar"
+              filter={true}
+            />
+          </div>
+          {/* <SelectComponent
               idInput="communeFundId"
               control={control}
               errors={errors}
@@ -45,8 +69,9 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
               classNameLabel="text-black big bold"
               placeholder="Seleccione."
               filter
-            />
-            <Controller
+            /> */}
+
+          {/* <Controller
               control={control}
               name="resource"
               render={({ field }) => {
@@ -68,33 +93,33 @@ const CreateAbsorptionPercentage = ({ announcementId, reloadTable }) => {
                   />
                 );
               }}
-            />
-            <InputNumberComponent
-              idInput="sceneryPercentage1"
-              control={control}
-              errors={errors}
-              label={<>Escenario 1</>}
-              classNameLabel="text-black big bold text-required"
-              className="inputNumber-basic medium "
-              mode="decimal"
-              prefix="% "
-              maxFractionDigits={2}
-              min={0}
-            />
+            /> */}
+          <InputNumberComponent
+            idInput="sceneryPercentage1"
+            control={control}
+            errors={errors}
+            label={<>Escenario 1</>}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="decimal"
+            prefix="% "
+            maxFractionDigits={2}
+            min={0}
+          />
 
-            <InputNumberComponent
-              idInput="sceneryPercentage2"
-              control={control}
-              errors={errors}
-              label={<>Escenario 2</>}
-              classNameLabel="text-black big bold text-required"
-              className="inputNumber-basic medium "
-              mode="decimal"
-              prefix="% "
-              maxFractionDigits={2}
-              min={0}
-            />
-          </div>
+          <InputNumberComponent
+            idInput="sceneryPercentage2"
+            control={control}
+            errors={errors}
+            label={<>Escenario 2</>}
+            classNameLabel="text-black big bold text-required"
+            className="inputNumber-basic medium "
+            mode="decimal"
+            prefix="% "
+            maxFractionDigits={2}
+            min={0}
+          />
+
           <div className="grid-form-4-container gap-25 mt-13px">
             <InputNumberComponent
               idInput="sceneryPercentage3"
