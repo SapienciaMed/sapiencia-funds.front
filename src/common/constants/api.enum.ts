@@ -14,7 +14,8 @@ export enum EStatePac{
   Juridical = 7,
   ProjectManager = 8,
   Committee = 9,
-  Consolidated = 10 
+  Consolidated = 10 ,
+  AdministrativeAct = 11 
 }
 
 export enum ERegulation{

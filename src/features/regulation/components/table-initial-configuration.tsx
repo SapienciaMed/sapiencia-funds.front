@@ -79,30 +79,6 @@ const TableInitialConfiguration = ({
       validateField('condonationPercent', tempData.condonationPercent, DEFAULT_MESSAGE);
       validateField('minimumHourPercent', tempData.minimumHourPercent, DEFAULT_MESSAGE);
       validateField('maximumHourPercent', tempData.maximumHourPercent, DEFAULT_MESSAGE);
-    } else if(parseInt(tempData.condonationPercent) < 0 || parseInt(tempData.condonationPercent) > 100){
-      setMessageError({
-        ...({'condonationPercent':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que 0"
-          }
-        })
-      })
-    } else if (parseInt(tempData.maximumHourPercent) < 0 || parseInt(tempData.maximumHourPercent) > 100 ) {
-      setMessageError({
-        ...({'maximumHourPercent':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que cero"
-          }
-        }),
-      })
-    } else if(parseInt(tempData.minimumHourPercent) < 0 || parseInt(tempData.minimumHourPercent) > 100){
-      setMessageError({
-        ...({'minimumHourPercent':{
-            "type": "optionality",
-            "message": "El campo no puede ser mayor a 100 y menor que cero"
-          }
-        })
-      })
     }else if(validateRanges()){
       return
     } else {
@@ -129,21 +105,19 @@ const TableInitialConfiguration = ({
     let isValidRange = false;
     data.dataTable.forEach((range) => {
       if (
-        tempData.minimumHourPercent >= range.minimumHourPercent && tempData.minimumHourPercent <= range.maximumHourPercent
+        parseFloat(tempData.minimumHourPercent) <= parseFloat(range.maximumHourPercent)
       ) {
         isValidRange = true;
         setMessageError({
-          ...messageError,
           'minimumHourPercent':{
             "type": "optionality",
             "message": "No se permite agregar el porcentaje porque se está solapando con otro ya ingresado"
           }
         })
       }
-      if (tempData.maximumHourPercent >= range.minimumHourPercent && tempData.maximumHourPercent <= range.maximumHourPercent) {
+      else if ( parseFloat(tempData.maximumHourPercent) <= parseFloat(range.maximumHourPercent) ) {
         isValidRange = true;
         setMessageError({
-          ...messageError,
           'maximumHourPercent':{
             "type": "optionality",
             "message": "No se permite agregar el porcentaje porque se está solapando con otro ya ingresado"

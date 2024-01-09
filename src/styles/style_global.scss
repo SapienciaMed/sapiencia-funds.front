@@ -242,6 +242,10 @@
     display: flex;
     flex-direction: column;
 }
+
+.grid-form-3-container-2{
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
   
 @media (min-width: 1024px) {
     .one-filter-container {
@@ -335,6 +339,15 @@
     .dynamic-grid{
         grid-template-columns: 0.33fr 0.33fr 0.33fr 0.1fr;
         grid-gap: 16px 16px;
+    }
+}
+
+@media (min-width: 920px) {
+    .grid-form-3-container-2{
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-gap: 0px 16px;
+        align-items: stretch;
     }
 }
 

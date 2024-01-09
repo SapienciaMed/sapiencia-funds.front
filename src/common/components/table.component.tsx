@@ -156,18 +156,10 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
           OkTitle: "Aceptar",
           onOk: () => {
             setMessage({});
-            // if (onGlobalFilterChange) {
-            //   const valor = { target: { value: "" } as HTMLInputElement };
-            //   onGlobalFilterChange(valor);
-            // }
             resetValue?.();
           },
           onClose:() => {
             setMessage({});
-            // if (onGlobalFilterChange) {
-            //   const valor = { target: { value: "" } as HTMLInputElement };
-            //   onGlobalFilterChange(valor);
-            // }
             resetValue?.();
           },
           background: true,
@@ -175,6 +167,7 @@ const TableComponent = forwardRef<IRef, IProps<any>>((props, ref) => {
         
       }
     } else {
+      EmptyData()
       setMessage({
         title: `Error en la consulta de datos`,
         show: true,
